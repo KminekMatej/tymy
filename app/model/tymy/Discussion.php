@@ -25,10 +25,10 @@ final class Discussion extends Tymy{
     
     public function select() {
         if (!isset($this->recId))
-            throw new APIException('Discussion ID not set!');
+            throw new \Tymy\Exception\APIException('Discussion ID not set!');
 
         if($this->page < 1)
-            throw new APIException("Page do not exist");
+            throw new \Tymy\Exception\APIException("Page do not exist");
         
         $this->fullUrl .= "discussion/" .$this->recId . "/" . $this->mode . "/" . $this->page;
         return $this;
