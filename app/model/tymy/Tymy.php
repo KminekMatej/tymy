@@ -49,6 +49,7 @@ abstract class Tymy extends Nette\Object{
         $this->user = $presenter->getUser();
         $this->team($presenter->getUser()->getIdentity()->data["tym"]);
         $this->setUriParam("TSID", $presenter->getUser()->getIdentity()->data["sessionKey"]);
+        return $this;
     }
     
     public function team($team){
