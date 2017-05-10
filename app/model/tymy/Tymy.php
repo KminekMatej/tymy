@@ -137,20 +137,20 @@ abstract class Tymy extends Nette\Object{
         $contents = $this->request($this->fullUrl);
         if ($contents->status) {
             if ($contents->curlInfo["http_code"] == 401) { // not logged in
-                throw new \Tymy\Exception\APIAuthenticationException("API retuned error 401 - Not Authorized");
+                throw new \Tymy\Exception\APIAuthenticationException("API request ". $this->fullUrl ." retuned error 401 - Not Authorized");
             }
             
             if ($contents->curlInfo["http_code"] != 200) {
-                throw new \Tymy\Exception\APIException("API retuned wrong error code " . $contents->curlInfo["http_code"]);
+                throw new \Tymy\Exception\APIException("API request ". $this->fullUrl ." retuned wrong error code " . $contents->curlInfo["http_code"]);
             }
             $jsonObj = Json::decode($contents->result);
             
             if ($jsonObj->status == "ERROR" && $jsonObj->statusMessage == "Not loggged in") {
-                throw new \Tymy\Exception\APIAuthenticationException("API retuned error 401 - Not Authorized");
+                throw new \Tymy\Exception\APIAuthenticationException("API request ". $this->fullUrl ." retuned error 401 - Not Authorized");
             }
             
             if ($jsonObj->status != "OK") {
-                throw new \Tymy\Exception\APIException("Server API vrátilo chybný návratový kód " . $jsonObj->status . " : " . $jsonObj->statusMessage);
+                throw new \Tymy\Exception\APIException("API request ". $this->fullUrl ." returned abnormal status " . $jsonObj->status . " : " . $jsonObj->statusMessage);
             }
             
             $this->result = (object) $jsonObj;
