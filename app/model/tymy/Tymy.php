@@ -20,16 +20,12 @@ abstract class Tymy extends Nette\Object{
     protected $result = NULL;
     protected $protocol;
     protected $presenter;
-    public $team;
-    protected $root;
+    protected $team;
     /**
      * recId - root id of record (discussion id, event id, ...)
      * $recId integer 
      */
     protected $recId;
-    private $condition;
-    private $limit;
-    private $offset;
     protected $fullUrl;
     private $user;
     private $uriParams;
@@ -108,6 +104,26 @@ abstract class Tymy extends Nette\Object{
         return $data;
     }
     
+    public function getUriParams(){
+        return $this->uriParams;
+    }
+    
+    public function getPostParams(){
+        return $this->postParams;
+    }
+    
+    public function getProtocol(){
+        return $this->protocol;
+    }
+    
+    public function getRecId(){
+        return $this->recId;
+    }
+    
+    public function getTeam(){
+        return $this->team;
+    }
+    
     public function getData(){
         return isset($this->result) ? $this->result->data : NULL;
     }
@@ -181,22 +197,6 @@ abstract class Tymy extends Nette\Object{
     
     public function recId($recId){
         $this->recId = $recId;
-        return $this;
-    }
-    
-    public function getFullUrl(){
-        return $this->fullUrl;
-    }
-    
-    /**
-     * Sets limit clause, more calls rewrite old values.
-     * @param  int
-     * @param  int
-     * @return static
-     */
-    public function limit($limit, $offset = NULL) {
-        $this->limit = $limit;
-        $this->offset = $offset;
         return $this;
     }
     
