@@ -1,0 +1,39 @@
+{block navbar}
+{control navbar}
+{/block}
+
+{block scripts}
+{include parent}
+<script src="{$basePath}/js/timer.js"></script>
+{/block}
+
+
+{block content}
+
+<div class="container users">
+    {foreach $users as $u}
+        {if $iterator->first}<div class="row">{/if}
+            <div class="col-sm-3 mt-3" cnt="{$iterator->getCounter()}">
+                <div class="card sh-box">
+                    <div class="card-header py-1 {ifset $u->gender}{$u->gender}{/ifset}">
+                        <span class="name">{$u->displayName}{if $u->jerseyNumber != ""} (#{$u->jerseyNumber}){/if}</span>
+                    </div>
+                    <div class="card-block">
+                        <div class="row">
+                            <div class="col-3">
+                                <img class="user_pic" src="http://{$tym}.tymy.cz/{$u->pictureUrl}">
+                            </div>
+                            <div class="col-9">
+                                <p class="card-text"><strong>{$u->fullName}</strong></p>
+                            </div>
+                        </div>
+                        <a href="{plink Team:player $u->webName}" class="btn btn-secondary btn-sm user" role="button" aria-pressed="true"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+            </div>
+            {if $iterator->getCounter() % 4 == 0}
+                </div><div class="row">
+            {/if}
+            {if $iterator->last}</div>{/if}
+        {/foreach}
+</div>

@@ -1,0 +1,89 @@
+{block navbar}
+{control navbar}
+{/block}
+
+{block scripts}
+{include parent}
+<script src="{$basePath}/js/event.js"></script>
+<script src="{$basePath}/js/timer.js"></script>
+{/block}
+
+{block content}
+
+<div class="container event">
+    <div class="row">
+        <div class="col">
+            <div class="card sh-box my-3">
+                <div class="card-block">
+                    <h4 class="card-title">{$event->caption}</h4>
+                    <h6 class="card-subtitle mb-2 text-muted">{$event->eventType->caption}</h6>
+                    <p class="card-text">{$event->description}</p>
+                    <div class="row">
+                        <div class="col-4">
+                            <table class="table">
+                                <tr><th>Začátek:</th><td>{$event->startTime|date:'d.n.Y H:i'}</td></tr>
+                                <tr><th>Konec:</th><td>{$event->endTime|date:'d.n.Y H:i'}</td></tr>
+                                <tr><th>Uzávěrka:</th><td>{$event->closeTime|date:'d.n.Y H:i'}</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card sh-box my-3">
+                <div class="card-header">
+                    <ul class="nav nav-tabs card-header-tabs" role="tablist">
+                        {var $first = true}
+                        {foreach $event->allUsers as $key => $preStatus}
+                            {ifset $preStatus}
+                                {var $count = array_sum(array_map('count', $preStatus))}
+                                {var $caption = $key == 'UNKNOWN' ? 'Nerozhodnutí' : $eventTypes[$event->eventType->code]->preStatusSet[$key]->caption}
+                                <li class="nav-item">
+                                    <a n:class="nav-link, $first ? active" href="#{$caption|webalize}" data-toggle="tab" role="tab">{$caption} ({$count})</a>
+                                </li>
+                                {var $first = false}
+                            {/ifset}
+                        {/foreach}
+                    </ul>
+                </div>
+
+                <div class="card-block">
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        {var $first = true}
+                        {foreach $event->allUsers as $key => $preStatus}
+                            {ifset $preStatus}
+                                {var $caption = $key == 'UNKNOWN' ? 'Nerozhodnutí' : $eventTypes[$event->eventType->code]->preStatusSet[$key]->caption}
+                                <div n:class="tab-pane, fade, $first ? show, $first ? active, player-list" id="{$caption|webalize}" role="tabpanel">
+                                    {foreach $preStatus as $gender => $usrs}
+                                        {if count($usrs)>0}
+                                            <div class="row my-2">
+                                                <div class="col-2 player-heading"><h6 style="font-weight: bold">{$gender|genderTranslate} ({count($usrs)}):</h6></div>
+                                                <div class="col-10">
+                                                    {foreach $usrs as $usr}
+                                                        {dump $usr}
+                                                        <figure class="figure text-center" style="width: 100px">
+                                                            <a href="{plink Team:player $usr->webName}">
+                                                                <img src="http://{$tym}.tymy.cz/{$usr->pictureUrl}" class="figure-img img-fluid rounded" alt="{$usr->callName}">
+                                                                <figcaption class="figure-caption">{$usr->callName}</figcaption>
+                                                                <figcaption class="figure-caption" style="font-size: 70%; display: inline-block">{$usr->preDescription}</figcaption>
+                                                            </a>
+                                                        </figure>
+                                                    {/foreach}
+                                                </div>
+                                            </div>
+                                        {/if}
+                                    {/foreach}
+                                </div>
+                                {var $first = false}
+                            {/ifset}
+                        {/foreach}
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+</div>

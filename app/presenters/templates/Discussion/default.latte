@@ -1,0 +1,26 @@
+{block scripts}
+{include parent}
+<script src="{$basePath}/js/timer.js"></script>
+{/block}
+
+{block navbar}
+{control navbar}
+{/block}
+
+{block content}
+<div class="container discussions">
+    <div class="row justify-content-md-center">
+        <div class="col-8 my-3">
+            <div class="card sh-box">
+                <div class="card-block">
+                    {foreach $discussions as $item}
+                        <div class="row my-2">
+                            <div class="col-sm-3 name"><a href="{plink Discussion:discussion $item->captionLink}">{$item->caption}</a></div>
+                            <div class="col-sm-9">{$item->description}</div>
+                        </div>
+                    {/foreach}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,179 @@
+body {
+        font-family: 'Noto Sans', sans-serif;
+	font-size: 15px;
+	line-height: 1.6;
+	color: #333;
+	background: linear-gradient(to left, #d14836, #ff5f49);
+        padding-top: 56px;
+}
+
+h1 {
+	color: #3484D2;
+}
+
+#ajax-spinner {
+	margin: 15px 0 0 15px;
+	padding: 13px;
+	background: white url('../images/spinner.gif') no-repeat 50% 50%;
+	font-size: 0;
+	z-index: 123456;
+	display: none;
+}
+
+div.flash {
+	color: black;
+	background: #FFF9D7;
+	border: 1px solid #E2C822;
+	padding: 1em;
+	margin: 1em 0;
+}
+
+a[href^="#error:"] {
+	background: red;
+	color: white;
+}
+
+form th, form td {
+	vertical-align: top;
+	font-weight: normal;
+}
+
+form th {
+	text-align: right;
+}
+
+form .required label {
+	font-weight: bold;
+}
+
+form .error {
+	color: #D00;
+	font-weight: bold;
+}
+
+@media (min-width: 979px) {
+    nav .dropdown:hover > .dropdown-menu {
+        margin: 0px;
+        display: block;
+    }
+}
+
+DIV.dis-item{
+    margin: 10px;
+    border: 1px solid black;
+}
+
+DIV.row DIV.avatar{
+    padding: 0px;
+}
+
+DIV.discussion DIV.avatar IMG{
+    max-width: 60%;
+}
+
+.sh-box{
+    border-radius: 0px;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 3px 3px 0 rgba(0, 0, 0, 0.24);
+}
+
+DIV.discussion DIV.card DIV.card-header SPAN.name{
+    font-weight: bold;
+}
+
+DIV.discussion DIV.card-header.post-mine{
+    color: #0275d8;
+}
+
+.card-unread{
+    border: 1px solid green;
+    color: green;
+}
+
+.card-unread .card-header{
+    background-color: green;
+}
+
+DIV.discussion IMG.user_pic{
+    float: left;
+    margin: 0px 10px 10px 0px;
+}
+
+DIV.page-caption{
+    background-color: #8f8f8f;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+
+NAV LI.nav-item SPAN.navbar-text{
+    padding-right: .5rem;
+    padding-left: .5rem;
+}
+
+DIV.container.discussions DIV.name{
+    font-weight: bold;
+    font-size: 17px;
+}
+
+DIV.container.discussion .card-header BUTTON{
+    cursor: pointer;
+}
+
+.breadcrumb{
+    background: linear-gradient(#bcbcbc, white);
+    padding: 0.25rem 1rem;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    margin-bottom: 0px;
+}
+
+.card-header.MALE{
+    font-weight: bold;
+    color: #7193BD;
+}
+
+.card-header.FEMALE{
+    font-weight: bold;
+    color: violet;
+}
+
+.container.users .user{
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+}
+
+.badge-new{
+    position: absolute;
+    right: 0px;
+}
+
+.addPost{
+    background-color: white; 
+    padding: 2px; 
+    text-align: right; 
+    border: 1px solid #d1d1d1; 
+    border-top-width: 0px;
+}
+
+.addPost BUTTON{
+    cursor: pointer;
+}
+
+I.sticky{
+    background-color: red;
+}
+
+DIV.container.events DIV.agenda DIV.card-block{
+    font-size: 10pt;
+}
+DIV.container.events DIV.agenda BUTTON{
+    cursor: pointer;
+}
+DIV.container.events DIV.agenda SPAN.event-time{
+    font-size: 0.8rem;
+}
+DIV.container.events DIV.agenda SPAN.event-heading{
+    font-size: 1rem;
+    font-weight: bold;
+    margin-left: 8px;
+}

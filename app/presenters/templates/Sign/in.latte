@@ -1,0 +1,14 @@
+{block styles}
+{include parent}
+<link rel="stylesheet" href="{$basePath}/css/sign.css">
+{/block}
+
+{block content}
+<div class="login">
+    {control signInForm}
+    <table class="under">
+        <tr>
+            <td style="padding-right:5px"><a href="{plink Sign:up}">Registrovat</a></td>
+            <td style="padding-left:5px"><a href="{plink Sign:pwdlost}">Ztracené heslo</a></td></tr>
+    </table>
+</div>

@@ -1,0 +1,56 @@
+{snippet nav}
+<nav class="navbar navbar-inverse navbar-toggleable-md bg-inverse fixed-top">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="{$baseUri}" title="{$tym|firstUpper}.Tymy.CZ">{$tym|firstUpper}</a>
+    
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item dropdown">
+                {if $unreadSum > 0}<span class="badge badge-pill badge-danger badge-new">{$unreadSum}</span>{/if}
+                <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Diskuze <i class="fa fa-comments" aria-hidden="true"></i></a>    
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    {foreach $discussions as $d}
+                        <a class="dropdown-item" href="{plink Discussion:discussion $d["captionLink"]}">
+                            {if $unreadSum > 0}<span class="badge badge-primary" {if $d['unreadCount'] == 0}style="visibility: hidden"{/if}>{$d["unreadCount"]}</span>{/if}
+                            {$d["caption"]}
+                        </a>
+                    {/foreach}
+                </div>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="{plink Event:}"><i class="fa fa-calendar-o" aria-hidden="true"></i> Události</a></li>
+            <li class="nav-item dropdown">
+                {if $playerErrors > 0}<span class="badge badge-pill badge-danger badge-new">{$playerErrors}</span>{/if}
+                <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-users" aria-hidden="true"></i> Tým</a>    
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="{plink Team:player $me->webName}">{$me->callName}</a> {if $me->errCnt > 0}<span class="badge badge-danger">{$me->errCnt}</span>{/if}
+                    <a class="dropdown-item" href="{plink Team:players}">Hráči ({$counts['PLAYER']})</a>
+                    <a class="dropdown-item" href="{plink Team:members}">Členové ({$counts['MEMBER']})</a>
+                    <a class="dropdown-item" href="{plink Team:sicks}">Marodi ({$counts['SICK']})</a>
+                    <a class="dropdown-item" href="{plink Team:}">Všichni ({$counts['ALL']})</a>
+                </div>
+            </li>
+        </ul>
+        <ul class="navbar-nav"> 
+            <li class="nav-item"><a class="nav-link" href="{plink Sign:out}">Odhlásit</a></li>
+        </ul>
+        
+    </div>
+    
+</nav>
+{/snippet}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <ol class="breadcrumb">
+                {foreach $levels as $level}
+                    {if $level['caption'] != ''}
+                        <li class="breadcrumb-item"><a href="{$level['link']}">{$level['caption']}</a></li>
+                    {/if}
+                {/foreach}
+            </ol>
+        </div>
+    </div>
+</div>

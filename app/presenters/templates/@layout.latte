@@ -1,0 +1,39 @@
+{**
+ * @param string   $basePath web base path
+ * @param array    $flashes  flash messages
+ *}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>{ifset title}{include title|stripHtml}Monkeys | Tymy.CZ v2{/ifset}</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+        {block styles}
+        <link rel="stylesheet" href="{$basePath}/resources/tether/css/tether.{$css}">
+        <link rel="stylesheet" href="{$basePath}/resources/bootstrap4/css/bootstrap.{$css}">
+        <link rel="stylesheet" href="{$basePath}/resources/fontawesome/css/font-awesome.{$css}">
+        <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+        <link rel="stylesheet" href="{$basePath}/css/style.css">
+        
+        {/block}
+	{block scripts}
+        <script src="{$basePath}/resources/tether/js/tether.{$js}"></script>
+        <script src="{$basePath}/resources/fullcalendar/lib/moment.min.js"></script>
+	<script src="{$basePath}/resources/jQuery/jquery-3.2.1.{$js}"></script>
+        <script src="{$basePath}/resources/bootstrap4/js/bootstrap.{$js}"></script>
+        <script src="{$basePath}/js/nette.ajax.js"></script>
+	{/block}
+	{block head}{/block}
+</head>
+
+<body>
+    {block navbar}{/block}
+	<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+
+	{include content}
+
+
+</body>
+</html>

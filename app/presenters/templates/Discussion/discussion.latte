@@ -1,0 +1,75 @@
+{* Latte template *}
+
+{block navbar}
+{control navbar}
+{/block}
+
+{block scripts}
+{include parent}
+<script src="{$basePath}/resources/ckeditor/ckeditor.js"></script>
+<script src="{$basePath}/js/clipboard.min.js"></script>
+<script src="{$basePath}/js/smoothScroll.js"></script>
+<script src="{$basePath}/js/discussion.js"></script>
+<script src="{$basePath}/js/timer.js"></script>
+{/block}
+
+{block content}
+
+{block newpost}
+{control newPost $discussion}
+{/block}
+
+<div class="container discussion" n:snippet="discussion">
+    {foreach $discussion->posts as $item}
+        {ifset $item->createdBy->callName}
+        {var $stickyIcon = ''}
+        {if $item->sticky}
+            {var $chc = 'post-sticky card-inverse card-danger'}
+            {var $cc = 'post-sticky'}
+            {var $stickyIcon = 'sticky'}
+        {elseif $item->newPost}
+            {var $chc = 'post-new card-inverse card-primary'}
+            {var $cc = 'post-new'}
+        {elseif $item->createdById == $userId}
+            {var $chc = 'post-mine'}
+            {var $cc = 'post-mine'}
+        {else}
+            {var $chc = ''}
+            {var $cc = ''}
+        {/if}
+            <div class="row">
+                <div class="col">
+                    <div class="card my-1 {$cc} sh-box">
+                        <div class="card-header {$chc} py-1 {if $item->newPost}card-inverse card-primary{/if}">
+                            <span class="name">{$item->createdBy->callName}</span>
+                            
+                            <div class="btn-group btn-group-sm float-md-right" role="group">
+                                <button n:class="btn,btn-sm,$item->sticky ? active,$item->sticky ? btn-info:btn-secondary"><i class="fa fa-thumb-tack" aria-hidden="true"></i></button>
+                                <button class="btn btn-sm btn-secondary" onclick="loadPost('{$item->id}-content')" title="Nový příspěvek z tohoto"><i class="fa fa-angle-double-up" aria-hidden="true"></i></button>
+                                <button class="btn btn-sm btn-secondary" onclick="copyPost('{$item->id}-content')" title="Kopírovat do schránky"><i class="fa fa-files-o" aria-hidden="true"></i></button>
+                                <button class="btn btn-sm btn-secondary"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                            </div>
+                            <span class="float-md-right mx-2">{$item->createdAt|date:'j.n.Y G:i:s'}</span>
+                        </div>
+                        <div class="card-block">
+                            <img class="user_pic" src="http://{$tym}.tymy.cz/{$item->createdBy->pictureUrl}">
+                            {php $post = $item->post}
+                            {var $post = htmlspecialchars_decode($post)}
+                            <p class="card-text" id="{$item->id}-content">{ifset $item->post}{$post|noescape}{/ifset}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {/ifset}
+    {/foreach}
+</div>
+
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        <li n:class="$currentPage == 1 ? disabled, page-item"><a class="page-link" href="{if $currentPage==2}{plink Discussion:discussion $nazevDiskuze}{else}{plink Discussion:discussion $nazevDiskuze,$currentPage-1}{/if}">Předchozí</a></li>
+            {foreach $pagination as $page}
+            <li n:class="$currentPage == $page ? active, page-item"><a class="page-link" href="{if $page==1}{plink Discussion:discussion $nazevDiskuze}{else}{plink Discussion:discussion $nazevDiskuze,$page}{/if}">{$page}</a></li>
+            {/foreach}
+        <li n:class="$currentPage == $lastPage ? disabled, page-item"><a class="page-link" href="{plink Discussion:discussion $nazevDiskuze,$currentPage+1}">Následující</a></li>
+    </ul>
+</nav>

@@ -1,0 +1,35 @@
+{block scripts}
+<script>
+    function addPost(url){
+        $.nette.ajax({
+            type: 'POST',
+            url: url,
+            data: {'post': CKEDITOR.instances.addPost.getData()},
+        });
+    }
+</script>
+{/block}
+
+<div class="container my-2">
+    <div class="row justify-content-md-center">
+        <div class="col-md-10">
+            <textarea style="width:100%;" id="addPost">
+            </textarea>
+            <script>CKEDITOR.replace('addPost',{
+                    language: 'cs',
+                });</script>
+        </div>
+    </div>
+    <div class="row justify-content-md-center">
+        <div class="col-md-10">
+            <div class="addPost">
+                {dump $discussion}
+                    <form action="http://tymy.klubpivovarek.cz{plink Discussion:discussion $discussion->discussion->webName}" method="GET" class="form-inline">
+                        <input class="form-control mr-sm-2" type="text" name="search" placeholder="Zadejte hledaný text...">
+                        <input type="submit" value="Hledat" class="form-control btn btn-outline-success mr-auto">
+                        <button onclick="addPost({plink Discussion:newpost $discussion->discussion->id, 1})" type="button" class="btn btn-primary">Vložit</button>    
+                    </form>
+            </div>
+        </div>
+    </div>
+</div>
