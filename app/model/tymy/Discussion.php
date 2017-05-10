@@ -25,10 +25,10 @@ final class Discussion extends Tymy{
     
     public function select() {
         if (!isset($this->recId))
-            throw new TymyException('Discussion ID not set!');
+            throw new APIException('Discussion ID not set!');
 
         if($this->page < 1)
-            throw new TymyException("Page do not exist");
+            throw new APIException("Page do not exist");
         
         $this->fullUrl .= "discussion/" .$this->recId . "/" . $this->mode . "/" . $this->page;
         return $this;
@@ -43,7 +43,7 @@ final class Discussion extends Tymy{
     public function insert($text) {
         //TODO change date to UTC when performing insert
         if (!isset($this->recId))
-            throw new TymyException('Discussion ID not set!');
+            throw new APIException('Discussion ID not set!');
 
         $this->urlStart();
 

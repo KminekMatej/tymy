@@ -16,15 +16,17 @@ final class Login extends Tymy{
     
     public function setUsername($username) {
         $this->username = $username;
+        return $this;
     }
     
     public function setPassword($password) {
-        $hash = $password;
+        $h = "";
         $n = rand(1, 20);
         for ($index = 0; $index < $n; $index++) {
-            $hash = md5($password);
+            $h = md5($password);
         }
-        $this->hash = $password;
+        $this->hash = $h;
+        return $this;
     }
     
     public function select() {
@@ -32,6 +34,22 @@ final class Login extends Tymy{
         return $this;
     }
     
+    public function fetch() {
+        $this->urlStart();
+
+        $this->select();
+
+        $this->urlEnd();
+        
+        $this->result = $this->execute();
+
+        $data = $this->getData();
+
+        $this->tzFields($data);
+        
+        return $data;
+    }
+
     protected function tzFields($jsonObj){
         return null;
     }

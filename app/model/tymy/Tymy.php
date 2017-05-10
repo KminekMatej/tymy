@@ -15,11 +15,12 @@ use DateTimeZone;
  */
 abstract class Tymy extends Nette\Object{
     
-    protected $result = NULL;
+    const TYMY_API = ".tymy.cz/api/";
     
+    protected $result = NULL;
     protected $protocol;
     protected $presenter;
-    protected $teamUri;
+    public $team;
     protected $root;
     /**
      * recId - root id of record (discussion id, event id, ...)
@@ -41,13 +42,22 @@ abstract class Tymy extends Nette\Object{
     /** Function to return fields supposed to be converted from UTC to proper timezone */
     abstract protected function tzFields($jsonObj);
     
-    public function __construct(Nette\Application\UI\Presenter $presenter) {
+    public function __construct(Nette\Application\UI\Presenter $presenter = NULL) {
+        if($presenter != NULL)
+            $this->presenter ($presenter);
+        $this->https(FALSE);
+    }
+    
+    public function presenter(Nette\Application\UI\Presenter $presenter){
         $this->presenter = $presenter;
         $this->user = $presenter->getUser();
-        $this->root($this->user->getIdentity()->tym);
-        $this->teamUri = $this->user->getIdentity()->tym . ".tymy.cz/api/";
-        $this->https(FALSE);
-        $this->setUriParam("TSID", $this->user->getIdentity()->tsid);
+        $this->team($presenter->getUser()->getIdentity()->data["tym"]);
+        $this->setUriParam("TSID", $presenter->getUser()->getIdentity()->data["sessionKey"]);
+    }
+    
+    public function team($team){
+        $this->team = $team;
+        return $this;
     }
 
     protected function setUriParam($key, $value) {
@@ -55,15 +65,17 @@ abstract class Tymy extends Nette\Object{
     }
     
     protected function composeUriParams(){
+        if(is_null($this->uriParams))
+            return "";
         return "?" . http_build_query($this->uriParams);
     }
     
     protected function urlStart() {
         $this->fullUrl = $this->protocol;
-        if (!isset($this->teamUri))
-            throw new TymyException('Uri not set!');
+        if (!isset($this->team))
+            throw new \Tymy\Exception\APIException('Team not set!');
 
-        $this->fullUrl .= "://" . $this->teamUri;
+        $this->fullUrl .= "://" . $this->team . self::TYMY_API;
         rtrim($this->fullUrl, "/");
         return $this;
     }
@@ -81,42 +93,54 @@ abstract class Tymy extends Nette\Object{
         $this->urlEnd();
         //\Tracy\Debugger::barDump($this->fullUrl);
         
-        $result = $this->execute();
+        try {
+            $this->result = $this->execute();
+        } catch (\Tymy\Exception\APIAuthenticationException $exc) {
+            $this->user->logout(true);
+            $this->presenter->flashMessage('You have been signed out due to inactivity. Please sign in again.');
+            $this->presenter->redirect('Sign:in', ['backlink' => $this->presenter->storeRequest()]);
+        }
         
-        $this->tzFields($this->result);
+        $data = $this->getData();
+
+        $this->tzFields($data);
         
-        return $result;
+        return $data;
+    }
+    
+    public function getData(){
+        return isset($this->result) ? $this->result->data : NULL;
+    }
+    
+    public function getResult(){
+        return isset($this->result) ? $this->result : NULL;
     }
     
     protected function execute() {
         $contents = $this->request($this->fullUrl);
         if ($contents->status) {
             if ($contents->curlInfo["http_code"] == 401) { // not logged in
-                $this->user->logout(true);
-                $this->presenter->flashMessage('You have been signed out due to inactivity. Please sign in again.');
-                $this->presenter->redirect('Sign:in', ['backlink' => $this->presenter->storeRequest()]);
+                throw new \Tymy\Exception\APIAuthenticationException("API retuned error 401 - Not Authorized");
             }
             
             if ($contents->curlInfo["http_code"] != 200) {
-                throw new TymyException("Dotaz na server vrátil chybný návratový kód (" . $contents->curlInfo["http_code"] . ")");
+                throw new \Tymy\Exception\APIException("API retuned wrong error code " . $contents->curlInfo["http_code"]);
             }
             $jsonObj = Json::decode($contents->result);
             
             if ($jsonObj->status == "ERROR" && $jsonObj->statusMessage == "Not loggged in") {
-                $this->user->logout(true);
-                $this->presenter->flashMessage('You have been signed out due to inactivity. Please sign in again.');
-                $this->presenter->redirect('Sign:in', ['backlink' => $this->presenter->storeRequest()]);
+                throw new \Tymy\Exception\APIAuthenticationException("API retuned error 401 - Not Authorized");
             }
             
             if ($jsonObj->status != "OK") {
-                throw new TymyException("Server API vrátilo chybný návratový kód " . $jsonObj->status . " : " . $jsonObj->statusMessage);
+                throw new \Tymy\Exception\APIException("Server API vrátilo chybný návratový kód " . $jsonObj->status . " : " . $jsonObj->statusMessage);
             }
             
-            $this->result = (object) $jsonObj->data;
+            $this->result = (object) $jsonObj;
 
             return $this->result;
         } else {
-            throw new TymyException("Nastala neošetřená výjimka ve funkci Tymy->execute(). Prosím kontaktujte vývojáře.");
+            throw new \Tymy\Exception\APIException("Nastala neošetřená výjimka ve funkci Tymy->execute(). Prosím kontaktujte vývojáře.");
         }
     }
     
@@ -150,11 +174,6 @@ abstract class Tymy extends Nette\Object{
         return $this;
     }
 
-    public function root($root){
-        $this->root = $root;
-        return $this;
-    }
-    
     public function https($https = FALSE){
         $this->protocol = $https ? "https" : "http";
         return $this;
@@ -225,17 +244,4 @@ abstract class Tymy extends Nette\Object{
             $player->errFls[] = "zipCode";
         }
     }
-}
-
-
-class TymyException extends \Exception
-{
-    public function __construct($message, $code = 0, Exception $previous = null) {
-        parent::__construct($message, $code, $previous);
-    }
-
-    public function __toString() {
-        return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
-    }
-
 }

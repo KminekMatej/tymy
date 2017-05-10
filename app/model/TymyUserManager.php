@@ -24,23 +24,22 @@ class TymyUserManager implements Nette\Security\IAuthenticator {
      */
     public function authenticate(array $credentials) {
         list($username, $password) = $credentials;
-        \Tracy\Debugger::barDump($this);
-        $loginObj = new \Tymy\Login(NULL);
-        $loginObj->setUsername($username)
-                 ->setPassword($password)
-                ->fetch();
-        $stop();
-        $user = $loginObj;
         
-        if ($user->status != "OK") {
+        $loginObj = new \Tymy\Login();
+        
+        try {
+        $loginObj->team($this->tym)
+                ->setUsername($username)
+                ->setPassword($password)
+                ->fetch();
+        } catch (\Tymy\Exception\APIException $exc) {
             throw new Nette\Security\AuthenticationException('Login failed.', self::INVALID_CREDENTIAL);
         }
         
-        $arr = (array)$user->data;
-        $arr["tsid"] = $user->sessionKey;
-        $arr["tym"] = $this->tym;
-
-        return new Nette\Security\Identity($user->data->id, $user->data->status, $arr );
+        $arr = (array) $loginObj->result;
+        $arr["tym"] = $loginObj->team;
+        
+        return new Nette\Security\Identity($loginObj->result->data->id, $loginObj->result->status, $arr );
     }
     
     private function execute($url) {
