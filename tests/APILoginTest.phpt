@@ -2,7 +2,7 @@
 /**
  * TEST: Test Login on TYMY api
  * 
- * 
+ * @skip
  */
 
 namespace Test;
@@ -13,7 +13,7 @@ use Tester\Assert;
 
 $container = require __DIR__ . '/bootstrap.php';
 
-class LoginTest extends Tester\TestCase {
+class APILoginTest extends Tester\TestCase {
 
     private $container;
     private $presenter;
@@ -67,5 +67,5 @@ class LoginTest extends Tester\TestCase {
     
 }
 
-$test = new NavbarTest($container);
+$test = new APILoginTest($container);
 $test->run();

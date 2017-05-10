@@ -40,8 +40,7 @@ class HomepagePresenterTest extends Tester\TestCase {
         $request = new Nette\Application\Request('Homepage', 'GET', array('action' => 'default'));
         $this->presenter->getUser()->setExpiration('2 minutes');
         $this->presenter->getUser()->login($this->username, $this->pass);
-        
-        Assert::equal($this->presenter->getUser()->identity->callName, "AUTOTEST");
+        Assert::equal($this->presenter->getUser()->getIdentity()->data["data"]->callName, "AUTOTEST");
         $response = $this->presenter->run($request);
 
         Assert::type('Nette\Application\Responses\TextResponse', $response);

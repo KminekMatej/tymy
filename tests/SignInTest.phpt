@@ -52,38 +52,40 @@ class SignInTest extends Tester\TestCase {
     function testSignInSuccess(){
         $tymyUserManager = new \App\Model\TymyUserManager("dev"); 
         $identity = $tymyUserManager->authenticate([$GLOBALS["username"], $GLOBALS["password"]]);
-        
+        var_dump($identity);
         Assert::type("Nette\Security\Identity", $identity);
         Assert::true(isset($identity->id));
         Assert::true(isset($identity->roles));
         Assert::true(is_array($identity->roles));
+        Assert::true(isset($identity->tym));
+        Assert::type("string", $identity->tym);
+        Assert::true(isset($identity->data["sessionKey"]));
+        Assert::equal(strlen($identity->data["sessionKey"]), 28);
         Assert::true(isset($identity->data));
         Assert::true(is_array($identity->data));
-        Assert::true(isset($identity->data["id"]));
-        Assert::true(isset($identity->data["login"]));
-        Assert::true(isset($identity->data["canLogin"]));
-        Assert::true(isset($identity->data["lastLogin"]));
-        Assert::true(isset($identity->data["status"]));
-        Assert::true(isset($identity->data["roles"]));
-        Assert::true(is_array($identity->data["roles"]));
-        Assert::true(isset($identity->data["oldPassword"]));
-        Assert::true(isset($identity->data["firstName"]));
-        Assert::true(isset($identity->data["lastName"]));
-        Assert::true(isset($identity->data["callName"]));
-        Assert::true(isset($identity->data["language"]));
-        Assert::true(isset($identity->data["jerseyNumber"]));
-        Assert::true(isset($identity->data["street"]));
-        Assert::true(isset($identity->data["city"]));
-        Assert::true(isset($identity->data["zipCode"]));
-        Assert::true(isset($identity->data["phone"]));
-        Assert::true(isset($identity->data["phone2"]));
-        Assert::true(isset($identity->data["nameDayMonth"]));
-        Assert::true(isset($identity->data["nameDayDay"]));
-        Assert::true(isset($identity->data["pictureUrl"]));
-        Assert::true(isset($identity->data["fullName"]));
-        Assert::true(isset($identity->data["displayName"]));
-        Assert::true(isset($identity->data["tsid"]));
-        Assert::true(isset($identity->data["tym"]));
+        Assert::true(isset($identity->data["data"]->id));
+        Assert::true(isset($identity->data["data"]->login));
+        Assert::true(isset($identity->data["data"]->canLogin));
+        Assert::true(isset($identity->data["data"]->lastLogin));
+        Assert::true(isset($identity->data["data"]->status));
+        Assert::true(isset($identity->data["data"]->roles));
+        Assert::true(is_array($identity->data["data"]->roles));
+        Assert::true(isset($identity->data["data"]->oldPassword));
+        Assert::true(isset($identity->data["data"]->firstName));
+        Assert::true(isset($identity->data["data"]->lastName));
+        Assert::true(isset($identity->data["data"]->callName));
+        Assert::true(isset($identity->data["data"]->language));
+        Assert::true(isset($identity->data["data"]->jerseyNumber));
+        Assert::true(isset($identity->data["data"]->street));
+        Assert::true(isset($identity->data["data"]->city));
+        Assert::true(isset($identity->data["data"]->zipCode));
+        Assert::true(isset($identity->data["data"]->phone));
+        Assert::true(isset($identity->data["data"]->phone2));
+        Assert::true(isset($identity->data["data"]->nameDayMonth));
+        Assert::true(isset($identity->data["data"]->nameDayDay));
+        Assert::true(isset($identity->data["data"]->pictureUrl));
+        Assert::true(isset($identity->data["data"]->fullName));
+        Assert::true(isset($identity->data["data"]->displayName));
     }
 
 }
