@@ -17,7 +17,7 @@ final class Discussion extends Tymy{
     private $search;
     
     
-    public function __construct(Nette\Application\UI\Presenter $presenter, $html = FALSE, $page) {
+    public function __construct(Nette\Application\UI\Presenter $presenter = NULL, $html = FALSE, $page) {
         parent::__construct($presenter);
         $this->mode = $html ? "html" : "bb";
         $this->page = is_numeric($page) ? $page : 1 ;
@@ -61,6 +61,18 @@ final class Discussion extends Tymy{
         foreach ($jsonObj->posts as $post) {
             $this->timezone($post->createdAt);
         }
+    }
+    
+    public function getMode(){
+        return $this->mode;
+    }
+
+    public function getPage(){
+        return $this->page;
+    }
+
+    public function getSearch(){
+        return $this->search;
     }
 
 }
