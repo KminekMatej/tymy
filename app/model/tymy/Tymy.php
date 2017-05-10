@@ -184,6 +184,10 @@ abstract class Tymy extends Nette\Object{
         return $this;
     }
     
+    public function getFullUrl(){
+        return $this->fullUrl;
+    }
+    
     /**
      * Sets limit clause, more calls rewrite old values.
      * @param  int
