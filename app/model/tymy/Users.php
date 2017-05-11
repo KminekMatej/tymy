@@ -12,7 +12,6 @@ use Nette\Utils\Strings;
  */
 final class Users extends Tymy{
     
-    private $withErrors = FALSE;
     private $userType;
     
     public function __construct(Nette\Application\UI\Presenter $presenter = NULL, $userType = NULL) {
