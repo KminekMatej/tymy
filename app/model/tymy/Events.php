@@ -56,7 +56,8 @@ final class Events extends Tymy{
             $this->timezone($event->closeTime);
             $this->timezone($event->startTime);
             $this->timezone($event->endTime);
-            $this->timezone($event->myAttendance->preDatMod);
+            if($this->withMyAttendance)
+                $this->timezone($event->myAttendance->preDatMod);
         }
     }
 }
