@@ -15,7 +15,7 @@ final class Users extends Tymy{
     private $withErrors = FALSE;
     private $userType;
     
-    public function __construct(Nette\Application\UI\Presenter $presenter, $userType = NULL) {
+    public function __construct(Nette\Application\UI\Presenter $presenter = NULL, $userType = NULL) {
         parent::__construct($presenter);
         $this->userType = $userType;
     }
