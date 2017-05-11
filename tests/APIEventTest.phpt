@@ -53,7 +53,7 @@ class APIEventTest extends Tester\TestCase {
      */
     function testFetchNotLoggedInFails404() {
         $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Homepage');
+        $mockPresenter = $presenterFactory->createPresenter('Team');
         $mockPresenter->autoCanonicalize = FALSE;
 
         $this->authenticator->setId(38);
@@ -74,7 +74,7 @@ class APIEventTest extends Tester\TestCase {
      */
     function testFetchNotLoggedInRedirects() {
         $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Homepage');
+        $mockPresenter = $presenterFactory->createPresenter('Team');
         $mockPresenter->autoCanonicalize = FALSE;
 
         $this->authenticator->setId(38);
@@ -92,7 +92,7 @@ class APIEventTest extends Tester\TestCase {
     
     function testFetchSuccess() {
         $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Discussion');
+        $mockPresenter = $presenterFactory->createPresenter('Team');
         $mockPresenter->autoCanonicalize = FALSE;
 
         $this->login();
