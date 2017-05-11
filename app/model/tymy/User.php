@@ -12,7 +12,7 @@ use Nette\Utils\Strings;
  */
 final class User extends Tymy{
     
-    public function __construct(Nette\Application\UI\Presenter $presenter) {
+    public function __construct(Nette\Application\UI\Presenter $presenter = NULL) {
         parent::__construct($presenter);
     }
     
