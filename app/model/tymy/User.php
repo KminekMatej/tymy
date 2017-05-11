@@ -18,7 +18,7 @@ final class User extends Tymy{
     
     public function select() {
         if (!isset($this->recId))
-            throw new APIException('User ID not set!');
+            throw new \Tymy\Exception\APIException('User ID not set!');
         $this->fullUrl .= "user/" .$this->recId;
         return $this;
     }
