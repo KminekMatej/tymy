@@ -27,6 +27,11 @@ final class Discussions extends Tymy{
     }
     
     protected function tzFields($jsonObj){
+        if ($this->withNew)
+            foreach ($jsonObj as $discussion) {
+                $this->timezone($discussion->newInfo->lastVisit);
+            }
+
         return null;
     }
 }
