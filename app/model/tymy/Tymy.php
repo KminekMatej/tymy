@@ -27,7 +27,7 @@ abstract class Tymy extends Nette\Object{
      */
     protected $recId;
     protected $fullUrl;
-    private $user;
+    protected $user;
     private $uriParams;
     private $postParams;
     
@@ -47,8 +47,8 @@ abstract class Tymy extends Nette\Object{
     public function presenter(Nette\Application\UI\Presenter $presenter){
         $this->presenter = $presenter;
         $this->user = $presenter->getUser();
-        $this->team($presenter->getUser()->getIdentity()->data["tym"]);
-        $this->setUriParam("TSID", $presenter->getUser()->getIdentity()->data["sessionKey"]);
+        $this->team($this->user->getIdentity()->data["tym"]);
+        $this->setUriParam("TSID", $this->user->getIdentity()->data["sessionKey"]);
         return $this;
     }
     
