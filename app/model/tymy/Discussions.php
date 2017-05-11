@@ -15,6 +15,7 @@ final class Discussions extends Tymy{
     
     public function setWithNew($withNew){
         $this->withNew = $withNew;
+        return $this;
     }
     
     public function select() {
