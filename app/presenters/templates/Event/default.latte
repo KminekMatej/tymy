@@ -64,31 +64,7 @@ $(document).ready(function () {
                     <div class="card-block">
                         {ifset $evMonths[$actMonth]}
                             {foreach $evMonths[$actMonth] as $ev}
-                                <div class="row">
-                                    <div class="col" title="{$ev->caption} ({$eventTypes[$ev->type]->caption})&#13;{$ev->startTime|date:'d.n. H:i'} -> {$ev->endTime|date:'d.n H:i'}"><span class="event-heading">{$ev->caption}</span><span class="event-time text-muted float-right">{$ev->startTime|date:'d.n. H:i'}</span></div>
-                                </div>
-                                <div class="row mb-2">
-                                    <div class="col">
-                                            <div class="btn-group input-group px-0" role="group" aria-label="Basic example">
-                                            <input type="text" class="form-control form-control-sm" placeholder="Poznámka">
-                                                {var $myPreStatus = "not-set"}
-                                                {var $myPostStatus = "not-set"}
-                                                {ifset $ev->myAttendance}
-                                                    {ifset $ev->myAttendance->preStatus}
-                                                        {var $myPreStatus = $eventTypes[$ev->type]->preStatusSet[$ev->myAttendance->preStatus]->code}
-                                                    {/ifset}
-                                                    {ifset $ev->myAttendance->postStatus}
-                                                        {var $myPostStatus = $eventTypes[$ev->type]->postStatusSet[$ev->myAttendance->postStatus]->code}
-                                                    {/ifset}
-                                                {/ifset}
-                                                {foreach $eventTypes[$ev->type]->preStatusSet as $preStatus}
-                                                    <button type="button" class="btn btn-sm {$myPreStatus,$myPostStatus,$preStatus->code,$ev->closeTime|prestatusClass}">{$preStatus->caption}</button>
-                                                {/foreach}
-
-                                            </div>
-                                        
-                                    </div>
-                                </div>
+                                {control attendanceRow $ev}
                             {/foreach}
                         {else}
                             Žádná událost

@@ -24,33 +24,6 @@ class EventPresenter extends SecuredPresenter {
                 case "UNKNOWN": return "Nezadáno";
             }
         });
-
-        $this->template->addFilter("prestatusClass", function ($myPreStatus, $myPostStatus, $btn, $startTime) {
-            switch ($btn) {
-                case "LAT": // Late
-                    $color = "warning";
-                    break;
-                case "NO":
-                    $color = "danger";
-                    break;
-                case "YES":
-                    $color = "success";
-                    break;
-                case "DKY": // Dont Know Yet
-                    $color = "warning";
-                    break;
-                default:
-                    $color = "primary";
-                    break;
-            }
-            
-            if(strtotime($startTime) > strtotime(date("c")))// pokud podminka plati, akce je budouci
-                return $btn == $myPreStatus ? "btn-outline-$color active" : "btn-outline-$color";
-            else if($myPostStatus == "not-set") // akce uz byla, post status nevyplnen
-                return $btn == $myPreStatus && $myPreStatus != "not-set" ? "btn-outline-$color disabled active" : "btn-outline-secondary disabled";
-            else 
-                return $btn == $myPostStatus && $myPostStatus != "not-set" ? "btn-outline-$color disabled active" : "btn-outline-secondary disabled";
-        });
     }
     
     public function renderDefault($date = NULL, $direction = NULL) {
@@ -176,6 +149,10 @@ class EventPresenter extends SecuredPresenter {
         
         $this->template->event = $event;
         $this->template->eventTypes = $this->getEventTypes();
+    }
+    
+    function createComponentAttendanceRow() {
+        return new \Nette\Application\UI\AttendanceRow($this->getUser()->getId(), $this->getSession()->getSection("tymy"));
     }
 
 }

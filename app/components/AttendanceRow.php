@@ -19,25 +19,50 @@ use Nette\Utils\Strings;
 class AttendanceRow extends Control{
     
     private $user;
-    private $presenter;
-    private $event;
+    private $userId;
+    private $sessionSection;
     
-    public function __construct(Nette\Application\UI\Presenter $presenter, \Tymy\Event $event) {
+    
+    public function __construct($userId, \Nette\Http\SessionSection $sessionSection) {
         parent::__construct();
-        $this->user = $presenter->getUser();
-        $this->presenter = $presenter;
-        $this->event = $event;
+        $this->sessionSection = $sessionSection;
+        $this->userId = $userId;
     }
     
-    public function render(){
+    public function render($event){
+        
+        $this->template->addFilter("prestatusClass", function ($myPreStatus, $myPostStatus, $btn, $startTime) {
+            switch ($btn) {
+                case "LAT": // Late
+                    $color = "warning";
+                    break;
+                case "NO":
+                    $color = "danger";
+                    break;
+                case "YES":
+                    $color = "success";
+                    break;
+                case "DKY": // Dont Know Yet
+                    $color = "warning";
+                    break;
+                default:
+                    $color = "primary";
+                    break;
+            }
+            
+            if(strtotime($startTime) > strtotime(date("c")))// pokud podminka plati, akce je budouci
+                return $btn == $myPreStatus ? "btn-outline-$color active" : "btn-outline-$color";
+            else if($myPostStatus == "not-set") // akce uz byla, post status nevyplnen
+                return $btn == $myPreStatus && $myPreStatus != "not-set" ? "btn-outline-$color disabled active" : "btn-outline-secondary disabled";
+            else 
+                return $btn == $myPostStatus && $myPostStatus != "not-set" ? "btn-outline-$color disabled active" : "btn-outline-secondary disabled";
+        });
+        
         $template = $this->template;
         $template->setFile(__DIR__ . '/templates/attendancerow.latte');
-        
-        $sessionSection = $this->getSession()->getSection("tymy");
-        
-        $this->template->eventTypes = $sessionSection["eventTypes"];
-        $this->template->ev = $this->event;
-        $this->template->userId = $this->user->getId();
+        $this->template->eventTypes = $this->sessionSection["eventTypes"];
+        $this->template->ev = $event;
+        $this->template->userId = $this->userId;
 
         $template->render();
     }
