@@ -3,10 +3,7 @@
 namespace Nette\Application\UI;
 
 use Nette;
-use App\Presenters\DiscussionPresenter;
 use Nette\Utils\Strings;
-use Tymy;
-use Tracy\Debugger;
 
 /**
  * Description of Navbar
