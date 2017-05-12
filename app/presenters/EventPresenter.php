@@ -14,7 +14,7 @@ class EventPresenter extends SecuredPresenter {
     
     public function startup() {
         parent::startup();
-        $this->getEventTypes(true);
+        $this->getEventTypes();
         $this->setLevelCaptions(["0" => ["caption" => "Události", "link" => $this->link("Discussion:")]]);
 
         $this->template->addFilter('genderTranslate', function ($gender) {
