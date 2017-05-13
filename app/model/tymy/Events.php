@@ -12,6 +12,7 @@ use Nette;
 final class Events extends Tymy{
     
     private $dateFrom;
+    private $order;
     private $dateTo;
     private $withMyAttendance = FALSE;
     
@@ -30,6 +31,11 @@ final class Events extends Tymy{
         return $this;
     }
     
+    public function order($orderField){
+        $this->order = $orderField;
+        return $this;
+    }
+    
     public function select() {
         $url = "events";
         
@@ -45,6 +51,10 @@ final class Events extends Tymy{
             
         if(count($filter) && !$this->withMyAttendance){
             $this->setUriParam("filter", join("~", $filter));
+        }
+        
+        if($this->order){
+            $this->setUriParam("order", $this->order);
         }
         
         $this->fullUrl .= $url;
