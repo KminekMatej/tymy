@@ -6,10 +6,10 @@ function loadAgenda(purl) {
     if ($("DIV.agenda[data-month='" + year + "-" + month + "']").length == 0) {    
         //this month is not loaded yet - call ajax to load new data
         disableCalendar(true);
-        if (date.month() == 12) {
+        if (date.month() == 11) {
             datePlus = (year + 1) + "-01";
             dateMinus = year + "-11";
-        } else if (date.month() == 1) {
+        } else if (date.month() == 0) {
             datePlus = year + "-02";
             dateMinus = (year - 1) + "-12";
         } else {
@@ -18,7 +18,7 @@ function loadAgenda(purl) {
         }
         if ($("DIV.agenda[data-month='" + datePlus + "']").length == 0) {
             $.nette.ajax({
-                url: purl+"?date=" + datePlus + "&direction=1",
+                url: purl+"?date=" + datePlus + "&direction=1&do=eventLoad",
                 complete: function (payload) {
                     $('#calendar').fullCalendar('removeEvents');
                     $('#calendar').fullCalendar('renderEvents', payload.responseJSON.events, true);
@@ -27,7 +27,7 @@ function loadAgenda(purl) {
             });
         } else if ($("DIV.agenda[data-month='" + dateMinus + "']").length == 0) {
             $.nette.ajax({
-                url: purl+"?date=" + dateMinus + "&direction=-1",
+                url: purl+"?date=" + dateMinus + "&direction=-1&do=eventload",
                 complete: function (payload) {
                     $('#calendar').fullCalendar('removeEvents');
                     $('#calendar').fullCalendar('renderEvents', payload.responseJSON.events, true);
@@ -52,5 +52,32 @@ function disableCalendar(disable) {
     } else if(disable === false) {
         $('#calendar DIV.fc-header-toolbar BUTTON.fc-prev-button').prop('disabled', false);
         $('#calendar DIV.fc-header-toolbar BUTTON.fc-next-button').prop('disabled', false);
+    }
+}
+
+function updateAttendance(btn, purl) {
+    if ($(btn).prop("disabled") || $(btn).hasClass("disabled"))
+        return;
+    var id = $(btn).closest("DIV.btn-group").attr("id");
+    $("DIV.events DIV#" + id + " BUTTON").removeClass("active");
+    $(btn).addClass("active");
+    var note = $("DIV.events DIV#" + id + " INPUT").val() ? $("DIV.events DIV#" + id + " INPUT").val() : "";
+    disableActionRow(id, true);
+    $.nette.ajax({
+        url: purl + "&desc=" + note,
+        complete: function (payload) {
+            disableActionRow(id, false);
+        }
+    });
+}
+
+function disableActionRow(id, disable){
+    $("DIV.events DIV#"+id+" BUTTON").prop("disabled", disable);
+    if(disable){
+        $("DIV.events DIV#"+id+" INPUT").attr("disabled","disabled");
+        //$("DIV.events DIV#"+id+" BUTTON").addClass("disabled");
+    } else {
+        $("DIV.events DIV#"+id+" INPUT").removeAttr("disabled");
+        //$("DIV.events DIV#"+id+" BUTTON").removeClass("disabled");
     }
 }
