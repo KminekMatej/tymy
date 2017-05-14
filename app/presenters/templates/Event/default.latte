@@ -17,36 +17,36 @@
 {block content}
 
 <script>
-$(document).ready(function () {
-    $('#calendar').fullCalendar({
-        locale: 'cs',
-        height: 500,
-        fixedWeekCount: false,
-        events: [{$evJson|noescape}],
-        header: {
-            left: 'title',
-            center: '',
-            right: 'today month,basicWeek,basicDay prev,next'
-        },
-        viewRender: function () {
-            loadAgenda({plink Event:});
-        },
-        loading: function( isLoading, view ) {
-            if(isLoading) {
-                $('#calendar DIV.fc-header-toolbar BUTTON.fc-prev-button').prop('disabled', true);
-                $('#calendar DIV.fc-header-toolbar BUTTON.fc-next-button').prop('disabled', true);
-            } else {
-                $('#calendar DIV.fc-header-toolbar BUTTON.fc-prev-button').prop('disabled', false);
-                $('#calendar DIV.fc-header-toolbar BUTTON.fc-next-button').prop('disabled', false);
+    $(document).ready(function () {
+        $('#calendar').fullCalendar({
+            locale: 'cs',
+            height: 500,
+            fixedWeekCount: false,
+            events: [{$evJson|noescape}],
+            header: {
+                left: 'title',
+                center: '',
+                right: 'today month,basicWeek,basicDay prev,next'
+            },
+            viewRender: function () {
+                loadAgenda({plink Event:});
+            },
+            loading: function (isLoading, view) {
+                if (isLoading) {
+                    $('#calendar DIV.fc-header-toolbar BUTTON.fc-prev-button').prop('disabled', true);
+                    $('#calendar DIV.fc-header-toolbar BUTTON.fc-next-button').prop('disabled', true);
+                } else {
+                    $('#calendar DIV.fc-header-toolbar BUTTON.fc-prev-button').prop('disabled', false);
+                    $('#calendar DIV.fc-header-toolbar BUTTON.fc-next-button').prop('disabled', false);
+                }
             }
-        }
+        });
+        $('#calendar DIV.fc-header-toolbar').addClass("card-header");
+        $('#calendar DIV.fc-button-group').addClass("btn-group");
+        $('#calendar DIV.fc-header-toolbar BUTTON').each(function () {
+            $(this).addClass("btn btn-secondary");
+        });
     });
-    $('#calendar DIV.fc-header-toolbar').addClass("card-header");
-    $('#calendar DIV.fc-button-group').addClass("btn-group");
-    $('#calendar DIV.fc-header-toolbar BUTTON').each(function () {
-        $(this).addClass("btn btn-secondary");
-    });
-});
 </script>
 
 <div class="container events">
@@ -54,9 +54,11 @@ $(document).ready(function () {
         <div class="col-md-7 my-3">
             <div class="card sh-box" id='calendar'></div>
         </div>
+
         <div class="col-md-5 agenda-wrapper my-3" n:snippet="events">
             {var $actMonth=$agendaFrom}
             {while strtotime($actMonth)<=strtotime($agendaTo)}
+
                 <div class="card sh-box agenda" data-month="{$actMonth}" style="display: none">
                     <div class="card-header">
                         Agenda
@@ -64,7 +66,34 @@ $(document).ready(function () {
                     <div class="card-block">
                         {ifset $evMonths[$actMonth]}
                             {foreach $evMonths[$actMonth] as $ev}
-                                {control attendanceRow $ev}
+                                <div class="row">
+                                    <div class="col" title="{$ev->caption} ({$eventTypes[$ev->type]->caption})&#13;{$ev->startTime|date:'j.n. H:i'} -> {$ev->endTime|date:'j.n H:i'}"><span class="event-heading">{$ev->caption}</span><span class="event-time text-muted float-right">{$ev->startTime|date:'j.n. H:i'}</span></div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col">
+
+                                        <div class="btn-group input-group px-0" role="group" aria-label="Basic example" id="action-{$ev->id}">
+                                            {var $val = isset($ev->myAttendance->preDescription) ? $ev->myAttendance->preDescription : ''}
+                                            <input type="text" class="form-control form-control-sm" title="Poznámka" name="preStatusDesc" value="{$val}">
+
+                                            {var $myPreStatus = "not-set"}
+                                            {var $myPostStatus = "not-set"}
+                                            {ifset $ev->myAttendance}
+                                                {ifset $ev->myAttendance->preStatus}
+                                                    {var $myPreStatus = $eventTypes[$ev->type]->preStatusSet[$ev->myAttendance->preStatus]->code}
+                                                {/ifset}
+                                                {ifset $ev->myAttendance->postStatus}
+                                                    {var $myPostStatus = $eventTypes[$ev->type]->postStatusSet[$ev->myAttendance->postStatus]->code}
+                                                {/ifset}
+                                            {/ifset}
+                                            {foreach $eventTypes[$ev->type]->preStatusSet as $preStatus}
+                                                <button onclick="updateAttendance(this, {link attendance! $ev->id, $preStatus->code})" class="btn btn-sm {$myPreStatus,$myPostStatus,$preStatus->code,$ev->closeTime|prestatusClass}">{$preStatus->caption}</button>
+                                            {/foreach}
+
+                                        </div>
+
+                                    </div>
+                                </div>
                             {/foreach}
                         {else}
                             Žádná událost

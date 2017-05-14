@@ -53,11 +53,13 @@ final class Attendance extends Tymy{
         $this->fullUrl .= "attendance/";
 
         $this->urlEnd();
-
-        $this->addPost("userId", $this->user->getId());
-        $this->addPost("eventId", $this->recId);
-        $this->addPost("preStatus", $this->preStatus);
-        $this->addPost("preDescription", $this->preDescription);
+        
+        $this->addPost([
+            "userId" => $this->user->getId(),
+            "eventId" => $this->recId,
+            "preStatus" => $this->preStatus,
+            "preDescription" => $this->preDescription,
+        ]);
 
         return $this->execute();
     }

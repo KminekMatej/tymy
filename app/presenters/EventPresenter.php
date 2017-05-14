@@ -8,6 +8,13 @@ use Nette\Application\UI\Form;
 
 class EventPresenter extends SecuredPresenter {
         
+    private $eventList;
+    private $eventsFrom;
+    private $eventsTo;
+    private $eventsJSString;
+    private $eventsJSObject;
+    private $eventsMonthly;
+    
     public function __construct() {
         parent::__construct();
     }
@@ -24,67 +31,100 @@ class EventPresenter extends SecuredPresenter {
                 case "UNKNOWN": return "Nezadáno";
             }
         });
+
+        $this->template->addFilter("prestatusClass", function ($myPreStatus, $myPostStatus, $btn, $startTime) {
+            switch ($btn) {
+                case "LAT": // Late
+                    $color = "warning";
+                    break;
+                case "NO":
+                    $color = "danger";
+                    break;
+                case "YES":
+                    $color = "success";
+                    break;
+                case "DKY": // Dont Know Yet
+                    $color = "warning";
+                    break;
+                default:
+                    $color = "primary";
+                    break;
+            }
+            
+            if(strtotime($startTime) > strtotime(date("c")))// pokud podminka plati, akce je budouci
+                return $btn == $myPreStatus ? "btn-outline-$color active" : "btn-outline-$color";
+            else if($myPostStatus == "not-set") // akce uz byla, post status nevyplnen
+                return $btn == $myPreStatus && $myPreStatus != "not-set" ? "btn-outline-$color disabled active" : "btn-outline-secondary disabled";
+            else 
+                return $btn == $myPostStatus && $myPostStatus != "not-set" ? "btn-outline-$color disabled active" : "btn-outline-secondary disabled";
+        });
     }
     
-    public function renderDefault($date = NULL, $direction = NULL) {
+    private function loadEventList($date = NULL, $direction = NULL) {
         $events = new \Tymy\Events($this);
-        $eventsFrom = date("Ym", strtotime("-3 months")) . "01";
-        $eventsTo = date("Ym", strtotime("+3 months")) . "01";
-        
-        if($direction == 1){
-            $eventsTo = date("Ym", strtotime("$date-01 +5 months")) . "01";
-        } elseif($direction == -1){
-            $eventsFrom = date("Ym", strtotime("$date-01 -5 months")) . "01";
+        $this->eventsFrom = date("Ym", strtotime("-3 months")) . "01";
+        $this->eventsTo = date("Ym", strtotime("+3 months")) . "01";
+
+        if ($direction == 1) {
+            $this->eventsTo = date("Ym", strtotime("$date-01 +5 months")) . "01";
+        } elseif ($direction == -1) {
+            $this->eventsFrom = date("Ym", strtotime("$date-01 -5 months")) . "01";
         }
-        
-        $result = $events
+
+        $this->eventList = $events
                 ->withMyAttendance(true)
-                ->from($eventsFrom)
-                ->to($eventsTo)
+                ->from($this->eventsFrom)
+                ->to($this->eventsTo)
+                ->order("startTime")
                 ->fetch();
-        $evJS = [];
-        $evMonths = [];
-        foreach ($result as $ev) {
-            $webName = \Nette\Utils\Strings::webalize($ev->caption);
-            $evObj = "{"
-                    . "id:'".$ev->id."',"
-                    . "title:'".$ev->caption."',"
-                    . "start:'".$ev->startTime."',"
-                    . "end:'".$ev->endTime."',"
-                    . "url:'".$this->link('event', array('udalost'=>$ev->id . "-$webName")) ."'"
-                    . "}";
-            $month = date("Y-m", strtotime($ev->startTime));
-            $evMonths[$month][] = $ev;
-            $evJS[] = $evObj;
+    }
+
+    public function renderDefault() {
+        if (!isset($this->eventList)) {
+            $this->loadEventList(NULL, NULL);
         }
         
-        $this->template->agendaFrom = date("Y-m", strtotime($eventsFrom));
-        $this->template->agendaTo = date("Y-m", strtotime($eventsTo));
+        $this->eventize();
+        
+        $this->template->agendaFrom = date("Y-m", strtotime($this->eventsFrom));
+        $this->template->agendaTo = date("Y-m", strtotime($this->eventsTo));
         
         $this->template->currY = date("Y");
         $this->template->currM = date("m");
-        $this->template->evJson = join(",", $evJS);
-        $this->template->evMonths = $evMonths;
-        $this->template->events = $result;
+        $this->template->evJson = join(",", $this->eventsJSString);
+        $this->template->evMonths = $this->eventsMonthly;
+        $this->template->events = $this->eventList;
         $this->template->eventTypes = $this->getEventTypes();
-        if($this->isAjax()){
-            $events = [];
-            foreach ($result as $ev) {
-                $webName = \Nette\Utils\Strings::webalize($ev->caption);
-                $events[] = (object)[
+    }
+    
+    private function eventize() {
+        $this->eventsJSString = [];
+        $this->eventsJSObject = [];
+        $this->eventsMonthly = [];
+        foreach ($this->eventList as $ev) {
+            $webName = \Nette\Utils\Strings::webalize($ev->caption);
+            //this special formatting is made to make it easily work with fullCalendar javascript object
+            $this->eventsJSString[] = "{"
+                    . "id:'" . $ev->id . "',"
+                    . "title:'" . $ev->caption . "',"
+                    . "start:'" . $ev->startTime . "',"
+                    . "end:'" . $ev->endTime . "',"
+                    . "url:'" . $this->link('event', array('udalost' => $ev->id . "-$webName")) . "'"
+                    . "}";
+            
+            $this->eventsJSObject[] = (object)[
                     "id"=>$ev->id,
                     "title"=>$ev->caption,
                     "start"=>$ev->startTime,
                     "end"=>$ev->endTime,
                     "url"=>$this->link('event', array('udalost'=>$ev->id . "-$webName"))
                     ];
-            }
-            $this->payload->events = $events;
-            $this->redrawControl("events");
+            
+            $month = date("Y-m", strtotime($ev->startTime));
+            $this->eventsMonthly[$month][] = $ev;
         }
-        
     }
-    
+
     private function getEventTypes($force = FALSE){
         $sessionSection = $this->getSession()->getSection("tymy");
         
@@ -151,8 +191,22 @@ class EventPresenter extends SecuredPresenter {
         $this->template->eventTypes = $this->getEventTypes();
     }
     
-    function createComponentAttendanceRow() {
-        return new \Nette\Application\UI\AttendanceRow($this->getUser()->getId(), $this->getSession()->getSection("tymy"));
+    public function handleAttendance($id, $code, $desc){
+        $att = new \Tymy\Attendance($this);
+        $att->recId($id)
+            ->preStatus($code)
+            ->preDescription($desc)
+            ->plan();
+               
+    }
+    
+    public function handleEventLoad($date = NULL, $direction = NULL) {
+        $this->loadEventList($date, $direction);
+        if ($this->isAjax()) {
+            $this->eventize();
+            $this->payload->events = $this->eventsJSObject;
+            $this->redrawControl("events");
+        }
     }
 
 }
