@@ -177,6 +177,7 @@ abstract class Tymy extends Nette\Object{
                 'Content-Type: application/json')
             );
         }
+        \Tracy\Debugger::barDump(json_encode($this->postParams));
         $result = curl_exec($ch);
         $output = new \stdClass();
         $output->status = $result === FALSE ? FALSE : TRUE;
@@ -186,8 +187,18 @@ abstract class Tymy extends Nette\Object{
         return $output;
     }
     
-    protected function addPost($key, $value){
-        $this->postParams[$key] = $value;
+    /**
+     * Adds post parameter to prepared request. If Key is an array, whole array is added to the body. Otherwise a standard key/value pair is added.
+     * @param array or string $key
+     * @param string $value
+     * @return $this
+     */
+    protected function addPost($key, $value = NULL){
+        if($value == NULL && is_array($key)){
+            $this->postParams[] = $key;
+        } else {
+            $this->postParams[$key] = $value;
+        }
         return $this;
     }
 
