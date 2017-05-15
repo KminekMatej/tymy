@@ -49,7 +49,7 @@ final class Events extends Tymy{
         if($this->dateTo)
             $filter[] = "startTime<" . $this->dateTo;
             
-        if(count($filter) && !$this->withMyAttendance){
+        if(count($filter)){
             $this->setUriParam("filter", join("~", $filter));
         }
         
