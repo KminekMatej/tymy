@@ -41,7 +41,6 @@ final class Discussion extends Tymy{
     }
     
     public function insert($text) {
-        //TODO change date to UTC when performing insert
         if (!isset($this->recId))
             throw new APIException('Discussion ID not set!');
 
