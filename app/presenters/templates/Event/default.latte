@@ -16,13 +16,21 @@
 
 {block content}
 
+
+
 <script>
     $(document).ready(function () {
         $('#calendar').fullCalendar({
             locale: 'cs',
             height: 500,
             fixedWeekCount: false,
-            events: [{$evJson|noescape}],
+            events: function(start, end, timezone, callback) {
+                var events = [];
+                {foreach $events as $evnt}
+                    events.push({l}id: {$evnt->id}, title: {$evnt->caption},start: {$evnt->startTime},end: {$evnt->endTime},url: {$presenter->link('event', $evnt->id . '-' . $evnt->caption|webalize)}{r});
+                {/foreach}
+                callback(events);
+            },
             header: {
                 left: 'title',
                 center: '',

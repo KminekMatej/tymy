@@ -11,7 +11,6 @@ class EventPresenter extends SecuredPresenter {
     private $eventList;
     private $eventsFrom;
     private $eventsTo;
-    private $eventsJSString;
     private $eventsJSObject;
     private $eventsMonthly;
     
@@ -91,27 +90,16 @@ class EventPresenter extends SecuredPresenter {
         
         $this->template->currY = date("Y");
         $this->template->currM = date("m");
-        $this->template->evJson = join(",", $this->eventsJSString);
         $this->template->evMonths = $this->eventsMonthly;
         $this->template->events = $this->eventList;
         $this->template->eventTypes = $this->getEventTypes();
     }
     
     private function eventize() {
-        $this->eventsJSString = [];
         $this->eventsJSObject = [];
         $this->eventsMonthly = [];
         foreach ($this->eventList as $ev) {
             $webName = \Nette\Utils\Strings::webalize($ev->caption);
-            //this special formatting is made to make it easily work with fullCalendar javascript object
-            $this->eventsJSString[] = "{"
-                    . "id:'" . $ev->id . "',"
-                    . "title:'" . $ev->caption . "',"
-                    . "start:'" . $ev->startTime . "',"
-                    . "end:'" . $ev->endTime . "',"
-                    . "url:'" . $this->link('event', array('udalost' => $ev->id . "-$webName")) . "'"
-                    . "}";
-            
             $this->eventsJSObject[] = (object)[
                     "id"=>$ev->id,
                     "title"=>$ev->caption,
