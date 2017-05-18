@@ -19,6 +19,7 @@ abstract class Tymy extends Nette\Object{
     
     protected $result = NULL;
     protected $protocol;
+    /** @var \App\Presenters\SecuredPresenter */
     protected $presenter;
     protected $team;
     /**
@@ -30,7 +31,8 @@ abstract class Tymy extends Nette\Object{
     protected $user;
     private $uriParams;
     private $postParams;
-    
+    /** @var \Tymy\TracyPanelTymy */
+    private $tymyPanel;
     
     /** Function to return full URI of select api */
     abstract protected function select();
@@ -39,9 +41,22 @@ abstract class Tymy extends Nette\Object{
     abstract protected function tzFields($jsonObj);
     
     public function __construct(Nette\Application\UI\Presenter $presenter = NULL) {
+        \Tracy\Debugger::timer("tymy-object-process" . spl_object_hash($this));
+        $panelId = "TymyAPI";
+        //\Tracy\Debugger::barDump(\Tracy\Debugger::getBar()->getPanel($panelId));
+        if(is_null(\Tracy\Debugger::getBar()->getPanel($panelId))){
+            $this->tymyPanel = new \Tymy\TracyPanelTymy;
+            \Tracy\Debugger::getBar()->addPanel($this->tymyPanel, $panelId);
+        } else {
+            $this->tymyPanel = \Tracy\Debugger::getBar()->getPanel($panelId);
+        }
         if($presenter != NULL)
             $this->presenter ($presenter);
         $this->https(FALSE);
+    }
+    
+    public function __destruct() {
+        $this->tymyPanel->logAPI("Request time", $this->fullUrl, \Tracy\Debugger::timer("tymy-object-process" . spl_object_hash($this)));
     }
     
     public function presenter(Nette\Application\UI\Presenter $presenter){
@@ -88,7 +103,7 @@ abstract class Tymy extends Nette\Object{
         $this->select();
 
         $this->urlEnd();
-        //\Tracy\Debugger::barDump($this->fullUrl);
+        \Tracy\Debugger::barDump($this->fullUrl);
         
         try {
             $this->result = $this->execute();
