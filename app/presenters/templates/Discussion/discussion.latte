@@ -7,10 +7,15 @@
 {block scripts}
 {include parent}
 <script src="{$basePath}/resources/ckeditor/ckeditor.js"></script>
-<script src="{$basePath}/js/clipboard.min.js"></script>
 <script src="{$basePath}/js/smoothScroll.js"></script>
 <script src="{$basePath}/js/discussion.js"></script>
 <script src="{$basePath}/js/timer.js"></script>
+<script src="{$basePath}/resources/clipboard/dist/clipboard.{$js}"></script>
+<script>
+$( document ).ready(function() {
+    new Clipboard('BUTTON.clipboard-btn');
+});
+</script>
 {/block}
 
 {block content}
@@ -45,8 +50,8 @@
                             
                             <div class="btn-group btn-group-sm float-md-right" role="group">
                                 <button n:class="btn,btn-sm,$item->sticky ? active,$item->sticky ? btn-info:btn-secondary"><i class="fa fa-thumb-tack" aria-hidden="true"></i></button>
-                                <button class="btn btn-sm btn-secondary" onclick="loadPost('{$item->id}-content')" title="Nový příspěvek z tohoto"><i class="fa fa-angle-double-up" aria-hidden="true"></i></button>
-                                <button class="btn btn-sm btn-secondary" onclick="copyPost('{$item->id}-content')" title="Kopírovat do schránky"><i class="fa fa-files-o" aria-hidden="true"></i></button>
+                                <button class="btn btn-sm btn-secondary" onclick="loadPost('content_{$item->id}')" title="Nový příspěvek z tohoto"><i class="fa fa-angle-double-up" aria-hidden="true"></i></button>
+                                <button class="btn btn-sm btn-secondary clipboard-btn" data-clipboard-target="#content_{$item->id}" title="Kopírovat do schránky"><i class="fa fa-files-o" aria-hidden="true"></i></button>
                                 <button class="btn btn-sm btn-secondary"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                             </div>
                             <span class="float-md-right mx-2">{$item->createdAt|date:'j.n.Y G:i:s'}</span>
@@ -55,7 +60,7 @@
                             <img class="user_pic" src="http://{$tym}.tymy.cz/{$item->createdBy->pictureUrl}">
                             {php $post = $item->post}
                             {var $post = htmlspecialchars_decode($post)}
-                            <p class="card-text" id="{$item->id}-content">{ifset $item->post}{$post|noescape}{/ifset}</p>
+                            <p class="card-text" id="content_{$item->id}">{ifset $item->post}{$post|noescape}{/ifset}</p>
                         </div>
                     </div>
                 </div>

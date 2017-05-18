@@ -15,7 +15,7 @@ class HomepagePresenter extends SecuredPresenter {
         parent::startup();
         $this->setLevelCaptions(["0" => ["caption" => "Přehled", "link" => $this->link("Homepage:")]]);
     }
-
+    
     public function renderDefault() {
         //todo
     }
