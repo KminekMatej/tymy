@@ -32,7 +32,7 @@ abstract class Tymy extends Nette\Object{
     private $uriParams;
     private $postParams;
     /** @var \Tymy\TracyPanelTymy */
-    private $tymyPanel;
+    protected $tymyPanel;
     
     /** Function to return full URI of select api */
     abstract protected function select();
@@ -102,7 +102,7 @@ abstract class Tymy extends Nette\Object{
         try {
             \Tracy\Debugger::timer("tymy-fetch" . spl_object_hash($this));
             $this->result = $this->execute();
-            $this->tymyPanel->logAPI("Request time", $this->fullUrl, \Tracy\Debugger::timer("tymy-fetch" . spl_object_hash($this)));
+            $this->tymyPanel->logAPI("Fetch request", $this->fullUrl, \Tracy\Debugger::timer("tymy-fetch" . spl_object_hash($this)));
         } catch (\Tymy\Exception\APIAuthenticationException $exc) {
             $this->user->logout(true);
             $this->presenter->flashMessage('You have been signed out due to inactivity. Please sign in again.');

@@ -35,7 +35,6 @@ final class Discussion extends Tymy{
     }
     
     public function search($text){
-        \Tracy\Debugger::barDump("Searching for $text");
         $this->setUriParam("search", $text);
         return $this;
     }
@@ -51,8 +50,11 @@ final class Discussion extends Tymy{
         $this->urlEnd();
 
         $this->addPost("post", $text);
+        \Tracy\Debugger::timer("tymy-fetch" . spl_object_hash($this));
+        $ex = $this->execute();
+        $this->tymyPanel->logAPI("Insert request", $this->fullUrl, \Tracy\Debugger::timer("tymy-fetch" . spl_object_hash($this)));
 
-        return $this->execute();
+        return $ex;
     }
     
     protected function tzFields($jsonObj){
