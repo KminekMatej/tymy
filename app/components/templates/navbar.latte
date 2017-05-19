@@ -24,7 +24,7 @@
                 {if $playerErrors > 0}<span class="badge badge-pill badge-danger badge-new">{$playerErrors}</span>{/if}
                 <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-users" aria-hidden="true"></i> Tým</a>    
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item" href="{plink Team:player $me->webName}">{if $me->errCnt > 0}<span class="badge badge-danger">{$me->errCnt}</span>{/if} {$me->callName}</a>
+                    <a class="dropdown-item" href="{plink Team:player $me->webName}">{$me->callName} {if $me->errCnt > 0}<span class="badge badge-danger">{$me->errCnt}</span>{/if}</a>
                     <a class="dropdown-item" href="{plink Team:players}">Hráči ({$counts['PLAYER']})</a>
                     <a class="dropdown-item" href="{plink Team:members}">Členové ({$counts['MEMBER']})</a>
                     <a class="dropdown-item" href="{plink Team:sicks}">Marodi ({$counts['SICK']})</a>
