@@ -61,14 +61,13 @@
                                                 <div class="col-2 player-heading"><h6 style="font-weight: bold">{$gender|genderTranslate} ({count($usrs)}):</h6></div>
                                                 <div class="col-10">
                                                     {foreach $usrs as $usr}
-                                                        {dump $usr}
-                                                        <figure class="figure text-center" style="width: 100px">
-                                                            <a href="{plink Team:player $usr->webName}">
-                                                                <img src="http://{$tym}.tymy.cz/{$usr->pictureUrl}" class="figure-img img-fluid rounded" alt="{$usr->callName}">
-                                                                <figcaption class="figure-caption">{$usr->callName}</figcaption>
-                                                                <figcaption class="figure-caption" style="font-size: 70%; display: inline-block">{$usr->preDescription}</figcaption>
-                                                            </a>
-                                                        </figure>
+                                                            <figure class="figure text-center" style="width: 100px">
+                                                                <a href="{plink Team:player $usr->webName}">
+                                                                    <img src="http://{$tym}.tymy.cz/{$usr->pictureUrl}" class="figure-img img-fluid rounded" alt="{$usr->callName}">
+                                                                    <figcaption class="figure-caption">{$usr->callName}</figcaption>
+                                                                    <figcaption class="figure-caption" style="font-size: 70%; display: inline-block">{$usr->preDescription}</figcaption>
+                                                                </a>
+                                                            </figure>
                                                     {/foreach}
                                                 </div>
                                             </div>
