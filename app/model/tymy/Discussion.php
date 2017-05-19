@@ -50,9 +50,9 @@ final class Discussion extends Tymy{
         $this->urlEnd();
 
         $this->addPost("post", $text);
-        \Tracy\Debugger::timer("tymy-fetch" . spl_object_hash($this));
+        \Tracy\Debugger::timer("tymy-discussion-insert" . spl_object_hash($this));
         $ex = $this->execute();
-        $this->tymyPanel->logAPI("Insert request", $this->fullUrl, \Tracy\Debugger::timer("tymy-fetch" . spl_object_hash($this)));
+        $this->tymyPanel->logAPI("Insert request", $this->fullUrl, \Tracy\Debugger::timer("tymy-discussion-insert" . spl_object_hash($this)));
 
         return $ex;
     }
