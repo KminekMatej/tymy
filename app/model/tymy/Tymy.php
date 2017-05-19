@@ -41,9 +41,7 @@ abstract class Tymy extends Nette\Object{
     abstract protected function tzFields($jsonObj);
     
     public function __construct(Nette\Application\UI\Presenter $presenter = NULL) {
-        \Tracy\Debugger::timer("tymy-object-process" . spl_object_hash($this));
         $panelId = "TymyAPI";
-        //\Tracy\Debugger::barDump(\Tracy\Debugger::getBar()->getPanel($panelId));
         if(is_null(\Tracy\Debugger::getBar()->getPanel($panelId))){
             $this->tymyPanel = new \Tymy\TracyPanelTymy;
             \Tracy\Debugger::getBar()->addPanel($this->tymyPanel, $panelId);
@@ -53,10 +51,6 @@ abstract class Tymy extends Nette\Object{
         if($presenter != NULL)
             $this->presenter ($presenter);
         $this->https(FALSE);
-    }
-    
-    public function __destruct() {
-        $this->tymyPanel->logAPI("Request time", $this->fullUrl, \Tracy\Debugger::timer("tymy-object-process" . spl_object_hash($this)));
     }
     
     public function presenter(Nette\Application\UI\Presenter $presenter){
@@ -98,15 +92,17 @@ abstract class Tymy extends Nette\Object{
     }
 
     public function fetch(){
+        
         $this->urlStart();
 
         $this->select();
 
         $this->urlEnd();
-        \Tracy\Debugger::barDump($this->fullUrl);
         
         try {
+            \Tracy\Debugger::timer("tymy-fetch" . spl_object_hash($this));
             $this->result = $this->execute();
+            $this->tymyPanel->logAPI("Request time", $this->fullUrl, \Tracy\Debugger::timer("tymy-fetch" . spl_object_hash($this)));
         } catch (\Tymy\Exception\APIAuthenticationException $exc) {
             $this->user->logout(true);
             $this->presenter->flashMessage('You have been signed out due to inactivity. Please sign in again.');
@@ -192,7 +188,6 @@ abstract class Tymy extends Nette\Object{
                 'Content-Type: application/json')
             );
         }
-        \Tracy\Debugger::barDump(json_encode($this->postParams));
         $result = curl_exec($ch);
         $output = new \stdClass();
         $output->status = $result === FALSE ? FALSE : TRUE;
