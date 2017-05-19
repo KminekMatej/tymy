@@ -178,10 +178,10 @@ class APIEventsTest extends Tester\TestCase {
                 ->withMyAttendance(TRUE)
                 ->fetch();
         
-        Assert::same(1, count($eventsObj->getUriParams()));
-        Assert::notcontains("filter",array_keys($eventsObj->getUriParams()));
+        Assert::same(2, count($eventsObj->getUriParams()));
+        Assert::contains("filter",array_keys($eventsObj->getUriParams()));
         Assert::contains("TSID",array_keys($eventsObj->getUriParams()));
-        Assert::notcontains("startTime>20160202~startTime<20170202",$eventsObj->getUriParams());
+        Assert::contains("startTime>20160202~startTime<20170202",$eventsObj->getUriParams());
         
         foreach ($eventsObj->result->data as $ev) {
             Assert::true(is_object($ev));
