@@ -92,7 +92,6 @@ class NavbarControl extends Control {
         if ($this->parent->isAjax()) {
             $this->redrawControl('nav');
         } else {
-            // redirect může jen presenter, nikoliv komponenta
             $this->parent->redirect('this');
         }
     }
