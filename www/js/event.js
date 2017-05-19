@@ -81,3 +81,16 @@ function disableActionRow(id, disable){
         //$("DIV.events DIV#"+id+" BUTTON").removeClass("disabled");
     }
 }
+
+function togglePast(){
+    if($(".evnt-past").is(":visible")){
+        $(".evnt-past").hide(300);
+        $("DIV.agenda DIV.card-header I.fa").removeClass("fa-low-vision");
+        $("DIV.agenda DIV.card-header I.fa").addClass("fa-eye");
+    } else {
+        $(".evnt-past").show(300);
+        $("DIV.agenda DIV.card-header I.fa").removeClass("fa-eye");
+        $("DIV.agenda DIV.card-header I.fa").addClass("fa-low-vision");
+    }
+    
+}
