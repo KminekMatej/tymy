@@ -55,7 +55,9 @@ class NavbarControl extends Control {
             "PLAYER"=>0,
             "MEMBER"=>0,
             "SICK"=>0,
-            "DELETED"=>0,];
+            "DELETED"=>0,
+            "INIT"=>0,
+            ];
         foreach ($players as $p) {
             $counts["ALL"]++;
             $counts[$p->status]++;
