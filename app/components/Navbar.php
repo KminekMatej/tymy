@@ -52,6 +52,7 @@ class NavbarControl extends Control {
         $playerErrors = 0;
         $counts = [
             "ALL"=>0,
+            "NEW"=>0, // TODO NEW PLAYERS
             "PLAYER"=>0,
             "MEMBER"=>0,
             "SICK"=>0,
@@ -61,6 +62,7 @@ class NavbarControl extends Control {
         foreach ($players as $p) {
             $counts["ALL"]++;
             $counts[$p->status]++;
+            \Tracy\Debugger::barDump($p);
             if($p->id == $this->user->getId()){
                 $playerErrors = $p->errCnt;
                 $this->template->me = (object)$p;

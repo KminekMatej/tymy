@@ -9,7 +9,7 @@
         <ul class="navbar-nav mr-auto">
             <li class="nav-item dropdown">
                 {if $unreadSum > 0}<span class="badge badge-pill badge-danger badge-new">{$unreadSum}</span>{/if}
-                <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Diskuze <i class="fa fa-comments" aria-hidden="true"></i></a>    
+                <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-comments" aria-hidden="true"></i> Diskuze</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     {foreach $discussions as $d}
                         <a class="dropdown-item" href="{plink Discussion:discussion $d["captionLink"]}">
