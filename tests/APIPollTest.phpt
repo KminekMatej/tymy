@@ -116,8 +116,10 @@ class APIPollTest extends Tester\TestCase {
         
         Assert::type("int",$pollObj->result->data->createdById);
         Assert::type("string",$pollObj->result->data->createdAt);
+        Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $pollObj->result->data->createdAt)); //timezone correction check
         Assert::type("int",$pollObj->result->data->updatedById);
         Assert::type("string",$pollObj->result->data->updatedAt);
+        Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $pollObj->result->data->updatedAt)); //timezone correction check
         Assert::type("string",$pollObj->result->data->caption);
         Assert::type("string",$pollObj->result->data->description);
         Assert::type("int",$pollObj->result->data->minItems);
