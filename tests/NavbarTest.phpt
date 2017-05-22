@@ -59,7 +59,11 @@ class NavbarTest extends Tester\TestCase {
         $this->mockPresenter($presenterMock);
         $html = (string) $this->getHomepageHtml();
         $discussions = new \Tymy\Discussions($this->presenter);
+        
         $dObj = $discussions->fetch();
+        
+        $polls = new \Tymy\Polls($this->presenter);
+        $pObj = $polls->fetch();
         
         $dom = Tester\DomQuery::fromHtml($html);
         Assert::true($dom->has('div#snippet-navbar-nav'));
@@ -71,10 +75,11 @@ class NavbarTest extends Tester\TestCase {
         Assert::true($dom->has("ul.navbar-nav.mr-auto"));
         Assert::true($dom->has("ul.navbar-nav.mr-auto"));
         
-        Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item")), 3); //3 menu items
-        Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")), 2); //2 of them with dropdown
+        Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item")), 4); //4 menu items
+        Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")), 3); //2 of them with dropdown
         Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")[0]->div->a), count((array)$dObj)); //check if the discussions are all displayed
         Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")[1]->div->a), 5); //there are 5 menu items on second dropdown (team)
+        Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")[2]->div->a), count((array)$pObj)); //there are 5 menu items on second dropdown (team)
         
         Assert::equal(count($dom->find("ul.navbar-nav")), 2); //there are two nav menus, left and right
         $logoutBtn = (array)$dom->find("ul.navbar-nav")[1]->li->a;
