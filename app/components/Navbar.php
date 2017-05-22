@@ -14,6 +14,7 @@ class NavbarControl extends Control {
     
     private $discussions;
     private $players;
+    private $polls;
     private $user;
     private $presenter;
     
@@ -22,6 +23,7 @@ class NavbarControl extends Control {
         parent::__construct();
         $this->discussions = new \Tymy\Discussions($presenter);
         $this->players = new \Tymy\Users($presenter);
+        $this->polls= new \Tymy\Polls($presenter);
         $this->user = $presenter->getUser();
         $this->presenter = $presenter;
     }
@@ -75,6 +77,18 @@ class NavbarControl extends Control {
         
     }
     
+    private function polls(){
+        $polls = $this->polls->fetch();
+        $unvoteCount = 0;
+        foreach ($polls as $p) {
+            if($p->status == "OPENED" && $p->canVote && !$p->voted)
+                $unvoteCount++;
+        }
+        $this->template->unVotePolls = $unvoteCount;
+        $this->template->polls = (object)$polls;
+        
+    }
+    
     public function render(){
         $template = $this->template;
         $template->setFile(__DIR__ . '/templates/navbar.latte');
@@ -88,6 +102,8 @@ class NavbarControl extends Control {
         $this->discussions();
         //render players
         $this->players();
+        //render polls
+        $this->polls();
 
         $template->render();
     }
