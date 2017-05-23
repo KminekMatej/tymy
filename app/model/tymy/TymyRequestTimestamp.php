@@ -28,6 +28,14 @@ class TymyRequestTimestamp {
     }
     
     public function write(){
-        return "<table class=\"table\"><tr><th>$this->actionName: </th><td>". round($this->time * 1000)." ms</td></tr><tr><td colspan=\"2\" style=\"test-decoration: italic\">$this->actionDesc</td></tr></table>";
+        return "<table class=\"table\">"
+                . "<tr>"
+                    . "<th>$this->actionName: </th>"
+                    . "<td>". round($this->time * 1000)." ms</td>"
+                . "</tr>"
+                . "<tr>"
+                    . "<td colspan=\"2\" style=\"test-decoration: italic\"><a href=\"$this->actionDesc\" target=_blank>$this->actionDesc</a></td>"
+                . "</tr>"
+            . "</table>";
     }
 }
