@@ -100,9 +100,7 @@ abstract class Tymy extends Nette\Object{
         $this->urlEnd();
         
         try {
-            \Tracy\Debugger::timer("tymy-fetch" . spl_object_hash($this));
             $this->result = $this->execute();
-            $this->tymyPanel->logAPI("Fetch request", $this->fullUrl, \Tracy\Debugger::timer("tymy-fetch" . spl_object_hash($this)));
         } catch (\Tymy\Exception\APIAuthenticationException $exc) {
             $this->user->logout(true);
             $this->presenter->flashMessage('You have been signed out due to inactivity. Please sign in again.');
@@ -178,6 +176,7 @@ abstract class Tymy extends Nette\Object{
     }
 
     protected function request($url) {
+        \Tracy\Debugger::timer("tapi-request" . spl_object_hash($this));
         $ch = curl_init(); 
         curl_setopt($ch, CURLOPT_URL, $url); 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -194,6 +193,7 @@ abstract class Tymy extends Nette\Object{
         $output->result = $result;
         $output->curlInfo = curl_getinfo ($ch);
         curl_close($ch);
+        $this->tymyPanel->logAPI("TAPI request", $this->fullUrl, \Tracy\Debugger::timer("tapi-request" . spl_object_hash($this)));
         return $output;
     }
     

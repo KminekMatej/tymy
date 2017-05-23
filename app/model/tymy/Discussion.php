@@ -50,11 +50,8 @@ final class Discussion extends Tymy{
         $this->urlEnd();
 
         $this->addPost("post", $text);
-        \Tracy\Debugger::timer("tymy-discussion-insert" . spl_object_hash($this));
-        $ex = $this->execute();
-        $this->tymyPanel->logAPI("Insert request", $this->fullUrl, \Tracy\Debugger::timer("tymy-discussion-insert" . spl_object_hash($this)));
-
-        return $ex;
+        $this->result = $this->execute();
+        return $this->result;
     }
     
     protected function tzFields($jsonObj){

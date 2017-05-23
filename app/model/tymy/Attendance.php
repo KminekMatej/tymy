@@ -60,8 +60,9 @@ final class Attendance extends Tymy{
             "preStatus" => $this->preStatus,
             "preDescription" => $this->preDescription,
         ]);
-
-        return $this->execute();
+        
+        $this->result = $this->execute();
+        return $this->result;
     }
     
     public function select() {
