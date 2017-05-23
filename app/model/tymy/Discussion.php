@@ -58,6 +58,9 @@ final class Discussion extends Tymy{
         $this->timezone($jsonObj->discussion->newInfo->lastVisit);
         foreach ($jsonObj->posts as $post) {
             $this->timezone($post->createdAt);
+            if(property_exists($post, "updatedAt")){
+                $this->timezone($post->updatedAt);
+            }
         }
     }
     
