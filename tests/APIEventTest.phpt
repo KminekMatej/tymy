@@ -102,8 +102,9 @@ class APIEventTest extends Tester\TestCase {
         $mockPresenter->getUser()->setExpiration('2 minutes');
         $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
 
+        $eventId = 1;
         $eventObj = new \Tymy\Event($mockPresenter);
-        $eventObj->recId(1)
+        $eventObj->recId($eventId)
                 ->fetch();
         Assert::true(is_object($eventObj));
         Assert::true(is_object($eventObj->result));
@@ -111,12 +112,17 @@ class APIEventTest extends Tester\TestCase {
         Assert::same("OK",$eventObj->result->status);
         var_dump($eventObj->result->data);
         Assert::type("int",$eventObj->result->data->id);
+        Assert::same($eventId,$eventObj->result->data->id);
+        
         Assert::type("string",$eventObj->result->data->caption);
         Assert::type("string",$eventObj->result->data->type);
         Assert::type("string",$eventObj->result->data->description);
         Assert::type("string",$eventObj->result->data->closeTime);
+        Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $eventObj->result->data->closeTime)); //timezone correction check
         Assert::type("string",$eventObj->result->data->startTime);
+        Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $eventObj->result->data->startTime)); //timezone correction check
         Assert::type("string",$eventObj->result->data->endTime);
+        Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $eventObj->result->data->endTime)); //timezone correction check
         Assert::type("string",$eventObj->result->data->link);
         Assert::type("string",$eventObj->result->data->place);
         
@@ -132,18 +138,23 @@ class APIEventTest extends Tester\TestCase {
         foreach ($eventObj->result->data->attendance as $att) {
             Assert::true(is_object($att));
             Assert::type("int",$att->userId);
-            /*Assert::type("int",$att->eventId);
-            Assert::type("string",$att->preStatus);
-            Assert::type("string",$att->preDescription);
-            Assert::type("int",$att->preUserMod);
-            Assert::type("string",$att->preDatMod);*/
+            if(property_exists($att, "eventId")){
+                Assert::type("int",$att->eventId);
+                Assert::same($eventId,$att->eventId);
+                Assert::type("string",$att->preStatus);
+                Assert::type("string",$att->preDescription);
+                Assert::type("int",$att->preUserMod);
+                Assert::type("string",$att->preDatMod);
+                Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $att->preDatMod)); //timezone correction check
+            }
             
             Assert::true(is_object($att->user));
             Assert::type("int",$att->user->id);
+            Assert::true($att->user->id > 0);
             Assert::type("string",$att->user->login);
             Assert::type("string",$att->user->callName);
             Assert::type("string",$att->user->pictureUrl);
-            //Assert::type("string",$att->user->gender); // TODO Uncomment when gender is returned from api
+            Assert::true(!property_exists($att->user, "gender"));
         }
         
             Assert::true(is_object($eventObj->result->data->eventType));
