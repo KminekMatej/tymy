@@ -98,15 +98,32 @@ class APIDiscussionsTest extends Tester\TestCase {
         $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
 
         $discussionsObj = new \Tymy\Discussions($mockPresenter);
-        $discussionsObj->recId(1)
-                ->fetch();
+        $discussionsObj->fetch();
         Assert::true(is_object($discussionsObj));
         Assert::true(is_object($discussionsObj->result));
         Assert::type("string",$discussionsObj->result->status);
         Assert::same("OK",$discussionsObj->result->status);
-        Assert::true(is_object($discussionsObj->result->data[0]));//returned discussion object
-        Assert::type("int",$discussionsObj->result->data[0]->id);
-        Assert::true(!property_exists($discussionsObj->result->data[0],"newInfo"));//returned discussion object
+        Assert::type("array",$discussionsObj->result->data);
+        
+        foreach ($discussionsObj->result->data as $dis) {
+            Assert::type("int",$dis->id);
+            Assert::type("string",$dis->caption);
+            Assert::type("string",$dis->description);
+            Assert::type("string",$dis->readRightName);
+            Assert::type("string",$dis->writeRightName);
+            Assert::type("string",$dis->deleteRightName);
+            Assert::type("string",$dis->stickyRightName);
+            Assert::type("bool",$dis->publicRead);
+            Assert::type("string",$dis->status);
+            Assert::same("ACTIVE",$dis->status);
+            Assert::type("bool",$dis->editablePosts);
+            Assert::type("int",$dis->order);
+            Assert::type("bool",$dis->canRead);
+            Assert::type("bool",$dis->canWrite);
+            Assert::type("bool",$dis->canDelete);
+            Assert::type("bool",$dis->canStick);
+            Assert::true(!property_exists($dis, "newInfo"));
+        }
     }
     
     function testFetchWithNew() {
@@ -122,20 +139,41 @@ class APIDiscussionsTest extends Tester\TestCase {
         $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
 
         $discussionsObj = new \Tymy\Discussions($mockPresenter);
-        $discussionsObj->recId(1)
-                ->setWithNew(TRUE)
+        $discussionsObj->setWithNew(TRUE)
                 ->fetch();
+        var_dump($discussionsObj);
 
         Assert::true(is_object($discussionsObj));
         Assert::true(is_object($discussionsObj->result));
         Assert::type("string",$discussionsObj->result->status);
         Assert::same("OK",$discussionsObj->result->status);
-        Assert::true(is_object($discussionsObj->result->data[0]));
-        Assert::type("int",$discussionsObj->result->data[0]->id);
-        Assert::true(is_object($discussionsObj->result->data[0]->newInfo));
-        Assert::type("int", $discussionsObj->result->data[0]->newInfo->newsCount);
-        Assert::type("int", $discussionsObj->result->data[0]->newInfo->discussionId);
-        Assert::type("string", $discussionsObj->result->data[0]->newInfo->lastVisit);
+        Assert::type("array",$discussionsObj->result->data);
+        
+        foreach ($discussionsObj->result->data as $dis) {
+            Assert::type("int",$dis->id);
+            Assert::type("string",$dis->caption);
+            Assert::type("string",$dis->description);
+            Assert::type("string",$dis->readRightName);
+            Assert::type("string",$dis->writeRightName);
+            Assert::type("string",$dis->deleteRightName);
+            Assert::type("string",$dis->stickyRightName);
+            Assert::type("bool",$dis->publicRead);
+            Assert::type("string",$dis->status);
+            Assert::same("ACTIVE",$dis->status);
+            Assert::type("bool",$dis->editablePosts);
+            Assert::type("int",$dis->order);
+            Assert::type("bool",$dis->canRead);
+            Assert::type("bool",$dis->canWrite);
+            Assert::type("bool",$dis->canDelete);
+            Assert::type("bool",$dis->canStick);
+            
+            Assert::true(is_object($dis->newInfo));
+            Assert::type("int", $dis->newInfo->newsCount);
+            Assert::type("int", $dis->newInfo->discussionId);
+            Assert::same($dis->id, $dis->newInfo->discussionId);
+            Assert::type("string", $dis->newInfo->lastVisit);
+            Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $dis->newInfo->lastVisit)); //timezone correction check
+        }
     }
 
 }

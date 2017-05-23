@@ -123,7 +123,7 @@ class APIDiscussionTest extends Tester\TestCase {
         $discussionObj = new \Tymy\Discussion($mockPresenter, TRUE, 1);
         $discussionObj->recId($discussionId)
                 ->fetch();
-        var_dump($discussionObj);
+        
         Assert::true(is_object($discussionObj));
         Assert::true(is_object($discussionObj->result));
         Assert::type("string",$discussionObj->result->status);
