@@ -20,9 +20,13 @@ final class Event extends Tymy{
         return $this;
     }
     
-    protected function tzFields($jsonObj){
+    protected function tzFields($jsonObj) {
         $this->timezone($jsonObj->closeTime);
         $this->timezone($jsonObj->startTime);
         $this->timezone($jsonObj->endTime);
+        if (property_exists($jsonObj->attendance, "preDatMod")) {
+            $this->timezone($jsonObj->attendance->preDatMod);
+        }
     }
+
 }
