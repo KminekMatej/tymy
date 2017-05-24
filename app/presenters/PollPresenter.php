@@ -6,6 +6,7 @@ use Nette;
 use Nette\Application\UI\NavbarControl;
 use App\Model;
 use Nette\Application\UI\Form;
+use Nette\Utils\Strings;
 
 class PollPresenter extends SecuredPresenter {
 
@@ -18,5 +19,24 @@ class PollPresenter extends SecuredPresenter {
     
     public function renderDefault() {
         //todo
+    }
+    
+    public function renderPoll($anketa) {
+        $polls = new \Tymy\Polls($this);
+        $pollId = NULL;
+        foreach ($polls->fetch() as $p) {
+            if(Strings::webalize($p->caption) == $anketa){
+                $pollId = $p->id;
+                $this->setLevelCaptions(["1" => ["caption" => $p->caption, "link" => $this->link("Poll:poll", Strings::webalize($p->caption)) ] ]);
+                break;
+            }
+        }
+        
+        $pollObj = new \Tymy\Poll($this);
+        $pollData = $pollObj->
+                recId($pollId)->
+                fetch();
+        
+        $this->template->poll = $pollData;
     }
 }

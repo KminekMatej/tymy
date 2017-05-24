@@ -64,7 +64,6 @@ class NavbarControl extends Control {
         foreach ($players as $p) {
             $counts["ALL"]++;
             $counts[$p->status]++;
-            \Tracy\Debugger::barDump($p);
             if($p->id == $this->user->getId()){
                 $playerErrors = $p->errCnt;
                 $this->template->me = (object)$p;
@@ -81,6 +80,7 @@ class NavbarControl extends Control {
         $polls = $this->polls->fetch();
         $unvoteCount = 0;
         foreach ($polls as $p) {
+            $p->webName = Strings::webalize($p->caption);
             if($p->status == "OPENED" && $p->canVote && !$p->voted)
                 $unvoteCount++;
         }
