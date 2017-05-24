@@ -24,7 +24,6 @@
                 {if $unSetEvents > 0}<span class="badge badge-pill badge-danger badge-new">{$unSetEvents}</span>{/if}
                 <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-calendar-o" aria-hidden="true"></i> Události</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    {dump $events}
                     {foreach $events as $ev}
                         <a class="dropdown-item" href="{plink Event:event $ev->id.'-'.$ev->webName}">
                             {if !property_exists($ev,'myAttendance')}<span class="badge badge-danger"><i class="fa fa-info" aria-hidden="true"></i></span>{/if}

@@ -19,12 +19,33 @@
                     <h6 class="card-subtitle mb-2 text-muted">{$event->eventType->caption}</h6>
                     <p class="card-text">{$event->description}</p>
                     <div class="row">
-                        <div class="col-4">
-                            <table class="table">
+                        <div class="col-md-4">
+                            <table class="table mb-0">
                                 <tr><th>Začátek:</th><td>{$event->startTime|date:'d.n.Y H:i'}</td></tr>
                                 <tr><th>Konec:</th><td>{$event->endTime|date:'d.n.Y H:i'}</td></tr>
                                 <tr><th>Uzávěrka:</th><td>{$event->closeTime|date:'d.n.Y H:i'}</td></tr>
                             </table>
+                        </div>
+                            {dump $event}
+                        <div class="col-md-8 d-flex align-items-end">
+                            <div class="btn-group input-group pb-2" role="group" aria-label="Basic example" id="action-{$event->id}">
+                                            {var $evnt_desc = isset($event->myAttendance->preDescription) ? $event->myAttendance->preDescription : ''}
+                                            <input type="text" class="form-control form-control-sm" title="Poznámka" name="preStatusDesc" value="{$evnt_desc}">
+
+                                            {var $myPreStatus = "not-set"}
+                                            {var $myPostStatus = "not-set"}
+                                            {ifset $event->myAttendance}
+                                                {ifset $event->myAttendance->preStatus}
+                                                    {var $myPreStatus = $eventTypes[$event->type]->preStatusSet[$event->myAttendance->preStatus]->code}
+                                                {/ifset}
+                                                {ifset $event->myAttendance->postStatus}
+                                                    {var $myPostStatus = $eventTypes[$event->type]->postStatusSet[$event->myAttendance->postStatus]->code}
+                                                {/ifset}
+                                            {/ifset}
+                                            {foreach $eventTypes[$event->type]->preStatusSet as $preStatus}
+                                                <button onclick="updateAttendance(this, {link attendance! $event->id, $preStatus->code})" class="btn {$myPreStatus,$myPostStatus,$preStatus->code,$event->closeTime|prestatusClass}">{$preStatus->caption}</button>
+                                            {/foreach}
+                                        </div>
                         </div>
                     </div>
                 </div>

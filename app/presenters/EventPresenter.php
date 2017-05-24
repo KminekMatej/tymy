@@ -171,9 +171,9 @@ class EventPresenter extends SecuredPresenter {
         foreach ($event->attendance as $attendee) {
             if($userArr[$attendee->userId]->status != "PLAYER") continue; // display only players on event detail
             $preStatus = isset($attendee->preStatus) ? $attendee->preStatus : "UNKNOWN";
-            $g = isset($userArr[$attendee->userId]->gender) ? $userArr[$attendee->userId]->gender : "UNKNOWN";
+            $gender = isset($userArr[$attendee->userId]->gender) ? $userArr[$attendee->userId]->gender : "UNKNOWN";
             $userArr[$attendee->userId]->preDescription = isset($attendee->preDescription) ? $attendee->preDescription : "";
-            $attArray[$preStatus][$g][$attendee->userId]=$userArr[$attendee->userId];
+            $attArray[$preStatus][$gender][$attendee->userId]=$userArr[$attendee->userId];
         }
         
         $event->allUsers = $attArray;
