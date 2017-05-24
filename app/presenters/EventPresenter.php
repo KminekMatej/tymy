@@ -5,6 +5,7 @@ namespace App\Presenters;
 use Nette;
 use App\Model;
 use Nette\Application\UI\Form;
+use Nette\Utils\Strings;
 
 class EventPresenter extends SecuredPresenter {
         
@@ -21,7 +22,7 @@ class EventPresenter extends SecuredPresenter {
     public function startup() {
         parent::startup();
         $this->getEventTypes();
-        $this->setLevelCaptions(["0" => ["caption" => "Události", "link" => $this->link("Discussion:")]]);
+        $this->setLevelCaptions(["0" => ["caption" => "Události", "link" => $this->link("Event:")]]);
 
         $this->template->addFilter('genderTranslate', function ($gender) {
             switch($gender){
@@ -147,6 +148,8 @@ class EventPresenter extends SecuredPresenter {
         $event = $eventObj
                 ->recId($eventId)
                 ->fetch();
+        
+        $this->setLevelCaptions(["1" => ["caption" => $event->caption, "link" => $this->link("Event:event", $event->id . "-" . Strings::webalize($event->caption))]]);
         
         $usersObj = new \Tymy\Users($this);
         $users = $usersObj
