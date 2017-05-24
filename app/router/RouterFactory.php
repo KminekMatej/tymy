@@ -21,8 +21,10 @@ class RouterFactory
                 $router[] = new Route('diskuze', 'Discussion:default');
                 $router[] = new Route('udalosti', 'Event:default');
                 $router[] = new Route('tym', 'Team:default');
+                $router[] = new Route('ankety', 'Poll:default');
                 $router[] = new Route('diskuze/<discussion>[/<page>] ? search=<search>', 'Discussion:discussion');
                 $router[] = new Route('udalosti/<udalost>', 'Event:event');
+                $router[] = new Route('ankety/<anketa>', 'Poll:poll');
                 $router[] = new Route('tym/<player>', 'Team:player');
 		$router[] = new Route('<presenter>/<action>', 'Homepage:default');
 		return $router;
