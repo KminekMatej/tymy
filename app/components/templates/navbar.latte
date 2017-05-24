@@ -33,7 +33,7 @@
             </li>
             <li class="nav-item dropdown">
                 {if $unVotePolls > 0}<span class="badge badge-pill badge-danger badge-new">{$unVotePolls}</span>{/if}
-                <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-gavel" aria-hidden="true"></i> Ankety</a>
+                <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-pie-chart" aria-hidden="true"></i> Ankety</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     {foreach $polls as $p}
                         <a class="dropdown-item" href="{plink Poll:poll $p->webName}">

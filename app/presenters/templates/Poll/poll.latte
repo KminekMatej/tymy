@@ -9,3 +9,43 @@
 
 {block content}
 {dump $poll}
+
+
+
+<div class="container user">
+    <div class="row">
+        <div class="col my-3">
+            <div class="card sh-box">
+                <div class="card-header">
+                    {$poll->caption}
+                </div>
+                <!-- Tab panes -->
+                <div class="card-block">
+                    <h4 class="card-title">{$poll->description}</h4>
+                    <div class="container">
+                        <div class="row">
+                    {foreach $poll->options as $opt}
+                        <div class="col-3 my-3">
+                            <h5>{$opt->caption}</h5>
+                            {if $opt->type == 'TEXT'}
+                                <input type="text" value="hodnota" class="form-control">
+                            {/if}
+                            {if $opt->type == 'NUMBER'}
+                                <input type="number" value="-1" class="form-control">
+                            {/if}
+                            {if $opt->type == 'BOOLEAN'}
+                                <div class="btn-group"><button class="btn btn-outline-success" style="width:69px">ANO</button><button style="width:69px" class="btn btn-outline-danger">NE</button></div>
+                            {/if}
+                        
+                        </div>
+                    {/foreach}
+                    </div></div>
+                </div>
+                <div class="card-footer text-right">
+                    <a href="#" class="btn btn-primary disabled">Hlasovat</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
