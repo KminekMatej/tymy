@@ -119,15 +119,17 @@ class APIUserTest extends Tester\TestCase {
         Assert::same("OK",$userObj->result->status);
         
         Assert::type("int",$userObj->result->data->id);
+        Assert::true($userObj->result->data->id > 0);
         Assert::type("string",$userObj->result->data->login);
         Assert::type("bool",$userObj->result->data->canLogin);
         Assert::type("string",$userObj->result->data->lastLogin);
+        Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $userObj->result->data->lastLogin)); //timezone correction check
         Assert::type("string",$userObj->result->data->status);
+        Assert::true(in_array($userObj->result->data->status, ["PLAYER", "MEMBER", "SICK"]));
         Assert::type("array",$userObj->result->data->roles);
         foreach ($userObj->result->data->roles as $role) {
             Assert::type("string",$role);
         }
-        
         Assert::type("string",$userObj->result->data->firstName);
         Assert::type("string",$userObj->result->data->lastName);
         Assert::type("string",$userObj->result->data->callName);
@@ -148,6 +150,7 @@ class APIUserTest extends Tester\TestCase {
         Assert::type("string",$userObj->result->data->displayName);
         Assert::type("string",$userObj->result->data->webName);
         Assert::type("int",$userObj->result->data->errCnt);
+        Assert::true($userObj->result->data->errCnt>= 0);
         Assert::type("array",$userObj->result->data->errFls);
         foreach ($userObj->result->data->errFls as $errF) {
             Assert::type("string",$errF);
