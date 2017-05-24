@@ -24,9 +24,11 @@ final class Event extends Tymy{
         $this->timezone($jsonObj->closeTime);
         $this->timezone($jsonObj->startTime);
         $this->timezone($jsonObj->endTime);
-        if (property_exists($jsonObj->attendance, "preDatMod")) {
-            $this->timezone($jsonObj->attendance->preDatMod);
-        }
+        if (property_exists($jsonObj, "attendance"))
+            foreach ($jsonObj->attendance as $att) {
+                if (property_exists($att, "preDatMod"))
+                    $this->timezone($att->preDatMod);
+            }
     }
 
 }
