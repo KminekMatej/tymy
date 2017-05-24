@@ -15,6 +15,7 @@ class NavbarControl extends Control {
     private $discussions;
     private $players;
     private $polls;
+    private $events;
     private $user;
     private $presenter;
     
@@ -23,7 +24,8 @@ class NavbarControl extends Control {
         parent::__construct();
         $this->discussions = new \Tymy\Discussions($presenter);
         $this->players = new \Tymy\Users($presenter);
-        $this->polls= new \Tymy\Polls($presenter);
+        $this->polls = new \Tymy\Polls($presenter);
+        $this->events = new \Tymy\Events($presenter);
         $this->user = $presenter->getUser();
         $this->presenter = $presenter;
     }
@@ -89,6 +91,45 @@ class NavbarControl extends Control {
         
     }
     
+    private function events(){
+        $events = $this->events
+                ->withMyAttendance(true)
+                ->from(date("Ymd"))
+                ->to(date("Ymd", strtotime(" + 14 days")))
+                ->fetch();
+        $unsetCount = 0;
+        foreach ($events as $e) {
+            $e->webName = Strings::webalize($e->caption);
+            if(property_exists($e, "myAttendance")){
+                switch ($e->myAttendance->preStatus) {
+                    case "YES":
+                        $e->preClass = "success";
+                        break;
+                    case "LAT":
+                        $e->preClass = "warning";
+                        break;
+                    case "NO":
+                        $e->preClass = "danger";
+                        break;
+                    case "DKY":
+                        $e->preClass = "danger";
+                        break;
+                    case "UNKNOWN":
+                        $e->preClass = "secondary";
+                        break;
+
+                    default:
+                        break;
+                }
+            } else {
+                $unsetCount++;
+            }
+        }
+        $this->template->unSetEvents = $unsetCount;
+        $this->template->events = (object)$events;
+        
+    }
+    
     public function render(){
         $template = $this->template;
         $template->setFile(__DIR__ . '/templates/navbar.latte');
@@ -102,6 +143,8 @@ class NavbarControl extends Control {
         $this->discussions();
         //render players
         $this->players();
+        //render events
+        $this->events();
         //render polls
         $this->polls();
 
