@@ -51,6 +51,6 @@ final class Login extends Tymy{
     }
 
     protected function tzFields($jsonObj){
-        return null;
+        $this->timezone($jsonObj->lastLogin);
     }
 }

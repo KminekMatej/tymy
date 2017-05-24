@@ -24,10 +24,6 @@ class APILoginTest extends Tester\TestCase {
         parent::setUp();
     }
     
-    function tearDown() {
-        parent::tearDown();
-    }
-    
     function testLoginSuccess(){
         $loginObj = new \Tymy\Login();
         $loginObj->team("dev")
@@ -39,6 +35,36 @@ class APILoginTest extends Tester\TestCase {
         Assert::true(is_object($loginObj));
         Assert::type("string", $loginObj->result->status);
         Assert::equal($loginObj->result->status, "OK");
+        Assert::type("string", $loginObj->result->sessionKey);
+        Assert::true(is_object($loginObj->result->data));
+        Assert::type("int", $loginObj->result->data->id);
+        Assert::type("string", $loginObj->result->data->login);
+        Assert::type("bool", $loginObj->result->data->canLogin);
+        Assert::type("string", $loginObj->result->data->lastLogin);
+        Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $loginObj->result->data->lastLogin)); //timezone correction check
+        Assert::type("string", $loginObj->result->data->status);
+        Assert::true(in_array($loginObj->result->data->status, ["PLAYER","MEMBER","SICK"]));
+        Assert::type("array", $loginObj->result->data->roles);
+        foreach ($loginObj->result->data->roles as $role) {
+            Assert::type("string", $role);
+        }
+        
+        Assert::type("string", $loginObj->result->data->oldPassword);
+        Assert::type("string", $loginObj->result->data->firstName);
+        Assert::type("string", $loginObj->result->data->lastName);
+        Assert::type("string", $loginObj->result->data->callName);
+        Assert::type("string", $loginObj->result->data->language);
+        Assert::type("string", $loginObj->result->data->jerseyNumber);
+        Assert::type("string", $loginObj->result->data->street);
+        Assert::type("string", $loginObj->result->data->city);
+        Assert::type("string", $loginObj->result->data->zipCode);
+        Assert::type("string", $loginObj->result->data->phone);
+        Assert::type("string", $loginObj->result->data->phone2);
+        Assert::type("int", $loginObj->result->data->nameDayMonth);
+        Assert::type("int", $loginObj->result->data->nameDayDay);
+        Assert::type("string", $loginObj->result->data->pictureUrl);
+        Assert::type("string", $loginObj->result->data->fullName);
+        Assert::type("string", $loginObj->result->data->displayName);
     }
     
     /**
