@@ -110,19 +110,24 @@ class APIEventTypesTest extends Tester\TestCase {
         foreach ($eventTypesObj->result->data as $evt) {
             Assert::true(is_object($evt));
             Assert::type("int",$evt->id);
+            Assert::true($evt->id > 0);
             Assert::type("string",$evt->code);
             Assert::type("string",$evt->caption);
             Assert::type("int",$evt->preStatusSetId);
+            Assert::true($evt->preStatusSetId > 0);
             Assert::type("int",$evt->postStatusSetId);
+            Assert::true($evt->postStatusSetId > 0);
             Assert::type("array",$evt->preStatusSet);
             foreach ($evt->preStatusSet as $evtSS) {
                 Assert::type("int",$evtSS->id);
+                Assert::true($evtSS->id > 0);
                 Assert::type("string",$evtSS->code);
                 Assert::type("string",$evtSS->caption);
             }
             Assert::type("array",$evt->postStatusSet);
             foreach ($evt->postStatusSet as $evtSS) {
                 Assert::type("int",$evtSS->id);
+                Assert::true($evtSS->id > 0);
                 Assert::type("string",$evtSS->code);
                 Assert::type("string",$evtSS->caption);
             }
