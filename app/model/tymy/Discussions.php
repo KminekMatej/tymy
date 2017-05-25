@@ -26,12 +26,17 @@ final class Discussions extends Tymy{
         return $this;
     }
     
-    protected function tzFields($jsonObj){
-        if ($this->withNew)
-            foreach ($jsonObj as $discussion) {
+    protected function postProcess() {
+        $data = $this->getData();
+        $this->getResult()->menuWarningCount = 0;
+        foreach ($data as $discussion) {
+            $discussion->webName = \Nette\Utils\Strings::webalize($discussion->caption);
+            if ($this->withNew){
+                $this->getResult()->menuWarningCount += $discussion->newInfo->newsCount;
                 $this->timezone($discussion->newInfo->lastVisit);
             }
-
-        return null;
+                
+        }
     }
+
 }

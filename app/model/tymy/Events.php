@@ -61,11 +61,41 @@ final class Events extends Tymy{
         return $this;
     }
     
-    protected function tzFields($jsonObj){
-        foreach ($jsonObj as $event) {
+    protected function postProcess(){
+        $data = $this->getData();
+        
+        $this->getResult()->menuWarningCount = 0;
+        
+        foreach ($data as $event) {
+            if(property_exists($event, "myAttendance") && property_exists($event->myAttendance, "preStatus")){
+                switch ($event->myAttendance->preStatus) {
+                    case "YES":
+                        $event->preClass = "success";
+                        break;
+                    case "LAT":
+                        $event->preClass = "warning";
+                        break;
+                    case "NO":
+                        $event->preClass = "danger";
+                        break;
+                    case "DKY":
+                        $event->preClass = "danger";
+                        break;
+                    case "UNKNOWN":
+                        $event->preClass = "secondary";
+                        break;
+
+                    default:
+                        break;
+                }
+            } else {
+                $this->getResult()->menuWarningCount++;
+            }
+            
             $this->timezone($event->closeTime);
             $this->timezone($event->startTime);
             $this->timezone($event->endTime);
+            $event->webName = \Nette\Utils\Strings::webalize($event->caption);
             if($this->withMyAttendance)
                 $this->timezone($event->myAttendance->preDatMod);
         }

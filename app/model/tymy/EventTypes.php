@@ -20,8 +20,8 @@ final class EventTypes extends Tymy{
         $this->fullUrl .= "eventTypes/";
     }
     
-    protected function tzFields($jsonObj){
-        return null;
+    protected function postProcess(){
+        return TRUE;
     }
 
 }

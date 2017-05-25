@@ -177,3 +177,7 @@ DIV.container.events DIV.agenda SPAN.event-heading{
     font-weight: bold;
     margin-left: 8px;
 }
+
+DIV.container.event DIV.btn-group BUTTON{
+    cursor: pointer;
+}

@@ -45,12 +45,13 @@ final class Login extends Tymy{
 
         $data = $this->getData();
 
-        $this->tzFields($data);
+        $this->postProcess();
         
         return $data;
     }
 
-    protected function tzFields($jsonObj){
-        $this->timezone($jsonObj->lastLogin);
+    protected function postProcess(){
+        $data = $this->getData();
+        $this->timezone($data->lastLogin);
     }
 }

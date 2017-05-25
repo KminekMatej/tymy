@@ -31,10 +31,11 @@ class NavbarControl extends Control {
     }
     
     private function discussions(){
-        $this->discussions->setWithNew(true);
-        $discussions = $this->discussions->fetch();
+        $discussions = $this->discussions
+                ->setWithNew(true)
+                ->fetch();
         
-        $data = [];
+        /*$data = [];
         $unreadSum = 0;
         foreach ($discussions as $dis) {
             $unreadSum += $dis->newInfo->newsCount;
@@ -45,48 +46,23 @@ class NavbarControl extends Control {
                 
             ];
                     
-        }
-        $this->template->unreadSum = $unreadSum;
-        $this->template->discussions = $data;
+        }*/
+        $this->template->discussionWarnings = $this->discussions->getResult()->menuWarningCount;
+        $this->template->discussions = (object)$discussions;
         
     }
     
     private function players(){
         $players = $this->players->fetch();
-        $playerErrors = 0;
-        $counts = [
-            "ALL"=>0,
-            "NEW"=>0, // TODO NEW PLAYERS
-            "PLAYER"=>0,
-            "MEMBER"=>0,
-            "SICK"=>0,
-            "DELETED"=>0,
-            "INIT"=>0,
-            ];
-        foreach ($players as $p) {
-            $counts["ALL"]++;
-            $counts[$p->status]++;
-            if($p->id == $this->user->getId()){
-                $playerErrors = $p->errCnt;
-                $this->template->me = (object)$p;
-            }
-        }
-        
-        $this->template->counts = $counts;
-        $this->template->playerErrors = $playerErrors;
+        $this->template->counts = $this->players->getResult()->counts;
+        $this->template->playersWarnings = $this->players->getResult()->menuWarningCount;
         $this->template->players = (object)$players;
-        
+        $this->template->me = $this->players->getResult()->me;
     }
     
     private function polls(){
         $polls = $this->polls->fetch();
-        $unvoteCount = 0;
-        foreach ($polls as $p) {
-            $p->webName = Strings::webalize($p->caption);
-            if($p->status == "OPENED" && $p->canVote && !$p->voted)
-                $unvoteCount++;
-        }
-        $this->template->unVotePolls = $unvoteCount;
+        $this->template->voteWarnings = $this->polls->getResult()->menuWarningCount;
         $this->template->polls = (object)$polls;
         
     }
@@ -97,35 +73,7 @@ class NavbarControl extends Control {
                 ->from(date("Ymd"))
                 ->to(date("Ymd", strtotime(" + 14 days")))
                 ->fetch();
-        $unsetCount = 0;
-        foreach ($events as $e) {
-            $e->webName = Strings::webalize($e->caption);
-            if(property_exists($e, "myAttendance")){
-                switch ($e->myAttendance->preStatus) {
-                    case "YES":
-                        $e->preClass = "success";
-                        break;
-                    case "LAT":
-                        $e->preClass = "warning";
-                        break;
-                    case "NO":
-                        $e->preClass = "danger";
-                        break;
-                    case "DKY":
-                        $e->preClass = "danger";
-                        break;
-                    case "UNKNOWN":
-                        $e->preClass = "secondary";
-                        break;
-
-                    default:
-                        break;
-                }
-            } else {
-                $unsetCount++;
-            }
-        }
-        $this->template->unSetEvents = $unsetCount;
+        $this->template->eventWarnings = $this->events->getResult()->menuWarningCount;
         $this->template->events = (object)$events;
         
     }

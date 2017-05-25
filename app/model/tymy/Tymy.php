@@ -37,8 +37,8 @@ abstract class Tymy extends Nette\Object{
     /** Function to return full URI of select api */
     abstract protected function select();
     
-    /** Function to return fields supposed to be converted from UTC to proper timezone */
-    abstract protected function tzFields($jsonObj);
+    /** Function to process after the result from API is obtained, used mainly for formatting or adding new properties to TAPI result */
+    abstract protected function postProcess();
     
     public function __construct(Nette\Application\UI\Presenter $presenter = NULL) {
         $panelId = "TymyAPI";
@@ -107,9 +107,10 @@ abstract class Tymy extends Nette\Object{
             $this->presenter->redirect('Sign:in', ['backlink' => $this->presenter->storeRequest()]);
         }
         
+        
         $data = $this->getData();
 
-        $this->tzFields($data);
+        $this->postProcess();
         
         return $data;
     }

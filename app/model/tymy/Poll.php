@@ -19,8 +19,10 @@ final class Poll extends Tymy{
         return $this;
     }
     
-    protected function tzFields($jsonObj){
-        $this->timezone($jsonObj->createdAt);
-        $this->timezone($jsonObj->updatedAt);
+    protected function postProcess(){
+        $data = $this->getData();
+        $data->webName = \Nette\Utils\Strings::webalize($data->caption);
+        $this->timezone($data->createdAt);
+        $this->timezone($data->updatedAt);
     }
 }

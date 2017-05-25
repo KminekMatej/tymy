@@ -25,13 +25,14 @@ final class User extends Tymy{
     
     public function fetch() {
         $player = parent::fetch();
-        $player->webName = Strings::webalize($player->fullName);
         $this->checkPlayerData($player);
         return $player;
     }
     
-    protected function tzFields($jsonObj){
-        $this->timezone($jsonObj->lastLogin);
+    protected function postProcess(){
+        $data = $this->getData();
+        $data->webName = \Nette\Utils\Strings::webalize($data->fullName);
+        $this->timezone($data->lastLogin);
     }
 
 }

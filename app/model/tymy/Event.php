@@ -20,15 +20,19 @@ final class Event extends Tymy{
         return $this;
     }
     
-    protected function tzFields($jsonObj) {
-        $this->timezone($jsonObj->closeTime);
-        $this->timezone($jsonObj->startTime);
-        $this->timezone($jsonObj->endTime);
-        if (property_exists($jsonObj, "attendance"))
-            foreach ($jsonObj->attendance as $att) {
+    protected function postProcess() {
+        $data = $this->getData();
+        
+        $data->webName = \Nette\Utils\Strings::webalize($data->caption);
+
+        $this->timezone($data->closeTime);
+        $this->timezone($data->startTime);
+        $this->timezone($data->endTime);
+        if (property_exists($data, "attendance"))
+            foreach ($data->attendance as $att) {
                 if (property_exists($att, "preDatMod"))
                     $this->timezone($att->preDatMod);
             }
     }
-
+    
 }

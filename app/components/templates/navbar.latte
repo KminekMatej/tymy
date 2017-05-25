@@ -8,20 +8,20 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item dropdown">
-                {if $unreadSum > 0}<span class="badge badge-pill badge-danger badge-new">{$unreadSum}</span>{/if}
+                {if $discussionWarnings > 0}<span class="badge badge-pill badge-danger badge-new">{$discussionWarnings}</span>{/if}
                 <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-comments" aria-hidden="true"></i> Diskuze</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     {foreach $discussions as $d}
-                        <a class="dropdown-item" href="{plink Discussion:discussion $d["captionLink"]}">
-                            {if $unreadSum > 0}<span class="badge badge-primary" {if $d['unreadCount'] == 0}style="visibility: hidden"{/if}>{$d["unreadCount"]}</span>{/if}
-                            {$d["caption"]}
+                        <a class="dropdown-item" href="{plink Discussion:discussion $d->webName}">
+                            {if $discussionWarnings > 0}<span class="badge badge-primary" {if $d->newInfo->newsCount == 0}style="visibility: hidden"{/if}>{$d->newInfo->newsCount}</span>{/if}
+                            {$d->caption}
                         </a>
                     {/foreach}
                 </div>
             </li>
             
             <li class="nav-item dropdown">
-                {if $unSetEvents > 0}<span class="badge badge-pill badge-danger badge-new">{$unSetEvents}</span>{/if}
+                {if $eventWarnings > 0}<span class="badge badge-pill badge-danger badge-new">{$eventWarnings}</span>{/if}
                 <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-calendar-o" aria-hidden="true"></i> Události</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     {foreach $events as $ev}
@@ -34,7 +34,7 @@
             </li>
             
             <li class="nav-item dropdown">
-                {if $playerErrors > 0}<span class="badge badge-pill badge-danger badge-new">{$playerErrors}</span>{/if}
+                {if $playersWarnings > 0}<span class="badge badge-pill badge-danger badge-new">{$playersWarnings}</span>{/if}
                 <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-users" aria-hidden="true"></i> Tým</a>    
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <a class="dropdown-item" href="{plink Team:player $me->webName}">{$me->callName} {if $me->errCnt > 0}<span class="badge badge-danger">{$me->errCnt}</span>{/if}</a>
@@ -45,7 +45,7 @@
                 </div>
             </li>
             <li class="nav-item dropdown">
-                {if $unVotePolls > 0}<span class="badge badge-pill badge-danger badge-new">{$unVotePolls}</span>{/if}
+                {if $voteWarnings > 0}<span class="badge badge-pill badge-danger badge-new">{$voteWarnings}</span>{/if}
                 <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-pie-chart" aria-hidden="true"></i> Ankety</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     {foreach $polls as $p}

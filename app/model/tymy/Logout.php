@@ -26,7 +26,6 @@ final class Logout extends Tymy{
         return $this->execute();
     }
     
-    protected function tzFields($jsonObj){
-        return null;
-    }
+    protected function postProcess(){}
+    
 }

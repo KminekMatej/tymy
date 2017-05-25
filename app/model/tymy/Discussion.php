@@ -54,9 +54,10 @@ final class Discussion extends Tymy{
         return $this->result;
     }
     
-    protected function tzFields($jsonObj){
-        $this->timezone($jsonObj->discussion->newInfo->lastVisit);
-        foreach ($jsonObj->posts as $post) {
+    protected function postProcess() {
+        $data = $this->getData();
+        $this->timezone($data->discussion->newInfo->lastVisit);
+        foreach ($data->posts as $post) {
             $this->timezone($post->createdAt);
             if(property_exists($post, "updatedAt")){
                 $this->timezone($post->updatedAt);
