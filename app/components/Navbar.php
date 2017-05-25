@@ -34,19 +34,6 @@ class NavbarControl extends Control {
         $discussions = $this->discussions
                 ->setWithNew(true)
                 ->fetch();
-        
-        /*$data = [];
-        $unreadSum = 0;
-        foreach ($discussions as $dis) {
-            $unreadSum += $dis->newInfo->newsCount;
-            $data[] = [
-                "caption" => $dis->caption,
-                "captionLink" => Strings::webalize($dis->caption),
-                "unreadCount" => $dis->newInfo->newsCount,
-                
-            ];
-                    
-        }*/
         $this->template->discussionWarnings = $this->discussions->getResult()->menuWarningCount;
         $this->template->discussions = (object)$discussions;
         
