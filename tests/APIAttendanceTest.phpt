@@ -44,7 +44,7 @@ class APIAttendanceTest extends Tester\TestCase {
      * @throws Tymy\Exception\APIException
      */
     function testPlanFailsNoEventId(){
-        $attendanceObj = new \Tymy\Attendance(NULL);
+        $attendanceObj = new \Tymy\Attendance();
         $attendance = $attendanceObj
                 ->team("dev")
                 ->plan();
@@ -54,7 +54,7 @@ class APIAttendanceTest extends Tester\TestCase {
      * @throws Tymy\Exception\APIException
      */
     function testPlanFailsNoPreStatus(){
-        $attendanceObj = new \Tymy\Attendance(NULL);
+        $attendanceObj = new \Tymy\Attendance();
         $attendance = $attendanceObj
                 ->team("dev")
                 ->recId(147)
@@ -77,7 +77,7 @@ class APIAttendanceTest extends Tester\TestCase {
         $mockPresenter->getUser()->setAuthenticator($this->authenticator);
         $mockPresenter->getUser()->login("test", "test");
 
-        $attendanceObj = new \Tymy\Attendance(NULL);
+        $attendanceObj = new \Tymy\Attendance();
         $attendanceObj
                 ->presenter($mockPresenter)
                 ->recId(147)
@@ -101,8 +101,36 @@ class APIAttendanceTest extends Tester\TestCase {
         $mockPresenter->getUser()->login("test", "test");
 
 
-        $attendanceObj = new \Tymy\Attendance(NULL);
+        $attendanceObj = new \Tymy\Attendance();
         $attendanceObj
+                ->presenter($mockPresenter)
+                ->recId(147)
+                ->preStatus("YES")
+                ->plan();
+    }
+    
+    
+    function test401relogin() {
+        $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
+        $mockPresenter = $presenterFactory->createPresenter('Homepage');
+        $mockPresenter->autoCanonicalize = FALSE;
+
+        $tapiAuthenticator = new \App\Model\TymyUserManager("dev");
+        $mockPresenter->getUser()->setAuthenticator($tapiAuthenticator);
+        $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
+        
+        $attendanceObj = new \Tymy\Attendance($mockPresenter->tapiAuthenticator, $mockPresenter);
+        $attendanceObj
+                ->presenter($mockPresenter)
+                ->recId(147)
+                ->preStatus("YES")
+                ->plan();
+        
+        $logoutObj = new \Tymy\Logout($mockPresenter->tapiAuthenticator, $mockPresenter);
+        $logoutObj ->logout();
+        
+        $attendanceObj2 = new \Tymy\Attendance($mockPresenter->tapiAuthenticator, $mockPresenter);
+        $attendanceObj2
                 ->presenter($mockPresenter)
                 ->recId(147)
                 ->preStatus("YES")
@@ -111,7 +139,7 @@ class APIAttendanceTest extends Tester\TestCase {
     
     function testPlanSuccess() {
         $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Discussion');
+        $mockPresenter = $presenterFactory->createPresenter('Event');
         $mockPresenter->autoCanonicalize = FALSE;
 
         $this->login();
@@ -121,13 +149,13 @@ class APIAttendanceTest extends Tester\TestCase {
         $mockPresenter->getUser()->setExpiration('2 minutes');
         $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
         
-        $allEvents = new \Tymy\Events($mockPresenter);
+        $allEvents = new \Tymy\Events($mockPresenter->tapiAuthenticator, $mockPresenter);
         $allEventsObj = $allEvents
                 ->from(date("Ymd"))
                 ->fetch();
         $idActionToUpdateOn = $allEventsObj[0]->id;
 
-        $attendanceObj = new \Tymy\Attendance($mockPresenter);
+        $attendanceObj = new \Tymy\Attendance($mockPresenter->tapiAuthenticator, $mockPresenter);
         $attendanceObj->recId($idActionToUpdateOn)
                 ->preStatus("YES")
                 ->preDescription("Tymyv2-AutoTest-yes")
@@ -150,7 +178,7 @@ class APIAttendanceTest extends Tester\TestCase {
         Assert::same("OK",$attendanceObj->result->status);
 
         //now check if the event is correctly filled
-        $updatedEventObj = new \Tymy\Event($mockPresenter);
+        $updatedEventObj = new \Tymy\Event($mockPresenter->tapiAuthenticator, $mockPresenter);
         $updatedEventObj
                 ->recId($idActionToUpdateOn)
                 ->fetch();

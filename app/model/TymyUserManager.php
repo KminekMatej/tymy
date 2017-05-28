@@ -23,32 +23,29 @@ class TymyUserManager implements Nette\Security\IAuthenticator {
      * @throws Nette\Security\AuthenticationException
      */
     public function authenticate(array $credentials) {
+        $credentials[1] = md5($credentials[1]); // first login recodes password to md5 hash
+        $loginObj = $this->reAuthenticate($credentials);
+        $arr = (array) $loginObj->result;
+        $arr["tym"] = $loginObj->team; 
+        $arr["hash"] = $credentials[1];
+        return new Nette\Security\Identity($loginObj->result->data->id, $loginObj->result->status, $arr );
+    }
+    
+    public function reAuthenticate(array $credentials){
         list($username, $password) = $credentials;
         
         $loginObj = new \Tymy\Login();
         
         try {
-        $loginObj->team($this->tym)
-                ->setUsername($username)
-                ->setPassword($password)
-                ->fetch();
+            $loginObj->team($this->tym)
+                    ->setUsername($username)
+                    ->setPassword($password)
+                    ->fetch();
         } catch (\Tymy\Exception\APIException $exc) {
             throw new Nette\Security\AuthenticationException('Login failed.', self::INVALID_CREDENTIAL);
         }
-        
-        $arr = (array) $loginObj->result;
-        $arr["tym"] = $loginObj->team;
-        
-        return new Nette\Security\Identity($loginObj->result->data->id, $loginObj->result->status, $arr );
-    }
-    
-    private function execute($url) {
-        $ch = curl_init(); 
-        curl_setopt($ch, CURLOPT_URL, $url); 
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-        $output = curl_exec($ch); 
-        curl_close($ch);  
-        return $output;
+
+        return $loginObj;
     }
     
     //TODO register new user

@@ -44,7 +44,7 @@ class APIEventTest extends Tester\TestCase {
      * @throws Tymy\Exception\APIException
      */
     function testFetchNotLoggedInFailsRecIdNotSet() {
-        $eventObj = new \Tymy\Event(NULL);
+        $eventObj = new \Tymy\Event();
         $eventObj->fetch();
     }
     
@@ -63,7 +63,7 @@ class APIEventTest extends Tester\TestCase {
         $mockPresenter->getUser()->setAuthenticator($this->authenticator);
         $mockPresenter->getUser()->login("test", "test");
 
-        $eventObj = new \Tymy\Event(NULL);
+        $eventObj = new \Tymy\Event();
         $eventObj->presenter($mockPresenter)
                 ->recId(1)
                 ->fetch();
@@ -84,7 +84,7 @@ class APIEventTest extends Tester\TestCase {
         $mockPresenter->getUser()->setAuthenticator($this->authenticator);
         $mockPresenter->getUser()->login("test", "test");
 
-        $eventObj = new \Tymy\Event(NULL);
+        $eventObj = new \Tymy\Event();
         $eventObj->presenter($mockPresenter)
                 ->recId(1)
                 ->fetch();
@@ -92,7 +92,7 @@ class APIEventTest extends Tester\TestCase {
     
     function testFetchSuccess() {
         $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Team');
+        $mockPresenter = $presenterFactory->createPresenter('Event');
         $mockPresenter->autoCanonicalize = FALSE;
 
         $this->login();
@@ -103,14 +103,13 @@ class APIEventTest extends Tester\TestCase {
         $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
 
         $eventId = 1;
-        $eventObj = new \Tymy\Event($mockPresenter);
+        $eventObj = new \Tymy\Event($mockPresenter->tapiAuthenticator, $mockPresenter);
         $eventObj->recId($eventId)
                 ->fetch();
         Assert::true(is_object($eventObj));
         Assert::true(is_object($eventObj->result));
         Assert::type("string",$eventObj->result->status);
         Assert::same("OK",$eventObj->result->status);
-        var_dump($eventObj->result->data);
         Assert::type("int",$eventObj->result->data->id);
         Assert::same($eventId,$eventObj->result->data->id);
         

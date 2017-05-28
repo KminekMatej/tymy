@@ -58,14 +58,14 @@ class NavbarTest extends Tester\TestCase {
     function testNavbarComponents($presenterMock){
         $this->mockPresenter($presenterMock);
         $html = (string) $this->getHomepageHtml();
-        $discussions = new \Tymy\Discussions($this->presenter);
+        $discussions = new \Tymy\Discussions($this->presenter->tapiAuthenticator, $this->presenter);
         
         $dObj = $discussions->fetch();
         
-        $polls = new \Tymy\Polls($this->presenter);
+        $polls = new \Tymy\Polls($this->presenter->tapiAuthenticator, $this->presenter);
         $pObj = $polls->fetch();
         
-        $events = new \Tymy\Events($this->presenter);
+        $events = new \Tymy\Events($this->presenter->tapiAuthenticator, $this->presenter);
         $eObj = $events
                 ->withMyAttendance(true)
                 ->from(date("Ymd"))

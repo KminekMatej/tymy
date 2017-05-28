@@ -73,7 +73,7 @@ class APILogoutTest extends Tester\TestCase {
         $mockPresenter->getUser()->setExpiration('2 minutes');
         $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
 
-        $logoutObj = new \Tymy\Logout($mockPresenter);
+        $logoutObj = new \Tymy\Logout($mockPresenter->tapiAuthenticator, $mockPresenter);
         $logoutObj->logout();
         
         Assert::same(1, count($logoutObj->getUriParams()));

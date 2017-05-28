@@ -56,7 +56,7 @@ class APIEventsTest extends Tester\TestCase {
         $mockPresenter->getUser()->login("test", "test");
 
 
-        $eventsObj = new \Tymy\Events(NULL);
+        $eventsObj = new \Tymy\Events();
         $eventsObj->presenter($mockPresenter)
                 ->fetch();
     }
@@ -77,14 +77,14 @@ class APIEventsTest extends Tester\TestCase {
         $mockPresenter->getUser()->login("test", "test");
 
 
-        $eventsObj = new \Tymy\Events(NULL);
+        $eventsObj = new \Tymy\Events();
         $eventsObj->presenter($mockPresenter)
                 ->fetch();
     }
     
     function testFetchSuccess() {
         $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Discussion');
+        $mockPresenter = $presenterFactory->createPresenter('Event');
         $mockPresenter->autoCanonicalize = FALSE;
 
         $this->login();
@@ -94,7 +94,7 @@ class APIEventsTest extends Tester\TestCase {
         $mockPresenter->getUser()->setExpiration('2 minutes');
         $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
 
-        $eventsObj = new \Tymy\Events($mockPresenter);
+        $eventsObj = new \Tymy\Events($mockPresenter->tapiAuthenticator, $mockPresenter);
         $eventsObj->fetch();
         
         Assert::same(1, count($eventsObj->getUriParams()));
@@ -128,7 +128,7 @@ class APIEventsTest extends Tester\TestCase {
     
     function testFetchFilter() {
         $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Discussion');
+        $mockPresenter = $presenterFactory->createPresenter('Event');
         $mockPresenter->autoCanonicalize = FALSE;
 
         $this->login();
@@ -138,13 +138,13 @@ class APIEventsTest extends Tester\TestCase {
         $mockPresenter->getUser()->setExpiration('2 minutes');
         $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
 
-        $eventsObj = new \Tymy\Events($mockPresenter);
+        $eventsObj = new \Tymy\Events($mockPresenter->tapiAuthenticator, $mockPresenter);
         $eventsObj->fetch();
         
         Assert::same(1, count($eventsObj->getUriParams()));
         Assert::contains("TSID",array_keys($eventsObj->getUriParams()));
         
-        $eventsObj = new \Tymy\Events($mockPresenter);
+        $eventsObj = new \Tymy\Events($mockPresenter->tapiAuthenticator, $mockPresenter);
         $eventsObj->from("20160202")
                 ->fetch();
         
@@ -153,7 +153,7 @@ class APIEventsTest extends Tester\TestCase {
         Assert::contains("TSID",array_keys($eventsObj->getUriParams()));
         Assert::contains("startTime>20160202",$eventsObj->getUriParams());
         
-        $eventsObj = new \Tymy\Events($mockPresenter);
+        $eventsObj = new \Tymy\Events($mockPresenter->tapiAuthenticator, $mockPresenter);
         $eventsObj->to("20170202")
                 ->fetch();
         
@@ -162,7 +162,7 @@ class APIEventsTest extends Tester\TestCase {
         Assert::contains("TSID",array_keys($eventsObj->getUriParams()));
         Assert::contains("startTime<20170202",$eventsObj->getUriParams());
         
-        $eventsObj = new \Tymy\Events($mockPresenter);
+        $eventsObj = new \Tymy\Events($mockPresenter->tapiAuthenticator, $mockPresenter);
         $eventsObj->from("20160202")
                 ->to("20170202")
                 ->fetch();
@@ -172,7 +172,7 @@ class APIEventsTest extends Tester\TestCase {
         Assert::contains("TSID",array_keys($eventsObj->getUriParams()));
         Assert::contains("startTime>20160202~startTime<20170202",$eventsObj->getUriParams());
         
-        $eventsObj = new \Tymy\Events($mockPresenter);
+        $eventsObj = new \Tymy\Events($mockPresenter->tapiAuthenticator, $mockPresenter);
         $eventsObj->from("20160202")
                 ->to("20170202")
                 ->withMyAttendance(TRUE)

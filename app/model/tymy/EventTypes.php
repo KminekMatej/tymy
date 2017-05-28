@@ -12,16 +12,10 @@ use Nette\Utils\Strings;
  */
 final class EventTypes extends Tymy{
     
-    public function __construct(Nette\Application\UI\Presenter $presenter = NULL) {
-        parent::__construct($presenter);
-    }
-    
     public function select() {
         $this->fullUrl .= "eventTypes/";
     }
     
-    protected function postProcess(){
-        return TRUE;
-    }
+    protected function postProcess(){}
 
 }

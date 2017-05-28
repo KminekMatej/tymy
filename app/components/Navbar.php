@@ -22,10 +22,10 @@ class NavbarControl extends Control {
     
     public function __construct(Nette\Application\UI\Presenter $presenter) {
         parent::__construct();
-        $this->discussions = new \Tymy\Discussions($presenter);
-        $this->players = new \Tymy\Users($presenter);
-        $this->polls = new \Tymy\Polls($presenter);
-        $this->events = new \Tymy\Events($presenter);
+        $this->discussions = new \Tymy\Discussions($presenter->tapiAuthenticator, $presenter);
+        $this->players = new \Tymy\Users($presenter->tapiAuthenticator, $presenter);
+        $this->polls = new \Tymy\Polls($presenter->tapiAuthenticator, $presenter);
+        $this->events = new \Tymy\Events($presenter->tapiAuthenticator, $presenter);
         $this->user = $presenter->getUser();
         $this->presenter = $presenter;
     }

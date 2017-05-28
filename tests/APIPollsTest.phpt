@@ -56,7 +56,7 @@ class APIPollsTest extends Tester\TestCase {
         $mockPresenter->getUser()->login("test", "test");
 
 
-        $pollsObj = new \Tymy\Polls(NULL);
+        $pollsObj = new \Tymy\Polls();
         $pollsObj->presenter($mockPresenter)
                 ->fetch();
     }
@@ -77,7 +77,7 @@ class APIPollsTest extends Tester\TestCase {
         $mockPresenter->getUser()->login("test", "test");
 
 
-        $pollsObj = new \Tymy\Polls(NULL);
+        $pollsObj = new \Tymy\Polls();
         $pollsObj->presenter($mockPresenter)
                 ->fetch();
     }
@@ -94,7 +94,7 @@ class APIPollsTest extends Tester\TestCase {
         $mockPresenter->getUser()->setExpiration('2 minutes');
         $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
 
-        $pollsObj = new \Tymy\Polls($mockPresenter);
+        $pollsObj = new \Tymy\Polls($mockPresenter->tapiAuthenticator, $mockPresenter);
         $pollsObj->fetch();
         
         Assert::same(1, count($pollsObj->getUriParams()));

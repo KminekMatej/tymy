@@ -14,8 +14,8 @@ final class Users extends Tymy{
     
     private $userType;
     
-    public function __construct(Nette\Application\UI\Presenter $presenter = NULL, $userType = NULL) {
-        parent::__construct($presenter);
+    public function __construct(\App\Model\TymyUserManager $tapiAuthenticator = NULL, Nette\Application\UI\Presenter $presenter = NULL, $userType = NULL) {
+        parent::__construct($tapiAuthenticator, $presenter);
         $this->userType = $userType;
     }
     

@@ -22,7 +22,7 @@ class PollPresenter extends SecuredPresenter {
     }
     
     public function renderPoll($anketa) {
-        $polls = new \Tymy\Polls($this);
+        $polls = new \Tymy\Polls($this->tapiAuthenticator, $this);
         $pollId = NULL;
         foreach ($polls->fetch() as $p) {
             if(Strings::webalize($p->caption) == $anketa){
@@ -32,7 +32,7 @@ class PollPresenter extends SecuredPresenter {
             }
         }
         
-        $pollObj = new \Tymy\Poll($this);
+        $pollObj = new \Tymy\Poll($this->tapiAuthenticator, $this);
         $pollData = $pollObj->
                 recId($pollId)->
                 fetch();

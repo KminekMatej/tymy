@@ -56,7 +56,7 @@ class APIDiscussionsTest extends Tester\TestCase {
         $mockPresenter->getUser()->login("test", "test");
 
 
-        $discussionsObj = new \Tymy\Discussions(NULL);
+        $discussionsObj = new \Tymy\Discussions();
         $discussionsObj->presenter($mockPresenter)
                 ->recId(1)
                 ->fetch();
@@ -78,7 +78,7 @@ class APIDiscussionsTest extends Tester\TestCase {
         $mockPresenter->getUser()->login("test", "test");
 
 
-        $discussionsObj = new \Tymy\Discussions(NULL);
+        $discussionsObj = new \Tymy\Discussions();
         $discussionsObj
                 ->presenter($mockPresenter)
                 ->recId(1)
@@ -97,7 +97,7 @@ class APIDiscussionsTest extends Tester\TestCase {
         $mockPresenter->getUser()->setExpiration('2 minutes');
         $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
 
-        $discussionsObj = new \Tymy\Discussions($mockPresenter);
+        $discussionsObj = new \Tymy\Discussions($mockPresenter->tapiAuthenticator, $mockPresenter);
         $discussionsObj->fetch();
         Assert::true(is_object($discussionsObj));
         Assert::true(is_object($discussionsObj->result));
@@ -138,10 +138,9 @@ class APIDiscussionsTest extends Tester\TestCase {
         $mockPresenter->getUser()->setExpiration('2 minutes');
         $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
 
-        $discussionsObj = new \Tymy\Discussions($mockPresenter);
+        $discussionsObj = new \Tymy\Discussions($mockPresenter->tapiAuthenticator, $mockPresenter);
         $discussionsObj->setWithNew(TRUE)
                 ->fetch();
-        var_dump($discussionsObj);
 
         Assert::true(is_object($discussionsObj));
         Assert::true(is_object($discussionsObj->result));

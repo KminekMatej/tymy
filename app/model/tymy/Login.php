@@ -21,7 +21,7 @@ final class Login extends Tymy{
     
     public function setPassword($password) {
         $h = "";
-        $n = rand(1, 20);
+        $n = rand(1, 19); // password given is already hashed by md5 - therefore max should be 19 to have at most 20 md5 hashings
         for ($index = 0; $index < $n; $index++) {
             $h = md5($password);
         }

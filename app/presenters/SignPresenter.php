@@ -34,7 +34,7 @@ class SignPresenter extends BasePresenter {
     }
 
     public function actionOut() {
-        $logout = new \Tymy\Logout($this);
+        $logout = new \Tymy\Logout(NULL, $this);
         $logout->logout();
         $this->getUser()->logout();
         $this->flashMessage('You have been succesfully signed out');

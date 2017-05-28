@@ -61,7 +61,7 @@ class EventPresenter extends SecuredPresenter {
     }
     
     private function loadEventList($date = NULL, $direction = NULL) {
-        $events = new \Tymy\Events($this);
+        $events = new \Tymy\Events($this->tapiAuthenticator, $this);
         $this->eventsFrom = date("Ym", strtotime("-3 months")) . "01";
         $this->eventsTo = date("Ym", strtotime("+3 months")) . "01";
 
@@ -120,7 +120,7 @@ class EventPresenter extends SecuredPresenter {
         if(isset($sessionSection["eventTypes"]) && !$force)
             return $sessionSection["eventTypes"];
         
-        $eventTypesObj = new \Tymy\EventTypes($this);
+        $eventTypesObj = new \Tymy\EventTypes($this->tapiAuthenticator, $this);
         $eventTypesResult = $eventTypesObj->fetch();
         
         $eventTypes = [];
@@ -144,14 +144,14 @@ class EventPresenter extends SecuredPresenter {
     
     public function renderEvent($udalost) {
         $eventId = substr($udalost,0,strpos($udalost, "-"));
-        $eventObj = new \Tymy\Event($this);
+        $eventObj = new \Tymy\Event($this->tapiAuthenticator, $this);
         $event = $eventObj
                 ->recId($eventId)
                 ->fetch();
         
         $this->setLevelCaptions(["1" => ["caption" => $event->caption, "link" => $this->link("Event:event", $event->id . "-" . Strings::webalize($event->caption))]]);
         
-        $usersObj = new \Tymy\Users($this);
+        $usersObj = new \Tymy\Users($this->tapiAuthenticator, $this);
         $users = $usersObj
                 ->fetch();
                 
@@ -183,7 +183,7 @@ class EventPresenter extends SecuredPresenter {
     }
     
     public function handleAttendance($id, $code, $desc){
-        $att = new \Tymy\Attendance($this);
+        $att = new \Tymy\Attendance($this->tapiAuthenticator, $this);
         $att->recId($id)
             ->preStatus($code)
             ->preDescription($desc)

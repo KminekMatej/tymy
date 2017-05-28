@@ -44,7 +44,7 @@ class APIPollTest extends Tester\TestCase {
      * @throws Tymy\Exception\APIException
      */
     function testFetchNotLoggedInFailsRecIdNotSet() {
-        $pollObj = new \Tymy\Poll(NULL);
+        $pollObj = new \Tymy\Poll();
         $pollObj->fetch();
     }
     
@@ -63,7 +63,7 @@ class APIPollTest extends Tester\TestCase {
         $mockPresenter->getUser()->setAuthenticator($this->authenticator);
         $mockPresenter->getUser()->login("test", "test");
 
-        $pollObj = new \Tymy\Poll(NULL);
+        $pollObj = new \Tymy\Poll();
         $pollObj->presenter($mockPresenter)
                 ->recId(1)
                 ->fetch();
@@ -84,7 +84,7 @@ class APIPollTest extends Tester\TestCase {
         $mockPresenter->getUser()->setAuthenticator($this->authenticator);
         $mockPresenter->getUser()->login("test", "test");
 
-        $pollObj = new \Tymy\Poll(NULL);
+        $pollObj = new \Tymy\Poll();
         $pollObj->presenter($mockPresenter)
                 ->recId(1)
                 ->fetch();
@@ -103,7 +103,7 @@ class APIPollTest extends Tester\TestCase {
         $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
 
         $pollId = 1;
-        $pollObj = new \Tymy\Poll($mockPresenter);
+        $pollObj = new \Tymy\Poll($mockPresenter->tapiAuthenticator, $mockPresenter);
         $pollObj->recId($pollId)
                 ->fetch();
         Assert::true(is_object($pollObj));

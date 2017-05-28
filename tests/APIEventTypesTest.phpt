@@ -56,7 +56,7 @@ class APIEventTypesTest extends Tester\TestCase {
         $mockPresenter->getUser()->login("test", "test");
 
 
-        $eventTypesObj = new \Tymy\EventTypes(NULL);
+        $eventTypesObj = new \Tymy\EventTypes();
         $eventTypesObj->presenter($mockPresenter)
                 ->fetch();
     }
@@ -77,14 +77,14 @@ class APIEventTypesTest extends Tester\TestCase {
         $mockPresenter->getUser()->login("test", "test");
 
 
-        $eventTypesObj = new \Tymy\EventTypes(NULL);
+        $eventTypesObj = new \Tymy\EventTypes();
         $eventTypesObj->presenter($mockPresenter)
                 ->fetch();
     }
     
     function testFetchSuccess() {
         $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Discussion');
+        $mockPresenter = $presenterFactory->createPresenter('Event');
         $mockPresenter->autoCanonicalize = FALSE;
 
         $this->login();
@@ -94,12 +94,11 @@ class APIEventTypesTest extends Tester\TestCase {
         $mockPresenter->getUser()->setExpiration('2 minutes');
         $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
 
-        $eventTypesObj = new \Tymy\EventTypes($mockPresenter);
+        $eventTypesObj = new \Tymy\EventTypes($mockPresenter->tapiAuthenticator, $mockPresenter);
         $eventTypesObj->fetch();
         
         Assert::same(1, count($eventTypesObj->getUriParams()));
         
-        var_dump($eventTypesObj);
         Assert::true(is_object($eventTypesObj));
         Assert::true(is_object($eventTypesObj->result));
         Assert::type("string",$eventTypesObj->result->status);

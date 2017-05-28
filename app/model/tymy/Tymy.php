@@ -34,13 +34,16 @@ abstract class Tymy extends Nette\Object{
     /** @var \Tymy\TracyPanelTymy */
     protected $tymyPanel;
     
+    /** @var \App\Model\TymyUserManager */
+    protected $tapiAuthenticator;
+    
     /** Function to return full URI of select api */
     abstract protected function select();
     
     /** Function to process after the result from API is obtained, used mainly for formatting or adding new properties to TAPI result */
     abstract protected function postProcess();
     
-    public function __construct(Nette\Application\UI\Presenter $presenter = NULL) {
+    public function __construct(\App\Model\TymyUserManager $tapiAuthenticator = NULL, Nette\Application\UI\Presenter $presenter = NULL) {
         $panelId = "TymyAPI";
         if(is_null(\Tracy\Debugger::getBar()->getPanel($panelId))){
             $this->tymyPanel = new \Tymy\TracyPanelTymy;
@@ -48,6 +51,7 @@ abstract class Tymy extends Nette\Object{
         } else {
             $this->tymyPanel = \Tracy\Debugger::getBar()->getPanel($panelId);
         }
+        $this->tapiAuthenticator = $tapiAuthenticator;
         if($presenter != NULL)
             $this->presenter ($presenter);
         $this->https(FALSE);
@@ -87,6 +91,7 @@ abstract class Tymy extends Nette\Object{
     }
     
     protected function urlEnd() {
+        $this->fullUrl = preg_replace('/\\?.*/', '', $this->fullUrl); // firstly try to remove all url params before adding them - important for relogins
         $this->fullUrl .= "/" . $this->composeUriParams();
         return $this;
     }
@@ -143,11 +148,11 @@ abstract class Tymy extends Nette\Object{
         return isset($this->result) ? $this->result : NULL;
     }
     
-    protected function execute() {
+    protected function execute($relogin = TRUE) {
         $contents = $this->request($this->fullUrl);
         if ($contents->status) {
-            if ($contents->curlInfo["http_code"] == 401) { // not logged in
-                throw new \Tymy\Exception\APIAuthenticationException("API request ". $this->fullUrl ." retuned error 401 - Not Authorized");
+            if ($contents->curlInfo["http_code"] == 401) { // login failed, try to refresh
+                return $this->loginFailure($relogin);
             }
             
             if ($contents->curlInfo["http_code"] != 200) {
@@ -156,7 +161,7 @@ abstract class Tymy extends Nette\Object{
             $jsonObj = Json::decode($contents->result);
             
             if ($jsonObj->status == "ERROR" && $jsonObj->statusMessage == "Not loggged in") {
-                throw new \Tymy\Exception\APIAuthenticationException("API request ". $this->fullUrl ." retuned error 401 - Not Authorized");
+                return $this->loginFailure($relogin);
             }
             
             if ($jsonObj->status != "OK") {
@@ -171,6 +176,18 @@ abstract class Tymy extends Nette\Object{
         }
     }
     
+    private function loginFailure($relogin) {
+        if ($relogin && !is_null($this->tapiAuthenticator)) {
+            $newLogin = $this->tapiAuthenticator->reAuthenticate([$this->user->getIdentity()->data["data"]->login, $this->user->getIdentity()->data["hash"]]);
+            $this->user->getIdentity()->sessionKey = $newLogin->result->sessionKey;
+            $this->setUriParam("TSID", $this->user->getIdentity()->sessionKey);
+            $this->urlEnd();
+            return $this->execute(FALSE);
+        } else {
+            throw new \Tymy\Exception\APIAuthenticationException("API request " . $this->fullUrl . " retuned error 401 - Not logged in");
+        }
+    }
+
     protected function timezone(&$date) {
         $date = date('c',strtotime("$date UTC"));
         return $date;

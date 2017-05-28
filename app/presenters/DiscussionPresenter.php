@@ -24,7 +24,7 @@ class DiscussionPresenter extends SecuredPresenter {
     }
 
     public function renderDefault() {
-        $discussions = new \Tymy\Discussions($this);
+        $discussions = new \Tymy\Discussions($this->tapiAuthenticator, $this);
         $d = [];
         foreach ($discussions->fetch() as $dis) {
             $d[] = (object)[
@@ -39,7 +39,7 @@ class DiscussionPresenter extends SecuredPresenter {
     public function actionNewPost($discussion, $page){
         $post = $this->getHttpRequest()->getPost("post");
         if (trim($post) != "") {
-            $addPost = new \Tymy\Discussion($this, FALSE, $page);
+            $addPost = new \Tymy\Discussion($this->tapiAuthenticator, $this, FALSE, $page);
             $addPost->recId($discussion)->insert($post);
         }
         $this->setView('discussion');
@@ -48,7 +48,7 @@ class DiscussionPresenter extends SecuredPresenter {
     public function renderDiscussion($discussion, $page, $search) {
         $discussionId = NULL;
         if(!$discussionId = intval($discussion)){
-            $allDiscussions = new \Tymy\Discussions($this);
+            $allDiscussions = new \Tymy\Discussions($this->tapiAuthenticator, $this);
             foreach ($allDiscussions->fetch() as $dis) {
                 if (Strings::webalize($dis->caption) == $discussion) {
                     $discussionId = $dis->id;
@@ -60,7 +60,7 @@ class DiscussionPresenter extends SecuredPresenter {
         if (is_null($discussionId) || $discussionId < 1)
             $this->error("Tato diskuze neexistuje");
 
-        $d = new \Tymy\Discussion($this, true, $page);
+        $d = new \Tymy\Discussion($this->tapiAuthenticator, $this, true, $page);
         $d->recId($discussionId);
         if($search) 
             $d->search($search);

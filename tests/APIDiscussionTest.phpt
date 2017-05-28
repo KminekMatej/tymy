@@ -44,7 +44,7 @@ class APIDiscussionTest extends Tester\TestCase {
      * @throws Tymy\Exception\APIException
      */
     function testFetchFailsNoRecId(){
-        $discussionObj = new \Tymy\Discussion(NULL, TRUE, 1);
+        $discussionObj = new \Tymy\Discussion(NULL, NULL, TRUE, 1);
         $discussion = $discussionObj
                 ->team("dev")
                 ->fetch();
@@ -54,7 +54,7 @@ class APIDiscussionTest extends Tester\TestCase {
      * @throws Tymy\Exception\APIException
      */
     function testFetchFailsPageDoNotExist(){
-        $discussionObj = new \Tymy\Discussion(NULL, TRUE, -1);
+        $discussionObj = new \Tymy\Discussion(NULL, NULL, TRUE, -1);
         $discussion = $discussionObj
                 ->team("dev")
                 ->recId(1)
@@ -77,7 +77,7 @@ class APIDiscussionTest extends Tester\TestCase {
         $mockPresenter->getUser()->login("test", "test");
 
 
-        $discussionObj = new \Tymy\Discussion(NULL, TRUE, 1);
+        $discussionObj = new \Tymy\Discussion(NULL, NULL, TRUE, 1);
         $discussionObj
                 ->presenter($mockPresenter)
                 ->recId(1)
@@ -100,7 +100,7 @@ class APIDiscussionTest extends Tester\TestCase {
         $mockPresenter->getUser()->login("test", "test");
 
 
-        $discussionObj = new \Tymy\Discussion(NULL, TRUE, 1);
+        $discussionObj = new \Tymy\Discussion(NULL, NULL, TRUE, 1);
         $discussionObj
                 ->presenter($mockPresenter)
                 ->recId(1)
@@ -120,7 +120,7 @@ class APIDiscussionTest extends Tester\TestCase {
         $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
 
         $discussionId = 1;
-        $discussionObj = new \Tymy\Discussion($mockPresenter, TRUE, 1);
+        $discussionObj = new \Tymy\Discussion($mockPresenter->tapiAuthenticator, $mockPresenter, TRUE, 1);
         $discussionObj->recId($discussionId)
                 ->fetch();
         
@@ -215,7 +215,7 @@ class APIDiscussionTest extends Tester\TestCase {
 
         $insertText = "AUTOTEST automatic discussion post";
         
-        $discussionObj = new \Tymy\Discussion($mockPresenter, TRUE, 1);
+        $discussionObj = new \Tymy\Discussion($mockPresenter->tapiAuthenticator, $mockPresenter, TRUE, 1);
         $discussionObj
                 ->insert($insertText);
         Assert::true(is_object($discussionObj));
@@ -227,6 +227,8 @@ class APIDiscussionTest extends Tester\TestCase {
     }
     
     function testPost() {
+        if(!$GLOBALS["invasive"])
+            return null;
         $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
         $mockPresenter = $presenterFactory->createPresenter('Discussion');
         $mockPresenter->autoCanonicalize = FALSE;
@@ -240,7 +242,7 @@ class APIDiscussionTest extends Tester\TestCase {
 
         $insertText = "AUTOTEST automatic discussion post";
         $discussionId = 2; //ID of Testovaci Diskuze
-        $discussionObj = new \Tymy\Discussion($mockPresenter, TRUE, 1);
+        $discussionObj = new \Tymy\Discussion($mockPresenter->tapiAuthenticator, $mockPresenter, TRUE, 1);
         $discussionObj
                 ->recId($discussionId)
                 ->insert($insertText);
@@ -288,7 +290,7 @@ class APIDiscussionTest extends Tester\TestCase {
 
         $discussionId = 2; //ID of Testovaci Diskuze
         $searchHash = "d658281299b4b756f8f6385407eaa442";
-        $discussionObj = new \Tymy\Discussion($mockPresenter, TRUE, 1);
+        $discussionObj = new \Tymy\Discussion($mockPresenter->tapiAuthenticator, $mockPresenter, TRUE, 1);
         $discussionObj
                 ->recId($discussionId)
                 ->search($searchHash)

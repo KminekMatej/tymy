@@ -17,10 +17,6 @@ final class Attendance extends Tymy{
     private $postStatus;
     private $postDescription;
     
-    public function __construct(Nette\Application\UI\Presenter $presenter = NULL) {
-        parent::__construct($presenter);
-    }
-    
     public function preStatus($preStatus){
         $this->preStatus = $preStatus;
         return $this;
@@ -69,9 +65,7 @@ final class Attendance extends Tymy{
         throw new \Tymy\Exception\APIException("Select is not possible on Attendance object");
     }
     
-    protected function postProcess(){
-        return TRUE;
-    }
+    protected function postProcess(){}
     
     public function getPreStatus(){
         return $this->preStatus;

@@ -44,7 +44,7 @@ class APIUserTest extends Tester\TestCase {
      * @throws Tymy\Exception\APIException
      */
     function testFetchFailsNoRecId(){
-        $userObj = new \Tymy\User(NULL);
+        $userObj = new \Tymy\User();
         $user = $userObj
                 ->team("dev")
                 ->fetch();
@@ -66,7 +66,7 @@ class APIUserTest extends Tester\TestCase {
         $mockPresenter->getUser()->login("test", "test");
 
 
-        $userObj = new \Tymy\User(NULL);
+        $userObj = new \Tymy\User();
         $userObj
                 ->presenter($mockPresenter)
                 ->recId(1)
@@ -89,7 +89,7 @@ class APIUserTest extends Tester\TestCase {
         $mockPresenter->getUser()->login("test", "test");
 
 
-        $userObj = new \Tymy\User(NULL);
+        $userObj = new \Tymy\User();
         $userObj
                 ->presenter($mockPresenter)
                 ->recId(1)
@@ -108,11 +108,10 @@ class APIUserTest extends Tester\TestCase {
         $mockPresenter->getUser()->setExpiration('2 minutes');
         $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
 
-        $userObj = new \Tymy\User($mockPresenter);
+        $userObj = new \Tymy\User($mockPresenter->tapiAuthenticator, $mockPresenter);
         $userObj->recId(1)
                 ->fetch();
         
-        var_dump($userObj);
         Assert::true(is_object($userObj));
         Assert::true(is_object($userObj->result));
         Assert::type("string",$userObj->result->status);

@@ -45,7 +45,7 @@ class APIUsersTest extends Tester\TestCase {
      */
     function testFetchNotLoggedInFails404() {
         $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Homepage');
+        $mockPresenter = $presenterFactory->createPresenter('Team');
         $mockPresenter->autoCanonicalize = FALSE;
 
         $this->authenticator->setId(38);
@@ -56,7 +56,7 @@ class APIUsersTest extends Tester\TestCase {
         $mockPresenter->getUser()->login("test", "test");
 
 
-        $usersObj = new \Tymy\Users(NULL);
+        $usersObj = new \Tymy\Users();
         $usersObj->presenter($mockPresenter)
                 ->fetch();
     }
@@ -66,7 +66,7 @@ class APIUsersTest extends Tester\TestCase {
      */
     function testFetchNotLoggedInRedirects() {
         $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Homepage');
+        $mockPresenter = $presenterFactory->createPresenter('Team');
         $mockPresenter->autoCanonicalize = FALSE;
 
         $this->authenticator->setId(38);
@@ -77,7 +77,7 @@ class APIUsersTest extends Tester\TestCase {
         $mockPresenter->getUser()->login("test", "test");
 
 
-        $usersObj = new \Tymy\Users(NULL);
+        $usersObj = new \Tymy\Users();
         $usersObj->presenter($mockPresenter)
                 ->fetch();
     }
@@ -94,7 +94,7 @@ class APIUsersTest extends Tester\TestCase {
         $mockPresenter->getUser()->setExpiration('2 minutes');
         $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
 
-        $usersObj = new \Tymy\Users($mockPresenter);
+        $usersObj = new \Tymy\Users($mockPresenter->tapiAuthenticator, $mockPresenter);
         $usersObj->fetch();
         
         Assert::same(1, count($usersObj->getUriParams()));
@@ -178,7 +178,7 @@ class APIUsersTest extends Tester\TestCase {
         $mockPresenter->getUser()->setExpiration('2 minutes');
         $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
         
-        $usersObj = new \Tymy\Users($mockPresenter, $userType);
+        $usersObj = new \Tymy\Users($mockPresenter->tapiAuthenticator, $mockPresenter, $userType);
         $usersObj->fetch();
         
         foreach ($usersObj->result->data as $data) {
@@ -202,7 +202,7 @@ class APIUsersTest extends Tester\TestCase {
         $mockPresenter->getUser()->setExpiration('2 minutes');
         $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
         
-        $usersObj = new \Tymy\Users($mockPresenter, $userType);
+        $usersObj = new \Tymy\Users($mockPresenter->tapiAuthenticator, $mockPresenter, $userType);
         $usersObj->fetch();
         
         Assert::type("array", $usersObj->result->data);

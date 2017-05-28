@@ -39,7 +39,7 @@ class TeamPresenter extends SecuredPresenter {
     }
     
     public function renderDefault() {
-        $users = new \Tymy\Users($this, $this->userType);
+        $users = new \Tymy\Users($this->tapiAuthenticator, $this, $this->userType);
         $u = $users->fetch();
         foreach ($u as $data) {
             $data->webName = Strings::webalize($data->fullName);
@@ -48,7 +48,7 @@ class TeamPresenter extends SecuredPresenter {
     }
     
     public function renderPlayer($player) {
-        $players = new \Tymy\Users($this);
+        $players = new \Tymy\Users($this->tapiAuthenticator, $this);
         $playerId = NULL;
         foreach ($players->fetch() as $p) {
             if(Strings::webalize($p->fullName) == $player){
@@ -58,7 +58,7 @@ class TeamPresenter extends SecuredPresenter {
             }
         }
         
-        $playerObj = new \Tymy\User($this);
+        $playerObj = new \Tymy\User($this->tapiAuthenticator, $this);
         $playerData = $playerObj->
                 recId($playerId)->
                 fetch();
