@@ -17,7 +17,7 @@ CKEDITOR.editorConfig = function( config ) {
         config.height = 100;
 	config.removeButtons = 'Save,NewPage,Preview,Print,Templates,PasteText,PasteFromWord,Copy,Cut,Paste,Scayt,SelectAll,Find,Replace,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,Strike,Subscript,Superscript,CopyFormatting,CreateDiv,JustifyBlock,BidiLtr,BidiRtl,Language,Outdent,Indent,Anchor,Flash,SpecialChar,PageBreak,Iframe,ShowBlocks,Maximize,About,Styles,Font';
         config.enterMode = CKEDITOR.ENTER_BR;
+        config.format_tags = 'p;h1;h2;h3;h4;h5;h6;pre';
         config.extraPlugins = 'font,justify,bbcode';
 
 };
-
