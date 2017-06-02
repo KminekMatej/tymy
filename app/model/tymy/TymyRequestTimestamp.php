@@ -31,7 +31,7 @@ class TymyRequestTimestamp {
         return "<table class=\"table\">"
                 . "<tr>"
                     . "<th>$this->actionName: </th>"
-                    . "<td>". round($this->time * 1000)." ms</td>"
+                    . "<td>". round($this->time * 1000, 1)." ms</td>"
                 . "</tr>"
                 . "<tr>"
                     . "<td colspan=\"2\" style=\"test-decoration: italic\"><a href=\"$this->actionDesc\" target=_blank>$this->actionDesc</a></td>"
