@@ -11,6 +11,10 @@ h1 {
 	color: #3484D2;
 }
 
+BUTTON.btn, A.btn{
+    cursor: pointer;
+}
+
 #ajax-spinner {
 	margin: 15px 0 0 15px;
 	padding: 13px;
@@ -114,10 +118,6 @@ DIV.container.discussions DIV.name{
     font-size: 17px;
 }
 
-DIV.container.discussion .card-header BUTTON{
-    cursor: pointer;
-}
-
 .breadcrumb{
     background: linear-gradient(#bcbcbc, white);
     padding: 0.25rem 1rem;
@@ -155,19 +155,12 @@ DIV.container.discussion .card-header BUTTON{
     border-top-width: 0px;
 }
 
-.addPost BUTTON{
-    cursor: pointer;
-}
-
 I.sticky{
     background-color: red;
 }
 
 DIV.container.events DIV.agenda DIV.card-block{
     font-size: 10pt;
-}
-DIV.container.events DIV.agenda BUTTON{
-    cursor: pointer;
 }
 DIV.container.events DIV.agenda SPAN.event-time{
     font-size: 0.8rem;
@@ -176,10 +169,6 @@ DIV.container.events DIV.agenda SPAN.event-heading{
     font-size: 1rem;
     font-weight: bold;
     margin-left: 8px;
-}
-
-DIV.container.event DIV.btn-group BUTTON{
-    cursor: pointer;
 }
 
 DIV.container.discussion DIV.row DIV.card-block blockquote{
@@ -191,4 +180,13 @@ DIV.container.discussion DIV.row DIV.card-block blockquote{
 
 DIV.container.discussion DIV.row DIV.card-block blockquote P{
     margin: 0px;
+}
+
+DIV.container.poll DIV.row DIV.card-block DIV.option{
+    text-align: center;
+}
+
+DIV.container.poll DIV.row DIV.card-block DIV.option:hover{
+    background-color: rgb(247, 247, 249);
+    transition: background-color 500ms linear;
 }
