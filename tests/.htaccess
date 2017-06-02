@@ -4,3 +4,5 @@ allow from 192.168.31.0/24
 allow from 94.112.206.90
 allow from 46.135.126.2
 allow from 37.188.183.195
+allow from 90.182.181.138
+allow from 80.188.249.250
