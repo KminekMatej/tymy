@@ -24,5 +24,8 @@ final class Poll extends Tymy{
         $data->webName = \Nette\Utils\Strings::webalize($data->caption);
         $this->timezone($data->createdAt);
         $this->timezone($data->updatedAt);
+        foreach ($data->votes as $vote) {
+            $this->timezone($vote->updatedAt);
+        }
     }
 }
