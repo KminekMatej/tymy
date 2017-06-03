@@ -33,24 +33,13 @@ class EventPresenter extends SecuredPresenter {
         });
 
         $this->template->addFilter("prestatusClass", function ($myPreStatus, $myPostStatus, $btn, $startTime) {
-            switch ($btn) {
-                case "LAT": // Late
-                    $color = "warning";
-                    break;
-                case "NO":
-                    $color = "danger";
-                    break;
-                case "YES":
-                    $color = "success";
-                    break;
-                case "DKY": // Dont Know Yet
-                    $color = "warning";
-                    break;
-                default:
-                    $color = "primary";
-                    break;
-            }
-            
+            $btnCls = [
+                "LAT" => "warning",
+                "NO" => "danger",
+                "YES" => "success",
+                "DKY" => "warning", // dont know yet
+                ];
+            $color = $btnCls[$btn];
             if(strtotime($startTime) > strtotime(date("c")))// pokud podminka plati, akce je budouci
                 return $btn == $myPreStatus ? "btn-outline-$color active" : "btn-outline-$color";
             else if($myPostStatus == "not-set") // akce uz byla, post status nevyplnen
@@ -62,13 +51,13 @@ class EventPresenter extends SecuredPresenter {
     
     private function loadEventList($date = NULL, $direction = NULL) {
         $events = new \Tymy\Events($this->tapiAuthenticator, $this);
-        $this->eventsFrom = date("Ym", strtotime("-3 months")) . "01";
-        $this->eventsTo = date("Ym", strtotime("+3 months")) . "01";
+        $this->eventsFrom = date("Ym", strtotime("-6 months")) . "01";
+        $this->eventsTo = date("Ym", strtotime("+6 months")) . "01";
 
         if ($direction == 1) {
-            $this->eventsTo = date("Ym", strtotime("$date-01 +5 months")) . "01";
+            $this->eventsTo = date("Ym", strtotime("$date-01 +6 months")) . "01";
         } elseif ($direction == -1) {
-            $this->eventsFrom = date("Ym", strtotime("$date-01 -5 months")) . "01";
+            $this->eventsFrom = date("Ym", strtotime("$date-01 -6 months")) . "01";
         }
 
         $this->eventList = $events
