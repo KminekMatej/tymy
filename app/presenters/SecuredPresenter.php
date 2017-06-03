@@ -37,6 +37,34 @@ class SecuredPresenter extends BasePresenter {
             unset($this->levelCaptions[$index]);
         }
     }
+    
+    protected function getEventTypes($force = FALSE){
+        $sessionSection = $this->getSession()->getSection("tymy");
+        
+        if(isset($sessionSection["eventTypes"]) && !$force)
+            return $sessionSection["eventTypes"];
+        
+        $eventTypesObj = new \Tymy\EventTypes($this->tapiAuthenticator, $this);
+        $eventTypesResult = $eventTypesObj->fetch();
+        
+        $eventTypes = [];
+        foreach ($eventTypesResult as $type) {
+            $eventTypes[$type->code] = $type;
+            $preStatusSet = [];
+            foreach ($type->preStatusSet as $preSS) {
+                $preStatusSet[$preSS->code] = $preSS;
+            }
+            $eventTypes[$type->code]->preStatusSet = $preStatusSet;
+            
+            $postStatusSet = [];
+            foreach ($type->postStatusSet as $postSS) {
+                $postStatusSet[$postSS->code] = $postSS;
+            }
+            $eventTypes[$type->code]->postStatusSet = $postStatusSet;
+        }
+        $sessionSection["eventTypes"] = $eventTypes;
+        return $eventTypes;
+    }
 
     protected function startup() {
         parent::startup();

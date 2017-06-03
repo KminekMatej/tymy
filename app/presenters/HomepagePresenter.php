@@ -10,11 +10,6 @@ use Nette\Application\UI\Form;
 class HomepagePresenter extends SecuredPresenter {
 
     public $navbar;
-    private $eventList;
-    private $eventsFrom;
-    private $eventsTo;
-    private $eventsJSObject;
-    private $eventsMonthly;
     
     public function startup() {
         parent::startup();
@@ -22,6 +17,14 @@ class HomepagePresenter extends SecuredPresenter {
     }
     
     public function renderDefault() {
-        //todo
+        $eventsObj = new \Tymy\Events($this->tapiAuthenticator, $this);
+        $events = $eventsObj->loadYearEvents(NULL, NULL);
+        
+        $this->template->currY = date("Y");
+        $this->template->currM = date("m");
+        $this->template->evMonths = $events->eventsMonthly;
+        $this->template->events = $events->getData();
+        $this->template->eventTypes = $this->getEventTypes();
     }
+
 }
