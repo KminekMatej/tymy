@@ -57,7 +57,7 @@ class APIAttendanceTest extends Tester\TestCase {
         $attendanceObj = new \Tymy\Attendance();
         $attendance = $attendanceObj
                 ->team($GLOBALS["team"])
-                ->recId(147)
+                ->recId($GLOBALS["testEventId"])
                 ->plan();
     }
 
@@ -80,7 +80,7 @@ class APIAttendanceTest extends Tester\TestCase {
         $attendanceObj = new \Tymy\Attendance();
         $attendanceObj
                 ->presenter($mockPresenter)
-                ->recId(147)
+                ->recId($GLOBALS["testEventId"])
                 ->preStatus("YES")
                 ->plan();
     }
@@ -104,7 +104,7 @@ class APIAttendanceTest extends Tester\TestCase {
         $attendanceObj = new \Tymy\Attendance();
         $attendanceObj
                 ->presenter($mockPresenter)
-                ->recId(147)
+                ->recId($GLOBALS["testEventId"])
                 ->preStatus("YES")
                 ->plan();
     }
@@ -122,7 +122,7 @@ class APIAttendanceTest extends Tester\TestCase {
         $attendanceObj = new \Tymy\Attendance($mockPresenter->tapiAuthenticator, $mockPresenter);
         $attendanceObj
                 ->presenter($mockPresenter)
-                ->recId(147)
+                ->recId($GLOBALS["testEventId"])
                 ->preStatus("YES")
                 ->plan();
         
@@ -132,7 +132,7 @@ class APIAttendanceTest extends Tester\TestCase {
         $attendanceObj2 = new \Tymy\Attendance($mockPresenter->tapiAuthenticator, $mockPresenter);
         $attendanceObj2
                 ->presenter($mockPresenter)
-                ->recId(147)
+                ->recId($GLOBALS["testEventId"])
                 ->preStatus("YES")
                 ->plan();
     }

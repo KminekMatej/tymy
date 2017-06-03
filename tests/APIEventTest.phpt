@@ -102,7 +102,7 @@ class APIEventTest extends Tester\TestCase {
         $mockPresenter->getUser()->setExpiration('2 minutes');
         $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
 
-        $eventId = 1;
+        $eventId = $GLOBALS["testEventId"];
         $eventObj = new \Tymy\Event($mockPresenter->tapiAuthenticator, $mockPresenter);
         $eventObj->recId($eventId)
                 ->fetch();

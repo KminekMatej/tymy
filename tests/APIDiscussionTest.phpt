@@ -288,8 +288,8 @@ class APIDiscussionTest extends Tester\TestCase {
         $mockPresenter->getUser()->setExpiration('2 minutes');
         $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
 
-        $discussionId = 2; //ID of Testovaci Diskuze
-        $searchHash = "d658281299b4b756f8f6385407eaa442";
+        $discussionId = $GLOBALS["searchDiscussionId"];
+        $searchHash = $GLOBALS["searchHash"];
         $discussionObj = new \Tymy\Discussion($mockPresenter->tapiAuthenticator, $mockPresenter, TRUE, 1);
         $discussionObj
                 ->recId($discussionId)
