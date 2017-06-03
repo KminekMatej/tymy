@@ -16,8 +16,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
         
         date_default_timezone_set('Europe/Prague');
         
-        $bF = $this->context->parameters["bootstrapVer"];
-        
         $this->template->js = \Tracy\Debugger::$productionMode ? "min.js" : "js";
         $this->template->css = \Tracy\Debugger::$productionMode ? "min.css" : "css";
         
