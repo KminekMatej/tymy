@@ -138,7 +138,8 @@ class APIUserTest extends Tester\TestCase {
         Assert::type("string",$userObj->result->data->language);
         Assert::type("string",$userObj->result->data->email);
         Assert::type("string",$userObj->result->data->jerseyNumber);
-        Assert::type("string",$userObj->result->data->gender);
+        if(property_exists($userObj->result->data, "gender"))
+            Assert::type("string",$userObj->result->data->gender);
         Assert::type("string",$userObj->result->data->street);
         Assert::type("string",$userObj->result->data->city);
         Assert::type("string",$userObj->result->data->zipCode);

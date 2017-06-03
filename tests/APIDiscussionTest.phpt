@@ -319,7 +319,7 @@ class APIDiscussionTest extends Tester\TestCase {
         Assert::type("string",$discussionObj->result->data->posts[0]->post);
         Assert::contains($searchHash, $discussionObj->result->data->posts[0]->post);
         Assert::type("int",$discussionObj->result->data->posts[0]->createdById);
-        Assert::same(11,$discussionObj->result->data->posts[0]->createdById);
+        Assert::same($GLOBALS["searchedItemUserId"],$discussionObj->result->data->posts[0]->createdById);
         
         Assert::type("string",$discussionObj->result->data->posts[0]->createdAt);
         Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $discussionObj->result->data->posts[0]->createdAt)); //timezone correction check
