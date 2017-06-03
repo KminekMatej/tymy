@@ -2,11 +2,65 @@
 {control navbar}
 {/block}
 
+{block styles}
+<link rel='stylesheet' href="{$basePath}/resources/fullcalendar/fullcalendar.css" />
+{include parent}
+{/block}
+
 {block scripts}
 {include parent}
+<script src="{$basePath}/js/event.js"></script>
+<script src="{$basePath}/resources/fullcalendar/fullcalendar.{$js}"></script>
+<script src="{$basePath}/resources/fullcalendar/locale/cs.js"></script>
 <script src="{$basePath}/js/timer.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#calendar').fullCalendar({
+            locale: 'cs',
+            contentHeight: 350,
+            fixedWeekCount: false,
+            displayEventTime: false,
+            events: function(start, end, timezone, callback) {
+                var events = [];
+                {foreach $events as $evnt}
+                    events.push({l}id: {$evnt->id}, title: {$evnt->caption},start: {$evnt->startTime},end: {$evnt->endTime},url: {$presenter->link('Event:event', $evnt->id . '-' . $evnt->caption|webalize)},description:{date('H:i',strtotime($evnt->startTime))} + ' ' + {$evnt->caption}{r});
+                {/foreach}
+                callback(events);
+            },
+            eventRender: function(event, element) { 
+                element.find('.fc-title').attr("title",event.description);
+            },
+            header: {
+                left: 'title',
+                center: '',
+                right: 'today prev,next'
+            },
+            loading: function (isLoading, view) {
+                if (isLoading) {
+                    $('#calendar DIV.fc-header-toolbar BUTTON.fc-prev-button').prop('disabled', true);
+                    $('#calendar DIV.fc-header-toolbar BUTTON.fc-next-button').prop('disabled', true);
+                } else {
+                    $('#calendar DIV.fc-header-toolbar BUTTON.fc-prev-button').prop('disabled', false);
+                    $('#calendar DIV.fc-header-toolbar BUTTON.fc-next-button').prop('disabled', false);
+                }
+            }
+        });
+        $('#calendar DIV.fc-header-toolbar').addClass("card-header");
+        $('#calendar DIV.fc-button-group').addClass("btn-group");
+        $('#calendar DIV.fc-header-toolbar BUTTON').each(function () {
+            $(this).addClass("btn btn-secondary");
+        });
+    });
+</script>
 {/block}
 
 
 {block content}
-Homepage - TODO
+
+<div class="container-fluid homepage">
+    <div class="row">
+        <div class="col-md-4 my-3">
+            <div class="card sh-box" id='calendar'></div>
+        </div>
+    </div>
+</div>
