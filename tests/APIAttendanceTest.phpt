@@ -12,6 +12,10 @@ use Tester\Assert;
 
 $container = require __DIR__ . '/bootstrap.php';
 
+if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["skips"])) {
+    Tester\Environment::skip('Test skipped as set in config file.');
+}
+
 class APIAttendanceTest extends Tester\TestCase {
 
     private $container;

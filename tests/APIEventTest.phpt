@@ -11,6 +11,9 @@ use Tester;
 use Tester\Assert;
 
 $container = require __DIR__ . '/bootstrap.php';
+if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["skips"])) {
+    Tester\Environment::skip('Test skipped as set in config file.');
+}
 
 class APIEventTest extends Tester\TestCase {
 
@@ -133,7 +136,7 @@ class APIEventTest extends Tester\TestCase {
         
         Assert::type("array",$eventObj->result->data->attendance);
         Assert::true(count($eventObj->result->data->attendance) > 0);
-        
+        var_dump($eventObj);
         foreach ($eventObj->result->data->attendance as $att) {
             Assert::true(is_object($att));
             Assert::type("int",$att->userId);
@@ -141,7 +144,8 @@ class APIEventTest extends Tester\TestCase {
                 Assert::type("int",$att->eventId);
                 Assert::same($eventId,$att->eventId);
                 Assert::type("string",$att->preStatus);
-                Assert::type("string",$att->preDescription);
+                if(property_exists($att, "preDescription"))
+                    Assert::type("string",$att->preDescription);
                 Assert::type("int",$att->preUserMod);
                 Assert::type("string",$att->preDatMod);
                 Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $att->preDatMod)); //timezone correction check
