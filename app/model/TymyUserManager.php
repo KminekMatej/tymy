@@ -14,6 +14,10 @@ class TymyUserManager implements Nette\Security\IAuthenticator {
     private $tym;
 
     public function __construct($tym) {
+        $this->setTym($tym);
+    }
+    
+    public function setTym($tym){
         $this->tym = $tym;
     }
 
