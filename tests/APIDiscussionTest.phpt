@@ -34,7 +34,7 @@ class APIDiscussionTest extends Tester\TestCase {
     
     function login(){
         $this->loginObj = new \Tymy\Login();
-        $this->login = $this->loginObj->team("dev")
+        $this->login = $this->loginObj->team($GLOBALS["team"])
                 ->setUsername($GLOBALS["username"])
                 ->setPassword($GLOBALS["password"])
                 ->fetch();
@@ -46,7 +46,7 @@ class APIDiscussionTest extends Tester\TestCase {
     function testFetchFailsNoRecId(){
         $discussionObj = new \Tymy\Discussion(NULL, NULL, TRUE, 1);
         $discussion = $discussionObj
-                ->team("dev")
+                ->team($GLOBALS["team"])
                 ->fetch();
     }
 
@@ -56,7 +56,7 @@ class APIDiscussionTest extends Tester\TestCase {
     function testFetchFailsPageDoNotExist(){
         $discussionObj = new \Tymy\Discussion(NULL, NULL, TRUE, -1);
         $discussion = $discussionObj
-                ->team("dev")
+                ->team($GLOBALS["team"])
                 ->recId(1)
                 ->fetch();
     }
@@ -94,7 +94,7 @@ class APIDiscussionTest extends Tester\TestCase {
 
         $this->authenticator->setId(38);
         $this->authenticator->setStatus(["TESTROLE", "TESTROLE2"]);
-        $this->authenticator->setArr(["tym" => "dev", "sessionKey" => "dsfbglsdfbg13546"]);
+        $this->authenticator->setArr(["tym" => $GLOBALS["team"], "sessionKey" => "dsfbglsdfbg13546"]);
 
         $mockPresenter->getUser()->setAuthenticator($this->authenticator);
         $mockPresenter->getUser()->login("test", "test");
@@ -114,7 +114,7 @@ class APIDiscussionTest extends Tester\TestCase {
 
         $this->login();
         $this->authenticator->setId($this->login->id);
-        $this->authenticator->setArr(["tym" => "dev", "sessionKey" => $this->loginObj->getResult()->sessionKey]);
+        $this->authenticator->setArr(["tym" => $GLOBALS["team"], "sessionKey" => $this->loginObj->getResult()->sessionKey]);
         $mockPresenter->getUser()->setAuthenticator($this->authenticator);
         $mockPresenter->getUser()->setExpiration('2 minutes');
         $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
@@ -208,7 +208,7 @@ class APIDiscussionTest extends Tester\TestCase {
 
         $this->login();
         $this->authenticator->setId($this->login->id);
-        $this->authenticator->setArr(["tym" => "dev", "sessionKey" => $this->loginObj->getResult()->sessionKey]);
+        $this->authenticator->setArr(["tym" => $GLOBALS["team"], "sessionKey" => $this->loginObj->getResult()->sessionKey]);
         $mockPresenter->getUser()->setAuthenticator($this->authenticator);
         $mockPresenter->getUser()->setExpiration('2 minutes');
         $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
@@ -235,7 +235,7 @@ class APIDiscussionTest extends Tester\TestCase {
 
         $this->login();
         $this->authenticator->setId($this->login->id);
-        $this->authenticator->setArr(["tym" => "dev", "sessionKey" => $this->loginObj->getResult()->sessionKey]);
+        $this->authenticator->setArr(["tym" => $GLOBALS["team"], "sessionKey" => $this->loginObj->getResult()->sessionKey]);
         $mockPresenter->getUser()->setAuthenticator($this->authenticator);
         $mockPresenter->getUser()->setExpiration('2 minutes');
         $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
@@ -283,7 +283,7 @@ class APIDiscussionTest extends Tester\TestCase {
 
         $this->login();
         $this->authenticator->setId($this->login->id);
-        $this->authenticator->setArr(["tym" => "dev", "sessionKey" => $this->loginObj->getResult()->sessionKey]);
+        $this->authenticator->setArr(["tym" => $GLOBALS["team"], "sessionKey" => $this->loginObj->getResult()->sessionKey]);
         $mockPresenter->getUser()->setAuthenticator($this->authenticator);
         $mockPresenter->getUser()->setExpiration('2 minutes');
         $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);

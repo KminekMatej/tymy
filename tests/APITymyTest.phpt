@@ -34,7 +34,7 @@ class APITymyTest extends Tester\TestCase {
     
     function login(){
         $tymyObj = new \Tymy\Login();
-        $this->tymyObj = $tymyObj->team("dev")
+        $this->tymyObj = $tymyObj->team($GLOBALS["team"])
                 ->setUsername($GLOBALS["username"])
                 ->setPassword($GLOBALS["password"])
                 ->fetch();
@@ -49,9 +49,9 @@ class APITymyTest extends Tester\TestCase {
 
     function testTeam(){
         Assert::null($this->tymyObj->team);
-        $this->tymyObj->team("dev");
+        $this->tymyObj->team($GLOBALS["team"]);
         Assert::type("string", $this->tymyObj->team);
-        Assert::same($this->tymyObj->team, "dev");
+        Assert::same($this->tymyObj->team, $GLOBALS["team"]);
     }
     
     function testPresenterSet(){

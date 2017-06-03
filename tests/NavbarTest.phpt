@@ -36,7 +36,7 @@ class NavbarTest extends Tester\TestCase {
         $this->presenter->autoCanonicalize = FALSE;
         $this->presenter->getUser()->setExpiration('2 minutes');
         $this->presenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
-        $this->presenter->getUser()->getIdentity()->tym = "dev";
+        $this->presenter->getUser()->getIdentity()->tym = $GLOBALS["team"];
     }
     
     function getHomepageHtml(){

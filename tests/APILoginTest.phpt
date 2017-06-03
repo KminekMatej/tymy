@@ -26,12 +26,12 @@ class APILoginTest extends Tester\TestCase {
     
     function testLoginSuccess(){
         $loginObj = new \Tymy\Login();
-        $loginObj->team("dev")
+        $loginObj->team($GLOBALS["team"])
                 ->setUsername($GLOBALS["username"])
                 ->setPassword($GLOBALS["password"])
                 ->fetch();
         Assert::type("string", $loginObj->team);
-        Assert::equal($loginObj->team, "dev");
+        Assert::equal($loginObj->team, $GLOBALS["team"]);
         Assert::true(is_object($loginObj));
         Assert::type("string", $loginObj->result->status);
         Assert::equal($loginObj->result->status, "OK");
@@ -72,7 +72,7 @@ class APILoginTest extends Tester\TestCase {
      */
     function testLoginFails(){
         $loginObj = new \Tymy\Login();
-        $loginObj->team("dev")
+        $loginObj->team($GLOBALS["team"])
                 ->setUsername($GLOBALS["username"])
                 ->setPassword("sdfas6df84asd3c")
                 ->fetch();

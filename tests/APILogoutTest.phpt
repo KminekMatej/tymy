@@ -34,7 +34,7 @@ class APILogoutTest extends Tester\TestCase {
     
     function login(){
         $this->loginObj = new \Tymy\Login();
-        $this->login = $this->loginObj->team("dev")
+        $this->login = $this->loginObj->team($GLOBALS["team"])
                 ->setUsername($GLOBALS["username"])
                 ->setPassword($GLOBALS["password"])
                 ->fetch();
@@ -68,7 +68,7 @@ class APILogoutTest extends Tester\TestCase {
 
         $this->login();
         $this->authenticator->setId($this->login->id);
-        $this->authenticator->setArr(["tym" => "dev", "sessionKey" => $this->loginObj->getResult()->sessionKey]);
+        $this->authenticator->setArr(["tym" => $GLOBALS["team"], "sessionKey" => $this->loginObj->getResult()->sessionKey]);
         $mockPresenter->getUser()->setAuthenticator($this->authenticator);
         $mockPresenter->getUser()->setExpiration('2 minutes');
         $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
