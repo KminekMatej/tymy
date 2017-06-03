@@ -25,15 +25,7 @@ class DiscussionPresenter extends SecuredPresenter {
 
     public function renderDefault() {
         $discussions = new \Tymy\Discussions($this->tapiAuthenticator, $this);
-        $d = [];
-        foreach ($discussions->fetch() as $dis) {
-            $d[] = (object)[
-                "caption" => $dis->caption,
-                "captionLink" => Strings::webalize($dis->caption),
-                "description" => $dis->description,
-            ];
-        }
-        $this->template->discussions = (object)$d;
+        $this->template->discussions = $discussions->fetch();
     }
     
     public function actionNewPost($discussion, $page){

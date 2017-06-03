@@ -15,7 +15,7 @@
                 <div class="card-block">
                     {foreach $discussions as $item}
                         <div class="row my-2">
-                            <div class="col-sm-3 name"><a href="{plink Discussion:discussion $item->captionLink}">{$item->caption}</a></div>
+                            <div class="col-sm-3 name"><a href="{plink Discussion:discussion $item->webName}">{$item->caption}</a></div>
                             <div class="col-sm-9">{$item->description}</div>
                         </div>
                     {/foreach}
