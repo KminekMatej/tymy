@@ -10,6 +10,11 @@ use Nette\Application\UI\Form;
 class HomepagePresenter extends SecuredPresenter {
 
     public $navbar;
+    private $eventList;
+    private $eventsFrom;
+    private $eventsTo;
+    private $eventsJSObject;
+    private $eventsMonthly;
     
     public function startup() {
         parent::startup();
