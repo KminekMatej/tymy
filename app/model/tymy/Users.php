@@ -47,6 +47,7 @@ final class Users extends Tymy{
             $this->checkPlayerData($player);
             $counts["ALL"]++;
             $counts[$player->status]++;
+            if(!property_exists($player, "gender")) $player->gender = "UNKNOWN"; //set default value
             if($player->id == $myId){
                 $this->getResult()->menuWarningCount = $player->errCnt;
                 $this->getResult()->me = (object)$player;
