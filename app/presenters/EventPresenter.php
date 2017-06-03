@@ -69,38 +69,17 @@ class EventPresenter extends SecuredPresenter {
     }
 
     public function renderDefault() {
-        if (!isset($this->eventList)) {
-            $this->loadEventList(NULL, NULL);
-        }
-        
-        $this->eventize();
-        
-        $this->template->agendaFrom = date("Y-m", strtotime($this->eventsFrom));
-        $this->template->agendaTo = date("Y-m", strtotime($this->eventsTo));
-        
+        $eventsObj = new \Tymy\Events($this->tapiAuthenticator, $this);
+        $events = $eventsObj->loadYearEvents(NULL, NULL);
+        $this->payload->events = $events->eventsJSObject;
+
+        $this->template->agendaFrom = date("Y-m", strtotime($events->eventsFrom));
+        $this->template->agendaTo = date("Y-m", strtotime($events->eventsTo));
         $this->template->currY = date("Y");
         $this->template->currM = date("m");
-        $this->template->evMonths = $this->eventsMonthly;
-        $this->template->events = $this->eventList;
+        $this->template->evMonths = $events->eventsMonthly;
+        $this->template->events = $events->getData();
         $this->template->eventTypes = $this->getEventTypes();
-    }
-    
-    private function eventize() {
-        $this->eventsJSObject = [];
-        $this->eventsMonthly = [];
-        foreach ($this->eventList as $ev) {
-            $webName = \Nette\Utils\Strings::webalize($ev->caption);
-            $this->eventsJSObject[] = (object)[
-                    "id"=>$ev->id,
-                    "title"=>$ev->caption,
-                    "start"=>$ev->startTime,
-                    "end"=>$ev->endTime,
-                    "url"=>$this->link('event', array('udalost'=>$ev->id . "-$webName"))
-                    ];
-            
-            $month = date("Y-m", strtotime($ev->startTime));
-            $this->eventsMonthly[$month][] = $ev;
-        }
     }
 
     private function getEventTypes($force = FALSE){
@@ -181,10 +160,10 @@ class EventPresenter extends SecuredPresenter {
     }
     
     public function handleEventLoad($date = NULL, $direction = NULL) {
-        $this->loadEventList($date, $direction);
         if ($this->isAjax()) {
-            $this->eventize();
-            $this->payload->events = $this->eventsJSObject;
+            $eventsObj = new \Tymy\Events($this->tapiAuthenticator, $this);
+            $events = $eventsObj->loadYearEvents($date, $direction);
+            $this->payload->events = $events->eventsJSObject;
             $this->redrawControl("events");
         }
     }
