@@ -13,12 +13,8 @@ if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["skips"])) {
 
 class HomepagePresenterTest extends Tester\TestCase {
 
-    private $username = "autotest";
-    private $pass = "123456.";
-    
     private $container;
     private $presenter;
-    private $admin;
 
     function __construct(Nette\DI\Container $container) {
         $this->container = $container;
@@ -42,8 +38,7 @@ class HomepagePresenterTest extends Tester\TestCase {
     function testHomepageComponents(){
         $request = new Nette\Application\Request('Homepage', 'GET', array('action' => 'default'));
         $this->presenter->getUser()->setExpiration('2 minutes');
-        $this->presenter->getUser()->login($this->username, $this->pass);
-        Assert::equal($this->presenter->getUser()->getIdentity()->data["data"]->callName, "AUTOTEST");
+        $this->presenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
         $response = $this->presenter->run($request);
 
         Assert::type('Nette\Application\Responses\TextResponse', $response);
