@@ -191,14 +191,18 @@ DIV.container.poll DIV.row DIV.card-block DIV.option:hover{
     transition: background-color 500ms linear;
 }
 
-DIV.container-fluid.homepage .fc h2 {
+DIV.homepage .fc h2 {
    font-size: 20px;
 }
 
-DIV.container-fluid.homepage .fc .fc-day-number {
+DIV.homepage .fc .fc-day-number {
    font-size: 7pt;
 }
 
 body .fc { 
    font-size: 0.9em;
+}
+
+DIV.homepage DIV.dis-description{
+    font-size: 0.83em;
 }

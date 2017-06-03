@@ -20,6 +20,9 @@ class HomepagePresenter extends SecuredPresenter {
         $eventsObj = new \Tymy\Events($this->tapiAuthenticator, $this);
         $events = $eventsObj->loadYearEvents(NULL, NULL);
         
+        $discussions = new \Tymy\Discussions($this->tapiAuthenticator, $this);
+        $this->template->discussions = $discussions->setWithNew(true)->fetch();
+        
         $this->template->currY = date("Y");
         $this->template->currM = date("m");
         $this->template->evMonths = $events->eventsMonthly;

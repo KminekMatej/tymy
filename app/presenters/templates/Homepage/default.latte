@@ -57,10 +57,26 @@
 
 {block content}
 
-<div class="container-fluid homepage">
+<div class="container homepage">
     <div class="row">
-        <div class="col-md-4 my-3">
+        <div class="col-md-5 my-3">
             <div class="card sh-box" id='calendar'></div>
+            <a class="btn btn-sm btn-secondary my-1 d-block" href="{plink Event:}">Přejít na události...</a>
+        </div>
+        <div class="col-md-7 my-3">
+            <div class="card sh-box">
+                <div class="card-block">
+                    {foreach $discussions as $item}
+                        <div class="row my-2">
+                            <div class="col-sm-4 name">
+                                {if $item->newPosts}<span class="badge badge-pill badge-danger">{$item->newPosts}</span>{/if}
+                                <a href="{plink Discussion:discussion $item->webName}">{$item->caption}</a>
+                            </div>
+                            <div class="col-sm-8 dis-description">{$item->description}</div>
+                        </div>
+                    {/foreach}
+                </div>
+            </div>
         </div>
     </div>
 </div>

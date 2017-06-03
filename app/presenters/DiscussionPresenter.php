@@ -25,7 +25,7 @@ class DiscussionPresenter extends SecuredPresenter {
 
     public function renderDefault() {
         $discussions = new \Tymy\Discussions($this->tapiAuthenticator, $this);
-        $this->template->discussions = $discussions->fetch();
+        $this->template->discussions = $discussions->setWithNew(true)->fetch();
     }
     
     public function actionNewPost($discussion, $page){
@@ -38,15 +38,6 @@ class DiscussionPresenter extends SecuredPresenter {
     }
     
     public function renderDiscussion($discussion, $page, $search) {
-        /*$this->template->addFilter('htmlpost', function ($post) {
-            $post = preg_replace('/<a(.*?)>/', '', $post); 
-            $post = preg_replace('/<\/(a)>/', '', $post); //remove generated links from native tymy application
-            $preRepl = ["\t" => "","<br/>" => "","&amp;" => "&","&quot;" => "\"","&#039;" => "'"];
-            $post = strtr($post, $preRepl);// remove generated line breaks and prepare some special chars
-            $replArr = ["&lt;br" => "<br","&lt;strong" => "<strong","&lt;em" => "<em","&lt;u" => "<u","&lt;span" => "<span","&lt;div" => "<div","&lt;ol" => "<ol","&lt;li" => "<li","&lt;ul" => "<ul","&lt;p" => "<p","&lt;blockquote" => "<blockquote","&lt;a" => "<a","&lt;hr" => "<hr","&lt;h1" => "<h1","&lt;h2" => "<h2","&lt;h3" => "<h3","&lt;h4" => "<h","&lt;h5" => "<h5","&lt;h6" => "<h6","&lt;table" => "<table","&lt;tbody" => "<tbody","&lt;tr" => "<tr","&lt;td" => "<td","&lt;th" => "<th","&lt;img" => "<img","&gt;" => ">","&lt;/br" => "</br","&lt;/strong" => "</strong","&lt;/em" => "</em","&lt;/u" => "</u","&lt;/span" => "</span","&lt;/div" => "</div","&lt;/ol" => "</ol","&lt;/li" => "</li","&lt;/ul" => "</ul","&lt;/p" => "</p","&lt;/blockquote" => "</blockquote","&lt;/a" => "</a","&lt;/hr" => "</hr","&lt;/h1" => "</h1","&lt;/h2" => "</h2","&lt;/h3" => "</h3","&lt;/h4" => "</h4","&lt;/h5" => "</h5","&lt;/h6" => "</h6","&lt;/table" => "</table","&lt;/tbody" => "</tbody","&lt;/tr" => "</tr","&lt;/td" => "</td","&lt;/th" => "</th","&lt;/img" => "</img",];//perform substitutions for specified html entities
-            return strtr($post, $replArr);
-        });*/
-        
         $discussionId = NULL;
         if(!$discussionId = intval($discussion)){
             $allDiscussions = new \Tymy\Discussions($this->tapiAuthenticator, $this);
