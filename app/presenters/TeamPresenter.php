@@ -73,7 +73,6 @@ class TeamPresenter extends SecuredPresenter {
         if(!isset($playerData->city)) $playerData->city = "";
         if(!isset($playerData->zipCode)) $playerData->zipCode = "";
         if(!isset($playerData->birthDate)) $playerData->birthDate = "";
-        if(!isset($playerData->gender)) $playerData->gender = "";
         if(!isset($playerData->phone)) $playerData->phone = "";
         if(!isset($playerData->phone2)) $playerData->phone2 = "";
         if(!isset($playerData->email)) $playerData->email = "";
