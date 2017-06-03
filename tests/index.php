@@ -1,6 +1,6 @@
 <?php
 header("Content-Type: text/plain");
-//runTest("setup_DEV");
+runTest("setup_DEV");
 runTest("setup_MONKEYS");
 
 function runTest($phpSetup) {
