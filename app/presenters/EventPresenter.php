@@ -9,7 +9,6 @@ use Nette\Utils\Strings;
 
 class EventPresenter extends SecuredPresenter {
         
-    private $eventList;
     private $eventsFrom;
     private $eventsTo;
     private $eventsJSObject;
@@ -47,25 +46,6 @@ class EventPresenter extends SecuredPresenter {
             else 
                 return $btn == $myPostStatus && $myPostStatus != "not-set" ? "btn-outline-$color disabled active" : "btn-outline-secondary disabled";
         });
-    }
-    
-    private function loadEventList($date = NULL, $direction = NULL) {
-        $events = new \Tymy\Events($this->tapiAuthenticator, $this);
-        $this->eventsFrom = date("Ym", strtotime("-6 months")) . "01";
-        $this->eventsTo = date("Ym", strtotime("+6 months")) . "01";
-
-        if ($direction == 1) {
-            $this->eventsTo = date("Ym", strtotime("$date-01 +6 months")) . "01";
-        } elseif ($direction == -1) {
-            $this->eventsFrom = date("Ym", strtotime("$date-01 -6 months")) . "01";
-        }
-
-        $this->eventList = $events
-                ->withMyAttendance(true)
-                ->from($this->eventsFrom)
-                ->to($this->eventsTo)
-                ->order("startTime")
-                ->fetch();
     }
 
     public function renderDefault() {
