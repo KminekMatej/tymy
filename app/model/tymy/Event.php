@@ -32,6 +32,9 @@ final class Event extends Tymy{
             foreach ($data->attendance as $att) {
                 if(!property_exists($att, "preStatus")) $att->preStatus = "UNKNOWN"; //set default value
                 if(!property_exists($att, "preDescription")) $att->preDescription = ""; //set default value
+                if($att->userId == $this->user->getId()){
+                    $data->myAttendance = $att;
+                }
                 if (property_exists($att, "preDatMod"))
                     $this->timezone($att->preDatMod);
             }
