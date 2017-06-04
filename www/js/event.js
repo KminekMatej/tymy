@@ -59,9 +59,9 @@ function updateAttendance(btn, purl) {
     if ($(btn).prop("disabled") || $(btn).hasClass("disabled"))
         return;
     var id = $(btn).closest("DIV.btn-group").attr("id");
-    $("DIV.events DIV#" + id + " BUTTON").removeClass("active");
+    $("DIV.btn-group#" + id + " BUTTON").removeClass("active");
     $(btn).addClass("active");
-    var note = $("DIV.events DIV#" + id + " INPUT").val() ? $("DIV.events DIV#" + id + " INPUT").val() : "";
+    var note = $("DIV.btn-group#" + id + " INPUT").val() ? $("DIV.btn-group#" + id + " INPUT").val() : "";
     disableActionRow(id, true);
     $.nette.ajax({
         url: purl + "&desc=" + note,
@@ -72,13 +72,11 @@ function updateAttendance(btn, purl) {
 }
 
 function disableActionRow(id, disable){
-    $("DIV.events DIV#"+id+" BUTTON").prop("disabled", disable);
+    $("DIV.btn-group#" + id + " BUTTON").prop("disabled", disable);
     if(disable){
-        $("DIV.events DIV#"+id+" INPUT").attr("disabled","disabled");
-        //$("DIV.events DIV#"+id+" BUTTON").addClass("disabled");
+        $("DIV.btn-group#" + id + " INPUT").attr("disabled","disabled");
     } else {
-        $("DIV.events DIV#"+id+" INPUT").removeAttr("disabled");
-        //$("DIV.events DIV#"+id+" BUTTON").removeClass("disabled");
+        $("DIV.btn-group#" + id + " INPUT").removeAttr("disabled");
     }
 }
 
