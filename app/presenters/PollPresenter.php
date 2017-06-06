@@ -36,9 +36,9 @@ class PollPresenter extends SecuredPresenter {
         $pollData = $pollObj->
                 recId($pollId)->
                 fetch();
-        \Tracy\Debugger::barDump($pollData);
         
         $this->template->poll = $pollData;
+        $this->template->users = $this->getUsers();
     }
     
     public function handleVote($pollId){

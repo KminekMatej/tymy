@@ -17,37 +17,37 @@
             <div class="card sh-box">
                 <div class="card-header">
                     <div class="row">
-                    <div class="col">
-                        <i class="fa fa-info-circle mx-3" aria-hidden="true"></i>
-                        {ifset $poll->minItems}<span class="badge badge-info"><strong>Minimum vyplněných položek: {$poll->minItems}</strong></span>{/ifset}
-                        {ifset $poll->maxItems}<span class="badge badge-warning"><strong>Maximum vyplněných položek: {$poll->maxItems}</strong></span>{/ifset}
-                        <span n:class="badge,$poll->changeableVotes ? badge-success : badge-danger"><strong>Hlasování se {if $poll->changeableVotes}dá{else}nedá{/if} měnit</strong></span>
-                        <span n:class="badge,$poll->anonymousResults ? badge-success : badge-danger"><strong>Anketa {if $poll->anonymousResults}je{else}není{/if} anonymní</strong></span>
-                        {if $poll->showResults == 'AFTER_VOTE'}
-                            {if $poll->voted}
-                                {var $resultsClass = 'badge-success'}
-                                {var $resultsDesc = 'Výsledky jsou zobrazeny'}
-                            {else}
-                                {var $resultsClass = 'badge-info'}
-                                {var $resultsDesc = 'Výsledky budou zobrazeny po odhlasování'}
-                            {/if}
-                        {elseif $poll->showResults == 'NEVER'}
+                        <div class="col">
+                            <i class="fa fa-info-circle mx-3" aria-hidden="true"></i>
+                            {ifset $poll->minItems}<span class="badge badge-info"><strong>Minimum vyplněných položek: {$poll->minItems}</strong></span>{/ifset}
+                            {ifset $poll->maxItems}<span class="badge badge-warning"><strong>Maximum vyplněných položek: {$poll->maxItems}</strong></span>{/ifset}
+                            <span n:class="badge,$poll->changeableVotes ? badge-success : badge-danger"><strong>Hlasování se {if $poll->changeableVotes}dá{else}nedá{/if} měnit</strong></span>
+                            <span n:class="badge,$poll->anonymousResults ? badge-success : badge-danger"><strong>Anketa {if $poll->anonymousResults}je{else}není{/if} anonymní</strong></span>
+                            {if $poll->showResults == 'AFTER_VOTE'}
+                                {if $poll->voted}
+                                    {var $resultsClass = 'badge-success'}
+                                    {var $resultsDesc = 'Výsledky jsou zobrazeny'}
+                                {else}
+                                    {var $resultsClass = 'badge-info'}
+                                    {var $resultsDesc = 'Výsledky budou zobrazeny po odhlasování'}
+                                {/if}
+                            {elseif $poll->showResults == 'NEVER'}
                                 {var $resultsClass = 'badge-danger'}
                                 {var $resultsDesc = 'Výsledky jsou tajné'}
-                        {elseif $poll->showResults == 'ALWAYS'}
+                            {elseif $poll->showResults == 'ALWAYS'}
                                 {var $resultsClass = 'badge-success'}
                                 {var $resultsDesc = 'Výsledky jsou zobrazeny'}
-                        {elseif $poll->showResults == 'WHEN_CLOSED'}
-                            {if $poll->status == 'CLOSED'}
-                                {var $resultsClass = 'badge-success'}
-                                {var $resultsDesc = 'Výsledky jsou zobrazeny'}
-                            {else}
-                                {var $resultsClass = 'badge-info'}
-                                {var $resultsDesc = 'Výsledky budou zobrazeny až po uzavření ankety'}
+                            {elseif $poll->showResults == 'WHEN_CLOSED'}
+                                {if $poll->status == 'CLOSED'}
+                                    {var $resultsClass = 'badge-success'}
+                                    {var $resultsDesc = 'Výsledky jsou zobrazeny'}
+                                {else}
+                                    {var $resultsClass = 'badge-info'}
+                                    {var $resultsDesc = 'Výsledky budou zobrazeny až po uzavření ankety'}
+                                {/if}
                             {/if}
-                        {/if}
-                        <span class="badge {$resultsClass}">{$resultsDesc}</span>
-                    </div>
+                            <span class="badge {$resultsClass}">{$resultsDesc}</span>
+                        </div>
                     </div>
                 </div>
                 <!-- Tab panes -->
@@ -56,25 +56,25 @@
                     <h6 class="card-subtitle mb-2 text-muted">{$poll->description}</h6>
                     <div class="container">
                         <div class="row">
-                    {foreach $poll->options as $opt}
-                        <div class="col-3 py-3 option" id="{$opt->id}">
-                            <h5>{$opt->caption}</h5>
-                            {if $opt->type == 'TEXT'}
-                                <input type="text" value="{ifset $poll->myVotes[$opt->id]}{$poll->myVotes[$opt->id]->stringValue}{/ifset}" class="form-control">
-                            {/if}
-                            {if $opt->type == 'NUMBER'}
-                                <input type="number" value="{ifset $poll->myVotes[$opt->id]}{$poll->myVotes[$opt->id]->numericValue}{/ifset}" class="form-control">
-                            {/if}
-                            {if $opt->type == 'BOOLEAN'}
-                                <div class="btn-group">
-                                    <button n:class="btn,btn-outline-success,isset($poll->myVotes[$opt->id]) && $poll->myVotes[$opt->id]->booleanValue ? active" style="width:69px" data-value="true" onclick="checkBool(this)">ANO</button>
-                                    <button n:class="btn,btn-outline-danger,isset($poll->myVotes[$opt->id]) && !$poll->myVotes[$opt->id]->booleanValue ? active" style="width:69px" data-value="false" onclick="checkBool(this)">NE</button>
+                            {foreach $poll->options as $opt}
+                                <div class="col-3 py-3 option" id="{$opt->id}">
+                                    <h5>{$opt->caption}</h5>
+                                    {if $opt->type == 'TEXT'}
+                                        <input type="text" value="{ifset $poll->myVotes[$opt->id]}{$poll->myVotes[$opt->id]->stringValue}{/ifset}" class="form-control">
+                                    {/if}
+                                    {if $opt->type == 'NUMBER'}
+                                        <input type="number" value="{ifset $poll->myVotes[$opt->id]}{$poll->myVotes[$opt->id]->numericValue}{/ifset}" class="form-control">
+                                    {/if}
+                                    {if $opt->type == 'BOOLEAN'}
+                                        <div class="btn-group">
+                                            <button n:class="btn,btn-outline-success,isset($poll->myVotes[$opt->id]) && $poll->myVotes[$opt->id]->booleanValue ? active" style="width:69px" data-value="true" onclick="checkBool(this)">ANO</button>
+                                            <button n:class="btn,btn-outline-danger,isset($poll->myVotes[$opt->id]) && !$poll->myVotes[$opt->id]->booleanValue ? active" style="width:69px" data-value="false" onclick="checkBool(this)">NE</button>
+                                        </div>
+                                    {/if}
+
                                 </div>
-                            {/if}
-                        
-                        </div>
-                    {/foreach}
-                    </div></div>
+                            {/foreach}
+                        </div></div>
                 </div>
                 <div class="card-footer text-right">
                     <button onclick="updatePoll(this, {link vote! $poll->id})" class="btn btn-primary">Hlasovat</button>
@@ -83,4 +83,51 @@
 
         </div>
     </div>
+
+    {*SHOW RESULTS ONLY UNDER SPECIFIC CONDITIONS*}
+    {var $show = FALSE}
+    {if $poll->showResults == 'AFTER_VOTE' && $poll->voted}{var $show = TRUE}{/if}
+    {if $poll->showResults == 'WHEN_CLOSED' && $poll->status == 'CLOSED'}{var $show = TRUE}{/if}
+    {if $poll->showResults == 'ALWAYS'}{var $show = TRUE}{/if}
+    {if $show}
+    <div class="row">
+        <div class="col my-3">
+            <div class="card sh-box card-inverse" style="background-color: #333; border-color: #333;">
+                <div class="card-header">
+                    <h4 class="card-title">Výsledky hlasování</h4>
+                    <table class="table">
+                        {foreach $poll->orderedVotes as $userId => $vote}
+                            <tr>
+                                {if $iterator->isFirst()}
+                                    {var $head = TRUE}
+                                    <th></th>
+                                    {else}
+                                    <th>{$users->data[$userId]->callName}</th>
+                                    {/if}
+
+                                {foreach $poll->options as $option}
+                                    {if $head}
+                                        <th>{$option->caption}</th>
+                                        {else}
+                                            {ifset $vote[$option->id]}
+                                                {ifset $vote[$option->id]->numericValue}<td>{$vote[$option->id]->numericValue}</td>{/ifset}
+                                            {ifset $vote[$option->id]->stringValue}<td>{$vote[$option->id]->stringValue}</td>{/ifset}
+                                            {ifset $vote[$option->id]->booleanValue}<td>{$vote[$option->id]->booleanValue}</td>{/ifset}
+                                        {else}
+                                            <td>&nbsp;</td>
+                                        {/ifset}
+
+                                    {/if}
+
+                                {/foreach}
+                                {var $head = FALSE}
+                            </tr>
+                        {/foreach}
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    {/if}
 </div>

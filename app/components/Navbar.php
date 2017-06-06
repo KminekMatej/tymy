@@ -13,7 +13,6 @@ use Nette\Utils\Strings;
 class NavbarControl extends Control {
     
     private $discussions;
-    private $players;
     private $polls;
     private $events;
     private $user;
