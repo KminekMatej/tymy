@@ -4,6 +4,7 @@
 
 {block scripts}
 {include parent}
+<script src="{$basePath}/js/poll.js"></script>
 <script src="{$basePath}/js/timer.js"></script>
 {/block}
 
@@ -23,7 +24,7 @@
                     <div class="container">
                         <div class="row">
                     {foreach $poll->options as $opt}
-                        <div class="col-3 py-3 option">
+                        <div class="col-3 py-3 option" id="{$opt->id}">
                             <h5>{$opt->caption}</h5>
                             {if $opt->type == 'TEXT'}
                                 <input type="text" value="{ifset $poll->myVotes[$opt->id]}{$poll->myVotes[$opt->id]->stringValue}{/ifset}" class="form-control">
@@ -33,8 +34,8 @@
                             {/if}
                             {if $opt->type == 'BOOLEAN'}
                                 <div class="btn-group">
-                                    <button n:class="btn,btn-outline-success,isset($poll->myVotes[$opt->id]) && $poll->myVotes[$opt->id]->booleanValue ? active" style="width:69px">ANO</button>
-                                    <button n:class="btn,btn-outline-danger,isset($poll->myVotes[$opt->id]) && !$poll->myVotes[$opt->id]->booleanValue ? active" style="width:69px">NE</button>
+                                    <button n:class="btn,btn-outline-success,isset($poll->myVotes[$opt->id]) && $poll->myVotes[$opt->id]->booleanValue ? active" style="width:69px" data-value="true" onclick="checkBool(this)">ANO</button>
+                                    <button n:class="btn,btn-outline-danger,isset($poll->myVotes[$opt->id]) && !$poll->myVotes[$opt->id]->booleanValue ? active" style="width:69px" data-value="false" onclick="checkBool(this)">NE</button>
                                 </div>
                             {/if}
                         
@@ -43,7 +44,7 @@
                     </div></div>
                 </div>
                 <div class="card-footer text-right">
-                    <a href="#" class="btn btn-primary disabled">Hlasovat</a>
+                    <button onclick="updatePoll(this, {link vote! $poll->id})" class="btn btn-primary">Hlasovat</button>
                 </div>
             </div>
 

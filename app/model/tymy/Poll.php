@@ -19,6 +19,25 @@ final class Poll extends Tymy{
         return $this;
     }
     
+    public function vote($votes){
+        if (!isset($this->recId))
+            throw new \Tymy\Exception\APIException('Poll ID not set!');
+        
+        $this->urlStart();
+
+        $this->fullUrl .= "polls/" .$this->recId . "/votes";
+
+        $this->urlEnd();
+        
+        foreach ($votes as $vote) {
+            $vote["userId"] = $this->user->getId();
+            $this->addPost($vote);
+        }
+        $this->result = $this->execute();
+        return $this->result;
+        
+    }
+    
     protected function postProcess(){
         $data = $this->getData();
         $data->webName = \Nette\Utils\Strings::webalize($data->caption);

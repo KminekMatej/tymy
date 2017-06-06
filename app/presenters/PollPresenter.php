@@ -39,4 +39,19 @@ class PollPresenter extends SecuredPresenter {
         
         $this->template->poll = $pollData;
     }
+    
+    public function handleVote($pollId){
+        $votes = [];
+        $post = $this->getRequest()->getPost();
+        \Tracy\Debugger::barDump($post);
+        foreach ($post as $optId => $opt) {
+            if(array_key_exists("value", $opt)){
+                $votes[] = ["optionId" => $optId, $opt["type"] => $opt["type"] == "numericValue" ? (int)$opt["value"] : $opt["value"] ];
+            }
+        }
+        
+        $poll = new \Tymy\Poll($this->tapiAuthenticator, $this);
+        $poll->recId($pollId)
+            ->vote($votes);
+    }
 }
