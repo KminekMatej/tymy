@@ -68,11 +68,9 @@ class SecuredPresenter extends BasePresenter {
     
     public function getUsers($force = FALSE){
         $sessionSection = $this->getSession()->getSection("tymy");
-        
         if(isset($sessionSection["users"]) && !$force)
             return $sessionSection["users"];
-        
-        $usersObj = new \Tymy\Users($this->tapiAuthenticator, $this);
+        $usersObj = new \Tymy\Users($this->tapiAuthenticator, $this, NULL);
         $usersObj->fetch();
         $sessionSection["users"] = $usersObj->getResult();
         return $usersObj->getResult();
