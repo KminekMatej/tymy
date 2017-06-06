@@ -23,7 +23,6 @@ class NavbarControl extends Control {
     public function __construct(Nette\Application\UI\Presenter $presenter) {
         parent::__construct();
         $this->discussions = new \Tymy\Discussions($presenter->tapiAuthenticator, $presenter);
-        $this->players = new \Tymy\Users($presenter->tapiAuthenticator, $presenter);
         $this->polls = new \Tymy\Polls($presenter->tapiAuthenticator, $presenter);
         $this->events = new \Tymy\Events($presenter->tapiAuthenticator, $presenter);
         $this->user = $presenter->getUser();
@@ -40,11 +39,10 @@ class NavbarControl extends Control {
     }
     
     private function players(){
-        $players = $this->players->fetch();
-        $this->template->counts = $this->players->getResult()->counts;
-        $this->template->playersWarnings = $this->players->getResult()->menuWarningCount;
-        $this->template->players = (object)$players;
-        $this->template->me = $this->players->getResult()->me;
+        $players = $this->presenter->getUsers(TRUE);
+        $this->template->counts = $players->counts;
+        $this->template->playersWarnings = $players->menuWarningCount;
+        $this->template->me = $players->me;
     }
     
     private function polls(){

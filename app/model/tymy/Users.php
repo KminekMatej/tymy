@@ -35,7 +35,7 @@ final class Users extends Tymy{
         
         $counts = [
             "ALL"=>0,
-            "NEW"=>0, // TODO NEW PLAYERS
+            "NEW"=>0,
             "PLAYER"=>0,
             "MEMBER"=>0,
             "SICK"=>0,
@@ -43,6 +43,7 @@ final class Users extends Tymy{
             "INIT"=>0,
             ];
         
+        $players = [];
         foreach ($data as $player) {
             $this->checkPlayerData($player);
             $counts["ALL"]++;
@@ -54,7 +55,9 @@ final class Users extends Tymy{
             }
             $player->webName = Strings::webalize($player->fullName);
             $this->timezone($player->lastLogin);
+            $players[$player->id] = $player;
         }
+        $this->getResult()->data = $players;
         $this->getResult()->counts = $counts;
     }
 }

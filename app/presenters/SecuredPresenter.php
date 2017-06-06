@@ -65,6 +65,18 @@ class SecuredPresenter extends BasePresenter {
         $sessionSection["eventTypes"] = $eventTypes;
         return $eventTypes;
     }
+    
+    public function getUsers($force = FALSE){
+        $sessionSection = $this->getSession()->getSection("tymy");
+        
+        if(isset($sessionSection["users"]) && !$force)
+            return $sessionSection["users"];
+        
+        $usersObj = new \Tymy\Users($this->tapiAuthenticator, $this);
+        $usersObj->fetch();
+        $sessionSection["users"] = $usersObj->getResult();
+        return $usersObj->getResult();
+    }
 
     protected function startup() {
         parent::startup();
