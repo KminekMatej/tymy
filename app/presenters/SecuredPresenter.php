@@ -68,7 +68,6 @@ class SecuredPresenter extends BasePresenter {
 
     protected function startup() {
         parent::startup();
-        \Tracy\Debugger::barDump($this->tapiAuthenticator, "Authenticator load");
         if (!$this->getUser()->isLoggedIn()) {
             if ($this->getUser()->getLogoutReason() === Nette\Security\IUserStorage::INACTIVITY) {
                 $this->flashMessage('You have been signed out due to inactivity. Please sign in again.');

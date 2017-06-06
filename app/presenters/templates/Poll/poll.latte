@@ -16,11 +16,44 @@
         <div class="col my-3">
             <div class="card sh-box">
                 <div class="card-header">
-                    {$poll->caption}
+                    <div class="row">
+                    <div class="col">
+                        <i class="fa fa-info-circle mx-3" aria-hidden="true"></i>
+                        {ifset $poll->minItems}<span class="badge badge-info"><strong>Minimum vyplněných položek: {$poll->minItems}</strong></span>{/ifset}
+                        {ifset $poll->maxItems}<span class="badge badge-warning"><strong>Maximum vyplněných položek: {$poll->maxItems}</strong></span>{/ifset}
+                        <span n:class="badge,$poll->changeableVotes ? badge-success : badge-danger"><strong>Hlasování se {if $poll->changeableVotes}dá{else}nedá{/if} měnit</strong></span>
+                        <span n:class="badge,$poll->anonymousResults ? badge-success : badge-danger"><strong>Anketa {if $poll->anonymousResults}je{else}není{/if} anonymní</strong></span>
+                        {if $poll->showResults == 'AFTER_VOTE'}
+                            {if $poll->voted}
+                                {var $resultsClass = 'badge-success'}
+                                {var $resultsDesc = 'Výsledky jsou zobrazeny'}
+                            {else}
+                                {var $resultsClass = 'badge-info'}
+                                {var $resultsDesc = 'Výsledky budou zobrazeny po odhlasování'}
+                            {/if}
+                        {elseif $poll->showResults == 'NEVER'}
+                                {var $resultsClass = 'badge-danger'}
+                                {var $resultsDesc = 'Výsledky jsou tajné'}
+                        {elseif $poll->showResults == 'ALWAYS'}
+                                {var $resultsClass = 'badge-success'}
+                                {var $resultsDesc = 'Výsledky jsou zobrazeny'}
+                        {elseif $poll->showResults == 'WHEN_CLOSED'}
+                            {if $poll->status == 'CLOSED'}
+                                {var $resultsClass = 'badge-success'}
+                                {var $resultsDesc = 'Výsledky jsou zobrazeny'}
+                            {else}
+                                {var $resultsClass = 'badge-info'}
+                                {var $resultsDesc = 'Výsledky budou zobrazeny až po uzavření ankety'}
+                            {/if}
+                        {/if}
+                        <span class="badge {$resultsClass}">{$resultsDesc}</span>
+                    </div>
+                    </div>
                 </div>
                 <!-- Tab panes -->
                 <div class="card-block">
-                    <h4 class="card-title">{$poll->description}</h4>
+                    <h4 class="card-title">{$poll->caption}</h4>
+                    <h6 class="card-subtitle mb-2 text-muted">{$poll->description}</h6>
                     <div class="container">
                         <div class="row">
                     {foreach $poll->options as $opt}

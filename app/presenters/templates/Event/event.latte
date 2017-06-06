@@ -26,7 +26,6 @@
                                 <tr><th>Uzávěrka:</th><td>{$event->closeTime|date:'d.n.Y H:i'}</td></tr>
                             </table>
                         </div>
-                            {dump $event}
                         <div class="col-md-8 d-flex align-items-end">
                             <div class="btn-group input-group pb-2" role="group" aria-label="Basic example" id="action-{$event->id}">
                                             {var $evnt_desc = isset($event->myAttendance->preDescription) ? $event->myAttendance->preDescription : ''}
