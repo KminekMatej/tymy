@@ -12,8 +12,7 @@ use Nette;
 final class Polls extends Tymy{
     
     public function select() {
-        $url = "polls/menu";
-        
+        $url = "polls";
         $this->fullUrl .= $url;
         return $this;
     }
