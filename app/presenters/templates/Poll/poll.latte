@@ -84,50 +84,43 @@
         </div>
     </div>
 
+    <div class="row" n:snippet="poll-results">
     {*SHOW RESULTS ONLY UNDER SPECIFIC CONDITIONS*}
     {var $show = FALSE}
     {if $poll->showResults == 'AFTER_VOTE' && $poll->voted}{var $show = TRUE}{/if}
     {if $poll->showResults == 'WHEN_CLOSED' && $poll->status == 'CLOSED'}{var $show = TRUE}{/if}
     {if $poll->showResults == 'ALWAYS'}{var $show = TRUE}{/if}
     {if $show}
-    <div class="row">
         <div class="col my-3">
             <div class="card sh-box card-inverse" style="background-color: #333; border-color: #333;">
                 <div class="card-header">
                     <h4 class="card-title">Výsledky hlasování</h4>
-                    <table class="table">
+                    <table class="table table-inverted table-striped table-hover">
+                        {dump $poll}
                         {foreach $poll->orderedVotes as $userId => $vote}
+                            {first}
                             <tr>
-                                {if $iterator->isFirst()}
-                                    {var $head = TRUE}
-                                    <th></th>
+                                <th>Uživatel</th>
+                                <th n:foreach="$poll->options as $option">{$option->caption}</th>
+                            </tr>
+                            {/first}
+                            <tr>
+                                <th>{$users->data[$userId]->callName}</th>
+                                    {foreach $poll->options as $option}
+                                        {ifset $vote[$option->id]}
+                                            {ifset $vote[$option->id]->numericValue}<td>{$vote[$option->id]->numericValue}</td>{/ifset}
+                                        {ifset $vote[$option->id]->stringValue}<td>{$vote[$option->id]->stringValue}</td>{/ifset}
+                                        {ifset $vote[$option->id]->booleanValue}<td><span n:class="badge, $vote[$option->id]->booleanValue ? 'badge-success' : 'badge-danger' ">{if $vote[$option->id]->booleanValue}ANO{else}NE{/if}</span></td>{/ifset}
                                     {else}
-                                    <th>{$users->data[$userId]->callName}</th>
-                                    {/if}
-
-                                {foreach $poll->options as $option}
-                                    {if $head}
-                                        <th>{$option->caption}</th>
-                                        {else}
-                                            {ifset $vote[$option->id]}
-                                                {ifset $vote[$option->id]->numericValue}<td>{$vote[$option->id]->numericValue}</td>{/ifset}
-                                            {ifset $vote[$option->id]->stringValue}<td>{$vote[$option->id]->stringValue}</td>{/ifset}
-                                            {ifset $vote[$option->id]->booleanValue}<td>{$vote[$option->id]->booleanValue}</td>{/ifset}
-                                        {else}
-                                            <td>&nbsp;</td>
-                                        {/ifset}
-
-                                    {/if}
-
+                                        <td>&nbsp;</td>
+                                    {/ifset}
                                 {/foreach}
-                                {var $head = FALSE}
                             </tr>
                         {/foreach}
                     </table>
                 </div>
             </div>
         </div>
-
-    </div>
     {/if}
+    </div>
 </div>

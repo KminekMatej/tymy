@@ -49,7 +49,7 @@ class PollPresenter extends SecuredPresenter {
                 $votes[] = ["optionId" => $optId, $opt["type"] => $opt["type"] == "numericValue" ? (int)$opt["value"] : $opt["value"] ];
             }
         }
-        
+        $this->redrawControl ("poll-results");
         $poll = new \Tymy\Poll($this->tapiAuthenticator, $this);
         $poll->recId($pollId)
             ->vote($votes);
