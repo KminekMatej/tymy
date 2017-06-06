@@ -43,12 +43,17 @@ final class Poll extends Tymy{
         $data->webName = \Nette\Utils\Strings::webalize($data->caption);
         $this->timezone($data->createdAt);
         $this->timezone($data->updatedAt);
-        if (property_exists($data, "votes"))
+        if (property_exists($data, "votes")){
+            $orderedVotes = [];
             foreach ($data->votes as $vote) {
                 if (!$data->anonymousResults && $vote->userId == $this->user->getId()) {
                     $data->myVotes[$vote->optionId] = $vote;
                 }
+                $orderedVotes[$vote->userId][$vote->optionId] = $vote;
                 $this->timezone($vote->updatedAt);
             }
+            $data->orderedVotes = $orderedVotes;
+        }
+            
     }
 }
