@@ -21,3 +21,18 @@ CKEDITOR.editorConfig = function( config ) {
         config.extraPlugins = 'font,justify,bbcode';
 
 };
+
+CKEDITOR.on('dialogDefinition', function( ev ) {
+  var dialogName = ev.data.name;
+  var dialogDefinition = ev.data.definition;
+
+  if(dialogName === 'table') {
+    var infoTab = dialogDefinition.getContents('info');
+    var width = infoTab.get('txtWidth');
+    width['default'] = "";
+    var cellSpacing = infoTab.get('txtCellSpace');
+    cellSpacing['default'] = "1";
+    var cellPadding = infoTab.get('txtCellPad');
+    cellPadding['default'] = "3";
+  }
+});
