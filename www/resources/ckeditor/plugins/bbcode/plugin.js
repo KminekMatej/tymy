@@ -26,11 +26,11 @@
 		}
 	} );
 
-	var bbcodeMap = { b: 'strong', u: 'u', i: 'em', hr: 'hr', h1: 'h1', h2: 'h2', h3: 'h3', h4: 'h4', h5: 'h5', h6: 'h6', pre: 'pre', color: 'span', size: 'span', left: 'div', right: 'div', center: 'div', quote: 'blockquote', code: 'code', url: 'a', email: 'span', img: 'span', '*': 'li', list: 'ol' },
-		convertMap = { strong: 'b', b: 'b', u: 'u', em: 'i', i: 'i', hr: 'hr', h1: 'h1', h2: 'h2', h3: 'h3', h4: 'h4', h5: 'h5', h6: 'h6', pre: 'pre', code: 'code', li: '*' },
-		tagnameMap = { strong: 'b', em: 'i', u: 'u', hr: 'hr', h1: 'h1', h2: 'h2', h3: 'h3', h4: 'h4', h5: 'h5', h6: 'h6', pre: 'pre', li: '*', ul: 'list', ol: 'list', code: 'code', a: 'link', img: 'img', blockquote: 'quote' },
-		stylesMap = { color: 'color', size: 'font-size', left: 'text-align', center: 'text-align', right: 'text-align' },
-		attributesMap = { url: 'href', email: 'mailhref', quote: 'cite', list: 'listType' };
+	var bbcodeMap = { b: 'strong', u: 'u', i: 'em', hr: 'hr', h1: 'h1', h2: 'h2', h3: 'h3', h4: 'h4', h5: 'h5', h6: 'h6', pre: 'pre', color: 'span', size: 'span', left: 'div', right: 'div', center: 'div', quote: 'blockquote', code: 'code', url: 'a', email: 'span', img: 'span', '*': 'li', list: 'ol' , table: 'table', tr: 'tr', th: 'th', td: 'td' },
+		convertMap = { strong: 'b', b: 'b', u: 'u', em: 'i', i: 'i', hr: 'hr', h1: 'h1', h2: 'h2', h3: 'h3', h4: 'h4', h5: 'h5', h6: 'h6', pre: 'pre', code: 'code', li: '*', table: 'table', tr: 'tr', th: 'th', td: 'td' },
+		tagnameMap = { strong: 'b', em: 'i', u: 'u', hr: 'hr', h1: 'h1', h2: 'h2', h3: 'h3', h4: 'h4', h5: 'h5', h6: 'h6', pre: 'pre', li: '*', ul: 'list', ol: 'list', code: 'code', a: 'link', img: 'img', blockquote: 'quote', table: 'table', tr: 'tr', th: 'th', td: 'td'},
+		stylesMap = { color: 'color', size: 'font-size', left: 'text-align', center: 'text-align', right: 'text-align'},
+		attributesMap = { url: 'href', email: 'mailhref', quote: 'cite', list: 'listType'};
 
 	// List of block-like tags.
 	var dtd = CKEDITOR.dtd,
@@ -135,7 +135,7 @@
 							else if ( /^[A-Z]+$/.test( optionPart ) )
 								optionPart = 'upper-alpha';
 						}
-
+                                                
 						if ( stylesMap[ part ] ) {
 							// Font size represents percentage.
 //							if ( part == 'size' )
@@ -163,8 +163,15 @@
                                                 styles[ stylesMap[ part ] ] = part;
                                                 attribs.style = serializeStyleText( styles );
                                         }
-
-					this.onTagOpen( tagName, attribs, CKEDITOR.dtd.$empty[ tagName ] );
+                                        
+                                        //special handle of table - add border 1px to table and padding 2px to cells
+                                        if (part == 'table'){
+                                            attribs[ "border" ] = 1;
+                                            attribs[ "cellpadding" ] = 3;
+                                            attribs[ "cellspacing" ] = 1;
+                                        }
+                                        
+                                        this.onTagOpen( tagName, attribs, CKEDITOR.dtd.$empty[ tagName ] );
 				}
 				// Closing tag
 				else if ( parts[ 3 ] ) {
