@@ -7,10 +7,6 @@ body {
         padding-top: 56px;
 }
 
-h1 {
-	color: #3484D2;
-}
-
 BUTTON.btn, A.btn{
     cursor: pointer;
 }
@@ -100,6 +96,10 @@ DIV.discussion DIV.card-header.post-mine{
 DIV.discussion IMG.user_pic{
     float: left;
     margin: 0px 10px 10px 0px;
+}
+
+DIV.discussion DIV.card-block OL{
+    display: inline-block;
 }
 
 DIV.page-caption{

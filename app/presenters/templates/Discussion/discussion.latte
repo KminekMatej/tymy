@@ -58,7 +58,9 @@ $( document ).ready(function() {
                         </div>
                         <div class="card-block">
                             <img class="user_pic" src="http://{$tym}.tymy.cz/{$item->createdBy->pictureUrl}">
-                            <div class="card-text" id="content_{$item->id}">{ifset $item->post}{$item->post|noescape}{/ifset}</div>
+                            <div class="card-text" id="content_{$item->id}">
+                                {ifset $item->post}{$item->post|noescape}{/ifset}
+                            </div>
                         </div>
                     </div>
                 </div>
