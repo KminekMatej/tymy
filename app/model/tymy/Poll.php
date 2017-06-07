@@ -43,6 +43,16 @@ final class Poll extends Tymy{
         $data->webName = \Nette\Utils\Strings::webalize($data->caption);
         $this->timezone($data->createdAt);
         $this->timezone($data->updatedAt);
+        $data->radio = $data->minItems == 1 && $data->maxItems == 1;
+        if ($data->radio) {
+            foreach ($data->options as $opt) {
+                if ($opt->type != "BOOLEAN") {
+                    $data->radio = FALSE;
+                    break;
+                }
+            }
+        }
+
         if (property_exists($data, "votes")){
             $orderedVotes = [];
             foreach ($data->votes as $vote) {

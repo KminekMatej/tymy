@@ -14,9 +14,9 @@
 {/block}
 
 {block content}
+{dump $poll}
 
-
-<div class="container poll">
+<div class="container poll" data-min-items="{$poll->minItems}" data-max-items="{$poll->maxItems}" data-show-results="{$poll->showResults}" data-radio-layout="{$poll->radio ? 'true' : 'false'}">
     <div class="row">
         <div class="col my-3">
             <div class="card sh-box">
@@ -63,7 +63,7 @@
                         <div class="row">
                             {foreach $poll->options as $opt}
                                 <div class="col-3 py-3 option" id="{$opt->id}">
-                                    <h5>{$opt->caption}</h5>
+                                    <h5 n:if="!$poll->radio">{$opt->caption}</h5>
                                     {if $opt->type == 'TEXT'}
                                         <input type="text" value="{ifset $poll->myVotes[$opt->id]}{$poll->myVotes[$opt->id]->stringValue}{/ifset}" class="form-control">
                                     {/if}
@@ -71,10 +71,17 @@
                                         <input type="number" value="{ifset $poll->myVotes[$opt->id]}{$poll->myVotes[$opt->id]->numericValue}{/ifset}" class="form-control">
                                     {/if}
                                     {if $opt->type == 'BOOLEAN'}
-                                        <div class="btn-group">
-                                            <button n:class="btn,btn-outline-success,isset($poll->myVotes[$opt->id]) && $poll->myVotes[$opt->id]->booleanValue ? active" style="width:69px" data-value="true" onclick="checkBool(this)">ANO</button>
-                                            <button n:class="btn,btn-outline-danger,isset($poll->myVotes[$opt->id]) && !$poll->myVotes[$opt->id]->booleanValue ? active" style="width:69px" data-value="false" onclick="checkBool(this)">NE</button>
-                                        </div>
+                                        {if $poll->radio}
+                                            <div class="btn-group">
+                                                <button n:class="btn,btn-outline-success,isset($poll->myVotes[$opt->id]) && $poll->myVotes[$opt->id]->booleanValue ? active" style="min-width:69px" data-value="true" onclick="checkBool(this)">{$opt->caption}</button>
+                                            </div>
+                                        {else}
+                                            <div class="btn-group">
+                                                <button n:class="btn,btn-outline-success,isset($poll->myVotes[$opt->id]) && $poll->myVotes[$opt->id]->booleanValue ? active" style="width:69px" data-value="true" onclick="checkBool(this)">ANO</button>
+                                                <button n:class="btn,btn-outline-danger,isset($poll->myVotes[$opt->id]) && !$poll->myVotes[$opt->id]->booleanValue ? active" style="width:69px" data-value="false" onclick="checkBool(this)">NE</button>
+                                            </div>
+                                        {/if}
+                                        
                                     {/if}
 
                                 </div>
@@ -101,14 +108,11 @@
                 <div class="card-header">
                     <h4 class="card-title">Výsledky hlasování</h4>
                     <table class="table table-inverted table-striped table-hover">
-                        {dump $poll->options}
+                        <tr>
+                            <th>Uživatel</th>
+                            <th n:foreach="$poll->options as $option">{$option->caption}</th>
+                        </tr>
                         {foreach $poll->orderedVotes as $userId => $vote}
-                            {first}
-                            <tr>
-                                <th>Uživatel</th>
-                                <th n:foreach="$poll->options as $option">{$option->caption}</th>
-                            </tr>
-                            {/first}
                             <tr data-vote data-gender="{$users->data[$userId]->gender}" data-status="{$users->data[$userId]->status}">
                                 <th><a href="{plink Team:player $users->data[$userId]->webName}">{$users->data[$userId]->callName}</a></th>
                                     {foreach $poll->options as $option}

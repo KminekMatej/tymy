@@ -1,25 +1,46 @@
 function updatePoll(btn, purl) {
     if ($(btn).prop("disabled") || $(btn).hasClass("disabled"))
         return;
+    var minItems = $("DIV.poll").attr("data-min-items");
+    var maxItems = $("DIV.poll").attr("data-max-items");
     var value = "";
     var type = "";
     var values = {};
+    var voteCount = 0;
     $("DIV.poll DIV.option").each(function (){
         var optId = parseInt($(this).attr("id"));
         if($(this).find("INPUT").attr("type") == "text"){
             //option is text
             value = $(this).find("INPUT").val();
-            if(value != "") values[optId] = {type: "stringValue", value: value};
+            if(value != ""){
+                values[optId] = {type: "stringValue", value: value};
+                voteCount++;
+            }
         }else if($(this).find("INPUT").attr("type") == "number") {
             //option is number
             value = $(this).find("INPUT").val();
-            if(value != "") values[optId] = {type: "numericValue", value: parseInt(value)};
+            if(value != ""){
+                values[optId] = {type: "numericValue", value: parseInt(value)};
+                voteCount++;
+            }
         }else if($(this).find("DIV.btn-group")) {
             //option is boolean
             var btnChecked = $(this).find("DIV.btn-group BUTTON.active");
-            if(btnChecked.length) values[optId] = {type: "booleanValue", value: btnChecked.attr("data-value")};
+            if(btnChecked.length){
+                values[optId] = {type: "booleanValue", value: btnChecked.attr("data-value")};
+                voteCount++;
+            } 
         }
     });
+    
+    if(voteCount > maxItems){
+        $("DIV.poll DIV.card-block").prepend("<div class='alert alert-danger' role='alert'><strong>Chyba!</strong> Překročen maximální počet hlasů ("+maxItems+")!</div>");
+        return;
+    }
+    if(voteCount < minItems){
+        $("DIV.poll DIV.card-block").prepend("<div class='alert alert-danger' role='alert'><strong>Chyba!</strong> Nedosažen minimální počet hlasů ("+minItems+")!</div>");
+        return;
+    }
     
     $(btn).prop("disabled", true);
     $(btn).attr("disabled", "disabled");
@@ -37,9 +58,16 @@ function updatePoll(btn, purl) {
 }
 
 function checkBool(btn){
-    $(btn).closest("DIV.btn-group").find("BUTTON").each(function (){
-        $(this).removeClass("active");
-    });
+    var radioLayout = $("DIV.poll").attr("data-radio-layout") === "true";
+    if(radioLayout){
+        $("DIV.poll DIV.option BUTTON").each(function (){
+            $(this).removeClass("active");
+        });
+    } else {
+        $(btn).closest("DIV.btn-group").find("BUTTON").each(function () {
+            $(this).removeClass("active");
+        });
+    }
     $(btn).addClass("active");
 }
 
