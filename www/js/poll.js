@@ -77,6 +77,7 @@ function stats(){
         return false;
     $("DIV#snippet--poll-results TR#stats").remove();
     var stats = {};
+    var radioLayout = $("DIV.poll").attr("data-radio-layout") === "true";
     
     $("DIV#snippet--poll-results TR[data-vote]").each(function (){
         gender = $(this).attr("data-gender");
@@ -132,7 +133,10 @@ function stats(){
                     statsHtml += "<td data-option-id='"+stats[option].optionId+"'>Hlasováno "+stats[option].votes+"x ("+Math.round((stats[option].votes / votesCount)*100) +"%)<br/>Σ = "+Math.round(stats[option].sum * 100) / 100 +"<br/>ϕ = "+ Math.round((stats[option].sum/votesCount) * 100) / 100 +"</td>";
                     break;
                 case "BOOLEAN":
-                    statsHtml += "<td data-option-id='"+stats[option].optionId+"'>Hlasováno "+stats[option].votes+"x ("+Math.round((stats[option].votes / votesCount)*100) +"%)<br/>"+stats[option].true +"x ANO ("+Math.round((stats[option].true/votesCount)*100)+"%)<br/>"+stats[option].false +"x NE ("+Math.round((stats[option].false/votesCount)*100)+"%)</td>";
+                    if(radioLayout)
+                        statsHtml += "<td data-option-id='"+stats[option].optionId+"'>Hlasováno "+stats[option].votes+"x ("+Math.round((stats[option].votes / votesCount)*100) +"%)</td>";
+                    else 
+                        statsHtml += "<td data-option-id='"+stats[option].optionId+"'>Hlasováno "+stats[option].votes+"x ("+Math.round((stats[option].votes / votesCount)*100) +"%)<br/>"+stats[option].true +"x ANO ("+Math.round((stats[option].true/votesCount)*100)+"%)<br/>"+stats[option].false +"x NE ("+Math.round((stats[option].false/votesCount)*100)+"%)</td>";
                     break;
             }
         }

@@ -14,7 +14,6 @@
 {/block}
 
 {block content}
-{dump $poll}
 
 <div class="container poll" data-min-items="{$poll->minItems}" data-max-items="{$poll->maxItems}" data-show-results="{$poll->showResults}" data-radio-layout="{$poll->radio ? 'true' : 'false'}">
     <div class="row">
@@ -73,7 +72,7 @@
                                     {if $opt->type == 'BOOLEAN'}
                                         {if $poll->radio}
                                             <div class="btn-group">
-                                                <button n:class="btn,btn-outline-success,isset($poll->myVotes[$opt->id]) && $poll->myVotes[$opt->id]->booleanValue ? active" style="min-width:69px" data-value="true" onclick="checkBool(this)">{$opt->caption}</button>
+                                                <button n:class="btn,btn-outline-warning,isset($poll->myVotes[$opt->id]) && $poll->myVotes[$opt->id]->booleanValue ? active" style="min-width:69px" data-value="true" onclick="checkBool(this)">{$opt->caption}</button>
                                             </div>
                                         {else}
                                             <div class="btn-group">
@@ -124,7 +123,11 @@
                                             <td data-option-type="{$option->type}" data-option-id="{$option->id}" data-option-value="{$vote[$option->id]->stringValue}">{$vote[$option->id]->stringValue}</td>
                                         {/ifset}
                                         {ifset $vote[$option->id]->booleanValue}
-                                            <td data-option-type="{$option->type}" data-option-id="{$option->id}" data-option-value="{$vote[$option->id]->booleanValue ? 'true' : 'false'}"><span n:class="badge, $vote[$option->id]->booleanValue ? 'badge-success' : 'badge-danger' ">{if $vote[$option->id]->booleanValue}ANO{else}NE{/if}</span></td>
+                                            {if $poll->radio}
+                                                <td data-option-type="{$option->type}" data-option-id="{$option->id}" data-option-value="true"><span n:class="badge, badge-warning">{$option->caption}</span></td>
+                                            {else}
+                                                <td data-option-type="{$option->type}" data-option-id="{$option->id}" data-option-value="{$vote[$option->id]->booleanValue ? 'true' : 'false'}"><span n:class="badge, $vote[$option->id]->booleanValue ? 'badge-success' : 'badge-danger' ">{if $vote[$option->id]->booleanValue}ANO{else}NE{/if}</span></td>
+                                            {/if}
                                         {/ifset}
                                     {else}
                                         <td data-option-type="{$option->type}" data-option-id="{$option->id}" data-option-value></td>
