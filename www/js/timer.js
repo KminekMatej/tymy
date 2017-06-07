@@ -7,6 +7,7 @@ $(function () {
         $.nette.ajax({
             url: "/?do=navbar-refresh",
             complete: function (payload) {
+                reTitle();
                 setTimeout(function(){nav();}, 5000);
             }
         });
