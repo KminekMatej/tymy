@@ -55,7 +55,8 @@ class NavbarControl extends Control {
         $events = $this->events
                 ->withMyAttendance(true)
                 ->from(date("Ymd"))
-                ->to(date("Ymd", strtotime(" + 14 days")))
+                ->to(date("Ymd", strtotime(" + 1 month")))
+                ->order("startTime")
                 ->fetch();
         $this->template->eventWarnings = $this->events->getResult()->menuWarningCount;
         $this->template->events = (object)$events;
