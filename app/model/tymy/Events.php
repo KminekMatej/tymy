@@ -71,6 +71,7 @@ final class Events extends Tymy{
         $this->getResult()->menuWarningCount = 0;
         
         foreach ($data as $event) {
+            $event->warning = false;
             if(property_exists($event, "myAttendance") && property_exists($event->myAttendance, "preStatus")){
                 switch ($event->myAttendance->preStatus) {
                     case "YES":
@@ -93,6 +94,7 @@ final class Events extends Tymy{
                         break;
                 }
             } else {
+                $event->warning = true;
                 $this->getResult()->menuWarningCount++;
             }
             

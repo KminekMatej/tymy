@@ -34,9 +34,9 @@
                                             {var $myPreStatus = "not-set"}
                                             {var $myPostStatus = "not-set"}
                                             {ifset $event->myAttendance}
-                                                {ifset $event->myAttendance->preStatus}
+                                                {if $event->myAttendance->preStatus != "UNKNOWN"}
                                                     {var $myPreStatus = $eventTypes[$event->type]->preStatusSet[$event->myAttendance->preStatus]->code}
-                                                {/ifset}
+                                                {/if}
                                                 {ifset $event->myAttendance->postStatus}
                                                     {var $myPostStatus = $eventTypes[$event->type]->postStatusSet[$event->myAttendance->postStatus]->code}
                                                 {/ifset}
