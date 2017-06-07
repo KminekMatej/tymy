@@ -90,19 +90,20 @@ function stats(){
         });
         
     });
-    statsHtml = "<tr id='stats'><td>Statistiky:</td>";
+    statsHtml = "<tr id='stats'><td>Počet hlasů:"+votesCount+"</td>";
 
     for (option in stats) {
         if (stats.hasOwnProperty(option)) {
             switch (stats[option].type) {
                 case "TEXT":
-                    statsHtml += "<td data-option-id='"+stats[option].optionId+"'>Počet = "+stats[option].votes+"<br/></td>";
+                    votesSumTxt = "";
+                    statsHtml += "<td data-option-id='"+stats[option].optionId+"'>Hlasováno "+stats[option].votes+"x ("+Math.round((stats[option].votes / votesCount)*100) +"%)</td>";
                     break;
                 case "NUMBER":
-                    statsHtml += "<td data-option-id='"+stats[option].optionId+"'>Počet = "+stats[option].votes+"<br/>Σ = "+Math.round(stats[option].sum * 100) / 100 +"<br/>ϕ = "+ Math.round((stats[option].sum/votesCount) * 100) / 100 +"</td>";
+                    statsHtml += "<td data-option-id='"+stats[option].optionId+"'>Hlasováno "+stats[option].votes+"x ("+Math.round((stats[option].votes / votesCount)*100) +"%)<br/>Σ = "+Math.round(stats[option].sum * 100) / 100 +"<br/>ϕ = "+ Math.round((stats[option].sum/votesCount) * 100) / 100 +"</td>";
                     break;
                 case "BOOLEAN":
-                    statsHtml += "<td data-option-id='"+stats[option].optionId+"'>Počet = "+stats[option].votes+"<br/>"+stats[option].true +"x ANO ("+Math.round((stats[option].true/votesCount)*100)+"%)<br/>"+stats[option].false +"x NE ("+Math.round((stats[option].false/votesCount)*100)+"%)</td>";
+                    statsHtml += "<td data-option-id='"+stats[option].optionId+"'>Hlasováno "+stats[option].votes+"x ("+Math.round((stats[option].votes / votesCount)*100) +"%)<br/>"+stats[option].true +"x ANO ("+Math.round((stats[option].true/votesCount)*100)+"%)<br/>"+stats[option].false +"x NE ("+Math.round((stats[option].false/votesCount)*100)+"%)</td>";
                     break;
             }
         }
