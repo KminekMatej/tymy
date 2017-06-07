@@ -87,6 +87,7 @@ class SecuredPresenter extends BasePresenter {
         
         $sessionTymy = $this->getSession()->getSection("tymy");
         $sessionTymy->tym = $this->getUser()->getIdentity()->tym;
+        $this->template->tym = $sessionTymy->tym;
     }
     
     protected function createComponentNavbar() {
@@ -94,5 +95,5 @@ class SecuredPresenter extends BasePresenter {
         $navbar->redrawControl();
         return $navbar;
     }
-
+    
 }
