@@ -24,6 +24,7 @@
                 {if $eventWarnings > 0}<span class="badge badge-pill badge-danger badge-new">{$eventWarnings}</span>{/if}
                 <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-calendar-o" aria-hidden="true"></i> Události</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="{plink Event:}">Všechny</a>
                     {foreach $events as $ev}
                         <a class="dropdown-item" href="{plink Event:event $ev->id.'-'.$ev->webName}">
                             {if $ev->warning}<span class="badge badge-danger"><i class="fa fa-info" aria-hidden="true"></i></span>{/if}
@@ -37,11 +38,11 @@
                 {if $playersWarnings > 0}<span class="badge badge-pill badge-danger badge-new">{$playersWarnings}</span>{/if}
                 <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-users" aria-hidden="true"></i> Tým</a>    
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="{plink Team:}">Všichni ({$counts['ALL']})</a>
                     <a class="dropdown-item" href="{plink Team:player $me->webName}">{$me->callName} {if $me->errCnt > 0}<span class="badge badge-danger">{$me->errCnt}</span>{/if}</a>
                     <a class="dropdown-item" href="{plink Team:players}">Hráči ({$counts['PLAYER']})</a>
                     <a class="dropdown-item" href="{plink Team:members}">Členové ({$counts['MEMBER']})</a>
                     <a class="dropdown-item" href="{plink Team:sicks}">Marodi ({$counts['SICK']})</a>
-                    <a class="dropdown-item" href="{plink Team:}">Všichni ({$counts['ALL']})</a>
                 </div>
             </li>
             <li class="nav-item dropdown">
