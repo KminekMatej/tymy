@@ -96,7 +96,7 @@
                 <div class="card-header">
                     <h4 class="card-title">Výsledky hlasování</h4>
                     <table class="table table-inverted table-striped table-hover">
-                        {dump $poll}
+                        {dump $poll->options}
                         {foreach $poll->orderedVotes as $userId => $vote}
                             {first}
                             <tr>
@@ -104,20 +104,27 @@
                                 <th n:foreach="$poll->options as $option">{$option->caption}</th>
                             </tr>
                             {/first}
-                            <tr>
+                            <tr data-vote data-gender="{$users->data[$userId]->gender}" data-status="{$users->data[$userId]->status}">
                                 <th>{$users->data[$userId]->callName}</th>
                                     {foreach $poll->options as $option}
-                                        {ifset $vote[$option->id]}
-                                            {ifset $vote[$option->id]->numericValue}<td>{$vote[$option->id]->numericValue}</td>{/ifset}
-                                        {ifset $vote[$option->id]->stringValue}<td>{$vote[$option->id]->stringValue}</td>{/ifset}
-                                        {ifset $vote[$option->id]->booleanValue}<td><span n:class="badge, $vote[$option->id]->booleanValue ? 'badge-success' : 'badge-danger' ">{if $vote[$option->id]->booleanValue}ANO{else}NE{/if}</span></td>{/ifset}
+                                    {ifset $vote[$option->id]}
+                                        {ifset $vote[$option->id]->numericValue}
+                                            <td data-option-type="{$option->type}" data-option-id="{$option->id}" data-option-value="{$vote[$option->id]->numericValue}">{$vote[$option->id]->numericValue}</td>
+                                        {/ifset}
+                                        {ifset $vote[$option->id]->stringValue}
+                                            <td data-option-type="{$option->type}" data-option-id="{$option->id}" data-option-value="{$vote[$option->id]->stringValue}">{$vote[$option->id]->stringValue}</td>
+                                        {/ifset}
+                                        {ifset $vote[$option->id]->booleanValue}
+                                            <td data-option-type="{$option->type}" data-option-id="{$option->id}" data-option-value="{$vote[$option->id]->booleanValue ? 'true' : 'false'}"><span n:class="badge, $vote[$option->id]->booleanValue ? 'badge-success' : 'badge-danger' ">{if $vote[$option->id]->booleanValue}ANO{else}NE{/if}</span></td>
+                                        {/ifset}
                                     {else}
-                                        <td>&nbsp;</td>
+                                        <td data-option-type="{$option->type}" data-option-id="{$option->id}" data-option-value></td>
                                     {/ifset}
                                 {/foreach}
                             </tr>
                         {/foreach}
                     </table>
+                    <button class="btn btn-secondary" onclick="stats()">Stats</button>
                 </div>
             </div>
         </div>

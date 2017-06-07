@@ -41,3 +41,73 @@ function checkBool(btn){
     });
     $(btn).addClass("active");
 }
+
+function stats(){
+    var votesCount = $("DIV#snippet--poll-results TR[data-vote]").length;
+    if($("DIV#snippet--poll-results").length == 0 || votesCount == 0)
+        return false;
+    $("DIV#snippet--poll-results TR#stats").remove();
+    var stats = {};
+    
+    $("DIV#snippet--poll-results TR[data-vote]").each(function (){
+        gender = $(this).attr("data-gender");
+        status = $(this).attr("data-status");
+        $(this).find("TD[data-option-type]").each(function() {
+            type = $(this).attr("data-option-type");
+            optionId = $(this).attr("data-option-id");
+            value = $(this).attr("data-option-value");
+            if(typeof(stats["id"+optionId]) == "undefined"){
+                stats["id"+optionId] = {};
+                stats["id"+optionId].sum = 0;
+                stats["id"+optionId].true = 0;
+                stats["id"+optionId].false = 0;
+                stats["id"+optionId].type = type;
+                stats["id"+optionId].optionId = optionId;
+                stats["id"+optionId].votes = 0;
+            }
+            
+            switch (type) {
+                case "TEXT":
+                    if(value.trim() != "")
+                        stats["id" + optionId].votes += 1;
+                    break;
+                case "NUMBER":
+                    if (!isNaN(parseInt(value))) {
+                        stats["id" + optionId].sum += parseInt(value);
+                        stats["id" + optionId].votes += 1;
+                    }
+                    break;
+                case "BOOLEAN":
+                    if (value === "true") {
+                        stats["id" + optionId].true += 1;
+                        stats["id" + optionId].votes += 1;
+                    } else if (value === "false") {
+                        stats["id" + optionId].false += 1;
+                        stats["id" + optionId].votes += 1;
+                    }
+                    break;
+            }
+        });
+        
+    });
+    statsHtml = "<tr id='stats'><td>Statistiky:</td>";
+
+    for (option in stats) {
+        if (stats.hasOwnProperty(option)) {
+            switch (stats[option].type) {
+                case "TEXT":
+                    statsHtml += "<td data-option-id='"+stats[option].optionId+"'>Počet = "+stats[option].votes+"<br/></td>";
+                    break;
+                case "NUMBER":
+                    statsHtml += "<td data-option-id='"+stats[option].optionId+"'>Počet = "+stats[option].votes+"<br/>Σ = "+Math.round(stats[option].sum * 100) / 100 +"<br/>ϕ = "+ Math.round((stats[option].sum/votesCount) * 100) / 100 +"</td>";
+                    break;
+                case "BOOLEAN":
+                    statsHtml += "<td data-option-id='"+stats[option].optionId+"'>Počet = "+stats[option].votes+"<br/>"+stats[option].true +"x ANO ("+Math.round((stats[option].true/votesCount)*100)+"%)<br/>"+stats[option].false +"x NE ("+Math.round((stats[option].false/votesCount)*100)+"%)</td>";
+                    break;
+            }
+        }
+    }
+    statsHtml += "</tr>";
+    
+    $("DIV#snippet--poll-results TABLE").append(statsHtml);
+}
