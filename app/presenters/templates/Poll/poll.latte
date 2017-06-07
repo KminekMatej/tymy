@@ -6,6 +6,11 @@
 {include parent}
 <script src="{$basePath}/js/poll.js"></script>
 <script src="{$basePath}/js/timer.js"></script>
+<script>
+    $(document).ready(function () {
+        stats();
+    });
+</script>
 {/block}
 
 {block content}
@@ -105,7 +110,7 @@
                             </tr>
                             {/first}
                             <tr data-vote data-gender="{$users->data[$userId]->gender}" data-status="{$users->data[$userId]->status}">
-                                <th>{$users->data[$userId]->callName}</th>
+                                <th><a href="{plink Team:player $users->data[$userId]->webName}">{$users->data[$userId]->callName}</a></th>
                                     {foreach $poll->options as $option}
                                     {ifset $vote[$option->id]}
                                         {ifset $vote[$option->id]->numericValue}
@@ -124,7 +129,6 @@
                             </tr>
                         {/foreach}
                     </table>
-                    <button class="btn btn-secondary" onclick="stats()">Stats</button>
                 </div>
             </div>
         </div>

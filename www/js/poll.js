@@ -31,6 +31,7 @@ function updatePoll(btn, purl) {
             $(btn).prop("disabled", true);
             $(btn).attr("disabled", "disabled");
             $(btn).removeAttr("disabled");
+            stats();
         }
     });
 }

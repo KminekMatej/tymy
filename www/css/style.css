@@ -206,3 +206,11 @@ body .fc {
 DIV.homepage DIV.dis-description{
     font-size: 0.83em;
 }
+
+DIV.poll TR[data-vote] A{
+    color: rgb(129, 191, 245);
+}
+
+DIV.poll TR[data-vote] A:hover{
+    color: white;
+}
