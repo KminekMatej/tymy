@@ -55,6 +55,13 @@ class EventPresenterTest extends Tester\TestCase {
         Assert::true($dom->has('div.container'));
         Assert::true($dom->has('ol.breadcrumb'));
         Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 1);
+        
+        Assert::true($dom->has('div.container.events'));
+        Assert::true(count($dom->find('div.container.events div.row')) >= 1);
+        Assert::true($dom->has('div.container.events div.row div.col-md-7.my-3 div.card.sh-box#calendar'));
+        
+        Assert::true($dom->has('div.container.events div.row div.col-md-5.my-3.agenda-wrapper#snippet--events'));
+        Assert::equal(count($dom->find('div.container.events div.row div.col-md-5.my-3.agenda-wrapper#snippet--events div.card.sh-box.agenda[data-month]')), 13);
     }
 }
 
