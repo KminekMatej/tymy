@@ -12,7 +12,7 @@ use Tester\Assert;
 
 $container = require __DIR__ . '/bootstrap.php';
 
-if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["skips"])) {
+if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
 
@@ -38,9 +38,9 @@ class APIAttendanceTest extends Tester\TestCase {
     
     function login(){
         $this->loginObj = new \Tymy\Login();
-        $this->login = $this->loginObj->team($GLOBALS["team"])
-                ->setUsername($GLOBALS["username"])
-                ->setPassword($GLOBALS["password"])
+        $this->login = $this->loginObj->team($GLOBALS["testedTeam"]["team"])
+                ->setUsername($GLOBALS["testedTeam"]["username"])
+                ->setPassword($GLOBALS["testedTeam"]["password"])
                 ->fetch();
     }
     
@@ -50,7 +50,7 @@ class APIAttendanceTest extends Tester\TestCase {
     function testPlanFailsNoEventId(){
         $attendanceObj = new \Tymy\Attendance();
         $attendance = $attendanceObj
-                ->team($GLOBALS["team"])
+                ->team($GLOBALS["testedTeam"]["team"])
                 ->plan();
     }
     
@@ -60,8 +60,8 @@ class APIAttendanceTest extends Tester\TestCase {
     function testPlanFailsNoPreStatus(){
         $attendanceObj = new \Tymy\Attendance();
         $attendance = $attendanceObj
-                ->team($GLOBALS["team"])
-                ->recId($GLOBALS["testEventId"])
+                ->team($GLOBALS["testedTeam"]["team"])
+                ->recId($GLOBALS["testedTeam"]["testEventId"])
                 ->plan();
     }
 
@@ -84,7 +84,7 @@ class APIAttendanceTest extends Tester\TestCase {
         $attendanceObj = new \Tymy\Attendance();
         $attendanceObj
                 ->presenter($mockPresenter)
-                ->recId($GLOBALS["testEventId"])
+                ->recId($GLOBALS["testedTeam"]["testEventId"])
                 ->preStatus("YES")
                 ->plan();
     }
@@ -99,7 +99,7 @@ class APIAttendanceTest extends Tester\TestCase {
 
         $this->authenticator->setId(38);
         $this->authenticator->setStatus(["TESTROLE", "TESTROLE2"]);
-        $this->authenticator->setArr(["tym" => $GLOBALS["team"], "sessionKey" => "dsfbglsdfbg13546"]);
+        $this->authenticator->setArr(["tym" => $GLOBALS["testedTeam"]["team"], "sessionKey" => "dsfbglsdfbg13546"]);
 
         $mockPresenter->getUser()->setAuthenticator($this->authenticator);
         $mockPresenter->getUser()->login("test", "test");
@@ -108,7 +108,7 @@ class APIAttendanceTest extends Tester\TestCase {
         $attendanceObj = new \Tymy\Attendance();
         $attendanceObj
                 ->presenter($mockPresenter)
-                ->recId($GLOBALS["testEventId"])
+                ->recId($GLOBALS["testedTeam"]["testEventId"])
                 ->preStatus("YES")
                 ->plan();
     }
@@ -119,14 +119,14 @@ class APIAttendanceTest extends Tester\TestCase {
         $mockPresenter = $presenterFactory->createPresenter('Homepage');
         $mockPresenter->autoCanonicalize = FALSE;
 
-        $tapiAuthenticator = new \App\Model\TymyUserManager($GLOBALS["team"]);
+        $tapiAuthenticator = new \App\Model\TymyUserManager($GLOBALS["testedTeam"]["team"]);
         $mockPresenter->getUser()->setAuthenticator($tapiAuthenticator);
-        $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
+        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["username"], $GLOBALS["testedTeam"]["password"]);
         
         $attendanceObj = new \Tymy\Attendance($mockPresenter->tapiAuthenticator, $mockPresenter);
         $attendanceObj
                 ->presenter($mockPresenter)
-                ->recId($GLOBALS["testEventId"])
+                ->recId($GLOBALS["testedTeam"]["testEventId"])
                 ->preStatus("YES")
                 ->plan();
         
@@ -136,7 +136,7 @@ class APIAttendanceTest extends Tester\TestCase {
         $attendanceObj2 = new \Tymy\Attendance($mockPresenter->tapiAuthenticator, $mockPresenter);
         $attendanceObj2
                 ->presenter($mockPresenter)
-                ->recId($GLOBALS["testEventId"])
+                ->recId($GLOBALS["testedTeam"]["testEventId"])
                 ->preStatus("YES")
                 ->plan();
     }
@@ -148,10 +148,10 @@ class APIAttendanceTest extends Tester\TestCase {
 
         $this->login();
         $this->authenticator->setId($this->login->id);
-        $this->authenticator->setArr(["tym" => $GLOBALS["team"], "sessionKey" => $this->loginObj->getResult()->sessionKey]);
+        $this->authenticator->setArr(["tym" => $GLOBALS["testedTeam"]["team"], "sessionKey" => $this->loginObj->getResult()->sessionKey]);
         $mockPresenter->getUser()->setAuthenticator($this->authenticator);
         $mockPresenter->getUser()->setExpiration('2 minutes');
-        $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
+        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["username"], $GLOBALS["testedTeam"]["password"]);
         
         $allEvents = new \Tymy\Events($mockPresenter->tapiAuthenticator, $mockPresenter);
         $allEventsObj = $allEvents

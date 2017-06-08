@@ -7,7 +7,7 @@ use Tester;
 use Tester\Assert;
 
 $container = require __DIR__ . '/bootstrap.php';
-if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["skips"])) {
+if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
 
@@ -47,14 +47,14 @@ class SignInTest extends Tester\TestCase {
      * @throws Nette\Security\AuthenticationException Login failed.
      */
     function testSignInFails(){
-        $tymyUserManager = new \App\Model\TymyUserManager($GLOBALS["team"]); 
+        $tymyUserManager = new \App\Model\TymyUserManager($GLOBALS["testedTeam"]["team"]); 
         $tymyUserManager->authenticate(["Beatles","Ladyda"]);
         
     }
     
     function testSignInSuccess(){
-        $tymyUserManager = new \App\Model\TymyUserManager($GLOBALS["team"]); 
-        $identity = $tymyUserManager->authenticate([$GLOBALS["username"], $GLOBALS["password"]]);
+        $tymyUserManager = new \App\Model\TymyUserManager($GLOBALS["testedTeam"]["team"]); 
+        $identity = $tymyUserManager->authenticate([$GLOBALS["testedTeam"]["username"], $GLOBALS["testedTeam"]["password"]]);
         Assert::type("Nette\Security\Identity", $identity);
         Assert::true(isset($identity->id));
         Assert::true(isset($identity->roles));

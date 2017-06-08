@@ -14,7 +14,7 @@ use Tester;
 use Tester\Assert;
 
 $container = require __DIR__ . '/bootstrap.php';
-if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["skips"])) {
+if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
 
@@ -38,8 +38,8 @@ class NavbarTest extends Tester\TestCase {
         $this->presenter = $presenterFactory->createPresenter($presenter);
         $this->presenter->autoCanonicalize = FALSE;
         $this->presenter->getUser()->setExpiration('2 minutes');
-        $this->presenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
-        $this->presenter->getUser()->getIdentity()->tym = $GLOBALS["team"];
+        $this->presenter->getUser()->login($GLOBALS["testedTeam"]["username"], $GLOBALS["testedTeam"]["password"]);
+        $this->presenter->getUser()->getIdentity()->tym = $GLOBALS["testedTeam"]["team"];
     }
     
     function getHomepageHtml($presenter){

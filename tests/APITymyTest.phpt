@@ -11,7 +11,7 @@ use Tester;
 use Tester\Assert;
 
 $container = require __DIR__ . '/bootstrap.php';
-if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["skips"])) {
+if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
 
@@ -37,9 +37,9 @@ class APITymyTest extends Tester\TestCase {
     
     function login(){
         $tymyObj = new \Tymy\Login();
-        $this->tymyObj = $tymyObj->team($GLOBALS["team"])
-                ->setUsername($GLOBALS["username"])
-                ->setPassword($GLOBALS["password"])
+        $this->tymyObj = $tymyObj->team($GLOBALS["testedTeam"]["team"])
+                ->setUsername($GLOBALS["testedTeam"]["username"])
+                ->setPassword($GLOBALS["testedTeam"]["password"])
                 ->fetch();
     }
     
@@ -52,9 +52,9 @@ class APITymyTest extends Tester\TestCase {
 
     function testTeam(){
         Assert::null($this->tymyObj->team);
-        $this->tymyObj->team($GLOBALS["team"]);
+        $this->tymyObj->team($GLOBALS["testedTeam"]["team"]);
         Assert::type("string", $this->tymyObj->team);
-        Assert::same($this->tymyObj->team, $GLOBALS["team"]);
+        Assert::same($this->tymyObj->team, $GLOBALS["testedTeam"]["team"]);
     }
     
     function testPresenterSet(){

@@ -7,7 +7,7 @@ use Tester;
 use Tester\Assert;
 
 $container = require __DIR__ . '/bootstrap.php';
-if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["skips"])) {
+if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
 
@@ -41,7 +41,7 @@ class DiscussionPresenterTest extends Tester\TestCase {
     function testActionDefault(){
         $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', array('action' => 'default'));
         $this->presenter->getUser()->setExpiration('2 minutes');
-        $this->presenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
+        $this->presenter->getUser()->login($GLOBALS["testedTeam"]["username"], $GLOBALS["testedTeam"]["password"]);
         $response = $this->presenter->run($request);
 
         Assert::type('Nette\Application\Responses\TextResponse', $response);
@@ -58,6 +58,25 @@ class DiscussionPresenterTest extends Tester\TestCase {
         
         Assert::true($dom->has('div.container.discussions'));
         Assert::true(count($dom->find('div.container.discussions div.row')) >= 1);
+    }
+    
+    function testActionDiscussion(){
+        $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', array('action' => 'default'));
+        $this->presenter->getUser()->setExpiration('2 minutes');
+        $this->presenter->getUser()->login($GLOBALS["testedTeam"]["username"], $GLOBALS["testedTeam"]["password"]);
+        $response = $this->presenter->run($request);
+
+        Assert::type('Nette\Application\Responses\TextResponse', $response);
+        
+        $html = (string)$response->getSource();
+        $dom = Tester\DomQuery::fromHtml($html);
+        
+        //has navbar
+        Assert::true($dom->has('div#snippet-navbar-nav'));
+        //has breadcrumbs
+        Assert::true($dom->has('div.container'));
+        Assert::true($dom->has('ol.breadcrumb'));
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 1);
     }
 }
 

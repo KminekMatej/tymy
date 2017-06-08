@@ -11,7 +11,7 @@ use Tester;
 use Tester\Assert;
 
 $container = require __DIR__ . '/bootstrap.php';
-if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["skips"])) {
+if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
 
@@ -29,12 +29,12 @@ class APILoginTest extends Tester\TestCase {
     
     function testLoginSuccess(){
         $loginObj = new \Tymy\Login();
-        $loginObj->team($GLOBALS["team"])
-                ->setUsername($GLOBALS["username"])
-                ->setPassword($GLOBALS["password"])
+        $loginObj->team($GLOBALS["testedTeam"]["team"])
+                ->setUsername($GLOBALS["testedTeam"]["username"])
+                ->setPassword($GLOBALS["testedTeam"]["password"])
                 ->fetch();
         Assert::type("string", $loginObj->team);
-        Assert::equal($loginObj->team, $GLOBALS["team"]);
+        Assert::equal($loginObj->team, $GLOBALS["testedTeam"]["team"]);
         Assert::true(is_object($loginObj));
         Assert::type("string", $loginObj->result->status);
         Assert::equal($loginObj->result->status, "OK");
@@ -75,8 +75,8 @@ class APILoginTest extends Tester\TestCase {
      */
     function testLoginFails(){
         $loginObj = new \Tymy\Login();
-        $loginObj->team($GLOBALS["team"])
-                ->setUsername($GLOBALS["username"])
+        $loginObj->team($GLOBALS["testedTeam"]["team"])
+                ->setUsername($GLOBALS["testedTeam"]["username"])
                 ->setPassword("sdfas6df84asd3c")
                 ->fetch();
     }

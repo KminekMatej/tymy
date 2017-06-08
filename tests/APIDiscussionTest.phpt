@@ -11,7 +11,7 @@ use Tester;
 use Tester\Assert;
 
 $container = require __DIR__ . '/bootstrap.php';
-if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["skips"])) {
+if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
 
@@ -37,9 +37,9 @@ class APIDiscussionTest extends Tester\TestCase {
     
     function login(){
         $this->loginObj = new \Tymy\Login();
-        $this->login = $this->loginObj->team($GLOBALS["team"])
-                ->setUsername($GLOBALS["username"])
-                ->setPassword($GLOBALS["password"])
+        $this->login = $this->loginObj->team($GLOBALS["testedTeam"]["team"])
+                ->setUsername($GLOBALS["testedTeam"]["username"])
+                ->setPassword($GLOBALS["testedTeam"]["password"])
                 ->fetch();
     }
     
@@ -49,7 +49,7 @@ class APIDiscussionTest extends Tester\TestCase {
     function testFetchFailsNoRecId(){
         $discussionObj = new \Tymy\Discussion(NULL, NULL, TRUE, 1);
         $discussion = $discussionObj
-                ->team($GLOBALS["team"])
+                ->team($GLOBALS["testedTeam"]["team"])
                 ->fetch();
     }
 
@@ -59,7 +59,7 @@ class APIDiscussionTest extends Tester\TestCase {
     function testFetchFailsPageDoNotExist(){
         $discussionObj = new \Tymy\Discussion(NULL, NULL, TRUE, -1);
         $discussion = $discussionObj
-                ->team($GLOBALS["team"])
+                ->team($GLOBALS["testedTeam"]["team"])
                 ->recId(1)
                 ->fetch();
     }
@@ -97,7 +97,7 @@ class APIDiscussionTest extends Tester\TestCase {
 
         $this->authenticator->setId(38);
         $this->authenticator->setStatus(["TESTROLE", "TESTROLE2"]);
-        $this->authenticator->setArr(["tym" => $GLOBALS["team"], "sessionKey" => "dsfbglsdfbg13546"]);
+        $this->authenticator->setArr(["tym" => $GLOBALS["testedTeam"]["team"], "sessionKey" => "dsfbglsdfbg13546"]);
 
         $mockPresenter->getUser()->setAuthenticator($this->authenticator);
         $mockPresenter->getUser()->login("test", "test");
@@ -117,10 +117,10 @@ class APIDiscussionTest extends Tester\TestCase {
 
         $this->login();
         $this->authenticator->setId($this->login->id);
-        $this->authenticator->setArr(["tym" => $GLOBALS["team"], "sessionKey" => $this->loginObj->getResult()->sessionKey]);
+        $this->authenticator->setArr(["tym" => $GLOBALS["testedTeam"]["team"], "sessionKey" => $this->loginObj->getResult()->sessionKey]);
         $mockPresenter->getUser()->setAuthenticator($this->authenticator);
         $mockPresenter->getUser()->setExpiration('2 minutes');
-        $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
+        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["username"], $GLOBALS["testedTeam"]["password"]);
 
         $discussionId = 1;
         $discussionObj = new \Tymy\Discussion($mockPresenter->tapiAuthenticator, $mockPresenter, TRUE, 1);
@@ -211,10 +211,10 @@ class APIDiscussionTest extends Tester\TestCase {
 
         $this->login();
         $this->authenticator->setId($this->login->id);
-        $this->authenticator->setArr(["tym" => $GLOBALS["team"], "sessionKey" => $this->loginObj->getResult()->sessionKey]);
+        $this->authenticator->setArr(["tym" => $GLOBALS["testedTeam"]["team"], "sessionKey" => $this->loginObj->getResult()->sessionKey]);
         $mockPresenter->getUser()->setAuthenticator($this->authenticator);
         $mockPresenter->getUser()->setExpiration('2 minutes');
-        $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
+        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["username"], $GLOBALS["testedTeam"]["password"]);
 
         $insertText = "AUTOTEST automatic discussion post";
         
@@ -230,7 +230,7 @@ class APIDiscussionTest extends Tester\TestCase {
     }
     
     function testPost() {
-        if(!$GLOBALS["invasive"])
+        if(!$GLOBALS["testedTeam"]["invasive"])
             return null;
         $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
         $mockPresenter = $presenterFactory->createPresenter('Discussion');
@@ -238,10 +238,10 @@ class APIDiscussionTest extends Tester\TestCase {
 
         $this->login();
         $this->authenticator->setId($this->login->id);
-        $this->authenticator->setArr(["tym" => $GLOBALS["team"], "sessionKey" => $this->loginObj->getResult()->sessionKey]);
+        $this->authenticator->setArr(["tym" => $GLOBALS["testedTeam"]["team"], "sessionKey" => $this->loginObj->getResult()->sessionKey]);
         $mockPresenter->getUser()->setAuthenticator($this->authenticator);
         $mockPresenter->getUser()->setExpiration('2 minutes');
-        $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
+        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["username"], $GLOBALS["testedTeam"]["password"]);
 
         $insertText = "AUTOTEST automatic discussion post";
         $discussionId = 2; //ID of Testovaci Diskuze
@@ -286,13 +286,13 @@ class APIDiscussionTest extends Tester\TestCase {
 
         $this->login();
         $this->authenticator->setId($this->login->id);
-        $this->authenticator->setArr(["tym" => $GLOBALS["team"], "sessionKey" => $this->loginObj->getResult()->sessionKey]);
+        $this->authenticator->setArr(["tym" => $GLOBALS["testedTeam"]["team"], "sessionKey" => $this->loginObj->getResult()->sessionKey]);
         $mockPresenter->getUser()->setAuthenticator($this->authenticator);
         $mockPresenter->getUser()->setExpiration('2 minutes');
-        $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
+        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["username"], $GLOBALS["testedTeam"]["password"]);
 
-        $discussionId = $GLOBALS["searchDiscussionId"];
-        $searchHash = $GLOBALS["searchHash"];
+        $discussionId = $GLOBALS["testedTeam"]["searchDiscussionId"];
+        $searchHash = $GLOBALS["testedTeam"]["searchHash"];
         $discussionObj = new \Tymy\Discussion($mockPresenter->tapiAuthenticator, $mockPresenter, TRUE, 1);
         $discussionObj
                 ->recId($discussionId)
@@ -319,7 +319,7 @@ class APIDiscussionTest extends Tester\TestCase {
         Assert::type("string",$discussionObj->result->data->posts[0]->post);
         Assert::contains($searchHash, $discussionObj->result->data->posts[0]->post);
         Assert::type("int",$discussionObj->result->data->posts[0]->createdById);
-        Assert::same($GLOBALS["searchedItemUserId"],$discussionObj->result->data->posts[0]->createdById);
+        Assert::same($GLOBALS["testedTeam"]["searchedItemUserId"],$discussionObj->result->data->posts[0]->createdById);
         
         Assert::type("string",$discussionObj->result->data->posts[0]->createdAt);
         Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $discussionObj->result->data->posts[0]->createdAt)); //timezone correction check

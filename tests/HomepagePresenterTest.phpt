@@ -7,7 +7,7 @@ use Tester;
 use Tester\Assert;
 
 $container = require __DIR__ . '/bootstrap.php';
-if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["skips"])) {
+if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
 
@@ -40,7 +40,7 @@ class HomepagePresenterTest extends Tester\TestCase {
     function testActionDefault(){
         $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', array('action' => 'default'));
         $this->presenter->getUser()->setExpiration('2 minutes');
-        $this->presenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
+        $this->presenter->getUser()->login($GLOBALS["testedTeam"]["username"], $GLOBALS["testedTeam"]["password"]);
         $response = $this->presenter->run($request);
 
         Assert::type('Nette\Application\Responses\TextResponse', $response);

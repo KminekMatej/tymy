@@ -12,7 +12,7 @@ use Tester;
 use Tester\Assert;
 
 $container = require __DIR__ . '/bootstrap.php';
-if (in_array(basename(__FILE__, '.phpt'), $GLOBALS["skips"])) {
+if (in_array(basename(__FILE__, '.phpt'), $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
 
@@ -38,9 +38,9 @@ class APIEventTest extends Tester\TestCase {
 
     function login() {
         $this->loginObj = new \Tymy\Login();
-        $this->login = $this->loginObj->team($GLOBALS["team"])
-                ->setUsername($GLOBALS["username"])
-                ->setPassword($GLOBALS["password"])
+        $this->login = $this->loginObj->team($GLOBALS["testedTeam"]["team"])
+                ->setUsername($GLOBALS["testedTeam"]["username"])
+                ->setPassword($GLOBALS["testedTeam"]["password"])
                 ->fetch();
     }
 
@@ -83,7 +83,7 @@ class APIEventTest extends Tester\TestCase {
 
         $this->authenticator->setId(38);
         $this->authenticator->setStatus(["TESTROLE", "TESTROLE2"]);
-        $this->authenticator->setArr(["tym" => $GLOBALS["team"], "sessionKey" => "dsfbglsdfbg13546"]);
+        $this->authenticator->setArr(["tym" => $GLOBALS["testedTeam"]["team"], "sessionKey" => "dsfbglsdfbg13546"]);
 
         $mockPresenter->getUser()->setAuthenticator($this->authenticator);
         $mockPresenter->getUser()->login("test", "test");
@@ -101,12 +101,12 @@ class APIEventTest extends Tester\TestCase {
 
         $this->login();
         $this->authenticator->setId($this->login->id);
-        $this->authenticator->setArr(["tym" => $GLOBALS["team"], "sessionKey" => $this->loginObj->getResult()->sessionKey]);
+        $this->authenticator->setArr(["tym" => $GLOBALS["testedTeam"]["team"], "sessionKey" => $this->loginObj->getResult()->sessionKey]);
         $mockPresenter->getUser()->setAuthenticator($this->authenticator);
         $mockPresenter->getUser()->setExpiration('2 minutes');
-        $mockPresenter->getUser()->login($GLOBALS["username"], $GLOBALS["password"]);
+        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["username"], $GLOBALS["testedTeam"]["password"]);
 
-        $eventId = $GLOBALS["testEventId"];
+        $eventId = $GLOBALS["testedTeam"]["testEventId"];
         $eventObj = new \Tymy\Event($mockPresenter->tapiAuthenticator, $mockPresenter);
         $eventObj->recId($eventId)
                 ->fetch();
@@ -149,7 +149,7 @@ class APIEventTest extends Tester\TestCase {
                     Assert::type("string", $att->preDescription);
                 Assert::type("int", $att->preUserMod);
                 Assert::type("string", $att->preDatMod);
-                Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $att->preDatMod)); //timezone correction check
+                Assert::same(1, preg_match_all($GLOBALS["testedTeam"]["dateRegex"], $att->preDatMod)); //timezone correction check
             }
 
             Assert::true(is_object($att->user));
