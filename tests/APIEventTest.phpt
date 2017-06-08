@@ -39,8 +39,8 @@ class APIEventTest extends Tester\TestCase {
     function login() {
         $this->loginObj = new \Tymy\Login();
         $this->login = $this->loginObj->team($GLOBALS["testedTeam"]["team"])
-                ->setUsername($GLOBALS["testedTeam"]["username"])
-                ->setPassword($GLOBALS["testedTeam"]["password"])
+                ->setUsername($GLOBALS["testedTeam"]["user"])
+                ->setPassword($GLOBALS["testedTeam"]["pass"])
                 ->fetch();
     }
 
@@ -104,7 +104,7 @@ class APIEventTest extends Tester\TestCase {
         $this->authenticator->setArr(["tym" => $GLOBALS["testedTeam"]["team"], "sessionKey" => $this->loginObj->getResult()->sessionKey]);
         $mockPresenter->getUser()->setAuthenticator($this->authenticator);
         $mockPresenter->getUser()->setExpiration('2 minutes');
-        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["username"], $GLOBALS["testedTeam"]["password"]);
+        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
 
         $eventId = $GLOBALS["testedTeam"]["testEventId"];
         $eventObj = new \Tymy\Event($mockPresenter->tapiAuthenticator, $mockPresenter);
@@ -149,7 +149,7 @@ class APIEventTest extends Tester\TestCase {
                     Assert::type("string", $att->preDescription);
                 Assert::type("int", $att->preUserMod);
                 Assert::type("string", $att->preDatMod);
-                Assert::same(1, preg_match_all($GLOBALS["testedTeam"]["dateRegex"], $att->preDatMod)); //timezone correction check
+                Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $att->preDatMod)); //timezone correction check
             }
 
             Assert::true(is_object($att->user));

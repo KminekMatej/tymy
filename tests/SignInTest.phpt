@@ -54,7 +54,7 @@ class SignInTest extends Tester\TestCase {
     
     function testSignInSuccess(){
         $tymyUserManager = new \App\Model\TymyUserManager($GLOBALS["testedTeam"]["team"]); 
-        $identity = $tymyUserManager->authenticate([$GLOBALS["testedTeam"]["username"], $GLOBALS["testedTeam"]["password"]]);
+        $identity = $tymyUserManager->authenticate([$GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]]);
         Assert::type("Nette\Security\Identity", $identity);
         Assert::true(isset($identity->id));
         Assert::true(isset($identity->roles));

@@ -38,7 +38,7 @@ class NavbarTest extends Tester\TestCase {
         $this->presenter = $presenterFactory->createPresenter($presenter);
         $this->presenter->autoCanonicalize = FALSE;
         $this->presenter->getUser()->setExpiration('2 minutes');
-        $this->presenter->getUser()->login($GLOBALS["testedTeam"]["username"], $GLOBALS["testedTeam"]["password"]);
+        $this->presenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
         $this->presenter->getUser()->getIdentity()->tym = $GLOBALS["testedTeam"]["team"];
     }
     

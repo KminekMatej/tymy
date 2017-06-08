@@ -38,8 +38,8 @@ class APITymyTest extends Tester\TestCase {
     function login(){
         $tymyObj = new \Tymy\Login();
         $this->tymyObj = $tymyObj->team($GLOBALS["testedTeam"]["team"])
-                ->setUsername($GLOBALS["testedTeam"]["username"])
-                ->setPassword($GLOBALS["testedTeam"]["password"])
+                ->setUsername($GLOBALS["testedTeam"]["user"])
+                ->setPassword($GLOBALS["testedTeam"]["pass"])
                 ->fetch();
     }
     

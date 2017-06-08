@@ -38,8 +38,8 @@ class APIUsersTest extends Tester\TestCase {
     function login(){
         $this->loginObj = new \Tymy\Login();
         $this->login = $this->loginObj->team($GLOBALS["testedTeam"]["team"])
-                ->setUsername($GLOBALS["testedTeam"]["username"])
-                ->setPassword($GLOBALS["testedTeam"]["password"])
+                ->setUsername($GLOBALS["testedTeam"]["user"])
+                ->setPassword($GLOBALS["testedTeam"]["pass"])
                 ->fetch();
     }
 
@@ -95,7 +95,7 @@ class APIUsersTest extends Tester\TestCase {
         $this->authenticator->setArr(["tym" => $GLOBALS["testedTeam"]["team"], "sessionKey" => $this->loginObj->getResult()->sessionKey]);
         $mockPresenter->getUser()->setAuthenticator($this->authenticator);
         $mockPresenter->getUser()->setExpiration('2 minutes');
-        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["username"], $GLOBALS["testedTeam"]["password"]);
+        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
 
         $usersObj = new \Tymy\Users($mockPresenter->tapiAuthenticator, $mockPresenter);
         $usersObj->fetch();
@@ -179,7 +179,7 @@ class APIUsersTest extends Tester\TestCase {
         $this->authenticator->setArr(["tym" => $GLOBALS["testedTeam"]["team"], "sessionKey" => $this->loginObj->getResult()->sessionKey]);
         $mockPresenter->getUser()->setAuthenticator($this->authenticator);
         $mockPresenter->getUser()->setExpiration('2 minutes');
-        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["username"], $GLOBALS["testedTeam"]["password"]);
+        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
         
         $usersObj = new \Tymy\Users($mockPresenter->tapiAuthenticator, $mockPresenter, $userType);
         $usersObj->fetch();
@@ -203,7 +203,7 @@ class APIUsersTest extends Tester\TestCase {
         $this->authenticator->setArr(["tym" => $GLOBALS["testedTeam"]["team"], "sessionKey" => $this->loginObj->getResult()->sessionKey]);
         $mockPresenter->getUser()->setAuthenticator($this->authenticator);
         $mockPresenter->getUser()->setExpiration('2 minutes');
-        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["username"], $GLOBALS["testedTeam"]["password"]);
+        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
         
         $usersObj = new \Tymy\Users($mockPresenter->tapiAuthenticator, $mockPresenter, $userType);
         $usersObj->fetch();

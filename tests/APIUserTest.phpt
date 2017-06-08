@@ -38,8 +38,8 @@ class APIUserTest extends Tester\TestCase {
     function login(){
         $this->loginObj = new \Tymy\Login();
         $this->login = $this->loginObj->team($GLOBALS["testedTeam"]["team"])
-                ->setUsername($GLOBALS["testedTeam"]["username"])
-                ->setPassword($GLOBALS["testedTeam"]["password"])
+                ->setUsername($GLOBALS["testedTeam"]["user"])
+                ->setPassword($GLOBALS["testedTeam"]["pass"])
                 ->fetch();
     }
     
@@ -109,7 +109,7 @@ class APIUserTest extends Tester\TestCase {
         $this->authenticator->setArr(["tym" => $GLOBALS["testedTeam"]["team"], "sessionKey" => $this->loginObj->getResult()->sessionKey]);
         $mockPresenter->getUser()->setAuthenticator($this->authenticator);
         $mockPresenter->getUser()->setExpiration('2 minutes');
-        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["username"], $GLOBALS["testedTeam"]["password"]);
+        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
 
         $userObj = new \Tymy\User($mockPresenter->tapiAuthenticator, $mockPresenter);
         $userObj->recId(1)
