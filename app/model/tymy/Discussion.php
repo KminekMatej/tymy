@@ -57,6 +57,7 @@ final class Discussion extends Tymy{
     protected function postProcess() {
         $data = $this->getData();
         $this->timezone($data->discussion->newInfo->lastVisit);
+        $data->discussion->webName = \Nette\Utils\Strings::webalize($data->discussion->caption);
         foreach ($data->posts as $post) {
             $this->timezone($post->createdAt);
             if(property_exists($post, "updatedAt")){
