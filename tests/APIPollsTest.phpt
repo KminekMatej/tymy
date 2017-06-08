@@ -124,11 +124,15 @@ class APIPollsTest extends Tester\TestCase {
             Assert::type("string",$poll->caption);
             Assert::type("string",$poll->description);
             Assert::type("string",$poll->descriptionHtml);
-            Assert::type("int",$poll->minItems);
-            Assert::true($poll->minItems > 0 || $poll->minItems == -1);
-            Assert::type("int",$poll->maxItems);
-            Assert::true($poll->maxItems > 0 || $poll->maxItems == -1);
-            Assert::true($poll->maxItems >= $poll->minItems);
+            if(property_exists($poll, "minItems")){
+                Assert::type("int",$poll->minItems);
+                Assert::true($poll->minItems > 0 || $poll->minItems == -1);
+            }
+            if(property_exists($poll, "maxItems")){
+                Assert::type("int",$poll->maxItems);
+                Assert::true($poll->maxItems > 0 || $poll->maxItems == -1);
+                Assert::true($poll->maxItems >= $poll->minItems);
+            }
             Assert::type("bool",$poll->changeableVotes);
             Assert::type("bool",$poll->mainMenu);
             Assert::type("bool",$poll->anonymousResults);

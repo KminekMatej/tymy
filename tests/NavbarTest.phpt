@@ -1,6 +1,6 @@
 <?php
 /**
- * TEST: Test NavBar on Homepage presenter
+ * TEST: Test NavBar on presenters
  * 
  * 
  */
@@ -42,15 +42,15 @@ class NavbarTest extends Tester\TestCase {
         $this->presenter->getUser()->getIdentity()->tym = $GLOBALS["team"];
     }
     
-    function getHomepageHtml(){
-        $request = new Nette\Application\Request('Homepage', 'GET', array('action' => 'default'));
+    function getHomepageHtml($presenter){
+        $request = new Nette\Application\Request($presenter, 'GET', array('action' => 'default'));
         $response = $this->presenter->run($request);
         return $response->getSource();
     }
     
     
     function getPresenters(){
-        return [["Homepage"],["Discussion"],["Event"],["Team"]]; 
+        return [["Homepage"],["Discussion"],["Event"],["Team"],["Poll"]]; 
     }
     
     /**
@@ -60,7 +60,7 @@ class NavbarTest extends Tester\TestCase {
      */
     function testNavbarComponents($presenterMock){
         $this->mockPresenter($presenterMock);
-        $html = (string) $this->getHomepageHtml();
+        $html = (string) $this->getHomepageHtml($presenterMock);
         $discussions = new \Tymy\Discussions($this->presenter->tapiAuthenticator, $this->presenter);
         
         $dObj = $discussions->fetch();
@@ -72,7 +72,7 @@ class NavbarTest extends Tester\TestCase {
         $eObj = $events
                 ->withMyAttendance(true)
                 ->from(date("Ymd"))
-                ->to(date("Ymd", strtotime(" + 14 days")))
+                ->to(date("Ymd", strtotime(" + 1 month")))
                 ->fetch();
 
         $dom = Tester\DomQuery::fromHtml($html);
@@ -88,7 +88,7 @@ class NavbarTest extends Tester\TestCase {
         Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item")), 4); //4 menu items
         Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")), 4); //4 of them with dropdown
         Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")[0]->div->a), count((array)$dObj)); //check if the discussions are all displayed
-        Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")[1]->div->a), count((array)$eObj)); //check if the events are all displayed
+        Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")[1]->div->a), count((array)$eObj) + 1); //check display all events + 1
         Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")[2]->div->a), 5); //there are 5 menu items on second dropdown (team)
         Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")[3]->div->a), count((array)$pObj)); //check if the polls are all displayed
         

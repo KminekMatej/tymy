@@ -11,12 +11,13 @@ if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
 
-class HomepagePresenterTest extends Tester\TestCase {
+class DiscussionPresenterTest extends Tester\TestCase {
 
-    const PRESENTERNAME = "Homepage";
+    const PRESENTERNAME = "Discussion";
     
     private $container;
     private $presenter;
+    
 
     function __construct(Nette\DI\Container $container) {
         $this->container = $container;
@@ -57,5 +58,5 @@ class HomepagePresenterTest extends Tester\TestCase {
     }
 }
 
-$test = new HomepagePresenterTest($container);
+$test = new DiscussionPresenterTest($container);
 $test->run();

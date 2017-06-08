@@ -125,11 +125,15 @@ class APIPollTest extends Tester\TestCase {
         Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $pollObj->result->data->updatedAt)); //timezone correction check
         Assert::type("string",$pollObj->result->data->caption);
         Assert::type("string",$pollObj->result->data->description);
-        Assert::type("int",$pollObj->result->data->minItems);
-        Assert::true($pollObj->result->data->minItems > 0 || $pollObj->result->data->minItems == -1);
-        Assert::type("int",$pollObj->result->data->maxItems);
-        Assert::true($pollObj->result->data->maxItems > 0 || $pollObj->result->data->maxItems == -1);
-        Assert::true($pollObj->result->data->maxItems >= $pollObj->result->data->minItems);
+        if(property_exists($pollObj->result->data, "minItems")){
+            Assert::type("int",$pollObj->result->data->minItems);
+            Assert::true($pollObj->result->data->minItems > 0 || $pollObj->result->data->minItems == -1);
+        }
+        if(property_exists($pollObj->result->data, "maxItems")){
+            Assert::type("int",$pollObj->result->data->maxItems);
+            Assert::true($pollObj->result->data->maxItems > 0 || $pollObj->result->data->maxItems == -1);
+            Assert::true($pollObj->result->data->maxItems >= $pollObj->result->data->minItems);
+        }
         Assert::type("bool",$pollObj->result->data->changeableVotes);
         Assert::type("bool",$pollObj->result->data->mainMenu);
         Assert::type("bool",$pollObj->result->data->anonymousResults);
