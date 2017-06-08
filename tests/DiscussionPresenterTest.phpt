@@ -41,7 +41,7 @@ class DiscussionPresenterTest extends Tester\TestCase {
     function testActionDefault(){
         $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', array('action' => 'default'));
         $this->presenter->getUser()->setExpiration('2 minutes');
-        $this->presenter->getUser()->login($GLOBALS["testedTeam"]["username"], $GLOBALS["testedTeam"]["password"]);
+        $this->presenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
         $response = $this->presenter->run($request);
 
         Assert::type('Nette\Application\Responses\TextResponse', $response);
@@ -61,9 +61,9 @@ class DiscussionPresenterTest extends Tester\TestCase {
     }
     
     function testActionDiscussion(){
-        $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', array('action' => 'default'));
+        $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', array('action' => 'discussion', 'discussion' => $GLOBALS["testedTeam"]["testDiscussionName"]));
         $this->presenter->getUser()->setExpiration('2 minutes');
-        $this->presenter->getUser()->login($GLOBALS["testedTeam"]["username"], $GLOBALS["testedTeam"]["password"]);
+        $this->presenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
         $response = $this->presenter->run($request);
 
         Assert::type('Nette\Application\Responses\TextResponse', $response);
@@ -74,9 +74,22 @@ class DiscussionPresenterTest extends Tester\TestCase {
         //has navbar
         Assert::true($dom->has('div#snippet-navbar-nav'));
         //has breadcrumbs
-        Assert::true($dom->has('div.container'));
+        var_dump($html);
+        Assert::true($dom->has('div.container div.row div.col ol.breadcrumb'));
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 2);
+        
+        Assert::equal(count($dom->find('div.container.my-2 div.row.justify-content-md-center')), 2);
+        Assert::true($dom->has('div.container.my-2 div.row.justify-content-md-center div.col-md-10 textarea#addPost'));
+        Assert::true($dom->has('div.container.my-2 div.row.justify-content-md-center div.col-md-10 div.addPost form.form-inline input.form-control.mr-sm-2'));
+        Assert::true($dom->has('div.container.my-2 div.row.justify-content-md-center div.col-md-10 div.addPost form.form-inline input.form-control.btn.btn-outline-success.mr-auto'));
+        Assert::true($dom->has('div.container.my-2 div.row.justify-content-md-center div.col-md-10 div.addPost form.form-inline button.btn.btn-primary'));
+        
+        Assert::true($dom->has('div.container.discussion#snippet--discussion'));
+        Assert::equal(count($dom->find('div.container.discussion#snippet--discussion div.row')), 20);
+        
+        
+        
         Assert::true($dom->has('ol.breadcrumb'));
-        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 1);
     }
 }
 
