@@ -52,8 +52,7 @@ class EventPresenterTest extends Tester\TestCase {
         //has navbar
         Assert::true($dom->has('div#snippet-navbar-nav'));
         //has breadcrumbs
-        Assert::true($dom->has('div.container'));
-        Assert::true($dom->has('ol.breadcrumb'));
+        Assert::true($dom->has('div.container div.row div.col ol.breadcrumb'));
         Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 1);
         
         Assert::true($dom->has('div.container.events'));
