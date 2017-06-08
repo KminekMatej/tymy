@@ -42,7 +42,7 @@ class DiscussionPresenter extends SecuredPresenter {
         if(!$discussionId = intval($discussion)){
             $allDiscussions = new \Tymy\Discussions($this->tapiAuthenticator, $this);
             foreach ($allDiscussions->fetch() as $dis) {
-                if (Strings::webalize($dis->caption) == $discussion) {
+                if ($dis->webName == $discussion) {
                     $discussionId = $dis->id;
                     break;
                 }
@@ -57,13 +57,13 @@ class DiscussionPresenter extends SecuredPresenter {
         if($search) 
             $d->search($search);
         $data = $d->fetch();
-        $data->discussion->webName = Strings::webalize($data->discussion->caption);
+        $data->discussion->webName = $data->discussion->webName;
 
-        $this->setLevelCaptions(["1" => ["caption" => $data->discussion->caption, "link" => $this->link("Discussion:discussion", [Strings::webalize($data->discussion->caption)]) ] ]);
+        $this->setLevelCaptions(["1" => ["caption" => $data->discussion->caption, "link" => $this->link("Discussion:discussion", [$data->discussion->webName]) ] ]);
         
         $this->template->userId = $this->getUser()->getId();
         $this->template->discussion = $data;
-        $this->template->nazevDiskuze = Strings::webalize($data->discussion->caption);
+        $this->template->nazevDiskuze = $data->discussion->webName;
         $this->template->currentPage = is_numeric($page) ? $page : 1 ;
         $currentPage = is_numeric($page) ? $page : 1;
         $lastPage = is_numeric($data->paging->numberOfPages) ? $data->paging->numberOfPages : 1 ;

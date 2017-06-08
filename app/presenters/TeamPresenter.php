@@ -40,20 +40,16 @@ class TeamPresenter extends SecuredPresenter {
     
     public function renderDefault() {
         $users = new \Tymy\Users($this->tapiAuthenticator, $this, $this->userType);
-        $u = $users->fetch();
-        foreach ($u as $data) {
-            $data->webName = Strings::webalize($data->fullName);
-        }
-        $this->template->users = $u;
+        $this->template->users = $users->fetch();;
     }
     
     public function renderPlayer($player) {
         $players = new \Tymy\Users($this->tapiAuthenticator, $this);
         $playerId = NULL;
         foreach ($players->fetch() as $p) {
-            if(Strings::webalize($p->fullName) == $player){
+            if($p->webName == $player){
                 $playerId = $p->id;
-                $this->setLevelCaptions(["1" => ["caption" => $p->callName, "link" => $this->link("Team:player", Strings::webalize($p->fullName)) ] ]);
+                $this->setLevelCaptions(["1" => ["caption" => $p->callName, "link" => $this->link("Team:player", $p->webName) ] ]);
                 break;
             }
         }

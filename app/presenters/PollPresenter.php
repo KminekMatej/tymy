@@ -25,9 +25,9 @@ class PollPresenter extends SecuredPresenter {
         $polls = new \Tymy\Polls($this->tapiAuthenticator, $this);
         $pollId = NULL;
         foreach ($polls->fetch() as $p) {
-            if(Strings::webalize($p->caption) == $anketa){
+            if($p->webName == $anketa){
                 $pollId = $p->id;
-                $this->setLevelCaptions(["1" => ["caption" => $p->caption, "link" => $this->link("Poll:poll", Strings::webalize($p->caption)) ] ]);
+                $this->setLevelCaptions(["1" => ["caption" => $p->caption, "link" => $this->link("Poll:poll", $p->webName) ] ]);
                 break;
             }
         }

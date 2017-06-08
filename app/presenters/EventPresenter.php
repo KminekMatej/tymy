@@ -68,7 +68,7 @@ class EventPresenter extends SecuredPresenter {
                 ->recId($eventId)
                 ->fetch();
         
-        $this->setLevelCaptions(["1" => ["caption" => $event->caption, "link" => $this->link("Event:event", $event->id . "-" . Strings::webalize($event->caption))]]);
+        $this->setLevelCaptions(["1" => ["caption" => $event->caption, "link" => $this->link("Event:event", $event->id . "-" . $event->webName)]]);
         
         $usersObj = new \Tymy\Users($this->tapiAuthenticator, $this);
         $users = $usersObj

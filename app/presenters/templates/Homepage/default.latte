@@ -24,7 +24,7 @@
             events: function(start, end, timezone, callback) {
                 var events = [];
                 {foreach $events as $evnt}
-                    events.push({l}id: {$evnt->id}, title: {$evnt->caption},start: {$evnt->startTime},end: {$evnt->endTime},url: {$presenter->link('Event:event', $evnt->id . '-' . $evnt->caption|webalize)},description:{date('H:i',strtotime($evnt->startTime))} + ' ' + {$evnt->caption}{r});
+                    events.push({l}id: {$evnt->id}, title: {$evnt->caption},start: {$evnt->startTime},end: {$evnt->endTime},url: {$presenter->link('Event:event', $evnt->id . '-' . $evnt->webName)},description:{date('H:i',strtotime($evnt->startTime))} + ' ' + {$evnt->caption}{r});
                 {/foreach}
                 callback(events);
             },

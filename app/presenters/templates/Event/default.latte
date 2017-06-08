@@ -22,7 +22,7 @@
             events: function(start, end, timezone, callback) {
                 var events = [];
                 {foreach $events as $evnt}
-                    events.push({l}id: {$evnt->id}, title: {$evnt->caption},start: {$evnt->startTime},end: {$evnt->endTime},url: {$presenter->link('event', $evnt->id . '-' . $evnt->caption|webalize)}{r});
+                    events.push({l}id: {$evnt->id}, title: {$evnt->caption},start: {$evnt->startTime},end: {$evnt->endTime},url: {$presenter->link('event', $evnt->id . '-' . $evnt->webName)}{r});
                 {/foreach}
                 callback(events);
             },
