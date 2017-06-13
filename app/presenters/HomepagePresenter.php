@@ -4,7 +4,7 @@ namespace App\Presenters;
 
 use Nette;
 use Nette\Application\UI\NavbarControl;
-use App\Model;
+use App\Model; 
 use Nette\Application\UI\Form;
 
 class HomepagePresenter extends SecuredPresenter {
@@ -19,7 +19,7 @@ class HomepagePresenter extends SecuredPresenter {
     public function renderDefault() {
         $eventsObj = new \Tymy\Events($this->tapiAuthenticator, $this);
         $events = $eventsObj->loadYearEvents(NULL, NULL);
-        
+        date("n", strtotime("2017-13-5"));
         $discussions = new \Tymy\Discussions($this->tapiAuthenticator, $this);
         $this->template->discussions = $discussions->setWithNew(true)->fetch();
         
@@ -28,6 +28,7 @@ class HomepagePresenter extends SecuredPresenter {
         $this->template->evMonths = $events->eventsMonthly;
         $this->template->events = $events->getData();
         $this->template->eventTypes = $this->getEventTypes();
+        $this->template->users = $this->getUsers()->data;
     }
 
 }

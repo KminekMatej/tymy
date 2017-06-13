@@ -81,10 +81,30 @@
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col my-3">
+            {var $today = date('m-d')}
+            {var $tommorow = date('m-d', strtotime('+ 1 day'))}
+            {foreach $users as $u}
+                {var $nameDay = date('m-d', strtotime(date('Y').'-'.$u->nameDayMonth.'-'.$u->nameDayDay))}
+                {var $bDay = property_exists($u, 'birthDate') ? date('m-d', strtotime($u->birthDate)) : '0-0'}
+                <div n:if="$today==$nameDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><a href="{plink Team:player $u->webName}">{$u->callName}</a></strong> slaví dnes svátek!</div>
+                <div n:if="$today==$bDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><a href="{plink Team:player $u->webName}">{$u->callName}</a></strong> slaví dnes narozeniny!</div>
+                <div n:if="$tommorow==$nameDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><a href="{plink Team:player $u->webName}">{$u->callName}</a></strong> slaví zítra svátek!</div>
+                <div n:if="$tommorow==$bDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><a href="{plink Team:player $u->webName}">{$u->callName}</a></strong> slaví zítra narozeniny!</div>
+                
+            {/foreach}
+        </div>
+    </div>
+                    
+
+                
     <div class="row">
         <div class="col my-3">
             <div class="card sh-box">
                 <div class="card-block">
+                    
                     TODO bottom - probably users logged in, or sth
                 </div>
             </div>

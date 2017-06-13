@@ -60,21 +60,31 @@ class DiscussionPresenterTest extends Tester\TestCase {
         Assert::true(count($dom->find('div.container.discussions div.row')) >= 1);
     }
     
-    function testActionDiscussion(){
-        $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', array('action' => 'discussion', 'discussion' => $GLOBALS["testedTeam"]["testDiscussionName"]));
+    
+    function getDiscussionNames() {
+        return $GLOBALS["testedTeam"]["testDiscussionName"];
+    }
+
+    /**
+     * 
+     * @dataProvider getDiscussionNames
+     */
+    function testActionDiscussion($discussionName){
+        $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', array('action' => 'discussion', 'discussion' => $discussionName));
         $this->presenter->getUser()->setExpiration('2 minutes');
         $this->presenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
         $response = $this->presenter->run($request);
 
         Assert::type('Nette\Application\Responses\TextResponse', $response);
         
-        $html = (string)$response->getSource();
-        $dom = Tester\DomQuery::fromHtml($html);
+        $html = (string)htmlentities($response->getSource());
         
+        $dom = Tester\DomQuery::fromHtml($html);
+        var_dump($dom);
         //has navbar
         Assert::true($dom->has('div#snippet-navbar-nav'));
         //has breadcrumbs
-        var_dump($html);
+        
         Assert::true($dom->has('div.container div.row div.col ol.breadcrumb'));
         Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 2);
         
@@ -85,11 +95,7 @@ class DiscussionPresenterTest extends Tester\TestCase {
         Assert::true($dom->has('div.container.my-2 div.row.justify-content-md-center div.col-md-10 div.addPost form.form-inline button.btn.btn-primary'));
         
         Assert::true($dom->has('div.container.discussion#snippet--discussion'));
-        Assert::equal(count($dom->find('div.container.discussion#snippet--discussion div.row')), 20);
-        
-        
-        
-        Assert::true($dom->has('ol.breadcrumb'));
+        Assert::true(count($dom->find('div.container.discussion#snippet--discussion div.row'))<=20);
     }
 }
 
