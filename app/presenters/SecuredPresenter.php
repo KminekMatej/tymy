@@ -84,7 +84,7 @@ class SecuredPresenter extends BasePresenter {
             }
             $this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
         }
-        
+        $this->setLevelCaptions(["0" => ["caption" => "Hlavní stránka", "link" => $this->link("Homepage:")]]);
         $sessionTymy = $this->getSession()->getSection("tymy");
         $sessionTymy->tym = $this->getUser()->getIdentity()->tym;
         $this->template->tym = $sessionTymy->tym;

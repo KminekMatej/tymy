@@ -17,23 +17,23 @@ class TeamPresenter extends SecuredPresenter {
     
     public function startup() {
         parent::startup();
-        $this->setLevelCaptions(["0" => ["caption" => "Tým", "link" => $this->link("Team:") ] ]);
+        $this->setLevelCaptions(["1" => ["caption" => "Tým", "link" => $this->link("Team:") ] ]);
     }
     
     public function actionPlayers() {
-        $this->setLevelCaptions(["1" => ["caption" => "Hráči", "link" => $this->link("Team:players") ] ]);
+        $this->setLevelCaptions(["2" => ["caption" => "Hráči", "link" => $this->link("Team:players") ] ]);
         $this->userType = "PLAYER";
         $this->setView('default');
     }
     
     public function actionMembers() {
-        $this->setLevelCaptions(["1" => ["caption" => "Členové", "link" => $this->link("Team:members") ] ]);
+        $this->setLevelCaptions(["2" => ["caption" => "Členové", "link" => $this->link("Team:members") ] ]);
         $this->userType = "MEMBER";
         $this->setView('default');
     }
     
     public function actionSicks() {
-        $this->setLevelCaptions(["1" => ["caption" => "Marodi", "link" => $this->link("Team:sicks") ] ]);
+        $this->setLevelCaptions(["2" => ["caption" => "Marodi", "link" => $this->link("Team:sicks") ] ]);
         $this->userType = "SICK";
         $this->setView('default');
     }
@@ -49,7 +49,7 @@ class TeamPresenter extends SecuredPresenter {
         foreach ($players->fetch() as $p) {
             if($p->webName == $player){
                 $playerId = $p->id;
-                $this->setLevelCaptions(["1" => ["caption" => $p->callName, "link" => $this->link("Team:player", $p->webName) ] ]);
+                $this->setLevelCaptions(["2" => ["caption" => $p->callName, "link" => $this->link("Team:player", $p->webName) ] ]);
                 break;
             }
         }

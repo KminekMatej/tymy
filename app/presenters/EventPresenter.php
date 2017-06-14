@@ -21,7 +21,7 @@ class EventPresenter extends SecuredPresenter {
     public function startup() {
         parent::startup();
         $this->getEventTypes();
-        $this->setLevelCaptions(["0" => ["caption" => "Události", "link" => $this->link("Event:")]]);
+        $this->setLevelCaptions(["1" => ["caption" => "Události", "link" => $this->link("Event:")]]);
 
         $this->template->addFilter('genderTranslate', function ($gender) {
             switch($gender){
@@ -68,7 +68,7 @@ class EventPresenter extends SecuredPresenter {
                 ->recId($eventId)
                 ->fetch();
         
-        $this->setLevelCaptions(["1" => ["caption" => $event->caption, "link" => $this->link("Event:event", $event->id . "-" . $event->webName)]]);
+        $this->setLevelCaptions(["2" => ["caption" => $event->caption, "link" => $this->link("Event:event", $event->id . "-" . $event->webName)]]);
         
         $usersObj = new \Tymy\Users($this->tapiAuthenticator, $this);
         $users = $usersObj

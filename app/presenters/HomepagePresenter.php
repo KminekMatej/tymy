@@ -11,11 +11,6 @@ class HomepagePresenter extends SecuredPresenter {
 
     public $navbar;
     
-    public function startup() {
-        parent::startup();
-        $this->setLevelCaptions(["0" => ["caption" => "Přehled", "link" => $this->link("Homepage:")]]);
-    }
-    
     public function beforeRender() {
         parent::beforeRender();
         $this->template->addFilter('lastLogin', function ($lastLogin) {

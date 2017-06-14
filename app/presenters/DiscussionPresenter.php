@@ -20,7 +20,7 @@ class DiscussionPresenter extends SecuredPresenter {
     
     public function startup() {
         parent::startup();
-        $this->setLevelCaptions(["0" => ["caption" => "Diskuze", "link" => $this->link("Discussion:")]]);
+        $this->setLevelCaptions(["1" => ["caption" => "Diskuze", "link" => $this->link("Discussion:")]]);
     }
 
     public function renderDefault() {
@@ -59,7 +59,7 @@ class DiscussionPresenter extends SecuredPresenter {
         $data = $d->fetch();
         $data->discussion->webName = $data->discussion->webName;
 
-        $this->setLevelCaptions(["1" => ["caption" => $data->discussion->caption, "link" => $this->link("Discussion:discussion", [$data->discussion->webName]) ] ]);
+        $this->setLevelCaptions(["2" => ["caption" => $data->discussion->caption, "link" => $this->link("Discussion:discussion", [$data->discussion->webName]) ] ]);
         
         $this->template->userId = $this->getUser()->getId();
         $this->template->discussion = $data;

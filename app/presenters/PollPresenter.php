@@ -14,7 +14,7 @@ class PollPresenter extends SecuredPresenter {
     
     public function startup() {
         parent::startup();
-        $this->setLevelCaptions(["0" => ["caption" => "Ankety", "link" => $this->link("Poll:")]]);
+        $this->setLevelCaptions(["1" => ["caption" => "Ankety", "link" => $this->link("Poll:")]]);
     }
     
     public function renderDefault() {
@@ -27,7 +27,7 @@ class PollPresenter extends SecuredPresenter {
         foreach ($polls->fetch() as $p) {
             if($p->webName == $anketa){
                 $pollId = $p->id;
-                $this->setLevelCaptions(["1" => ["caption" => $p->caption, "link" => $this->link("Poll:poll", $p->webName) ] ]);
+                $this->setLevelCaptions(["2" => ["caption" => $p->caption, "link" => $this->link("Poll:poll", $p->webName) ] ]);
                 break;
             }
         }
