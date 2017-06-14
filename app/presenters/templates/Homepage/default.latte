@@ -23,9 +23,35 @@
             displayEventTime: false,
             events: function (start, end, timezone, callback) {
                 var events = [];
-    {foreach $events as $evnt}
-                events.push({l}id: {$evnt->id}, title: {$evnt->caption}, start: {$evnt->startTime}, end: {$evnt->endTime}, url: {$presenter->link('Event:event', $evnt->id . '-' . $evnt->webName)}, description:{date('H:i',strtotime($evnt->startTime))} + ' ' + {$evnt->caption}{r});
-    {/foreach}
+                {foreach $events as $evnt}
+                    {var $borCol = ''}
+                    {var $bgCol = ''}
+                    {var $txtCol = ''}
+                    {switch $evnt->type} 
+                        {case 'TRA'}
+                            {var $bgCol = ', backgroundColor: \'#5cb85c\''}
+                            {var $borCol = ', borderColor: \'#5cb85c\''}
+                            {var $txtCol = ', textColor: \'#5cb85c\''}
+                        {case 'RUN'}
+                            {var $bgCol = ', backgroundColor: \'#f0ad4e\''}
+                            {var $borCol = ', borderColor: \'#f0ad4e\''}
+                            {var $txtCol = ', textColor: \'#f0ad4e\''}
+                        {case 'MEE'}
+                            {var $bgCol = ', backgroundColor: \'#795548\''}
+                            {var $borCol = ', borderColor: \'#795548\''}
+                            {var $txtCol = ', textColor: \'#795548\''}
+                        {case 'TOU'}
+                            {var $bgCol = ', backgroundColor: \'#d9534f\''}
+                            {var $borCol = ', borderColor: \'#d9534f\''}
+                            {var $txtCol = ', textColor: \'#d9534f\''}
+                    {/switch}
+                    {if !property_exists($evnt, 'myAttendance') || !property_exists($evnt->myAttendance, 'preStatus')}
+                        {var $bgCol = ', backgroundColor: \'inherit\''}
+                    {else}
+                        {var $txtCol = ''}
+                    {/if}
+                events.push({l}id: {$evnt->id}, title: {$evnt->caption}, start: {$evnt->startTime}, end: {$evnt->endTime} {$bgCol|noescape} {$borCol|noescape} {$txtCol|noescape} ,url: {$presenter->link('Event:event', $evnt->id . '-' . $evnt->webName)}{r});
+                {/foreach}
                                 callback(events);
                             },
                             eventRender: function (event, element) {
