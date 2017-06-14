@@ -21,37 +21,37 @@
             contentHeight: 350,
             fixedWeekCount: false,
             displayEventTime: false,
-            events: function(start, end, timezone, callback) {
+            events: function (start, end, timezone, callback) {
                 var events = [];
-                {foreach $events as $evnt}
-                    events.push({l}id: {$evnt->id}, title: {$evnt->caption},start: {$evnt->startTime},end: {$evnt->endTime},url: {$presenter->link('Event:event', $evnt->id . '-' . $evnt->webName)},description:{date('H:i',strtotime($evnt->startTime))} + ' ' + {$evnt->caption}{r});
-                {/foreach}
-                callback(events);
-            },
-            eventRender: function(event, element) { 
-                element.find('.fc-title').attr("title",event.description);
-            },
-            header: {
-                left: 'title',
-                center: '',
-                right: 'today prev,next'
-            },
-            loading: function (isLoading, view) {
-                if (isLoading) {
-                    $('#calendar DIV.fc-header-toolbar BUTTON.fc-prev-button').prop('disabled', true);
-                    $('#calendar DIV.fc-header-toolbar BUTTON.fc-next-button').prop('disabled', true);
-                } else {
-                    $('#calendar DIV.fc-header-toolbar BUTTON.fc-prev-button').prop('disabled', false);
-                    $('#calendar DIV.fc-header-toolbar BUTTON.fc-next-button').prop('disabled', false);
-                }
-            }
-        });
-        $('#calendar DIV.fc-header-toolbar').addClass("card-header");
-        $('#calendar DIV.fc-button-group').addClass("btn-group");
-        $('#calendar DIV.fc-header-toolbar BUTTON').each(function () {
-            $(this).addClass("btn btn-secondary");
-        });
-    });
+    {foreach $events as $evnt}
+                events.push({l}id: {$evnt->id}, title: {$evnt->caption}, start: {$evnt->startTime}, end: {$evnt->endTime}, url: {$presenter->link('Event:event', $evnt->id . '-' . $evnt->webName)}, description:{date('H:i',strtotime($evnt->startTime))} + ' ' + {$evnt->caption}{r});
+    {/foreach}
+                                callback(events);
+                            },
+                            eventRender: function (event, element) {
+                                element.find('.fc-title').attr("title", event.description);
+                            },
+                            header: {
+                                left: 'title',
+                                center: '',
+                                right: 'today prev,next'
+                            },
+                            loading: function (isLoading, view) {
+                                if (isLoading) {
+                                    $('#calendar DIV.fc-header-toolbar BUTTON.fc-prev-button').prop('disabled', true);
+                                    $('#calendar DIV.fc-header-toolbar BUTTON.fc-next-button').prop('disabled', true);
+                                } else {
+                                    $('#calendar DIV.fc-header-toolbar BUTTON.fc-prev-button').prop('disabled', false);
+                                    $('#calendar DIV.fc-header-toolbar BUTTON.fc-next-button').prop('disabled', false);
+                                }
+                            }
+                        });
+                        $('#calendar DIV.fc-header-toolbar').addClass("card-header");
+                        $('#calendar DIV.fc-button-group').addClass("btn-group");
+                        $('#calendar DIV.fc-header-toolbar BUTTON').each(function () {
+                            $(this).addClass("btn btn-secondary");
+                        });
+                    });
 </script>
 {/block}
 
@@ -83,8 +83,7 @@
     </div>
 
     <div class="row">
-        <div class="col my-3">
-            {dump $users}
+        <div class="col">
             {var $today = date('m-d')}
             {var $tommorow = date('m-d', strtotime('+ 1 day'))}
             {foreach $users as $usr}
@@ -95,12 +94,10 @@
                 <div n:if="$today==$bDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><a href="{plink Team:player $usr->webName}">{$usr->callName}</a></strong> slaví dnes <strong>{$years}.</strong> narozeniny!</div>
                 <div n:if="$tommorow==$nameDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><a href="{plink Team:player $usr->webName}">{$usr->callName}</a></strong> slaví zítra svátek!</div>
                 <div n:if="$tommorow==$bDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><a href="{plink Team:player $usr->webName}">{$usr->callName}</a></strong> slaví zítra <strong>{$years}.</strong> narozeniny!</div>
-            {/foreach}
+                    {/foreach}
         </div>
     </div>
-                    
 
-                
     <div class="row">
         <div class="col my-3">
             <div class="card sh-box">
@@ -116,29 +113,29 @@
                 </div>
                 <div class="card-block">
                     <div class="tab-content">
-                    <div class="tab-pane fade show active" id="online" role="tabpanel">
-                    {foreach $users as $usr}
-                        {breakIf strtotime($usr->lastLogin) < date('U', strtotime('- 5 minutes'))}
-                        <figure class="figure text-center" style="width: 100px">
-                            <a href="{plink Team:player $usr->webName}" title="{$usr->lastLogin|date:'j.n.Y H:i:s'}">
-                                <img src="http://{$tym}.tymy.cz/{$usr->pictureUrl}" class="figure-img img-fluid rounded" alt="{$usr->callName}">
-                                <figcaption class="figure-caption">{$usr->callName}</figcaption>
-                                <figcaption class="figure-caption" style="font-size: 70%; display: inline-block">{$usr->lastLogin|lastLogin}</figcaption>
-                            </a>
-                        </figure>
-                    {/foreach}
-                    </div>
-                    <div class="tab-pane fade" id="lastLogin" role="tabpanel">
-                    {foreach $users as $usr}
-                        <figure class="figure text-center" style="width: 100px">
-                            <a href="{plink Team:player $usr->webName}" title="{$usr->lastLogin|date:'j.n.Y H:i:s'}">
-                                <img src="http://{$tym}.tymy.cz/{$usr->pictureUrl}" class="figure-img img-fluid rounded" alt="{$usr->callName}">
-                                <figcaption class="figure-caption">{$usr->callName}</figcaption>
-                                <figcaption class="figure-caption" style="font-size: 70%; display: inline-block">{$usr->lastLogin|lastLogin}</figcaption>
-                            </a>
-                        </figure>
-                    {/foreach}
-                    </div>
+                        <div class="tab-pane fade show active" id="online" role="tabpanel">
+                            {foreach $users as $usr}
+                                {breakIf strtotime($usr->lastLogin) < date('U', strtotime('- 5 minutes'))}
+                                <figure class="figure text-center" style="width: 100px">
+                                    <a href="{plink Team:player $usr->webName}" title="{$usr->lastLogin|date:'j.n.Y H:i:s'}">
+                                        <img src="http://{$tym}.tymy.cz/{$usr->pictureUrl}" class="figure-img img-fluid rounded" alt="{$usr->callName}">
+                                        <figcaption class="figure-caption">{$usr->callName}</figcaption>
+                                        <figcaption class="figure-caption" style="font-size: 70%; display: inline-block">{$usr->lastLogin|lastLogin}</figcaption>
+                                    </a>
+                                </figure>
+                            {/foreach}
+                        </div>
+                        <div class="tab-pane fade" id="lastLogin" role="tabpanel">
+                            {foreach $users as $usr}
+                                <figure class="figure text-center" style="width: 100px">
+                                    <a href="{plink Team:player $usr->webName}" title="{$usr->lastLogin|date:'j.n.Y H:i:s'}">
+                                        <img src="http://{$tym}.tymy.cz/{$usr->pictureUrl}" class="figure-img img-fluid rounded" alt="{$usr->callName}">
+                                        <figcaption class="figure-caption">{$usr->callName}</figcaption>
+                                        <figcaption class="figure-caption" style="font-size: 70%; display: inline-block">{$usr->lastLogin|lastLogin}</figcaption>
+                                    </a>
+                                </figure>
+                            {/foreach}
+                        </div>
                     </div>
                 </div>
             </div>
