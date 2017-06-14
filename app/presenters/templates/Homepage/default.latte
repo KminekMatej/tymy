@@ -33,17 +33,21 @@
                             {var $borCol = ', borderColor: \'#5cb85c\''}
                             {var $txtCol = ', textColor: \'#5cb85c\''}
                         {case 'RUN'}
-                            {var $bgCol = ', backgroundColor: \'#f0ad4e\''}
-                            {var $borCol = ', borderColor: \'#f0ad4e\''}
-                            {var $txtCol = ', textColor: \'#f0ad4e\''}
+                            {var $bgCol = ', backgroundColor: \'#0275d8\''}
+                            {var $borCol = ', borderColor: \'#0275d8\''}
+                            {var $txtCol = ', textColor: \'#0275d8\''}
                         {case 'MEE'}
                             {var $bgCol = ', backgroundColor: \'#795548\''}
                             {var $borCol = ', borderColor: \'#795548\''}
                             {var $txtCol = ', textColor: \'#795548\''}
                         {case 'TOU'}
-                            {var $bgCol = ', backgroundColor: \'#d9534f\''}
-                            {var $borCol = ', borderColor: \'#d9534f\''}
-                            {var $txtCol = ', textColor: \'#d9534f\''}
+                            {var $bgCol = ', backgroundColor: \'#f0ad4e\''}
+                            {var $borCol = ', borderColor: \'#f0ad4e\''}
+                            {var $txtCol = ', textColor: \'#f0ad4e\''}
+                        {case 'CMP'}
+                            {var $bgCol = ', backgroundColor: \'#5bc0de\''}
+                            {var $borCol = ', borderColor: \'#5bc0de\''}
+                            {var $txtCol = ', textColor: \'#5bc0de\''}
                     {/switch}
                     {if !property_exists($evnt, 'myAttendance') || !property_exists($evnt->myAttendance, 'preStatus')}
                         {var $bgCol = ', backgroundColor: \'inherit\''}
