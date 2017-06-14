@@ -16,6 +16,25 @@ class HomepagePresenter extends SecuredPresenter {
         $this->setLevelCaptions(["0" => ["caption" => "Přehled", "link" => $this->link("Homepage:")]]);
     }
     
+    public function beforeRender() {
+        parent::beforeRender();
+        $this->template->addFilter('lastLogin', function ($lastLogin) {
+            $diff = date("U") - strtotime($lastLogin);
+            if($diff == 1) return "před vteřinou";
+            if($diff < 60) return "před $diff vteřinami";
+            if($diff < 120) return "před minutou";
+            $diffMinutes = round($diff / 60);
+            if($diff < 1800) return "před $diffMinutes minutami";
+            if($diff < 3600) return "před půl hodinou";
+            if($diff < 7200) return "před hodinou";
+            $diffHours = round($diff / 3600);
+            if($diff < 86400) return "před $diffHours hodinami";
+            $diffDays = round($diff / 86400);
+            if($diff < 172800) return "před 1 dnem";
+            return "před $diffDays dny";
+        });
+    }
+    
     public function renderDefault() {
         $eventsObj = new \Tymy\Events($this->tapiAuthenticator, $this);
         $events = $eventsObj->loadYearEvents(NULL, NULL);
@@ -28,7 +47,13 @@ class HomepagePresenter extends SecuredPresenter {
         $this->template->evMonths = $events->eventsMonthly;
         $this->template->events = $events->getData();
         $this->template->eventTypes = $this->getEventTypes();
-        $this->template->users = $this->getUsers()->data;
+        $usersArray = $this->getUsers()->data;
+        usort($usersArray, array( $this, 'sortUsersByLastLogin' ));
+        $this->template->users = $usersArray;
+    }
+    
+    private static function sortUsersByLastLogin($a, $b){
+        return strtotime($a->lastLogin) < strtotime($b->lastLogin) ? 1 : -1;
     }
 
 }
