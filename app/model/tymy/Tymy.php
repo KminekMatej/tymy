@@ -275,17 +275,5 @@ abstract class Tymy extends Nette\Object{
             $player->errCnt++;
             $player->errFls[] = "jerseyNumber";
         }
-        if (!isset($player->street) || empty($player->street)) {
-            $player->errCnt++;
-            $player->errFls[] = "street";
-        }
-        if (!isset($player->city) || empty($player->city)) {
-            $player->errCnt++;
-            $player->errFls[] = "city";
-        }
-        if (!isset($player->zipCode) || empty($player->zipCode)) {
-            $player->errCnt++;
-            $player->errFls[] = "zipCode";
-        }
     }
 }
