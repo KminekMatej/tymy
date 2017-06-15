@@ -94,12 +94,8 @@
         </div>
 
         <div class="col-md-5 agenda-wrapper my-3" n:snippet="events">
-            {dump $agendaFrom}
-            {dump $agendaTo}
             {var $actMonth=$agendaFrom}
             {while strtotime($actMonth)<=strtotime($agendaTo)}
-                
-
                 <div class="card sh-box agenda" data-month="{$actMonth}" style="display: none">
                     <div class="card-header">
                         <span class="mr-auto">Agenda</span>
