@@ -9,6 +9,7 @@ use Nette\Utils\Strings;
 
 class EventPresenter extends SecuredPresenter {
         
+    private $events;
     private $eventsFrom;
     private $eventsTo;
     private $eventsJSObject;
@@ -49,15 +50,17 @@ class EventPresenter extends SecuredPresenter {
     }
 
     public function renderDefault() {
-        $eventsObj = new \Tymy\Events($this->tapiAuthenticator, $this);
-        $events = $eventsObj->loadYearEvents(NULL, NULL);
-
-        $this->template->agendaFrom = date("Y-m", strtotime($events->eventsFrom));
-        $this->template->agendaTo = date("Y-m", strtotime($events->eventsTo));
+        if(!$this->events){
+            $eventsObj = new \Tymy\Events($this->tapiAuthenticator, $this);
+            $this->events = $eventsObj->loadYearEvents(NULL, NULL);
+        }
+        
+        $this->template->agendaFrom = date("Y-m", strtotime($this->events->eventsFrom));
+        $this->template->agendaTo = date("Y-m", strtotime($this->events->eventsTo));
         $this->template->currY = date("Y");
         $this->template->currM = date("m");
-        $this->template->evMonths = $events->eventsMonthly;
-        $this->template->events = $events->getData();
+        $this->template->evMonths = $this->events->eventsMonthly;
+        $this->template->events = $this->events->getData();
         $this->template->eventTypes = $this->getEventTypes();
     }
     
@@ -113,8 +116,8 @@ class EventPresenter extends SecuredPresenter {
     public function handleEventLoad($date = NULL, $direction = NULL) {
         if ($this->isAjax()) {
             $eventsObj = new \Tymy\Events($this->tapiAuthenticator, $this);
-            $events = $eventsObj->loadYearEvents($date, $direction);
-            $this->payload->events = $events->eventsJSObject;
+            $this->events = $eventsObj->loadYearEvents($date, $direction);
+            $this->payload->events = $this->events->eventsJSObject;
             $this->redrawControl("events");
         }
     }

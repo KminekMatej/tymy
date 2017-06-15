@@ -16,7 +16,7 @@ function loadAgenda(purl) {
             datePlus = year + "-" + ("0" + (date.month() + 2)).slice(-2);
             dateMinus = year + "-" + ("0" + (date.month())).slice(-2);
         }
-        if ($("DIV.agenda[data-month='" + datePlus + "']").length == 0) {
+        if ($("DIV.agenda[data-month='" + datePlus + "']").length == 0 && purl) {
             $.nette.ajax({
                 url: purl+"?date=" + datePlus + "&direction=1&do=eventLoad",
                 complete: function (payload) {
@@ -25,7 +25,7 @@ function loadAgenda(purl) {
                     loadAgenda();
                 }
             });
-        } else if ($("DIV.agenda[data-month='" + dateMinus + "']").length == 0) {
+        } else if ($("DIV.agenda[data-month='" + dateMinus + "']").length == 0 && purl) {
             $.nette.ajax({
                 url: purl+"?date=" + dateMinus + "&direction=-1&do=eventload",
                 complete: function (payload) {

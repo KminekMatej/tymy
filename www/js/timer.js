@@ -1,7 +1,7 @@
 $(function () {
     $.nette.init();
     
-    setTimeout(function(){nav();}, 5000);
+//    setTimeout(function(){nav();}, 5000);
 
     function nav(){
         $.nette.ajax({
