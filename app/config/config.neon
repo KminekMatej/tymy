@@ -14,6 +14,7 @@ session:
 
 services:
 	- App\Model\TymyUserManager (%tym%)
+	- App\Model\Supplier(%tym%)
 	- App\Forms\FormFactory
 	- App\Forms\SignInFormFactory
 	- App\Forms\SignUpFormFactory

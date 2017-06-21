@@ -11,6 +11,9 @@ use App\Model;
  */
 abstract class BasePresenter extends Nette\Application\UI\Presenter {
     
+    /** @var \App\Model\Supplier @inject */
+    public $supplier;
+    
     public function beforeRender() {
         parent::beforeRender();
         
@@ -18,8 +21,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
         
         $this->template->js = \Tracy\Debugger::$productionMode ? "min.js" : "js";
         $this->template->css = \Tracy\Debugger::$productionMode ? "min.css" : "css";
-        
-        $this->template->tym = $this->getSession()->getSection("tymy")->tym;
+        $this->template->tym = $this->supplier->getTym();
         
         $this->template->addFilter('monthName', function ($number) {
             switch ($number) {
