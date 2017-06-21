@@ -137,18 +137,35 @@ final class Events extends Tymy{
         $this->eventsMonthly = [];
         
         foreach ($data as $ev) {
-            $this->eventsJSObject[] = (object)[
-                    "id"=>$ev->id,
-                    "title"=>$ev->caption,
-                    "start"=>$ev->startTime,
-                    "end"=>$ev->endTime,
-                    "url"=>$this->presenter->link('event', array('udalost'=>$ev->id . "-" . $ev->webName))
-                    ];
-            
+            $eventColor = $this->calendarItemColor($ev);
+            $eventProps = [
+                "id" => $ev->id,
+                "title" => $ev->caption,
+                "start" => $ev->startTime,
+                "end" => $ev->endTime,
+                "url" => $this->presenter->link('Event:event', array('udalost' => $ev->id . "-" . $ev->webName))
+            ];
+            $this->eventsJSObject[] = (object)array_merge($eventProps, $eventColor);
             $month = date("Y-m", strtotime($ev->startTime));
             $this->eventsMonthly[$month][] = $ev;
         }
-        
         return $this;
     }
+    
+    private function calendarItemColor($event) {
+        $colorList = [
+            "TRA" => '#5cb85c',
+            "RUN" => '#0275d8',
+            "MEE" => '#795548',
+            "TOU" => '#f0ad4e',
+            "CMP" => '#5bc0de',
+            ];
+        $eventColor = [];
+        $invertColors = !property_exists($event, 'myAttendance') || !property_exists($event->myAttendance, 'preStatus');
+        $eventColor["borderColor"] = $colorList[$event->type];
+        $eventColor["backgroundColor"] = $invertColors ? 'white' : $colorList[$event->type];
+        $eventColor["textColor"] = $invertColors ? $colorList[$event->type] : '';
+        return $eventColor;
+    }
+
 }

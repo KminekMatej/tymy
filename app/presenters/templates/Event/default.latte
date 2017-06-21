@@ -13,6 +13,7 @@
 <script src="{$basePath}/resources/fullcalendar/fullcalendar.{$js}"></script>
 <script src="{$basePath}/resources/fullcalendar/locale/cs.js"></script>
 <script src="{$basePath}/js/timer.js"></script>
+{dump $events}
 <script>
     $(document).ready(function () {
         $('#calendar').fullCalendar({
@@ -22,38 +23,7 @@
             events: function(start, end, timezone, callback) {
                 var events = [];
                 {foreach $events as $evnt}
-                    {var $borCol = ''}
-                    {var $bgCol = ''}
-                    {var $txtCol = ''}
-                    {switch $evnt->type} 
-                        {case 'TRA'}
-                            {var $bgCol = ', backgroundColor: \'#5cb85c\''}
-                            {var $borCol = ', borderColor: \'#5cb85c\''}
-                            {var $txtCol = ', textColor: \'#5cb85c\''}
-                        {case 'RUN'}
-                            {var $bgCol = ', backgroundColor: \'#0275d8\''}
-                            {var $borCol = ', borderColor: \'#0275d8\''}
-                            {var $txtCol = ', textColor: \'#0275d8\''}
-                        {case 'MEE'}
-                            {var $bgCol = ', backgroundColor: \'#795548\''}
-                            {var $borCol = ', borderColor: \'#795548\''}
-                            {var $txtCol = ', textColor: \'#795548\''}
-                        {case 'TOU'}
-                            {var $bgCol = ', backgroundColor: \'#f0ad4e\''}
-                            {var $borCol = ', borderColor: \'#f0ad4e\''}
-                            {var $txtCol = ', textColor: \'#f0ad4e\''}
-                        {case 'CMP'}
-                            {var $bgCol = ', backgroundColor: \'#5bc0de\''}
-                            {var $borCol = ', borderColor: \'#5bc0de\''}
-                            {var $txtCol = ', textColor: \'#5bc0de\''}
-                    {/switch}
-                    {if !property_exists($evnt, 'myAttendance') || !property_exists($evnt->myAttendance, 'preStatus')}
-                        {var $bgCol = ', backgroundColor: \'inherit\''}
-                    {else}
-                        {var $txtCol = ''}
-                    {/if}
-                    
-                    events.push({l}id: {$evnt->id}, title: {$evnt->caption},start: {$evnt->startTime},end: {$evnt->endTime} {$bgCol|noescape} {$borCol|noescape} {$txtCol|noescape} ,url: {$presenter->link('event', $evnt->id . '-' . $evnt->webName)}{r});
+                    events.push({l}id: {$evnt->id}, title: {$evnt->title},start: {$evnt->start},end: {$evnt->end},backgroundColor: {$evnt->backgroundColor},borderColor: {$evnt->borderColor},textColor: {$evnt->textColor},url: {$evnt->url}{r});
                 {/foreach}
                 callback(events);
             },
@@ -102,7 +72,7 @@
                         <button class="btn btn-sm btn-secondary float-right" title="Zobrazit/skrýt již proběhlé akce" onclick="togglePast()"><i class="fa fa-eye" aria-hidden="true"></i></button>
                     </div>
                     <div class="card-block">
-                        {ifset $evMonths[$actMonth]}
+                        {if isset($evMonths[$actMonth]) && count($evMonths[$actMonth]) > 0 }
                             {foreach $evMonths[$actMonth] as $ev}
                                 {var $past = strtotime($ev->closeTime) < strtotime(date('Ymd')) ? 'evnt-past collapse'}
                                 
@@ -134,7 +104,7 @@
                             {/foreach}
                         {else}
                             Žádná událost
-                        {/ifset}
+                        {/if}
                     </div>
                 </div>
                 {php $actMonth=date('Y-m', strtotime($actMonth.' + 1 month'));}

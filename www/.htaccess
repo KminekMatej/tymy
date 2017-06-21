@@ -8,7 +8,7 @@
 # enable cool URL
 <IfModule mod_rewrite.c>
 	RewriteEngine On
-	RewriteBase /tymy
+	#RewriteBase /tymy
 
 	# use HTTPS
 	RewriteCond %{HTTPS} !on
@@ -20,7 +20,7 @@
 	# front controller
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d
-	RewriteRule !\.(pdf|js|ico|gif|jpg|png|css|rar|zip|tar\.gz|map)$ index.php [L]
+	RewriteRule !\.(pdf|js|ico|gif|jpg|png|css|rar|zip|tar|woff|woff2|ttf\.gz|map)$ index.php [L]
 </IfModule>
 
 # enable gzip compression

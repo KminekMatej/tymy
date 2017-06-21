@@ -60,7 +60,7 @@ class EventPresenter extends SecuredPresenter {
         $this->template->currY = date("Y");
         $this->template->currM = date("m");
         $this->template->evMonths = $this->events->eventsMonthly;
-        $this->template->events = $this->events->getData();
+        $this->template->events = $this->events->eventsJSObject;
         $this->template->eventTypes = $this->getEventTypes();
     }
     

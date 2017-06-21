@@ -21,7 +21,8 @@ function loadAgenda(purl) {
                 url: purl+"?date=" + datePlus + "&direction=1&do=eventLoad",
                 complete: function (payload) {
                     $('#calendar').fullCalendar('removeEvents');
-                    $('#calendar').fullCalendar('renderEvents', payload.responseJSON.events, true);
+                    $('#calendar').fullCalendar('renderEvents', payload.responseJSON.events, false);
+                    $('#calendar').fullCalendar('rerenderEvents');
                     loadAgenda();
                 }
             });
@@ -30,7 +31,8 @@ function loadAgenda(purl) {
                 url: purl+"?date=" + dateMinus + "&direction=-1&do=eventload",
                 complete: function (payload) {
                     $('#calendar').fullCalendar('removeEvents');
-                    $('#calendar').fullCalendar('renderEvents', payload.responseJSON.events, true);
+                    $('#calendar').fullCalendar('renderEvents', payload.responseJSON.events, false);
+                    $('#calendar').fullCalendar('rerenderEvents');
                     loadAgenda();
                 }
             });

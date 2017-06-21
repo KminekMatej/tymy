@@ -40,7 +40,7 @@ class HomepagePresenter extends SecuredPresenter {
         $this->template->currY = date("Y");
         $this->template->currM = date("m");
         $this->template->evMonths = $events->eventsMonthly;
-        $this->template->events = $events->getData();
+        $this->template->events = $events->eventsJSObject;
         $this->template->eventTypes = $this->getEventTypes();
         $usersArray = $this->getUsers()->data;
         usort($usersArray, array( $this, 'sortUsersByLastLogin' ));
