@@ -160,8 +160,6 @@ class APIUsersTest extends Tester\TestCase {
         return [
             ["35163531"],
             ["adwskfnlx"],
-            ["oáwýeřzno3wčt"],
-            ["38ře7ž63e1d"]
         ];
     }
 
