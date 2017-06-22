@@ -66,7 +66,7 @@ class DiscussionPresenterTest extends Tester\TestCase {
     }
 
     /**
-     * 
+     *
      * @dataProvider getDiscussionNames
      */
     function testActionDiscussion($discussionName){
@@ -77,18 +77,21 @@ class DiscussionPresenterTest extends Tester\TestCase {
 
         Assert::type('Nette\Application\Responses\TextResponse', $response);
         
-        $html = (string)htmlentities($response->getSource());
+        $re = '/&(?!(?:apos|quot|[gl]t|amp);|#)/';
+
+        $dom = NULL;
+        $html = (string)$response->getSource();
+        //replace unescaped ampersands in html to prevent tests from failing
+        $html = preg_replace($re, "&amp;", $html);
         
         $dom = Tester\DomQuery::fromHtml($html);
-        var_dump($dom);
-        var_dump($dom->css2xpath('div#snippet-navbar-nav'));
         //has navbar
         Assert::true($dom->has('div#snippet-navbar-nav'));
-        //Assert::true($dom->has('nav.navbar'));
+        
         //has breadcrumbs
         
         Assert::true($dom->has('div.container div.row div.col ol.breadcrumb'));
-        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 2);
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 3);
         
         Assert::equal(count($dom->find('div.container.my-2 div.row.justify-content-md-center')), 2);
         Assert::true($dom->has('div.container.my-2 div.row.justify-content-md-center div.col-md-10 textarea#addPost'));
