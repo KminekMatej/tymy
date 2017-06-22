@@ -54,7 +54,7 @@ class DiscussionPresenterTest extends Tester\TestCase {
         //has breadcrumbs
         Assert::true($dom->has('div.container'));
         Assert::true($dom->has('ol.breadcrumb'));
-        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 1);
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 2);
         
         Assert::true($dom->has('div.container.discussions'));
         Assert::true(count($dom->find('div.container.discussions div.row')) >= 1);
@@ -83,6 +83,7 @@ class DiscussionPresenterTest extends Tester\TestCase {
         var_dump($dom);
         //has navbar
         Assert::true($dom->has('div#snippet-navbar-nav'));
+        //Assert::true($dom->has('nav.navbar'));
         //has breadcrumbs
         
         Assert::true($dom->has('div.container div.row div.col ol.breadcrumb'));
