@@ -6,10 +6,11 @@
 <html>
 <head>
 	<meta charset="utf-8" />
+        <meta name="author" content="Matej Kminek">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
 
         <title>{ifset $title}{$title|striptags} | {/ifset}{$tym|firstUpper} | Tymy.CZ v2</title>
 
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
         {block styles}
         <link rel="stylesheet" href="{$basePath}/resources/tether/css/tether.{$css}" />
         <link rel="stylesheet" href="{$basePath}/resources/bootstrap4/css/bootstrap.{$css}" />
