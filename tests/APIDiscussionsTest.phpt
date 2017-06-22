@@ -168,13 +168,14 @@ class APIDiscussionsTest extends Tester\TestCase {
             Assert::type("bool",$dis->canWrite);
             Assert::type("bool",$dis->canDelete);
             Assert::type("bool",$dis->canStick);
-            
-            Assert::true(is_object($dis->newInfo));
-            Assert::type("int", $dis->newInfo->newsCount);
-            Assert::type("int", $dis->newInfo->discussionId);
-            Assert::same($dis->id, $dis->newInfo->discussionId);
-            Assert::type("string", $dis->newInfo->lastVisit);
-            Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $dis->newInfo->lastVisit)); //timezone correction check
+            if ($dis->newPosts > 0) {
+                Assert::true(is_object($dis->newInfo));
+                Assert::type("int", $dis->newInfo->newsCount);
+                Assert::type("int", $dis->newInfo->discussionId);
+                Assert::same($dis->id, $dis->newInfo->discussionId);
+                Assert::type("string", $dis->newInfo->lastVisit);
+                Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $dis->newInfo->lastVisit)); //timezone correction check
+            }
         }
     }
 
