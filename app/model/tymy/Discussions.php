@@ -32,8 +32,9 @@ final class Discussions extends Tymy{
         foreach ($data as $discussion) {
             $discussion->webName = \Nette\Utils\Strings::webalize($discussion->caption);
             if ($this->withNew){
-                $this->getResult()->menuWarningCount += $discussion->newInfo->newsCount;
-                $this->timezone($discussion->newInfo->lastVisit);
+                $this->getResult()->menuWarningCount += $discussion->newPosts;
+                if(property_exists($discussion, "newInfo"))
+                    $this->timezone($discussion->newInfo->lastVisit);
             }
                 
         }
