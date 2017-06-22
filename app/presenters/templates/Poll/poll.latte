@@ -64,10 +64,10 @@
                                 <div class="col-3 py-3 option" id="{$opt->id}">
                                     <h5 n:if="!$poll->radio">{$opt->caption}</h5>
                                     {if $opt->type == 'TEXT'}
-                                        <input type="text" value="{ifset $poll->myVotes[$opt->id]}{$poll->myVotes[$opt->id]->stringValue}{/ifset}" class="form-control">
+                                        <input type="text" value="{ifset $poll->myVotes[$opt->id]}{$poll->myVotes[$opt->id]->stringValue}{/ifset}" class="form-control" />
                                     {/if}
                                     {if $opt->type == 'NUMBER'}
-                                        <input type="number" value="{ifset $poll->myVotes[$opt->id]}{$poll->myVotes[$opt->id]->numericValue}{/ifset}" class="form-control">
+                                        <input type="number" value="{ifset $poll->myVotes[$opt->id]}{$poll->myVotes[$opt->id]->numericValue}{/ifset}" class="form-control" />
                                     {/if}
                                     {if $opt->type == 'BOOLEAN'}
                                         {if $poll->radio}

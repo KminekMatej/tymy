@@ -118,7 +118,7 @@
                                 {breakIf strtotime($usr->lastLogin) < date('U', strtotime('- 5 minutes'))}
                                 <figure class="figure text-center" style="width: 100px">
                                     <a href="{plink Team:player $usr->webName}" title="{$usr->lastLogin|date:'j.n.Y H:i:s'}">
-                                        <img src="http://{$tym}.tymy.cz/{$usr->pictureUrl}" class="figure-img img-fluid rounded" alt="{$usr->callName}">
+                                        <img src="http://{$tym}.tymy.cz/{$usr->pictureUrl}" class="figure-img img-fluid rounded" alt="{$usr->callName}" />
                                         <figcaption class="figure-caption">{$usr->callName}</figcaption>
                                         <figcaption class="figure-caption" style="font-size: 70%; display: inline-block">{$usr->lastLogin|lastLogin}</figcaption>
                                     </a>
@@ -129,7 +129,7 @@
                             {foreach $users as $usr}
                                 <figure class="figure text-center" style="width: 100px">
                                     <a href="{plink Team:player $usr->webName}" title="{$usr->lastLogin|date:'j.n.Y H:i:s'}">
-                                        <img src="http://{$tym}.tymy.cz/{$usr->pictureUrl}" class="figure-img img-fluid rounded" alt="{$usr->callName}">
+                                        <img src="http://{$tym}.tymy.cz/{$usr->pictureUrl}" class="figure-img img-fluid rounded" alt="{$usr->callName}" />
                                         <figcaption class="figure-caption">{$usr->callName}</figcaption>
                                         <figcaption class="figure-caption" style="font-size: 70%; display: inline-block">{$usr->lastLogin|lastLogin}</figcaption>
                                     </a>

@@ -58,7 +58,7 @@ $( document ).ready(function() {
                             <span class="float-md-right mx-2">{$item->createdAt|date:'j.n.Y G:i:s'}</span>
                         </div>
                         <div class="card-block">
-                            <img class="user_pic" src="http://{$tym}.tymy.cz/{$item->createdBy->pictureUrl}">
+                            <img class="user_pic" src="http://{$tym}.tymy.cz/{$item->createdBy->pictureUrl}" />
                             <div class="card-text" id="content_{$item->id}">
                                 {ifset $item->post}{$item->post|noescape}{/ifset}
                             </div>

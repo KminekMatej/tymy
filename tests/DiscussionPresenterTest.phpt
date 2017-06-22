@@ -81,6 +81,7 @@ class DiscussionPresenterTest extends Tester\TestCase {
         
         $dom = Tester\DomQuery::fromHtml($html);
         var_dump($dom);
+        var_dump($dom->css2xpath('div#snippet-navbar-nav'));
         //has navbar
         Assert::true($dom->has('div#snippet-navbar-nav'));
         //Assert::true($dom->has('nav.navbar'));

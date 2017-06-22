@@ -44,7 +44,7 @@
                         <div class="tab-pane fade show active" id="osobni-udaje" role="tabpanel">
                             <table class="table">
                                 <tr>
-                                    <th>Profilovka:</th><td n:class="in_array('pictureUrl',$player->errFls) ? has-danger"><img src="http://{$tym}.tymy.cz/{$player->pictureUrl}"></td>
+                                    <th>Profilovka:</th><td n:class="in_array('pictureUrl',$player->errFls) ? has-danger"><img src="http://{$tym}.tymy.cz/{$player->pictureUrl}" /></td>
                                 </tr>
                                 <tr>
                                     <th>Pohlaví:</th><td n:class="in_array('gender',$player->errFls) ? has-danger">
@@ -56,19 +56,19 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>Jméno:</th><td n:class="in_array('firstName',$player->errFls) ? has-danger"><input type="text" value="{$player->firstName}" class="form-control col-6"></td>
+                                    <th>Jméno:</th><td n:class="in_array('firstName',$player->errFls) ? has-danger"><input type="text" value="{$player->firstName}" class="form-control col-6" /></td>
                                 </tr>
                                 <tr>
-                                    <th>Příjmení:</th><td n:class="in_array('lastName',$player->errFls) ? has-danger"><input type="text" value="{$player->lastName}" class="form-control col-6"></td>
+                                    <th>Příjmení:</th><td n:class="in_array('lastName',$player->errFls) ? has-danger"><input type="text" value="{$player->lastName}" class="form-control col-6" /></td>
                                 </tr>
                                 <tr>
-                                    <th>Telefon:</th><td n:class="in_array('phone',$player->errFls) ? has-danger"><input type="text" value="{$player->phone}" class="form-control col-6"></td>
+                                    <th>Telefon:</th><td n:class="in_array('phone',$player->errFls) ? has-danger"><input type="text" value="{$player->phone}" class="form-control col-6" /></td>
                                 </tr>
                                 <tr>
-                                    <th>E-mail:</th><td n:class="in_array('email',$player->errFls) ? has-danger"><div class="input-group"><input type="text" value="{$player->email}" class="form-control col-6"><div class="input-group-addon">{if $player->email != ""}<a href="mailto:{$player->email}">{/if}<i class="fa fa-envelope-o" aria-hidden="true"></i>{if $player->email!=""}</a>{/if}</div></div></td>
+                                    <th>E-mail:</th><td n:class="in_array('email',$player->errFls) ? has-danger"><div class="input-group"><input type="text" value="{$player->email}" class="form-control col-6" /><div class="input-group-addon">{if $player->email != ""}<a href="mailto:{$player->email}">{/if}<i class="fa fa-envelope-o" aria-hidden="true"></i>{if $player->email!=""}</a>{/if}</div></div></td>
                                 </tr>
                                 <tr>
-                                    <th>Datum narození:</th><td n:class="in_array('birthDate',$player->errFls) ? has-danger"><input type="text" value="{$player->birthDate|date:'d.m.Y'}" class="form-control col-6"></td>
+                                    <th>Datum narození:</th><td n:class="in_array('birthDate',$player->errFls) ? has-danger"><input type="text" value="{$player->birthDate|date:'d.m.Y'}" class="form-control col-6" /></td>
                                 </tr>
                                 <tr>
                                     <th>Měsíc svátku:</th><td n:class="in_array('nameDayMonth',$player->errFls) ? has-danger">
@@ -82,7 +82,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>Den svátku:</th><td n:class="in_array('nameDayDay',$player->errFls) ? has-danger"><input type="number" value="{$player->nameDayDay}" min="1" max="31" class="form-control col-2"></td>
+                                    <th>Den svátku:</th><td n:class="in_array('nameDayDay',$player->errFls) ? has-danger"><input type="number" value="{$player->nameDayDay}" min="1" max="31" class="form-control col-2" /></td>
                                 </tr>
                                 <tr>
                                     <th>Jazyk:</th>
@@ -100,13 +100,13 @@
                         <div class="tab-pane fade" id="prihlaseni" role="tabpanel">
                             <table class="table">
                                 <tr>
-                                    <th>Zobrazované jméno:</th><td n:class="in_array('displayName',$player->errFls) ? has-danger"><input type="text" value="{$player->displayName}" class="form-control col-6"></td>
+                                    <th>Zobrazované jméno:</th><td n:class="in_array('displayName',$player->errFls) ? has-danger"><input type="text" value="{$player->displayName}" class="form-control col-6" /></td>
                                 </tr>
                                 <tr>
-                                    <th>Uživatelské jméno:</th><td n:class="in_array('login',$player->errFls) ? has-danger"><input type="text" value="{$player->login}" class="form-control col-6"></td>
+                                    <th>Uživatelské jméno:</th><td n:class="in_array('login',$player->errFls) ? has-danger"><input type="text" value="{$player->login}" class="form-control col-6" /></td>
                                 </tr>
                                 <tr>
-                                    <th>Nové heslo:</th><td><input type="password" value="" class="form-control col-6"></td>
+                                    <th>Nové heslo:</th><td><input type="password" value="" class="form-control col-6" /></td>
                                 </tr>
                             </table>
                         </div>
@@ -125,7 +125,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>Číslo dresu:</th><td n:class="in_array('jerseyNumber',$player->errFls) ? has-danger"><input type="number" value="{$player->jerseyNumber}" class="form-control col-3"></td>
+                                    <th>Číslo dresu:</th><td n:class="in_array('jerseyNumber',$player->errFls) ? has-danger"><input type="number" value="{$player->jerseyNumber}" class="form-control col-3" /></td>
                                 </tr>
                             </table>
                         </div>
@@ -133,13 +133,13 @@
                         <div class="tab-pane fade" id="adresa" role="tabpanel">
                             <table class="table">
                                 <tr>
-                                    <th>Ulice:</th><td n:class="in_array('street',$player->errFls) ? has-danger"><input type="text" value="{$player->street}" class="form-control col-6"></td>
+                                    <th>Ulice:</th><td n:class="in_array('street',$player->errFls) ? has-danger"><input type="text" value="{$player->street}" class="form-control col-6" /></td>
                                 </tr>
                                 <tr>
-                                    <th>Město:</th><td n:class="in_array('city',$player->errFls) ? has-danger"><input type="text" value="{$player->city}" class="form-control col-6"></td>
+                                    <th>Město:</th><td n:class="in_array('city',$player->errFls) ? has-danger"><input type="text" value="{$player->city}" class="form-control col-6" /></td>
                                 </tr>
                                 <tr>
-                                    <th>PSČ:</th><td n:class="in_array('zipCode',$player->errFls) ? has-danger"><input type="text" value="{$player->zipCode}" class="form-control col-3"></td>
+                                    <th>PSČ:</th><td n:class="in_array('zipCode',$player->errFls) ? has-danger"><input type="text" value="{$player->zipCode}" class="form-control col-3" /></td>
                                 </tr>
                             </table>
 

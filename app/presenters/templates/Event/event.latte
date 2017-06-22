@@ -29,7 +29,7 @@
                         <div class="col-md-8 d-flex align-items-end">
                             <div class="btn-group input-group pb-2" role="group" aria-label="Basic example" id="action-{$event->id}">
                                             {var $evnt_desc = isset($event->myAttendance->preDescription) ? $event->myAttendance->preDescription : ''}
-                                            <input type="text" class="form-control form-control-sm" title="Poznámka" name="preStatusDesc" value="{$evnt_desc}">
+                                            <input type="text" class="form-control form-control-sm" title="Poznámka" name="preStatusDesc" value="{$evnt_desc}" />
 
                                             {var $myPreStatus = "not-set"}
                                             {var $myPostStatus = "not-set"}
@@ -83,7 +83,7 @@
                                                     {foreach $usrs as $usr}
                                                             <figure class="figure text-center" style="width: 100px">
                                                                 <a href="{plink Team:player $usr->webName}">
-                                                                    <img src="http://{$tym}.tymy.cz/{$usr->pictureUrl}" class="figure-img img-fluid rounded" alt="{$usr->callName}">
+                                                                    <img src="http://{$tym}.tymy.cz/{$usr->pictureUrl}" class="figure-img img-fluid rounded" alt="{$usr->callName}" />
                                                                     <figcaption class="figure-caption">{$usr->callName}</figcaption>
                                                                     <figcaption class="figure-caption" style="font-size: 70%; display: inline-block">{$usr->preDescription}</figcaption>
                                                                 </a>
