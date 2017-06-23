@@ -54,7 +54,9 @@ final class Users extends Tymy{
                 $this->getResult()->me = (object)$player;
             }
             $player->webName = Strings::webalize($player->fullName);
-            $this->timezone($player->lastLogin);
+            if(property_exists($player, "lastLogin")){
+                $this->timezone($player->lastLogin);
+            }
             $players[$player->id] = $player;
         }
         $this->getResult()->data = $players;

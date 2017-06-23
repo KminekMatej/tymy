@@ -115,6 +115,8 @@
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="online" role="tabpanel">
                             {foreach $users as $usr}
+                                {dump $usr}
+                                {breakIf !property_exists($usr, 'lastLogin')}
                                 {breakIf strtotime($usr->lastLogin) < date('U', strtotime('- 5 minutes'))}
                                 <figure class="figure text-center" style="width: 100px">
                                     <a href="{plink Team:player $usr->webName}" title="{$usr->lastLogin|date:'j.n.Y H:i:s'}">
@@ -128,10 +130,12 @@
                         <div class="tab-pane fade" id="lastLogin" role="tabpanel">
                             {foreach $users as $usr}
                                 <figure class="figure text-center" style="width: 100px">
-                                    <a href="{plink Team:player $usr->webName}" title="{$usr->lastLogin|date:'j.n.Y H:i:s'}">
+                                    {var $lastLogin = property_exists($usr, 'lastLogin') ? ($usr->lastLogin|date:'j.n.Y H:i:s') : 'Nikdy'}
+                                    {var $caption = property_exists($usr, 'lastLogin') ? ($usr->lastLogin|lastLogin) : 'Nikdy'}
+                                    <a href="{plink Team:player $usr->webName}" title="{$lastLogin}">
                                         <img src="http://{$tym}.tymy.cz/{$usr->pictureUrl}" class="figure-img img-fluid rounded" alt="{$usr->callName}" />
                                         <figcaption class="figure-caption">{$usr->callName}</figcaption>
-                                        <figcaption class="figure-caption" style="font-size: 70%; display: inline-block">{$usr->lastLogin|lastLogin}</figcaption>
+                                        <figcaption class="figure-caption" style="font-size: 70%; display: inline-block">{$caption}</figcaption>
                                     </a>
                                 </figure>
                             {/foreach}

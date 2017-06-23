@@ -33,21 +33,31 @@ class HomepagePresenter extends SecuredPresenter {
     public function renderDefault() {
         $eventsObj = new \Tymy\Events($this->tapiAuthenticator, $this);
         $events = $eventsObj->loadYearEvents(NULL, NULL);
-        date("n", strtotime("2017-13-5"));
         $discussions = new \Tymy\Discussions($this->tapiAuthenticator, $this);
-        $this->template->discussions = $discussions->setWithNew(true)->fetch();
         
+        $this->template->discussions = $discussions->setWithNew(true)->fetch();
         $this->template->currY = date("Y");
         $this->template->currM = date("m");
         $this->template->evMonths = $events->eventsMonthly;
         $this->template->events = $events->eventsJSObject;
         $this->template->eventTypes = $this->getEventTypes();
-        $usersArray = $this->getUsers()->data;
-        usort($usersArray, array( $this, 'sortUsersByLastLogin' ));
-        $this->template->users = $usersArray;
+        $this->template->users = $this->sortUsersByLastLogin($this->getUsers()->data);
     }
     
-    private static function sortUsersByLastLogin($a, $b){
+    private function sortUsersByLastLogin($usersArray){
+        $notSetValues = [];
+        foreach ($usersArray as $key => $value) {
+            if(!property_exists($value, "lastLogin")){
+                $notSetValues[] = $value;
+                unset($usersArray[$key]);
+            }
+        }
+        usort($usersArray, array( $this, 'sortUsersComparer' ));
+        return array_merge($usersArray, $notSetValues);
+    }
+    
+    private static function sortUsersComparer($a, $b) {
+        if (!property_exists($a, "lastLogin") || !property_exists($b, "lastLogin")) return 1;
         return strtotime($a->lastLogin) < strtotime($b->lastLogin) ? 1 : -1;
     }
 
