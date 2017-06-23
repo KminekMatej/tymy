@@ -13,7 +13,7 @@ final class Poll extends Tymy{
     
     public function select() {
         if (!isset($this->recId))
-            throw new APIException('Poll ID not set!');
+            throw new \Tymy\Exception\APIException('Poll ID not set!');
         
         $this->fullUrl .= "polls/" .$this->recId;
         return $this;

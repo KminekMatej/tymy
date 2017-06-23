@@ -15,7 +15,7 @@ if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
 
-class APILoginTest extends Tester\TestCase {
+class APILoginTest extends TapiTestCase {
 
     private $container;
 
@@ -28,14 +28,11 @@ class APILoginTest extends Tester\TestCase {
     }
     
     function testLoginSuccess(){
-        var_dump($GLOBALS["testedTeam"]);
         $loginObj = new \Tymy\Login();
-        $loginObj->team($GLOBALS["testedTeam"]["team"])
+        $loginObj->setSupplier($this->supplier)
                 ->setUsername($GLOBALS["testedTeam"]["user"])
                 ->setPassword($GLOBALS["testedTeam"]["pass"])
                 ->fetch();
-        Assert::type("string", $loginObj->team);
-        Assert::equal($loginObj->team, $GLOBALS["testedTeam"]["team"]);
         Assert::true(is_object($loginObj));
         Assert::type("string", $loginObj->result->status);
         Assert::equal($loginObj->result->status, "OK");
@@ -76,7 +73,7 @@ class APILoginTest extends Tester\TestCase {
      */
     function testLoginFails(){
         $loginObj = new \Tymy\Login();
-        $loginObj->team($GLOBALS["testedTeam"]["team"])
+        $loginObj->setSupplier($this->supplier)
                 ->setUsername($GLOBALS["testedTeam"]["user"])
                 ->setPassword("sdfas6df84asd3c")
                 ->fetch();

@@ -40,7 +40,6 @@ class SignInTest extends Tester\TestCase {
         Assert::true($dom->has('input[name="name"]'));
         Assert::true($dom->has('input[name="password"]'));
         Assert::true($dom->has('input[name="send"]'));
-        //Assert::true(FALSE);
     }
     
     /**
@@ -59,8 +58,6 @@ class SignInTest extends Tester\TestCase {
         Assert::true(isset($identity->id));
         Assert::true(isset($identity->roles));
         Assert::true(is_array($identity->roles));
-        Assert::true(isset($identity->tym));
-        Assert::type("string", $identity->tym);
         Assert::true(isset($identity->data["sessionKey"]));
         Assert::equal(strlen($identity->data["sessionKey"]), 28);
         Assert::true(isset($identity->data));

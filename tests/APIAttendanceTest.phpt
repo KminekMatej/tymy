@@ -16,11 +16,9 @@ if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
 
-class APIAttendanceTest extends Tester\TestCase {
+class APIAttendanceTest extends TapiTestCase {
 
     private $container;
-    private $login;
-    private $loginObj;
     private $authenticator;
 
     function __construct(Nette\DI\Container $container) {
@@ -36,21 +34,13 @@ class APIAttendanceTest extends Tester\TestCase {
         parent::tearDown();
     }
     
-    function login(){
-        $this->loginObj = new \Tymy\Login();
-        $this->login = $this->loginObj->team($GLOBALS["testedTeam"]["team"])
-                ->setUsername($GLOBALS["testedTeam"]["user"])
-                ->setPassword($GLOBALS["testedTeam"]["pass"])
-                ->fetch();
-    }
-    
     /**
      * @throws Tymy\Exception\APIException
      */
     function testPlanFailsNoEventId(){
         $attendanceObj = new \Tymy\Attendance();
         $attendance = $attendanceObj
-                ->team($GLOBALS["testedTeam"]["team"])
+                ->setSupplier($this->supplier)
                 ->plan();
     }
     
@@ -60,7 +50,7 @@ class APIAttendanceTest extends Tester\TestCase {
     function testPlanFailsNoPreStatus(){
         $attendanceObj = new \Tymy\Attendance();
         $attendance = $attendanceObj
-                ->team($GLOBALS["testedTeam"]["team"])
+                ->setSupplier($this->supplier)
                 ->recId($GLOBALS["testedTeam"]["testEventId"])
                 ->plan();
     }
