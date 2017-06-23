@@ -68,7 +68,7 @@ class APITymyTest extends Tester\TestCase {
         
         $mockPresenter->getUser()->setAuthenticator($this->authenticator);
         $mockPresenter->getUser()->login("test","test");
-        $this->tymyObj->presenter($mockPresenter);
+        $this->tymyObj->setPresenter($mockPresenter);
         
         Assert::type("string", $this->tymyObj->team);
         Assert::same($this->tymyObj->team, "testteam");

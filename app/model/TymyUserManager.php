@@ -30,18 +30,17 @@ class TymyUserManager implements Nette\Security\IAuthenticator {
         $credentials[1] = md5($credentials[1]); // first login recodes password to md5 hash
         $loginObj = $this->reAuthenticate($credentials);
         $arr = (array) $loginObj->result;
-        $arr["tym"] = $loginObj->team; 
         $arr["hash"] = $credentials[1];
         return new Nette\Security\Identity($loginObj->result->data->id, $loginObj->result->status, $arr );
     }
     
     public function reAuthenticate(array $credentials){
         list($username, $password) = $credentials;
-        
+        $supplier = new \App\Model\Supplier($this->tym);
         $loginObj = new \Tymy\Login();
         
         try {
-            $loginObj->team($this->tym)
+            $loginObj->setSupplier($supplier)
                     ->setUsername($username)
                     ->setPassword($password)
                     ->fetch();

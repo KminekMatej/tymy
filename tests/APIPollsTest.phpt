@@ -60,7 +60,7 @@ class APIPollsTest extends Tester\TestCase {
 
 
         $pollsObj = new \Tymy\Polls();
-        $pollsObj->presenter($mockPresenter)
+        $pollsObj->setPresenter($mockPresenter)
                 ->fetch();
     }
     
@@ -81,7 +81,7 @@ class APIPollsTest extends Tester\TestCase {
 
 
         $pollsObj = new \Tymy\Polls();
-        $pollsObj->presenter($mockPresenter)
+        $pollsObj->setPresenter($mockPresenter)
                 ->fetch();
     }
     

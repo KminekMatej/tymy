@@ -67,7 +67,7 @@ class APIPollTest extends Tester\TestCase {
         $mockPresenter->getUser()->login("test", "test");
 
         $pollObj = new \Tymy\Poll();
-        $pollObj->presenter($mockPresenter)
+        $pollObj->setPresenter($mockPresenter)
                 ->recId(1)
                 ->fetch();
     }
@@ -88,7 +88,7 @@ class APIPollTest extends Tester\TestCase {
         $mockPresenter->getUser()->login("test", "test");
 
         $pollObj = new \Tymy\Poll();
-        $pollObj->presenter($mockPresenter)
+        $pollObj->setPresenter($mockPresenter)
                 ->recId(1)
                 ->fetch();
     }

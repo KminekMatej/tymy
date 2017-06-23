@@ -82,7 +82,7 @@ class APIDiscussionTest extends Tester\TestCase {
 
         $discussionObj = new \Tymy\Discussion(NULL, NULL, TRUE, 1);
         $discussionObj
-                ->presenter($mockPresenter)
+                ->setPresenter($mockPresenter)
                 ->recId(1)
                 ->fetch();
     }
@@ -105,7 +105,7 @@ class APIDiscussionTest extends Tester\TestCase {
 
         $discussionObj = new \Tymy\Discussion(NULL, NULL, TRUE, 1);
         $discussionObj
-                ->presenter($mockPresenter)
+                ->setPresenter($mockPresenter)
                 ->recId(1)
                 ->fetch();
     }

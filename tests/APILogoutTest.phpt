@@ -60,7 +60,7 @@ class APILogoutTest extends Tester\TestCase {
 
 
         $logoutObj = new \Tymy\Logout(NULL);
-        $logoutObj->presenter($mockPresenter)
+        $logoutObj->setPresenter($mockPresenter)
                 ->fetch();
     }
     

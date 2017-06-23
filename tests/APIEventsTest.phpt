@@ -60,7 +60,7 @@ class APIEventsTest extends Tester\TestCase {
 
 
         $eventsObj = new \Tymy\Events();
-        $eventsObj->presenter($mockPresenter)
+        $eventsObj->setPresenter($mockPresenter)
                 ->fetch();
     }
     
@@ -81,7 +81,7 @@ class APIEventsTest extends Tester\TestCase {
 
 
         $eventsObj = new \Tymy\Events();
-        $eventsObj->presenter($mockPresenter)
+        $eventsObj->setPresenter($mockPresenter)
                 ->fetch();
     }
     

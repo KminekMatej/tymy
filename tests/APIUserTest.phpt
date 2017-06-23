@@ -71,7 +71,7 @@ class APIUserTest extends Tester\TestCase {
 
         $userObj = new \Tymy\User();
         $userObj
-                ->presenter($mockPresenter)
+                ->setPresenter($mockPresenter)
                 ->recId(1)
                 ->fetch();
     }
@@ -94,7 +94,7 @@ class APIUserTest extends Tester\TestCase {
 
         $userObj = new \Tymy\User();
         $userObj
-                ->presenter($mockPresenter)
+                ->setPresenter($mockPresenter)
                 ->recId(1)
                 ->fetch();
     }

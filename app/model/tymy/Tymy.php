@@ -14,14 +14,9 @@ use DateTimeZone;
  * @author matej
  */
 abstract class Tymy extends Nette\Object{
-    
-    const TYMY_API = ".tymy.cz/api/";
-    
     protected $result = NULL;
-    protected $protocol;
     /** @var \App\Presenters\SecuredPresenter */
     protected $presenter;
-    protected $team;
     /**
      * recId - root id of record (discussion id, event id, ...)
      * $recId integer 
@@ -31,6 +26,8 @@ abstract class Tymy extends Nette\Object{
     protected $user;
     private $uriParams;
     private $postParams;
+    /** @var \App\Model\Supplier */
+    private $supplier;
     /** @var \Tymy\TracyPanelTymy */
     protected $tymyPanel;
     
@@ -44,6 +41,14 @@ abstract class Tymy extends Nette\Object{
     abstract protected function postProcess();
     
     public function __construct(\App\Model\TymyUserManager $tapiAuthenticator = NULL, Nette\Application\UI\Presenter $presenter = NULL) {
+        $this->initTapiDebugPanel();
+        $this->tapiAuthenticator = $tapiAuthenticator;
+        if($presenter != NULL){
+            $this->setPresenter ($presenter);
+        } 
+    }
+    
+    private function initTapiDebugPanel(){
         $panelId = "TymyAPI";
         if(is_null(\Tracy\Debugger::getBar()->getPanel($panelId))){
             $this->tymyPanel = new \Tymy\TracyPanelTymy;
@@ -51,22 +56,23 @@ abstract class Tymy extends Nette\Object{
         } else {
             $this->tymyPanel = \Tracy\Debugger::getBar()->getPanel($panelId);
         }
-        $this->tapiAuthenticator = $tapiAuthenticator;
-        if($presenter != NULL)
-            $this->presenter ($presenter);
-        $this->https(FALSE);
     }
     
-    public function presenter(Nette\Application\UI\Presenter $presenter){
+    public function setPresenter(Nette\Application\UI\Presenter $presenter){
         $this->presenter = $presenter;
-        $this->user = $presenter->getUser();
-        $this->team($this->user->getIdentity()->data["tym"]);
+        $this->setSupplier ($presenter->supplier);
+        $this->setUser ($presenter->getUser());
         $this->setUriParam("TSID", $this->user->getIdentity()->data["sessionKey"]);
         return $this;
     }
     
-    public function team($team){
-        $this->team = $team;
+    public function setSupplier(\App\Model\Supplier $supplier) {
+        $this->supplier = $supplier;
+        return $this;
+    }
+
+    public function setUser($user) {
+        $this->user = $user;
         return $this;
     }
 
@@ -81,12 +87,8 @@ abstract class Tymy extends Nette\Object{
     }
     
     protected function urlStart() {
-        $this->fullUrl = $this->protocol;
-        if (!isset($this->team))
-            throw new \Tymy\Exception\APIException('Team not set!');
-
-        $this->fullUrl .= "://" . $this->team . self::TYMY_API;
-        rtrim($this->fullUrl, "/");
+        $this->fullUrl = $this->supplier->getApiRoot();
+        $this->fullUrl .= \App\Model\Supplier::URL_SEPARATOR;
         return $this;
     }
     
@@ -112,7 +114,6 @@ abstract class Tymy extends Nette\Object{
             $this->presenter->redirect('Sign:in', ['backlink' => $this->presenter->storeRequest()]);
         }
         
-        
         $data = $this->getData();
 
         $this->postProcess();
@@ -128,16 +129,8 @@ abstract class Tymy extends Nette\Object{
         return $this->postParams;
     }
     
-    public function getProtocol(){
-        return $this->protocol;
-    }
-    
     public function getRecId(){
         return $this->recId;
-    }
-    
-    public function getTeam(){
-        return $this->team;
     }
     
     public function getData(){
@@ -227,11 +220,6 @@ abstract class Tymy extends Nette\Object{
         } else {
             $this->postParams[$key] = $value;
         }
-        return $this;
-    }
-
-    public function https($https = FALSE){
-        $this->protocol = $https ? "https" : "http";
         return $this;
     }
     
