@@ -10,11 +10,11 @@ use Nette\Utils\Strings;
  *
  * @author matej
  */
-final class Users extends Tymy{
+final class Users extends UserInterface{
     
     private $userType;
     
-    public function __construct(\App\Model\TymyUserManager $tapiAuthenticator = NULL, Nette\Application\UI\Presenter $presenter = NULL, $userType = NULL) {
+    public function __construct(\App\Model\TapiAuthenticator $tapiAuthenticator = NULL, Nette\Application\UI\Presenter $presenter = NULL, $userType = NULL) {
         parent::__construct($tapiAuthenticator, $presenter);
         $this->userType = $userType;
     }
@@ -45,19 +45,23 @@ final class Users extends Tymy{
         
         $players = [];
         foreach ($data as $player) {
-            $this->checkPlayerData($player);
             $counts["ALL"]++;
             $counts[$player->status]++;
             if(!property_exists($player, "gender")) $player->gender = "UNKNOWN"; //set default value
+            
+            $player->webName = Strings::webalize($player->fullName);
+            $this->userWarnings($player);
+            $this->userPermissions($player);
+            $this->timezone($player->lastLogin);
+            $players[$player->id] = $player;
             if($player->id == $myId){
                 $this->getResult()->menuWarningCount = $player->errCnt;
                 $this->getResult()->me = (object)$player;
             }
-            $player->webName = Strings::webalize($player->fullName);
-            $this->timezone($player->lastLogin);
-            $players[$player->id] = $player;
         }
         $this->getResult()->data = $players;
         $this->getResult()->counts = $counts;
     }
+    
+    
 }
