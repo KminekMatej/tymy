@@ -119,7 +119,7 @@ class APIAttendanceTest extends Tester\TestCase {
         $mockPresenter = $presenterFactory->createPresenter('Homepage');
         $mockPresenter->autoCanonicalize = FALSE;
 
-        $tapiAuthenticator = new \App\Model\TymyUserManager($GLOBALS["testedTeam"]["team"]);
+        $tapiAuthenticator = new \App\Model\TapiAuthenticator($GLOBALS["testedTeam"]["team"]);
         $mockPresenter->getUser()->setAuthenticator($tapiAuthenticator);
         $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
         

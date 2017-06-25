@@ -47,13 +47,13 @@ class SignInTest extends Tester\TestCase {
      * @throws Nette\Security\AuthenticationException Login failed.
      */
     function testSignInFails(){
-        $tymyUserManager = new \App\Model\TymyUserManager($GLOBALS["testedTeam"]["team"]); 
+        $tymyUserManager = new \App\Model\TapiAuthenticator($GLOBALS["testedTeam"]["team"]); 
         $tymyUserManager->authenticate(["Beatles","Ladyda"]);
         
     }
     
     function testSignInSuccess(){
-        $tymyUserManager = new \App\Model\TymyUserManager($GLOBALS["testedTeam"]["team"]); 
+        $tymyUserManager = new \App\Model\TapiAuthenticator($GLOBALS["testedTeam"]["team"]); 
         $identity = $tymyUserManager->authenticate([$GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]]);
         Assert::type("Nette\Security\Identity", $identity);
         Assert::true(isset($identity->id));

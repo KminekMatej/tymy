@@ -20,7 +20,7 @@ class SignUpFormFactory
 	private $userManager;
 
 
-	public function __construct(FormFactory $factory, Model\TymyUserManager $userManager)
+	public function __construct(FormFactory $factory, Model\TapiAuthenticator $userManager)
 	{
 		$this->factory = $factory;
 		$this->userManager = $userManager;

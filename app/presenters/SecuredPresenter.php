@@ -20,8 +20,12 @@ class SecuredPresenter extends BasePresenter {
     
     protected $levelCaptions;
     
-    /** @var \App\Model\TymyUserManager @inject */
+    
+    /** @var \App\Model\TapiAuthenticator @inject */
     public $tapiAuthenticator;
+    
+    /** @var \App\Model\TapiAuthorizator @inject */
+    public $tapiAuthorizator;
     
     public function getLevelCaptions(){
         return $this->levelCaptions;
@@ -73,6 +77,7 @@ class SecuredPresenter extends BasePresenter {
         $usersObj = new \Tymy\Users($this->tapiAuthenticator, $this, NULL);
         $usersObj->fetch();
         $sessionSection["users"] = $usersObj->getResult();
+        $sessionSection["me"] = $usersObj->getResult()->me;
         return $usersObj->getResult();
     }
 
@@ -84,10 +89,9 @@ class SecuredPresenter extends BasePresenter {
             }
             $this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
         }
+        $this->tapiAuthorizator->setUser($this->getUser()->getIdentity()->getData()["data"]);
         $this->setLevelCaptions(["0" => ["caption" => "Hlavní stránka", "link" => $this->link("Homepage:")]]);
-        $sessionTymy = $this->getSession()->getSection("tymy");
-        $sessionTymy->tym = $this->getUser()->getIdentity()->tym;
-        $this->template->tym = $sessionTymy->tym;
+        $this->template->tym = $this->supplier->getTym();
     }
     
     protected function createComponentNavbar() {

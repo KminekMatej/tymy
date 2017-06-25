@@ -17,7 +17,7 @@ final class Discussion extends Tymy{
     private $search;
     
     
-    public function __construct(\App\Model\TymyUserManager $tapiAuthenticator = NULL, Nette\Application\UI\Presenter $presenter = NULL, $html = FALSE, $page) {
+    public function __construct(\App\Model\TapiAuthenticator $tapiAuthenticator = NULL, Nette\Application\UI\Presenter $presenter = NULL, $html = FALSE, $page) {
         parent::__construct($tapiAuthenticator, $presenter);
         $this->mode = $html ? "html" : "bb";
         $this->page = is_numeric($page) ? $page : 1 ;

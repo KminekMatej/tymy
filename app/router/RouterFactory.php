@@ -20,6 +20,7 @@ class RouterFactory
                 $router[] = new Route('diskuze', 'Discussion:default');
                 $router[] = new Route('udalosti', 'Event:default');
                 $router[] = new Route('tym', 'Team:default');
+                $router[] = new Route('tym/registrovani', 'Team:inits');
                 $router[] = new Route('tym/hraci', 'Team:players');
                 $router[] = new Route('tym/clenove', 'Team:members');
                 $router[] = new Route('tym/marodi', 'Team:sicks');

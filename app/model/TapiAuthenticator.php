@@ -3,13 +3,11 @@
 namespace App\Model;
 
 use Nette;
-use Nette\Utils\Json;
-use Nette\SmartObject;
 
 /**
  * Users management.
  */
-class TymyUserManager implements Nette\Security\IAuthenticator {
+class TapiAuthenticator implements Nette\Security\IAuthenticator {
 
     private $tym;
 
@@ -21,7 +19,7 @@ class TymyUserManager implements Nette\Security\IAuthenticator {
         $this->tym = $tym;
     }
 
-    /**
+        /**
      * Performs an authentication.
      * @return Nette\Security\Identity
      * @throws Nette\Security\AuthenticationException
@@ -32,7 +30,7 @@ class TymyUserManager implements Nette\Security\IAuthenticator {
         $arr = (array) $loginObj->result;
         $arr["tym"] = $loginObj->team; 
         $arr["hash"] = $credentials[1];
-        return new Nette\Security\Identity($loginObj->result->data->id, $loginObj->result->status, $arr );
+        return new Nette\Security\Identity($loginObj->result->data->id, $loginObj->result->data->roles, $arr );
     }
     
     public function reAuthenticate(array $credentials){

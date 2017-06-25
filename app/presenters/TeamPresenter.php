@@ -38,6 +38,12 @@ class TeamPresenter extends SecuredPresenter {
         $this->setView('default');
     }
     
+    public function actionInits() {
+        $this->setLevelCaptions(["2" => ["caption" => "Registrovaní", "link" => $this->link("Team:inits") ] ]);
+        $this->userType = "INIT";
+        $this->setView('default');
+    }
+    
     public function renderDefault() {
         $users = new \Tymy\Users($this->tapiAuthenticator, $this, $this->userType);
         $this->template->users = $users->fetch();;

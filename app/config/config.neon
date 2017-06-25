@@ -3,22 +3,24 @@
 # https://nette.org/security-warning
 #
 application:
-	errorPresenter: Error
-	mapping:
-		*: App\*Module\Presenters\*Presenter
+        errorPresenter: Error
+        mapping:
+            *: App\*Module\Presenters\*Presenter
 
 
 session:
-	expiration: 14 days
+        expiration: 14 days
 
 
 services:
-	- App\Model\TymyUserManager (%tym%)
-	- App\Model\Supplier(%tym%)
-	- App\Forms\FormFactory
-	- App\Forms\SignInFormFactory
-	- App\Forms\SignUpFormFactory
-	router: App\RouterFactory::createRouter
-	#authenticator: UserManager
-	cacheStorage:
-		class: Nette\Caching\Storages\DevNullStorage
+        - App\Model\TapiAuthenticator (%tym%)
+        - App\Model\Supplier(%tym%)
+        - App\Forms\FormFactory
+        - App\Forms\SignInFormFactory
+        - App\Forms\SignUpFormFactory
+        router: App\RouterFactory::createRouter
+        #authenticator: UserManager
+        authorizator:
+            class: App\Model\TapiAuthorizator
+        cacheStorage:
+            class: Nette\Caching\Storages\DevNullStorage

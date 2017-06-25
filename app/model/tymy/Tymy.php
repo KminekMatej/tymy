@@ -34,7 +34,7 @@ abstract class Tymy extends Nette\Object{
     /** @var \Tymy\TracyPanelTymy */
     protected $tymyPanel;
     
-    /** @var \App\Model\TymyUserManager */
+    /** @var \App\Model\TapiAuthenticator */
     protected $tapiAuthenticator;
     
     /** Function to return full URI of select api */
@@ -43,7 +43,7 @@ abstract class Tymy extends Nette\Object{
     /** Function to process after the result from API is obtained, used mainly for formatting or adding new properties to TAPI result */
     abstract protected function postProcess();
     
-    public function __construct(\App\Model\TymyUserManager $tapiAuthenticator = NULL, Nette\Application\UI\Presenter $presenter = NULL) {
+    public function __construct(\App\Model\TapiAuthenticator $tapiAuthenticator = NULL, Nette\Application\UI\Presenter $presenter = NULL) {
         $panelId = "TymyAPI";
         if(is_null(\Tracy\Debugger::getBar()->getPanel($panelId))){
             $this->tymyPanel = new \Tymy\TracyPanelTymy;
@@ -111,7 +111,6 @@ abstract class Tymy extends Nette\Object{
             $this->presenter->flashMessage('You have been signed out due to inactivity. Please sign in again.');
             $this->presenter->redirect('Sign:in', ['backlink' => $this->presenter->storeRequest()]);
         }
-        
         
         $data = $this->getData();
 
@@ -240,40 +239,4 @@ abstract class Tymy extends Nette\Object{
         return $this;
     }
     
-    protected function checkPlayerData(&$player) {
-        $player->errCnt = 0;
-        $player->errFls = [];
-        if (!isset($player->firstName) || empty($player->firstName)) {
-            $player->errCnt++;
-            $player->errFls[] = "firstName";
-        }
-        if (!isset($player->lastName) || empty($player->lastName)) {
-            $player->errCnt++;
-            $player->errFls[] = "lastName";
-        }
-        if (!isset($player->gender) || empty($player->gender)) {
-            $player->errCnt++;
-            $player->errFls[] = "gender";
-        }
-        if (!isset($player->phone) || empty($player->phone)) {
-            $player->errCnt++;
-            $player->errFls[] = "phone";
-        }
-        if (!isset($player->email) || empty($player->email) || filter_var($player->email, FILTER_VALIDATE_EMAIL) === FALSE) {
-            $player->errCnt++;
-            $player->errFls[] = "email";
-        }
-        if (!isset($player->birthDate) || empty($player->birthDate)) {
-            $player->errCnt++;
-            $player->errFls[] = "birthDate";
-        }
-        if (!isset($player->callName) || empty($player->callName)) {
-            $player->errCnt++;
-            $player->errFls[] = "callName";
-        }
-        if (!isset($player->jerseyNumber) || empty($player->jerseyNumber)) {
-            $player->errCnt++;
-            $player->errFls[] = "jerseyNumber";
-        }
-    }
 }
