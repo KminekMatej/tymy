@@ -44,14 +44,14 @@
 
             <div class="card sh-box my-3" n:snippet="attendanceTabs">
                 <div class="card-header">
-                    <ul class="nav nav-tabs card-header-tabs" role="tablist">
+                    <ul class="nav nav-tabs flex-column flex-sm-row card-header-tabs" role="tablist">
                         {var $first = true}
                         {foreach $event->allUsers as $key => $preStatus}
                             {ifset $preStatus}
                                 {var $count = array_sum(array_map('count', $preStatus))}
                                 {var $caption = $key == 'UNKNOWN' ? 'Nerozhodnutí' : $eventTypes[$event->eventType->code]->preStatusSet[$key]->caption}
                                 <li class="nav-item">
-                                    <a n:class="nav-link, $first ? active" href="#{$caption|webalize}" data-toggle="tab" role="tab">{$caption} ({$count})</a>
+                                    <a n:class="flex-sm-fill, text-sm-center, nav-link, $first ? active" href="#{$caption|webalize}" data-toggle="tab" role="tab">{$caption} ({$count})</a>
                                 </li>
                                 {var $first = false}
                             {/ifset}

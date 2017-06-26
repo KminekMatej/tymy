@@ -16,25 +16,25 @@
         <div class="col my-3">
             <div class="card sh-box">
                 <div class="card-header">
-                    <ul class="nav nav-tabs card-header-tabs">
+                    <ul class="nav nav-tabs flex-column flex-sm-row card-header-tabs">
                         <li class="nav-item">
                             {var $cnt = count(array_intersect($player->errFls,['gender','firstName','lastName','phone','email','birthDate']))}
-                            <a class="nav-link active" data-toggle="tab" href="#osobni-udaje" role="tab">Osobní údaje {if $cnt > 0}<span class="badge badge-pill badge-danger">{$cnt}</span>{/if}</a>
+                            <a class="flex-sm-fill text-sm-center nav-link active" data-toggle="tab" href="#osobni-udaje" role="tab">Osobní údaje {if $cnt > 0}<span class="badge badge-pill badge-danger">{$cnt}</span>{/if}</a>
                         </li>
                         <li class="nav-item">
                             {var $cnt = count(array_intersect($player->errFls,['callName']))}
-                            <a class="nav-link" data-toggle="tab" href="#prihlaseni" role="tab">Přihlášení {if $cnt > 0}<span class="badge badge-pill badge-danger">{$cnt}</span>{/if}</a>
+                            <a class="flex-sm-fill text-sm-center nav-link" data-toggle="tab" href="#prihlaseni" role="tab">Přihlášení {if $cnt > 0}<span class="badge badge-pill badge-danger">{$cnt}</span>{/if}</a>
                         </li>
                         <li class="nav-item">
                             {var $cnt = count(array_intersect($player->errFls,['jerseyNumber']))}
-                            <a class="nav-link" data-toggle="tab" href="#tymove-info" role="tab">Týmové info {if $cnt > 0}<span class="badge badge-pill badge-danger">{$cnt}</span>{/if}</a>
+                            <a class="flex-sm-fill text-sm-center nav-link" data-toggle="tab" href="#tymove-info" role="tab">Týmové info {if $cnt > 0}<span class="badge badge-pill badge-danger">{$cnt}</span>{/if}</a>
                         </li>
                         <li class="nav-item">
                             {var $cnt = count(array_intersect($player->errFls,['street','city','zipCode']))}
-                            <a class="nav-link" data-toggle="tab" href="#adresa" role="tab">Adresa {if $cnt > 0}<span class="badge badge-pill badge-danger">{$cnt}</span>{/if}</a>
+                            <a class="flex-sm-fill text-sm-center nav-link" data-toggle="tab" href="#adresa" role="tab">Adresa {if $cnt > 0}<span class="badge badge-pill badge-danger">{$cnt}</span>{/if}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#opravneni" role="tab">Oprávnění</a>
+                            <a class="flex-sm-fill text-sm-center nav-link" data-toggle="tab" href="#opravneni" role="tab">Oprávnění</a>
                         </li>
                     </ul>
                 </div>
