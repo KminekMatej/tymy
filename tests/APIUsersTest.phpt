@@ -117,7 +117,7 @@ class APIUsersTest extends Tester\TestCase {
             Assert::type("string",$u->lastLogin);
             Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $u->lastLogin)); //timezone correction check
             Assert::type("string",$u->status);
-            Assert::true(in_array($u->status, ["PLAYER", "MEMBER", "SICK", "DELETED"]));
+            Assert::true(in_array($u->status, ["PLAYER", "MEMBER", "SICK", "DELETED", "INIT"]));
 
             Assert::type("string",$u->firstName);
             Assert::type("string",$u->lastName);

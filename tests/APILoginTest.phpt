@@ -48,11 +48,15 @@ class APILoginTest extends Tester\TestCase {
         Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $loginObj->result->data->lastLogin)); //timezone correction check
         Assert::type("string", $loginObj->result->data->status);
         Assert::true(in_array($loginObj->result->data->status, ["PLAYER","MEMBER","SICK"]));
-        Assert::type("array", $loginObj->result->data->roles);
-        foreach ($loginObj->result->data->roles as $role) {
-            Assert::type("string", $role);
-        }
         
+        if (property_exists($loginObj->result->data, "roles")) {
+            Assert::type("array", $loginObj->result->data->roles);
+            foreach ($loginObj->result->data->roles as $role) {
+                Assert::type("string", $role);
+            }
+        }
+
+
         Assert::type("string", $loginObj->result->data->oldPassword);
         Assert::type("string", $loginObj->result->data->firstName);
         Assert::type("string", $loginObj->result->data->lastName);

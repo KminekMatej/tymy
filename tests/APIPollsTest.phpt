@@ -144,8 +144,6 @@ class APIPollsTest extends Tester\TestCase {
             Assert::type("string",$poll->voteRightName);
             //Assert::type("string",$poll->alienVoteRightName); // not always exists
             Assert::type("int",$poll->orderFlag);
-            Assert::type("string",$poll->resultRightValue);
-            Assert::type("string",$poll->voteRightValue);
             Assert::type("bool",$poll->canSeeResults);
             Assert::type("bool",$poll->canVote);
             Assert::type("bool",$poll->canAlienVote);
