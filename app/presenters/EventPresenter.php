@@ -99,9 +99,12 @@ class EventPresenter extends SecuredPresenter {
         }
         
         $event->allUsers = $attArray;
-        
+        $eventTypes = $this->getEventTypes();
         $this->template->event = $event;
-        $this->template->eventTypes = $this->getEventTypes();
+        $this->template->eventTypes = $eventTypes;
+        $this->template->myPreStatusCaption = $event->myAttendance->preStatus == "UNKNOWN" ? "not-set" : $eventTypes[$event->type]->preStatusSet[$event->myAttendance->preStatus]->code;
+        $this->template->myPostStatusCaption = $event->myAttendance->postStatus == "UNKNOWN" ? "not-set" : $eventTypes[$event->type]->postStatusSet[$event->myAttendance->postStatus]->code;
+        
     }
     
     public function handleAttendance($id, $code, $desc){
@@ -110,7 +113,10 @@ class EventPresenter extends SecuredPresenter {
             ->preStatus($code)
             ->preDescription($desc)
             ->plan();
-               
+        if ($this->isAjax()) {
+            $this->redrawControl("attendanceWarning");
+            $this->redrawControl("attendanceTabs");
+        }
     }
     
     public function handleEventLoad($date = NULL, $direction = NULL) {

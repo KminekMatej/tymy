@@ -28,30 +28,21 @@
                         </div>
                         <div class="col-md-8 d-flex flex-column-reverse align-items-center">
                             <div class="btn-group input-group pb-2" role="group" aria-label="Basic example" id="action-{$event->id}">
-                                {var $evnt_desc = isset($event->myAttendance->preDescription) ? $event->myAttendance->preDescription : ''}
-                                <input type="text" class="form-control form-control-sm" title="Poznámka" name="preStatusDesc" value="{$evnt_desc}" />
-
-                                {var $myPreStatus = "not-set"}
-                                {var $myPostStatus = "not-set"}
-                                {ifset $event->myAttendance}
-                                    {if $event->myAttendance->preStatus != "UNKNOWN"}
-                                        {var $myPreStatus = $eventTypes[$event->type]->preStatusSet[$event->myAttendance->preStatus]->code}
-                                    {/if}
-                                    {ifset $event->myAttendance->postStatus}
-                                        {var $myPostStatus = $eventTypes[$event->type]->postStatusSet[$event->myAttendance->postStatus]->code}
-                                    {/ifset}
-                                {/ifset}
+                                <input type="text" class="form-control form-control-sm" title="Poznámka" name="preStatusDesc" value="{$event->myAttendance->preDescription}" />
                                 {foreach $eventTypes[$event->type]->preStatusSet as $preStatus}
-                                    <button onclick="updateAttendance(this, {link attendance! $event->id, $preStatus->code})" class="btn {$myPreStatus,$myPostStatus,$preStatus->code,$event->closeTime|prestatusClass}">{$preStatus->caption}</button>
+                                    <button onclick="updateAttendance(this, {link attendance! $event->id, $preStatus->code})" class="btn {$myPreStatusCaption,$myPostStatusCaption,$preStatus->code,$event->closeTime|prestatusClass}">{$preStatus->caption}</button>
                                 {/foreach}
                             </div>
-                            <div class="alert alert-danger"><i class="fa fa-arrow-down" aria-hidden="true"></i> Nemáš vyplněnou docházku ! <i class="fa fa-arrow-down" aria-hidden="true"></i></div>
+                            {snippet attendanceWarning}
+                                <div class="alert alert-danger" n:if="$myPreStatusCaption == 'not-set'"><i class="fa fa-arrow-down" aria-hidden="true"></i> Nemáš vyplněnou docházku ! <i class="fa fa-arrow-down" aria-hidden="true"></i></div>
+                            {/snippet}
+                            
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="card sh-box my-3">
+            <div class="card sh-box my-3" n:snippet="attendanceTabs">
                 <div class="card-header">
                     <ul class="nav nav-tabs card-header-tabs" role="tablist">
                         {var $first = true}
