@@ -70,7 +70,7 @@ class DiscussionPresenter extends SecuredPresenter {
         $this->template->lastPage = $lastPage;
         $this->template->pagination = $this->pagination($lastPage, 1, $currentPage, 5);
         if($this->isAjax())
-            $this->redrawControl ("discussion");
+            $this->redrawControl("discussion");
     }
     
     protected function createComponentNewPost($discussion) {
