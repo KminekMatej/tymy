@@ -15,12 +15,14 @@ final class Discussion extends Tymy{
     private $mode;
     private $page;
     private $search;
+    private $users;
     
     
     public function __construct(\App\Model\TapiAuthenticator $tapiAuthenticator = NULL, Nette\Application\UI\Presenter $presenter = NULL, $html = FALSE, $page) {
         parent::__construct($tapiAuthenticator, $presenter);
         $this->mode = $html ? "html" : "bb";
         $this->page = is_numeric($page) ? $page : 1 ;
+        $this->users = $presenter->getUsers();
     }
     
     public function select() {
@@ -62,6 +64,7 @@ final class Discussion extends Tymy{
             $this->timezone($post->createdAt);
             if(property_exists($post, "updatedAt")){
                 $this->timezone($post->updatedAt);
+                $post->updatedBy = $this->users->data[$post->updatedById];
             }
         }
     }
@@ -77,5 +80,11 @@ final class Discussion extends Tymy{
     public function getSearch(){
         return $this->search;
     }
+    
+    public function setUsers($users) {
+        $this->users = $users;
+        return $this;
+    }
+
 
 }
