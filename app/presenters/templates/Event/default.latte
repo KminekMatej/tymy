@@ -77,13 +77,12 @@
                                 {var $past = strtotime($ev->closeTime) < strtotime(date('Ymd')) ? 'evnt-past collapse'}
                                 
                                 <div class="row {$past}">
-                                    <div class="col" title="{$past} {$ev->caption} ({$eventTypes[$ev->type]->caption})&#13;{$ev->startTime|date:'j.n. H:i'} -> {$ev->endTime|date:'j.n H:i'}"><span class="event-heading">{$ev->caption}</span><span class="event-time text-muted float-right">{$ev->startTime|date:'j.n. H:i'}</span></div>
+                                    <div class="col" title=" {$ev->caption} ({$eventTypes[$ev->type]->caption})&#13;{$ev->startTime|date:'j.n. H:i'} -> {$ev->endTime|date:'j.n H:i'}"><a href="{plink Event:event, $ev->id . '-' . $ev->webName}}" class="event-heading">{$ev->caption}</a><span class="event-time text-muted float-right">{$ev->startTime|date:'j.n. H:i'}</span></div>
                                 </div>
                                 <div class="row mb-2 {$past}">
                                     <div class="col">
                                         <div class="btn-group input-group px-0" role="group" aria-label="Basic example" id="action-{$ev->id}">
-                                            {var $evnt_desc = isset($ev->myAttendance->preDescription) ? $ev->myAttendance->preDescription : ''}
-                                            <input type="text" class="form-control form-control-sm" title="Poznámka" name="preStatusDesc" value="{$evnt_desc}" />
+                                            <input type="text" class="form-control form-control-sm" title="Poznámka" name="preStatusDesc" value="{$ev->myAttendance->preDescription}" />
                                             {foreach $eventTypes[$ev->type]->preStatusSet as $preStatus}
                                                 <button onclick="updateAttendance(this, {link attendance! $ev->id, $preStatus->code})" class="btn btn-sm {$ev->myPreStatusCaption,$ev->myPostStatusCaption,$preStatus->code,$ev->closeTime|prestatusClass}">{$preStatus->caption}</button>
                                             {/foreach}

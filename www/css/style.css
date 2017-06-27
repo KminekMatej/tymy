@@ -165,10 +165,10 @@ DIV.container.events DIV.agenda DIV.card-block{
 DIV.container.events DIV.agenda SPAN.event-time{
     font-size: 0.8rem;
 }
-DIV.container.events DIV.agenda SPAN.event-heading{
-    font-size: 1rem;
-    font-weight: bold;
+DIV.container.events DIV.agenda A.event-heading{
+    font-size: 0.9rem;
     margin-left: 8px;
+    font-weight: bold;
 }
 
 DIV.container.discussion DIV.row DIV.card-block blockquote{
