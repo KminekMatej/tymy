@@ -89,7 +89,7 @@ class APIAttendanceTest extends TapiTestCase {
 
         $this->authenticator->setId(38);
         $this->authenticator->setStatus(["TESTROLE", "TESTROLE2"]);
-        $this->authenticator->setArr(["tym" => $GLOBALS["testedTeam"]["team"], "sessionKey" => "dsfbglsdfbg13546"]);
+        $this->authenticator->setArr(["sessionKey" => "dsfbglsdfbg13546"]);
 
         $mockPresenter->getUser()->setAuthenticator($this->authenticator);
         $mockPresenter->getUser()->login("test", "test");
@@ -109,7 +109,7 @@ class APIAttendanceTest extends TapiTestCase {
         $mockPresenter = $presenterFactory->createPresenter('Homepage');
         $mockPresenter->autoCanonicalize = FALSE;
 
-        $tapiAuthenticator = new \App\Model\TapiAuthenticator($GLOBALS["testedTeam"]["team"]);
+        $tapiAuthenticator = new \App\Model\TapiAuthenticator($this->tapi_config);
         $mockPresenter->getUser()->setAuthenticator($tapiAuthenticator);
         $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
         

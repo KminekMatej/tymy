@@ -15,6 +15,7 @@ class SignInTest extends Tester\TestCase {
 
     private $container;
     private $presenter;
+    private $tapi_config;
 
     function __construct(Nette\DI\Container $container) {
         $this->container = $container;
@@ -24,6 +25,7 @@ class SignInTest extends Tester\TestCase {
         $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
         $this->presenter = $presenterFactory->createPresenter('Sign');
         $this->presenter->autoCanonicalize = FALSE;
+        $this->tapi_config = (array)$GLOBALS["testedTeam"]["tapi_config"];
     }
 
     function testSignInComponents(){
@@ -46,13 +48,13 @@ class SignInTest extends Tester\TestCase {
      * @throws Nette\Security\AuthenticationException Login failed.
      */
     function testSignInFails(){
-        $tymyUserManager = new \App\Model\TapiAuthenticator($GLOBALS["testedTeam"]["team"]); 
+        $tymyUserManager = new \App\Model\TapiAuthenticator($this->tapi_config); 
         $tymyUserManager->authenticate(["Beatles","Ladyda"]);
         
     }
     
     function testSignInSuccess(){
-        $tymyUserManager = new \App\Model\TapiAuthenticator($GLOBALS["testedTeam"]["team"]); 
+        $tymyUserManager = new \App\Model\TapiAuthenticator($this->tapi_config); 
         $identity = $tymyUserManager->authenticate([$GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]]);
         Assert::type("Nette\Security\Identity", $identity);
         Assert::true(isset($identity->id));

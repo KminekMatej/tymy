@@ -14,10 +14,12 @@ class TapiTestCase extends Tester\TestCase {
     protected $supplier;
     protected $loginObj;
     protected $login;
+    protected $tapi_config;
     
     function setUp() {
         parent::setUp();
-        $this->supplier = new \App\Model\Supplier($GLOBALS["testedTeam"]["team"]);
+        $this->tapi_config = (array)$GLOBALS["testedTeam"]["tapi_config"];
+        $this->supplier = new \App\Model\Supplier($this->tapi_config);
     }
     
     public function login(){

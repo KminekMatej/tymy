@@ -175,11 +175,14 @@ class APIEventsTest extends TapiTestCase {
         Assert::contains("filter",array_keys($eventsObj->getUriParams()));
         Assert::contains("TSID",array_keys($eventsObj->getUriParams()));
         Assert::contains("startTime>20160202~startTime<20170202",$eventsObj->getUriParams());
-        
+
         foreach ($eventsObj->result->data as $ev) {
             Assert::true(is_object($ev));
             Assert::true(property_exists($ev, "myAttendance"));
-            Assert::type("string",$ev->myAttendance->preDatMod);
+            Assert::type("string",$ev->myAttendance->preStatus);
+            Assert::type("string",$ev->myAttendance->preDescription);
+            Assert::type("string",$ev->myAttendance->postStatus);
+            Assert::type("string",$ev->myAttendance->postDescription);
         }
     }
 
