@@ -73,26 +73,14 @@ final class Events extends Tymy{
         foreach ($data as $event) {
             $event->warning = false;
             if(property_exists($event, "myAttendance") && property_exists($event->myAttendance, "preStatus")){
-                switch ($event->myAttendance->preStatus) {
-                    case "YES":
-                        $event->preClass = "success";
-                        break;
-                    case "LAT":
-                        $event->preClass = "warning";
-                        break;
-                    case "NO":
-                        $event->preClass = "danger";
-                        break;
-                    case "DKY":
-                        $event->preClass = "danger";
-                        break;
-                    case "UNKNOWN":
-                        $event->preClass = "secondary";
-                        break;
-
-                    default:
-                        break;
-                }
+                $eventClassMap = [
+                    "YES" => "success",
+                    "LAT" => "warning",
+                    "NO" => "danger",
+                    "DKY" => "danger",
+                    "UNKNOWN" => "secondary",
+                ];
+                $event->preClass = $eventClassMap[$event->myAttendance->preStatus];
             } else {
                 $event->warning = true;
                 $this->getResult()->menuWarningCount++;
@@ -102,8 +90,15 @@ final class Events extends Tymy{
             $this->timezone($event->startTime);
             $this->timezone($event->endTime);
             $event->webName = \Nette\Utils\Strings::webalize($event->caption);
-            if($this->withMyAttendance)
-                $this->timezone($event->myAttendance->preDatMod);
+            if($this->withMyAttendance){
+                if(!property_exists($event, "myAttendance")) $event->myAttendance = new \stdClass ();
+                if(!property_exists($event->myAttendance, "preStatus")) $event->myAttendance->preStatus = "UNKNOWN"; //set default value
+                if(!property_exists($event->myAttendance, "preDescription")) $event->myAttendance->preDescription = ""; //set default value
+                if(!property_exists($event->myAttendance, "postStatus")) $event->myAttendance->postStatus = "UNKNOWN"; //set default value
+                if(!property_exists($event->myAttendance, "postDescription")) $event->myAttendance->postDescription = ""; //set default value
+                if (property_exists($event->myAttendance, "preDatMod")) $this->timezone($event->myAttendance->preDatMod);
+                if (property_exists($event->myAttendance, "postDatMod")) $this->timezone($event->myAttendance->postDatMod);
+            } 
         }
     }
     

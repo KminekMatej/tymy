@@ -84,19 +84,8 @@
                                         <div class="btn-group input-group px-0" role="group" aria-label="Basic example" id="action-{$ev->id}">
                                             {var $evnt_desc = isset($ev->myAttendance->preDescription) ? $ev->myAttendance->preDescription : ''}
                                             <input type="text" class="form-control form-control-sm" title="Poznámka" name="preStatusDesc" value="{$evnt_desc}" />
-
-                                            {var $myPreStatus = "not-set"}
-                                            {var $myPostStatus = "not-set"}
-                                            {ifset $ev->myAttendance}
-                                                {ifset $ev->myAttendance->preStatus}
-                                                    {var $myPreStatus = $eventTypes[$ev->type]->preStatusSet[$ev->myAttendance->preStatus]->code}
-                                                {/ifset}
-                                                {ifset $ev->myAttendance->postStatus}
-                                                    {var $myPostStatus = $eventTypes[$ev->type]->postStatusSet[$ev->myAttendance->postStatus]->code}
-                                                {/ifset}
-                                            {/ifset}
                                             {foreach $eventTypes[$ev->type]->preStatusSet as $preStatus}
-                                                <button onclick="updateAttendance(this, {link attendance! $ev->id, $preStatus->code})" class="btn btn-sm {$myPreStatus,$myPostStatus,$preStatus->code,$ev->closeTime|prestatusClass}">{$preStatus->caption}</button>
+                                                <button onclick="updateAttendance(this, {link attendance! $ev->id, $preStatus->code})" class="btn btn-sm {$ev->myPreStatusCaption,$ev->myPostStatusCaption,$preStatus->code,$ev->closeTime|prestatusClass}">{$preStatus->caption}</button>
                                             {/foreach}
                                         </div>
                                     </div>

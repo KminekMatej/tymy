@@ -54,14 +54,22 @@ class EventPresenter extends SecuredPresenter {
             $eventsObj = new \Tymy\Events($this->tapiAuthenticator, $this);
             $this->events = $eventsObj->loadYearEvents(NULL, NULL);
         }
+        $eventTypes = $this->getEventTypes();
         
+        foreach ($this->events->eventsMonthly as $eventMonth) {
+            foreach ($eventMonth as $event) {
+                $eventCaptions = $this->getEventCaptions($event, $eventTypes);
+                $event->myPreStatusCaption = $eventCaptions["myPreStatusCaption"];
+                $event->myPostStatusCaption = $eventCaptions["myPostStatusCaption"];
+            }
+        }
         $this->template->agendaFrom = date("Y-m", strtotime($this->events->eventsFrom));
         $this->template->agendaTo = date("Y-m", strtotime($this->events->eventsTo));
         $this->template->currY = date("Y");
         $this->template->currM = date("m");
         $this->template->evMonths = $this->events->eventsMonthly;
         $this->template->events = $this->events->eventsJSObject;
-        $this->template->eventTypes = $this->getEventTypes();
+        $this->template->eventTypes = $eventTypes;
     }
     
     public function renderEvent($udalost) {
@@ -95,9 +103,9 @@ class EventPresenter extends SecuredPresenter {
         $eventTypes = $this->getEventTypes();
         $this->template->event = $event;
         $this->template->eventTypes = $eventTypes;
-        $this->template->myPreStatusCaption = $event->myAttendance->preStatus == "UNKNOWN" ? "not-set" : $eventTypes[$event->type]->preStatusSet[$event->myAttendance->preStatus]->code;
-        $this->template->myPostStatusCaption = $event->myAttendance->postStatus == "UNKNOWN" ? "not-set" : $eventTypes[$event->type]->postStatusSet[$event->myAttendance->postStatus]->code;
-        
+        $eventCaptions = $this->getEventCaptions($event, $eventTypes);
+        $this->template->myPreStatusCaption = $eventCaptions["myPreStatusCaption"];
+        $this->template->myPostStatusCaption = $eventCaptions["myPostStatusCaption"];
     }
     
     public function handleAttendance($id, $code, $desc){
@@ -119,6 +127,13 @@ class EventPresenter extends SecuredPresenter {
             $this->payload->events = $this->events->eventsJSObject;
             $this->redrawControl("events");
         }
+    }
+    
+    private function getEventCaptions($event, $eventTypes){
+        return [
+            "myPreStatusCaption" => $event->myAttendance->preStatus == "UNKNOWN" ? "not-set" : $eventTypes[$event->type]->preStatusSet[$event->myAttendance->preStatus]->code,
+            "myPostStatusCaption" => $event->myAttendance->postStatus == "UNKNOWN" ? "not-set" : $eventTypes[$event->type]->postStatusSet[$event->myAttendance->postStatus]->code,
+        ];
     }
 
 }

@@ -45,8 +45,8 @@ class TeamPresenter extends SecuredPresenter {
     }
     
     public function renderDefault() {
-        $users = new \Tymy\Users($this->tapiAuthenticator, $this, $this->userType);
-        $this->template->users = $users->fetch();
+        $users = $this->getUsers(TRUE); // when loading list of all users, perhaps this is the place where list should be refreshed
+        $this->template->users = $users->data;
     }
     
     public function renderPlayer($player) {
