@@ -9,23 +9,17 @@
 namespace App\Model;
 
 class Supplier {
-    
-    const HTTP = "http://"; // could be changed to https in future?
-    const TYMY_ROOT = "tymy.cz";
-    const TAPI_API_FOLD = "api";
-    const TAPI_SYSAPI_FOLD = "sysapi";
-    const URL_SEPARATOR = "/";
-    
+
     private $tym;
     private $tymyRoot;
     private $apiRoot;
     private $sysapiRoot;
     
-    public function __construct($tym) {
-        $this->setTym($tym);
-        $this->setTymyRoot(self::HTTP . $tym . "." . self::TYMY_ROOT);
-        $this->setApiRoot($this->getTymyRoot() . self::URL_SEPARATOR . self::TAPI_API_FOLD);
-        $this->setSysapiRoot($this->getTymyRoot() . self::URL_SEPARATOR . self::TAPI_SYSAPI_FOLD);
+    public function __construct($tapi_config) {
+        $this->setTym($tapi_config['tym']);
+        $this->setTymyRoot($tapi_config["protocol"] . "://" . $tapi_config["tym"] . "." . $tapi_config["root"]);
+        $this->setApiRoot($this->getTymyRoot() . DIRECTORY_SEPARATOR . $tapi_config["tapi_api_root"]);
+        $this->setSysapiRoot($this->getTymyRoot() . DIRECTORY_SEPARATOR . $tapi_config["tapi_sysapi_root"]);
     }
     
     public function getTym() {

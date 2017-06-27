@@ -1,2 +1,7 @@
 parameters:
-    tym: dev
+    tapi:
+        tym: dev # needs to be changed for each different team
+        protocol: HTTP
+        root: tymy.cz
+        tapi_api_root: api
+        tapi_sysapi_root: sysapi

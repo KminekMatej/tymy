@@ -10,12 +10,23 @@ use Nette;
 class TapiAuthenticator implements Nette\Security\IAuthenticator {
 
     private $tym;
+    private $tapi_config;
 
-    public function __construct($tym) {
-        $this->setTym($tym);
+    public function __construct($tapi_config) {
+        $this->setTapi_config($tapi_config);
+        $this->setTym($tapi_config['tym']);
     }
     
-    public function setTym($tym){
+    public function getTapi_config() {
+        return $this->tapi_config;
+    }
+
+    public function setTapi_config($tapi_config) {
+        $this->tapi_config = $tapi_config;
+        return $this;
+    }
+
+        public function setTym($tym){
         $this->tym = $tym;
     }
 
@@ -38,7 +49,7 @@ class TapiAuthenticator implements Nette\Security\IAuthenticator {
         $loginObj = new \Tymy\Login();
         
         try {
-            $loginObj->setSupplier(new Supplier($this->tym))
+            $loginObj->setSupplier(new Supplier($this->tapi_config))
                     ->setUsername($username)
                     ->setPassword($password)
                     ->fetch();
