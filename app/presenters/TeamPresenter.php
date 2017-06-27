@@ -46,13 +46,13 @@ class TeamPresenter extends SecuredPresenter {
     
     public function renderDefault() {
         $users = new \Tymy\Users($this->tapiAuthenticator, $this, $this->userType);
-        $this->template->users = $users->fetch();;
+        $this->template->users = $users->fetch();
     }
     
     public function renderPlayer($player) {
-        $players = new \Tymy\Users($this->tapiAuthenticator, $this);
+        $players = $this->getUsers();
         $playerId = NULL;
-        foreach ($players->fetch() as $p) {
+        foreach ($players->data as $p) {
             if($p->webName == $player){
                 $playerId = $p->id;
                 $this->setLevelCaptions(["2" => ["caption" => $p->callName, "link" => $this->link("Team:player", $p->webName) ] ]);

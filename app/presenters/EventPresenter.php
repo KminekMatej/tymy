@@ -72,15 +72,8 @@ class EventPresenter extends SecuredPresenter {
                 ->fetch();
         
         $this->setLevelCaptions(["2" => ["caption" => $event->caption, "link" => $this->link("Event:event", $event->id . "-" . $event->webName)]]);
-        
-        $usersObj = new \Tymy\Users($this->tapiAuthenticator, $this);
-        $users = $usersObj
-                ->fetch();
-                
-        $userArr = [];
-        foreach ($users as $usr) {
-            $userArr[$usr->id] = $usr;
-        }
+
+        $users = $this->getUsers();
         
         //array keys are pre-set for sorting purposes
         $attArray = [];
@@ -91,7 +84,7 @@ class EventPresenter extends SecuredPresenter {
         $attArray["UNKNOWN"] = NULL;
         
         foreach ($event->attendance as $attendee) {
-            $user = $userArr[$attendee->userId];
+            $user = $users->data[$attendee->userId];
             if($user->status != "PLAYER") continue; // display only players on event detail
             $gender = $user->gender;
             $user->preDescription = $attendee->preDescription;
