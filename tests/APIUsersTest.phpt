@@ -15,11 +15,9 @@ if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
 
-class APIUsersTest extends Tester\TestCase {
+class APIUsersTest extends TapiTestCase {
 
     private $container;
-    private $login;
-    private $loginObj;
     private $authenticator;
 
     function __construct(Nette\DI\Container $container) {
@@ -34,17 +32,9 @@ class APIUsersTest extends Tester\TestCase {
     function tearDown() {
         parent::tearDown();
     }
-    
-    function login(){
-        $this->loginObj = new \Tymy\Login();
-        $this->login = $this->loginObj->team($GLOBALS["testedTeam"]["team"])
-                ->setUsername($GLOBALS["testedTeam"]["user"])
-                ->setPassword($GLOBALS["testedTeam"]["pass"])
-                ->fetch();
-    }
 
     /**
-     * @throws Tymy\Exception\APIException
+     * @throws Nette\Application\AbortException
      */
     function testFetchNotLoggedInFails404() {
         $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
@@ -60,7 +50,7 @@ class APIUsersTest extends Tester\TestCase {
 
 
         $usersObj = new \Tymy\Users();
-        $usersObj->presenter($mockPresenter)
+        $usersObj->setPresenter($mockPresenter)
                 ->fetch();
     }
     
@@ -81,7 +71,7 @@ class APIUsersTest extends Tester\TestCase {
 
 
         $usersObj = new \Tymy\Users();
-        $usersObj->presenter($mockPresenter)
+        $usersObj->setPresenter($mockPresenter)
                 ->fetch();
     }
     

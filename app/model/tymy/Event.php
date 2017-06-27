@@ -13,7 +13,7 @@ final class Event extends Tymy{
     
     public function select() {
         if (!isset($this->recId))
-            throw new APIException('Event ID not set!');
+            throw new Exception\APIException('Event ID not set!');
         
         $this->fullUrl .= "event/" .$this->recId;
         

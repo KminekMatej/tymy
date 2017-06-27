@@ -15,11 +15,9 @@ if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
 
-class APILogoutTest extends Tester\TestCase {
+class APILogoutTest extends TapiTestCase {
 
     private $container;
-    private $login;
-    private $loginObj;
     private $authenticator;
 
     function __construct(Nette\DI\Container $container) {
@@ -34,34 +32,25 @@ class APILogoutTest extends Tester\TestCase {
     function tearDown() {
         parent::tearDown();
     }
-    
-    function login(){
-        $this->loginObj = new \Tymy\Login();
-        $this->login = $this->loginObj->team($GLOBALS["testedTeam"]["team"])
-                ->setUsername($GLOBALS["testedTeam"]["user"])
-                ->setPassword($GLOBALS["testedTeam"]["pass"])
-                ->fetch();
-    }
 
     /**
-     * @throws Tymy\Exception\APIException
+     * @throws \Tymy\Exception\APIException
      */
-    function testFetchNotLoggedInFails404() {
+    function testFetchLogoutNotLoggedInFails500() {
         $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
         $mockPresenter = $presenterFactory->createPresenter('Homepage');
         $mockPresenter->autoCanonicalize = FALSE;
 
         $this->authenticator->setId(38);
         $this->authenticator->setStatus(["TESTROLE", "TESTROLE2"]);
-        $this->authenticator->setArr(["tym" => "testteam", "sessionKey" => "dsfbglsdfbg13546"]);
+        $this->authenticator->setArr(["sessionKey" => "dsfbglsdfbg13546"]);
 
         $mockPresenter->getUser()->setAuthenticator($this->authenticator);
         $mockPresenter->getUser()->login("test", "test");
 
-
         $logoutObj = new \Tymy\Logout(NULL);
-        $logoutObj->presenter($mockPresenter)
-                ->fetch();
+        $logoutObj->setPresenter($mockPresenter)
+                ->logout();
     }
     
     function testLogoutSuccess() {

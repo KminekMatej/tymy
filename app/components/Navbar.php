@@ -3,7 +3,6 @@
 namespace Nette\Application\UI;
 
 use Nette;
-use Nette\Utils\Strings;
 
 /**
  * Description of Navbar
@@ -69,7 +68,7 @@ class NavbarControl extends Control {
         $this->template->levels = $this->presenter->getLevelCaptions();
         $this->template->presenterName = $this->presenter->getName();
         $this->template->action = $this->presenter->getAction();
-        $this->template->tym = $this->presenter->getSession()->getSection("tymy")->tym;
+        $this->template->tym = $this->presenter->supplier->getTym();
         $this->template->userId = $this->user->getId();
         
         //render menus

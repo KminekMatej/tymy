@@ -15,11 +15,9 @@ if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
 
-class APIPollTest extends Tester\TestCase {
+class APIPollTest extends TapiTestCase {
 
     private $container;
-    private $login;
-    private $loginObj;
     private $authenticator;
 
     function __construct(Nette\DI\Container $container) {
@@ -34,25 +32,17 @@ class APIPollTest extends Tester\TestCase {
     function tearDown() {
         parent::tearDown();
     }
-    
-    function login(){
-        $this->loginObj = new \Tymy\Login();
-        $this->login = $this->loginObj->team($GLOBALS["testedTeam"]["team"])
-                ->setUsername($GLOBALS["testedTeam"]["user"])
-                ->setPassword($GLOBALS["testedTeam"]["pass"])
-                ->fetch();
-    }
 
     /**
      * @throws Tymy\Exception\APIException
      */
     function testFetchNotLoggedInFailsRecIdNotSet() {
         $pollObj = new \Tymy\Poll();
-        $pollObj->fetch();
+        $pollObj->setSupplier($this->supplier)->fetch();
     }
     
     /**
-     * @throws Tymy\Exception\APIException
+     * @throws Nette\Application\AbortException
      */
     function testFetchNotLoggedInFails404() {
         $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
@@ -67,7 +57,7 @@ class APIPollTest extends Tester\TestCase {
         $mockPresenter->getUser()->login("test", "test");
 
         $pollObj = new \Tymy\Poll();
-        $pollObj->presenter($mockPresenter)
+        $pollObj->setPresenter($mockPresenter)
                 ->recId(1)
                 ->fetch();
     }
@@ -88,7 +78,7 @@ class APIPollTest extends Tester\TestCase {
         $mockPresenter->getUser()->login("test", "test");
 
         $pollObj = new \Tymy\Poll();
-        $pollObj->presenter($mockPresenter)
+        $pollObj->setPresenter($mockPresenter)
                 ->recId(1)
                 ->fetch();
     }
