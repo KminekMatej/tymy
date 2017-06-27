@@ -16,7 +16,8 @@
             <div class="card sh-box my-3">
                 <div class="card-block">
                     <h4 class="card-title">{$event->caption}</h4>
-                    <h6 class="card-subtitle mb-2 text-muted">{$event->eventType->caption}</h6>
+                    {var $mapParams = 'query='.urlencode($event->place)}
+                    <h6 class="card-subtitle mb-2 text-muted">{$event->eventType->caption}<span n:ifset="$event->place"> - <a href="https://www.google.com/maps/search/?api=1&{$mapParams}" target="blank" title="Otevřít mapu...">{$event->place}</a></span><span n:ifset="$event->place"> - <a n:ifset="$event->link" href="{$event->link}" target="_blank">[Odkaz]</a></span></h6>
                     <p class="card-text">{$event->description}</p>
                     <div class="row">
                         <div class="col-md-4">
@@ -36,7 +37,6 @@
                             {snippet attendanceWarning}
                                 <div class="alert alert-danger" n:if="$myPreStatusCaption == 'not-set'"><i class="fa fa-arrow-down" aria-hidden="true"></i> Nemáš vyplněnou docházku ! <i class="fa fa-arrow-down" aria-hidden="true"></i></div>
                             {/snippet}
-                            
                         </div>
                     </div>
                 </div>
