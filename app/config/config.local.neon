@@ -1,3 +1,2 @@
 parameters:
-	options:
-		lazy: yes
+    tym: dev
