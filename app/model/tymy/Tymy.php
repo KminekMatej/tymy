@@ -88,7 +88,7 @@ abstract class Tymy extends Nette\Object{
     
     protected function urlStart() {
         $this->fullUrl = $this->supplier->getApiRoot();
-        $this->fullUrl .= \App\Model\Supplier::URL_SEPARATOR;
+        $this->fullUrl .= DIRECTORY_SEPARATOR;
         return $this;
     }
     
