@@ -40,7 +40,7 @@ abstract class Tymy extends Nette\Object{
     /** Function to process after the result from API is obtained, used mainly for formatting or adding new properties to TAPI result */
     abstract protected function postProcess();
     
-    public function __construct(\App\Model\TymyUserManager $tapiAuthenticator = NULL, Nette\Application\UI\Presenter $presenter = NULL) {
+    public function __construct(\App\Model\TapiAuthenticator $tapiAuthenticator = NULL, Nette\Application\UI\Presenter $presenter = NULL) {
         $this->initTapiDebugPanel();
         $this->tapiAuthenticator = $tapiAuthenticator;
         if($presenter != NULL){
