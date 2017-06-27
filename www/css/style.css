@@ -214,3 +214,21 @@ DIV.poll TR[data-vote] A{
 DIV.poll TR[data-vote] A:hover{
     color: white;
 }
+
+@media screen and (max-width: 544px) {
+    DIV.custom-container{
+        flex-direction: column;
+    }
+    
+    .custom-btn-sm{
+        width: 100% !important;
+        display: block !important;
+    }
+    INPUT.custom-btn-sm{
+        border-radius: 0.2rem !important;
+        height: 36px !important;
+    }
+    BUTTON.custom-btn-sm{
+        border-radius: 0.25rem !important;
+    }
+}

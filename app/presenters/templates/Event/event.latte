@@ -27,10 +27,10 @@
                             </table>
                         </div>
                         <div class="col-md-8 d-flex flex-column-reverse align-items-center">
-                            <div class="btn-group input-group pb-2" role="group" aria-label="Basic example" id="action-{$event->id}">
-                                <input type="text" class="form-control form-control-sm" title="Poznámka" name="preStatusDesc" value="{$event->myAttendance->preDescription}" />
+                            <div class=" custom-container btn-group input-group pb-2" role="group" aria-label="Basic example" id="action-{$event->id}">
+                                <input type="text" class="form-control form-control-sm custom-btn-sm" title="Poznámka" name="preStatusDesc" value="{$event->myAttendance->preDescription}" />
                                 {foreach $eventTypes[$event->type]->preStatusSet as $preStatus}
-                                    <button onclick="updateAttendance(this, {link attendance! $event->id, $preStatus->code})" class="btn {$myPreStatusCaption,$myPostStatusCaption,$preStatus->code,$event->closeTime|prestatusClass}">{$preStatus->caption}</button>
+                                    <button onclick="updateAttendance(this, {link attendance! $event->id, $preStatus->code})" class="btn custom-btn-sm {$myPreStatusCaption,$myPostStatusCaption,$preStatus->code,$event->closeTime|prestatusClass}">{$preStatus->caption}</button>
                                 {/foreach}
                             </div>
                             {snippet attendanceWarning}
