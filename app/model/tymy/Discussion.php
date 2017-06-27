@@ -22,7 +22,7 @@ final class Discussion extends Tymy{
         parent::__construct($tapiAuthenticator, $presenter);
         $this->mode = $html ? "html" : "bb";
         $this->page = is_numeric($page) ? $page : 1 ;
-        $this->users = $presenter->getUsers();
+        $this->users = $presenter ? $presenter->getUsers() : NULL;
     }
     
     public function select() {
