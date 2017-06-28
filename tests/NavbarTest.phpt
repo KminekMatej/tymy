@@ -85,12 +85,13 @@ class NavbarTest extends Tester\TestCase {
         Assert::true($dom->has("ul.navbar-nav.mr-auto"));
         Assert::true($dom->has("ul.navbar-nav.mr-auto"));
         
-        Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item")), 4); //4 menu items
-        Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")), 4); //4 of them with dropdown
+        Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item")), 5); //4 menu items
+        Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")), 5); //4 of them with dropdown
         Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")[0]->div->a), count((array)$dObj)); //check if the discussions are all displayed
         Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")[1]->div->a), count((array)$eObj) + 1); //check display all events + 1
         Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")[2]->div->a), 5); //there are 5 menu items on second dropdown (team)
         Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")[3]->div->a), count((array)$pObj)); //check if the polls are all displayed
+        Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")[4]->div->a), 4); //check if the polls are all displayed
         
         Assert::equal(count($dom->find("ul.navbar-nav")), 2); //there are two nav menus, left and right
         $logoutBtn = (array)$dom->find("ul.navbar-nav")[1]->li->a;
