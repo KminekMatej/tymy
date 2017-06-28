@@ -51,7 +51,7 @@ class DiscussionPresenter extends SecuredPresenter {
 
         if (is_null($discussionId) || $discussionId < 1)
             $this->error("Tato diskuze neexistuje");
-
+        
         $d = new \Tymy\Discussion($this->tapiAuthenticator, $this, true, $page);
         $d->recId($discussionId);
         if($search) 

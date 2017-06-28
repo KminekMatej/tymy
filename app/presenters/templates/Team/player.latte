@@ -142,7 +142,10 @@
                         </div>
 
                         <div class="tab-pane fade" id="opravneni" role="tabpanel">
-                            Karta oprávnění
+                            {foreach $allRoles as $role}
+                                <button n:class="btn,$role->class,property_exists($player, 'roles') && in_array($role->code,$player->roles) ? active" style="min-width:69px" data-value="true">{$role->caption}</button>
+                            {/foreach}
+                            
                         </div>
                     </div>
                 </div>

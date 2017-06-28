@@ -80,6 +80,12 @@ class TeamPresenter extends SecuredPresenter {
         if(!isset($playerData->email)) $playerData->email = "";
         
         $this->template->player = $playerData;
+        $allRoles = [];
+        $allRoles[] = (object)["code" => "SUPER", "caption" => "Administrátor", "class"=>$this->supplier->getRoleClass("SUPER")];
+        $allRoles[] = (object)["code" => "USR", "caption" => "Správce uživatelů", "class"=>$this->supplier->getRoleClass("USR")];
+        $allRoles[] = (object)["code" => "ATT", "caption" => "Správce docházky", "class"=>$this->supplier->getRoleClass("ATT")];
+
+        $this->template->allRoles = $allRoles;
     }
     
 }
