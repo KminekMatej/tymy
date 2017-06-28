@@ -74,7 +74,7 @@ class APIPollTest extends TapiTestCase {
 
         $this->authenticator->setId(38);
         $this->authenticator->setStatus(["TESTROLE", "TESTROLE2"]);
-        $this->authenticator->setArr(["tym" => $GLOBALS["testedTeam"]["team"], "sessionKey" => "dsfbglsdfbg13546"]);
+        $this->authenticator->setArr(["sessionKey" => "dsfbglsdfbg13546"]);
 
         $mockPresenter->getUser()->setAuthenticator($this->authenticator);
         $mockPresenter->getUser()->login("test", "test");
@@ -92,12 +92,12 @@ class APIPollTest extends TapiTestCase {
 
         $this->login();
         $this->authenticator->setId($this->login->id);
-        $this->authenticator->setArr(["tym" => $GLOBALS["testedTeam"]["team"], "sessionKey" => $this->loginObj->getResult()->sessionKey]);
+        $this->authenticator->setArr(["sessionKey" => $this->loginObj->getResult()->sessionKey]);
         $mockPresenter->getUser()->setAuthenticator($this->authenticator);
         $mockPresenter->getUser()->setExpiration('2 minutes');
         $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
 
-        $pollId = 1;
+        $pollId = $GLOBALS["testedTeam"]["testPollId"];
         $pollObj = new \Tymy\Poll($mockPresenter->tapiAuthenticator, $mockPresenter);
         $pollObj->recId($pollId)
                 ->fetch();
