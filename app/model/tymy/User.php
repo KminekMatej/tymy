@@ -23,7 +23,9 @@ final class User extends UserInterface{
         $data = $this->getData();
         $data->webName = \Nette\Utils\Strings::webalize($data->fullName);
         if(!property_exists($data, "gender")) $data->gender = "UNKNOWN"; //set default value
-        $this->timezone($data->lastLogin);
+        if(property_exists($data, "lastLogin")){
+                $this->timezone($data->lastLogin);
+            }
         $this->userWarnings($data);
         $this->userPermissions($data);
     }

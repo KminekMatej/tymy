@@ -52,7 +52,6 @@ final class Users extends UserInterface{
             $player->webName = Strings::webalize($player->fullName);
             $this->userWarnings($player);
             $this->userPermissions($player);
-            $this->timezone($player->lastLogin);
             $players[$player->id] = $player;
             if($player->id == $myId){
                 $this->getResult()->menuWarningCount = $player->errCnt;
