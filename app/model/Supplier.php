@@ -23,6 +23,7 @@ class Supplier {
         $this->setApiRoot($this->getTymyRoot() . DIRECTORY_SEPARATOR . $tapi_config["tapi_api_root"]);
         $this->setSysapiRoot($this->getTymyRoot() . DIRECTORY_SEPARATOR . $tapi_config["tapi_sysapi_root"]);
         $this->setRoleClasses($tapi_config['roles_classes']);
+        $this->setStatusClasses($tapi_config['status_classes']);
     }
     
     public function getTym() {
