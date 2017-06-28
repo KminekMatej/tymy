@@ -14,12 +14,14 @@ class Supplier {
     private $tymyRoot;
     private $apiRoot;
     private $sysapiRoot;
+    private $roleClasses;
     
     public function __construct($tapi_config) {
         $this->setTym($tapi_config['tym']);
         $this->setTymyRoot($tapi_config["protocol"] . "://" . $tapi_config["tym"] . "." . $tapi_config["root"]);
         $this->setApiRoot($this->getTymyRoot() . DIRECTORY_SEPARATOR . $tapi_config["tapi_api_root"]);
         $this->setSysapiRoot($this->getTymyRoot() . DIRECTORY_SEPARATOR . $tapi_config["tapi_sysapi_root"]);
+        $this->setRoleClasses($tapi_config['roles_classes']);
     }
     
     public function getTym() {
@@ -55,6 +57,19 @@ class Supplier {
 
     private function setTymyRoot($tymyRoot) {
         $this->tymyRoot = $tymyRoot;
+        return $this;
+    }
+
+    public function getRoleClasses() {
+        return $this->roleClasses;
+    }
+    
+    public function getRoleClass($role) {
+        return $this->roleClasses[$role];
+    }
+
+    public function setRoleClasses($roleClasses) {
+        $this->roleClasses = $roleClasses;
         return $this;
     }
 

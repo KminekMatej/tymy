@@ -5,3 +5,7 @@ parameters:
         root: tymy.cz
         tapi_api_root: api
         tapi_sysapi_root: sysapi
+        roles_classes:
+            SUPER: btn-outline-success
+            USR: btn-outline-info
+            ATT: btn-outline-warning
