@@ -32,8 +32,8 @@ class SupplierTest extends Tester\TestCase {
      * @dataProvider getTeams
      */
     function testSupplier($team){
-        $tapi_config = (array)$GLOBALS["testedTeam"]["tapi_config"];
-        var_dump($tapi_config);
+        $supplierTemplate = $this->container->getByType('App\Model\Supplier');
+        $tapi_config = $supplierTemplate->getTapi_config();
         $tapi_config["tym"] = $team;
         $supplier = new \App\Model\Supplier($tapi_config);
         Assert::equal($team, $supplier->getTym());

@@ -1,6 +1,6 @@
 <?php
 /**
- * TEST: Test Discussion on TYMY api
+ * TEST: Test Attendance on TYMY api
  * 
  */
 
@@ -18,15 +18,16 @@ if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
 
 class APIAttendanceTest extends TapiTestCase {
 
-    private $container;
     private $authenticator;
+    private $container;
 
     function __construct(Nette\DI\Container $container) {
         $this->container = $container;
     }
-
+    
     function setUp() {
         parent::setUp();
+        $this->initTapiConfiguration($this->container);
         $this->authenticator = new \App\Model\TestAuthenticator();
     }
     

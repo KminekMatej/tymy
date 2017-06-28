@@ -11,6 +11,7 @@ use Tester;
 use Tester\Assert;
 
 $container = require __DIR__ . '/bootstrap.php';
+
 if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
@@ -20,13 +21,14 @@ class APITymyTest extends TapiTestCase {
     private $container;
     private $tymyObj;
     private $authenticator;
-
+    
     function __construct(Nette\DI\Container $container) {
         $this->container = $container;
     }
-
+    
     function setUp() {
         parent::setUp();
+        $this->initTapiConfiguration($this->container);
         $this->tymyObj = new \Tymy\Login();
         $this->authenticator = new \App\Model\TestAuthenticator();
     }

@@ -25,7 +25,10 @@ class SignInTest extends Tester\TestCase {
         $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
         $this->presenter = $presenterFactory->createPresenter('Sign');
         $this->presenter->autoCanonicalize = FALSE;
-        $this->tapi_config = (array)$GLOBALS["testedTeam"]["tapi_config"];
+        $supplier = $this->container->getByType('App\Model\Supplier');
+        $tapi_config = $supplier->getTapi_config();
+        $tapi_config["tym"] = $GLOBALS["testedTeam"]["team"];
+        $this->tapi_config = $tapi_config;
     }
 
     function testSignInComponents(){

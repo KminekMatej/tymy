@@ -11,6 +11,7 @@ use Tester;
 use Tester\Assert;
 
 $container = require __DIR__ . '/bootstrap.php';
+
 if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
@@ -18,13 +19,14 @@ if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
 class APILoginTest extends TapiTestCase {
 
     private $container;
-
+    
     function __construct(Nette\DI\Container $container) {
         $this->container = $container;
     }
-
+    
     function setUp() {
         parent::setUp();
+        $this->initTapiConfiguration($this->container);
     }
     
     function testLoginSuccess(){

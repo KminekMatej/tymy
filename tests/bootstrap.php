@@ -21,6 +21,5 @@ $configurator->createRobotLoader()
 
 $configurator->addConfig(__DIR__ . '/../app/config/config.neon');
 $configurator->addConfig(__DIR__ . '/../app/config/config.local.neon');
-//$configurator->addParameters(['tym' => $GLOBALS["testedTeam"]["team"]]);
 
 return $configurator->createContainer();
