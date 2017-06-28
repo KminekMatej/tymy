@@ -21,6 +21,8 @@ class TapiAuthorizator implements Nette\Security\IAuthorizator {
         switch ($this->resource) {
             case "users":
                 return $this->usersPrivileges($privilege);
+            case "settings":
+                return $this->settingsPrivileges($privilege);
             default:
                 return TapiAuthorizator::DENY;
         }
@@ -32,6 +34,27 @@ class TapiAuthorizator implements Nette\Security\IAuthorizator {
                 return in_array($this->role, ["SUPER","USR"]) ? TapiAuthorizator::ALLOW : TapiAuthorizator::DENY;
             case "canLogin":
                 return $this->getUser()->canLogin ? TapiAuthorizator::ALLOW : TapiAuthorizator::DENY;
+            default:
+                return TapiAuthorizator::DENY;
+        }
+    }
+    
+    private function settingsPrivileges($privilege){
+        switch ($privilege) {
+            case "discussions"://TODO check for right SYS::DSSETUP (or possibly check whether api returns this possibility)
+                return TapiAuthorizator::ALLOW;
+            case "events"://TODO check for role SUPER and right PAGE::EVENT_TYPES (or possibly check whether api returns this possibility)
+                return in_array($this->role, ["SUPER"]) ? TapiAuthorizator::ALLOW : TapiAuthorizator::DENY;
+            case "team"://TODO check for role SUPER and right PAGE::TEAM_SETUP (or possibly check whether api returns this possibility)
+                return in_array($this->role, ["SUPER"]) ? TapiAuthorizator::ALLOW : TapiAuthorizator::DENY;
+            case "polls"://TODO check for right PAGE::VOTE and check for right SYS::ASK.VOTE_CREATE or SYS::ASK.VOTE_UPDATE or SYS::ASK.VOTE_DELETE
+                return TapiAuthorizator::ALLOW;
+            case "reports"://TODO check for right PAGE::REPORTS and right SYS::REP_SETUP (or possibly check whether api returns this possibility)
+                return TapiAuthorizator::ALLOW;
+            case "permissions"://TODO check for role SUPER and right PAGE::RIGHTS (or possibly check whether api returns this possibility)
+                return in_array($this->role, ["SUPER"]) ? TapiAuthorizator::ALLOW : TapiAuthorizator::DENY;
+            case "app"://TODO check for right PAGE::SETTINGS (or possibly check whether api returns this possibility)
+                return TapiAuthorizator::ALLOW;
             default:
                 return TapiAuthorizator::DENY;
         }

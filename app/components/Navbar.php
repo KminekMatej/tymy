@@ -33,7 +33,6 @@ class NavbarControl extends Control {
                 ->fetch();
         $this->template->discussionWarnings = $this->discussions->getResult()->menuWarningCount;
         $this->template->discussions = (object)$discussions;
-        
     }
     
     private function players(){
@@ -47,7 +46,6 @@ class NavbarControl extends Control {
         $polls = $this->polls->fetch();
         $this->template->voteWarnings = $this->polls->getResult()->menuWarningCount;
         $this->template->polls = (object)$polls;
-        
     }
     
     private function events(){
@@ -59,7 +57,19 @@ class NavbarControl extends Control {
                 ->fetch();
         $this->template->eventWarnings = $this->events->getResult()->menuWarningCount;
         $this->template->events = (object)$events;
-        
+    }
+    
+    private function settings(){
+        //TODO with settings api
+        $settings = [];
+        if($this->user->isAllowed("settings", "discussions")) $settings[] = "Diskuze";
+        if($this->user->isAllowed("settings", "events")) $settings[] = "Události";
+        if($this->user->isAllowed("settings", "team")) $settings[] = "Tým";
+        if($this->user->isAllowed("settings", "polls")) $settings[] = "Ankety";
+        if($this->user->isAllowed("settings", "reports")) $settings[] = "Reporty";
+        if($this->user->isAllowed("settings", "permissions")) $settings[] = "Oprávnění";
+        if($this->user->isAllowed("settings", "app")) $settings[] = "Aplikace";
+        $this->template->settings = (object)$settings;
     }
     
     public function render(){
@@ -71,14 +81,16 @@ class NavbarControl extends Control {
         $this->template->tym = $this->presenter->supplier->getTym();
         $this->template->userId = $this->user->getId();
         
-        //render menus
+        //tapi discussions
         $this->discussions();
-        //render players
+        //tapi players
         $this->players();
-        //render events
+        //tapi events
         $this->events();
-        //render polls
+        //tapi polls
         $this->polls();
+        //tapi settings
+        $this->settings();
 
         $template->render();
     }
