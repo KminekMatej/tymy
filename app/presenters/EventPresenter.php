@@ -33,13 +33,7 @@ class EventPresenter extends SecuredPresenter {
         });
 
         $this->template->addFilter("prestatusClass", function ($myPreStatus, $myPostStatus, $btn, $startTime) {
-            $btnCls = [
-                "LAT" => "warning",
-                "NO" => "danger",
-                "YES" => "success",
-                "DKY" => "warning", // dont know yet
-                ];
-            $color = $btnCls[$btn];
+            $color = $this->supplier->getStatusClass($btn);
             if(strtotime($startTime) > strtotime(date("c")))// pokud podminka plati, akce je budouci
                 return $btn == $myPreStatus ? "btn-outline-$color active" : "btn-outline-$color";
             else if($myPostStatus == "not-set") // akce uz byla, post status nevyplnen

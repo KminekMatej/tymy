@@ -9,3 +9,8 @@ parameters:
             SUPER: btn-outline-success
             USR: btn-outline-info
             ATT: btn-outline-warning
+        status_classes:
+            LAT: warning
+            NO: danger
+            YES: success
+            DKY: warning

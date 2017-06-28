@@ -15,6 +15,7 @@ class Supplier {
     private $apiRoot;
     private $sysapiRoot;
     private $roleClasses;
+    private $statusClasses;
     
     public function __construct($tapi_config) {
         $this->setTym($tapi_config['tym']);
@@ -60,16 +61,21 @@ class Supplier {
         return $this;
     }
 
-    public function getRoleClasses() {
-        return $this->roleClasses;
-    }
-    
     public function getRoleClass($role) {
         return $this->roleClasses[$role];
     }
 
     public function setRoleClasses($roleClasses) {
         $this->roleClasses = $roleClasses;
+        return $this;
+    }
+    
+    public function getStatusClass($status) {
+        return $this->statusClasses[$status];
+    }
+
+    public function setStatusClasses($statusClasses) {
+        $this->statusClasses = $statusClasses;
         return $this;
     }
 
