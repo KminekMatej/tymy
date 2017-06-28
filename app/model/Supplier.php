@@ -20,12 +20,6 @@ class Supplier {
     
     public function __construct($tapi_config) {
         $this->setTapi_config($tapi_config);
-        $this->setTym($tapi_config['tym']);
-        $this->setTymyRoot($tapi_config["protocol"] . "://" . $tapi_config["tym"] . "." . $tapi_config["root"]);
-        $this->setApiRoot($this->getTymyRoot() . DIRECTORY_SEPARATOR . $tapi_config["tapi_api_root"]);
-        $this->setSysapiRoot($this->getTymyRoot() . DIRECTORY_SEPARATOR . $tapi_config["tapi_sysapi_root"]);
-        $this->setRoleClasses($tapi_config['roles_classes']);
-        $this->setStatusClasses($tapi_config['status_classes']);
     }
     
     public function getTapi_config() {
@@ -34,6 +28,12 @@ class Supplier {
 
     public function setTapi_config($tapi_config) {
         $this->tapi_config = $tapi_config;
+        $this->setTym($tapi_config['tym']);
+        $this->setTymyRoot($tapi_config["protocol"] . "://" . $tapi_config["tym"] . "." . $tapi_config["root"]);
+        $this->setApiRoot($this->getTymyRoot() . DIRECTORY_SEPARATOR . $tapi_config["tapi_api_root"]);
+        $this->setSysapiRoot($this->getTymyRoot() . DIRECTORY_SEPARATOR . $tapi_config["tapi_sysapi_root"]);
+        $this->setRoleClasses($tapi_config['roles_classes']);
+        $this->setStatusClasses($tapi_config['status_classes']);
         return $this;
     }
 

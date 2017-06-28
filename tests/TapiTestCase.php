@@ -21,6 +21,7 @@ class TapiTestCase extends Tester\TestCase {
         $tapi_config = $this->supplier->getTapi_config();
         $tapi_config["tym"] = $GLOBALS["testedTeam"]["team"];
         $this->tapi_config = $tapi_config;
+        $this->supplier->setTapi_config($tapi_config);
     }
     
     public function login(){
