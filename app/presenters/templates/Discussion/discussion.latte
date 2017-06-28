@@ -1,4 +1,4 @@
-{* Latte template *}
+{import '../common.latte'}
 
 {block navbar}
 {control navbar}
@@ -6,11 +6,9 @@
 
 {block scripts}
 {include parent}
-<script src="{$basePath}/js/main.js"></script>
 <script src="{$basePath}/resources/ckeditor/ckeditor.js"></script>
 <script src="{$basePath}/js/smoothScroll.js"></script>
 <script src="{$basePath}/js/discussion.js"></script>
-<script src="{$basePath}/js/timer.js"></script>
 <script src="{$basePath}/resources/clipboard/dist/clipboard.{$js}"></script>
 <script>
 $( document ).ready(function() {

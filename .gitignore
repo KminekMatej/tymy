@@ -1,5 +1,6 @@
-/temp/
 /nbproject/
+/log/
+/temp/
 /tests/setup_DEV.php
 /tests/setup_MONKEYS.php
-/log/
+/tests/test.json
