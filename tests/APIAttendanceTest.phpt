@@ -18,7 +18,6 @@ if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
 
 class APIAttendanceTest extends TapiTestCase {
 
-    private $authenticator;
     private $container;
 
     function __construct(Nette\DI\Container $container) {
@@ -28,7 +27,6 @@ class APIAttendanceTest extends TapiTestCase {
     function setUp() {
         parent::setUp();
         $this->initTapiConfiguration($this->container);
-        $this->authenticator = new \App\Model\TestAuthenticator();
     }
     
     function tearDown() {
@@ -65,11 +63,11 @@ class APIAttendanceTest extends TapiTestCase {
         $mockPresenter = $presenterFactory->createPresenter('Homepage');
         $mockPresenter->autoCanonicalize = FALSE;
 
-        $this->authenticator->setId(38);
-        $this->authenticator->setStatus(["TESTROLE", "TESTROLE2"]);
-        $this->authenticator->setArr(["tym" => "testteam", "sessionKey" => "dsfbglsdfbg13546"]);
+        $this->testAuthenticator->setId(38);
+        $this->testAuthenticator->setStatus(["TESTROLE", "TESTROLE2"]);
+        $this->testAuthenticator->setArr(["tym" => "testteam", "sessionKey" => "dsfbglsdfbg13546"]);
 
-        $mockPresenter->getUser()->setAuthenticator($this->authenticator);
+        $mockPresenter->getUser()->setAuthenticator($this->testAuthenticator);
         $mockPresenter->getUser()->login("test", "test");
 
         $attendanceObj = new \Tymy\Attendance();
@@ -88,11 +86,11 @@ class APIAttendanceTest extends TapiTestCase {
         $mockPresenter = $presenterFactory->createPresenter('Homepage');
         $mockPresenter->autoCanonicalize = FALSE;
 
-        $this->authenticator->setId(38);
-        $this->authenticator->setStatus(["TESTROLE", "TESTROLE2"]);
-        $this->authenticator->setArr(["sessionKey" => "dsfbglsdfbg13546"]);
+        $this->testAuthenticator->setId(38);
+        $this->testAuthenticator->setStatus(["TESTROLE", "TESTROLE2"]);
+        $this->testAuthenticator->setArr(["sessionKey" => "dsfbglsdfbg13546"]);
 
-        $mockPresenter->getUser()->setAuthenticator($this->authenticator);
+        $mockPresenter->getUser()->setAuthenticator($this->testAuthenticator);
         $mockPresenter->getUser()->login("test", "test");
 
 
@@ -109,22 +107,21 @@ class APIAttendanceTest extends TapiTestCase {
         $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
         $mockPresenter = $presenterFactory->createPresenter('Homepage');
         $mockPresenter->autoCanonicalize = FALSE;
-
-        $tapiAuthenticator = new \App\Model\TapiAuthenticator($this->tapi_config);
-        $mockPresenter->getUser()->setAuthenticator($tapiAuthenticator);
+        
+        $mockPresenter->getUser()->setAuthenticator($this->tapiAuthenticator);
         $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
         
-        $attendanceObj = new \Tymy\Attendance($mockPresenter->tapiAuthenticator, $mockPresenter);
+        $attendanceObj = new \Tymy\Attendance($this->tapiAuthenticator, $mockPresenter);
         $attendanceObj
                 ->setPresenter($mockPresenter)
                 ->recId($GLOBALS["testedTeam"]["testEventId"])
                 ->preStatus("YES")
                 ->plan();
         
-        $logoutObj = new \Tymy\Logout($mockPresenter->tapiAuthenticator, $mockPresenter);
+        $logoutObj = new \Tymy\Logout($this->tapiAuthenticator, $mockPresenter);
         $logoutObj ->logout();
         
-        $attendanceObj2 = new \Tymy\Attendance($mockPresenter->tapiAuthenticator, $mockPresenter);
+        $attendanceObj2 = new \Tymy\Attendance($this->tapiAuthenticator, $mockPresenter);
         $attendanceObj2
                 ->setPresenter($mockPresenter)
                 ->recId($GLOBALS["testedTeam"]["testEventId"])
@@ -138,19 +135,19 @@ class APIAttendanceTest extends TapiTestCase {
         $mockPresenter->autoCanonicalize = FALSE;
 
         $this->login();
-        $this->authenticator->setId($this->login->id);
-        $this->authenticator->setArr(["sessionKey" => $this->loginObj->getResult()->sessionKey]);
-        $mockPresenter->getUser()->setAuthenticator($this->authenticator);
+        $this->testAuthenticator->setId($this->login->id);
+        $this->testAuthenticator->setArr(["sessionKey" => $this->loginObj->getResult()->sessionKey]);
+        $mockPresenter->getUser()->setAuthenticator($this->testAuthenticator);
         $mockPresenter->getUser()->setExpiration('2 minutes');
         $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
         
-        $allEvents = new \Tymy\Events($mockPresenter->tapiAuthenticator, $mockPresenter);
+        $allEvents = new \Tymy\Events($this->tapiAuthenticator, $mockPresenter);
         $allEventsObj = $allEvents
                 ->from(date("Ymd"))
                 ->fetch();
         $idActionToUpdateOn = $allEventsObj[0]->id;
 
-        $attendanceObj = new \Tymy\Attendance($mockPresenter->tapiAuthenticator, $mockPresenter);
+        $attendanceObj = new \Tymy\Attendance($this->tapiAuthenticator, $mockPresenter);
         $attendanceObj->recId($idActionToUpdateOn)
                 ->preStatus("YES")
                 ->preDescription("Tymyv2-AutoTest-yes")

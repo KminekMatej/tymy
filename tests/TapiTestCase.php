@@ -15,13 +15,18 @@ class TapiTestCase extends Tester\TestCase {
     protected $loginObj;
     protected $login;
     protected $tapi_config;
+    protected $tapiAuthenticator;
+    protected $testAuthenticator;
         
     protected function initTapiConfiguration($container){
         $this->supplier = $container->getByType('App\Model\Supplier');
         $tapi_config = $this->supplier->getTapi_config();
         $tapi_config["tym"] = $GLOBALS["testedTeam"]["team"];
         $this->tapi_config = $tapi_config;
+        
         $this->supplier->setTapi_config($tapi_config);
+        $this->tapiAuthenticator = new \App\Model\TapiAuthenticator($this->tapi_config);
+        $this->testAuthenticator = new \App\Model\TestAuthenticator();
     }
     
     public function login(){

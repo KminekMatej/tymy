@@ -18,19 +18,17 @@ if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
 
-class NavbarTest extends Tester\TestCase {
+class NavbarTest extends TapiTestCase {
 
     private $container;
     private $presenter;
-    private $identity;
-    private $admin;
 
     function __construct(Nette\DI\Container $container) {
         $this->container = $container;
     }
 
     function setUp() {
-        
+        $this->initTapiConfiguration($this->container);
     }
     
     function mockPresenter($presenter){
@@ -38,8 +36,8 @@ class NavbarTest extends Tester\TestCase {
         $this->presenter = $presenterFactory->createPresenter($presenter);
         $this->presenter->autoCanonicalize = FALSE;
         $this->presenter->getUser()->setExpiration('2 minutes');
+        $this->presenter->getUser()->setAuthenticator($this->tapiAuthenticator);
         $this->presenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
-        $this->presenter->getUser()->getIdentity()->tym = $GLOBALS["testedTeam"]["team"];
     }
     
     function getHomepageHtml($presenter){
@@ -61,14 +59,14 @@ class NavbarTest extends Tester\TestCase {
     function testNavbarComponents($presenterMock){
         $this->mockPresenter($presenterMock);
         $html = (string) $this->getHomepageHtml($presenterMock);
-        $discussions = new \Tymy\Discussions($this->presenter->tapiAuthenticator, $this->presenter);
+        $discussions = new \Tymy\Discussions($this->tapiAuthenticator, $this->presenter);
         
         $dObj = $discussions->fetch();
         
-        $polls = new \Tymy\Polls($this->presenter->tapiAuthenticator, $this->presenter);
+        $polls = new \Tymy\Polls($this->tapiAuthenticator, $this->presenter);
         $pObj = $polls->fetch();
         
-        $events = new \Tymy\Events($this->presenter->tapiAuthenticator, $this->presenter);
+        $events = new \Tymy\Events($this->tapiAuthenticator, $this->presenter);
         $eObj = $events
                 ->withMyAttendance(true)
                 ->from(date("Ymd"))

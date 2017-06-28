@@ -11,7 +11,7 @@ if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
 
-class EventPresenterTest extends Tester\TestCase {
+class EventPresenterTest extends TapiTestCase {
 
     const PRESENTERNAME = "Event";
     
@@ -24,6 +24,7 @@ class EventPresenterTest extends Tester\TestCase {
     }
 
     function setUp() {
+        $this->initTapiConfiguration($this->container);
         $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
         $this->presenter = $presenterFactory->createPresenter(self::PRESENTERNAME);
         $this->presenter->autoCanonicalize = FALSE;
@@ -41,6 +42,7 @@ class EventPresenterTest extends Tester\TestCase {
     function testActionDefault(){
         $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', array('action' => 'default'));
         $this->presenter->getUser()->setExpiration('2 minutes');
+        $this->presenter->getUser()->setAuthenticator($this->tapiAuthenticator);
         $this->presenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
         $response = $this->presenter->run($request);
 
