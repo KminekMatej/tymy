@@ -89,6 +89,7 @@ class SecuredPresenter extends BasePresenter {
             }
             $this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
         }
+        $this->supplier->setTapi_config($this->getUser()->getIdentity()->getData()["tapi_config"]);
         $this->tapiAuthorizator->setUser($this->getUser()->getIdentity()->getData()["data"]);
         $this->setLevelCaptions(["0" => ["caption" => "Hlavní stránka", "link" => $this->link("Homepage:")]]);
         $this->template->tym = $this->supplier->getTym();

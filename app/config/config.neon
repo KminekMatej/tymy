@@ -13,7 +13,7 @@ session:
 
 
 services:
-        - App\Model\TapiAuthenticator (%tapi%)
+        - App\Model\TapiAuthenticator
         - App\Model\Supplier(%tapi%)
         - App\Forms\FormFactory
         - App\Forms\SignInFormFactory

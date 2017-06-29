@@ -17,11 +17,11 @@ class Supplier {
     private $sysapiRoot;
     private $roleClasses;
     private $statusClasses;
-    
+
     public function __construct($tapi_config) {
         $this->setTapi_config($tapi_config);
     }
-    
+
     public function getTapi_config() {
         return $this->tapi_config;
     }
@@ -37,7 +37,7 @@ class Supplier {
         return $this;
     }
 
-        public function getTym() {
+    public function getTym() {
         return $this->tym;
     }
 
@@ -53,7 +53,7 @@ class Supplier {
         return $this->sysapiRoot;
     }
 
-    private function setTym($tym) {
+    public function setTym($tym) {
         $this->tym = $tym;
         return $this;
     }

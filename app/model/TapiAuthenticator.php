@@ -9,28 +9,14 @@ use Nette;
  */
 class TapiAuthenticator implements Nette\Security\IAuthenticator {
 
-    private $tym;
-    private $tapi_config;
-
-    public function __construct($tapi_config) {
-        $this->setTapi_config($tapi_config);
-        $this->setTym($tapi_config['tym']);
+    /** @var Supplier */
+    private $supplier;
+    
+    public function __construct(Supplier $supplier) {
+        $this->supplier = $supplier;
     }
     
-    public function getTapi_config() {
-        return $this->tapi_config;
-    }
-
-    public function setTapi_config($tapi_config) {
-        $this->tapi_config = $tapi_config;
-        return $this;
-    }
-
-        public function setTym($tym){
-        $this->tym = $tym;
-    }
-
-        /**
+    /**
      * Performs an authentication.
      * @return Nette\Security\Identity
      * @throws Nette\Security\AuthenticationException
@@ -40,6 +26,7 @@ class TapiAuthenticator implements Nette\Security\IAuthenticator {
         $loginObj = $this->reAuthenticate($credentials);
         $arr = (array) $loginObj->result;
         $arr["hash"] = $credentials[1];
+        $arr["tapi_config"] = $this->supplier->getTapi_config();
         return new Nette\Security\Identity($loginObj->result->data->id, $loginObj->result->data->roles, $arr );
     }
     
@@ -49,7 +36,7 @@ class TapiAuthenticator implements Nette\Security\IAuthenticator {
         $loginObj = new \Tymy\Login();
         
         try {
-            $loginObj->setSupplier(new Supplier($this->tapi_config))
+            $loginObj->setSupplier($this->supplier)
                     ->setUsername($username)
                     ->setPassword($password)
                     ->fetch();

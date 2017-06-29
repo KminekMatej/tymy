@@ -12,6 +12,9 @@ class SignPresenter extends BasePresenter {
 
     /** @var Forms\SignUpFormFactory @inject */
     public $signUpFactory;
+    
+    /** @var \App\Model\Supplier @inject */
+    public $supplier;
 
     /**
      * Sign-in form factory.
@@ -20,7 +23,7 @@ class SignPresenter extends BasePresenter {
     protected function createComponentSignInForm() {
         return $this->signInFactory->create(function () {
                     $this->redirect('Homepage:');
-                });
+                }, $this->supplier);
     }
 
     /**
@@ -34,10 +37,14 @@ class SignPresenter extends BasePresenter {
     }
 
     public function actionOut() {
+        $this->supplier->setTapi_config($this->getUser()->getIdentity()->getData()["tapi_config"]);
         $logout = new \Tymy\Logout(NULL, $this);
-        $logout->logout();
+        $logout
+                ->setSupplier($this->supplier)
+                ->logout();
+        
         $this->getUser()->logout();
         $this->flashMessage('You have been succesfully signed out');
         $this->redirect('Sign:In');
     }
-}
+        }
