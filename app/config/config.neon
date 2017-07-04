@@ -24,3 +24,6 @@ services:
             class: App\Model\TapiAuthorizator
         cacheStorage:
             class: Nette\Caching\Storages\DevNullStorage
+
+tracy:
+    email: matej.kminek@attendees.eu
