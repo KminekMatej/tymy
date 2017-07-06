@@ -22,7 +22,7 @@
                             <a class="flex-sm-fill text-sm-center nav-link" data-toggle="tab" href="#prihlaseni" role="tab">Přihlášení {if $cnt > 0}<span class="badge badge-pill badge-danger">{$cnt}</span>{/if}</a>
                         </li>
                         <li class="nav-item">
-                            {var $cnt = count(array_intersect($player->errFls,['jerseyNumber']))}
+                            {var $cnt = count(array_intersect($player->errFls,['jerseyNumber','status']))}
                             <a class="flex-sm-fill text-sm-center nav-link" data-toggle="tab" href="#tymove-info" role="tab">Týmové info {if $cnt > 0}<span class="badge badge-pill badge-danger">{$cnt}</span>{/if}</a>
                         </li>
                         <li class="nav-item">
@@ -113,6 +113,7 @@
                                     <th>Týmový stav:</th>
                                     <td n:class="in_array('status',$player->errFls) ? has-danger">
                                         <select class="form-control col-3" style="min-width: 120px">
+                                            <option value="INIT" selected n:if="$player->status=='INIT'">Registrován</option>
                                             <option value="PLAYER" {if $player->status=="PLAYER"}selected{/if}>Hráč</option>
                                             <option value="SICK" {if $player->status=="SICK"}selected{/if}>Marod</option>
                                             <option value="MEMBER" {if $player->status=="MEMBER"}selected{/if}>Člen</option>

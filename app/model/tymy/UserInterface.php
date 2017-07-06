@@ -58,5 +58,9 @@ abstract class UserInterface extends Tymy{
             $player->errCnt++;
             $player->errFls[] = "jerseyNumber";
         }
+        if ($player->status == "INIT") {
+            $player->errCnt++;
+            $player->errFls[] = "status";
+        }
     }
 }
