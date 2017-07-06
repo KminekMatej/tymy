@@ -99,10 +99,16 @@
                                     <th>Zobrazované jméno:</th><td n:class="in_array('displayName',$player->errFls) ? has-danger"><input type="text" value="{$player->displayName}" class="form-control col-6" /></td>
                                 </tr>
                                 <tr>
+                                    <th>Editovatelné uživatelem:</th><td><input type="checkbox" n:attr='checked => $player->canLogin' class="form-control form-check col-6" /></td>
+                                </tr>
+                                <tr>
                                     <th>Uživatelské jméno:</th><td n:class="in_array('login',$player->errFls) ? has-danger"><input type="text" value="{$player->login}" class="form-control col-6" /></td>
                                 </tr>
                                 <tr>
                                     <th>Nové heslo:</th><td><input type="password" value="" class="form-control col-6" /></td>
+                                </tr>
+                                <tr>
+                                    <th>Přihlášení povoleno:</th><td><input type="checkbox" n:attr='checked => $player->canLogin' class="form-control from-control-lg form-check col-6" /></td>
                                 </tr>
                             </table>
                         </div>

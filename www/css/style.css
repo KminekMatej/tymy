@@ -232,3 +232,8 @@ DIV.poll TR[data-vote] A:hover{
         border-radius: 0.25rem !important;
     }
 }
+
+INPUT.form-check{
+    width: 25px;
+    height: 25px;
+}
