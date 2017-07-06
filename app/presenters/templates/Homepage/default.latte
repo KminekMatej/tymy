@@ -121,7 +121,7 @@
                                 {var $someOnline = TRUE}
                                 <figure class="figure text-center" style="width: 100px">
                                     <a href="{plink Team:player $usr->webName}" title="{$usr->lastLogin|date:'j.n.Y H:i:s'}">
-                                        <img src="{$tymyRoot}/{$usr->pictureUrl}" class="figure-img img-fluid rounded" alt="{$usr->callName}" />
+                                        <img src="{$tymyRoot}/{$usr->pictureUrl}" class="figure-img img-fluid rounded user_pic" alt="{$usr->callName}" />
                                         <figcaption class="figure-caption">{$usr->callName}</figcaption>
                                         <figcaption class="figure-caption" style="font-size: 70%; display: inline-block">{$usr->lastLogin|lastLogin}</figcaption>
                                     </a>
@@ -135,7 +135,7 @@
                                     {var $lastLogin = property_exists($usr, 'lastLogin') ? ($usr->lastLogin|date:'j.n.Y H:i:s') : 'Nikdy'}
                                     {var $caption = property_exists($usr, 'lastLogin') ? ($usr->lastLogin|lastLogin) : 'Nikdy'}
                                     <a href="{plink Team:player $usr->webName}" title="{$lastLogin}">
-                                        <img src="{$tymyRoot}/{$usr->pictureUrl}" class="figure-img img-fluid rounded" alt="{$usr->callName}" />
+                                        <img src="{$tymyRoot}/{$usr->pictureUrl}" class="figure-img img-fluid rounded user_pic" alt="{$usr->callName}" />
                                         <figcaption class="figure-caption">{$usr->callName}</figcaption>
                                         <figcaption class="figure-caption" style="font-size: 70%; display: inline-block">{$caption}</figcaption>
                                     </a>

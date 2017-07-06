@@ -40,7 +40,7 @@
                         <div class="tab-pane fade show active" id="osobni-udaje" role="tabpanel">
                             <table class="table">
                                 <tr>
-                                    <th>Profilovka:</th><td n:class="in_array('pictureUrl',$player->errFls) ? has-danger"><img src="{$tymyRoot}/{$player->pictureUrl}" /></td>
+                                    <th>Profilovka:</th><td n:class="in_array('pictureUrl',$player->errFls) ? has-danger"><img class="user_pic" src="{$tymyRoot}/{$player->pictureUrl}" /></td>
                                 </tr>
                                 <tr>
                                     <th>Pohlaví:</th><td n:class="in_array('gender',$player->errFls) ? has-danger">
@@ -64,7 +64,7 @@
                                     <th>E-mail:</th><td n:class="in_array('email',$player->errFls) ? has-danger"><div class="input-group"><input type="text" value="{$player->email}" class="form-control col-6" style="min-width: 200px"/><div class="input-group-addon">{if $player->email != ""}<a href="mailto:{$player->email}">{/if}<i class="fa fa-envelope-o" aria-hidden="true"></i>{if $player->email!=""}</a>{/if}</div></div></td>
                                 </tr>
                                 <tr>
-                                    <th>Datum narození:</th><td n:class="in_array('birthDate',$player->errFls) ? has-danger"><input type="text" value="{$player->birthDate|date:'d.m.Y'}" class="form-control col-6" /></td>
+                                    <th>Datum narození:</th><td n:class="in_array('birthDate',$player->errFls) ? has-danger"><input type="date" value="{$player->birthDate|date:'d.m.Y'}" class="form-control col-6" /></td>
                                 </tr>
                                 <tr>
                                     <th>Měsíc svátku:</th><td n:class="in_array('nameDayMonth',$player->errFls) ? has-danger">
@@ -99,7 +99,7 @@
                                     <th>Zobrazované jméno:</th><td n:class="in_array('displayName',$player->errFls) ? has-danger"><input type="text" value="{$player->displayName}" class="form-control col-6" /></td>
                                 </tr>
                                 <tr>
-                                    <th>Editovatelné uživatelem:</th><td><input type="checkbox" n:attr='checked => $player->canLogin' class="form-control form-check col-6" /></td>
+                                    <th>Editovatelné uživatelem:</th><td><input type="checkbox" n:attr='checked => $player->canEditCallName' class="form-control form-check col-6" /></td>
                                 </tr>
                                 <tr>
                                     <th>Uživatelské jméno:</th><td n:class="in_array('login',$player->errFls) ? has-danger"><input type="text" value="{$player->login}" class="form-control col-6" /></td>
