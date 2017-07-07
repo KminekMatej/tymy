@@ -19,6 +19,26 @@ final class User extends UserInterface{
         return $this;
     }
     
+    public function edit($fields){
+        if (!isset($this->recId))
+            throw new \Tymy\Exception\APIException('User ID not set!');
+        if (!$fields)
+            throw new \Tymy\Exception\APIException('Fields to edit not set!');
+        
+        $this->urlStart();
+
+        $this->fullUrl .= "users/" .$this->recId . "/edit/";
+
+        $this->urlEnd();
+        
+        foreach ($fields as $key => $value) {
+            $this->addPost($key,$value);
+        }
+        
+        $this->result = $this->execute();
+        return $this;
+    }
+    
     protected function postProcess(){
         $data = $this->getData();
         $data->webName = \Nette\Utils\Strings::webalize($data->fullName);

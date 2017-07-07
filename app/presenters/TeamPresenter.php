@@ -88,4 +88,13 @@ class TeamPresenter extends SecuredPresenter {
         $this->template->allRoles = $allRoles;
     }
     
+    public function handleEdit($playerId){
+        $post = $this->getRequest()->getPost();
+        \Tracy\Debugger::barDump($post);
+        //$this->redrawControl ("poll-results");
+        $poll = new \Tymy\User($this->tapiAuthenticator, $this);
+        $poll->recId($playerId)
+            ->edit($post);
+    }
+    
 }

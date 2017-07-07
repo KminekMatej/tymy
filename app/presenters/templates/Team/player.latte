@@ -4,6 +4,10 @@
 {control navbar}
 {/block}
 
+{block scripts}
+{include parent}
+<script src="{$basePath}/js/users.js"></script>
+{/block}
 
 {block content}
 
@@ -44,32 +48,32 @@
                                 </tr>
                                 <tr>
                                     <th>Pohlaví:</th><td n:class="in_array('gender',$player->errFls) ? has-danger">
-                                        <select class="form-control col-3" style="min-width: 80px">
-                                            <option>Specifikujte...</option>
+                                        <select class="form-control col-3" style="min-width: 80px" name="gender" data-value="{$player->gender}">
+                                            <option value="">Vyberte pohlaví ↓</option>
                                             <option value="MALE" {if $player->gender=="MALE"}selected{/if}>Muž</option>
                                             <option value="FEMALE" {if $player->gender=="FEMALE"}selected{/if}>Žena</option>
                                         </select>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>Jméno:</th><td n:class="in_array('firstName',$player->errFls) ? has-danger"><input type="text" value="{$player->firstName}" class="form-control col-6" /></td>
+                                    <th>Jméno:</th><td n:class="in_array('firstName',$player->errFls) ? has-danger"><input name="firstName" data-value="{$player->firstName}" type="text" value="{$player->firstName}" class="form-control col-6" /></td>
                                 </tr>
                                 <tr>
-                                    <th>Příjmení:</th><td n:class="in_array('lastName',$player->errFls) ? has-danger"><input type="text" value="{$player->lastName}" class="form-control col-6" /></td>
+                                    <th>Příjmení:</th><td n:class="in_array('lastName',$player->errFls) ? has-danger"><input name="lastName" data-value="{$player->lastName}" type="text" value="{$player->lastName}" class="form-control col-6" /></td>
                                 </tr>
                                 <tr>
-                                    <th>Telefon:</th><td n:class="in_array('phone',$player->errFls) ? has-danger"><input type="text" value="{$player->phone}" class="form-control col-6" /></td>
+                                    <th>Telefon:</th><td n:class="in_array('phone',$player->errFls) ? has-danger"><input name="phone" data-value="{$player->phone}" type="text" value="{$player->phone}" class="form-control col-6" /></td>
                                 </tr>
                                 <tr>
-                                    <th>E-mail:</th><td n:class="in_array('email',$player->errFls) ? has-danger"><div class="input-group"><input type="text" value="{$player->email}" class="form-control col-6" style="min-width: 200px"/><div class="input-group-addon">{if $player->email != ""}<a href="mailto:{$player->email}">{/if}<i class="fa fa-envelope-o" aria-hidden="true"></i>{if $player->email!=""}</a>{/if}</div></div></td>
+                                    <th>E-mail:</th><td n:class="in_array('email',$player->errFls) ? has-danger"><div class="input-group"><input name="email" data-value="{$player->email}" type="text" value="{$player->email}" class="form-control col-6" style="min-width: 200px"/><div class="input-group-addon">{if $player->email != ""}<a href="mailto:{$player->email}">{/if}<i class="fa fa-envelope-o" aria-hidden="true"></i>{if $player->email!=""}</a>{/if}</div></div></td>
                                 </tr>
                                 <tr>
-                                    <th>Datum narození:</th><td n:class="in_array('birthDate',$player->errFls) ? has-danger"><input type="date" value="{$player->birthDate|date:'d.m.Y'}" class="form-control col-6" /></td>
+                                    <th>Datum narození:</th><td n:class="in_array('birthDate',$player->errFls) ? has-danger"><input name="birthDate" data-value="{$player->birthDate}" type="date" value="{$player->birthDate}" class="form-control col-6" /></td>
                                 </tr>
                                 <tr>
                                     <th>Měsíc svátku:</th><td n:class="in_array('nameDayMonth',$player->errFls) ? has-danger">
-                                        <select class="form-control col-3" style="min-width: 160px">
-                                            <option>Vyberte měsíc...</option>
+                                        <select class="form-control col-3" style="min-width: 160px" name="nameDayMonth" data-value="{$player->nameDayMonth}">
+                                            <option value="">Vyberte měsíc ↓</option>
                                             {for $m=1; $m<=12; $m++})
                                                 <option value="{$m}" {if $player->nameDayMonth==$m}selected{/if}>{$m|monthName}</option>
                                             {/for}
@@ -78,13 +82,13 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>Den svátku:</th><td n:class="in_array('nameDayDay',$player->errFls) ? has-danger"><input type="number" value="{$player->nameDayDay}" min="1" max="31" class="form-control col-2"  style="min-width: 160px" /></td>
+                                    <th>Den svátku:</th><td n:class="in_array('nameDayDay',$player->errFls) ? has-danger"><input name="nameDayDay" data-value="{$player->nameDayDay}" type="number" value="{$player->nameDayDay}" min="1" max="31" class="form-control col-2"  style="min-width: 160px" /></td>
                                 </tr>
                                 <tr>
                                     <th>Jazyk:</th>
                                     <td n:class="in_array('language',$player->errFls) ? has-danger">
-                                        <select class="form-control col-3"  style="min-width: 120px">
-                                            <option value="CS" {if $player->language=="CZ"}selected{/if}>Czech</option>
+                                        <select class="form-control col-3"  style="min-width: 120px" name="language" data-value="{$player->language}">
+                                            <option value="CZ" {if $player->language=="CZ"}selected{/if}>Czech</option>
                                             <option value="EN" {if $player->language=="EN"}selected{/if}>English</option>
                                             <option value="FR" {if $player->language=="FR"}selected{/if}>French</option>
                                         </select>
@@ -96,19 +100,19 @@
                         <div class="tab-pane fade" id="prihlaseni" role="tabpanel">
                             <table class="table">
                                 <tr>
-                                    <th>Zobrazované jméno:</th><td n:class="in_array('displayName',$player->errFls) ? has-danger"><input type="text" value="{$player->displayName}" class="form-control col-6" /></td>
+                                    <th>Zobrazované jméno:</th><td n:class="in_array('displayName',$player->errFls) ? has-danger"><input name="displayName" data-value="{$player->displayName}" type="text" value="{$player->displayName}" class="form-control col-6" /></td>
                                 </tr>
                                 <tr>
-                                    <th>Editovatelné uživatelem:</th><td><input type="checkbox" n:attr='checked => $player->canEditCallName' class="form-control form-check col-6" /></td>
+                                    <th>Editovatelné uživatelem:</th><td><input name="canEditCallName" data-value="{$player->canEditCallName}" type="checkbox" n:attr='checked => $player->canEditCallName' class="form-control form-check col-6" /></td>
                                 </tr>
                                 <tr>
-                                    <th>Uživatelské jméno:</th><td n:class="in_array('login',$player->errFls) ? has-danger"><input type="text" value="{$player->login}" class="form-control col-6" /></td>
+                                    <th>Uživatelské jméno:</th><td n:class="in_array('login',$player->errFls) ? has-danger"><input name="login" data-value="{$player->login}" type="text" value="{$player->login}" class="form-control col-6" /></td>
                                 </tr>
                                 <tr>
                                     <th>Nové heslo:</th><td><input type="password" value="" class="form-control col-6" /></td>
                                 </tr>
                                 <tr>
-                                    <th>Přihlášení povoleno:</th><td><input type="checkbox" n:attr='checked => $player->canLogin' class="form-control from-control-lg form-check col-6" /></td>
+                                    <th>Přihlášení povoleno:</th><td><input name="canLogin" data-value="{$player->canLogin}" type="checkbox" n:attr='checked => $player->canLogin' class="form-control from-control-lg form-check col-6" /></td>
                                 </tr>
                             </table>
                         </div>
@@ -118,7 +122,7 @@
                                 <tr>
                                     <th>Týmový stav:</th>
                                     <td n:class="in_array('status',$player->errFls) ? has-danger">
-                                        <select class="form-control col-3" style="min-width: 120px">
+                                        <select class="form-control col-3" style="min-width: 120px" name="status" data-value="{$player->status}">
                                             <option value="INIT" selected n:if="$player->status=='INIT'">Registrován</option>
                                             <option value="PLAYER" {if $player->status=="PLAYER"}selected{/if}>Hráč</option>
                                             <option value="SICK" {if $player->status=="SICK"}selected{/if}>Marod</option>
@@ -128,7 +132,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>Číslo dresu:</th><td n:class="in_array('jerseyNumber',$player->errFls) ? has-danger"><input type="number" value="{$player->jerseyNumber}" class="form-control col-3" /></td>
+                                    <th>Číslo dresu:</th><td n:class="in_array('jerseyNumber',$player->errFls) ? has-danger"><input name="jerseyNumber" data-value="{$player->jerseyNumber}" type="number" value="{$player->jerseyNumber}" class="form-control col-3" /></td>
                                 </tr>
                             </table>
                         </div>
@@ -136,13 +140,13 @@
                         <div class="tab-pane fade" id="adresa" role="tabpanel">
                             <table class="table">
                                 <tr>
-                                    <th>Ulice:</th><td n:class="in_array('street',$player->errFls) ? has-danger"><input type="text" value="{$player->street}" class="form-control col-6" /></td>
+                                    <th>Ulice:</th><td n:class="in_array('street',$player->errFls) ? has-danger"><input name="street" data-value="{$player->street}" type="text" value="{$player->street}" class="form-control col-6" /></td>
                                 </tr>
                                 <tr>
-                                    <th>Město:</th><td n:class="in_array('city',$player->errFls) ? has-danger"><input type="text" value="{$player->city}" class="form-control col-6" /></td>
+                                    <th>Město:</th><td n:class="in_array('city',$player->errFls) ? has-danger"><input name="city" data-value="{$player->city}" type="text" value="{$player->city}" class="form-control col-6" /></td>
                                 </tr>
                                 <tr>
-                                    <th>PSČ:</th><td n:class="in_array('zipCode',$player->errFls) ? has-danger"><input type="text" value="{$player->zipCode}" class="form-control col-3" /></td>
+                                    <th>PSČ:</th><td n:class="in_array('zipCode',$player->errFls) ? has-danger"><input name="zipCode" data-value="{$player->zipCode}" type="text" value="{$player->zipCode}" class="form-control col-3" /></td>
                                 </tr>
                             </table>
 
@@ -157,7 +161,7 @@
                     </div>
                 </div>
                 <div class="card-footer text-right">
-                    <a href="#" class="btn btn-primary disabled">Uložit</a>
+                    <button onclick="updateUser(this, {link edit! $player->id})" class="btn btn-primary">Uložit</button>
                 </div>
             </div>
 
