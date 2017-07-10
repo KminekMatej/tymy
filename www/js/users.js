@@ -48,19 +48,35 @@ function updateUser(btn, purl){
         }
     });
     
-    $(btn).prop("disabled", true);
-    $(btn).attr("disabled", "disabled");
-    
-    $.nette.ajax({
-        url: purl,
-        method: 'POST',
-        data: values,
-        complete: function (payload) {
-            $(btn).prop("disabled", true);
-            $(btn).attr("disabled", "disabled");
-            $(btn).removeAttr("disabled");
-        }
+    //check for updated role buttons
+    rolesNew = [];
+    rolesOld = [];
+    activeTab.find("BUTTON[name='role']").each(function (){
+        if($(this).hasClass("active"))
+            rolesNew.push($(this).attr("data-role"));
+        
+        if($(this).attr("data-value"))
+            rolesOld.push($(this).attr("data-role"));
+        
     });
+    
+    if($(rolesNew).not(rolesOld).length || $(rolesOld).not(rolesNew).length)
+        values["roles"] = rolesNew;
+    
+    if (!($.isEmptyObject(values) > 0)) {
+        $(btn).prop("disabled", true);
+        $(btn).attr("disabled", "disabled");
+        $.nette.ajax({
+            url: purl,
+            method: 'POST',
+            data: values,
+            complete: function (payload) {
+                $(btn).prop("disabled", true);
+                $(btn).attr("disabled", "disabled");
+                $(btn).removeAttr("disabled");
+            }
+        });
+    }
 }
 
 function isValid(name, value1, value2 = null){
@@ -82,4 +98,11 @@ function isValid(name, value1, value2 = null){
     }
     return true;
     
+}
+
+function checkRole(btn){
+    if($(btn).hasClass("active"))
+        $(btn).removeClass("active");
+    else
+        $(btn).addClass("active");
 }

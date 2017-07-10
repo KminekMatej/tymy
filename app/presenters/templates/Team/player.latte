@@ -157,7 +157,8 @@
 
                         <div class="tab-pane fade" id="opravneni" role="tabpanel">
                             {foreach $allRoles as $role}
-                                <button n:class="btn,$role->class,property_exists($player, 'roles') && in_array($role->code,$player->roles) ? active" style="min-width:69px" data-value="true">{$role->caption}</button>
+                                {var $hasRole = property_exists($player, 'roles') && in_array($role->code,$player->roles)}
+                                <button name="role" n:class="btn,$role->class,$hasRole ? active" style="min-width:69px" data-role="{$role->code}" data-value="{$hasRole}" onclick="checkRole(this)">{$role->caption}</button>
                             {/foreach}
                             
                         </div>
