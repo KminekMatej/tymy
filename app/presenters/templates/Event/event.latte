@@ -17,8 +17,8 @@
             <div class="card sh-box my-3">
                 <div class="card-block">
                     <h4 class="card-title">{$event->caption}</h4>
-                    {var $mapParams = 'query='.urlencode($event->place)}
-                    <h6 class="card-subtitle mb-2 text-muted">{$event->eventType->caption}<span n:if="$event->place"> - <a href="https://www.google.com/maps/search/?api=1&{$mapParams}" target="blank" title="Otevřít mapu...">{$event->place}</a></span><span n:if="$event->link"> - <a href="{$event->link}" target="_blank">[Odkaz]</a></span></h6>
+                    {var $mapLink = filter_var($event->place, FILTER_VALIDATE_URL) ? $event->place : 'https://www.google.com/maps/search/?api=1&query='.urlencode($event->place)}
+                    <h6 class="card-subtitle mb-2 text-muted">{$event->eventType->caption}<span n:if="$event->place"> - <a href="{$mapLink}" target="blank" title="Otevřít mapu...">{$event->place}</a></span><span n:if="$event->link"> - <a href="{$event->link}" target="_blank">[Odkaz]</a></span></h6>
                     <p class="card-text">{$event->description}</p>
                     <div class="row">
                         <div class="col-md-4">
