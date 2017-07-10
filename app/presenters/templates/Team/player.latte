@@ -109,7 +109,10 @@
                                     <th>Uživatelské jméno:</th><td n:class="in_array('login',$player->errFls) ? has-danger"><input name="login" data-value="{$player->login}" type="text" value="{$player->login}" class="form-control col-6" /></td>
                                 </tr>
                                 <tr>
-                                    <th>Nové heslo:</th><td><input type="password" value="" class="form-control col-6" /></td>
+                                    <th>Nové heslo:</th><td><input name="password" data-value="" type="password" value="" class="form-control col-6" /></td>
+                                </tr>
+                                <tr>
+                                    <th>Nové heslo znovu:</th><td><input name="password-check" type="password" value="" class="form-control col-6" /></td>
                                 </tr>
                                 <tr>
                                     <th>Přihlášení povoleno:</th><td><input name="canLogin" data-value="{$player->canLogin}" type="checkbox" n:attr='checked => $player->canLogin' class="form-control from-control-lg form-check col-6" /></td>
