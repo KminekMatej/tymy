@@ -37,14 +37,17 @@ class SignPresenter extends BasePresenter {
     }
 
     public function actionOut() {
-        $this->supplier->setTapi_config($this->getUser()->getIdentity()->getData()["tapi_config"]);
-        $logout = new \Tymy\Logout(NULL, $this);
-        $logout
-                ->setSupplier($this->supplier)
-                ->logout();
-        
-        $this->getUser()->logout();
+        if (isset($this->getUser()->getIdentity())) {
+            $this->supplier->setTapi_config($this->getUser()->getIdentity()->getData()["tapi_config"]);
+            $logout = new \Tymy\Logout(NULL, $this);
+            $logout
+                    ->setSupplier($this->supplier)
+                    ->logout();
+
+            $this->getUser()->logout();
+        }
         $this->flashMessage('You have been succesfully signed out');
         $this->redirect('Sign:In');
     }
-        }
+
+}
