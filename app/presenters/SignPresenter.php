@@ -37,7 +37,7 @@ class SignPresenter extends BasePresenter {
     }
 
     public function actionOut() {
-        if (isset($this->getUser()->getIdentity())) {
+        if (!is_null($this->getUser()->getIdentity())) {
             $this->supplier->setTapi_config($this->getUser()->getIdentity()->getData()["tapi_config"]);
             $logout = new \Tymy\Logout(NULL, $this);
             $logout
