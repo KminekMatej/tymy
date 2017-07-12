@@ -12,6 +12,8 @@ use Nette\Utils\Strings;
  */
 final class EventTypes extends Tymy{
     
+    const TAPI_NAME = "eventTypes";
+    
     public function select() {
         $this->fullUrl .= "eventTypes/";
     }

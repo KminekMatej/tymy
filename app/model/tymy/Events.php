@@ -11,6 +11,8 @@ use Nette;
  */
 final class Events extends Tymy{
     
+    const TAPI_NAME = "events";
+    
     private $dateFrom;
     private $order;
     private $dateTo;

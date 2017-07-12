@@ -12,6 +12,10 @@ use Nette\Utils\Strings;
  */
 final class User extends UserInterface{
     
+    private $login;
+    private $password;
+    private $email;
+    
     public function select() {
         if (!isset($this->recId))
             throw new \Tymy\Exception\APIException('User ID not set!');
@@ -39,6 +43,26 @@ final class User extends UserInterface{
         return $this;
     }
     
+    public function create(){
+        if (!$this->login)
+            throw new \Tymy\Exception\APIException('Login not set!');
+        if (!$this->password)
+            throw new \Tymy\Exception\APIException('Password not set!');
+        if (!$this->email)
+            throw new \Tymy\Exception\APIException('Email not set!');
+        
+        $this->urlStart();
+
+        $this->fullUrl .= "users/register/";
+        
+        foreach ($fields as $key => $value) {
+            $this->addPost($key,$value);
+        }
+        
+        $this->result = $this->execute();
+        return $this;
+    }
+    
     protected function postProcess(){
         $data = $this->getData();
         $data->webName = \Nette\Utils\Strings::webalize($data->fullName);
@@ -49,5 +73,33 @@ final class User extends UserInterface{
         $this->userWarnings($data);
         $this->userPermissions($data);
     }
+    
+    public function getLogin() {
+        return $this->login;
+    }
+
+    public function getPassword() {
+        return $this->password;
+    }
+
+    public function getEmail() {
+        return $this->email;
+    }
+
+    public function setLogin($login) {
+        $this->login = $login;
+        return $this;
+    }
+
+    public function setPassword($password) {
+        $this->password = $password;
+        return $this;
+    }
+
+    public function setEmail($email) {
+        $this->email = $email;
+        return $this;
+    }
+
 
 }

@@ -12,6 +12,8 @@ use Nette\Utils\Json;
  */
 final class Logout extends Tymy{
     
+    const TAPI_NAME = "logout";
+    
     public function select() {
         return $this;
     }

@@ -12,17 +12,10 @@ use Nette\Utils\Strings;
  */
 final class Users extends UserInterface{
     
-    private $userType;
-    
-    public function __construct(\App\Model\TapiAuthenticator $tapiAuthenticator = NULL, Nette\Application\UI\Presenter $presenter = NULL, $userType = NULL) {
-        parent::__construct($tapiAuthenticator, $presenter);
-        $this->userType = $userType;
-    }
+    const TAPI_NAME = "users";
     
     public function select() {
         $this->fullUrl .= "users/";
-        if(!is_null($this->userType))
-            $this->fullUrl .= "status/" . $this->userType . "/";
         return $this;
     }
 
@@ -65,7 +58,9 @@ final class Users extends UserInterface{
         }
         $this->getResult()->data = $players;
         $this->getResult()->counts = $counts;
+        
+        $this->session->getSection("tymy")["users"] = $this->users->getResult();
+        
     }
-    
-    
+
 }

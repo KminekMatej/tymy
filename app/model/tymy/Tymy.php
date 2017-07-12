@@ -14,6 +14,9 @@ use DateTimeZone;
  * @author matej
  */
 abstract class Tymy extends Nette\Object{
+    
+    const SESSION_SECTION = "TAPI";
+    
     protected $result = NULL;
     /** @var \App\Presenters\SecuredPresenter */
     protected $presenter;
@@ -27,12 +30,16 @@ abstract class Tymy extends Nette\Object{
     private $uriParams;
     private $postParams;
     /** @var \App\Model\Supplier */
-    private $supplier;
+    protected $supplier;
     /** @var \Tymy\TracyPanelTymy */
     protected $tymyPanel;
+    /** @var Nette\Http\Session */
+    protected $session;
     
     /** @var \App\Model\TapiAuthenticator */
     protected $tapiAuthenticator;
+    
+    protected $tsid;
     
     /** Function to return full URI of select api */
     abstract protected function select();
@@ -40,15 +47,20 @@ abstract class Tymy extends Nette\Object{
     /** Function to process after the result from API is obtained, used mainly for formatting or adding new properties to TAPI result */
     abstract protected function postProcess();
     
-    public function __construct(\App\Model\TapiAuthenticator $tapiAuthenticator = NULL, Nette\Application\UI\Presenter $presenter = NULL) {
-        $this->initTapiDebugPanel();
-        $this->tapiAuthenticator = $tapiAuthenticator;
-        if($presenter != NULL){
-            $this->setPresenter ($presenter);
-        } 
+    /** Function to return TAPI name of this request */
+    public function getTapiName(){
+        return self::TAPI_NAME;
     }
     
-    private function initTapiDebugPanel(){
+    public function __construct(\App\Model\Supplier $supplier, \App\Model\TapiAuthenticator $tapiAuthenticator, Nette\Security\User $user, Nette\Http\Session $session) {
+        $this->initTapiDebugPanel();
+        $this->tapiAuthenticator = $tapiAuthenticator;
+        $this->supplier = $supplier;
+        $this->user = $user;
+        $this->session = $session;
+    }
+    
+    protected function initTapiDebugPanel(){
         $panelId = "TymyAPI";
         if(is_null(\Tracy\Debugger::getBar()->getPanel($panelId))){
             $this->tymyPanel = new \Tymy\TracyPanelTymy;
@@ -62,7 +74,6 @@ abstract class Tymy extends Nette\Object{
         $this->presenter = $presenter;
         $this->setSupplier ($presenter->supplier);
         $this->setUser ($presenter->getUser());
-        $this->setUriParam("TSID", $this->user->getIdentity()->data["sessionKey"]);
         return $this;
     }
     
@@ -133,12 +144,29 @@ abstract class Tymy extends Nette\Object{
         return $this->recId;
     }
     
-    public function getData(){
-        return isset($this->result) ? $this->result->data : NULL;
+    public function getData($force = FALSE){
+        $sessionSection = $this->session->getSection(self::SESSION_SECTION);
+        if(!$force && array_key_exists($this->getTapiName(), $sessionSection)){
+            return $sessionSection[$this->getTapiName()]->data;
+        }
+        
+        if(is_null($this->result) || $force){
+            $this->fetch();
+        }
+        return $this->result->data;
     }
     
-    public function getResult(){
-        return isset($this->result) ? $this->result : NULL;
+    public function getResult($force = FALSE){
+        $sessionSection = $this->session->getSection(self::SESSION_SECTION);
+        if(!$force && array_key_exists($this->getTapiName(), $sessionSection)){
+            return $sessionSection[$this->getTapiName()];
+        }
+        
+        if(is_null($this->result) || $force){
+            $this->fetch();
+        }
+        
+        return $this->result;
     }
     
     protected function execute($relogin = TRUE) {
@@ -173,7 +201,7 @@ abstract class Tymy extends Nette\Object{
         if ($relogin && !is_null($this->tapiAuthenticator)) {
             $newLogin = $this->tapiAuthenticator->reAuthenticate([$this->user->getIdentity()->data["data"]->login, $this->user->getIdentity()->data["hash"]]);
             $this->user->getIdentity()->sessionKey = $newLogin->result->sessionKey;
-            $this->setUriParam("TSID", $this->user->getIdentity()->sessionKey);
+            $this->setTsid($this->user->getIdentity()->sessionKey);
             $this->urlEnd();
             return $this->execute(FALSE);
         } else {
@@ -228,4 +256,14 @@ abstract class Tymy extends Nette\Object{
         return $this;
     }
     
+    public function getTsid() {
+        return $this->tsid;
+    }
+
+    public function setTsid($tsid) {
+        $this->tsid = $tsid;
+        $this->setUriParam("TSID", $tsid);
+        return $this;
+    }
+
 }

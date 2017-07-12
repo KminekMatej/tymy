@@ -11,6 +11,8 @@ use Nette;
  */
 final class Event extends Tymy{
     
+    const TAPI_NAME = "event";
+    
     public function select() {
         if (!isset($this->recId))
             throw new Exception\APIException('Event ID not set!');

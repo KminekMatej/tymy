@@ -12,18 +12,11 @@ use Nette\Utils\Json;
  */
 final class Discussion extends Tymy{
     
-    private $mode;
+    const MODE = "html";
+    const TAPI_NAME = "discussion";
+    
     private $page;
     private $search;
-    private $users;
-    
-    
-    public function __construct(\App\Model\TapiAuthenticator $tapiAuthenticator = NULL, Nette\Application\UI\Presenter $presenter = NULL, $html = FALSE, $page) {
-        parent::__construct($tapiAuthenticator, $presenter);
-        $this->mode = $html ? "html" : "bb";
-        $this->page = is_numeric($page) ? $page : 1 ;
-        $this->users = $presenter ? $presenter->getUsers() : NULL;
-    }
     
     public function select() {
         if (!isset($this->recId))
@@ -32,7 +25,7 @@ final class Discussion extends Tymy{
         if($this->page < 1)
             throw new \Tymy\Exception\APIException("Page do not exist");
         
-        $this->fullUrl .= "discussion/" .$this->recId . "/" . $this->mode . "/" . $this->page;
+        $this->fullUrl .= "discussion/" .$this->recId . "/" . self::MODE . "/" . $this->page;
         return $this;
     }
     
@@ -69,15 +62,16 @@ final class Discussion extends Tymy{
         }
     }
     
-    public function getMode(){
-        return $this->mode;
-    }
-
     public function getPage(){
         return $this->page;
     }
+    
+    public function setPage($page) {
+        $this->page = is_numeric($page) ? $page : 1 ;
+        return $this;
+    }
 
-    public function getSearch(){
+        public function getSearch(){
         return $this->search;
     }
     

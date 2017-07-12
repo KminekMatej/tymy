@@ -11,8 +11,9 @@ use Nette;
  */
 final class Discussions extends Tymy{
     
+    const TAPI_NAME = "discussions";
     private $withNew = FALSE;
-    
+        
     public function setWithNew($withNew){
         $this->withNew = $withNew;
         return $this;

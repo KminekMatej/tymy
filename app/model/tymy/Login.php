@@ -11,8 +11,14 @@ use Nette;
  */
 final class Login extends Tymy{
     
+    const TAPI_NAME = "login";
     private $username;
     private $hash;
+    
+    public function __construct(\App\Model\Supplier $supplier) {
+        $this->supplier = $supplier;
+        $this->initTapiDebugPanel();
+    }
     
     public function setUsername($username) {
         $this->username = $username;

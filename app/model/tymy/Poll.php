@@ -11,6 +11,8 @@ use Nette;
  */
 final class Poll extends Tymy{
     
+    const TAPI_NAME = "poll";
+    
     public function select() {
         if (!isset($this->recId))
             throw new \Tymy\Exception\APIException('Poll ID not set!');

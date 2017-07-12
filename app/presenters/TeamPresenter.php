@@ -90,7 +90,6 @@ class TeamPresenter extends SecuredPresenter {
     
     public function handleEdit($playerId){
         $post = $this->getRequest()->getPost();
-        \Tracy\Debugger::barDump($post);
         //$this->redrawControl ("poll-results");
         $poll = new \Tymy\User($this->tapiAuthenticator, $this);
         $poll->recId($playerId)
