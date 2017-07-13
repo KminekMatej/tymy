@@ -17,16 +17,15 @@ final class Discussion extends Tymy{
     const TSID_REQUIRED = TRUE;
     
     private $page;
-    private $search;
     
     public function select() {
         if (!isset($this->recId))
             throw new \Tymy\Exception\APIException('Discussion ID not set!');
 
-        if($this->page < 1)
-            throw new \Tymy\Exception\APIException("Page do not exist");
+        if(!isset($this->page) || $this->page <= 0) // page is not set
+            throw new \Tymy\Exception\APIException("Invalid page specified");
         
-        $this->fullUrl .= $this->fullUrl .= self::TAPI_NAME . "/" .$this->recId . "/" . self::MODE . "/" . $this->page;
+        $this->fullUrl .= self::TAPI_NAME . "/" .$this->recId . "/" . self::MODE . "/" . $this->page;
         return $this;
     }
     
@@ -71,15 +70,5 @@ final class Discussion extends Tymy{
         $this->page = is_numeric($page) ? $page : 1 ;
         return $this;
     }
-
-        public function getSearch(){
-        return $this->search;
-    }
-    
-    public function setUsers($users) {
-        $this->users = $users;
-        return $this;
-    }
-
 
 }
