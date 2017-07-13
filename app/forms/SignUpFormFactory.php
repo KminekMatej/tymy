@@ -11,19 +11,24 @@ class SignUpFormFactory
 {
 	use Nette\SmartObject;
 
-	const PASSWORD_MIN_LENGTH = 7;
+	const PASSWORD_MIN_LENGTH = 3;
+        const PASSWORD_PATTERN = '[^\s]{3,}';
+        const EMAIL_PATTERN = "^[-a-zA-Z0-9!#$%&'*+/=?^_`{|}~]+(\\.[-a-zA-Z0-9!#$%&'*+/=?^_`{|}~]+)*@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)+";
+        const LOGIN_PATTERN = '^[\w-]{3,20}';
+        
+        
 
 	/** @var FormFactory */
 	private $factory;
 
 	/** @var Model\UserManager */
-	private $userManager;
+	private $tapiAuthenticator;
 
 
-	public function __construct(FormFactory $factory, Model\TapiAuthenticator $userManager)
+	public function __construct(FormFactory $factory, Model\TapiAuthenticator $tapiAuthenticator)
 	{
 		$this->factory = $factory;
-		$this->userManager = $userManager;
+		$this->tapiAuthenticator = $tapiAuthenticator;
 	}
 
 
@@ -34,23 +39,23 @@ class SignUpFormFactory
 	{
 		$form = $this->factory->create();
 		$form->addText('username', 'Pick a username:')
-			->setRequired('Please pick a username.');
+			->setRequired('Please pick a username.')
+                        ->addRule($form::PATTERN, "Uživatelské jméno musí mít 3-20 znaků", self::LOGIN_PATTERN);
 
 		$form->addEmail('email', 'Your e-mail:')
 			->setRequired('Please enter your e-mail.');
 
 		$form->addPassword('password', 'Create a password:')
-			->setOption('description', sprintf('at least %d characters', self::PASSWORD_MIN_LENGTH))
 			->setRequired('Please create a password.')
-			->addRule($form::MIN_LENGTH, NULL, self::PASSWORD_MIN_LENGTH);
+                        ->addRule($form::PATTERN, "Heslo musí mít minimálně 3 znaky", self::PASSWORD_PATTERN);
 
-		$form->addSubmit('send', 'Sign up');
+		$form->addSubmit('send', 'Registrovat');
 
 		$form->onSuccess[] = function (Form $form, $values) use ($onSuccess) {
 			try {
-				$this->userManager->add($values->username, $values->email, $values->password);
-			} catch (Model\DuplicateNameException $e) {
-				$form['username']->addError('Username is already taken.');
+				$this->tapiAuthenticator->add($values->username, $values->email, $values->password);
+			} catch (\Nette\InvalidArgumentException $exc) {
+				$form['username']->addError($exc->getMessage());
 				return;
 			}
 			$onSuccess();
