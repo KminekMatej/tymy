@@ -13,6 +13,7 @@ use Nette\Utils\Json;
 final class Attendance extends Tymy{
     
     const TAPI_NAME = "attendance";
+    const TSID_REQUIRED = TRUE;
     
     private $preStatus;
     private $preDescription;

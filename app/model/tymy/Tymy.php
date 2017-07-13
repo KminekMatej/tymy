@@ -26,7 +26,9 @@ abstract class Tymy extends Nette\Object{
      */
     protected $recId;
     protected $fullUrl;
+    /** @var Nette\Security\User */
     protected $user;
+    
     private $uriParams;
     private $postParams;
     /** @var \App\Model\Supplier */
@@ -49,7 +51,14 @@ abstract class Tymy extends Nette\Object{
     
     /** Function to return TAPI name of this request */
     public function getTapiName(){
-        return self::TAPI_NAME;
+        $c = get_class( $this );
+        return $c::TAPI_NAME;
+    }
+    
+    /** Function to return if this TAPI class needs TSID for work */
+    public function getTSIDRequired(){
+        $c = get_class( $this );
+        return $c::TSID_REQUIRED;
     }
     
     public function __construct(\App\Model\Supplier $supplier, \App\Model\TapiAuthenticator $tapiAuthenticator, Nette\Security\User $user, Nette\Http\Session $session) {
@@ -104,6 +113,9 @@ abstract class Tymy extends Nette\Object{
     }
     
     protected function urlEnd() {
+        if($this->getTSIDRequired()){
+            $this->setTsid($this->user->getIdentity()->sessionKey);
+        }
         $this->fullUrl = preg_replace('/\\?.*/', '', $this->fullUrl); // firstly try to remove all url params before adding them - important for relogins
         $this->fullUrl .= "/" . $this->composeUriParams();
         return $this;
@@ -145,11 +157,13 @@ abstract class Tymy extends Nette\Object{
     }
     
     public function getData($force = FALSE){
-        $sessionSection = $this->session->getSection(self::SESSION_SECTION);
-        if(!$force && array_key_exists($this->getTapiName(), $sessionSection)){
-            return $sessionSection[$this->getTapiName()]->data;
+        if (!is_null($this->session)) {
+            $sessionSection = $this->session->getSection(self::SESSION_SECTION);
+            if (!$force && array_key_exists($this->getTapiName(), $sessionSection)) {
+                return $sessionSection[$this->getTapiName()]->data;
+            }
         }
-        
+
         if(is_null($this->result) || $force){
             $this->fetch();
         }
@@ -157,12 +171,14 @@ abstract class Tymy extends Nette\Object{
     }
     
     public function getResult($force = FALSE){
-        $sessionSection = $this->session->getSection(self::SESSION_SECTION);
-        if(!$force && array_key_exists($this->getTapiName(), $sessionSection)){
-            return $sessionSection[$this->getTapiName()];
+        if (!is_null($this->session)) {
+            $sessionSection = $this->session->getSection(self::SESSION_SECTION);
+            if (!$force && array_key_exists($this->getTapiName(), $sessionSection)) {
+                return $sessionSection[$this->getTapiName()];
+            }
         }
-        
-        if(is_null($this->result) || $force){
+
+        if(is_null($this->result)){
             $this->fetch();
         }
         

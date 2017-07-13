@@ -14,6 +14,7 @@ final class Discussion extends Tymy{
     
     const MODE = "html";
     const TAPI_NAME = "discussion";
+    const TSID_REQUIRED = TRUE;
     
     private $page;
     private $search;

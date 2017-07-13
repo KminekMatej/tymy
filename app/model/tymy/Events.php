@@ -12,10 +12,11 @@ use Nette;
 final class Events extends Tymy{
     
     const TAPI_NAME = "events";
+    const TSID_REQUIRED = TRUE;
     
-    private $dateFrom;
+    private $from;
     private $order;
-    private $dateTo;
+    private $to;
     private $withMyAttendance = FALSE;
     public $eventsJSObject;
     public $eventsMonthly;
@@ -42,6 +43,45 @@ final class Events extends Tymy{
         return $this;
     }
     
+    public function getFrom() {
+        return $this->from;
+    }
+
+    public function getOrder() {
+        return $this->order;
+    }
+
+    public function getTo() {
+        return $this->to;
+    }
+
+    public function getWithMyAttendance() {
+        return $this->withMyAttendance;
+    }
+
+    public function setFrom($from) {
+        $this->from = $from;
+        return $this;
+    }
+
+    public function setOrder($order) {
+        $this->order = $order;
+        return $this;
+    }
+
+    public function setTo($to) {
+        $this->to = $to;
+        return $this;
+    }
+
+    public function setWithMyAttendance($withMyAttendance) {
+        $this->withMyAttendance = $withMyAttendance;
+        return $this;
+    }
+
+        
+    
+    
     public function select() {
         $url = "events";
         
@@ -50,10 +90,10 @@ final class Events extends Tymy{
         }
         $filter = [];
         
-        if($this->dateFrom)
-            $filter[] = "startTime>" . $this->dateFrom;
-        if($this->dateTo)
-            $filter[] = "startTime<" . $this->dateTo;
+        if($this->from)
+            $filter[] = "startTime>" . $this->from;
+        if($this->to)
+            $filter[] = "startTime<" . $this->to;
             
         if(count($filter)){
             $this->setUriParam("filter", join("~", $filter));
@@ -114,9 +154,9 @@ final class Events extends Tymy{
             $this->eventsFrom = date("Ym", strtotime("$date-01 -6 months")) . "01";
         }
         $this->withMyAttendance(TRUE)
-                ->from($this->eventsFrom)
-                ->to($this->eventsTo)
-                ->order("startTime");
+                ->setFrom($this->eventsFrom)
+                ->setTo($this->eventsTo)
+                ->setOrder("startTime");
         $this->urlStart();
         $this->select();
         $this->urlEnd();
@@ -140,7 +180,7 @@ final class Events extends Tymy{
                 "title" => $ev->caption,
                 "start" => $ev->startTime,
                 "end" => $ev->endTime,
-                "url" => $this->presenter->link('Event:event', array('udalost' => $ev->id . "-" . $ev->webName))
+                "webName" => $ev->webName
             ];
             $this->eventsJSObject[] = (object)array_merge($eventProps, $eventColor);
             $month = date("Y-m", strtotime($ev->startTime));

@@ -13,6 +13,7 @@ use Nette\Utils\Strings;
 final class Users extends UserInterface{
     
     const TAPI_NAME = "users";
+    const TSID_REQUIRED = TRUE;
     
     public function select() {
         $this->fullUrl .= "users/";
@@ -22,9 +23,9 @@ final class Users extends UserInterface{
     protected function postProcess(){
         $data = $this->getData();
         
-        $myId = isset($this->presenter) ? $this->presenter->user->getId() : NULL;
+        $myId = $this->user->getId();
         
-        $this->getResult()->menuWarningCount = 0;
+        $this->result->menuWarningCount = 0;
         
         $counts = [
             "ALL"=>0,
@@ -47,8 +48,8 @@ final class Users extends UserInterface{
             $this->userPermissions($player);
             $players[$player->id] = $player;
             if($player->id == $myId){
-                $this->getResult()->menuWarningCount = $player->errCnt;
-                $this->getResult()->me = (object)$player;
+                $this->result->menuWarningCount = $player->errCnt;
+                $this->result->me = (object)$player;
             }
             $player->webName = Strings::webalize($player->fullName);
             if(property_exists($player, "lastLogin")){
@@ -56,10 +57,10 @@ final class Users extends UserInterface{
             }
             $players[$player->id] = $player;
         }
-        $this->getResult()->data = $players;
-        $this->getResult()->counts = $counts;
+        $this->result->data = $players;
+        $this->result->counts = $counts;
         
-        $this->session->getSection("tymy")["users"] = $this->users->getResult();
+        $this->session->getSection(self::SESSION_SECTION)[$this->getTapiName()] = $this->result;
         
     }
 

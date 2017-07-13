@@ -12,6 +12,7 @@ use Nette;
 final class Polls extends Tymy{
     
     const TAPI_NAME = "polls";
+    const TSID_REQUIRED = TRUE;
     
     public function select() {
         $url = "polls";

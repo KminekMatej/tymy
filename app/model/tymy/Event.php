@@ -12,6 +12,7 @@ use Nette;
 final class Event extends Tymy{
     
     const TAPI_NAME = "event";
+    const TSID_REQUIRED = TRUE;
     
     public function select() {
         if (!isset($this->recId))

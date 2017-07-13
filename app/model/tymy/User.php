@@ -12,6 +12,8 @@ use Nette\Utils\Strings;
  */
 final class User extends UserInterface{
     
+    const TSID_REQUIRED = TRUE;
+    const TAPI_NAME = "user";
     private $login;
     private $password;
     private $email;

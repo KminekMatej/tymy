@@ -12,6 +12,7 @@ use Nette;
 final class Poll extends Tymy{
     
     const TAPI_NAME = "poll";
+    const TSID_REQUIRED = TRUE;
     
     public function select() {
         if (!isset($this->recId))

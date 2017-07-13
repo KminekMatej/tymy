@@ -12,6 +12,7 @@ use Nette;
 final class Login extends Tymy{
     
     const TAPI_NAME = "login";
+    const TSID_REQUIRED = FALSE;
     private $username;
     private $hash;
     
