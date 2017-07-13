@@ -19,9 +19,17 @@ class TestAuthenticator implements Nette\Security\IAuthenticator {
      * @throws Nette\Security\AuthenticationException
      */
     public function authenticate(array $credentials) {
+        list($username, $password) = $credentials;
+        $dataMock = new \stdClass();
+        $dataMock->login = $username;
         $this->setId(38);
         $this->setStatus(["TESTROLE", "TESTROLE2"]);
-        $this->setArr(["tym" => "testteam", "sessionKey" => "dsfbglsdfbg13546"]);
+        $this->setArr([
+            "tym" => "testteam", 
+            "sessionKey" => "dsfbglsdfbg13546",
+            "hash" => "123hash",
+            "data" => $dataMock
+            ]);
         return new Nette\Security\Identity($this->id, $this->status, $this->arr );
     }
     
