@@ -18,20 +18,27 @@ if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
 
 class APIAttendanceTest extends ITapiTest {
 
-    private $container;
+    /** @var \Tymy\Attendance */
+    private $attendance;
 
     function __construct(Nette\DI\Container $container) {
         $this->container = $container;
     }
     
-    function setUp() {
-        parent::setUp();
-        $this->initTapiConfiguration($this->container);
+    public function getTestedObject() {
+        return $this->attendance;
     }
     
-    function tearDown() {
-        parent::tearDown();
+    protected function setUp() {
+        $this->attendance = $this->container->getByType('Tymy\Attendance');
+        parent::setUp();
     }
+    
+    /* TEST GETTERS AND SETTERS */ 
+    
+    /* TEST TAPI FUNCTIONS */ 
+    
+    /* TAPI : SELECT */
     
     /**
      * @throws Tymy\Exception\APIException
