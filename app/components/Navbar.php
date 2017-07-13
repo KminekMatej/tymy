@@ -60,7 +60,7 @@ class NavbarControl extends Control {
     
     private function events(){
         $this->events
-                ->withMyAttendance(true)
+                ->setWithMyAttendance(true)
                 ->setFrom(date("Ymd"))
                 ->setTo(date("Ymd", strtotime(" + 1 month")))
                 ->setOrder("startTime")

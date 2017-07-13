@@ -71,7 +71,7 @@ class NavbarTest extends TapiTestCase {
         
         $events = new \Tymy\Events($this->tapiAuthenticator, $this->presenter);
         $eObj = $events
-                ->withMyAttendance(true)
+                ->setWithMyAttendance(true)
                 ->setFrom(date("Ymd"))
                 ->setTo(date("Ymd", strtotime(" + 1 month")))
                 ->fetch();

@@ -22,17 +22,7 @@ final class Events extends Tymy{
     public $eventsMonthly;
     public $eventsFrom;
     public $eventsTo;
-    
-    public function from($date){
-        $this->dateFrom = $date;
-        return $this;
-    }
-    
-    public function to($date){
-        $this->dateTo = $date;
-        return $this;
-    }
-    
+        
     public function withMyAttendance($withMyAttendance){
         $this->withMyAttendance = $withMyAttendance;
         return $this;
@@ -150,7 +140,7 @@ final class Events extends Tymy{
         } elseif ($direction == -1) {
             $this->eventsFrom = date("Ym", strtotime("$date-01 -6 months")) . "01";
         }
-        $this->withMyAttendance(TRUE)
+        $this->setWithMyAttendance(TRUE)
                 ->setFrom($this->eventsFrom)
                 ->setTo($this->eventsTo)
                 ->setOrder("startTime");
