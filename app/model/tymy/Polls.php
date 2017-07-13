@@ -15,8 +15,7 @@ final class Polls extends Tymy{
     const TSID_REQUIRED = TRUE;
     
     public function select() {
-        $url = "polls";
-        $this->fullUrl .= $url;
+        $this->fullUrl .= self::TAPI_NAME;
         return $this;
     }
     

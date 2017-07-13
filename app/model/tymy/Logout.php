@@ -22,7 +22,7 @@ final class Logout extends Tymy{
     public function logout(){
         $this->urlStart();
 
-        $this->fullUrl .= "logout";
+        $this->fullUrl .= self::TAPI_NAME;
 
         $this->urlEnd();
         

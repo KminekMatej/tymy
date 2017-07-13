@@ -16,7 +16,7 @@ final class EventTypes extends Tymy{
     const TSID_REQUIRED = TRUE;
     
     public function select() {
-        $this->fullUrl .= "eventTypes/";
+        $this->fullUrl .= self::TAPI_NAME;
     }
     
     protected function postProcess(){}

@@ -49,7 +49,7 @@ final class Attendance extends Tymy{
         
         $this->urlStart();
 
-        $this->fullUrl .= "attendance/";
+        $this->fullUrl .= self::TAPI_NAME;
 
         $this->urlEnd();
         

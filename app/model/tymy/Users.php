@@ -16,7 +16,7 @@ final class Users extends UserInterface{
     const TSID_REQUIRED = TRUE;
     
     public function select() {
-        $this->fullUrl .= "users/";
+        $this->fullUrl .= self::TAPI_NAME;
         return $this;
     }
 

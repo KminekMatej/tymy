@@ -18,7 +18,7 @@ final class Event extends Tymy{
         if (!isset($this->recId))
             throw new Exception\APIException('Event ID not set!');
         
-        $this->fullUrl .= "event/" .$this->recId;
+        $this->fullUrl .= self::TAPI_NAME . "/" .$this->recId;
         
         return $this;
     }

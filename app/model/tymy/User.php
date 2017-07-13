@@ -21,7 +21,7 @@ final class User extends UserInterface{
     public function select() {
         if (!isset($this->recId))
             throw new \Tymy\Exception\APIException('User ID not set!');
-        $this->fullUrl .= "user/" .$this->recId;
+        $this->fullUrl .= self::TAPI_NAME . "/" .$this->recId;
         return $this;
     }
     

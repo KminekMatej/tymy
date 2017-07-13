@@ -79,11 +79,8 @@ final class Events extends Tymy{
         return $this;
     }
 
-        
-    
-    
     public function select() {
-        $url = "events";
+        $url = self::TAPI_NAME;
         
         if($this->withMyAttendance){
             $url .= "/withMyAttendance";

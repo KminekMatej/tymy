@@ -37,7 +37,7 @@ final class Login extends Tymy{
     }
     
     public function select() {
-        $this->fullUrl .= "login/".$this->username."/".$this->hash;
+        $this->fullUrl .= self::TAPI_NAME . "/" . $this->username . "/" . $this->hash;
         return $this;
     }
     

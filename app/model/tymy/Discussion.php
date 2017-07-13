@@ -26,7 +26,7 @@ final class Discussion extends Tymy{
         if($this->page < 1)
             throw new \Tymy\Exception\APIException("Page do not exist");
         
-        $this->fullUrl .= "discussion/" .$this->recId . "/" . self::MODE . "/" . $this->page;
+        $this->fullUrl .= $this->fullUrl .= self::TAPI_NAME . "/" .$this->recId . "/" . self::MODE . "/" . $this->page;
         return $this;
     }
     
@@ -41,7 +41,7 @@ final class Discussion extends Tymy{
 
         $this->urlStart();
 
-        $this->fullUrl .= "discussion/" . $this->recId . "/post/";
+        $this->fullUrl .= self::TAPI_NAME . "/" . $this->recId . "/post/";
 
         $this->urlEnd();
 

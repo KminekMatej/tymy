@@ -25,7 +25,7 @@ final class Discussions extends Tymy{
     }
     
     public function select() {
-        $url = "discussions";
+        $url = self::TAPI_NAME;
         if($this->withNew)
             $url .= "/withNew";
         $this->fullUrl .= $url;
