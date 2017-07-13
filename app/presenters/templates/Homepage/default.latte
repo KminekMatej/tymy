@@ -24,7 +24,7 @@
             events: function (start, end, timezone, callback) {
                 var events = [];
                 {foreach $events as $evnt}
-                    events.push({l}id: {$evnt->id}, title: {$evnt->title},start: {$evnt->start},end: {$evnt->end},backgroundColor: {$evnt->backgroundColor},borderColor: {$evnt->borderColor},textColor: {$evnt->textColor},url: {$evnt->url}{r});
+                    events.push({l}id: {$evnt->id}, title: {$evnt->title},start: {$evnt->start},end: {$evnt->end},backgroundColor: {$evnt->backgroundColor},borderColor: {$evnt->borderColor},textColor: {$evnt->textColor},url: {plink 'Event:event', $evnt->id . '-' . $evnt->webName}{r});
                 {/foreach}
                                 callback(events);
                             },
