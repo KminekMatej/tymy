@@ -70,27 +70,6 @@ class APIEventTest extends ITapiTest {
                 ->fetch();
     }
 
-    /**
-     * @throws Nette\Application\AbortException
-     */
-    function testFetchNotLoggedInRedirects() {
-        $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Team');
-        $mockPresenter->autoCanonicalize = FALSE;
-
-        $this->authenticator->setId(38);
-        $this->authenticator->setStatus(["TESTROLE", "TESTROLE2"]);
-        $this->authenticator->setArr(["sessionKey" => "dsfbglsdfbg13546"]);
-
-        $mockPresenter->getUser()->setAuthenticator($this->authenticator);
-        $mockPresenter->getUser()->login("test", "test");
-
-        $eventObj = new \Tymy\Event();
-        $eventObj->setPresenter($mockPresenter)
-                ->recId(1)
-                ->fetch();
-    }
-
     function testFetchSuccess() {
         $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
         $mockPresenter = $presenterFactory->createPresenter('Event');
