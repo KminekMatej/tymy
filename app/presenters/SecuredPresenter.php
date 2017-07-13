@@ -20,12 +20,29 @@ class SecuredPresenter extends BasePresenter {
     
     protected $levelCaptions;
     
-    
     /** @var \App\Model\TapiAuthenticator @inject */
     public $tapiAuthenticator;
     
     /** @var \App\Model\TapiAuthorizator @inject */
     public $tapiAuthorizator;
+    
+    /** @var \Tymy\Discussions @inject */
+    public $discussions;
+    
+    /** @var \Tymy\Polls @inject */
+    public $polls;
+    
+    /** @var \Tymy\Events @inject */
+    public $events;
+    
+    /** @var \Tymy\User @inject */
+    public $user;
+    
+    /** @var \Tymy\Users @inject */
+    public $users;
+    
+    /** @var \Tymy\EventTypes @inject */
+    public $eventTypes;
     
     public function getLevelCaptions(){
         return $this->levelCaptions;
@@ -48,8 +65,7 @@ class SecuredPresenter extends BasePresenter {
         if(isset($sessionSection["eventTypes"]) && !$force)
             return $sessionSection["eventTypes"];
         
-        $eventTypesObj = new \Tymy\EventTypes($this->tapiAuthenticator, $this);
-        $eventTypesResult = $eventTypesObj->fetch();
+        $eventTypesResult = $this->eventTypes->fetch();
         
         $eventTypes = [];
         foreach ($eventTypesResult as $type) {
@@ -74,11 +90,11 @@ class SecuredPresenter extends BasePresenter {
         $sessionSection = $this->getSession()->getSection("tymy");
         if(isset($sessionSection["users"]) && !$force)
             return $sessionSection["users"];
-        $usersObj = new \Tymy\Users($this->tapiAuthenticator, $this, NULL);
-        $usersObj->fetch();
-        $sessionSection["users"] = $usersObj->getResult();
-        $sessionSection["me"] = $usersObj->getResult()->me;
-        return $usersObj->getResult();
+        $this->users->fetch();
+        \Tracy\Debugger::barDump($this->users->getResult());
+        $sessionSection["users"] = $this->users->getResult();
+        $sessionSection["me"] = $this->users->getResult()->me;
+        return $this->users->getResult();
     }
 
     protected function startup() {

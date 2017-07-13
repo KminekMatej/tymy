@@ -9,16 +9,17 @@ use Nette\Utils\Strings;
 
 class EventPresenter extends SecuredPresenter {
         
-    private $events;
+    /** @var \Tymy\Event @inject */
+    public $event;
+    
+    /** @var \Tymy\Attendance @inject */
+    public $attendance;
+    
     private $eventsFrom;
     private $eventsTo;
     private $eventsJSObject;
     private $eventsMonthly;
-    
-    public function __construct() {
-        parent::__construct();
-    }
-    
+        
     public function startup() {
         parent::startup();
         $this->getEventTypes();
@@ -44,10 +45,7 @@ class EventPresenter extends SecuredPresenter {
     }
 
     public function renderDefault() {
-        if(!$this->events){
-            $eventsObj = new \Tymy\Events($this->tapiAuthenticator, $this);
-            $this->events = $eventsObj->loadYearEvents(NULL, NULL);
-        }
+        $this->events = $this->events->loadYearEvents(NULL, NULL);
         $eventTypes = $this->getEventTypes();
         
         foreach ($this->events->eventsMonthly as $eventMonth) {
@@ -68,14 +66,13 @@ class EventPresenter extends SecuredPresenter {
     
     public function renderEvent($udalost) {
         $eventId = substr($udalost,0,strpos($udalost, "-"));
-        $eventObj = new \Tymy\Event($this->tapiAuthenticator, $this);
-        $event = $eventObj
+        $event = $this->event
                 ->recId($eventId)
-                ->fetch();
+                ->getData(TRUE);
         
         $this->setLevelCaptions(["2" => ["caption" => $event->caption, "link" => $this->link("Event:event", $event->id . "-" . $event->webName)]]);
 
-        $users = $this->getUsers();
+        $users = $this->users->getResult();
         
         //array keys are pre-set for sorting purposes
         $attArray = [];
@@ -103,8 +100,8 @@ class EventPresenter extends SecuredPresenter {
     }
     
     public function handleAttendance($id, $code, $desc){
-        $att = new \Tymy\Attendance($this->tapiAuthenticator, $this);
-        $att->recId($id)
+        $this->attendance
+            ->recId($id)
             ->preStatus($code)
             ->preDescription($desc)
             ->plan();
@@ -116,8 +113,7 @@ class EventPresenter extends SecuredPresenter {
     
     public function handleEventLoad($date = NULL, $direction = NULL) {
         if ($this->isAjax()) {
-            $eventsObj = new \Tymy\Events($this->tapiAuthenticator, $this);
-            $this->events = $eventsObj->loadYearEvents($date, $direction);
+            $this->events->loadYearEvents($date, $direction);
             $this->payload->events = $this->events->eventsJSObject;
             $this->redrawControl("events");
         }

@@ -50,7 +50,7 @@ class TeamPresenter extends SecuredPresenter {
     }
     
     public function renderPlayer($player) {
-        $players = $this->getUsers();
+        $players = $this->users->getResult();
         $playerId = NULL;
         foreach ($players->data as $p) {
             if($p->webName == $player){
@@ -60,10 +60,9 @@ class TeamPresenter extends SecuredPresenter {
             }
         }
         
-        $playerObj = new \Tymy\User($this->tapiAuthenticator, $this);
-        $playerData = $playerObj->
-                recId($playerId)->
-                fetch();
+        $playerData = $this->user
+                ->recId($playerId)
+                ->getData();
         
         //set default values to avoid latte exceptions
         if(!isset($playerData->firstName)) $playerData->firstName = "";
@@ -90,10 +89,9 @@ class TeamPresenter extends SecuredPresenter {
     
     public function handleEdit($playerId){
         $post = $this->getRequest()->getPost();
-        //$this->redrawControl ("poll-results");
-        $poll = new \Tymy\User($this->tapiAuthenticator, $this);
-        $poll->recId($playerId)
-            ->edit($post);
+        $this->user
+                ->recId($playerId)
+                ->edit($post);
     }
     
 }

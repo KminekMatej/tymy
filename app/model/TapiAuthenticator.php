@@ -32,11 +32,9 @@ class TapiAuthenticator implements Nette\Security\IAuthenticator {
     
     public function reAuthenticate(array $credentials){
         list($username, $password) = $credentials;
-        
-        $loginObj = new \Tymy\Login();
-        
+        $login = new \Tymy\Login($this->supplier);
         try {
-            $loginObj->setSupplier($this->supplier)
+            $login
                     ->setUsername($username)
                     ->setPassword($password)
                     ->fetch();
@@ -44,28 +42,28 @@ class TapiAuthenticator implements Nette\Security\IAuthenticator {
             throw new Nette\Security\AuthenticationException('Login failed.', self::INVALID_CREDENTIAL);
         }
 
-        return $loginObj;
+        return $login;
     }
     
-    //TODO register new user
     //TODO password lost
     /**
      * Adds new user.
      * @param  string
      * @param  string
      * @param  string
+     * @param  string
      * @return void
-     * @throws DuplicateNameException
+     * @throws \Nette\InvalidArgumentException
      */
-    public function add($username, $password) {
+    public function add($user, $login, $password, $email) {
         try {
-            SRand(time());
-            $this->database->table(self::TABLE_NAME)->insert([
-                self::COLUMN_NAME => $username,
-                self::COLUMN_PASSWORD_HASH => crypt($password, makesalt()),
-            ]);
-        } catch (Nette\Database\UniqueConstraintViolationException $e) {
-            throw new DuplicateNameException;
+            $user
+                    ->setLogin($login)
+                    ->setPassword($password)
+                    ->setEmail($email)
+                    ->create();
+        } catch (\Tymy\Exception\APIException $exc) {
+            throw new \Nette\InvalidArgumentException($exc->getMessage(), self::FAILURE);
         }
     }
 

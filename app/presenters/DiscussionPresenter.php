@@ -13,6 +13,12 @@ use Tracy\Debugger;
  * @author matej
  */
 class DiscussionPresenter extends SecuredPresenter {
+    
+    /** @var \Tymy\Discussion @inject */
+    public $discussion;
+
+    /** @var \Tymy\Discussions @inject */
+    public $discussions;
 
     public function __construct() {
         parent::__construct();
@@ -24,15 +30,15 @@ class DiscussionPresenter extends SecuredPresenter {
     }
 
     public function renderDefault() {
-        $discussions = new \Tymy\Discussions($this->tapiAuthenticator, $this);
-        $this->template->discussions = $discussions->setWithNew(true)->fetch();
+        $this->template->discussions = $this->discussions->setWithNew(true)->fetch();
     }
     
     public function actionNewPost($discussion, $page){
         $post = $this->getHttpRequest()->getPost("post");
         if (trim($post) != "") {
-            $addPost = new \Tymy\Discussion($this->tapiAuthenticator, $this, FALSE, $page);
-            $addPost->recId($discussion)->insert($post);
+            $this->discussion
+                    ->recId($discussion)
+                    ->insert($post);
         }
         $this->setView('discussion');
     }
@@ -40,8 +46,7 @@ class DiscussionPresenter extends SecuredPresenter {
     public function renderDiscussion($discussion, $page, $search) {
         $discussionId = NULL;
         if(!$discussionId = intval($discussion)){
-            $allDiscussions = new \Tymy\Discussions($this->tapiAuthenticator, $this);
-            foreach ($allDiscussions->fetch() as $dis) {
+            foreach ($this->discussions->getData() as $dis) {
                 if ($dis->webName == $discussion) {
                     $discussionId = $dis->id;
                     break;
@@ -52,12 +57,12 @@ class DiscussionPresenter extends SecuredPresenter {
         if (is_null($discussionId) || $discussionId < 1)
             $this->error("Tato diskuze neexistuje");
         
-        $d = new \Tymy\Discussion($this->tapiAuthenticator, $this, true, $page);
-        $d->recId($discussionId);
+        $this->discussion
+                ->recId($discussionId)
+                ->setPage($page);
         if($search) 
-            $d->search($search);
-        $data = $d->fetch();
-        $data->discussion->webName = $data->discussion->webName;
+            $this->discussion->search($search);
+        $data = $this->discussion->getData();
 
         $this->setLevelCaptions(["2" => ["caption" => $data->discussion->caption, "link" => $this->link("Discussion:discussion", [$data->discussion->webName]) ] ]);
         

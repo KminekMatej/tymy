@@ -11,6 +11,8 @@ use Nette\Utils\Strings;
 class PollPresenter extends SecuredPresenter {
 
     public $navbar;
+    /** @var \Tymy\Poll @inject */
+    public $poll;
     
     public function startup() {
         parent::startup();
@@ -22,9 +24,8 @@ class PollPresenter extends SecuredPresenter {
     }
     
     public function renderPoll($anketa) {
-        $polls = new \Tymy\Polls($this->tapiAuthenticator, $this);
         $pollId = NULL;
-        foreach ($polls->fetch() as $p) {
+        foreach ($this->polls->getData() as $p) {
             if($p->webName == $anketa){
                 $pollId = $p->id;
                 $this->setLevelCaptions(["2" => ["caption" => $p->caption, "link" => $this->link("Poll:poll", $p->webName) ] ]);
@@ -32,13 +33,8 @@ class PollPresenter extends SecuredPresenter {
             }
         }
         
-        $pollObj = new \Tymy\Poll($this->tapiAuthenticator, $this);
-        $pollData = $pollObj->
-                recId($pollId)->
-                fetch();
-        
-        $this->template->poll = $pollData;
-        $this->template->users = $this->getUsers();
+        $this->template->poll = $this->poll->recId($pollId)->getData();
+        $this->template->users = $this->users->getData();
     }
     
     public function handleVote($pollId){
@@ -50,8 +46,6 @@ class PollPresenter extends SecuredPresenter {
             }
         }
         $this->redrawControl ("poll-results");
-        $poll = new \Tymy\Poll($this->tapiAuthenticator, $this);
-        $poll->recId($pollId)
-            ->vote($votes);
+        $this->poll->recId($pollId)->vote($votes);
     }
 }

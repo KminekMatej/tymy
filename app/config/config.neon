@@ -19,11 +19,21 @@ services:
         - App\Forms\SignInFormFactory
         - App\Forms\SignUpFormFactory
         router: App\RouterFactory::createRouter
-        #authenticator: UserManager
         authorizator:
             class: App\Model\TapiAuthorizator
         cacheStorage:
             class: Nette\Caching\Storages\DevNullStorage
+        - Tymy\Attendance
+        - Tymy\Discussion
+        - Tymy\Discussions
+        - Tymy\Event
+        - Tymy\EventTypes
+        - Tymy\Events
+        - Tymy\Logout
+        - Tymy\Poll
+        - Tymy\Polls
+        - Tymy\User
+        - Tymy\Users
 
 tracy:
     email: matej.kminek@attendees.eu

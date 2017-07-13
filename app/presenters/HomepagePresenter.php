@@ -11,6 +11,11 @@ class HomepagePresenter extends SecuredPresenter {
 
     public $navbar;
     
+    /** @var \Tymy\Events @inject */
+    public $events;
+    /** @var \Tymy\Discussions @inject */
+    public $discussions;
+    
     public function beforeRender() {
         parent::beforeRender();
         $this->template->addFilter('lastLogin', function ($lastLogin) {
@@ -31,17 +36,17 @@ class HomepagePresenter extends SecuredPresenter {
     }
     
     public function renderDefault() {
-        $eventsObj = new \Tymy\Events($this->tapiAuthenticator, $this);
-        $events = $eventsObj->loadYearEvents(NULL, NULL);
-        $discussions = new \Tymy\Discussions($this->tapiAuthenticator, $this);
+        $events = $this->events
+                ->setPresenter($this)
+                ->loadYearEvents(NULL, NULL);
         
-        $this->template->discussions = $discussions->setWithNew(true)->fetch();
+        $this->template->discussions = $this->discussions->setWithNew(true)->fetch();
         $this->template->currY = date("Y");
         $this->template->currM = date("m");
         $this->template->evMonths = $events->eventsMonthly;
         $this->template->events = $events->eventsJSObject;
-        $this->template->eventTypes = $this->getEventTypes();
-        $this->template->users = $this->sortUsersByLastLogin($this->getUsers()->data);
+        $this->template->eventTypes = $this->eventTypes;
+        $this->template->users = $this->sortUsersByLastLogin($this->users->getData());
     }
     
     private function sortUsersByLastLogin($usersArray){

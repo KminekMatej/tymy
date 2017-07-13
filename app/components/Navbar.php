@@ -11,64 +11,74 @@ use Nette;
  */
 class NavbarControl extends Control {
     
-    private $discussions;
-    private $polls;
-    private $events;
-    private $user;
+    /** @var \App\Presenters\SecuredPresenter */
     private $presenter;
+    /** @var \Tymy\Discussions */
+    private $discussions;
+    /** @var \Tymy\Polls */
+    private $polls;
+    /** @var \Tymy\Events */
+    private $events;
+    /** @var \Tymy\User */
+    private $user;
+    /** @var \Tymy\Users */
+    private $users;
+    /** @var \App\Model\Supplier */
+    private $supplier;
+    /** @var Nette\Security\User */
+    private $presenterUser;
     
-    
-    public function __construct(Nette\Application\UI\Presenter $presenter) {
+    public function __construct(\App\Presenters\SecuredPresenter $presenter) {
         parent::__construct();
-        $this->discussions = new \Tymy\Discussions($presenter->tapiAuthenticator, $presenter);
-        $this->polls = new \Tymy\Polls($presenter->tapiAuthenticator, $presenter);
-        $this->events = new \Tymy\Events($presenter->tapiAuthenticator, $presenter);
-        $this->user = $presenter->getUser();
         $this->presenter = $presenter;
+        $this->discussions = $this->presenter->discussions;
+        $this->polls = $this->presenter->polls;
+        $this->events = $this->presenter->events;
+        $this->user = $this->presenter->user;
+        $this->users = $this->presenter->users;
+        $this->supplier = $this->presenter->supplier;
+        $this->presenterUser = $this->presenter->getUser();
     }
     
     private function discussions(){
-        $discussions = $this->discussions
-                ->setWithNew(true)
-                ->fetch();
-        $this->template->discussionWarnings = $this->discussions->getResult()->menuWarningCount;
-        $this->template->discussions = (object)$discussions;
+        $discussionsResult = $this->discussions->getResult(!$this->discussions->getWithNew()); // if loaded discussions are not with withNew param, load them again
+        $this->template->discussionWarnings = $discussionsResult->menuWarningCount;
+        $this->template->discussions = (object)$this->discussions->getData();
     }
     
     private function players(){
-        $players = $this->presenter->getUsers(TRUE);
+        $players = $this->users->getResult(TRUE);
         $this->template->counts = $players->counts;
         $this->template->playersWarnings = $players->menuWarningCount;
         $this->template->me = $players->me;
     }
     
     private function polls(){
-        $polls = $this->polls->fetch();
         $this->template->voteWarnings = $this->polls->getResult()->menuWarningCount;
-        $this->template->polls = (object)$polls;
+        $this->template->polls = (object)$this->polls->getData();
     }
     
     private function events(){
-        $events = $this->events
+        $this->events
                 ->withMyAttendance(true)
-                ->from(date("Ymd"))
-                ->to(date("Ymd", strtotime(" + 1 month")))
-                ->order("startTime")
+                ->setFrom(date("Ymd"))
+                ->setTo(date("Ymd", strtotime(" + 1 month")))
+                ->setOrder("startTime")
                 ->fetch();
         $this->template->eventWarnings = $this->events->getResult()->menuWarningCount;
-        $this->template->events = (object)$events;
+        $this->template->events = (object)$this->events->getData();
     }
     
     private function settings(){
         //TODO with settings api
         $settings = [];
-        if($this->user->isAllowed("settings", "discussions")) $settings[] = "Diskuze";
-        if($this->user->isAllowed("settings", "events")) $settings[] = "Události";
-        if($this->user->isAllowed("settings", "team")) $settings[] = "Tým";
-        if($this->user->isAllowed("settings", "polls")) $settings[] = "Ankety";
-        if($this->user->isAllowed("settings", "reports")) $settings[] = "Reporty";
-        if($this->user->isAllowed("settings", "permissions")) $settings[] = "Oprávnění";
-        if($this->user->isAllowed("settings", "app")) $settings[] = "Aplikace";
+        if($this->presenterUser->isAllowed("settings", "discussions")) $settings[] = "Diskuze";
+        if($this->presenterUser->isAllowed("settings", "events")) $settings[] = "Události";
+        if($this->presenterUser->isAllowed("settings", "team")) $settings[] = "Tým";
+        if($this->presenterUser->isAllowed("settings", "polls")) $settings[] = "Ankety";
+        if($this->presenterUser->isAllowed("settings", "reports")) $settings[] = "Reporty";
+        if($this->presenterUser->isAllowed("settings", "permissions")) $settings[] = "Oprávnění";
+        if($this->presenterUser->isAllowed("settings", "app")) $settings[] = "Aplikace";
         $this->template->settings = (object)$settings;
     }
     
@@ -78,8 +88,8 @@ class NavbarControl extends Control {
         $this->template->levels = $this->presenter->getLevelCaptions();
         $this->template->presenterName = $this->presenter->getName();
         $this->template->action = $this->presenter->getAction();
-        $this->template->tym = $this->presenter->supplier->getTym();
-        $this->template->userId = $this->user->getId();
+        $this->template->tym = $this->supplier->getTym();
+        $this->template->userId = $this->presenterUser->getId();
         
         //tapi discussions
         $this->discussions();
