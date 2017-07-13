@@ -11,13 +11,16 @@ use Tester;
 use Tester\Assert;
 
 $container = require __DIR__ . '/../bootstrap.php';
-Tester\Environment::skip('Temporary skipping');
+
 if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
 
 class SupplierTest extends Tester\TestCase {
-
+    
+    /** @var \App\Model\Supplier */
+    private $supplier;
+    
     function __construct(Nette\DI\Container $container) {
         $this->container = $container;
     }
@@ -32,11 +35,25 @@ class SupplierTest extends Tester\TestCase {
      * @dataProvider getTeams
      */
     function testSupplier($team){
-        $supplierTemplate = $this->container->getByType('App\Model\Supplier');
-        $tapi_config = $supplierTemplate->getTapi_config();
+        $this->supplier = $this->container->getByType('App\Model\Supplier');
+        $tapi_config = $this->supplier->getTapi_config();
+        Assert::truthy($tapi_config);
         $tapi_config["tym"] = $team;
-        $supplier = new \App\Model\Supplier($tapi_config);
-        Assert::equal($team, $supplier->getTym());
+        $this->supplier->setTapi_config($tapi_config);
+
+        Assert::equal($team, $this->supplier->getTym());
+        Assert::equal("http://$team.tymy.cz", $this->supplier->getTymyRoot());
+        Assert::equal("http://$team.tymy.cz/api", $this->supplier->getApiRoot());
+        Assert::equal("http://$team.tymy.cz/sysapi", $this->supplier->getSysapiRoot());
+        Assert::equal("btn-outline-success", $this->supplier->getRoleClass("SUPER"));
+        Assert::equal("btn-outline-info", $this->supplier->getRoleClass("USR"));
+        Assert::equal("btn-outline-warning", $this->supplier->getRoleClass("ATT"));
+        Assert::equal("warning", $this->supplier->getStatusClass("LAT"));
+        Assert::equal("danger", $this->supplier->getStatusClass("NO"));
+        Assert::equal("success", $this->supplier->getStatusClass("YES"));
+        Assert::equal("warning", $this->supplier->getStatusClass("DKY"));
+        
+        
     }
 }
 
