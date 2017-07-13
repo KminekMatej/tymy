@@ -198,7 +198,7 @@ class APIDiscussionTest extends ITapiTest {
 
         $discussionId = $GLOBALS["testedTeam"]["searchDiscussionId"];
         $searchHash = $GLOBALS["testedTeam"]["searchHash"];
-        $this->discussion->dumpResult();
+        
         $this->discussion->recId($discussionId)->search($searchHash)->getResult(TRUE);
         
         Assert::true(is_object($this->discussion));

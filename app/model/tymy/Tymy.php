@@ -178,16 +178,11 @@ abstract class Tymy extends Nette\Object{
             }
         }
 
-        if(is_null($this->result)){
+        if(is_null($this->result) || $force){
             $this->fetch();
         }
         
         return $this->result;
-    }
-    
-    
-    public function dumpResult(){
-        $this->result = NULL;
     }
     
     protected function execute($relogin = TRUE) {
