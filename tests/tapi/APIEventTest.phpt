@@ -12,7 +12,7 @@ use Tester;
 use Tester\Assert;
 
 $container = require __DIR__ . '/../bootstrap.php';
-Tester\Environment::skip('Temporary skipping');
+
 if (in_array(basename(__FILE__, '.phpt'), $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
@@ -41,80 +41,50 @@ class APIEventTest extends ITapiTest {
     
     /* TAPI : SELECT */
 
-    /**
-     * @throws Tymy\Exception\APIException
-     */
-    function testFetchNotLoggedInFailsRecIdNotSet() {
-        $eventObj = new \Tymy\Event();
-        $eventObj->setSupplier($this->supplier)->fetch();
+    function testSelectNotLoggedInFailsNoRecId() {
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception(function(){$this->event->getResult(TRUE);} , "\Tymy\Exception\APIException", "Event ID not set!");
     }
 
-    /**
-     * @throws Nette\Application\AbortException
-     */
     function testFetchNotLoggedInFails404() {
-        $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Team');
-        $mockPresenter->autoCanonicalize = FALSE;
-
-        $this->authenticator->setId(38);
-        $this->authenticator->setStatus(["TESTROLE", "TESTROLE2"]);
-        $this->authenticator->setArr(["tym" => "testteam", "sessionKey" => "dsfbglsdfbg13546"]);
-
-        $mockPresenter->getUser()->setAuthenticator($this->authenticator);
-        $mockPresenter->getUser()->login("test", "test");
-
-        $eventObj = new \Tymy\Event();
-        $eventObj->setPresenter($mockPresenter)
-                ->recId(1)
-                ->fetch();
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception(function(){$this->event->recId(1)->getResult(TRUE);} , "Nette\Security\AuthenticationException", "Login failed.");
     }
 
-    function testFetchSuccess() {
-        $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Event');
-        $mockPresenter->autoCanonicalize = FALSE;
-
-        $this->login();
-        $this->authenticator->setId($this->login->id);
-        $this->authenticator->setArr(["sessionKey" => $this->loginObj->getResult()->sessionKey]);
-        $mockPresenter->getUser()->setAuthenticator($this->authenticator);
-        $mockPresenter->getUser()->setExpiration('2 minutes');
-        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
-
+    function testSelectSuccess() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
         $eventId = $GLOBALS["testedTeam"]["testEventId"];
-        $eventObj = new \Tymy\Event($mockPresenter->tapiAuthenticator, $mockPresenter);
-        $eventObj->recId($eventId)
-                ->fetch();
-        Assert::true(is_object($eventObj));
-        Assert::true(is_object($eventObj->result));
-        Assert::type("string", $eventObj->result->status);
-        Assert::same("OK", $eventObj->result->status);
-        Assert::type("int", $eventObj->result->data->id);
-        Assert::same($eventId, $eventObj->result->data->id);
+        $this->event->recId($eventId)->getResult(TRUE);
+        
+        Assert::true(is_object($this->event));
+        Assert::true(is_object($this->event->result));
+        Assert::type("string", $this->event->result->status);
+        Assert::same("OK", $this->event->result->status);
+        Assert::type("int", $this->event->result->data->id);
+        Assert::same($eventId, $this->event->result->data->id);
 
-        Assert::type("string", $eventObj->result->data->caption);
-        Assert::type("string", $eventObj->result->data->type);
-        Assert::type("string", $eventObj->result->data->description);
-        Assert::type("string", $eventObj->result->data->closeTime);
-        Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $eventObj->result->data->closeTime)); //timezone correction check
-        Assert::type("string", $eventObj->result->data->startTime);
-        Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $eventObj->result->data->startTime)); //timezone correction check
-        Assert::type("string", $eventObj->result->data->endTime);
-        Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $eventObj->result->data->endTime)); //timezone correction check
-        Assert::type("string", $eventObj->result->data->link);
-        Assert::type("string", $eventObj->result->data->place);
+        Assert::type("string", $this->event->result->data->caption);
+        Assert::type("string", $this->event->result->data->type);
+        Assert::type("string", $this->event->result->data->description);
+        Assert::type("string", $this->event->result->data->closeTime);
+        Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $this->event->result->data->closeTime)); //timezone correction check
+        Assert::type("string", $this->event->result->data->startTime);
+        Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $this->event->result->data->startTime)); //timezone correction check
+        Assert::type("string", $this->event->result->data->endTime);
+        Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $this->event->result->data->endTime)); //timezone correction check
+        Assert::type("string", $this->event->result->data->link);
+        Assert::type("string", $this->event->result->data->place);
 
-        Assert::type("bool", $eventObj->result->data->canView);
-        Assert::type("bool", $eventObj->result->data->canPlan);
-        Assert::type("bool", $eventObj->result->data->canResult);
-        Assert::type("bool", $eventObj->result->data->inPast);
-        Assert::type("bool", $eventObj->result->data->inFuture);
+        Assert::type("bool", $this->event->result->data->canView);
+        Assert::type("bool", $this->event->result->data->canPlan);
+        Assert::type("bool", $this->event->result->data->canResult);
+        Assert::type("bool", $this->event->result->data->inPast);
+        Assert::type("bool", $this->event->result->data->inFuture);
 
-        Assert::type("array", $eventObj->result->data->attendance);
-        Assert::true(count($eventObj->result->data->attendance) > 0);
+        Assert::type("array", $this->event->result->data->attendance);
+        Assert::true(count($this->event->result->data->attendance) > 0);
 
-        foreach ($eventObj->result->data->attendance as $att) {
+        foreach ($this->event->result->data->attendance as $att) {
             Assert::true(is_object($att));
             Assert::type("int", $att->userId);
             if (property_exists($att, "eventId")) {
@@ -137,16 +107,16 @@ class APIEventTest extends ITapiTest {
             Assert::true(!property_exists($att->user, "gender"));
         }
 
-        Assert::true(is_object($eventObj->result->data->myAttendance));
+        Assert::true(is_object($this->event->result->data->myAttendance));
         
-        Assert::true(is_object($eventObj->result->data->eventType));
-        Assert::type("int", $eventObj->result->data->eventType->id);
-        Assert::type("string", $eventObj->result->data->eventType->code);
-        Assert::type("string", $eventObj->result->data->eventType->caption);
-        Assert::type("int", $eventObj->result->data->eventType->preStatusSetId);
-        Assert::type("int", $eventObj->result->data->eventType->postStatusSetId);
-        Assert::type("array", $eventObj->result->data->eventType->preStatusSet);
-        foreach ($eventObj->result->data->eventType->preStatusSet as $set) {
+        Assert::true(is_object($this->event->result->data->eventType));
+        Assert::type("int", $this->event->result->data->eventType->id);
+        Assert::type("string", $this->event->result->data->eventType->code);
+        Assert::type("string", $this->event->result->data->eventType->caption);
+        Assert::type("int", $this->event->result->data->eventType->preStatusSetId);
+        Assert::type("int", $this->event->result->data->eventType->postStatusSetId);
+        Assert::type("array", $this->event->result->data->eventType->preStatusSet);
+        foreach ($this->event->result->data->eventType->preStatusSet as $set) {
             Assert::type("int", $set->id);
             Assert::type("string", $set->code);
             Assert::type("string", $set->caption);

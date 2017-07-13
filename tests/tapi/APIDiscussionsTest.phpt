@@ -11,7 +11,7 @@ use Tester;
 use Tester\Assert;
 
 $container = require __DIR__ . '/../bootstrap.php';
-Tester\Environment::skip('Temporary skipping');
+
 if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
@@ -36,53 +36,37 @@ class APIDiscussionsTest extends ITapiTest {
     
     /* TEST GETTERS AND SETTERS */ 
     
+    function testWithNew(){
+        Assert::equal(FALSE, $this->discussions->getWithNew());
+        $withNew = TRUE;
+        $this->discussions->setWithNew($withNew);
+        Assert::equal($withNew, $this->discussions->getWithNew());
+        $withNew = FALSE;
+        $this->discussions->setWithNew($withNew);
+        Assert::equal($withNew, $this->discussions->getWithNew());
+        
+    }
+    
     /* TEST TAPI FUNCTIONS */ 
     
     /* TAPI : SELECT */
     
-    /**
-     * @throws Nette\Application\AbortException
-     */
-    function testFetchNotLoggedInFails404() {
-        $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Homepage');
-        $mockPresenter->autoCanonicalize = FALSE;
-
-        $this->authenticator->setId(38);
-        $this->authenticator->setStatus(["TESTROLE", "TESTROLE2"]);
-        $this->authenticator->setArr(["tym" => "testteam", "sessionKey" => "dsfbglsdfbg13546"]);
-
-        $mockPresenter->getUser()->setAuthenticator($this->authenticator);
-        $mockPresenter->getUser()->login("test", "test");
-
-
-        $discussionsObj = new \Tymy\Discussions();
-        $discussionsObj->setPresenter($mockPresenter)
-                ->recId(1)
-                ->fetch();
+    function testSelectNotLoggedInFails404() {
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception(function(){$this->discussions->setWithNew(TRUE)->getResult(TRUE);} , "Nette\Security\AuthenticationException", "Login failed.");
     }
         
-    function testFetchSuccess() {
-        $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Discussion');
-        $mockPresenter->autoCanonicalize = FALSE;
-
-        $this->login();
-        $this->authenticator->setId($this->login->id);
-        $this->authenticator->setArr(["sessionKey" => $this->loginObj->getResult()->sessionKey]);
-        $mockPresenter->getUser()->setAuthenticator($this->authenticator);
-        $mockPresenter->getUser()->setExpiration('2 minutes');
-        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
-
-        $discussionsObj = new \Tymy\Discussions($mockPresenter->tapiAuthenticator, $mockPresenter);
-        $discussionsObj->fetch();
-        Assert::true(is_object($discussionsObj));
-        Assert::true(is_object($discussionsObj->result));
-        Assert::type("string",$discussionsObj->result->status);
-        Assert::same("OK",$discussionsObj->result->status);
-        Assert::type("array",$discussionsObj->result->data);
+    function testSelectSuccess() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->discussions->setWithNew(FALSE)->getResult(TRUE);
         
-        foreach ($discussionsObj->result->data as $dis) {
+        Assert::true(is_object($this->discussions));
+        Assert::true(is_object($this->discussions->result));
+        Assert::type("string",$this->discussions->result->status);
+        Assert::same("OK",$this->discussions->result->status);
+        Assert::type("array",$this->discussions->result->data);
+        
+        foreach ($this->discussions->result->data as $dis) {
             Assert::type("int",$dis->id);
             Assert::type("string",$dis->caption);
             Assert::type("string",$dis->description);
@@ -103,29 +87,18 @@ class APIDiscussionsTest extends ITapiTest {
         }
     }
     
-    function testFetchWithNew() {
-        $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Discussion');
-        $mockPresenter->autoCanonicalize = FALSE;
-
-        $this->login();
-        $this->authenticator->setId($this->login->id);
-        $this->authenticator->setArr(["sessionKey" => $this->loginObj->getResult()->sessionKey]);
-        $mockPresenter->getUser()->setAuthenticator($this->authenticator);
-        $mockPresenter->getUser()->setExpiration('2 minutes');
-        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
-
-        $discussionsObj = new \Tymy\Discussions($mockPresenter->tapiAuthenticator, $mockPresenter);
-        $discussionsObj->setWithNew(TRUE)
-                ->fetch();
-
-        Assert::true(is_object($discussionsObj));
-        Assert::true(is_object($discussionsObj->result));
-        Assert::type("string",$discussionsObj->result->status);
-        Assert::same("OK",$discussionsObj->result->status);
-        Assert::type("array",$discussionsObj->result->data);
+    function testSelectWithNewSuccess() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
         
-        foreach ($discussionsObj->result->data as $dis) {
+        $this->discussions->setWithNew(TRUE)->getResult(TRUE);
+
+        Assert::true(is_object($this->discussions));
+        Assert::true(is_object($this->discussions->result));
+        Assert::type("string",$this->discussions->result->status);
+        Assert::same("OK",$this->discussions->result->status);
+        Assert::type("array",$this->discussions->result->data);
+        
+        foreach ($this->discussions->result->data as $dis) {
             Assert::type("int",$dis->id);
             Assert::type("string",$dis->caption);
             Assert::type("string",$dis->description);
