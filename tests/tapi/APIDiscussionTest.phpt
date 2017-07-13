@@ -51,131 +51,73 @@ class APIDiscussionTest extends ITapiTest {
     
     /* TAPI : SELECT */
     
-    
-    /**
-     * @throws Tymy\Exception\APIException
-     */
-    function testFetchFailsPageDoNotExist(){
+    function testSelectFailsPageDoNotExist(){
         $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
-        Assert::exception($this->discussion->recId(1)->getResult(), "\Tymy\Exception\APIException", "Discussion ID not set!");
+        Assert::exception(function(){$this->discussion->recId(1)->setPage(0)->getResult(TRUE);}, "\Tymy\Exception\APIException", "Invalid page specified");
     }
     
-    /**
-     * @throws Tymy\Exception\APIException
-     */
-    function testFetchFailsNoRecId(){
-        Assert::exception($this->discussion->getResult(), "\Tymy\Exception\APIException", "Discussion ID not set!");
+    function testSelectFailsNoRecId(){
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception(function(){$this->discussion->recId(NULL)->getResult(TRUE);} , "\Tymy\Exception\APIException", "Discussion ID not set!");
     }
 
-    
-    
-    /**
-     * @throws Nette\Application\AbortException
-     */
-    function testFetchNotLoggedInFails404() {
-        $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Homepage');
-        $mockPresenter->autoCanonicalize = FALSE;
-
-        $this->testAuthenticator->setId(38);
-        $this->testAuthenticator->setStatus(["TESTROLE", "TESTROLE2"]);
-        $this->testAuthenticator->setArr(["tym" => "testteam", "sessionKey" => "dsfbglsdfbg13546"]);
-
-        $mockPresenter->getUser()->setAuthenticator($this->testAuthenticator);
-        $mockPresenter->getUser()->login("test", "test");
-
-
-        $this->discussion
-                ->setPresenter($mockPresenter)
-                ->recId(1)
-                ->fetch();
+    function testSelectNotLoggedInFails404() {
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception(function(){$this->discussion->recId(1)->setPage(1)->getResult(TRUE);} , "Nette\Security\AuthenticationException", "Login failed.");
+        
     }
-    
-    /**
-     * @throws Nette\Application\AbortException
-     */
-    function testFetchNotLoggedInRedirects() {
-        $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Homepage');
-        $mockPresenter->autoCanonicalize = FALSE;
-
-        $this->testAuthenticator->setId(38);
-        $this->testAuthenticator->setStatus(["TESTROLE", "TESTROLE2"]);
-        $this->testAuthenticator->setArr(["sessionKey" => "dsfbglsdfbg13546"]);
-
-        $mockPresenter->getUser()->setAuthenticator($this->testAuthenticator);
-        $mockPresenter->getUser()->login("test", "test");
-
-
-        $this->discussion
-                ->setPresenter($mockPresenter)
-                ->recId(1)
-                ->fetch();
-    }
-    
-    function testFetchSuccess() {
-        $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Discussion');
-        $mockPresenter->autoCanonicalize = FALSE;
-
-        $this->login();
-        $this->testAuthenticator->setId($this->login->id);
-        $this->testAuthenticator->setArr(["sessionKey" => $this->loginObj->getResult()->sessionKey]);
-        $mockPresenter->getUser()->setAuthenticator($this->testAuthenticator);
-        $mockPresenter->getUser()->setExpiration('2 minutes');
-        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
-
+        
+    function testSelectSuccess() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
         $discussionId = $GLOBALS["testedTeam"]["testDiscussionId"];
-        $discussionObj = new \Tymy\Discussion($mockPresenter->tapiAuthenticator, $mockPresenter, TRUE, 1);
-        $discussionObj->recId($discussionId)
-                ->fetch();
+        $this->discussion->recId($discussionId)->setPage(1)->getResult(TRUE);
         
-        Assert::true(is_object($discussionObj));
-        Assert::true(is_object($discussionObj->result));
-        Assert::type("string",$discussionObj->result->status);
-        Assert::same("OK",$discussionObj->result->status);
-        Assert::true(is_object($discussionObj->result->data->discussion));//returned discussion object
+        Assert::true(is_object($this->discussion));
+        Assert::true(is_object($this->discussion->result));
+        Assert::type("string",$this->discussion->result->status);
+        Assert::same("OK",$this->discussion->result->status);
+        Assert::true(is_object($this->discussion->result->data->discussion));//returned discussion object
         
-        Assert::type("int",$discussionObj->result->data->discussion->id);
-        Assert::same($discussionId, $discussionObj->result->data->discussion->id);
-        Assert::type("string",$discussionObj->result->data->discussion->caption);
-        Assert::type("string",$discussionObj->result->data->discussion->description);
-        Assert::type("string",$discussionObj->result->data->discussion->readRightName);
-        Assert::type("string",$discussionObj->result->data->discussion->writeRightName);
-        Assert::type("string",$discussionObj->result->data->discussion->deleteRightName);
-        Assert::type("string",$discussionObj->result->data->discussion->stickyRightName);
-        Assert::type("bool",$discussionObj->result->data->discussion->publicRead);
-        Assert::same(FALSE, $discussionObj->result->data->discussion->publicRead);
-        Assert::type("string",$discussionObj->result->data->discussion->status);
-        Assert::same("ACTIVE", $discussionObj->result->data->discussion->status);
-        Assert::type("bool",$discussionObj->result->data->discussion->editablePosts);
-        Assert::type("int",$discussionObj->result->data->discussion->order);
-        Assert::type("bool",$discussionObj->result->data->discussion->canRead);
-        Assert::type("bool",$discussionObj->result->data->discussion->canWrite);
-        Assert::type("bool",$discussionObj->result->data->discussion->canDelete);
-        Assert::type("bool",$discussionObj->result->data->discussion->canStick);
-        Assert::type("int",$discussionObj->result->data->discussion->newPosts);
-        Assert::true($discussionObj->result->data->discussion->newPosts >= 0);
-        Assert::type("int",$discussionObj->result->data->discussion->numberOfPosts);
-        Assert::true($discussionObj->result->data->discussion->numberOfPosts >= 0);
-        Assert::true(is_object($discussionObj->result->data->discussion->newInfo));
-        Assert::type("int",$discussionObj->result->data->discussion->newInfo->discussionId);
-        Assert::same($discussionId, $discussionObj->result->data->discussion->newInfo->discussionId);
-        Assert::type("int",$discussionObj->result->data->discussion->newInfo->newsCount);
-        Assert::same($discussionObj->result->data->discussion->newPosts, $discussionObj->result->data->discussion->newInfo->newsCount);
-        Assert::type("string",$discussionObj->result->data->discussion->newInfo->lastVisit);
-        Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $discussionObj->result->data->discussion->newInfo->lastVisit)); //timezone correction check
+        Assert::type("int",$this->discussion->result->data->discussion->id);
+        Assert::same($discussionId, $this->discussion->result->data->discussion->id);
+        Assert::type("string",$this->discussion->result->data->discussion->caption);
+        Assert::type("string",$this->discussion->result->data->discussion->description);
+        Assert::type("string",$this->discussion->result->data->discussion->readRightName);
+        Assert::type("string",$this->discussion->result->data->discussion->writeRightName);
+        Assert::type("string",$this->discussion->result->data->discussion->deleteRightName);
+        Assert::type("string",$this->discussion->result->data->discussion->stickyRightName);
+        Assert::type("bool",$this->discussion->result->data->discussion->publicRead);
+        Assert::same(FALSE, $this->discussion->result->data->discussion->publicRead);
+        Assert::type("string",$this->discussion->result->data->discussion->status);
+        Assert::same("ACTIVE", $this->discussion->result->data->discussion->status);
+        Assert::type("bool",$this->discussion->result->data->discussion->editablePosts);
+        Assert::type("int",$this->discussion->result->data->discussion->order);
+        Assert::type("bool",$this->discussion->result->data->discussion->canRead);
+        Assert::type("bool",$this->discussion->result->data->discussion->canWrite);
+        Assert::type("bool",$this->discussion->result->data->discussion->canDelete);
+        Assert::type("bool",$this->discussion->result->data->discussion->canStick);
+        Assert::type("int",$this->discussion->result->data->discussion->newPosts);
+        Assert::true($this->discussion->result->data->discussion->newPosts >= 0);
+        Assert::type("int",$this->discussion->result->data->discussion->numberOfPosts);
+        Assert::true($this->discussion->result->data->discussion->numberOfPosts >= 0);
+        Assert::true(is_object($this->discussion->result->data->discussion->newInfo));
+        Assert::type("int",$this->discussion->result->data->discussion->newInfo->discussionId);
+        Assert::same($discussionId, $this->discussion->result->data->discussion->newInfo->discussionId);
+        Assert::type("int",$this->discussion->result->data->discussion->newInfo->newsCount);
+        Assert::same($this->discussion->result->data->discussion->newPosts, $this->discussion->result->data->discussion->newInfo->newsCount);
+        Assert::type("string",$this->discussion->result->data->discussion->newInfo->lastVisit);
+        Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $this->discussion->result->data->discussion->newInfo->lastVisit)); //timezone correction check
         
-        Assert::true(is_object($discussionObj->result->data->paging));
-        Assert::type("int",$discussionObj->result->data->paging->currentPage);
-        Assert::same(1, $discussionObj->result->data->paging->currentPage);
-        Assert::type("int",$discussionObj->result->data->paging->numberOfPages);
-        Assert::true($discussionObj->result->data->paging->numberOfPages > 0);
+        Assert::true(is_object($this->discussion->result->data->paging));
+        Assert::type("int",$this->discussion->result->data->paging->currentPage);
+        Assert::same(1, $this->discussion->result->data->paging->currentPage);
+        Assert::type("int",$this->discussion->result->data->paging->numberOfPages);
+        Assert::true($this->discussion->result->data->paging->numberOfPages > 0);
         
-        Assert::type("array", $discussionObj->result->data->posts);
-        Assert::same(20, count($discussionObj->result->data->posts)); // only 20 posts on each page
+        Assert::type("array", $this->discussion->result->data->posts);
+        Assert::same(20, count($this->discussion->result->data->posts)); // only 20 posts on each page
         
-        foreach ($discussionObj->result->data->posts as $post) {
+        foreach ($this->discussion->result->data->posts as $post) {
             Assert::type("int",$post->id);
             Assert::true($post->id > 0);
             Assert::type("int",$post->discussionId);
@@ -204,136 +146,93 @@ class APIDiscussionTest extends ITapiTest {
         }
     }
     
-    /**
-     * @throws Tymy\Exception\APIException
-     */
+    /* TAPI : POST */
+    
     function testPostFailsNoRecId() {
-        $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Discussion');
-        $mockPresenter->autoCanonicalize = FALSE;
-
-        $this->login();
-        $this->testAuthenticator->setId($this->login->id);
-        $this->testAuthenticator->setArr(["sessionKey" => $this->loginObj->getResult()->sessionKey]);
-        $mockPresenter->getUser()->setAuthenticator($this->testAuthenticator);
-        $mockPresenter->getUser()->setExpiration('2 minutes');
-        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
-
-        $insertText = "AUTOTEST automatic discussion post";
-        
-        $discussionObj = new \Tymy\Discussion($mockPresenter->tapiAuthenticator, $mockPresenter, TRUE, 1);
-        $discussionObj
-                ->insert($insertText);
-        Assert::true(is_object($discussionObj));
-        Assert::true(is_object($discussionObj->result));
-        Assert::type("string",$discussionObj->result->status);
-        Assert::same("OK",$discussionObj->result->status);
-        
-        Assert::true(FALSE);
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception(function(){$this->discussion->recId(NULL)->insert("AUTOTEST automatic discussion post");} , "\Tymy\Exception\APIException", "Discussion ID not set!");
     }
     
     function testPost() {
         if(!$GLOBALS["testedTeam"]["invasive"])
             return null;
-        $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Discussion');
-        $mockPresenter->autoCanonicalize = FALSE;
-
-        $this->login();
-        $this->testAuthenticator->setId($this->login->id);
-        $this->testAuthenticator->setArr(["sessionKey" => $this->loginObj->getResult()->sessionKey]);
-        $mockPresenter->getUser()->setAuthenticator($this->authenticator);
-        $mockPresenter->getUser()->setExpiration('2 minutes');
-        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
-
-        $insertText = "AUTOTEST automatic discussion post";
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        
         $discussionId = $GLOBALS["testedTeam"]["testDiscussionId"];
-        $discussionObj = new \Tymy\Discussion($mockPresenter->tapiAuthenticator, $mockPresenter, TRUE, 1);
-        $discussionObj
-                ->recId($discussionId)
-                ->insert($insertText);
+        $insertText = "AUTOTEST automatic discussion post";
+        $this->discussion->recId($discussionId)->insert($insertText);
         
-        Assert::true(is_object($discussionObj));
-        Assert::true(is_object($discussionObj->result));
-        Assert::type("string",$discussionObj->result->status);
-        Assert::same("OK",$discussionObj->result->status);
+        Assert::true(is_object($this->discussion));
+        Assert::true(is_object($this->discussion->result));
+        Assert::type("string",$this->discussion->result->status);
+        Assert::same("OK",$this->discussion->result->status);
 
-        Assert::true(is_object($discussionObj->result->data));
+        Assert::true(is_object($this->discussion->result->data));
 
-        Assert::type("int",$discussionObj->result->data->discussionId);
-        Assert::same($discussionId,$discussionObj->result->data->discussionId);
-        Assert::type("string",$discussionObj->result->data->post);
-        Assert::same($insertText,$discussionObj->result->data->post);
-        Assert::type("int",$discussionObj->result->data->createdById);
-        Assert::same($this->login->id,$discussionObj->result->data->createdById);
-        Assert::type("string",$discussionObj->result->data->createdAt); // no timezone check here, this is only feedback
+        Assert::type("int",$this->discussion->result->data->discussionId);
+        Assert::same($discussionId,$this->discussion->result->data->discussionId);
+        Assert::type("string",$this->discussion->result->data->post);
+        Assert::same($insertText,$this->discussion->result->data->post);
+        Assert::type("int",$this->discussion->result->data->createdById);
+        Assert::same($this->login->id,$this->discussion->result->data->createdById);
+        Assert::type("string",$this->discussion->result->data->createdAt); // no timezone check here, this is only feedback
         
-        Assert::type("bool",$discussionObj->result->data->sticky);
-        Assert::same(FALSE,$discussionObj->result->data->sticky);
-        Assert::type("bool",$discussionObj->result->data->newPost);
-        Assert::same(FALSE,$discussionObj->result->data->newPost);
-        Assert::type("string",$discussionObj->result->data->createdAtStr);
+        Assert::type("bool",$this->discussion->result->data->sticky);
+        Assert::same(FALSE,$this->discussion->result->data->sticky);
+        Assert::type("bool",$this->discussion->result->data->newPost);
+        Assert::same(FALSE,$this->discussion->result->data->newPost);
+        Assert::type("string",$this->discussion->result->data->createdAtStr);
         
-        Assert::true(is_object($discussionObj->result->data->createdBy));
-        Assert::type("int",$discussionObj->result->data->createdBy->id);
-        Assert::same($this->login->id,$discussionObj->result->data->createdBy->id);
-        Assert::type("string",$discussionObj->result->data->createdBy->login);
-        Assert::type("string",$discussionObj->result->data->createdBy->callName);
-        Assert::type("string",$discussionObj->result->data->createdBy->pictureUrl);
+        Assert::true(is_object($this->discussion->result->data->createdBy));
+        Assert::type("int",$this->discussion->result->data->createdBy->id);
+        Assert::same($this->login->id,$this->discussion->result->data->createdBy->id);
+        Assert::type("string",$this->discussion->result->data->createdBy->login);
+        Assert::type("string",$this->discussion->result->data->createdBy->callName);
+        Assert::type("string",$this->discussion->result->data->createdBy->pictureUrl);
     }
     
+    /* TAPI : SEARCH */
+    
     function testSearch() {
-        $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Discussion');
-        $mockPresenter->autoCanonicalize = FALSE;
-
-        $this->login();
-        $this->testAuthenticator->setId($this->login->id);
-        $this->testAuthenticator->setArr(["sessionKey" => $this->loginObj->getResult()->sessionKey]);
-        $mockPresenter->getUser()->setAuthenticator($this->testAuthenticator);
-        $mockPresenter->getUser()->setExpiration('2 minutes');
-        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
 
         $discussionId = $GLOBALS["testedTeam"]["searchDiscussionId"];
         $searchHash = $GLOBALS["testedTeam"]["searchHash"];
-        $discussionObj = new \Tymy\Discussion($mockPresenter->tapiAuthenticator, $mockPresenter, TRUE, 1);
-        $discussionObj
-                ->recId($discussionId)
-                ->search($searchHash)
-                ->fetch();
+        $this->discussion->dumpResult();
+        $this->discussion->recId($discussionId)->search($searchHash)->getResult(TRUE);
         
-        Assert::true(is_object($discussionObj));
-        Assert::true(is_object($discussionObj->result));
-        Assert::type("string",$discussionObj->result->status);
-        Assert::same("OK",$discussionObj->result->status);
-        Assert::true(is_object($discussionObj->result->data->discussion));//returned discussion object
-        Assert::type("int",$discussionObj->result->data->discussion->id);
-        Assert::same($discussionId,$discussionObj->result->data->discussion->id);
+        Assert::true(is_object($this->discussion));
+        Assert::true(is_object($this->discussion->result));
+        Assert::type("string",$this->discussion->result->status);
+        Assert::same("OK",$this->discussion->result->status);
+        Assert::true(is_object($this->discussion->result->data->discussion));//returned discussion object
+        Assert::type("int",$this->discussion->result->data->discussion->id);
+        Assert::same($discussionId,$this->discussion->result->data->discussion->id);
         
-        Assert::type("array",$discussionObj->result->data->posts);
-        Assert::same(1,count($discussionObj->result->data->posts)); // only one post with that hash
+        Assert::type("array",$this->discussion->result->data->posts);
+        Assert::same(1,count($this->discussion->result->data->posts)); // only one post with that hash
         
-        Assert::true(is_object($discussionObj->result->data->posts[0]));
+        Assert::true(is_object($this->discussion->result->data->posts[0]));
         
-        Assert::type("int",$discussionObj->result->data->posts[0]->id);
-        Assert::true($discussionObj->result->data->posts[0]->id >= 0);
-        Assert::type("int",$discussionObj->result->data->posts[0]->discussionId);
-        Assert::same($discussionId,$discussionObj->result->data->posts[0]->discussionId);
-        Assert::type("string",$discussionObj->result->data->posts[0]->post);
-        Assert::contains($searchHash, $discussionObj->result->data->posts[0]->post);
-        Assert::type("int",$discussionObj->result->data->posts[0]->createdById);
-        Assert::same($GLOBALS["testedTeam"]["searchedItemUserId"],$discussionObj->result->data->posts[0]->createdById);
+        Assert::type("int",$this->discussion->result->data->posts[0]->id);
+        Assert::true($this->discussion->result->data->posts[0]->id >= 0);
+        Assert::type("int",$this->discussion->result->data->posts[0]->discussionId);
+        Assert::same($discussionId,$this->discussion->result->data->posts[0]->discussionId);
+        Assert::type("string",$this->discussion->result->data->posts[0]->post);
+        Assert::contains($searchHash, $this->discussion->result->data->posts[0]->post);
+        Assert::type("int",$this->discussion->result->data->posts[0]->createdById);
+        Assert::same($GLOBALS["testedTeam"]["searchedItemUserId"],$this->discussion->result->data->posts[0]->createdById);
         
-        Assert::type("string",$discussionObj->result->data->posts[0]->createdAt);
-        Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $discussionObj->result->data->posts[0]->createdAt)); //timezone correction check
-        Assert::type("int",$discussionObj->result->data->posts[0]->updatedById);
-        Assert::same(0,$discussionObj->result->data->posts[0]->updatedById); // no one updated
-        Assert::type("bool",$discussionObj->result->data->posts[0]->sticky);
-        Assert::same(false,$discussionObj->result->data->posts[0]->sticky);
-        Assert::type("bool",$discussionObj->result->data->posts[0]->newPost);
-        Assert::same(false,$discussionObj->result->data->posts[0]->newPost);
-        Assert::type("string",$discussionObj->result->data->posts[0]->createdAtStr);
-        Assert::true(is_object($discussionObj->result->data->posts[0]->createdBy));
+        Assert::type("string",$this->discussion->result->data->posts[0]->createdAt);
+        Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $this->discussion->result->data->posts[0]->createdAt)); //timezone correction check
+        Assert::type("int",$this->discussion->result->data->posts[0]->updatedById);
+        Assert::same(0,$this->discussion->result->data->posts[0]->updatedById); // no one updated
+        Assert::type("bool",$this->discussion->result->data->posts[0]->sticky);
+        Assert::same(false,$this->discussion->result->data->posts[0]->sticky);
+        Assert::type("bool",$this->discussion->result->data->posts[0]->newPost);
+        Assert::same(false,$this->discussion->result->data->posts[0]->newPost);
+        Assert::type("string",$this->discussion->result->data->posts[0]->createdAtStr);
+        Assert::true(is_object($this->discussion->result->data->posts[0]->createdBy));
     }
 
 }
