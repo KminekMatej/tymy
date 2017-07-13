@@ -10,13 +10,13 @@ use Nette;
 use Tester;
 use Tester\Assert;
 
-$container = require __DIR__ . '/bootstrap.php';
-
+$container = require __DIR__ . '/../bootstrap.php';
+Tester\Environment::skip('Temporary skipping');
 if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
 
-class APIPollTest extends TapiTestCase {
+class APIPollTest extends ITapiTest {
 
     private $authenticator;
     private $container;

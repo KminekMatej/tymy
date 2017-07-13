@@ -7,13 +7,14 @@ use Tester;
 use Tester\Assert;
 
 $container = require __DIR__ . '/bootstrap.php';
+Tester\Environment::skip('Temporary skipping');
 if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
 
-class TeamPresenterTest extends TapiTestCase {
+class PollPresenterTest extends TapiTestCase {
 
-    const PRESENTERNAME = "Team";
+    const PRESENTERNAME = "Poll";
     
     private $container;
     private $presenter;
@@ -58,5 +59,5 @@ class TeamPresenterTest extends TapiTestCase {
     }
 }
 
-$test = new TeamPresenterTest($container);
+$test = new PollPresenterTest($container);
 $test->run();

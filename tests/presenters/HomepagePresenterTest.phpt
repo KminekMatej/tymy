@@ -7,17 +7,17 @@ use Tester;
 use Tester\Assert;
 
 $container = require __DIR__ . '/bootstrap.php';
+Tester\Environment::skip('Temporary skipping');
 if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
 
-class EventPresenterTest extends TapiTestCase {
+class HomepagePresenterTest extends TapiTestCase {
 
-    const PRESENTERNAME = "Event";
+    const PRESENTERNAME = "Homepage";
     
     private $container;
     private $presenter;
-    
 
     function __construct(Nette\DI\Container $container) {
         $this->container = $container;
@@ -55,16 +55,18 @@ class EventPresenterTest extends TapiTestCase {
         Assert::true($dom->has('div#snippet-navbar-nav'));
         //has breadcrumbs
         Assert::true($dom->has('div.container div.row div.col ol.breadcrumb'));
-        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 2);
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 1);
         
-        Assert::true($dom->has('div.container.events'));
-        Assert::true(count($dom->find('div.container.events div.row')) >= 1);
-        Assert::true($dom->has('div.container.events div.row div.col-md-7.my-3 div.card.sh-box#calendar'));
+        Assert::true($dom->has('div.container.homepage'));
+        Assert::true(count($dom->find('div.container.homepage div.row')) >= 2); // at least two rows, two makes the main layout, more rows are inside for discussions
+        Assert::true($dom->has('div.container.homepage div.row div.col-md-5.my-3 div.card.sh-box#calendar'));
+        Assert::true($dom->has('div.container.homepage div.row div.col-md-5.my-3 a.btn.btn-sm.btn-secondary.d-block'));
         
-        Assert::true($dom->has('div.container.events div.row div.col-md-5.my-3.agenda-wrapper#snippet--events'));
-        Assert::equal(count($dom->find('div.container.events div.row div.col-md-5.my-3.agenda-wrapper#snippet--events div.card.sh-box.agenda[data-month]')), 13);
+        Assert::true($dom->has('div.container.homepage div.row div.col-md-7.my-3 div.card.sh-box div.card-header h4.card-title'));
+        Assert::true($dom->has('div.container.homepage div.row div.col-md-7.my-3 div.card.sh-box div.card-block'));
+        
     }
 }
 
-$test = new EventPresenterTest($container);
+$test = new HomepagePresenterTest($container);
 $test->run();

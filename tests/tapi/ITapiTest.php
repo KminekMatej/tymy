@@ -8,24 +8,31 @@ use Tester;
  *
  * @author kminekmatej
  */
-class TapiTestCase extends Tester\TestCase {
+class ITapiTest extends Tester\TestCase {
     
     /** @var \App\Model\Supplier */
     protected $supplier;
+    
     protected $loginObj;
     protected $login;
+    
     protected $tapi_config;
+    /** @var \App\Model\TapiAuthenticator */
     protected $tapiAuthenticator;
+    /** @var \App\Model\TestAuthenticator */
     protected $testAuthenticator;
-        
-    protected function initTapiConfiguration($container){
-        $this->supplier = $container->getByType('App\Model\Supplier');
+    
+    public function __construct(\App\Model\Supplier $supplier) {
+        $this->supplier = $supplier;
+    }
+    
+    protected function setUp(){
         $tapi_config = $this->supplier->getTapi_config();
         $tapi_config["tym"] = $GLOBALS["testedTeam"]["team"];
         $this->tapi_config = $tapi_config;
         
         $this->supplier->setTapi_config($tapi_config);
-        $this->tapiAuthenticator = new \App\Model\TapiAuthenticator($this->tapi_config);
+        $this->tapiAuthenticator = new \App\Model\TapiAuthenticator($this->supplier);
         $this->testAuthenticator = new \App\Model\TestAuthenticator();
     }
     

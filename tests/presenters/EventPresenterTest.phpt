@@ -7,17 +7,18 @@ use Tester;
 use Tester\Assert;
 
 $container = require __DIR__ . '/bootstrap.php';
-
+Tester\Environment::skip('Temporary skipping');
 if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
 
-class PollPresenterTest extends TapiTestCase {
+class EventPresenterTest extends TapiTestCase {
 
-    const PRESENTERNAME = "Poll";
+    const PRESENTERNAME = "Event";
     
     private $container;
     private $presenter;
+    
 
     function __construct(Nette\DI\Container $container) {
         $this->container = $container;
@@ -56,8 +57,15 @@ class PollPresenterTest extends TapiTestCase {
         //has breadcrumbs
         Assert::true($dom->has('div.container div.row div.col ol.breadcrumb'));
         Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 2);
+        
+        Assert::true($dom->has('div.container.events'));
+        Assert::true(count($dom->find('div.container.events div.row')) >= 1);
+        Assert::true($dom->has('div.container.events div.row div.col-md-7.my-3 div.card.sh-box#calendar'));
+        
+        Assert::true($dom->has('div.container.events div.row div.col-md-5.my-3.agenda-wrapper#snippet--events'));
+        Assert::equal(count($dom->find('div.container.events div.row div.col-md-5.my-3.agenda-wrapper#snippet--events div.card.sh-box.agenda[data-month]')), 13);
     }
 }
 
-$test = new PollPresenterTest($container);
+$test = new EventPresenterTest($container);
 $test->run();

@@ -10,29 +10,18 @@ use Nette;
 use Tester;
 use Tester\Assert;
 
-$container = require __DIR__ . '/bootstrap.php';
+$container = require __DIR__ . '/../bootstrap.php';
 
 if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
 
-class APIDiscussionTest extends TapiTestCase {
+class APIDiscussionTest extends ITapiTest {
 
-    private $authenticator;
     private $container;
 
     function __construct(Nette\DI\Container $container) {
         $this->container = $container;
-    }
-    
-    function setUp() {
-        parent::setUp();
-        $this->initTapiConfiguration($this->container);
-        $this->authenticator = new \App\Model\TestAuthenticator();
-    }
-    
-    function tearDown() {
-        parent::tearDown();
     }
     
     /**
@@ -64,11 +53,11 @@ class APIDiscussionTest extends TapiTestCase {
         $mockPresenter = $presenterFactory->createPresenter('Homepage');
         $mockPresenter->autoCanonicalize = FALSE;
 
-        $this->authenticator->setId(38);
-        $this->authenticator->setStatus(["TESTROLE", "TESTROLE2"]);
-        $this->authenticator->setArr(["tym" => "testteam", "sessionKey" => "dsfbglsdfbg13546"]);
+        $this->testAuthenticator->setId(38);
+        $this->testAuthenticator->setStatus(["TESTROLE", "TESTROLE2"]);
+        $this->testAuthenticator->setArr(["tym" => "testteam", "sessionKey" => "dsfbglsdfbg13546"]);
 
-        $mockPresenter->getUser()->setAuthenticator($this->authenticator);
+        $mockPresenter->getUser()->setAuthenticator($this->testAuthenticator);
         $mockPresenter->getUser()->login("test", "test");
 
 
@@ -87,11 +76,11 @@ class APIDiscussionTest extends TapiTestCase {
         $mockPresenter = $presenterFactory->createPresenter('Homepage');
         $mockPresenter->autoCanonicalize = FALSE;
 
-        $this->authenticator->setId(38);
-        $this->authenticator->setStatus(["TESTROLE", "TESTROLE2"]);
-        $this->authenticator->setArr(["sessionKey" => "dsfbglsdfbg13546"]);
+        $this->testAuthenticator->setId(38);
+        $this->testAuthenticator->setStatus(["TESTROLE", "TESTROLE2"]);
+        $this->testAuthenticator->setArr(["sessionKey" => "dsfbglsdfbg13546"]);
 
-        $mockPresenter->getUser()->setAuthenticator($this->authenticator);
+        $mockPresenter->getUser()->setAuthenticator($this->testAuthenticator);
         $mockPresenter->getUser()->login("test", "test");
 
 
@@ -108,9 +97,9 @@ class APIDiscussionTest extends TapiTestCase {
         $mockPresenter->autoCanonicalize = FALSE;
 
         $this->login();
-        $this->authenticator->setId($this->login->id);
-        $this->authenticator->setArr(["sessionKey" => $this->loginObj->getResult()->sessionKey]);
-        $mockPresenter->getUser()->setAuthenticator($this->authenticator);
+        $this->testAuthenticator->setId($this->login->id);
+        $this->testAuthenticator->setArr(["sessionKey" => $this->loginObj->getResult()->sessionKey]);
+        $mockPresenter->getUser()->setAuthenticator($this->testAuthenticator);
         $mockPresenter->getUser()->setExpiration('2 minutes');
         $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
 
@@ -202,9 +191,9 @@ class APIDiscussionTest extends TapiTestCase {
         $mockPresenter->autoCanonicalize = FALSE;
 
         $this->login();
-        $this->authenticator->setId($this->login->id);
-        $this->authenticator->setArr(["sessionKey" => $this->loginObj->getResult()->sessionKey]);
-        $mockPresenter->getUser()->setAuthenticator($this->authenticator);
+        $this->testAuthenticator->setId($this->login->id);
+        $this->testAuthenticator->setArr(["sessionKey" => $this->loginObj->getResult()->sessionKey]);
+        $mockPresenter->getUser()->setAuthenticator($this->testAuthenticator);
         $mockPresenter->getUser()->setExpiration('2 minutes');
         $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
 
@@ -229,8 +218,8 @@ class APIDiscussionTest extends TapiTestCase {
         $mockPresenter->autoCanonicalize = FALSE;
 
         $this->login();
-        $this->authenticator->setId($this->login->id);
-        $this->authenticator->setArr(["sessionKey" => $this->loginObj->getResult()->sessionKey]);
+        $this->testAuthenticator->setId($this->login->id);
+        $this->testAuthenticator->setArr(["sessionKey" => $this->loginObj->getResult()->sessionKey]);
         $mockPresenter->getUser()->setAuthenticator($this->authenticator);
         $mockPresenter->getUser()->setExpiration('2 minutes');
         $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
@@ -277,9 +266,9 @@ class APIDiscussionTest extends TapiTestCase {
         $mockPresenter->autoCanonicalize = FALSE;
 
         $this->login();
-        $this->authenticator->setId($this->login->id);
-        $this->authenticator->setArr(["sessionKey" => $this->loginObj->getResult()->sessionKey]);
-        $mockPresenter->getUser()->setAuthenticator($this->authenticator);
+        $this->testAuthenticator->setId($this->login->id);
+        $this->testAuthenticator->setArr(["sessionKey" => $this->loginObj->getResult()->sessionKey]);
+        $mockPresenter->getUser()->setAuthenticator($this->testAuthenticator);
         $mockPresenter->getUser()->setExpiration('2 minutes');
         $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
 

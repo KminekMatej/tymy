@@ -7,13 +7,14 @@ use Tester;
 use Tester\Assert;
 
 $container = require __DIR__ . '/bootstrap.php';
+Tester\Environment::skip('Temporary skipping');
 if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
 
-class HomepagePresenterTest extends TapiTestCase {
+class TeamPresenterTest extends TapiTestCase {
 
-    const PRESENTERNAME = "Homepage";
+    const PRESENTERNAME = "Team";
     
     private $container;
     private $presenter;
@@ -54,18 +55,9 @@ class HomepagePresenterTest extends TapiTestCase {
         Assert::true($dom->has('div#snippet-navbar-nav'));
         //has breadcrumbs
         Assert::true($dom->has('div.container div.row div.col ol.breadcrumb'));
-        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 1);
-        
-        Assert::true($dom->has('div.container.homepage'));
-        Assert::true(count($dom->find('div.container.homepage div.row')) >= 2); // at least two rows, two makes the main layout, more rows are inside for discussions
-        Assert::true($dom->has('div.container.homepage div.row div.col-md-5.my-3 div.card.sh-box#calendar'));
-        Assert::true($dom->has('div.container.homepage div.row div.col-md-5.my-3 a.btn.btn-sm.btn-secondary.d-block'));
-        
-        Assert::true($dom->has('div.container.homepage div.row div.col-md-7.my-3 div.card.sh-box div.card-header h4.card-title'));
-        Assert::true($dom->has('div.container.homepage div.row div.col-md-7.my-3 div.card.sh-box div.card-block'));
-        
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 2);
     }
 }
 
-$test = new HomepagePresenterTest($container);
+$test = new TeamPresenterTest($container);
 $test->run();
