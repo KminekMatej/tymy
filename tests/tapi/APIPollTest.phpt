@@ -18,22 +18,27 @@ if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
 
 class APIPollTest extends ITapiTest {
 
-    private $authenticator;
-    private $container;
+    /** @var \Tymy\Poll */
+    private $poll;
 
     function __construct(Nette\DI\Container $container) {
         $this->container = $container;
     }
     
-    function setUp() {
-        parent::setUp();
-        $this->initTapiConfiguration($this->container);
-        $this->authenticator = new \App\Model\TestAuthenticator();
+    public function getTestedObject() {
+        return $this->poll;
     }
     
-    function tearDown() {
-        parent::tearDown();
+    protected function setUp() {
+        $this->poll = $this->container->getByType('Tymy\Poll');
+        parent::setUp();
     }
+    
+    /* TEST GETTERS AND SETTERS */ 
+    
+    /* TEST TAPI FUNCTIONS */ 
+    
+    /* TAPI : SELECT */
 
     /**
      * @throws Tymy\Exception\APIException

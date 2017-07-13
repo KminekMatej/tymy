@@ -18,32 +18,56 @@ if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
 
 class APIDiscussionTest extends ITapiTest {
 
-    private $container;
+    public $container;
+    
+    /** @var \Tymy\Discussion */
+    private $discussion;
 
     function __construct(Nette\DI\Container $container) {
         $this->container = $container;
+    }
+    
+    public function getTestedObject() {
+        return $this->discussion;
+    }
+    
+    protected function setUp() {
+        $this->discussion = $this->container->getByType('Tymy\Discussion');
+        parent::setUp();
+    }
+    
+    /* TEST GETTERS AND SETTERS */ 
+    
+    function testPage(){
+        $page = 2;
+        $this->discussion->setPage($page);
+        Assert::equal($page, $this->discussion->getPage());
+        $page = "not-a-number";
+        $this->discussion->setPage($page);
+        Assert::equal(1, $this->discussion->getPage(), "Page should be 1 when set non numeric");
+    }
+    
+    /* TEST TAPI FUNCTIONS */ 
+    
+    /* TAPI : SELECT */
+    
+    
+    /**
+     * @throws Tymy\Exception\APIException
+     */
+    function testFetchFailsPageDoNotExist(){
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception($this->discussion->recId(1)->getResult(), "\Tymy\Exception\APIException", "Discussion ID not set!");
     }
     
     /**
      * @throws Tymy\Exception\APIException
      */
     function testFetchFailsNoRecId(){
-        $discussionObj = new \Tymy\Discussion(NULL, NULL, TRUE, 1);
-        $discussion = $discussionObj
-                ->setSupplier($this->supplier)
-                ->fetch();
+        Assert::exception($this->discussion->getResult(), "\Tymy\Exception\APIException", "Discussion ID not set!");
     }
 
-    /**
-     * @throws Tymy\Exception\APIException
-     */
-    function testFetchFailsPageDoNotExist(){
-        $discussionObj = new \Tymy\Discussion(NULL, NULL, TRUE, -1);
-        $discussion = $discussionObj
-                ->setSupplier($this->supplier)
-                ->recId(1)
-                ->fetch();
-    }
+    
     
     /**
      * @throws Nette\Application\AbortException
@@ -61,8 +85,7 @@ class APIDiscussionTest extends ITapiTest {
         $mockPresenter->getUser()->login("test", "test");
 
 
-        $discussionObj = new \Tymy\Discussion(NULL, NULL, TRUE, 1);
-        $discussionObj
+        $this->discussion
                 ->setPresenter($mockPresenter)
                 ->recId(1)
                 ->fetch();
@@ -84,8 +107,7 @@ class APIDiscussionTest extends ITapiTest {
         $mockPresenter->getUser()->login("test", "test");
 
 
-        $discussionObj = new \Tymy\Discussion(NULL, NULL, TRUE, 1);
-        $discussionObj
+        $this->discussion
                 ->setPresenter($mockPresenter)
                 ->recId(1)
                 ->fetch();

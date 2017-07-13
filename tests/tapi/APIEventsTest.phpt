@@ -18,22 +18,28 @@ if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
 
 class APIEventsTest extends ITapiTest {
 
-    private $authenticator;
-    private $container;
+    /** @var \Tymy\Events */
+    private $events;
 
     function __construct(Nette\DI\Container $container) {
         $this->container = $container;
     }
     
-    function setUp() {
-        parent::setUp();
-        $this->initTapiConfiguration($this->container);
-        $this->authenticator = new \App\Model\TestAuthenticator();
+    public function getTestedObject() {
+        return $this->events;
     }
     
-    function tearDown() {
-        parent::tearDown();
+    protected function setUp() {
+        $this->events = $this->container->getByType('Tymy\Events');
+        parent::setUp();
     }
+    
+    /* TEST GETTERS AND SETTERS */ 
+    
+    /* TEST TAPI FUNCTIONS */ 
+    
+    /* TAPI : SELECT */
+
 
     /**
      * @throws Nette\Application\AbortException

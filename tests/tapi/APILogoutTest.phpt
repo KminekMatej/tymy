@@ -18,22 +18,27 @@ if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
 
 class APILogoutTest extends ITapiTest {
 
-    private $authenticator;
-    private $container;
+    /** @var \Tymy\Logout */
+    private $logout;
 
     function __construct(Nette\DI\Container $container) {
         $this->container = $container;
     }
     
-    function setUp() {
-        parent::setUp();
-        $this->initTapiConfiguration($this->container);
-        $this->authenticator = new \App\Model\TestAuthenticator();
+    public function getTestedObject() {
+        return $this->logout;
     }
     
-    function tearDown() {
-        parent::tearDown();
+    protected function setUp() {
+        $this->logout = $this->container->getByType('Tymy\Logout');
+        parent::setUp();
     }
+    
+    /* TEST GETTERS AND SETTERS */ 
+    
+    /* TEST TAPI FUNCTIONS */ 
+    
+    /* TAPI : SELECT */
 
     /**
      * @throws \Tymy\Exception\APIException
