@@ -185,6 +185,11 @@ abstract class Tymy extends Nette\Object{
         return $this->result;
     }
     
+    
+    public function dumpResult(){
+        $this->result = NULL;
+    }
+    
     protected function execute($relogin = TRUE) {
         $contents = $this->request($this->fullUrl);
         if ($contents->status) {
@@ -214,7 +219,7 @@ abstract class Tymy extends Nette\Object{
     }
     
     private function loginFailure($relogin) {
-        if ($relogin && !is_null($this->tapiAuthenticator)) {
+        if ($relogin && !is_null($this->tapiAuthenticator)) { // relogin only if specified, is authenticator and is class needed logins
             $newLogin = $this->tapiAuthenticator->reAuthenticate([$this->user->getIdentity()->data["data"]->login, $this->user->getIdentity()->data["hash"]]);
             $this->user->getIdentity()->sessionKey = $newLogin->result->sessionKey;
             $this->setTsid($this->user->getIdentity()->sessionKey);
