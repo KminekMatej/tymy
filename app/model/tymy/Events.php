@@ -22,17 +22,7 @@ final class Events extends Tymy{
     public $eventsMonthly;
     public $eventsFrom;
     public $eventsTo;
-        
-    public function withMyAttendance($withMyAttendance){
-        $this->withMyAttendance = $withMyAttendance;
-        return $this;
-    }
-    
-    public function order($orderField){
-        $this->order = $orderField;
-        return $this;
-    }
-    
+       
     public function getFrom() {
         return $this->from;
     }
@@ -68,8 +58,16 @@ final class Events extends Tymy{
         $this->withMyAttendance = $withMyAttendance;
         return $this;
     }
+    
+    public function reset() {
+        $this->setFrom(NULL);
+        $this->setTo(NULL);
+        $this->setOrder(NULL);
+        $this->setWithMyAttendance(FALSE);
+        return parent::reset();
+    }
 
-    public function select() {
+        public function select() {
         $url = self::TAPI_NAME;
         
         if($this->withMyAttendance){
