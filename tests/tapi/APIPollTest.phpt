@@ -11,7 +11,7 @@ use Tester;
 use Tester\Assert;
 
 $container = require __DIR__ . '/../bootstrap.php';
-Tester\Environment::skip('Temporary skipping');
+
 if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
@@ -40,89 +40,61 @@ class APIPollTest extends ITapiTest {
     
     /* TAPI : SELECT */
 
-    /**
-     * @throws Tymy\Exception\APIException
-     */
-    function testFetchNotLoggedInFailsRecIdNotSet() {
-        $pollObj = new \Tymy\Poll();
-        $pollObj->setSupplier($this->supplier)->fetch();
+    function testSelectNotLoggedInFailsNoRecId() {
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception(function(){$this->poll->reset()->getResult(TRUE);} , "\Tymy\Exception\APIException", "Poll ID not set!");
+
     }
     
-    /**
-     * @throws Nette\Application\AbortException
-     */
     function testFetchNotLoggedInFails404() {
-        $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Poll');
-        $mockPresenter->autoCanonicalize = FALSE;
-
-        $this->authenticator->setId(38);
-        $this->authenticator->setStatus(["TESTROLE", "TESTROLE2"]);
-        $this->authenticator->setArr(["tym" => "testteam", "sessionKey" => "dsfbglsdfbg13546"]);
-
-        $mockPresenter->getUser()->setAuthenticator($this->authenticator);
-        $mockPresenter->getUser()->login("test", "test");
-
-        $pollObj = new \Tymy\Poll();
-        $pollObj->setPresenter($mockPresenter)
-                ->recId(1)
-                ->fetch();
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception(function(){$this->poll->reset()->recId(1)->getResult(TRUE);} , "Nette\Security\AuthenticationException", "Login failed.");
     }
         
+    
     function testFetchSuccess() {
-        $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Poll');
-        $mockPresenter->autoCanonicalize = FALSE;
-
-        $this->login();
-        $this->authenticator->setId($this->login->id);
-        $this->authenticator->setArr(["sessionKey" => $this->loginObj->getResult()->sessionKey]);
-        $mockPresenter->getUser()->setAuthenticator($this->authenticator);
-        $mockPresenter->getUser()->setExpiration('2 minutes');
-        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
-
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
         $pollId = $GLOBALS["testedTeam"]["testPollId"];
-        $pollObj = new \Tymy\Poll($mockPresenter->tapiAuthenticator, $mockPresenter);
-        $pollObj->recId($pollId)
-                ->fetch();
-        Assert::true(is_object($pollObj));
-        Assert::true(is_object($pollObj->result));
-        Assert::type("string",$pollObj->result->status);
-        Assert::same("OK",$pollObj->result->status);
+        $this->poll->reset()->recId($pollId)->getResult(TRUE);
+
+        Assert::true(is_object($this->poll));
+        Assert::true(is_object($this->poll->result));
+        Assert::type("string",$this->poll->result->status);
+        Assert::same("OK",$this->poll->result->status);
         
-        Assert::type("int",$pollObj->result->data->id);
-        Assert::same($pollId,$pollObj->result->data->id);
+        Assert::type("int",$this->poll->result->data->id);
+        Assert::same($pollId,$this->poll->result->data->id);
         
-        Assert::type("int",$pollObj->result->data->createdById);
-        Assert::type("string",$pollObj->result->data->createdAt);
-        Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $pollObj->result->data->createdAt)); //timezone correction check
-        Assert::type("int",$pollObj->result->data->updatedById);
-        Assert::type("string",$pollObj->result->data->updatedAt);
-        Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $pollObj->result->data->updatedAt)); //timezone correction check
-        Assert::type("string",$pollObj->result->data->caption);
-        Assert::type("string",$pollObj->result->data->description);
-        if(property_exists($pollObj->result->data, "minItems")){
-            Assert::type("int",$pollObj->result->data->minItems);
-            Assert::true($pollObj->result->data->minItems > 0 || $pollObj->result->data->minItems == -1);
+        Assert::type("int",$this->poll->result->data->createdById);
+        Assert::type("string",$this->poll->result->data->createdAt);
+        Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $this->poll->result->data->createdAt)); //timezone correction check
+        Assert::type("int",$this->poll->result->data->updatedById);
+        Assert::type("string",$this->poll->result->data->updatedAt);
+        Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $this->poll->result->data->updatedAt)); //timezone correction check
+        Assert::type("string",$this->poll->result->data->caption);
+        Assert::type("string",$this->poll->result->data->description);
+        if(property_exists($this->poll->result->data, "minItems")){
+            Assert::type("int",$this->poll->result->data->minItems);
+            Assert::true($this->poll->result->data->minItems > 0 || $this->poll->result->data->minItems == -1);
         }
-        if(property_exists($pollObj->result->data, "maxItems")){
-            Assert::type("int",$pollObj->result->data->maxItems);
-            Assert::true($pollObj->result->data->maxItems > 0 || $pollObj->result->data->maxItems == -1);
-            Assert::true($pollObj->result->data->maxItems >= $pollObj->result->data->minItems);
+        if(property_exists($this->poll->result->data, "maxItems")){
+            Assert::type("int",$this->poll->result->data->maxItems);
+            Assert::true($this->poll->result->data->maxItems > 0 || $this->poll->result->data->maxItems == -1);
+            Assert::true($this->poll->result->data->maxItems >= $this->poll->result->data->minItems);
         }
-        Assert::type("bool",$pollObj->result->data->changeableVotes);
-        Assert::type("bool",$pollObj->result->data->mainMenu);
-        Assert::type("bool",$pollObj->result->data->anonymousResults);
-        Assert::type("string",$pollObj->result->data->showResults);
-        Assert::true(in_array($pollObj->result->data->showResults, ["NEVER", "ALWAYS", "AFTER_VOTE", "WHEN_CLOSED"]));
-        Assert::type("string",$pollObj->result->data->status);
-        Assert::true(in_array($pollObj->result->data->status, ["DESIGN", "OPENED", "CLOSED"]));
-        Assert::type("string",$pollObj->result->data->resultRightName);
-        Assert::type("string",$pollObj->result->data->voteRightName);
-        Assert::type("int",$pollObj->result->data->orderFlag);
+        Assert::type("bool",$this->poll->result->data->changeableVotes);
+        Assert::type("bool",$this->poll->result->data->mainMenu);
+        Assert::type("bool",$this->poll->result->data->anonymousResults);
+        Assert::type("string",$this->poll->result->data->showResults);
+        Assert::true(in_array($this->poll->result->data->showResults, ["NEVER", "ALWAYS", "AFTER_VOTE", "WHEN_CLOSED"]));
+        Assert::type("string",$this->poll->result->data->status);
+        Assert::true(in_array($this->poll->result->data->status, ["DESIGN", "OPENED", "CLOSED"]));
+        Assert::type("string",$this->poll->result->data->resultRightName);
+        Assert::type("string",$this->poll->result->data->voteRightName);
+        Assert::type("int",$this->poll->result->data->orderFlag);
         
-        Assert::type("array",$pollObj->result->data->options);
-        foreach ($pollObj->result->data->options as $opt) {
+        Assert::type("array",$this->poll->result->data->options);
+        foreach ($this->poll->result->data->options as $opt) {
             Assert::type("int",$opt->id);
             Assert::true($opt->id > 0);
             Assert::type("int",$opt->pollId);
@@ -131,7 +103,7 @@ class APIPollTest extends ITapiTest {
             Assert::type("string",$opt->type);
             Assert::true(in_array($opt->type, ["TEXT", "NUMBER", "BOOLEAN"]));
         }
-        foreach ($pollObj->result->data->votes as $vote) {
+        foreach ($this->poll->result->data->votes as $vote) {
             Assert::type("int",$vote->pollId);
             Assert::same($pollId,$vote->pollId);
             Assert::type("int",$vote->userId);
@@ -142,7 +114,7 @@ class APIPollTest extends ITapiTest {
             Assert::true($vote->optionId > 0);
             
             $found = FALSE;
-            foreach ($pollObj->result->data->options as $option) {
+            foreach ($this->poll->result->data->options as $option) {
                 if($option->id == $vote->optionId){
                     $found = TRUE;
                     switch ($option->type) {
@@ -175,6 +147,68 @@ class APIPollTest extends ITapiTest {
             Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $vote->updatedAt)); //timezone correction check
         }
     }
+    
+    function testVoteSuccess(){
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $pollId = $GLOBALS["testedTeam"]["testPollId"];
+        $votes = [["userId" => $this->user->getId(), "optionId" => 5, "stringValue" => md5("xxx".rand(0,1000))],
+                    ["userId" => $this->user->getId(), "optionId" => 8, "numericValue" => ""]];
+        $this->poll->reset()->recId($pollId)->vote($votes);
+    }
+    
+    /**
+     * @throws \Tymy\Exception\APIException
+     */
+    function testVoteFailureTooMuch(){
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $pollId = $GLOBALS["testedTeam"]["testPollId"];
+        $votes = [
+            ["userId" => $this->user->getId(), "optionId" => 5, "stringValue" => md5("xxx".rand(0,1000))],
+            ["userId" => $this->user->getId(), "optionId" => 8, "numericValue" => 333],
+            ["userId" => $this->user->getId(), "optionId" => 7, "stringValue" => "neprojde, moc polozek"]
+            ];
+        $this->poll->reset()->recId($pollId)->vote($votes);
+    }
+
+    /**
+     * @throws \Tymy\Exception\APIException
+     */
+    function testVoteFailureInvalidNumericInput(){
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $pollId = $GLOBALS["testedTeam"]["testPollId"];
+        $votes = [
+            ["userId" => $this->user->getId(), "optionId" => 5, "stringValue" => md5("xxx".rand(0,1000))],
+            ["userId" => $this->user->getId(), "optionId" => 8, "numericValue" => md5("xxx".rand(0,1000))],
+            ];
+        $this->poll->reset()->recId($pollId)->vote($votes);
+    }
+
+    /**
+     * @throws \Tymy\Exception\APIException
+     */
+    function testVoteFailureInvalidBoolInput(){
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $pollId = $GLOBALS["testedTeam"]["testPollId"];
+        $votes = [
+            ["userId" => $this->user->getId(), "optionId" => 5, "stringValue" => md5("xxx".rand(0,1000))],
+            ["userId" => $this->user->getId(), "optionId" => 10, "booleanValue" => md5("xxx".rand(0,1000))],
+            ];
+        $this->poll->reset()->recId($pollId)->vote($votes);
+    }
+    
+    protected function tearDown() {
+        parent::tearDown();
+        //make last correct vote to set the database to normal
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $votes = [
+            ["userId" => $this->user->getId(), "optionId" => 5, "stringValue" => md5("xxx".rand(0,1000))],
+            ["userId" => $this->user->getId(), "optionId" => 8, "numericValue" => rand(0,1000)],
+            ];
+        $pollId = $GLOBALS["testedTeam"]["testPollId"];
+        $this->poll->reset()->recId($pollId)->vote($votes);
+    }
+
+    
 }
 
 $test = new APIPollTest($container);
