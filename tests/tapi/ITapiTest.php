@@ -30,6 +30,7 @@ abstract class ITapiTest extends Tester\TestCase {
         $this->user = $this->container->getByType('Nette\Security\User');
         $tapi_config = $this->supplier->getTapi_config();
         $tapi_config["tym"] = $GLOBALS["testedTeam"]["team"];
+        $tapi_config["root"] = $GLOBALS["testedTeam"]["root"];
         $this->tapi_config = $tapi_config;
         
         $this->supplier->setTapi_config($tapi_config);
