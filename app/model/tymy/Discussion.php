@@ -17,20 +17,25 @@ final class Discussion extends Tymy{
     const TSID_REQUIRED = TRUE;
     
     private $page;
+    private $search;
     
     public function select() {
         if (!isset($this->recId))
             throw new \Tymy\Exception\APIException('Discussion ID not set!');
 
-        if(!isset($this->page) || $this->page <= 0) // page is not set
+        if(!isset($this->search) && (!isset($this->page) || $this->page <= 0)) // page is not set
             throw new \Tymy\Exception\APIException("Invalid page specified");
+        
+        if($this->search)
+            $this->setUriParam("search", $this->search);
         
         $this->fullUrl .= self::TAPI_NAME . "/" .$this->recId . "/" . self::MODE . "/" . $this->page;
         return $this;
     }
     
     public function search($text){
-        $this->setUriParam("search", $text);
+        $this->search = $text;
+        $this->page = 1;
         return $this;
     }
     
@@ -57,7 +62,7 @@ final class Discussion extends Tymy{
             $this->timezone($post->createdAt);
             if(property_exists($post, "updatedAt")){
                 $this->timezone($post->updatedAt);
-                $post->updatedBy = $this->users->data[$post->updatedById];
+                $post->updatedBy = $this->users->getData()[$post->updatedById];
             }
         }
     }
@@ -71,9 +76,10 @@ final class Discussion extends Tymy{
         return $this;
     }
     
-    protected function reset() {
-        $this->setPage(NULL);
-        parent::reset();
+    public function reset() {
+        $this->page = NULL;
+        $this->search = NULL;
+        return parent::reset();
     }
 
 }
