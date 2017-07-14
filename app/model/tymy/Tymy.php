@@ -106,10 +106,14 @@ abstract class Tymy extends Nette\Object{
         return "?" . http_build_query($this->uriParams);
     }
     
-    protected function reset(){
+    public function reset(){
         $this->uriParams = NULL;
         $this->tsid = NULL;
         $this->result = NULL;
+        $this->recId = NULL;
+        $this->fullUrl = NULL;
+        $this->postParams = NULL;
+        return $this;
     }
     
     protected function urlStart() {
@@ -128,8 +132,6 @@ abstract class Tymy extends Nette\Object{
     }
 
     public function fetch(){
-        $this->reset();
-        
         $this->urlStart();
 
         $this->select();
