@@ -14,7 +14,6 @@ abstract class ITapiTest extends Tester\TestCase {
     protected $supplier;
     
     protected $loginObj;
-    protected $login;
     
     protected $tapi_config;
     /** @var \App\Model\TapiAuthenticator */
@@ -24,6 +23,7 @@ abstract class ITapiTest extends Tester\TestCase {
     /** @var \Nette\Security\User */
     protected $user;
     
+    abstract function getTestedObject();
     
     protected function setUp(){
         $this->supplier = $this->container->getByType('App\Model\Supplier');
@@ -53,16 +53,6 @@ abstract class ITapiTest extends Tester\TestCase {
     
     protected function objectExists($object){
         \Tester\Assert::truthy($object);
-    }
-
-    abstract function getTestedObject();
-
-    public function login(){
-        $this->loginObj = new \Tymy\Login();
-        $this->login = $this->loginObj->setSupplier($this->supplier)
-                ->setUsername($GLOBALS["testedTeam"]["user"])
-                ->setPassword($GLOBALS["testedTeam"]["pass"])
-                ->fetch();
     }
     
 }
