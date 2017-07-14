@@ -58,19 +58,19 @@ class APIDiscussionTest extends ITapiTest {
     
     function testSelectFailsNoRecId(){
         $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
-        Assert::exception(function(){$this->discussion->recId(NULL)->getResult(TRUE);} , "\Tymy\Exception\APIException", "Discussion ID not set!");
+        Assert::exception(function(){$this->discussion->reset()->getResult(TRUE);} , "\Tymy\Exception\APIException", "Discussion ID not set!");
     }
 
     function testSelectNotLoggedInFails404() {
         $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
-        Assert::exception(function(){$this->discussion->recId(1)->setPage(1)->getResult(TRUE);} , "Nette\Security\AuthenticationException", "Login failed.");
+        Assert::exception(function(){$this->discussion->reset()->recId(1)->setPage(1)->getResult(TRUE);} , "Nette\Security\AuthenticationException", "Login failed.");
         
     }
         
     function testSelectSuccess() {
         $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
         $discussionId = $GLOBALS["testedTeam"]["testDiscussionId"];
-        $this->discussion->recId($discussionId)->setPage(1)->getResult(TRUE);
+        $this->discussion->reset()->recId($discussionId)->setPage(1)->getResult(TRUE);
         
         Assert::true(is_object($this->discussion));
         Assert::true(is_object($this->discussion->result));
@@ -150,7 +150,7 @@ class APIDiscussionTest extends ITapiTest {
     
     function testPostFailsNoRecId() {
         $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
-        Assert::exception(function(){$this->discussion->recId(NULL)->insert("AUTOTEST automatic discussion post");} , "\Tymy\Exception\APIException", "Discussion ID not set!");
+        Assert::exception(function(){$this->discussion->reset()->insert("AUTOTEST automatic discussion post");} , "\Tymy\Exception\APIException", "Discussion ID not set!");
     }
     
     function testPost() {
@@ -160,7 +160,7 @@ class APIDiscussionTest extends ITapiTest {
         
         $discussionId = $GLOBALS["testedTeam"]["testDiscussionId"];
         $insertText = "AUTOTEST automatic discussion post";
-        $this->discussion->recId($discussionId)->insert($insertText);
+        $this->discussion->reset()->recId($discussionId)->insert($insertText);
         
         Assert::true(is_object($this->discussion));
         Assert::true(is_object($this->discussion->result));
@@ -199,7 +199,7 @@ class APIDiscussionTest extends ITapiTest {
         $discussionId = $GLOBALS["testedTeam"]["searchDiscussionId"];
         $searchHash = $GLOBALS["testedTeam"]["searchHash"];
         
-        $this->discussion->recId($discussionId)->search($searchHash)->getResult(TRUE);
+        $this->discussion->reset()->recId($discussionId)->search($searchHash)->getResult(TRUE);
         
         Assert::true(is_object($this->discussion));
         Assert::true(is_object($this->discussion->result));

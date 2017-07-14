@@ -43,18 +43,18 @@ class APIEventTest extends ITapiTest {
 
     function testSelectNotLoggedInFailsNoRecId() {
         $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
-        Assert::exception(function(){$this->event->getResult(TRUE);} , "\Tymy\Exception\APIException", "Event ID not set!");
+        Assert::exception(function(){$this->event->reset()->getResult(TRUE);} , "\Tymy\Exception\APIException", "Event ID not set!");
     }
 
     function testFetchNotLoggedInFails404() {
         $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
-        Assert::exception(function(){$this->event->recId(1)->getResult(TRUE);} , "Nette\Security\AuthenticationException", "Login failed.");
+        Assert::exception(function(){$this->event->reset()->recId(1)->getResult(TRUE);} , "Nette\Security\AuthenticationException", "Login failed.");
     }
 
     function testSelectSuccess() {
         $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
         $eventId = $GLOBALS["testedTeam"]["testEventId"];
-        $this->event->recId($eventId)->getResult(TRUE);
+        $this->event->reset()->recId($eventId)->getResult(TRUE);
         
         Assert::true(is_object($this->event));
         Assert::true(is_object($this->event->result));
@@ -104,7 +104,9 @@ class APIEventTest extends ITapiTest {
             Assert::type("string", $att->user->login);
             Assert::type("string", $att->user->callName);
             Assert::type("string", $att->user->pictureUrl);
-            Assert::true(!property_exists($att->user, "gender"));
+            if(property_exists($att->user, "gender")){
+                Assert::contains($att->user->gender, ["MALE","FEMALE"]);
+            }
         }
 
         Assert::true(is_object($this->event->result->data->myAttendance));
