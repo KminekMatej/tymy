@@ -68,7 +68,7 @@ class APILoginTest extends ITapiTest {
         }
 
 
-        Assert::type("string", $this->login->result->data->oldPassword);
+        //Assert::type("string", $this->login->result->data->oldPassword); //not neccesarilly specified
         Assert::type("string", $this->login->result->data->firstName);
         Assert::type("string", $this->login->result->data->lastName);
         Assert::type("string", $this->login->result->data->callName);
