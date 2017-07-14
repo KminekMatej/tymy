@@ -11,7 +11,7 @@ use Tester;
 use Tester\Assert;
 
 $container = require __DIR__ . '/../bootstrap.php';
-Tester\Environment::skip('Temporary skipping');
+
 if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
@@ -20,6 +20,9 @@ class APILogoutTest extends ITapiTest {
 
     /** @var \Tymy\Logout */
     private $logout;
+    
+    /** @var \Tymy\Login */
+    private $login;
 
     function __construct(Nette\DI\Container $container) {
         $this->container = $container;
@@ -32,6 +35,7 @@ class APILogoutTest extends ITapiTest {
     protected function setUp() {
         $this->logout = $this->container->getByType('Tymy\Logout');
         parent::setUp();
+        $this->login = new \Tymy\Login($this->supplier);
     }
     
     /* TEST GETTERS AND SETTERS */ 
@@ -41,48 +45,25 @@ class APILogoutTest extends ITapiTest {
     /* TAPI : SELECT */
 
     /**
-     * @throws \Tymy\Exception\APIException
+     * @todo Change when TAPI gets corrected to return error 404 instead of error 500 and add return message on exception
      */
-    function testFetchLogoutNotLoggedInFails500() {
-        $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Homepage');
-        $mockPresenter->autoCanonicalize = FALSE;
-
-        $this->authenticator->setId(38);
-        $this->authenticator->setStatus(["TESTROLE", "TESTROLE2"]);
-        $this->authenticator->setArr(["sessionKey" => "dsfbglsdfbg13546"]);
-
-        $mockPresenter->getUser()->setAuthenticator($this->authenticator);
-        $mockPresenter->getUser()->login("test", "test");
-
-        $logoutObj = new \Tymy\Logout(NULL);
-        $logoutObj->setPresenter($mockPresenter)
-                ->logout();
+    function testLogoutNotLoggedInFails500() {
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception(function(){$this->logout->logout();} , "Tymy\Exception\APIException");
     }
     
     function testLogoutSuccess() {
-        $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Discussion');
-        $mockPresenter->autoCanonicalize = FALSE;
-
-        $this->login();
-        $this->authenticator->setId($this->login->id);
-        $this->authenticator->setArr(["sessionKey" => $this->loginObj->getResult()->sessionKey]);
-        $mockPresenter->getUser()->setAuthenticator($this->authenticator);
-        $mockPresenter->getUser()->setExpiration('2 minutes');
-        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
-
-        $logoutObj = new \Tymy\Logout($mockPresenter->tapiAuthenticator, $mockPresenter);
-        $logoutObj->logout();
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->logout->logout();
         
-        Assert::same(1, count($logoutObj->getUriParams()));
+        Assert::same(1, count($this->logout->getUriParams()));
         
-        Assert::true(is_object($logoutObj));
-        Assert::true(is_object($logoutObj->result));
-        Assert::type("string",$logoutObj->result->status);
-        Assert::same("OK",$logoutObj->result->status);
+        Assert::true(is_object($this->logout));
+        Assert::true(is_object($this->logout->result));
+        Assert::type("string",$this->logout->result->status);
+        Assert::same("OK",$this->logout->result->status);
 
-        Assert::true(!property_exists($logoutObj->result, "data"));
+        Assert::true(!property_exists($this->logout->result, "data"));
     }
 
 }
