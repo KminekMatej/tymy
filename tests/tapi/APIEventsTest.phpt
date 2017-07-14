@@ -11,7 +11,7 @@ use Tester;
 use Tester\Assert;
 
 $container = require __DIR__ . '/../bootstrap.php';
-Tester\Environment::skip('Temporary skipping');
+
 if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
@@ -34,59 +34,48 @@ class APIEventsTest extends ITapiTest {
         parent::setUp();
     }
     
-    /* TEST GETTERS AND SETTERS */ 
+    function testFrom(){
+        $from = "20160202";
+        $this->events->reset()->setFrom($from);
+        Assert::equal($from, $this->events->getFrom());
+    }
+    
+    function testTo(){
+        $to = "20170301";
+        $this->events->reset()->setTo($to);
+        Assert::equal($to, $this->events->getTo());
+    }
+    
+    function testOrder(){
+        $order = "startTime";
+        $this->events->reset()->setOrder($order);
+        Assert::equal($order, $this->events->getOrder());
+    }
     
     /* TEST TAPI FUNCTIONS */ 
     
     /* TAPI : SELECT */
 
-
-    /**
-     * @throws Nette\Application\AbortException
-     */
-    function testFetchNotLoggedInFails404() {
-        $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Homepage');
-        $mockPresenter->autoCanonicalize = FALSE;
-
-        $this->authenticator->setId(38);
-        $this->authenticator->setStatus(["TESTROLE", "TESTROLE2"]);
-        $this->authenticator->setArr(["sessionKey" => "dsfbglsdfbg13546"]);
-
-        $mockPresenter->getUser()->setAuthenticator($this->authenticator);
-        $mockPresenter->getUser()->login("test", "test");
-
-        $eventsObj = new \Tymy\Events();
-        $eventsObj->setSupplier($this->supplier)
-                ->setPresenter($mockPresenter)
-                ->fetch();
+    function testSelectNotLoggedInFails404() {
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception(function(){$this->events->reset()->getResult(TRUE);} , "Nette\Security\AuthenticationException", "Login failed.");
     }
         
-    function testFetchSuccess() {
-        $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Event');
-        $mockPresenter->autoCanonicalize = FALSE;
+    function testSelectSuccess() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        
+        $this->events->reset()->getResult(TRUE);
 
-        $this->login();
-        $this->authenticator->setId($this->login->id);
-        $this->authenticator->setArr(["sessionKey" => $this->loginObj->getResult()->sessionKey]);
-        $mockPresenter->getUser()->setAuthenticator($this->authenticator);
-        $mockPresenter->getUser()->setExpiration('2 minutes');
-        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
-
-        $eventsObj = new \Tymy\Events($mockPresenter->tapiAuthenticator, $mockPresenter);
-        $eventsObj->fetch();
+        Assert::same(1, count($this->events->getUriParams()));
         
-        Assert::same(1, count($eventsObj->getUriParams()));
+        Assert::true(is_object($this->events));
+        Assert::true(is_object($this->events->result));
+        Assert::type("string",$this->events->result->status);
+        Assert::same("OK",$this->events->result->status);
         
-        Assert::true(is_object($eventsObj));
-        Assert::true(is_object($eventsObj->result));
-        Assert::type("string",$eventsObj->result->status);
-        Assert::same("OK",$eventsObj->result->status);
+        Assert::type("array",$this->events->result->data);
         
-        Assert::type("array",$eventsObj->result->data);
-        
-        foreach ($eventsObj->result->data as $ev) {
+        foreach ($this->events->result->data as $ev) {
             Assert::true(is_object($ev));
             Assert::type("int",$ev->id);
             Assert::type("string",$ev->caption);
@@ -106,64 +95,74 @@ class APIEventsTest extends ITapiTest {
         }
     }
     
-    function testFetchFilter() {
-        $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Event');
-        $mockPresenter->autoCanonicalize = FALSE;
+    function testSelectWithMyAttendanceSuccess() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->events->reset()->setWithMyAttendance(TRUE)->getResult(TRUE);
+        
+        Assert::same(1, count($this->events->getUriParams()));
+        
+        Assert::true(is_object($this->events));
+        Assert::true(is_object($this->events->result));
+        Assert::type("string",$this->events->result->status);
+        Assert::same("OK",$this->events->result->status);
+        
+        Assert::type("array",$this->events->result->data);
+        
+        foreach ($this->events->result->data as $ev) {
+            Assert::true(is_object($ev));
+            Assert::type("int",$ev->id);
+            Assert::type("string",$ev->caption);
+            Assert::type("string",$ev->type);
+            Assert::type("string",$ev->description);
+            Assert::type("string",$ev->closeTime);
+            Assert::type("string",$ev->startTime);
+            Assert::type("string",$ev->endTime);
+            Assert::type("string",$ev->link);
+            Assert::type("string",$ev->place);
+            Assert::type("bool",$ev->canView);
+            Assert::type("bool",$ev->canPlan);
+            Assert::type("bool",$ev->canResult);
+            Assert::type("bool",$ev->inPast);
+            Assert::type("bool",$ev->inFuture);
+            Assert::true(property_exists($ev, "myAttendance"));
+        }
+    }
+    
+    function testSelectFilter() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        
+        $this->events->reset()->getResult(TRUE);
+        Assert::same(1, count($this->events->getUriParams()));
+        Assert::contains("TSID",array_keys($this->events->getUriParams()));
+        
+        
+        $this->events->reset()->setFrom("20160202")->getResult(TRUE);
+        Assert::same(2, count($this->events->getUriParams()));
+        Assert::contains("filter",array_keys($this->events->getUriParams()));
+        Assert::contains("TSID",array_keys($this->events->getUriParams()));
+        Assert::contains("startTime>20160202",$this->events->getUriParams());
+        
+        $this->events->reset()->setTo("20170202")->getResult(TRUE);
+        Assert::same(2, count($this->events->getUriParams()));
+        Assert::contains("filter",array_keys($this->events->getUriParams()));
+        Assert::contains("TSID",array_keys($this->events->getUriParams()));
+        Assert::contains("startTime<20170202",$this->events->getUriParams()["filter"]);
+        
+        $this->events->reset()->setFrom("20160202")->setTo("20170202")->getResult(TRUE);
+        
+        Assert::same(2, count($this->events->getUriParams()));
+        Assert::contains("filter",array_keys($this->events->getUriParams()));
+        Assert::contains("TSID",array_keys($this->events->getUriParams()));
+        Assert::contains("startTime>20160202~startTime<20170202",$this->events->getUriParams()["filter"]);
+        
+        $this->events->reset()->setFrom("20160202")->setTo("20170202")->setWithMyAttendance(TRUE)->getResult(TRUE);
+        
+        Assert::same(2, count($this->events->getUriParams()));
+        Assert::contains("filter",array_keys($this->events->getUriParams()));
+        Assert::contains("TSID",array_keys($this->events->getUriParams()));
+        Assert::contains("startTime>20160202~startTime<20170202",$this->events->getUriParams()["filter"]);
 
-        $this->login();
-        $this->authenticator->setId($this->login->id);
-        $this->authenticator->setArr(["sessionKey" => $this->loginObj->getResult()->sessionKey]);
-        $mockPresenter->getUser()->setAuthenticator($this->authenticator);
-        $mockPresenter->getUser()->setExpiration('2 minutes');
-        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
-
-        $eventsObj = new \Tymy\Events($mockPresenter->tapiAuthenticator, $mockPresenter);
-        $eventsObj->fetch();
-        
-        Assert::same(1, count($eventsObj->getUriParams()));
-        Assert::contains("TSID",array_keys($eventsObj->getUriParams()));
-        
-        $eventsObj = new \Tymy\Events($mockPresenter->tapiAuthenticator, $mockPresenter);
-        $eventsObj->setFrom("20160202")
-                ->fetch();
-        
-        Assert::same(2, count($eventsObj->getUriParams()));
-        Assert::contains("filter",array_keys($eventsObj->getUriParams()));
-        Assert::contains("TSID",array_keys($eventsObj->getUriParams()));
-        Assert::contains("startTime>20160202",$eventsObj->getUriParams());
-        
-        $eventsObj = new \Tymy\Events($mockPresenter->tapiAuthenticator, $mockPresenter);
-        $eventsObj->setTo("20170202")
-                ->fetch();
-        
-        Assert::same(2, count($eventsObj->getUriParams()));
-        Assert::contains("filter",array_keys($eventsObj->getUriParams()));
-        Assert::contains("TSID",array_keys($eventsObj->getUriParams()));
-        Assert::contains("startTime<20170202",$eventsObj->getUriParams());
-        
-        $eventsObj = new \Tymy\Events($mockPresenter->tapiAuthenticator, $mockPresenter);
-        $eventsObj->setFrom("20160202")
-                ->setTo("20170202")
-                ->fetch();
-        
-        Assert::same(2, count($eventsObj->getUriParams()));
-        Assert::contains("filter",array_keys($eventsObj->getUriParams()));
-        Assert::contains("TSID",array_keys($eventsObj->getUriParams()));
-        Assert::contains("startTime>20160202~startTime<20170202",$eventsObj->getUriParams());
-        
-        $eventsObj = new \Tymy\Events($mockPresenter->tapiAuthenticator, $mockPresenter);
-        $eventsObj->setFrom("20160202")
-                ->setTo("20170202")
-                ->withMyAttendance(TRUE)
-                ->fetch();
-        
-        Assert::same(2, count($eventsObj->getUriParams()));
-        Assert::contains("filter",array_keys($eventsObj->getUriParams()));
-        Assert::contains("TSID",array_keys($eventsObj->getUriParams()));
-        Assert::contains("startTime>20160202~startTime<20170202",$eventsObj->getUriParams());
-
-        foreach ($eventsObj->result->data as $ev) {
+        foreach ($this->events->result->data as $ev) {
             Assert::true(is_object($ev));
             Assert::true(property_exists($ev, "myAttendance"));
             Assert::type("string",$ev->myAttendance->preStatus);
