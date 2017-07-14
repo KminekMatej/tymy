@@ -70,5 +70,10 @@ final class Discussion extends Tymy{
         $this->page = is_numeric($page) ? $page : 1 ;
         return $this;
     }
+    
+    protected function reset() {
+        $this->setPage(NULL);
+        parent::reset();
+    }
 
 }
