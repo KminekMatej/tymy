@@ -11,7 +11,7 @@ use Tester;
 use Tester\Assert;
 
 $container = require __DIR__ . '/../bootstrap.php';
-Tester\Environment::skip('Temporary skipping');
+
 if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
@@ -40,59 +40,34 @@ class APIUsersTest extends ITapiTest{
     
     /* TAPI : SELECT */
 
-
-    /**
-     * @throws Nette\Application\AbortException
-     */
-    function testFetchNotLoggedInFails404() {
-        $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Team');
-        $mockPresenter->autoCanonicalize = FALSE;
-
-        $this->authenticator->setId(38);
-        $this->authenticator->setStatus(["TESTROLE", "TESTROLE2"]);
-        $this->authenticator->setArr(["tym" => "testteam", "sessionKey" => "dsfbglsdfbg13546"]);
-
-        $mockPresenter->getUser()->setAuthenticator($this->authenticator);
-        $mockPresenter->getUser()->login("test", "test");
-
-
-        $usersObj = new \Tymy\Users();
-        $usersObj->setPresenter($mockPresenter)
-                ->fetch();
+    function testSelectNotLoggedInFails404() {
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception(function(){$this->users->reset()->getResult(TRUE);} , "Nette\Security\AuthenticationException", "Login failed.");
     }
         
-    function testFetchSuccessAll() {
-        $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Discussion');
-        $mockPresenter->autoCanonicalize = FALSE;
-
-        $this->login();
-        $this->authenticator->setId($this->login->id);
-        $this->authenticator->setArr(["sessionKey" => $this->loginObj->getResult()->sessionKey]);
-        $mockPresenter->getUser()->setAuthenticator($this->authenticator);
-        $mockPresenter->getUser()->setExpiration('2 minutes');
-        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
-
-        $usersObj = new \Tymy\Users($mockPresenter->tapiAuthenticator, $mockPresenter);
-        $usersObj->fetch();
+    function testSelectSuccess() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->users->reset()->getResult(TRUE);
         
-        Assert::same(1, count($usersObj->getUriParams()));
+        Assert::same(1, count($this->users->getUriParams()));
         
-        Assert::true(is_object($usersObj));
-        Assert::true(is_object($usersObj->result));
-        Assert::type("string",$usersObj->result->status);
-        Assert::same("OK",$usersObj->result->status);
+        Assert::true(is_object($this->users));
+        Assert::true(is_object($this->users->result));
+        Assert::type("string",$this->users->result->status);
+        Assert::same("OK",$this->users->result->status);
         
-        Assert::type("array",$usersObj->result->data);
+        Assert::type("array",$this->users->result->data);
         
-        foreach ($usersObj->result->data as $u) {
+        foreach ($this->users->result->data as $u) {
             Assert::true(is_object($u));
             Assert::type("int",$u->id);
             Assert::type("string",$u->login);
             Assert::type("bool",$u->canLogin);
-            Assert::type("string",$u->lastLogin);
-            Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $u->lastLogin)); //timezone correction check
+            if(property_exists($u, "lastLogin")){ // last login not returned for users that never logged before
+                Assert::type("string",$u->lastLogin);
+                Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $u->lastLogin)); //timezone correction check
+            }
+            
             Assert::type("string",$u->status);
             Assert::true(in_array($u->status, ["PLAYER", "MEMBER", "SICK", "DELETED", "INIT"]));
 
@@ -124,68 +99,6 @@ class APIUsersTest extends ITapiTest{
         }
     }
     
-    function getUserGoodTypes() {
-        return [
-            ["MEMBER"],
-            ["PLAYER"],
-            ["SICK"],
-            ["PLAYER"]
-        ];
-    }
-
-    function getUserBadTypes() {
-        return [
-            ["35163531"],
-            ["adwskfnlx"],
-        ];
-    }
-
-    /**
-     * 
-     * @dataProvider getUserGoodTypes
-     */
-    function testFetchSuccessTypes($userType) {
-        $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Team');
-        $mockPresenter->autoCanonicalize = FALSE;
-
-        $this->login();
-        $this->authenticator->setId($this->login->id);
-        $this->authenticator->setArr(["sessionKey" => $this->loginObj->getResult()->sessionKey]);
-        $mockPresenter->getUser()->setAuthenticator($this->authenticator);
-        $mockPresenter->getUser()->setExpiration('2 minutes');
-        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
-        
-        $usersObj = new \Tymy\Users($mockPresenter->tapiAuthenticator, $mockPresenter, $userType);
-        $usersObj->fetch();
-        
-        foreach ($usersObj->result->data as $data) {
-            Assert::type("string", $data->status);
-            Assert::same($userType, $data->status);
-        }
-    }
-    
-    /**
-     * @dataProvider getUserBadTypes
-     */
-    function testFetchFailsTypes($userType) {
-        $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Team');
-        $mockPresenter->autoCanonicalize = FALSE;
-
-        $this->login();
-        $this->authenticator->setId($this->login->id);
-        $this->authenticator->setArr(["sessionKey" => $this->loginObj->getResult()->sessionKey]);
-        $mockPresenter->getUser()->setAuthenticator($this->authenticator);
-        $mockPresenter->getUser()->setExpiration('2 minutes');
-        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
-        
-        $usersObj = new \Tymy\Users($mockPresenter->tapiAuthenticator, $mockPresenter, $userType);
-        $usersObj->fetch();
-        
-        Assert::type("array", $usersObj->result->data);
-        Assert::same(0, count($usersObj->result->data));
-    }
 }
 
 $test = new APIUsersTest($container);

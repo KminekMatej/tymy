@@ -64,7 +64,6 @@ class APIDiscussionTest extends ITapiTest {
     function testSelectNotLoggedInFails404() {
         $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
         Assert::exception(function(){$this->discussion->reset()->recId(1)->setPage(1)->getResult(TRUE);} , "Nette\Security\AuthenticationException", "Login failed.");
-        
     }
         
     function testSelectSuccess() {
