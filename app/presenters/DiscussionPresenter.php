@@ -67,6 +67,7 @@ class DiscussionPresenter extends SecuredPresenter {
         $this->setLevelCaptions(["2" => ["caption" => $data->discussion->caption, "link" => $this->link("Discussion:discussion", [$data->discussion->webName]) ] ]);
         
         $this->template->userId = $this->getUser()->getId();
+        $this->template->users = $this->users->getData();
         $this->template->discussion = $data;
         $this->template->nazevDiskuze = $data->discussion->webName;
         $this->template->currentPage = is_numeric($page) ? $page : 1 ;
