@@ -106,6 +106,10 @@ abstract class Tymy extends Nette\Object{
         return "?" . http_build_query($this->uriParams);
     }
     
+    protected function clearUriParams(){
+        $this->uriParams = NULL;
+    }
+    
     protected function urlStart() {
         $this->fullUrl = $this->supplier->getApiRoot();
         $this->fullUrl .= DIRECTORY_SEPARATOR;
