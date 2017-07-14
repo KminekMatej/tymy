@@ -11,7 +11,7 @@ use Tester;
 use Tester\Assert;
 
 $container = require __DIR__ . '/../bootstrap.php';
-Tester\Environment::skip('Temporary skipping');
+
 if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
@@ -41,52 +41,25 @@ class APIPollsTest extends ITapiTest {
     /* TAPI : SELECT */
 
 
-    /**
-     * @throws Nette\Application\AbortException
-     */
-    function testFetchNotLoggedInFails404() {
-        $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Homepage');
-        $mockPresenter->autoCanonicalize = FALSE;
-
-        $this->authenticator->setId(38);
-        $this->authenticator->setStatus(["TESTROLE", "TESTROLE2"]);
-        $this->authenticator->setArr(["tym" => "testteam", "sessionKey" => "dsfbglsdfbg13546"]);
-
-        $mockPresenter->getUser()->setAuthenticator($this->authenticator);
-        $mockPresenter->getUser()->login("test", "test");
-
-
-        $pollsObj = new \Tymy\Polls();
-        $pollsObj->setPresenter($mockPresenter)
-                ->fetch();
+    function testSelectNotLoggedInFails404() {
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception(function(){$this->polls->reset()->getResult(TRUE);} , "Nette\Security\AuthenticationException", "Login failed.");
     }
         
-    function testFetchSuccess() {
-        $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Poll');
-        $mockPresenter->autoCanonicalize = FALSE;
-
-        $this->login();
-        $this->authenticator->setId($this->login->id);
-        $this->authenticator->setArr(["sessionKey" => $this->loginObj->getResult()->sessionKey]);
-        $mockPresenter->getUser()->setAuthenticator($this->authenticator);
-        $mockPresenter->getUser()->setExpiration('2 minutes');
-        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
-
-        $pollsObj = new \Tymy\Polls($mockPresenter->tapiAuthenticator, $mockPresenter);
-        $pollsObj->fetch();
+    function testSelectSuccess() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->polls->reset()->getResult(TRUE);
         
-        Assert::same(1, count($pollsObj->getUriParams()));
+        Assert::same(1, count($this->polls->getUriParams()));
         
-        Assert::true(is_object($pollsObj));
-        Assert::true(is_object($pollsObj->result));
-        Assert::type("string",$pollsObj->result->status);
-        Assert::same("OK",$pollsObj->result->status);
+        Assert::true(is_object($this->polls));
+        Assert::true(is_object($this->polls->result));
+        Assert::type("string",$this->polls->result->status);
+        Assert::same("OK",$this->polls->result->status);
         
-        Assert::type("array",$pollsObj->result->data);
+        Assert::type("array",$this->polls->result->data);
         
-        foreach ($pollsObj->result->data as $poll) {
+        foreach ($this->polls->result->data as $poll) {
             Assert::true(is_object($poll));
             Assert::type("int",$poll->id);
             Assert::true($poll->id > 0);
