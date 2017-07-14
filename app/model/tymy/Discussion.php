@@ -62,7 +62,6 @@ final class Discussion extends Tymy{
             $this->timezone($post->createdAt);
             if(property_exists($post, "updatedAt")){
                 $this->timezone($post->updatedAt);
-                $post->updatedBy = $this->users->getData()[$post->updatedById];
             }
         }
     }
