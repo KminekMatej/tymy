@@ -173,7 +173,7 @@ class APIDiscussionTest extends ITapiTest {
         Assert::type("string",$this->discussion->result->data->post);
         Assert::same($insertText,$this->discussion->result->data->post);
         Assert::type("int",$this->discussion->result->data->createdById);
-        Assert::same($this->login->id,$this->discussion->result->data->createdById);
+        Assert::same($this->user->getId(),$this->discussion->result->data->createdById);
         Assert::type("string",$this->discussion->result->data->createdAt); // no timezone check here, this is only feedback
         
         Assert::type("bool",$this->discussion->result->data->sticky);
@@ -184,7 +184,7 @@ class APIDiscussionTest extends ITapiTest {
         
         Assert::true(is_object($this->discussion->result->data->createdBy));
         Assert::type("int",$this->discussion->result->data->createdBy->id);
-        Assert::same($this->login->id,$this->discussion->result->data->createdBy->id);
+        Assert::same($this->user->getId(),$this->discussion->result->data->createdBy->id);
         Assert::type("string",$this->discussion->result->data->createdBy->login);
         Assert::type("string",$this->discussion->result->data->createdBy->callName);
         Assert::type("string",$this->discussion->result->data->createdBy->pictureUrl);
