@@ -4,6 +4,7 @@ namespace Tymy;
 
 use Nette;
 use Nette\Utils\Strings;
+use Nette\Mail\Message;
 
 /**
  * Description of Tymy
@@ -17,6 +18,9 @@ final class User extends UserInterface{
     private $login;
     private $password;
     private $email;
+    private $firstName;
+    private $lastName;
+    private $adminNote;
     
     public function select() {
         if (!isset($this->recId))
@@ -45,7 +49,7 @@ final class User extends UserInterface{
         return $this;
     }
     
-    public function create(){
+    public function register(){
         if (!$this->login)
             throw new \Tymy\Exception\APIException('Login not set!');
         if (!$this->password)
@@ -57,11 +61,28 @@ final class User extends UserInterface{
 
         $this->fullUrl .= "users/register/";
         
-        foreach ($fields as $key => $value) {
-            $this->addPost($key,$value);
-        }
+        $this->addPost("login",$this->login);
+        $this->addPost("password",$this->password);
+        $this->addPost("email",$this->email);
+        $this->addPost("callName",$this->composeCallName());
         
+        if($this->firstName)
+            $this->addPost("firstName",$this->firstName);
+        if($this->lastName)
+            $this->addPost("lastName",$this->lastName);
+                
         $this->result = $this->execute();
+        
+        if($this->result->status == "OK"){
+            
+        }
+        $mail = new Message;
+        $mail->setFrom('Franta <franta@example.com>')
+                ->addTo('petr@example.com')
+                ->addTo('jirka@example.com')
+                ->setSubject('Potvrzení objednávky')
+                ->setBody("Dobrý den,\nvaše objednávka byla přijata.");
+
         return $this;
     }
     
@@ -102,6 +123,58 @@ final class User extends UserInterface{
         $this->email = $email;
         return $this;
     }
+    
+    public function getFirstName() {
+        return $this->firstName;
+    }
 
+    public function getLastName() {
+        return $this->lastName;
+    }
+
+    public function getAdminNote() {
+        return $this->adminNote;
+    }
+
+    public function setFirstName($firstName) {
+        $this->firstName = $firstName;
+        return $this;
+    }
+
+    public function setLastName($lastName) {
+        $this->lastName = $lastName;
+        return $this;
+    }
+
+    public function setAdminNote($adminNote) {
+        $this->adminNote = $adminNote;
+        return $this;
+    }
+
+    
+    public function reset() {
+        $this->login = NULL;
+        $this->password = NULL;
+        $this->email = NULL;
+        $this->firstName = NULL;
+        $this->lastName = NULL;
+        $this->adminNote = NULL;
+        return parent::reset();
+    }
+    
+    private function composeCallName(){
+        $callName = $this->firstName . " " . $this->lastName;
+        if(trim($callName) == "")
+            $callName = $this->login;
+        return $callName;
+    }
+    
+    private function sendRegistrationMail() {
+        $latte = new Latte\Engine;
+        $mail = new Message;
+        $mail->setFrom('Franta <franta@example.com>')
+                ->addTo('petr@example.com')
+                ->setHtmlBody($latte->renderToString('email.latte', $params));
+    }
 
 }
