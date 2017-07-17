@@ -71,19 +71,20 @@ class APIUsersTest extends ITapiTest{
             Assert::type("string",$u->status);
             Assert::true(in_array($u->status, ["PLAYER", "MEMBER", "SICK", "DELETED", "INIT"]));
 
-            Assert::type("string",$u->firstName);
-            Assert::type("string",$u->lastName);
+            if(property_exists($u, "firstName")) Assert::type("string",$u->firstName);
+            if(property_exists($u, "lastName")) Assert::type("string",$u->lastName);
             Assert::type("string",$u->callName);
-            Assert::type("string",$u->language);
-            //Assert::type("string",$u->email);
+            if(property_exists($u, "language")) Assert::type("string",$u->language);
+            if(property_exists($u, "email")) Assert::type("string",$u->email);
             Assert::type("string",$u->jerseyNumber);
-            //Assert::type("string",$u->gender);
-            //Assert::type("string",$u->street);
-            //Assert::type("string",$u->city);
-            //Assert::type("string",$u->zipCode);
-            //Assert::type("string",$u->phone);
-            //Assert::type("string",$u->phone2);
-            //Assert::type("string",$u->birthDate);
+            if(property_exists($u, "gender")) Assert::type("string",$u->gender);
+            if(property_exists($u, "street")) Assert::type("string",$u->street);
+            if(property_exists($u, "city")) Assert::type("string",$u->city);
+            if(property_exists($u, "zipCode")) Assert::type("string",$u->zipCode);
+            if(property_exists($u, "phone")) Assert::type("string",$u->phone);
+            if(property_exists($u, "phone2")) Assert::type("string",$u->phone2);
+            if(property_exists($u, "birthDate")) Assert::type("string",$u->birthDate);
+
             Assert::type("int",$u->nameDayMonth);
             Assert::type("int",$u->nameDayDay);
             Assert::type("string",$u->pictureUrl);
