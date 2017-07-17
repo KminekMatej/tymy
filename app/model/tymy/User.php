@@ -74,14 +74,8 @@ final class User extends UserInterface{
         $this->result = $this->execute();
         
         if($this->result->status == "OK"){
-            
+            //$this->sendRegistrationMail();
         }
-        $mail = new Message;
-        $mail->setFrom('Franta <franta@example.com>')
-                ->addTo('petr@example.com')
-                ->addTo('jirka@example.com')
-                ->setSubject('Potvrzení objednávky')
-                ->setBody("Dobrý den,\nvaše objednávka byla přijata.");
 
         return $this;
     }
@@ -169,6 +163,9 @@ final class User extends UserInterface{
         return $callName;
     }
     
+    /**
+     * @todo Dodelat nette mailung
+     */
     private function sendRegistrationMail() {
         $latte = new Latte\Engine;
         $mail = new Message;
