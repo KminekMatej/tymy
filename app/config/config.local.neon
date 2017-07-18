@@ -5,7 +5,7 @@ parameters:
         root: tymy.cz
         tapi_api_root: api
         tapi_sysapi_root: sysapi
-        multiple_team: true #if changed to true, user can pick which team he wants to login to
+        multiple_team: false #if changed to true, user can pick which team he wants to login to
         roles_classes:
             SUPER: btn-outline-success
             USR: btn-outline-info
