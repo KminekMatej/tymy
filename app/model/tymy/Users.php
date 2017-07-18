@@ -14,9 +14,21 @@ final class Users extends UserInterface{
     
     const TAPI_NAME = "users";
     const TSID_REQUIRED = TRUE;
+    private $userType;
+    
+    public function getUserType() {
+        return $this->userType;
+    }
+
+    public function setUserType($userType) {
+        $this->userType = $userType;
+        return $this;
+    }
     
     public function select() {
         $this->fullUrl .= self::TAPI_NAME;
+        if(!is_null($this->userType))
+            $this->fullUrl .= "/status/" . $this->userType;
         return $this;
     }
 
@@ -62,6 +74,11 @@ final class Users extends UserInterface{
         
         $this->session->getSection(self::SESSION_SECTION)[$this->getTapiName()] = $this->result;
         
+    }
+    
+    public function reset() {
+        $this->userType = NULL;
+        return parent::reset();
     }
 
 }
