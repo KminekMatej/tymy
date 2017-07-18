@@ -45,8 +45,7 @@ class TeamPresenter extends SecuredPresenter {
     }
     
     public function renderDefault() {
-        $users = $this->getUsers(TRUE); // when loading list of all users, perhaps this is the place where list should be refreshed
-        $this->template->users = $users->data;
+        $this->template->users = $this->users->reset()->setUserType($this->userType)->getData();
     }
     
     public function renderPlayer($player) {
