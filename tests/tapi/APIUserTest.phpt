@@ -36,6 +36,42 @@ class APIUserTest extends ITapiTest {
     
     /* TEST GETTERS AND SETTERS */ 
     
+    function testLogin(){
+        $field = "test" . md5(rand(0,100));
+        $this->tapi_user->setLogin($field);
+        Assert::equal($field, $this->tapi_user->getLogin());
+    }
+    
+    function testPassword(){
+        $field = "test" . md5(rand(0,100));
+        $this->tapi_user->setPassword($field);
+        Assert::equal($field, $this->tapi_user->getPassword());
+    }
+    
+    function testEmail(){
+        $field = "test" . md5(rand(0,100));
+        $this->tapi_user->setEmail($field);
+        Assert::equal($field, $this->tapi_user->getEmail());
+    }
+    
+    function testFirstname(){
+        $field = "test" . md5(rand(0,100));
+        $this->tapi_user->setFirstName($field);
+        Assert::equal($field, $this->tapi_user->getFirstName());
+    }
+    
+    function testLastname(){
+        $field = "test" . md5(rand(0,100));
+        $this->tapi_user->setLastName($field);
+        Assert::equal($field, $this->tapi_user->getLastName());
+    }
+    
+    function testAdminNote(){
+        $field = "test" . md5(rand(0,100));
+        $this->tapi_user->setAdminNote($field);
+        Assert::equal($field, $this->tapi_user->getAdminNote());
+    }
+    
     /* TEST TAPI FUNCTIONS */ 
     
     /* TAPI : SELECT */
@@ -101,7 +137,7 @@ class APIUserTest extends ITapiTest {
         
     }
 
-    /* TAPI : CREATE */
+    /* TAPI : REGISTER */
     
     
     function testRegisterFailsNoLogin(){
