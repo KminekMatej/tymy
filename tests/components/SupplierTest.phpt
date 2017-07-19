@@ -39,12 +39,13 @@ class SupplierTest extends Tester\TestCase {
         $tapi_config = $this->supplier->getTapi_config();
         Assert::truthy($tapi_config);
         $tapi_config["tym"] = $team;
+        $root = $tapi_config["root"];
         $this->supplier->setTapi_config($tapi_config);
 
         Assert::equal($team, $this->supplier->getTym());
-        Assert::equal("http://$team.tymy.cz", $this->supplier->getTymyRoot());
-        Assert::equal("http://$team.tymy.cz/api", $this->supplier->getApiRoot());
-        Assert::equal("http://$team.tymy.cz/sysapi", $this->supplier->getSysapiRoot());
+        Assert::equal("http://$team.$root", $this->supplier->getTymyRoot());
+        Assert::equal("http://$team.$root/api", $this->supplier->getApiRoot());
+        Assert::equal("http://$team.$root/sysapi", $this->supplier->getSysapiRoot());
         Assert::equal("btn-outline-success", $this->supplier->getRoleClass("SUPER"));
         Assert::equal("btn-outline-info", $this->supplier->getRoleClass("USR"));
         Assert::equal("btn-outline-warning", $this->supplier->getRoleClass("ATT"));
