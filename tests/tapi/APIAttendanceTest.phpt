@@ -11,7 +11,7 @@ use Tester;
 use Tester\Assert;
 
 $container = require __DIR__ . '/../bootstrap.php';
-Tester\Environment::skip('Temporary skipping');
+
 if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
@@ -35,6 +35,30 @@ class APIAttendanceTest extends ITapiTest {
     }
     
     /* TEST GETTERS AND SETTERS */ 
+    
+    function testPreStatus(){
+        $field = "test" . md5(rand(0,100));
+        $this->attendance->setPreStatus($field);
+        Assert::equal($field, $this->attendance->getPreStatus());
+    }
+    
+    function testPreDescription(){
+        $field = "test" . md5(rand(0,100));
+        $this->attendance->setPreDescription($field);
+        Assert::equal($field, $this->attendance->getPreDescription());
+    }
+    
+    function testPostStatus(){
+        $field = "test" . md5(rand(0,100));
+        $this->attendance->setPostStatus($field);
+        Assert::equal($field, $this->attendance->getPostStatus());
+    }
+    
+    function testPostDescription(){
+        $field = "test" . md5(rand(0,100));
+        $this->attendance->setPostDescription($field);
+        Assert::equal($field, $this->attendance->getPostDescription());
+    }
     
     /* TEST TAPI FUNCTIONS */ 
     
@@ -81,7 +105,7 @@ class APIAttendanceTest extends ITapiTest {
         $attendanceObj
                 ->setPresenter($mockPresenter)
                 ->recId($GLOBALS["testedTeam"]["testEventId"])
-                ->preStatus("YES")
+                ->setPreStatus("YES")
                 ->plan();
     }
     
@@ -105,7 +129,7 @@ class APIAttendanceTest extends ITapiTest {
         $attendanceObj
                 ->setPresenter($mockPresenter)
                 ->recId($GLOBALS["testedTeam"]["testEventId"])
-                ->preStatus("YES")
+                ->setPreStatus("YES")
                 ->plan();
     }
     
@@ -122,7 +146,7 @@ class APIAttendanceTest extends ITapiTest {
         $attendanceObj
                 ->setPresenter($mockPresenter)
                 ->recId($GLOBALS["testedTeam"]["testEventId"])
-                ->preStatus("YES")
+                ->setPreStatus("YES")
                 ->plan();
         
         $logoutObj = new \Tymy\Logout($this->tapiAuthenticator, $mockPresenter);
@@ -132,7 +156,7 @@ class APIAttendanceTest extends ITapiTest {
         $attendanceObj2
                 ->setPresenter($mockPresenter)
                 ->recId($GLOBALS["testedTeam"]["testEventId"])
-                ->preStatus("YES")
+                ->setPreStatus("YES")
                 ->plan();
     }
     
@@ -156,8 +180,8 @@ class APIAttendanceTest extends ITapiTest {
 
         $attendanceObj = new \Tymy\Attendance($this->tapiAuthenticator, $mockPresenter);
         $attendanceObj->recId($idActionToUpdateOn)
-                ->preStatus("YES")
-                ->preDescription("Tymyv2-AutoTest-yes")
+                ->setPreStatus("YES")
+                ->setPreDescription("Tymyv2-AutoTest-yes")
                 ->plan();
         Assert::type("array",$attendanceObj->postParams[0]);
         Assert::same(4,count($attendanceObj->postParams[0]));
