@@ -20,22 +20,22 @@ final class Attendance extends Tymy{
     private $postStatus;
     private $postDescription;
     
-    public function preStatus($preStatus){
+    public function setPreStatus($preStatus){
         $this->preStatus = $preStatus;
         return $this;
     }
     
-    public function preDescription($preDescription){
+    public function setPreDescription($preDescription){
         $this->preDescription = $preDescription;
         return $this;
     }
 
-    public function postStatus($postStatus) {
+    public function setPostStatus($postStatus) {
         $this->postStatus = $postStatus;
         return $this;
     }
 
-    public function postDescription($postDescription) {
+    public function setPostDescription($postDescription) {
         $this->postDescription = $postDescription;
         return $this;
     }
@@ -44,7 +44,7 @@ final class Attendance extends Tymy{
         if (!isset($this->recId))
             throw new \Tymy\Exception\APIException('Event ID not set!');
 
-        if(is_null($this->preStatus))
+        if(!isset($this->preStatus))
             throw new \Tymy\Exception\APIException("Pre status not set");
         
         $this->urlStart();
@@ -85,5 +85,14 @@ final class Attendance extends Tymy{
     public function getPostDescription(){
         return $this->postDescription;
     }
+    
+    public function reset() {
+        $this->preDescription = NULL;
+        $this->preStatus = NULL;
+        $this->postDescription = NULL;
+        $this->postStatus = NULL;
+        return parent::reset();
+    }
+
 
 }
