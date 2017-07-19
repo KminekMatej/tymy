@@ -78,14 +78,7 @@ abstract class Tymy extends Nette\Object{
             $this->tymyPanel = \Tracy\Debugger::getBar()->getPanel($panelId);
         }
     }
-    
-    public function setPresenter(Nette\Application\UI\Presenter $presenter){
-        $this->presenter = $presenter;
-        $this->setSupplier ($presenter->supplier);
-        $this->setUser ($presenter->getUser());
-        return $this;
-    }
-    
+        
     public function setSupplier(\App\Model\Supplier $supplier) {
         $this->supplier = $supplier;
         return $this;
