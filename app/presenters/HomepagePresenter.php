@@ -37,7 +37,6 @@ class HomepagePresenter extends SecuredPresenter {
     
     public function renderDefault() {
         $events = $this->events
-                ->setPresenter($this)
                 ->loadYearEvents(NULL, NULL);
         
         $this->template->discussions = $this->discussions->setWithNew(true)->fetch();
