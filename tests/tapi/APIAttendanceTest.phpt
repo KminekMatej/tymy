@@ -62,149 +62,66 @@ class APIAttendanceTest extends ITapiTest {
     
     /* TEST TAPI FUNCTIONS */ 
     
-    /* TAPI : SELECT */
+    /* TAPI : PLAN */
     
-    /**
-     * @throws Tymy\Exception\APIException
-     */
     function testPlanFailsNoEventId(){
-        $attendanceObj = new \Tymy\Attendance();
-        $attendance = $attendanceObj
-                ->setSupplier($this->supplier)
-                ->plan();
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception(function(){$this->attendance->reset()->plan();} , "\Tymy\Exception\APIException", "Event ID not set!");
     }
     
-    /**
-     * @throws Tymy\Exception\APIException
-     */
     function testPlanFailsNoPreStatus(){
-        $attendanceObj = new \Tymy\Attendance();
-        $attendance = $attendanceObj
-                ->setSupplier($this->supplier)
-                ->recId($GLOBALS["testedTeam"]["testEventId"])
-                ->plan();
-    }
-
-    
-    /**
-     * @throws Tymy\Exception\APIException
-     */
-    function test404() {
-        $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Homepage');
-        $mockPresenter->autoCanonicalize = FALSE;
-
-        $this->testAuthenticator->setId(38);
-        $this->testAuthenticator->setStatus(["TESTROLE", "TESTROLE2"]);
-        $this->testAuthenticator->setArr(["tym" => "testteam", "sessionKey" => "dsfbglsdfbg13546"]);
-
-        $mockPresenter->getUser()->setAuthenticator($this->testAuthenticator);
-        $mockPresenter->getUser()->login("test", "test");
-
-        $attendanceObj = new \Tymy\Attendance();
-        $attendanceObj
-                ->setPresenter($mockPresenter)
-                ->recId($GLOBALS["testedTeam"]["testEventId"])
-                ->setPreStatus("YES")
-                ->plan();
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception(function(){$this->attendance->reset()->recId($GLOBALS["testedTeam"]["testEventId"])->plan();} , "\Tymy\Exception\APIException", "Pre status not set");
     }
     
-    /**
-     * @throws Tymy\Exception\APIAuthenticationException
-     */
-    function test401() {
-        $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Homepage');
-        $mockPresenter->autoCanonicalize = FALSE;
-
-        $this->testAuthenticator->setId(38);
-        $this->testAuthenticator->setStatus(["TESTROLE", "TESTROLE2"]);
-        $this->testAuthenticator->setArr(["sessionKey" => "dsfbglsdfbg13546"]);
-
-        $mockPresenter->getUser()->setAuthenticator($this->testAuthenticator);
-        $mockPresenter->getUser()->login("test", "test");
-
-
-        $attendanceObj = new \Tymy\Attendance();
-        $attendanceObj
-                ->setPresenter($mockPresenter)
-                ->recId($GLOBALS["testedTeam"]["testEventId"])
-                ->setPreStatus("YES")
-                ->plan();
+    function testPlanNotLoggedInFails404() {
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception(function(){$this->attendance->reset()->recId($GLOBALS["testedTeam"]["testEventId"])->setPreStatus("YES")->plan();} , "Nette\Security\AuthenticationException", "Login failed.");
     }
     
-    
-    function test401relogin() {
-        $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Homepage');
-        $mockPresenter->autoCanonicalize = FALSE;
+    function testPlanRelogin() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->attendance->reset()->recId($GLOBALS["testedTeam"]["testEventId"])->setPreStatus("YES")->plan();
         
-        $mockPresenter->getUser()->setAuthenticator($this->tapiAuthenticator);
-        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
-        
-        $attendanceObj = new \Tymy\Attendance($this->tapiAuthenticator, $mockPresenter);
-        $attendanceObj
-                ->setPresenter($mockPresenter)
-                ->recId($GLOBALS["testedTeam"]["testEventId"])
-                ->setPreStatus("YES")
-                ->plan();
-        
-        $logoutObj = new \Tymy\Logout($this->tapiAuthenticator, $mockPresenter);
+        $logoutObj = $this->container->getByType('Tymy\Logout');
         $logoutObj ->logout();
         
-        $attendanceObj2 = new \Tymy\Attendance($this->tapiAuthenticator, $mockPresenter);
-        $attendanceObj2
-                ->setPresenter($mockPresenter)
-                ->recId($GLOBALS["testedTeam"]["testEventId"])
-                ->setPreStatus("YES")
-                ->plan();
+        $this->attendance->reset()->recId($GLOBALS["testedTeam"]["testEventId"])->setPreStatus("NO")->plan();
     }
     
     function testPlanSuccess() {
-        $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $mockPresenter = $presenterFactory->createPresenter('Event');
-        $mockPresenter->autoCanonicalize = FALSE;
-
-        $this->login();
-        $this->testAuthenticator->setId($this->login->id);
-        $this->testAuthenticator->setArr(["sessionKey" => $this->loginObj->getResult()->sessionKey]);
-        $mockPresenter->getUser()->setAuthenticator($this->testAuthenticator);
-        $mockPresenter->getUser()->setExpiration('2 minutes');
-        $mockPresenter->getUser()->login($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
         
-        $allEvents = new \Tymy\Events($this->tapiAuthenticator, $mockPresenter);
-        $allEventsObj = $allEvents
-                ->setFrom(date("Ymd"))
-                ->fetch();
-        $idActionToUpdateOn = $allEventsObj[0]->id;
-
-        $attendanceObj = new \Tymy\Attendance($this->tapiAuthenticator, $mockPresenter);
-        $attendanceObj->recId($idActionToUpdateOn)
+        $allEvents = $this->container->getByType('Tymy\Events');
+        $idActionToUpdateOn = $allEvents->setFrom(date("Ymd"))->getData()[0]->id;
+         
+        $this->attendance->reset()->recId($idActionToUpdateOn)
                 ->setPreStatus("YES")
                 ->setPreDescription("Tymyv2-AutoTest-yes")
                 ->plan();
-        Assert::type("array",$attendanceObj->postParams[0]);
-        Assert::same(4,count($attendanceObj->postParams[0]));
+        Assert::type("array",$this->attendance->postParams[0]);
+        Assert::same(4,count($this->attendance->postParams[0]));
         
-        Assert::type("int",$attendanceObj->postParams[0]["userId"]);
-        Assert::same($this->login->id,$attendanceObj->postParams[0]["userId"]);
-        Assert::type("int",$attendanceObj->postParams[0]["eventId"]);
-        Assert::same($idActionToUpdateOn,$attendanceObj->postParams[0]["eventId"]);
-        Assert::type("string",$attendanceObj->postParams[0]["preStatus"]);
-        Assert::same("YES",$attendanceObj->postParams[0]["preStatus"]);
-        Assert::type("string",$attendanceObj->postParams[0]["preDescription"]);
-        Assert::same("Tymyv2-AutoTest-yes",$attendanceObj->postParams[0]["preDescription"]); //Tested if POST params can be added as an array
+        Assert::type("int",$this->attendance->postParams[0]["userId"]);
+        Assert::same($this->user->getId(),$this->attendance->postParams[0]["userId"]);
+        Assert::type("int",$this->attendance->postParams[0]["eventId"]);
+        Assert::same($idActionToUpdateOn,$this->attendance->postParams[0]["eventId"]);
+        Assert::type("string",$this->attendance->postParams[0]["preStatus"]);
+        Assert::same("YES",$this->attendance->postParams[0]["preStatus"]);
+        Assert::type("string",$this->attendance->postParams[0]["preDescription"]);
+        Assert::same("Tymyv2-AutoTest-yes",$this->attendance->postParams[0]["preDescription"]); //Tested if POST params can be added as an array
         
-        Assert::true(is_object($attendanceObj));
-        Assert::true(is_object($attendanceObj->result));
-        Assert::type("string",$attendanceObj->result->status);
-        Assert::same("OK",$attendanceObj->result->status);
+        Assert::true(is_object($this->attendance));
+        Assert::true(is_object($this->attendance->result));
+        Assert::type("string",$this->attendance->result->status);
+        Assert::same("OK",$this->attendance->result->status);
 
         //now check if the event is correctly filled
-        $updatedEventObj = new \Tymy\Event($mockPresenter->tapiAuthenticator, $mockPresenter);
+        $updatedEventObj = $this->container->getByType('Tymy\Event');
         $updatedEventObj
+                ->reset()
                 ->recId($idActionToUpdateOn)
-                ->fetch();
+                ->getResult();
         
         Assert::true(is_object($updatedEventObj));
         Assert::true(is_object($updatedEventObj->result));
@@ -214,7 +131,7 @@ class APIAttendanceTest extends ITapiTest {
         Assert::true(is_object($updatedEventObj->result->data));
         $found = FALSE;
         foreach ($updatedEventObj->result->data->attendance as $att) {
-            if($att->userId == $this->login->id){
+            if($att->userId == $this->user->getId()){
                 $found = TRUE;
                 Assert::type("int",$att->eventId);
                 Assert::same($idActionToUpdateOn,$att->eventId);
