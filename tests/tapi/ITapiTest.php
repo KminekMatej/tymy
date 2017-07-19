@@ -37,7 +37,7 @@ abstract class ITapiTest extends Tester\TestCase {
         $this->tapiAuthenticator = new \App\Model\TapiAuthenticator($this->supplier);
         $this->testAuthenticator = new \App\Model\TestAuthenticator();
         $tested_object = $this->getTestedObject();
-        $this->objectExists($tested_object);
+        $this->objectPreTests($tested_object);
         $tested_object->setSupplier($this->supplier);
     }
     
@@ -51,8 +51,21 @@ abstract class ITapiTest extends Tester\TestCase {
         $this->user->login($username, $password);
     }
     
-    protected function objectExists($object){
-        \Tester\Assert::truthy($object);
+    protected function objectPreTests($object){
+        Tester\Assert::truthy($object);
+        Tester\Assert::type("\Nette\Reflection\ClassType", $object->getReflection());
+        $tapiname = $object->getTapiName();
+        Tester\Assert::type("string", $tapiname);
+        if($tapiname == "login"){
+            Tester\Assert::equal(FALSE, $object->getTSIDRequired());
+        } else {
+            Tester\Assert::equal(TRUE, $object->getTSIDRequired());
+        }
+        
+        $tsid = "123456";
+        $object->setTsid($tsid);
+        Tester\Assert::equal($tsid, $object->getTsid());
+        Tester\Assert::equal($tsid, $object->getUriParams()["TSID"]);
     }
     
 }
