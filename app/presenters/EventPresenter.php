@@ -102,8 +102,8 @@ class EventPresenter extends SecuredPresenter {
     public function handleAttendance($id, $code, $desc){
         $this->attendance
             ->recId($id)
-            ->preStatus($code)
-            ->preDescription($desc)
+            ->setPreStatus($code)
+            ->setPreDescription($desc)
             ->plan();
         if ($this->isAjax()) {
             $this->redrawControl("attendanceWarning");
