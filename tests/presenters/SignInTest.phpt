@@ -7,29 +7,17 @@ use Tester;
 use Tester\Assert;
 
 $container = require __DIR__ . '/../bootstrap.php';
-Tester\Environment::skip('Temporary skipping');
+
 if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
 
-class SignInTest extends Tester\TestCase {
+class SignInTest extends IPresenterTest {
 
-    private $container;
-    private $presenter;
-    private $tapi_config;
+    const PRESENTERNAME = "Sign";
 
     function __construct(Nette\DI\Container $container) {
         $this->container = $container;
-    }
-
-    function setUp() {
-        $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $this->presenter = $presenterFactory->createPresenter('Sign');
-        $this->presenter->autoCanonicalize = FALSE;
-        $supplier = $this->container->getByType('App\Model\Supplier');
-        $tapi_config = $supplier->getTapi_config();
-        $tapi_config["tym"] = $GLOBALS["testedTeam"]["team"];
-        $this->tapi_config = $tapi_config;
     }
 
     function testSignInComponents(){
@@ -52,14 +40,12 @@ class SignInTest extends Tester\TestCase {
      * @throws Nette\Security\AuthenticationException Login failed.
      */
     function testSignInFails(){
-        $tymyUserManager = new \App\Model\TapiAuthenticator($this->tapi_config); 
-        $tymyUserManager->authenticate(["Beatles","Ladyda"]);
-        
+        $this->userTapiAuthenticate("Beatles","Ladyda");
     }
     
     function testSignInSuccess(){
-        $tymyUserManager = new \App\Model\TapiAuthenticator($this->tapi_config); 
-        $identity = $tymyUserManager->authenticate([$GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]]);
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $identity = $this->user->getIdentity();
         Assert::type("Nette\Security\Identity", $identity);
         Assert::true(isset($identity->id));
         Assert::true(isset($identity->roles));
@@ -75,7 +61,6 @@ class SignInTest extends Tester\TestCase {
         Assert::true(isset($identity->data["data"]->status));
         Assert::true(isset($identity->data["data"]->roles));
         Assert::true(is_array($identity->data["data"]->roles));
-        Assert::true(isset($identity->data["data"]->oldPassword));
         Assert::true(isset($identity->data["data"]->firstName));
         Assert::true(isset($identity->data["data"]->lastName));
         Assert::true(isset($identity->data["data"]->callName));
