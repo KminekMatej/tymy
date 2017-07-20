@@ -53,6 +53,8 @@ final class Attendance extends Tymy{
 
         $this->urlEnd();
         
+        $this->method = "POST";
+        
         $this->addPost([
             "userId" => $this->user->getId(),
             "eventId" => $this->recId,
