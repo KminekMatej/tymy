@@ -64,6 +64,7 @@ abstract class IPresenterTest extends \Tester\TestCase {
     }
     
     function testSignInFailsRedirects(){
+        if($this->getPresenterName() == "Sign") return;
         $this->user->logout();
         $request = new Request($this->getPresenterName(), 'GET', array('action' => 'default'));
         $response = $this->presenter->run($request);
