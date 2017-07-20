@@ -33,13 +33,23 @@ class DiscussionPresenter extends SecuredPresenter {
         $this->template->discussions = $this->discussions->setWithNew(true)->fetch();
     }
     
-    public function actionNewPost($discussion, $page){
+    public function actionNewPost($discussion){
         $post = $this->getHttpRequest()->getPost("post");
         if (trim($post) != "") {
             $this->discussion
                     ->recId($discussion)
                     ->insert($post);
         }
+        $this->setView('discussion');
+    }
+
+    public function actionEditPost($discussionId, $postId){
+        $post = $this->getHttpRequest()->getPost("post");
+        $text = $post->post;
+        $sticky = $post->sticky;
+        $this->discussion
+                ->recId($discussionId)
+                ->editPost($postId, $text, $sticky);
         $this->setView('discussion');
     }
     
