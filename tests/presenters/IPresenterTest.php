@@ -24,6 +24,7 @@ abstract class IPresenterTest extends \Tester\TestCase {
     /** @var \App\Presenters\SecuredPresenter */
     protected $presenter;
     
+    /** @var \Nette\DI\Container */
     protected $container;
     
     protected function setUp() {

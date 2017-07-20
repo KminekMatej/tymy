@@ -47,7 +47,7 @@ class NavbarControl extends Control {
     }
     
     private function players(){
-        $players = $this->users->getResult(TRUE);
+        $players = $this->users->reset()->getResult(TRUE);
         $this->template->counts = $players->counts;
         $this->template->playersWarnings = $players->menuWarningCount;
         $this->template->me = $players->me;
