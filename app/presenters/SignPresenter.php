@@ -16,6 +16,9 @@ class SignPresenter extends BasePresenter {
     /** @var \App\Model\Supplier @inject */
     public $supplier;
 
+    /** @var \Tymy\Logout @inject */
+    public $logout;
+    
     /**
      * Sign-in form factory.
      * @return Nette\Application\UI\Form
@@ -38,12 +41,7 @@ class SignPresenter extends BasePresenter {
 
     public function actionOut() {
         if (!is_null($this->getUser()->getIdentity())) {
-            $this->supplier->setTapi_config($this->getUser()->getIdentity()->getData()["tapi_config"]);
-            $logout = new \Tymy\Logout(NULL, $this);
-            $logout
-                    ->setSupplier($this->supplier)
-                    ->logout();
-
+            $this->logout->logout();
             $this->getUser()->logout();
         }
         $this->flashMessage('You have been succesfully signed out');
