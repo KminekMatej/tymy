@@ -41,6 +41,8 @@ final class User extends UserInterface{
 
         $this->urlEnd();
         
+        $this->method = "PUT";
+        
         foreach ($fields as $key => $value) {
             $this->addPost($key,$value);
         }
@@ -60,6 +62,8 @@ final class User extends UserInterface{
         $this->urlStart();
 
         $this->fullUrl .= "users/register/";
+        
+        $this->method = "POST";
         
         $this->addPost("login",$this->login);
         $this->addPost("password",$this->password);
