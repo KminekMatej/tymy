@@ -38,3 +38,19 @@ function updatePost(url) {
         CKEDITOR.instances.addPost.setData('');
     });
 }
+
+function stickPost(url, postId, sticky) {
+    $("DIV.addPost BUTTON").prop("disabled", true);
+    $.nette.ajax({
+        type: 'POST',
+        url: url,
+        data: {
+            'postId': postId,
+            'sticky': sticky,
+        },
+    }).done(function () {
+        $("DIV.addPost BUTTON").prop("disabled", false);
+        $("DIV.addPost").attr("data-postId","");
+        smoothScroll('addPost');
+    });
+}

@@ -53,6 +53,15 @@ class DiscussionPresenter extends SecuredPresenter {
         $this->setView('discussion');
     }
     
+    public function actionStickPost($discussion){
+        $postId = $this->getHttpRequest()->getPost("postId");
+        $sticky = $this->getHttpRequest()->getPost("sticky");
+        $this->discussion
+                ->recId($discussion)
+                ->editPost($postId, NULL, $sticky);
+        $this->setView('discussion');
+    }
+    
     public function renderDiscussion($discussion, $page, $search) {
         $discussionId = NULL;
         if(!$discussionId = intval($discussion)){
