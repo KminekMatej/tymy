@@ -13,6 +13,13 @@ class TestAuthenticator implements Nette\Security\IAuthenticator {
     private $status;
     private $arr;
     
+    /** @var Supplier */
+    private $supplier;
+    
+    public function __construct(Supplier $supplier) {
+        $this->supplier = $supplier;
+    }
+    
     /**
      * Performs an authentication.
      * @return Nette\Security\Identity
@@ -22,6 +29,7 @@ class TestAuthenticator implements Nette\Security\IAuthenticator {
         list($username, $password) = $credentials;
         $dataMock = new \stdClass();
         $dataMock->login = $username;
+        $dataMock->tapi_config = $this->supplier->getTapi_config();
         $this->setId(38);
         $this->setStatus(["TESTROLE", "TESTROLE2"]);
         $this->setArr([

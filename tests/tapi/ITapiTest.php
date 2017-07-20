@@ -35,7 +35,7 @@ abstract class ITapiTest extends Tester\TestCase {
         
         $this->supplier->setTapi_config($tapi_config);
         $this->tapiAuthenticator = new \App\Model\TapiAuthenticator($this->supplier);
-        $this->testAuthenticator = new \App\Model\TestAuthenticator();
+        $this->testAuthenticator = new \App\Model\TestAuthenticator($this->supplier);
         $tested_object = $this->getTestedObject();
         $this->objectPreTests($tested_object);
         $tested_object->setSupplier($this->supplier);

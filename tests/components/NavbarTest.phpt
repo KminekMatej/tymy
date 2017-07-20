@@ -60,7 +60,7 @@ class NavbarTest extends Tester\TestCase {
         
         $this->supplier->setTapi_config($tapi_config);
         $this->tapiAuthenticator = new \App\Model\TapiAuthenticator($this->supplier);
-        $this->testAuthenticator = new \App\Model\TestAuthenticator();
+        $this->testAuthenticator = new \App\Model\TestAuthenticator($this->supplier);
     }
     
     protected function userTapiAuthenticate($username, $password){
