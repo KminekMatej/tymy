@@ -43,6 +43,8 @@ abstract class Tymy extends Nette\Object{
     
     protected $tsid;
     
+    protected $method;
+    
     /** Function to return full URI of select api */
     abstract protected function select();
     
@@ -67,6 +69,7 @@ abstract class Tymy extends Nette\Object{
         $this->supplier = $supplier;
         $this->user = $user;
         $this->session = $session;
+        $this->method = "GET";
     }
     
     protected function initTapiDebugPanel(){
@@ -106,6 +109,7 @@ abstract class Tymy extends Nette\Object{
         $this->recId = NULL;
         $this->fullUrl = NULL;
         $this->postParams = NULL;
+        $this->method = "GET";
         return $this;
     }
     
@@ -237,8 +241,9 @@ abstract class Tymy extends Nette\Object{
         $ch = curl_init(); 
         curl_setopt($ch, CURLOPT_URL, $url); 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        if(isset($this->postParams) && is_array($this->postParams)){
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        
+        if(in_array($this->method, ["POST","PUT"]) && isset($this->postParams) && is_array($this->postParams)){
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->method);
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($this->postParams));
             curl_setopt($ch, CURLOPT_HTTPHEADER, array(
                 'Content-Type: application/json')

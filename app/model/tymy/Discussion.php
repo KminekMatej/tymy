@@ -49,7 +49,31 @@ final class Discussion extends Tymy{
 
         $this->urlEnd();
 
+        $this->method = "POST";
+        
         $this->addPost("post", $text);
+        $this->result = $this->execute();
+        return $this->result;
+    }
+    
+    public function editPost($idPost, $text = NULL, $sticky = NULL){
+        if (!isset($idPost))
+            throw new \Tymy\Exception\APIException('Post ID not set!');
+        
+        if($text == NULL && $sticky == NULL)
+            return null;
+        
+        $this->urlStart();
+
+        $this->fullUrl .= self::TAPI_NAME . "/" . $this->recId . "/editPost/$idPost";
+
+        $this->urlEnd();
+        
+        $this->method = "PUT";
+
+        if($text != NULL) $this->addPost("post", $text);
+        if($sticky != NULL) $this->addPost("sticky", $sticky);
+        
         $this->result = $this->execute();
         return $this->result;
     }
