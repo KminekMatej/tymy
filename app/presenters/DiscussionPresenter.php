@@ -58,6 +58,7 @@ class DiscussionPresenter extends SecuredPresenter {
             $this->error("Tato diskuze neexistuje");
         
         $this->discussion
+                ->reset()
                 ->recId($discussionId)
                 ->setPage($page);
         if($search) 
