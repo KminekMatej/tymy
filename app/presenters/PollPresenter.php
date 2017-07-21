@@ -34,7 +34,7 @@ class PollPresenter extends SecuredPresenter {
         }
         
         $this->template->poll = $this->poll->recId($pollId)->getData();
-        $this->template->users = $this->users->getData();
+        $this->template->users = $this->users->getResult();
     }
     
     public function handleVote($pollId){
