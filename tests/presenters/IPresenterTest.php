@@ -27,6 +27,9 @@ abstract class IPresenterTest extends \Tester\TestCase {
     /** @var \Nette\DI\Container */
     protected $container;
     
+    /** @var \Nette\Application\IPresenterFactory */
+    protected $presenterFactory;
+    
     protected function setUp() {
         $this->supplier = $this->container->getByType('App\Model\Supplier');
         $this->user = $this->container->getByType('Nette\Security\User');
@@ -38,9 +41,12 @@ abstract class IPresenterTest extends \Tester\TestCase {
         $this->tapiAuthenticator = new \App\Model\TapiAuthenticator($this->supplier);
         $this->testAuthenticator = new \App\Model\TestAuthenticator($this->supplier);
         
-        $presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
-        $this->presenter = $presenterFactory->createPresenter($this->getPresenterName());
-        $this->presenter->autoCanonicalize = FALSE;
+        $this->presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
+        if($this->getPresenterName() != "undefined"){
+            $this->presenter = $this->presenterFactory->createPresenter($this->getPresenterName());
+            $this->presenter->autoCanonicalize = FALSE;
+        }
+        
 
         return parent::setUp();
     }
@@ -49,7 +55,7 @@ abstract class IPresenterTest extends \Tester\TestCase {
         return parent::tearDown();
     }
     
-    private function getPresenterName(){
+    protected function getPresenterName(){
         $class = get_called_class();
         return $class::PRESENTERNAME;
     }
@@ -65,7 +71,7 @@ abstract class IPresenterTest extends \Tester\TestCase {
     }
     
     function testSignInFailsRedirects(){
-        if($this->getPresenterName() == "Sign") return;
+        if(in_array($this->getPresenterName(), ["Sign","undefined"])) return;
         $this->user->logout();
         $request = new Request($this->getPresenterName(), 'GET', array('action' => 'default'));
         $response = $this->presenter->run($request);
