@@ -37,8 +37,13 @@ INPUT, SELECT{
 }
 
 INPUT[type='submit']{
-    background-color: #ff5f49;
+    background: #ff5f49;
     color: white;
+    cursor: pointer;
+}
+
+INPUT[type='submit']:hover {
+    background: linear-gradient(to bottom right, #ff5f49, #d14836);
 }
 
 TABLE.under TD{
@@ -47,9 +52,15 @@ TABLE.under TD{
 
 TABLE.under A{
     display: block;
-    background-color: #dadada;
+    background: linear-gradient(to bottom right, #d0d0d0, #bbbbbb);
     color: white;
     width: 100%;
     padding: 10px;
     font-size: 14px;
+}
+
+TABLE.under A:hover{
+    text-decoration: none;
+    background: linear-gradient(to bottom right, #d0d0d0, #616161);
+    
 }
