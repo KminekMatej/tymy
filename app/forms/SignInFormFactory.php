@@ -19,23 +19,16 @@ class SignInFormFactory {
     /** @var \App\Model\Supplier */
     private $supplier;
     
-    /** @var Nette\Http\Session */
-    private $session;
-    
     private $tapi_config;
     
-    /** @var Nette\Http\SessionSection */
-    private $sessionTymy;
     
     
     
-    public function __construct(FormFactory $factory, User $user, \App\Model\Supplier $supplier, Nette\Http\Session $session) {
+    public function __construct(FormFactory $factory, User $user, \App\Model\Supplier $supplier) {
         $this->factory = $factory;
         $this->user = $user;
         $this->supplier = $supplier;
         $this->tapi_config = $supplier->getTapi_config();
-        $this->session = $session;
-        $this->sessionTymy = $session->getSection("tymy");
     }
 
     /**
