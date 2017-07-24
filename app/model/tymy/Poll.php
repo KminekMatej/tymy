@@ -45,7 +45,7 @@ final class Poll extends Tymy{
     
     protected function postProcess(){
         $data = $this->getData();
-        $data->webName = \Nette\Utils\Strings::webalize($data->caption);
+        $data->webName = \Nette\Utils\Strings::webalize($data->id . "-" . $data->caption);
         $this->timezone($data->createdAt);
         $this->timezone($data->updatedAt);
         $data->radio = property_exists($data, "minItems") && property_exists($data, "maxItems") && $data->minItems == 1 && $data->maxItems == 1;

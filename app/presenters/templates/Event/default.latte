@@ -23,7 +23,7 @@
             events: function(start, end, timezone, callback) {
                 var events = [];
                 {foreach $events as $evnt}
-                    events.push({l}id: {$evnt->id}, title: {$evnt->title},start: {$evnt->start},end: {$evnt->end},backgroundColor: {$evnt->backgroundColor},borderColor: {$evnt->borderColor},textColor: {$evnt->textColor},url: {plink 'Event:event', $evnt->id . '-' . $evnt->webName}{r});
+                    events.push({l}id: {$evnt->id}, title: {$evnt->title},start: {$evnt->start},end: {$evnt->end},backgroundColor: {$evnt->backgroundColor},borderColor: {$evnt->borderColor},textColor: {$evnt->textColor},url: {plink 'Event:event', $evnt->webName}{r});
                 {/foreach}
                 callback(events);
             },
@@ -77,7 +77,7 @@
                                 {var $past = strtotime($ev->closeTime) < strtotime(date('Ymd')) ? 'evnt-past collapse'}
                                 
                                 <div class="row {$past}">
-                                    <div class="col" title=" {$ev->caption} ({$eventTypes[$ev->type]->caption})&#13;{$ev->startTime|date:'j.n. H:i'} -> {$ev->endTime|date:'j.n H:i'}"><a href="{plink Event:event, $ev->id . '-' . $ev->webName}}" class="event-heading">{$ev->caption}</a><span class="event-time text-muted float-right">{$ev->startTime|date:'j.n. H:i'}</span></div>
+                                    <div class="col" title=" {$ev->caption} ({$eventTypes[$ev->type]->caption})&#13;{$ev->startTime|date:'j.n. H:i'} -> {$ev->endTime|date:'j.n H:i'}"><a href="{plink Event:event, $ev->webName}}" class="event-heading">{$ev->caption}</a><span class="event-time text-muted float-right">{$ev->startTime|date:'j.n. H:i'}</span></div>
                                 </div>
                                 <div class="row mb-2 {$past}">
                                     <div class="col">

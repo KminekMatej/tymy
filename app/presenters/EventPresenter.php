@@ -65,9 +65,9 @@ class EventPresenter extends SecuredPresenter {
     }
     
     public function renderEvent($udalost) {
-        $eventId = substr($udalost,0,strpos($udalost, "-"));
         $event = $this->event
-                ->recId($eventId)
+                ->reset()
+                ->recId($this->parseIdFromWebname($udalost))
                 ->getData(TRUE);
         
         $this->setLevelCaptions(["2" => ["caption" => $event->caption, "link" => $this->link("Event:event", $event->id . "-" . $event->webName)]]);

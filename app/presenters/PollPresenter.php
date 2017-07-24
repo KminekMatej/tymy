@@ -24,16 +24,14 @@ class PollPresenter extends SecuredPresenter {
     }
     
     public function renderPoll($anketa) {
-        $pollId = NULL;
-        foreach ($this->polls->getData() as $p) {
-            if($p->webName == $anketa){
-                $pollId = $p->id;
-                $this->setLevelCaptions(["2" => ["caption" => $p->caption, "link" => $this->link("Poll:poll", $p->webName) ] ]);
-                break;
-            }
-        }
+        $poll = $this->poll
+                ->reset()
+                ->recId($this->parseIdFromWebname($anketa))
+                ->getData();
         
-        $this->template->poll = $this->poll->recId($pollId)->getData();
+        $this->setLevelCaptions(["2" => ["caption" => $poll->caption, "link" => $this->link("Poll:poll", $poll->webName) ] ]);
+        
+        $this->template->poll = $poll;
         $this->template->users = $this->users->getResult();
     }
     

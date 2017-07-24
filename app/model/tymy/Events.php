@@ -116,7 +116,7 @@ final class Events extends Tymy{
             $this->timezone($event->closeTime);
             $this->timezone($event->startTime);
             $this->timezone($event->endTime);
-            $event->webName = \Nette\Utils\Strings::webalize($event->caption);
+            $event->webName = \Nette\Utils\Strings::webalize($event->id . "-" . $event->caption);
             if($this->withMyAttendance){
                 if(!property_exists($event, "myAttendance")) $event->myAttendance = new \stdClass ();
                 if(!property_exists($event->myAttendance, "preStatus")) $event->myAttendance->preStatus = "UNKNOWN"; //set default value

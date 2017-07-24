@@ -49,35 +49,28 @@ class TeamPresenter extends SecuredPresenter {
     }
     
     public function renderPlayer($player) {
-        $players = $this->users->getResult();
-        $playerId = NULL;
-        foreach ($players->data as $p) {
-            if($p->webName == $player){
-                $playerId = $p->id;
-                $this->setLevelCaptions(["2" => ["caption" => $p->callName, "link" => $this->link("Team:player", $p->webName) ] ]);
-                break;
-            }
-        }
-        
-        $playerData = $this->user
-                ->recId($playerId)
+        $user = $this->user
+                ->reset()
+                ->recId($this->parseIdFromWebname($player))
                 ->getData();
         
-        //set default values to avoid latte exceptions
-        if(!isset($playerData->firstName)) $playerData->firstName = "";
-        if(!isset($playerData->lastName)) $playerData->lastName = "";
-        if(!isset($playerData->login)) $playerData->login = "";
-        if(!isset($playerData->callName)) $playerData->callName = "";
-        if(!isset($playerData->jerseyNumber)) $playerData->jerseyNumber = "";
-        if(!isset($playerData->street)) $playerData->street = "";
-        if(!isset($playerData->city)) $playerData->city = "";
-        if(!isset($playerData->zipCode)) $playerData->zipCode = "";
-        if(!isset($playerData->birthDate)) $playerData->birthDate = "";
-        if(!isset($playerData->phone)) $playerData->phone = "";
-        if(!isset($playerData->phone2)) $playerData->phone2 = "";
-        if(!isset($playerData->email)) $playerData->email = "";
+        $this->setLevelCaptions(["2" => ["caption" => $user->callName, "link" => $this->link("Team:player", $user->webName) ] ]);
         
-        $this->template->player = $playerData;
+        //set default values to avoid latte exceptions
+        if(!isset($user->firstName)) $user->firstName = "";
+        if(!isset($user->lastName)) $user->lastName = "";
+        if(!isset($user->login)) $user->login = "";
+        if(!isset($user->callName)) $user->callName = "";
+        if(!isset($user->jerseyNumber)) $user->jerseyNumber = "";
+        if(!isset($user->street)) $user->street = "";
+        if(!isset($user->city)) $user->city = "";
+        if(!isset($user->zipCode)) $user->zipCode = "";
+        if(!isset($user->birthDate)) $user->birthDate = "";
+        if(!isset($user->phone)) $user->phone = "";
+        if(!isset($user->phone2)) $user->phone2 = "";
+        if(!isset($user->email)) $user->email = "";
+        
+        $this->template->player = $user;
         $allRoles = [];
         $allRoles[] = (object)["code" => "SUPER", "caption" => "Administrátor", "class"=>$this->supplier->getRoleClass("SUPER")];
         $allRoles[] = (object)["code" => "USR", "caption" => "Správce uživatelů", "class"=>$this->supplier->getRoleClass("USR")];

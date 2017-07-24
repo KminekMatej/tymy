@@ -27,7 +27,7 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <a class="dropdown-item" href="{plink Event:}">Všechny</a>
                     {foreach $events as $ev}
-                        <a class="dropdown-item" href="{plink Event:event $ev->id.'-'.$ev->webName}">
+                        <a class="dropdown-item" href="{plink Event:event $ev->webName}">
                             {if $ev->warning}<span class="badge badge-danger"><i class="fa fa-info" aria-hidden="true"></i></span>{/if}
                             {$ev->startTime|date:'j.n.'} - {$ev->caption}
                         </a>

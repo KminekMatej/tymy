@@ -25,7 +25,7 @@ final class Polls extends Tymy{
         $this->getResult()->menuWarningCount = 0;
         
         foreach ($data as $poll) {
-            $poll->webName = \Nette\Utils\Strings::webalize($poll->caption);
+            $poll->webName = \Nette\Utils\Strings::webalize($poll->id . "-" . $poll->caption);
             if($poll->status == "OPENED" && $poll->canVote && !$poll->voted)
                 $this->getResult()->menuWarningCount++;
             $this->timezone($poll->createdAt);

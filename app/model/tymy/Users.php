@@ -55,7 +55,7 @@ final class Users extends UserInterface{
             $counts[$player->status]++;
             if(!property_exists($player, "gender")) $player->gender = "UNKNOWN"; //set default value
             
-            $player->webName = Strings::webalize($player->fullName);
+            $player->webName = Strings::webalize($player->id . "-" . $player->fullName);
             $this->userWarnings($player);
             $this->userPermissions($player);
             $players[$player->id] = $player;
@@ -63,7 +63,6 @@ final class Users extends UserInterface{
                 $this->result->menuWarningCount = $player->errCnt;
                 $this->result->me = (object)$player;
             }
-            $player->webName = Strings::webalize($player->fullName);
             if(property_exists($player, "lastLogin")){
                 $this->timezone($player->lastLogin);
             }

@@ -117,4 +117,8 @@ class SecuredPresenter extends BasePresenter {
         return $navbar;
     }
     
+    protected function parseIdFromWebname($webName){
+        return substr($webName,0,strpos($webName, "-"));
+    }
+    
 }

@@ -34,9 +34,10 @@ class AllPresentersTest extends IPresenterTest {
             ["presenter" => "Team", "action" => "players", "params" => []],
             ["presenter" => "Team", "action" => "sicks", "params" => []],
             ["presenter" => "Team", "action" => "inits", "params" => []],
-            ["presenter" => "Team", "action" => "player", "params" => ["player" => 11]],
+            ["presenter" => "Team", "action" => "player", "params" => ["player" => "11-matejskej-kminek"]],
             ["presenter" => "Poll", "action" => "default", "params" => []],
-            ["presenter" => "Poll", "action" => "poll", "params" => ["anketa" => "nejaka-anketa"]],
+            ["presenter" => "Poll", "action" => "poll", "params" => ["anketa" => "2-nejaka-anketa"]],
+            ["presenter" => "Poll", "action" => "poll", "params" => ["anketa" => "1-klasika"]],
         ];
         
         shuffle($hopList); // shuffle array each test
