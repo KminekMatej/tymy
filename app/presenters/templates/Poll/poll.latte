@@ -16,7 +16,7 @@
 
 {block content}
 
-<div class="container poll" data-min-items="{$poll->minItems}" data-max-items="{$poll->maxItems}" data-show-results="{$poll->showResults}" data-radio-layout="{$poll->radio ? 'true' : 'false'}">
+<div class="container poll" n:attr="data-min-items => isset($poll->minItems) ? $poll->minItems : 0, data-max-items=>isset($poll->maxItems) ? $poll->maxItems : 999" data-show-results="{$poll->showResults}" data-radio-layout="{$poll->radio ? 'true' : 'false'}">
     <div class="row">
         <div class="col my-3">
             <div class="card sh-box">
@@ -24,8 +24,8 @@
                     <div class="row">
                         <div class="col">
                             <i class="fa fa-info-circle mx-3" aria-hidden="true"></i>
-                            {ifset $poll->minItems}<span class="badge badge-info"><strong>Minimum vyplněných položek: {$poll->minItems}</strong></span>{/ifset}
-                            {ifset $poll->maxItems}<span class="badge badge-warning"><strong>Maximum vyplněných položek: {$poll->maxItems}</strong></span>{/ifset}
+                            <span n:ifset="$poll->minItems" class="badge badge-info"><strong>Minimum vyplněných položek: {$poll->minItems}</strong></span>
+                            <span n:ifset="$poll->maxItems" class="badge badge-warning"><strong>Maximum vyplněných položek: {$poll->maxItems}</strong></span>
                             <span n:class="badge,$poll->changeableVotes ? badge-success : badge-danger"><strong>Hlasování se {if $poll->changeableVotes}dá{else}nedá{/if} měnit</strong></span>
                             <span n:class="badge,$poll->anonymousResults ? badge-success : badge-danger"><strong>Anketa {if $poll->anonymousResults}je{else}není{/if} anonymní</strong></span>
                             {if $poll->showResults == 'AFTER_VOTE'}
