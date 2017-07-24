@@ -26,6 +26,7 @@ class AllPresentersTest extends IPresenterTest {
             ["presenter" => "Homepage", "action" => "default", "params" => []],
             ["presenter" => "Discussion", "action" => "default", "params" => []],
             ["presenter" => "Discussion", "action" => "discussion", "params" => ["discussion" => 2, "page" => 1, "search" => ""]],
+            ["presenter" => "Discussion", "action" => "discussion", "params" => ["discussion" => 2, "page" => 2, "search" => ""]],
             ["presenter" => "Event", "action" => "default", "params" => []],
             ["presenter" => "Event", "action" => "event", "params" => ["udalost" => "119-trenink"]],
             ["presenter" => "Team", "action" => "default", "params" => []],
