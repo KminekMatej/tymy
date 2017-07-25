@@ -142,6 +142,8 @@ class TeamPresenterTest extends IPresenterTest {
         Assert::equal(count($dom->find('div.container.user div.row div.col.my-3 div.card.sh-box div.card-header ul.nav.nav-tabs.card-header-tabs li.nav-item')), 5);
         Assert::equal(count($dom->find('div.container.user div.row div.col.my-3 div.card.sh-box div.card-block div.tab-content div.tab-pane.fade')), 5);
         Assert::equal(count($dom->find('div.container.user div.row div.col.my-3 div.card.sh-box div.card-block div.tab-content div.tab-pane.fade.active.show')), 1);
+        
+        Assert::true($dom->has('div.container.user div.row div.col.my-3 div.card.sh-box div.card-footer.text-right button.btn.btn-primary'));
     }
 
 }
