@@ -8,25 +8,23 @@ use Tester\Assert;
 
 $container = require __DIR__ . '/../bootstrap.php';
 
-if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
+if (in_array(basename(__FILE__, '.phpt'), $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
 
 class TeamPresenterTest extends IPresenterTest {
 
     const PRESENTERNAME = "Team";
-    
+
     /** @var \Tymy\Users */
     private $users;
-    
     private $counts;
 
     function __construct(Nette\DI\Container $container) {
         $this->container = $container;
         $this->users = $this->container->getByType("\Tymy\Users");
-        
     }
-    
+
     protected function setUp() {
         $parentResult = parent::setUp();
         $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
@@ -34,17 +32,16 @@ class TeamPresenterTest extends IPresenterTest {
         return $parentResult;
     }
 
-    
-    function testActionDefault(){
+    function testActionDefault() {
         $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
         $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', array('action' => 'default'));
         $response = $this->presenter->run($request);
 
         Assert::type('Nette\Application\Responses\TextResponse', $response);
-        
-        $html = (string)$response->getSource();
+
+        $html = (string) $response->getSource();
         $dom = Tester\DomQuery::fromHtml($html);
-        
+
         //has navbar
         Assert::true($dom->has('div#snippet-navbar-nav'));
         //has breadcrumbs
@@ -52,102 +49,102 @@ class TeamPresenterTest extends IPresenterTest {
         Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 2);
     }
 
-    function testActionPlayers(){
+    function testActionPlayers() {
         $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
         $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', array('action' => 'players'));
         $response = $this->presenter->run($request);
 
         Assert::type('Nette\Application\Responses\TextResponse', $response);
-        
-        $html = (string)$response->getSource();
+
+        $html = (string) $response->getSource();
         $dom = Tester\DomQuery::fromHtml($html);
-        
+
         //has navbar
         Assert::true($dom->has('div#snippet-navbar-nav'));
         //has breadcrumbs
         Assert::true($dom->has('div.container div.row div.col ol.breadcrumb'));
         Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 3);
-        
+
         //count displayed cards
         Assert::equal(count($dom->find('div.container.users div.col-sm-3')), $this->counts["PLAYER"]);
     }
 
-    function testActionMembers(){
+    function testActionMembers() {
         $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
         $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', array('action' => 'members'));
         $response = $this->presenter->run($request);
 
         Assert::type('Nette\Application\Responses\TextResponse', $response);
-        
-        $html = (string)$response->getSource();
+
+        $html = (string) $response->getSource();
         $dom = Tester\DomQuery::fromHtml($html);
-        
+
         //has navbar
         Assert::true($dom->has('div#snippet-navbar-nav'));
         //has breadcrumbs
         Assert::true($dom->has('div.container div.row div.col ol.breadcrumb'));
         Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 3);
-        
+
         //count displayed cards
         Assert::equal(count($dom->find('div.container.users div.col-sm-3')), $this->counts["MEMBER"]);
     }
 
-    function testActionSicks(){
+    function testActionSicks() {
         $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
         $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', array('action' => 'sicks'));
         $response = $this->presenter->run($request);
 
         Assert::type('Nette\Application\Responses\TextResponse', $response);
-        
-        $html = (string)$response->getSource();
+
+        $html = (string) $response->getSource();
         $dom = Tester\DomQuery::fromHtml($html);
-        
+
         //has navbar
         Assert::true($dom->has('div#snippet-navbar-nav'));
         //has breadcrumbs
         Assert::true($dom->has('div.container div.row div.col ol.breadcrumb'));
         Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 3);
-        
+
         //count displayed cards
         Assert::equal(count($dom->find('div.container.users div.col-sm-3')), $this->counts["SICK"]);
     }
-    
-    
-    function allWebNames(){
+
+    function allWebNames() {
         $users = $this->users->reset()
                 ->getData();
         $inputArray = [];
         foreach ($users as $u) {
-            $inputArray[] = [$u->webName];
+            $inputArray[] = [$u];
         }
         return $inputArray;
     }
-    
+
     /**
      * @dataProvider allWebNames
      */
-    function testActionPlayer($webName){
+    function testPlayer($player) {
+        var_dump($player->webName);
         $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
-        $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', array('action' => 'players'));
+        $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', array('action' => 'player', "player" => $player->webName));
         $response = $this->presenter->run($request);
 
         Assert::type('Nette\Application\Responses\TextResponse', $response);
-        
-        $html = (string)$response->getSource();
+
+        $html = (string) $response->getSource();
         $dom = Tester\DomQuery::fromHtml($html);
-        
+
         //has navbar
         Assert::true($dom->has('div#snippet-navbar-nav'));
         //has breadcrumbs
         Assert::true($dom->has('div.container div.row div.col ol.breadcrumb'));
         Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 3);
-        
-        //count displayed cards
-        Assert::equal(count($dom->find('div.container.users div.col-sm-3')), $this->counts["PLAYER"]);
+
+        Assert::equal(count($dom->find('div.container.user div.row div.col.my-3 div.card.sh-box div.card-header ul.nav.nav-tabs.card-header-tabs li.nav-item')), 5);
+        Assert::equal(count($dom->find('div.container.user div.row div.col.my-3 div.card.sh-box div.card-block div.tab-content div.tab-pane.fade')), 5);
+        Assert::equal(count($dom->find('div.container.user div.row div.col.my-3 div.card.sh-box div.card-block div.tab-content div.tab-pane.fade.active.show')), 1);
     }
 
-
-    }
+}
 
 $test = new TeamPresenterTest($container);
 $test->run();
