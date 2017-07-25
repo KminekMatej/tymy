@@ -247,3 +247,7 @@ INPUT.form-check{
     width: 25px;
     height: 25px;
 }
+
+SPAN.badge.hidden-badge{
+    display: none;
+}
