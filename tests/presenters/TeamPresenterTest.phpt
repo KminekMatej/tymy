@@ -111,6 +111,41 @@ class TeamPresenterTest extends IPresenterTest {
         //count displayed cards
         Assert::equal(count($dom->find('div.container.users div.col-sm-3')), $this->counts["SICK"]);
     }
+    
+    
+    function allWebNames(){
+        $users = $this->users->reset()
+                ->getData();
+        $inputArray = [];
+        foreach ($users as $u) {
+            $inputArray[] = [$u->webName];
+        }
+        return $inputArray;
+    }
+    
+    /**
+     * @dataProvider allWebNames
+     */
+    function testActionPlayer($webName){
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', array('action' => 'players'));
+        $response = $this->presenter->run($request);
+
+        Assert::type('Nette\Application\Responses\TextResponse', $response);
+        
+        $html = (string)$response->getSource();
+        $dom = Tester\DomQuery::fromHtml($html);
+        
+        //has navbar
+        Assert::true($dom->has('div#snippet-navbar-nav'));
+        //has breadcrumbs
+        Assert::true($dom->has('div.container div.row div.col ol.breadcrumb'));
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 3);
+        
+        //count displayed cards
+        Assert::equal(count($dom->find('div.container.users div.col-sm-3')), $this->counts["PLAYER"]);
+    }
+
 
     }
 
