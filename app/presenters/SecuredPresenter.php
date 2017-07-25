@@ -118,7 +118,11 @@ class SecuredPresenter extends BasePresenter {
     }
     
     protected function parseIdFromWebname($webName){
-        return substr($webName,0,strpos($webName, "-"));
+        if(strpos($webName, "-")){
+            return substr($webName,0,strpos($webName, "-"));
+        }
+        if(intval($webName))
+            return intval($webName);
     }
     
 }
