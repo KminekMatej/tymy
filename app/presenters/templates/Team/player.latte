@@ -165,7 +165,7 @@
                     </div>
                 </div>
                 <div class="card-footer text-right">
-                    <button n:if="$user->isAllowed('users','canDelete')" onclick="deleteUser(this, {link delete! $player->id})" class="btn btn-danger mx-2">Smazat</button>
+                    <button n:if="$user->isAllowed('users','canDelete')" onclick="updateUser(this, {link delete! $player->id})" class="btn btn-danger mx-2">Smazat</button>
                     <button onclick="updateUser(this, {link edit! $player->id})" class="btn btn-primary">Uložit</button>
                 </div>
             </div>
