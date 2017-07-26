@@ -11,9 +11,9 @@
         {if $iterator->first}<div class="row">{/if}
             <div class="col-sm-3 mt-3" cnt="{$iterator->getCounter()}">
                 <div class="card sh-box">
-                    <div n:class="card-header,py-1,isset($u->gender) ? $u->gender">
+                    <div class="card-header py-1 {$u->gender}">
                         <span class="name">{$u->displayName}{if $u->jerseyNumber != ""} (#{$u->jerseyNumber}){/if}</span>
-                        <span n:if="$u->isNew" class="badge badge-success">Nový</span>
+                        <span n:if="$u->isNew" class="badge badge-success float-right">Nový</span>
                     </div>
                     <div class="card-block">
                         <div class="row">
