@@ -50,7 +50,8 @@ $( document ).ready(function() {
                             <div class="btn-group btn-group-sm float-md-right" role="group">
                                 <button n:class="btn,btn-sm,$item->sticky ? active,$item->sticky ? btn-info:btn-secondary" onclick="stickPost({plink Discussion:stickPost $discussion->discussion->id}, {$item->id}, {$item->sticky ? false : true})" ><i class="fa fa-thumb-tack" aria-hidden="true"></i></button>
                                 <button class="btn btn-sm btn-secondary clipboard-btn" data-clipboard-target="#content_{$item->id}" title="Kopírovat do schránky"><i class="fa fa-files-o" aria-hidden="true"></i></button>
-                                <button class="btn btn-sm btn-secondary" onclick="loadPost({$item->id})" title="Upravit / Kopírovat"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                                {*<a class="btn btn-sm btn-secondary ajax" n:href=":loadBBPost $discussion->discussion->id, $item->id" title="Upravit / Kopírovat"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>*}
+                                <button class="btn btn-sm btn-secondary" onclick="loadPost({link :loadBBPost },{$discussion->discussion->id}, {$item->id})" title="Upravit / Kopírovat"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                             </div>
                             <span class="float-md-right mx-2">{$item->createdAt|date:'j.n.Y G:i'}</span>
                             <div class="alert alert-warning float-md-right mx-1" n:ifset="$item->updatedAt" style="margin: 0px; padding: 4px; font-size: 10px;">Upravil(a) {$users[$item->updatedById]->callName}, {$item->updatedAt|date:'j.n.Y G:i'}</div>

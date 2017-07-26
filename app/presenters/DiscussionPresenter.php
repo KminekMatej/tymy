@@ -62,6 +62,21 @@ class DiscussionPresenter extends SecuredPresenter {
         $this->setView('discussion');
     }
     
+    public function actionLoadBBPost() {
+        if ($this->isAjax()) {
+            $discussionId = intval($this->getRequest()->getPost("discussionId"));
+            $postId = intval($this->getRequest()->getPost("postId"));
+            $data = $this->discussion->reset()
+                    ->recId($discussionId)
+                    ->setPostId($postId)
+                    ->loadPost();
+            $this->payload->postId = $postId;
+            $this->payload->discussionId = $discussionId;
+            $this->payload->post = $data->data->post;
+            $this->sendResponse(new \Nette\Application\Responses\JsonResponse($this->payload));
+        }
+    }
+    
     public function renderDiscussion($discussion, $page, $search) {
         $discussionId = NULL;
         if(!$discussionId = intval($discussion)){
