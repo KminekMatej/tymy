@@ -204,7 +204,7 @@ abstract class Tymy extends Nette\Object{
                 case 200: // api request loaded succesfully
                     return $this->apiResponse(Json::decode($contents->result), $relogin);
                 default:
-                    break;
+                    throw new \Tymy\Exception\APIException("Request vrátil chybový stav ".$contents->curlInfo["http_code"]);
             }
         } else {
             throw new \Tymy\Exception\APIException("Nastala neošetřená výjimka ve funkci Tymy->execute(). Prosím kontaktujte vývojáře.");
