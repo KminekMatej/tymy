@@ -106,3 +106,11 @@ function checkRole(btn){
     else
         $(btn).addClass("active");
 }
+
+function deleteUser(btn, purl){
+    if ($(btn).prop("disabled") || $(btn).hasClass("disabled"))
+        return;
+    $(btn).prop("disabled", true);
+    $(btn).attr("disabled", "disabled");
+    $.nette.ajax({url: purl});
+}

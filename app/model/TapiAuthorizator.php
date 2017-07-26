@@ -34,6 +34,8 @@ class TapiAuthorizator implements Nette\Security\IAuthorizator {
                 return in_array($this->role, ["SUPER","USR"]) ? TapiAuthorizator::ALLOW : TapiAuthorizator::DENY;
             case "canLogin":
                 return $this->getUser()->canLogin ? TapiAuthorizator::ALLOW : TapiAuthorizator::DENY;
+            case "canDelete":
+                return in_array($this->role, ["SUPER"]) ? TapiAuthorizator::ALLOW : TapiAuthorizator::DENY;
             default:
                 return TapiAuthorizator::DENY;
         }

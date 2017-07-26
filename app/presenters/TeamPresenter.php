@@ -86,4 +86,14 @@ class TeamPresenter extends SecuredPresenter {
                 ->edit($post);
     }
     
+    public function handleDelete($playerId){
+        if(!$this->getUser()->isAllowed("users","canDelete"))
+                return;
+        $post = ["status" => "DELETED"];
+        $this->user
+                ->recId($playerId)
+                ->edit($post);
+        $this->redirect('Team:');
+    }
+    
 }
