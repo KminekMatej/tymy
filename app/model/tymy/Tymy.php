@@ -197,6 +197,8 @@ abstract class Tymy extends Nette\Object{
             switch ($contents->curlInfo["http_code"]) {
                 case 401: // unauthorized, try to refresh
                     return $this->loginFailure($relogin);
+                case 500: // error 500 can display when logging out on unlogged account, so this is temporary solution
+                    throw new \Tymy\Exception\APIException("Nastala neošetřená výjimka ve funkci Tymy->execute(). Prosím kontaktujte vývojáře.");
                 case 200: // api request loaded succesfully
                     return $this->apiResponse(Json::decode($contents->result), $relogin);
                 default:
