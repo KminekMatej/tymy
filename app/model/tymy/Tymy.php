@@ -194,31 +194,36 @@ abstract class Tymy extends Nette\Object{
     protected function execute($relogin = TRUE) {
         $contents = $this->request($this->fullUrl);
         if ($contents->status) {
-            if ($contents->curlInfo["http_code"] == 401) { // login failed, try to refresh
-                return $this->loginFailure($relogin);
+            switch ($contents->curlInfo["http_code"]) {
+                case 401: // unauthorized, try to refresh
+                    return $this->loginFailure($relogin);
+                case 200: // api request loaded succesfully
+                    return $this->apiResponse(Json::decode($contents->result), $relogin);
+                default:
+                    break;
             }
-            
-            if ($contents->curlInfo["http_code"] != 200) {
-                throw new \Tymy\Exception\APIException("API request ". $this->fullUrl ." retuned wrong error code " . $contents->curlInfo["http_code"]);
-            }
-            $jsonObj = Json::decode($contents->result);
-            
-            if ($jsonObj->status == "ERROR" && $jsonObj->statusMessage == "Not loggged in") {
-                return $this->loginFailure($relogin);
-            }
-            
-            if ($jsonObj->status != "OK") {
-                throw new \Tymy\Exception\APIException("API request ". $this->fullUrl ." returned abnormal status " . $jsonObj->status . " : " . $jsonObj->statusMessage);
-            }
-            
-            $this->result = (object) $jsonObj;
-
-            return $this->result;
         } else {
             throw new \Tymy\Exception\APIException("Nastala neošetřená výjimka ve funkci Tymy->execute(). Prosím kontaktujte vývojáře.");
         }
     }
     
+    
+    private function apiResponse($response, $relogin) {
+        switch ($response->status) {
+            case "ERROR":
+                switch ($response->statusMessage) { //TODO add some another reasons when they appear
+                    case "Not loggged in":
+                        return $this->loginFailure($relogin);
+                }
+                break;
+            case "OK":
+                $this->result = (object) $response;
+                return $this->result;
+            default:
+                throw new \Tymy\Exception\APIException("API request " . $this->fullUrl . " returned abnormal status " . $response->status . " : " . $response->statusMessage);
+        }
+    }
+
     private function loginFailure($relogin) {
         if ($relogin && !is_null($this->tapiAuthenticator)) { // relogin only if specified, is authenticator and is class needed logins
             $newLogin = $this->tapiAuthenticator->reAuthenticate([$this->user->getIdentity()->data["data"]->login, $this->user->getIdentity()->data["hash"]]);
