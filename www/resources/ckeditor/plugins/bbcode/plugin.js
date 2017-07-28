@@ -763,7 +763,7 @@
 				var bbcode = evt.data.dataValue;
 				evt.data.dataValue = BBCodeToHtml( bbcode );
 			}
-
+/*
 			// Skip the first "setData" call from inline creator, to allow content of
 			// HTML to be loaded from the page element.
 			if ( editor.elementMode == CKEDITOR.ELEMENT_MODE_INLINE )
@@ -771,7 +771,7 @@
 					editor.on( 'setData', onSetData );
 				} );
 			else
-				editor.on( 'setData', onSetData );
+				editor.on( 'setData', onSetData );*/
 
 		},
 
