@@ -33,7 +33,7 @@ class SignOutTest extends IPresenterTest {
     }
     
     /**
-     * @throws \Tymy\Exception\APIException
+     * @throws \Nette\Security\AuthenticationException
      */
     function testSignOutFails(){
         $this->userTestAuthenticate("Beatles","Ladyda");

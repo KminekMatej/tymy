@@ -44,12 +44,9 @@ class APILogoutTest extends ITapiTest {
     
     /* TAPI : SELECT */
 
-    /**
-     * @todo Change when TAPI gets corrected to return error 404 instead of error 500 and add return message on exception
-     */
-    function testLogoutNotLoggedInFails500() {
+    function testLogoutNotLoggedInFails401() {
         $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
-        Assert::exception(function(){$this->logout->logout();} , "Tymy\Exception\APIException");
+        Assert::exception(function(){$this->logout->logout();} , "Nette\Security\AuthenticationException", "Login failed.");
     }
     
     function testLogoutSuccess() {
