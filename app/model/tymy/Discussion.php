@@ -18,7 +18,6 @@ final class Discussion extends Tymy{
     
     private $page;
     private $search;
-    private $postId;
     
     public function select() {
         if (!isset($this->recId))
@@ -32,23 +31,6 @@ final class Discussion extends Tymy{
         
         $this->fullUrl .= self::TAPI_NAME . "/" .$this->recId . "/" . self::MODE . "/" . $this->page;
         return $this;
-    }
-    
-    public function loadPost() {
-        if (!isset($this->recId))
-            throw new \Tymy\Exception\APIException('Discussion ID not set!');
-
-        if (!isset($this->postId))
-            throw new \Tymy\Exception\APIException('Post ID not set!');
-        
-        $this->urlStart();
-        
-        $this->fullUrl .= self::TAPI_NAME . "/" .$this->recId . "/posts/" . $this->postId;
-        
-        $this->urlEnd();
-        
-        $this->result = $this->execute();
-        return $this->result;
     }
     
     public function search($text){
@@ -117,16 +99,7 @@ final class Discussion extends Tymy{
         return $this;
     }
     
-    public function getPostId() {
-        return $this->postId;
-    }
-
-    public function setPostId($postId) {
-        $this->postId = $postId;
-        return $this;
-    }
-
-        public function reset() {
+    public function reset() {
         $this->page = NULL;
         $this->search = NULL;
         return parent::reset();

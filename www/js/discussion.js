@@ -16,19 +16,11 @@ function copyPost(elm) {
     clipboard.copy({"text/html": text});
 }
 
-function loadPost(url, discussionId, postId) {
-    $.nette.ajax({
-        type: 'POST',
-        url: url,
-        data: {
-            postId: postId,
-            discussionId: discussionId,
-        },
-    }).done(function (payload) {
-        $("DIV.addPost").attr("data-postId",postId);
-        CKEDITOR.instances.addPost.setData(payload.post);
-        smoothScroll('addPost');
-    });
+function loadPost(postId) {
+    var text = $("#content_" + postId).html();
+    $("DIV.addPost").attr("data-postId",postId);
+    CKEDITOR.instances.addPost.setData(text);
+    smoothScroll('addPost');
 }
 
 function updatePost(url) {
