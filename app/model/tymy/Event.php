@@ -23,6 +23,51 @@ final class Event extends Tymy{
         return $this;
     }
     
+    public function edit($fields){
+        if (!isset($this->recId))
+            throw new \Tymy\Exception\APIException('User ID not set!');
+        if (!$fields)
+            throw new \Tymy\Exception\APIException('Fields to edit not set!');
+        
+        $this->urlStart();
+
+        $this->fullUrl .= self::TAPI_NAME . "/" .$this->recId . "/edit";
+
+        $this->urlEnd();
+        
+        $this->method = "PUT";
+        
+        foreach ($fields as $key => $value) {
+            $this->addPost($key,$value);
+        }
+        
+        $this->result = $this->execute();
+        return $this;
+    }
+    
+    public function create($eventsArray, $eventTypesArray){
+        foreach ($eventsArray as $event) {
+            if(!array_key_exists("startTime", $event))
+                throw new \Tymy\Exception\APIException('Start time not set!');
+            if(!array_key_exists("type", $event))
+                throw new \Tymy\Exception\APIException('Type not set!');
+            if(!array_key_exists($event["type"], $eventTypesArray))
+                throw new \Tymy\Exception\APIException('Unrecognized type!');
+        }
+        
+        $this->urlStart();
+
+        $this->fullUrl .= "events/create";
+        
+        $this->method = "POST";
+        
+        $this->addPost($eventsArray);
+        
+        $this->result = $this->execute();
+
+        return $this;
+    }
+    
     protected function postProcess() {
         $data = $this->getData();
         
