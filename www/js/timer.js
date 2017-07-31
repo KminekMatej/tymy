@@ -22,11 +22,12 @@ function homepageRefresh() {
         $("NAV UL.navbar-nav LI.nav-item.dropdown:first-child A.dropdown-item").each(function () {
             count = $(this).find("SPAN.badge").html();
             id = $(this).attr("id");
-            $("DIV.container.homepage DIV#" + id + ".name SPAN.badge").html(count);
+            var badge = $("DIV.container.homepage DIV#" + id + ".name SPAN.badge");
+            badge.html(count);
             if (count > 0) {
-                $("DIV.container.homepage DIV#" + id + ".name").removeClass("hidden-badge");
+                badge.removeClass("hidden-badge");
             } else {
-                $("DIV.container.homepage DIV#" + id + ".name").addClass("hidden-badge");
+                badge.addClass("hidden-badge");
             }
 
         });
