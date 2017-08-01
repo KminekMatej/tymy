@@ -1,6 +1,9 @@
+{block styles}
+{include parent}
+<link rel="stylesheet" href="{$basePath}/css/sign.up.css" />
+{/block}
+
 {block content}
-<h1 n:block=title>Sign Up</h1>
-
-{control signUpForm}
-
-<p><a n:href="in">Already have an account? Log in.</a></p>
+<div class="register">
+    {control signUpForm}
+</div>

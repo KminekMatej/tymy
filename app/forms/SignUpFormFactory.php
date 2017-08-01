@@ -38,22 +38,33 @@ class SignUpFormFactory
 	public function create(callable $onSuccess)
 	{
 		$form = $this->factory->create();
-		$form->addText('username', 'Pick a username:')
-			->setRequired('Please pick a username.')
+		$form->addText('username', 'Uživatelské jméno:')
+			->setRequired('Uživatelské jméno je povinné')
                         ->addRule($form::PATTERN, "Uživatelské jméno musí mít 3-20 znaků", self::LOGIN_PATTERN);
 
-		$form->addEmail('email', 'Your e-mail:')
-			->setRequired('Please enter your e-mail.');
-
-		$form->addPassword('password', 'Create a password:')
-			->setRequired('Please create a password.')
+                $form->addPassword('password', 'Heslo:')
+			->setRequired('Heslo je povinné')
                         ->addRule($form::PATTERN, "Heslo musí mít minimálně 3 znaky", self::PASSWORD_PATTERN);
+		
+                $form->addPassword('password_check', 'Heslo znovu:')
+			->setRequired('Vyplňte heslo pro kontrolu znovu')
+                        ->addConditionOn($form['password'], Form::VALID)
+                        ->addRule($form::EQUAL, "Hesla se neshodují", $form['password']);
+                
+                $form->addEmail('email', 'E-mail:')
+			->setRequired('E-mail je povinný')
+                        ->addRule($form::PATTERN, "E-mail je invalidní", self::EMAIL_PATTERN);
+
+                $form->addText('firstName', 'Křestní jméno:');
+                $form->addText('lastName', 'Příjmení:');
+
+		$form->addTextArea('admin_note', 'Vzkaz pro admina:');
 
 		$form->addSubmit('send', 'Registrovat');
 
 		$form->onSuccess[] = function (Form $form, $values) use ($onSuccess) {
 			try {
-				$this->tapiAuthenticator->add($values->username, $values->email, $values->password);
+				$this->tapiAuthenticator->add($values->username, $values->password, $values->email, $values->firstName, $values->lastName, $values->admin_note);
 			} catch (\Nette\InvalidArgumentException $exc) {
 				$form['username']->addError($exc->getMessage());
 				return;

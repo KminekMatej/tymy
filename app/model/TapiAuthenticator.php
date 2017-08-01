@@ -55,12 +55,16 @@ class TapiAuthenticator implements Nette\Security\IAuthenticator {
      * @return void
      * @throws \Nette\InvalidArgumentException
      */
-    public function add($user, $login, $password, $email) {
+    public function add($login, $password, $email, $firstName = NULL, $lastName = NULL, $adminNote = NULL) {
+        $register = new \Tymy\Register($this->supplier);
         try {
-            $user
+            $register
                     ->setLogin($login)
                     ->setPassword($password)
                     ->setEmail($email)
+                    ->setFirstName($firstName)
+                    ->setLastName($lastName)
+                    ->setAdmin_note($adminNote)
                     ->register();
         } catch (\Tymy\Exception\APIException $exc) {
             throw new \Nette\InvalidArgumentException($exc->getMessage(), self::FAILURE);
