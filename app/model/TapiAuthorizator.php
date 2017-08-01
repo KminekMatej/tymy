@@ -23,6 +23,17 @@ class TapiAuthorizator implements Nette\Security\IAuthorizator {
                 return $this->usersPrivileges($privilege);
             case "settings":
                 return $this->settingsPrivileges($privilege);
+            case "SYS":
+                return $this->sysPrivileges($privilege);
+            default:
+                return TapiAuthorizator::DENY;
+        }
+    }
+    
+    private function sysPrivileges($privilege){
+        switch ($privilege) {
+            case "EVE_UPDATE":
+                return in_array($this->role, ["ATT"]) ? TapiAuthorizator::ALLOW : TapiAuthorizator::DENY;
             default:
                 return TapiAuthorizator::DENY;
         }
