@@ -38,6 +38,16 @@
                 </div>
             </div>
 
+            <div class="card sh-box my-3" n:if="$user->isAllowed('SYS','EVE_UPDATE')">
+                <div class="card-header">
+                    <h4>Upravit akci</h4>
+                </div>
+
+                <div class="card-block">
+                    
+                </div>
+            </div>
+                        
             <div class="card sh-box my-3" n:snippet="attendanceTabs">
                 <div class="card-header">
                     <ul class="nav nav-tabs flex-column flex-sm-row card-header-tabs" role="tablist">
