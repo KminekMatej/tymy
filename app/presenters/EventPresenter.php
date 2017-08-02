@@ -22,7 +22,6 @@ class EventPresenter extends SecuredPresenter {
         
     public function startup() {
         parent::startup();
-        $this->getEventTypes();
         $this->setLevelCaptions(["1" => ["caption" => "Události", "link" => $this->link("Event:")]]);
 
         $this->template->addFilter('genderTranslate', function ($gender) {
@@ -46,7 +45,7 @@ class EventPresenter extends SecuredPresenter {
 
     public function renderDefault() {
         $this->events = $this->events->loadYearEvents(NULL, NULL);
-        $eventTypes = $this->getEventTypes();
+        $eventTypes = $this->eventTypes->getData();
         
         foreach ($this->events->eventsMonthly as $eventMonth) {
             foreach ($eventMonth as $event) {
@@ -91,7 +90,7 @@ class EventPresenter extends SecuredPresenter {
         }
         
         $event->allUsers = $attArray;
-        $eventTypes = $this->getEventTypes();
+        $eventTypes = $this->eventTypes->getData();
         $this->template->event = $event;
         $this->template->eventTypes = $eventTypes;
         $eventCaptions = $this->getEventCaptions($event, $eventTypes);

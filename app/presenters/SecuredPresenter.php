@@ -58,55 +58,7 @@ class SecuredPresenter extends BasePresenter {
             unset($this->levelCaptions[$index]);
         }
     }
-    
-    /**
-     * @todo Check if needed, then delete
-     * @param type $force
-     * @return type
-     */
-    protected function getEventTypes($force = FALSE){
-        $sessionSection = $this->getSession()->getSection("tymy");
         
-        if(isset($sessionSection["eventTypes"]) && !$force)
-            return $sessionSection["eventTypes"];
-        
-        $eventTypesResult = $this->eventTypes->getData();
-        
-        $eventTypes = [];
-        foreach ($eventTypesResult as $type) {
-            $eventTypes[$type->code] = $type;
-            $preStatusSet = [];
-            foreach ($type->preStatusSet as $preSS) {
-                $preStatusSet[$preSS->code] = $preSS;
-            }
-            $eventTypes[$type->code]->preStatusSet = $preStatusSet;
-            
-            $postStatusSet = [];
-            foreach ($type->postStatusSet as $postSS) {
-                $postStatusSet[$postSS->code] = $postSS;
-            }
-            $eventTypes[$type->code]->postStatusSet = $postStatusSet;
-        }
-        $sessionSection["eventTypes"] = $eventTypes;
-        return $eventTypes;
-    }
-    
-    /**
-     * @todo Check if needed, then delete
-     * @param type $force
-     * @return type
-     */
-    public function getUsers($force = FALSE){
-        $sessionSection = $this->getSession()->getSection("tymy");
-        if(isset($sessionSection["users"]) && !$force)
-            return $sessionSection["users"];
-        $this->users->getData();
-        \Tracy\Debugger::barDump($this->users->getResult());
-        $sessionSection["users"] = $this->users->getResult();
-        $sessionSection["me"] = $this->users->getResult()->me;
-        return $this->users->getResult();
-    }
-
     protected function startup() {
         parent::startup();
         if (!$this->getUser()->isLoggedIn()) {
