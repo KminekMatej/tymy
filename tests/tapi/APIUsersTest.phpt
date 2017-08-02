@@ -42,7 +42,7 @@ class APIUsersTest extends ITapiTest{
 
     function testSelectNotLoggedInFails404() {
         $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
-        Assert::exception(function(){$this->users->reset()->getResult(TRUE);} , "Nette\Security\AuthenticationException", "Login failed.");
+        Assert::exception(function(){$this->users->reset()->getResult(TRUE);} , "\Tymy\Exception\APIException", "Login failed. Wrong username or password.");
     }
         
     function testSelectSuccess() {
@@ -88,7 +88,7 @@ class APIUsersTest extends ITapiTest{
             Assert::type("int",$u->nameDayMonth);
             Assert::type("int",$u->nameDayDay);
             Assert::type("string",$u->pictureUrl);
-            Assert::type("string",$u->fullName);
+            if(property_exists($u, "fullName")) Assert::type("string",$u->fullName);
             Assert::type("string",$u->displayName);
             Assert::type("string",$u->webName);
             Assert::type("int",$u->errCnt);
