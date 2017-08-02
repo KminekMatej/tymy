@@ -41,7 +41,7 @@ class NavbarControl extends Control {
     }
     
     private function discussions(){
-        $discussionsResult = $this->discussions->getResult(!$this->discussions->getWithNew()); // if loaded discussions are not with withNew param, load them again
+        $discussionsResult = $this->discussions->reset()->setWithNew(true)->getResult();
         $this->template->discussionWarnings = $discussionsResult->menuWarningCount;
         $this->template->discussions = (object)$this->discussions->getData();
     }
@@ -54,12 +54,13 @@ class NavbarControl extends Control {
     }
     
     private function polls(){
-        $this->template->voteWarnings = $this->polls->getResult()->menuWarningCount;
+        $this->template->voteWarnings = $this->polls->reset()->getResult()->menuWarningCount;
         $this->template->polls = (object)$this->polls->getData();
     }
     
     private function events(){
         $this->events
+                ->reset()
                 ->setWithMyAttendance(true)
                 ->setFrom(date("Ymd"))
                 ->setTo(date("Ymd", strtotime(" + 1 month")))
