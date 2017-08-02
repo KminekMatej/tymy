@@ -41,22 +41,6 @@ final class Login extends Tymy{
         return $this;
     }
     
-    public function fetch() {
-        $this->urlStart();
-
-        $this->select();
-
-        $this->urlEnd();
-        
-        $this->result = $this->execute();
-
-        $data = $this->getData();
-
-        $this->postProcess();
-        
-        return $data;
-    }
-
     protected function postProcess(){
         $data = $this->getData();
         $this->timezone($data->lastLogin);
