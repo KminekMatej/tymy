@@ -13,7 +13,7 @@
                 <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-comments" aria-hidden="true"></i> Diskuze</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     {foreach $discussions as $d}
-                        <a class="dropdown-item" href="{plink Discussion:discussion $d->webName}" id="{$d->id}">
+                        <a class="dropdown-item" href="{plink Discussion:discussion $d->webName}" id="discussion-{$d->id}">
                             {if $discussionWarnings > 0}<span class="badge badge-primary" {if $d->newPosts == 0}style="visibility: hidden"{/if}>{$d->newPosts}</span>{/if}
                             {$d->caption}
                         </a>

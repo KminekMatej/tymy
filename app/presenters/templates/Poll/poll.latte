@@ -61,7 +61,7 @@
                     <div class="container">
                         <div class="row">
                             {foreach $poll->options as $opt}
-                                <div class="col-3 py-3 option" id="{$opt->id}">
+                                <div class="col-3 py-3 option" id="option-{$opt->id}">
                                     <h5 n:if="!$poll->radio">{$opt->caption}</h5>
                                     {if $opt->type == 'TEXT'}
                                         <input type="text" value="{ifset $poll->myVotes[$opt->id]}{$poll->myVotes[$opt->id]->stringValue}{/ifset}" class="form-control" />

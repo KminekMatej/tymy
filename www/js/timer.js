@@ -21,7 +21,7 @@ function homepageRefresh() {
     if ($("DIV.container.homepage")) {
         $("NAV UL.navbar-nav LI.nav-item.dropdown:first-child A.dropdown-item").each(function () {
             count = $(this).find("SPAN.badge").html();
-            id = $(this).attr("id");
+            id = $(this).attr("id").replace("discussion-","discussion-pane-");
             var badge = $("DIV.container.homepage DIV#" + id + ".name SPAN.badge");
             badge.html(count);
             if (count > 0) {

@@ -17,7 +17,7 @@ function copyPost(elm) {
 }
 
 function loadPost(postId) {
-    var text = $("#content_" + postId).html();
+    var text = $("#post-" + postId).html();
     $("DIV.addPost").attr("data-postId",postId);
     CKEDITOR.instances.addPost.setData(text);
     smoothScroll('addPost');

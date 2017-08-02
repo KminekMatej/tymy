@@ -8,7 +8,7 @@ function updatePoll(btn, purl) {
     var values = {};
     var voteCount = 0;
     $("DIV.poll DIV.option").each(function (){
-        var optId = parseInt($(this).attr("id"));
+        var optId = parseInt($(this).attr("id").replace("option-",""));
         if($(this).find("INPUT").attr("type") == "text"){
             //option is text
             value = $(this).find("INPUT").val();
