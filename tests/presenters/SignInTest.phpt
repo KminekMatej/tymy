@@ -37,7 +37,7 @@ class SignInTest extends IPresenterTest {
     }
     
     /**
-     * @throws Nette\Security\AuthenticationException Login failed.
+     * @throws Tymy\Exception\APIAuthenticationException Login failed. Wrong username or password.
      */
     function testSignInFails(){
         $this->userTapiAuthenticate("Beatles","Ladyda");

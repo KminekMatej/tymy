@@ -42,7 +42,7 @@ class APIEventTypesTest extends ITapiTest {
 
     function testFetchNotLoggedInFails404() {
         $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
-        Assert::exception(function(){$this->eventTypes->getResult(TRUE);} , "Nette\Security\AuthenticationException", "Login failed.");
+        Assert::exception(function(){$this->eventTypes->getResult(TRUE);} , "\Tymy\Exception\APIException", "Login failed. Wrong username or password.");
     }
         
     function testSelectSuccess() {

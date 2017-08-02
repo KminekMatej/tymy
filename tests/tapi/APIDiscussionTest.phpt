@@ -63,7 +63,7 @@ class APIDiscussionTest extends ITapiTest {
 
     function testSelectNotLoggedInFails404() {
         $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
-        Assert::exception(function(){$this->discussion->reset()->recId(1)->setPage(1)->getResult(TRUE);} , "Nette\Security\AuthenticationException", "Login failed.");
+        Assert::exception(function(){$this->discussion->reset()->recId(1)->setPage(1)->getResult(TRUE);} , "\Tymy\Exception\APIException", "Login failed. Wrong username or password.");
     }
         
     function testSelectSuccess() {

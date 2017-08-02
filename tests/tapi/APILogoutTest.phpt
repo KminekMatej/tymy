@@ -46,7 +46,7 @@ class APILogoutTest extends ITapiTest {
 
     function testLogoutNotLoggedInFails401() {
         $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
-        Assert::exception(function(){$this->logout->logout();} , "Nette\Security\AuthenticationException", "Login failed.");
+        Assert::exception(function(){$this->logout->logout();} , "\Tymy\Exception\APIException", "Login failed. Wrong username or password.");
     }
     
     function testLogoutSuccess() {

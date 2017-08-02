@@ -48,7 +48,7 @@ class APIEventTest extends ITapiTest {
 
     function testFetchNotLoggedInFails404() {
         $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
-        Assert::exception(function(){$this->event->reset()->recId(1)->getResult(TRUE);} , "Nette\Security\AuthenticationException", "Login failed.");
+        Assert::exception(function(){$this->event->reset()->recId(1)->getResult(TRUE);} , "\Tymy\Exception\APIException", "Login failed. Wrong username or password.");
     }
 
     function testSelectSuccess() {

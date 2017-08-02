@@ -76,7 +76,7 @@ class APIAttendanceTest extends ITapiTest {
     
     function testPlanNotLoggedInFails404() {
         $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
-        Assert::exception(function(){$this->attendance->reset()->recId($GLOBALS["testedTeam"]["testEventId"])->setPreStatus("YES")->plan();} , "Nette\Security\AuthenticationException", "Login failed.");
+        Assert::exception(function(){$this->attendance->reset()->recId($GLOBALS["testedTeam"]["testEventId"])->setPreStatus("YES")->plan();} , "\Tymy\Exception\APIException", "Login failed. Wrong username or password.");
     }
     
     function testPlanRelogin() {
