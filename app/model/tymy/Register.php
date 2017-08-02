@@ -14,7 +14,7 @@ final class Register extends Tymy{
     const TAPI_NAME = "users/register";
     const TSID_REQUIRED = FALSE;
     
-    private $username;
+    private $login;
     private $password;
     private $email;
     private $firstName;
@@ -26,8 +26,8 @@ final class Register extends Tymy{
         $this->initTapiDebugPanel();
     }
     
-    public function setUsername($username) {
-        $this->username = $username;
+    public function setLogin($login) {
+        $this->login = $login;
         return $this;
     }
     

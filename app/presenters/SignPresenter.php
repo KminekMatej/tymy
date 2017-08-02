@@ -35,7 +35,8 @@ class SignPresenter extends BasePresenter {
      */
     protected function createComponentSignUpForm() {
         return $this->signUpFactory->create(function () {
-                    $this->redirect('Homepage:');
+                    $this->flashMessage('Succesfully registered. Now you need to wait for administrator approval.', 'success');
+                    $this->redirect('Sign:In');
                 });
     }
 

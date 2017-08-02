@@ -28,6 +28,12 @@ div.flash {
 	margin: 1em 0;
 }
 
+div.flash.success{
+    background: #dff0d8;
+    border-color: #d0e9c6;
+    color: #3c763d;
+}
+
 a[href^="#error:"] {
 	background: red;
 	color: white;
