@@ -191,23 +191,31 @@ abstract class Tymy extends Nette\Object{
         return $this->result;
     }
     
+    /**
+     * @param bool $relogin TRUE if after unsuccesfull request should be performed relogin to obtain new TSID
+     * @return object containing the response
+     * @throws \Tymy\Exception\APIException when something goes wrong
+     */
     protected function execute($relogin = TRUE) {
         $contents = $this->request($this->fullUrl);
         if ($contents->status) {
             switch ($contents->curlInfo["http_code"]) {
-                case 401: // unauthorized, try to refresh
-                    return $this->loginFailure($relogin);
-                case 400: // bad request, throw error
-                    throw new \Tymy\Exception\APIException("Request vrátil chybový stav ERROR 400, BAD REQUEST");
-                case 500: // error 500 can display when logging out on unlogged account, so this is temporary solution
-                    throw new \Tymy\Exception\APIException("Nastala neošetřená výjimka ve funkci Tymy->execute(). Prosím kontaktujte vývojáře.");
                 case 200: // api request loaded succesfully
                     return $this->apiResponse(Json::decode($contents->result), $relogin);
+                case 401: // unauthorized, try to refresh
+                    return $this->loginFailure($relogin);
+                case 403: // forbidden, return the error message
+                    $forbidden = Json::decode($contents->result);
+                    throw new \Tymy\Exception\APIException($forbidden->statusMessage);
+                case 400: // bad request, throw error
+                    throw new \Tymy\Exception\APIException("Failure: 400 Bad Request");
+                case 500: // error 500 can display when logging out on unlogged account, so this is temporary solution
+                    throw new \Tymy\Exception\APIException("Failure: 500 Internal Server Error");
                 default:
-                    throw new \Tymy\Exception\APIException("Request vrátil chybový stav ".$contents->curlInfo["http_code"]);
+                    throw new \Tymy\Exception\APIException("Failure: ".$contents->curlInfo["http_code"]." Unknown error");
             }
         } else {
-            throw new \Tymy\Exception\APIException("Nastala neošetřená výjimka ve funkci Tymy->execute(). Prosím kontaktujte vývojáře.");
+            throw new \Tymy\Exception\APIException("TAPI query failed for unknown reason");
         }
     }
     
@@ -236,7 +244,7 @@ abstract class Tymy extends Nette\Object{
             $this->urlEnd();
             return $this->execute(FALSE);
         } else {
-            throw new \Tymy\Exception\APIAuthenticationException("API request " . $this->fullUrl . " retuned error 401 - Not logged in");
+            throw new \Tymy\Exception\APIAuthenticationException("Login failed. Wrong username or password.");
         }
     }
 
@@ -263,6 +271,7 @@ abstract class Tymy extends Nette\Object{
         $output->status = $result === FALSE ? FALSE : TRUE;
         $output->result = $result;
         $output->curlInfo = curl_getinfo ($ch);
+        $output->curlError = curl_error ($ch);
         curl_close($ch);
         $this->tymyPanel->logAPI("TAPI request", $this->fullUrl, \Tracy\Debugger::timer("tapi-request" . spl_object_hash($this)));
         return $output;

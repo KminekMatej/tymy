@@ -33,15 +33,9 @@ class TapiAuthenticator implements Nette\Security\IAuthenticator {
     public function reAuthenticate(array $credentials){
         list($username, $password) = $credentials;
         $login = new \Tymy\Login($this->supplier);
-        try {
-            $login
-                    ->setUsername($username)
-                    ->setPassword($password)
-                    ->fetch();
-        } catch (\Tymy\Exception\APIException $exc) {
-            throw new Nette\Security\AuthenticationException('Login failed.', self::INVALID_CREDENTIAL);
-        }
-
+        $login  ->setUsername($username)
+                ->setPassword($password)
+                ->fetch();
         return $login;
     }
     

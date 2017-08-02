@@ -72,8 +72,8 @@ class SignInFormFactory {
             try {
                 $this->user->setExpiration('20 minutes');
                 $this->user->login($values->name, $values->password);
-            } catch (Nette\Security\AuthenticationException $e) {
-                $form->addError('The username or password you entered is incorrect.');
+            } catch (\Tymy\Exception\APIException $ex){
+                $form->addError($ex->getMessage());
                 return;
             }
             $onSuccess();
