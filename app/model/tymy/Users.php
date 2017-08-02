@@ -54,8 +54,11 @@ final class Users extends UserInterface{
             $counts["ALL"]++;
             $counts[$player->status]++;
             if(!property_exists($player, "gender")) $player->gender = "UNKNOWN"; //set default value
+            if(!property_exists($player, "language")) $player->language = "CZ"; //set default value
+            if(!property_exists($player, "canEditCallName")) $player->canEditCallName = true; //set default value
             
-            $player->webName = Strings::webalize($player->id . "-" . $player->fullName);
+            $player->webName = (string)$player->id;
+            if(property_exists($player, "fullName")) $player->webName .= "-" . Strings::webalize($player->fullName);
             $this->userWarnings($player);
             $this->userPermissions($player);
             $players[$player->id] = $player;
