@@ -107,11 +107,7 @@ final class Register extends Tymy{
                 ->addTo('petr@example.com')
                 ->setHtmlBody($latte->renderToString('email.latte', $params));
     }
-    
-    public function fetch() {
-        return $this;
-    }
-    
+        
     public function select() {
         return $this;
     }
