@@ -135,13 +135,7 @@ abstract class Tymy extends Nette\Object{
 
         $this->urlEnd();
         
-        try {
-            $this->result = $this->execute();
-        } catch (\Tymy\Exception\APIAuthenticationException $exc) {
-            $this->user->logout(true);
-            $this->presenter->flashMessage('You have been signed out due to inactivity. Please sign in again.');
-            $this->presenter->redirect('Sign:in', ['backlink' => $this->presenter->storeRequest()]);
-        }
+        $this->result = $this->execute();
         
         $data = $this->getData();
 
