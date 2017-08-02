@@ -35,7 +35,7 @@ class TapiAuthenticator implements Nette\Security\IAuthenticator {
         $login = new \Tymy\Login($this->supplier);
         $login  ->setUsername($username)
                 ->setPassword($password)
-                ->fetch();
+                ->getData();
         return $login;
     }
     

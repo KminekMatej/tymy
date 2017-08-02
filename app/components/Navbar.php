@@ -64,7 +64,7 @@ class NavbarControl extends Control {
                 ->setFrom(date("Ymd"))
                 ->setTo(date("Ymd", strtotime(" + 1 month")))
                 ->setOrder("startTime")
-                ->fetch();
+                ->getData();
         $this->template->eventWarnings = $this->events->getResult()->menuWarningCount;
         $this->template->events = (object)$this->events->getData();
     }

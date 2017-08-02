@@ -59,13 +59,18 @@ class SecuredPresenter extends BasePresenter {
         }
     }
     
+    /**
+     * @todo Check if needed, then delete
+     * @param type $force
+     * @return type
+     */
     protected function getEventTypes($force = FALSE){
         $sessionSection = $this->getSession()->getSection("tymy");
         
         if(isset($sessionSection["eventTypes"]) && !$force)
             return $sessionSection["eventTypes"];
         
-        $eventTypesResult = $this->eventTypes->fetch();
+        $eventTypesResult = $this->eventTypes->getData();
         
         $eventTypes = [];
         foreach ($eventTypesResult as $type) {
@@ -86,11 +91,16 @@ class SecuredPresenter extends BasePresenter {
         return $eventTypes;
     }
     
+    /**
+     * @todo Check if needed, then delete
+     * @param type $force
+     * @return type
+     */
     public function getUsers($force = FALSE){
         $sessionSection = $this->getSession()->getSection("tymy");
         if(isset($sessionSection["users"]) && !$force)
             return $sessionSection["users"];
-        $this->users->fetch();
+        $this->users->getData();
         \Tracy\Debugger::barDump($this->users->getResult());
         $sessionSection["users"] = $this->users->getResult();
         $sessionSection["me"] = $this->users->getResult()->me;

@@ -30,7 +30,7 @@ class DiscussionPresenter extends SecuredPresenter {
     }
 
     public function renderDefault() {
-        $this->template->discussions = $this->discussions->setWithNew(true)->fetch();
+        $this->template->discussions = $this->discussions->setWithNew(true)->getData();
     }
     
     public function actionNewPost($discussion){

@@ -39,7 +39,7 @@ class HomepagePresenter extends SecuredPresenter {
         $events = $this->events
                 ->loadYearEvents(NULL, NULL);
         
-        $this->template->discussions = $this->discussions->setWithNew(true)->fetch();
+        $this->template->discussions = $this->discussions->setWithNew(true)->getData();
         $this->template->currY = date("Y");
         $this->template->currM = date("m");
         $this->template->evMonths = $events->eventsMonthly;
