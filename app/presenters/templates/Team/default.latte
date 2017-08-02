@@ -21,7 +21,7 @@
                                 <img class="user_pic" src="{$tymyRoot}/{$u->pictureUrl}" />
                             </div>
                             <div class="col-9">
-                                <p class="card-text"><strong>{$u->fullName}</strong></p>
+                                <p class="card-text"><strong n:if="property_exists($u, 'fullName')">{$u->fullName}</strong></p>
                             </div>
                         </div>
                         <a href="{plink Team:player $u->webName}" class="btn btn-secondary btn-sm user" role="button" aria-pressed="true"><i class="fa fa-eye" aria-hidden="true"></i></a>
