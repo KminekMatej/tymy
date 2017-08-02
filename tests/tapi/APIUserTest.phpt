@@ -36,42 +36,6 @@ class APIUserTest extends ITapiTest {
     
     /* TEST GETTERS AND SETTERS */ 
     
-    function testLogin(){
-        $field = "test" . md5(rand(0,100));
-        $this->tapi_user->setLogin($field);
-        Assert::equal($field, $this->tapi_user->getLogin());
-    }
-    
-    function testPassword(){
-        $field = "test" . md5(rand(0,100));
-        $this->tapi_user->setPassword($field);
-        Assert::equal($field, $this->tapi_user->getPassword());
-    }
-    
-    function testEmail(){
-        $field = "test" . md5(rand(0,100));
-        $this->tapi_user->setEmail($field);
-        Assert::equal($field, $this->tapi_user->getEmail());
-    }
-    
-    function testFirstname(){
-        $field = "test" . md5(rand(0,100));
-        $this->tapi_user->setFirstName($field);
-        Assert::equal($field, $this->tapi_user->getFirstName());
-    }
-    
-    function testLastname(){
-        $field = "test" . md5(rand(0,100));
-        $this->tapi_user->setLastName($field);
-        Assert::equal($field, $this->tapi_user->getLastName());
-    }
-    
-    function testAdminNote(){
-        $field = "test" . md5(rand(0,100));
-        $this->tapi_user->setAdminNote($field);
-        Assert::equal($field, $this->tapi_user->getAdminNote());
-    }
-    
     /* TEST TAPI FUNCTIONS */ 
     
     /* TAPI : SELECT */
@@ -83,7 +47,7 @@ class APIUserTest extends ITapiTest {
     
     function testSelectNotLoggedInFails404() {
         $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
-        Assert::exception(function(){$this->tapi_user->reset()->recId(1)->getResult(TRUE);} , "Nette\Security\AuthenticationException", "Login failed.");
+        Assert::exception(function(){$this->tapi_user->reset()->recId(1)->getResult(TRUE);} , "\Tymy\Exception\APIException", "Login failed. Wrong username or password.");
     }
         
     function testSelectSuccess() {
@@ -138,7 +102,7 @@ class APIUserTest extends ITapiTest {
     }
 
     /* TAPI : REGISTER */
-    
+    /*
     
     function testRegisterFailsNoLogin(){
         Assert::exception(function(){$this->tapi_user->reset()->register();} , "\Tymy\Exception\APIException", "Login not set!");
@@ -163,7 +127,7 @@ class APIUserTest extends ITapiTest {
         Assert::true(is_object($this->tapi_user->result));
         Assert::type("string",$this->tapi_user->result->status);
         Assert::same("OK",$this->tapi_user->result->status);
-    }
+    }*/
 }
 
 $test = new APIUserTest($container);
