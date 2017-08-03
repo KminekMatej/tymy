@@ -11,7 +11,7 @@
     <div class="row justify-content-md-center">
         <div class="col-md-10">
             <div class="addPost" data-postId>
-                    <form action="http://tymy.klubpivovarek.cz{plink Discussion:discussion $discussion->discussion->webName}" method="GET" class="form-inline">
+                    <form action="{plink Discussion:discussion $discussion->discussion->webName}" method="GET" class="form-inline">
                         <input class="form-control mr-sm-2" type="text" name="search" placeholder="Zadejte hledaný text...">
                         <input type="submit" value="Hledat" class="form-control btn btn-outline-success mr-auto">
                         <button onclick="updatePost({plink Discussion:editpost $discussion->discussion->id})" type="button" class="btn btn-warning mx-1" id="editPost">Upravit</button>    
