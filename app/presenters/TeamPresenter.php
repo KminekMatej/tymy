@@ -47,7 +47,7 @@ class TeamPresenter extends SecuredPresenter {
     public function renderDefault() {
         try {
             $this->template->users = $this->users->reset()->setUserType($this->userType)->getData();
-        } catch (Tymy\Exception\APIException $ex) {
+        } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
     }
@@ -58,7 +58,7 @@ class TeamPresenter extends SecuredPresenter {
                     ->reset()
                     ->recId($this->parseIdFromWebname($player))
                     ->getData();
-        } catch (Tymy\Exception\APIException $ex) {
+        } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
 
@@ -106,7 +106,7 @@ class TeamPresenter extends SecuredPresenter {
             $this->user
                 ->recId($playerId)
                 ->edit($post);
-        } catch (Tymy\Exception\APIException $ex) {
+        } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
     }
@@ -119,7 +119,7 @@ class TeamPresenter extends SecuredPresenter {
             $this->user
                     ->recId($playerId)
                     ->edit($post);
-        } catch (Tymy\Exception\APIException $ex) {
+        } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
         $this->flashMessage("Uživatel byl úspešně smazán", "success");

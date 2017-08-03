@@ -87,8 +87,9 @@ class SecuredPresenter extends BasePresenter {
             return intval($webName);
     }
     
-    protected function handleTapiException($ex){
-        //TODO show message and redirect to default presenter
+    protected function handleTapiException(\Tymy\Exception\APIException $ex){
+        $this->flashMessage("Došlo k nečekané chybě: " . $ex->getMessage());
+        $this->redirect($this->getName() . ":default");
     }
     
 }

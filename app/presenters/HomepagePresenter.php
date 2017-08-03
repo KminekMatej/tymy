@@ -40,7 +40,7 @@ class HomepagePresenter extends SecuredPresenter {
             $events = $this->events->loadYearEvents(NULL, NULL);
             $this->template->discussions = $this->discussions->setWithNew(true)->getData();
             $this->template->users = $this->sortUsersByLastLogin($this->users->getData());
-        } catch (Tymy\Exception\APIException $ex) {
+        } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
 

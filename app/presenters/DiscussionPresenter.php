@@ -32,7 +32,7 @@ class DiscussionPresenter extends SecuredPresenter {
     public function renderDefault() {
         try{
             $this->template->discussions = $this->discussions->setWithNew(true)->getData();
-        } catch (Tymy\Exception\APIException $ex){
+        } catch (\Tymy\Exception\APIException $ex){
             $this->handleTapiException($ex);
         }
     }
@@ -44,7 +44,7 @@ class DiscussionPresenter extends SecuredPresenter {
                 $this->discussion
                         ->recId($discussion)
                         ->insert($post);
-            } catch (Tymy\Exception\APIException $ex) {
+            } catch (\Tymy\Exception\APIException $ex) {
                 $this->handleTapiException($ex);
             }
         }
@@ -59,7 +59,7 @@ class DiscussionPresenter extends SecuredPresenter {
             $this->discussion
                     ->recId($discussion)
                     ->editPost($postId, $text, $sticky);
-        } catch (Tymy\Exception\APIException $ex) {
+        } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
         $this->setView('discussion');
@@ -72,7 +72,7 @@ class DiscussionPresenter extends SecuredPresenter {
             $this->discussion
                     ->recId($discussion)
                     ->editPost($postId, NULL, $sticky);
-        } catch (Tymy\Exception\APIException $ex) {
+        } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
         $this->setView('discussion');
@@ -83,7 +83,7 @@ class DiscussionPresenter extends SecuredPresenter {
         if (!$discussionId = intval($discussion)) {
             try {
                 $discussions = $this->discussions->getData();
-            } catch (Tymy\Exception\APIException $ex) {
+            } catch (\Tymy\Exception\APIException $ex) {
                 $this->handleTapiException($ex);
             }
 
@@ -107,7 +107,7 @@ class DiscussionPresenter extends SecuredPresenter {
         try {
             $data = $this->discussion->getData();
             $this->template->users = $this->users->getData();
-        } catch (Tymy\Exception\APIException $ex) {
+        } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
         

@@ -46,7 +46,7 @@ class EventPresenter extends SecuredPresenter {
         try {
             $this->events = $this->events->loadYearEvents(NULL, NULL);
             $eventTypes = $this->eventTypes->getData();
-        } catch (Tymy\Exception\APIException $ex) {
+        } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
 
@@ -76,7 +76,7 @@ class EventPresenter extends SecuredPresenter {
                     ->getData();
             $eventTypes = $this->eventTypes->getData();
             $users = $this->users->getResult();
-        } catch (Tymy\Exception\APIException $ex) {
+        } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
         
@@ -114,7 +114,7 @@ class EventPresenter extends SecuredPresenter {
                     ->setPreStatus($code)
                     ->setPreDescription($desc)
                     ->plan();
-        } catch (Tymy\Exception\APIException $ex) {
+        } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
         if ($this->isAjax()) {
@@ -127,7 +127,7 @@ class EventPresenter extends SecuredPresenter {
         if ($this->isAjax()) {
             try {
                 $this->events->loadYearEvents($date, $direction);
-            } catch (Tymy\Exception\APIException $ex) {
+            } catch (\Tymy\Exception\APIException $ex) {
                 $this->handleTapiException($ex);
             }
 

@@ -30,7 +30,7 @@ class PollPresenter extends SecuredPresenter {
                 ->recId($this->parseIdFromWebname($anketa))
                 ->getData();
         $this->template->users = $this->users->getResult();
-        } catch (Tymy\Exception\APIException $ex) {
+        } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
 
@@ -50,7 +50,7 @@ class PollPresenter extends SecuredPresenter {
         $this->redrawControl("poll-results");
         try {
             $this->poll->recId($pollId)->vote($votes);
-        } catch (Tymy\Exception\APIException $ex) {
+        } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
     }
