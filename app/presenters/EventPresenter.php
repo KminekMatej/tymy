@@ -8,24 +8,23 @@ use Nette\Application\UI\Form;
 use Nette\Utils\Strings;
 
 class EventPresenter extends SecuredPresenter {
-        
+
     /** @var \Tymy\Event @inject */
     public $event;
-    
+
     /** @var \Tymy\Attendance @inject */
     public $attendance;
-    
     private $eventsFrom;
     private $eventsTo;
     private $eventsJSObject;
     private $eventsMonthly;
-        
+
     public function startup() {
         parent::startup();
         $this->setLevelCaptions(["1" => ["caption" => "Události", "link" => $this->link("Event:")]]);
 
         $this->template->addFilter('genderTranslate', function ($gender) {
-            switch($gender){
+            switch ($gender) {
                 case "MALE": return "Muži";
                 case "FEMALE": return "Ženy";
                 case "UNKNOWN": return "Nezadáno";
@@ -34,19 +33,24 @@ class EventPresenter extends SecuredPresenter {
 
         $this->template->addFilter("prestatusClass", function ($myPreStatus, $myPostStatus, $btn, $startTime) {
             $color = $this->supplier->getStatusClass($btn);
-            if(strtotime($startTime) > strtotime(date("c")))// pokud podminka plati, akce je budouci
+            if (strtotime($startTime) > strtotime(date("c")))// pokud podminka plati, akce je budouci
                 return $btn == $myPreStatus ? "btn-outline-$color active" : "btn-outline-$color";
-            else if($myPostStatus == "not-set") // akce uz byla, post status nevyplnen
+            else if ($myPostStatus == "not-set") // akce uz byla, post status nevyplnen
                 return $btn == $myPreStatus && $myPreStatus != "not-set" ? "btn-outline-$color disabled active" : "btn-outline-secondary disabled";
-            else 
+            else
                 return $btn == $myPostStatus && $myPostStatus != "not-set" ? "btn-outline-$color disabled active" : "btn-outline-secondary disabled";
         });
     }
 
     public function renderDefault() {
-        $this->events = $this->events->loadYearEvents(NULL, NULL);
-        $eventTypes = $this->eventTypes->getData();
-        
+        try {
+            $this->events = $this->events->loadYearEvents(NULL, NULL);
+            $eventTypes = $this->eventTypes->getData();
+        } catch (Tymy\Exception\APIException $ex) {
+            $this->handleTapiException($ex);
+        }
+
+
         foreach ($this->events->eventsMonthly as $eventMonth) {
             foreach ($eventMonth as $event) {
                 $eventCaptions = $this->getEventCaptions($event, $eventTypes);
@@ -62,17 +66,22 @@ class EventPresenter extends SecuredPresenter {
         $this->template->events = $this->events->eventsJSObject;
         $this->template->eventTypes = $eventTypes;
     }
-    
+
     public function renderEvent($udalost) {
-        $event = $this->event
-                ->reset()
-                ->recId($this->parseIdFromWebname($udalost))
-                ->getData(TRUE);
+        
+        try {
+            $event = $this->event
+                    ->reset()
+                    ->recId($this->parseIdFromWebname($udalost))
+                    ->getData();
+            $eventTypes = $this->eventTypes->getData();
+            $users = $this->users->getResult();
+        } catch (Tymy\Exception\APIException $ex) {
+            $this->handleTapiException($ex);
+        }
         
         $this->setLevelCaptions(["2" => ["caption" => $event->caption, "link" => $this->link("Event:event", $event->id . "-" . $event->webName)]]);
 
-        $users = $this->users->getResult();
-        
         //array keys are pre-set for sorting purposes
         $attArray = [];
         $attArray["YES"] = NULL;
@@ -80,45 +89,54 @@ class EventPresenter extends SecuredPresenter {
         $attArray["DKY"] = NULL;
         $attArray["NO"] = NULL;
         $attArray["UNKNOWN"] = NULL;
-        
+
         foreach ($event->attendance as $attendee) {
             $user = $users->data[$attendee->userId];
-            if($user->status != "PLAYER") continue; // display only players on event detail
+            if ($user->status != "PLAYER")
+                continue; // display only players on event detail
             $gender = $user->gender;
             $user->preDescription = $attendee->preDescription;
-            $attArray[$attendee->preStatus][$gender][$attendee->userId]=$user;
+            $attArray[$attendee->preStatus][$gender][$attendee->userId] = $user;
         }
-        
+
         $event->allUsers = $attArray;
-        $eventTypes = $this->eventTypes->getData();
         $this->template->event = $event;
         $this->template->eventTypes = $eventTypes;
         $eventCaptions = $this->getEventCaptions($event, $eventTypes);
         $this->template->myPreStatusCaption = $eventCaptions["myPreStatusCaption"];
         $this->template->myPostStatusCaption = $eventCaptions["myPostStatusCaption"];
     }
-    
-    public function handleAttendance($id, $code, $desc){
-        $this->attendance
-            ->recId($id)
-            ->setPreStatus($code)
-            ->setPreDescription($desc)
-            ->plan();
+
+    public function handleAttendance($id, $code, $desc) {
+        try {
+            $this->attendance
+                    ->recId($id)
+                    ->setPreStatus($code)
+                    ->setPreDescription($desc)
+                    ->plan();
+        } catch (Tymy\Exception\APIException $ex) {
+            $this->handleTapiException($ex);
+        }
         if ($this->isAjax()) {
             $this->redrawControl("attendanceWarning");
             $this->redrawControl("attendanceTabs");
         }
     }
-    
+
     public function handleEventLoad($date = NULL, $direction = NULL) {
         if ($this->isAjax()) {
-            $this->events->loadYearEvents($date, $direction);
+            try {
+                $this->events->loadYearEvents($date, $direction);
+            } catch (Tymy\Exception\APIException $ex) {
+                $this->handleTapiException($ex);
+            }
+
             $this->payload->events = $this->events->eventsJSObject;
             $this->redrawControl("events");
         }
     }
-    
-    private function getEventCaptions($event, $eventTypes){
+
+    private function getEventCaptions($event, $eventTypes) {
         return [
             "myPreStatusCaption" => $event->myAttendance->preStatus == "UNKNOWN" ? "not-set" : $eventTypes[$event->type]->preStatusSet[$event->myAttendance->preStatus]->code,
             "myPostStatusCaption" => $event->myAttendance->postStatus == "UNKNOWN" ? "not-set" : $eventTypes[$event->type]->postStatusSet[$event->myAttendance->postStatus]->code,

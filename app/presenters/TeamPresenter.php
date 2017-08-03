@@ -45,55 +45,85 @@ class TeamPresenter extends SecuredPresenter {
     }
     
     public function renderDefault() {
-        $this->template->users = $this->users->reset()->setUserType($this->userType)->getData();
+        try {
+            $this->template->users = $this->users->reset()->setUserType($this->userType)->getData();
+        } catch (Tymy\Exception\APIException $ex) {
+            $this->handleTapiException($ex);
+        }
     }
-    
+
     public function renderPlayer($player) {
-        $user = $this->user
-                ->reset()
-                ->recId($this->parseIdFromWebname($player))
-                ->getData();
-        
-        $this->setLevelCaptions(["2" => ["caption" => $user->callName, "link" => $this->link("Team:player", $user->webName) ] ]);
-        
+        try {
+            $user = $this->user
+                    ->reset()
+                    ->recId($this->parseIdFromWebname($player))
+                    ->getData();
+        } catch (Tymy\Exception\APIException $ex) {
+            $this->handleTapiException($ex);
+        }
+
+
+        $this->setLevelCaptions(["2" => ["caption" => $user->callName, "link" => $this->link("Team:player", $user->webName)]]);
+
         //set default values to avoid latte exceptions
-        if(!isset($user->firstName)) $user->firstName = "";
-        if(!isset($user->lastName)) $user->lastName = "";
-        if(!isset($user->login)) $user->login = "";
-        if(!isset($user->callName)) $user->callName = "";
-        if(!isset($user->jerseyNumber)) $user->jerseyNumber = "";
-        if(!isset($user->street)) $user->street = "";
-        if(!isset($user->city)) $user->city = "";
-        if(!isset($user->zipCode)) $user->zipCode = "";
-        if(!isset($user->birthDate)) $user->birthDate = "";
-        if(!isset($user->phone)) $user->phone = "";
-        if(!isset($user->phone2)) $user->phone2 = "";
-        if(!isset($user->email)) $user->email = "";
-        
+        if (!isset($user->firstName))
+            $user->firstName = "";
+        if (!isset($user->lastName))
+            $user->lastName = "";
+        if (!isset($user->login))
+            $user->login = "";
+        if (!isset($user->callName))
+            $user->callName = "";
+        if (!isset($user->jerseyNumber))
+            $user->jerseyNumber = "";
+        if (!isset($user->street))
+            $user->street = "";
+        if (!isset($user->city))
+            $user->city = "";
+        if (!isset($user->zipCode))
+            $user->zipCode = "";
+        if (!isset($user->birthDate))
+            $user->birthDate = "";
+        if (!isset($user->phone))
+            $user->phone = "";
+        if (!isset($user->phone2))
+            $user->phone2 = "";
+        if (!isset($user->email))
+            $user->email = "";
+
         $this->template->player = $user;
         $allRoles = [];
-        $allRoles[] = (object)["code" => "SUPER", "caption" => "Administrátor", "class"=>$this->supplier->getRoleClass("SUPER")];
-        $allRoles[] = (object)["code" => "USR", "caption" => "Správce uživatelů", "class"=>$this->supplier->getRoleClass("USR")];
-        $allRoles[] = (object)["code" => "ATT", "caption" => "Správce docházky", "class"=>$this->supplier->getRoleClass("ATT")];
+        $allRoles[] = (object) ["code" => "SUPER", "caption" => "Administrátor", "class" => $this->supplier->getRoleClass("SUPER")];
+        $allRoles[] = (object) ["code" => "USR", "caption" => "Správce uživatelů", "class" => $this->supplier->getRoleClass("USR")];
+        $allRoles[] = (object) ["code" => "ATT", "caption" => "Správce docházky", "class" => $this->supplier->getRoleClass("ATT")];
 
         $this->template->allRoles = $allRoles;
     }
-    
+
     public function handleEdit($playerId){
         $post = $this->getRequest()->getPost();
-        $this->user
+        try {
+            $this->user
                 ->recId($playerId)
                 ->edit($post);
+        } catch (Tymy\Exception\APIException $ex) {
+            $this->handleTapiException($ex);
+        }
     }
     
     public function handleDelete($playerId){
-        if(!$this->getUser()->isAllowed("users","canDelete"))
-                return;
+        if (!$this->getUser()->isAllowed("users", "canDelete"))
+            return;
         $post = ["status" => "DELETED"];
-        $this->user
-                ->recId($playerId)
-                ->edit($post);
+        try {
+            $this->user
+                    ->recId($playerId)
+                    ->edit($post);
+        } catch (Tymy\Exception\APIException $ex) {
+            $this->handleTapiException($ex);
+        }
+        $this->flashMessage("Uživatel byl úspešně smazán", "success");
         $this->redirect('Team:');
     }
-    
+
 }

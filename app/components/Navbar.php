@@ -10,24 +10,31 @@ use Nette;
  * @author matej
  */
 class NavbarControl extends Control {
-    
+
     /** @var \App\Presenters\SecuredPresenter */
     private $presenter;
+
     /** @var \Tymy\Discussions */
     private $discussions;
+
     /** @var \Tymy\Polls */
     private $polls;
+
     /** @var \Tymy\Events */
     private $events;
+
     /** @var \Tymy\User */
     private $user;
+
     /** @var \Tymy\Users */
     private $users;
+
     /** @var \App\Model\Supplier */
     private $supplier;
+
     /** @var Nette\Security\User */
     private $presenterUser;
-    
+
     public function __construct(\App\Presenters\SecuredPresenter $presenter) {
         parent::__construct();
         $this->presenter = $presenter;
@@ -39,51 +46,76 @@ class NavbarControl extends Control {
         $this->supplier = $this->presenter->supplier;
         $this->presenterUser = $this->presenter->getUser();
     }
-    
-    private function discussions(){
-        $discussionsResult = $this->discussions->reset()->setWithNew(true)->getResult();
-        $this->template->discussionWarnings = $discussionsResult->menuWarningCount;
-        $this->template->discussions = (object)$this->discussions->getData();
+
+    private function discussions() {
+        try {
+            $discussionsResult = $this->discussions->reset()->setWithNew(true)->getResult();
+            $this->template->discussionWarnings = $discussionsResult->menuWarningCount;
+            $this->template->discussions = (object) $this->discussions->getData();
+        } catch (Tymy\Exception\APIException $ex) {
+            $this->handleTapiException($ex);
+        }
     }
-    
-    private function players(){
-        $players = $this->users->reset()->getResult(TRUE);
+
+    private function players() {
+        try {
+            $players = $this->users->reset()->getResult(TRUE);
+        } catch (Tymy\Exception\APIException $ex) {
+            $this->handleTapiException($ex);
+        }
+
+
         $this->template->counts = $players->counts;
         $this->template->playersWarnings = $players->menuWarningCount;
         $this->template->me = $players->me;
     }
-    
-    private function polls(){
-        $this->template->voteWarnings = $this->polls->reset()->getResult()->menuWarningCount;
-        $this->template->polls = (object)$this->polls->getData();
+
+    private function polls() {
+        try {
+            $this->template->voteWarnings = $this->polls->reset()->getResult()->menuWarningCount;
+            $this->template->polls = (object) $this->polls->getData();
+        } catch (Tymy\Exception\APIException $ex) {
+            $this->handleTapiException($ex);
+        }
     }
-    
-    private function events(){
-        $this->events
-                ->reset()
-                ->setWithMyAttendance(true)
-                ->setFrom(date("Ymd"))
-                ->setTo(date("Ymd", strtotime(" + 1 month")))
-                ->setOrder("startTime")
-                ->getData();
-        $this->template->eventWarnings = $this->events->getResult()->menuWarningCount;
-        $this->template->events = (object)$this->events->getData();
+
+    private function events() {
+        try {
+            $this->events
+                    ->reset()
+                    ->setWithMyAttendance(true)
+                    ->setFrom(date("Ymd"))
+                    ->setTo(date("Ymd", strtotime(" + 1 month")))
+                    ->setOrder("startTime")
+                    ->getData();
+            $this->template->eventWarnings = $this->events->getResult()->menuWarningCount;
+            $this->template->events = (object) $this->events->getData();
+        } catch (Tymy\Exception\APIException $ex) {
+            $this->handleTapiException($ex);
+        }
     }
-    
-    private function settings(){
+
+    private function settings() {
         //TODO with settings api
         $settings = [];
-        if($this->presenterUser->isAllowed("settings", "discussions")) $settings[] = "Diskuze";
-        if($this->presenterUser->isAllowed("settings", "events")) $settings[] = "Události";
-        if($this->presenterUser->isAllowed("settings", "team")) $settings[] = "Tým";
-        if($this->presenterUser->isAllowed("settings", "polls")) $settings[] = "Ankety";
-        if($this->presenterUser->isAllowed("settings", "reports")) $settings[] = "Reporty";
-        if($this->presenterUser->isAllowed("settings", "permissions")) $settings[] = "Oprávnění";
-        if($this->presenterUser->isAllowed("settings", "app")) $settings[] = "Aplikace";
-        $this->template->settings = (object)$settings;
+        if ($this->presenterUser->isAllowed("settings", "discussions"))
+            $settings[] = "Diskuze";
+        if ($this->presenterUser->isAllowed("settings", "events"))
+            $settings[] = "Události";
+        if ($this->presenterUser->isAllowed("settings", "team"))
+            $settings[] = "Tým";
+        if ($this->presenterUser->isAllowed("settings", "polls"))
+            $settings[] = "Ankety";
+        if ($this->presenterUser->isAllowed("settings", "reports"))
+            $settings[] = "Reporty";
+        if ($this->presenterUser->isAllowed("settings", "permissions"))
+            $settings[] = "Oprávnění";
+        if ($this->presenterUser->isAllowed("settings", "app"))
+            $settings[] = "Aplikace";
+        $this->template->settings = (object) $settings;
     }
-    
-    public function render(){
+
+    public function render() {
         $template = $this->template;
         $template->setFile(__DIR__ . '/templates/navbar.latte');
         $this->template->levels = $this->presenter->getLevelCaptions();
@@ -91,7 +123,7 @@ class NavbarControl extends Control {
         $this->template->action = $this->presenter->getAction();
         $this->template->tym = $this->supplier->getTym();
         $this->template->userId = $this->presenterUser->getId();
-        
+
         //tapi discussions
         $this->discussions();
         //tapi players
@@ -105,7 +137,7 @@ class NavbarControl extends Control {
 
         $template->render();
     }
-    
+
     public function handleRefresh() {
         if ($this->parent->isAjax()) {
             $this->redrawControl('nav');
@@ -113,4 +145,5 @@ class NavbarControl extends Control {
             $this->parent->redirect('this');
         }
     }
+
 }

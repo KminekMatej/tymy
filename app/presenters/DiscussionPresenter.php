@@ -30,42 +30,64 @@ class DiscussionPresenter extends SecuredPresenter {
     }
 
     public function renderDefault() {
-        $this->template->discussions = $this->discussions->setWithNew(true)->getData();
+        try{
+            $this->template->discussions = $this->discussions->setWithNew(true)->getData();
+        } catch (Tymy\Exception\APIException $ex){
+            $this->handleTapiException($ex);
+        }
     }
     
     public function actionNewPost($discussion){
         $post = $this->getHttpRequest()->getPost("post");
         if (trim($post) != "") {
-            $this->discussion
-                    ->recId($discussion)
-                    ->insert($post);
+            try {
+                $this->discussion
+                        ->recId($discussion)
+                        ->insert($post);
+            } catch (Tymy\Exception\APIException $ex) {
+                $this->handleTapiException($ex);
+            }
         }
         $this->setView('discussion');
     }
 
-    public function actionEditPost($discussion){
+    public function actionEditPost($discussion) {
         $postId = $this->getHttpRequest()->getPost("postId");
         $text = $this->getHttpRequest()->getPost("post");
         $sticky = $this->getHttpRequest()->getPost("sticky");
-        $this->discussion
-                ->recId($discussion)
-                ->editPost($postId, $text, $sticky);
+        try {
+            $this->discussion
+                    ->recId($discussion)
+                    ->editPost($postId, $text, $sticky);
+        } catch (Tymy\Exception\APIException $ex) {
+            $this->handleTapiException($ex);
+        }
         $this->setView('discussion');
     }
-    
+
     public function actionStickPost($discussion){
         $postId = $this->getHttpRequest()->getPost("postId");
         $sticky = $this->getHttpRequest()->getPost("sticky");
-        $this->discussion
-                ->recId($discussion)
-                ->editPost($postId, NULL, $sticky);
+        try {
+            $this->discussion
+                    ->recId($discussion)
+                    ->editPost($postId, NULL, $sticky);
+        } catch (Tymy\Exception\APIException $ex) {
+            $this->handleTapiException($ex);
+        }
         $this->setView('discussion');
     }
     
     public function renderDiscussion($discussion, $page, $search) {
         $discussionId = NULL;
-        if(!$discussionId = intval($discussion)){
-            foreach ($this->discussions->getData() as $dis) {
+        if (!$discussionId = intval($discussion)) {
+            try {
+                $discussions = $this->discussions->getData();
+            } catch (Tymy\Exception\APIException $ex) {
+                $this->handleTapiException($ex);
+            }
+
+            foreach ($discussions as $dis) {
                 if ($dis->webName == $discussion) {
                     $discussionId = $dis->id;
                     break;
@@ -82,12 +104,16 @@ class DiscussionPresenter extends SecuredPresenter {
                 ->setPage($page);
         if($search) 
             $this->discussion->search($search);
-        $data = $this->discussion->getData();
-
+        try {
+            $data = $this->discussion->getData();
+            $this->template->users = $this->users->getData();
+        } catch (Tymy\Exception\APIException $ex) {
+            $this->handleTapiException($ex);
+        }
+        
         $this->setLevelCaptions(["2" => ["caption" => $data->discussion->caption, "link" => $this->link("Discussion:discussion", [$data->discussion->webName]) ] ]);
         
         $this->template->userId = $this->getUser()->getId();
-        $this->template->users = $this->users->getData();
         $this->template->discussion = $data;
         $this->template->nazevDiskuze = $data->discussion->webName;
         $this->template->currentPage = is_numeric($page) ? $page : 1 ;

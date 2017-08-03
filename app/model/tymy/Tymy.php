@@ -128,6 +128,10 @@ abstract class Tymy extends Nette\Object{
         return $this;
     }
 
+    /**
+     * @throws \Tymy\Exception\APIException when something goes wrong
+     * @return type
+     */
     public function fetch(){
         $this->urlStart();
 
@@ -156,6 +160,11 @@ abstract class Tymy extends Nette\Object{
         return $this->recId;
     }
     
+    /**
+     * @throws \Tymy\Exception\APIException when something goes wrong
+     * @param bool $force Force tapi request again
+     * @return data
+     */
     public function getData($force = FALSE){
         if (!is_null($this->session)) {
             $sessionSection = $this->session->getSection(self::SESSION_SECTION);
@@ -170,6 +179,11 @@ abstract class Tymy extends Nette\Object{
         return $this->result->data;
     }
     
+    /**
+     * @throws \Tymy\Exception\APIException when something goes wrong 
+     * @param bool $force Force tapi request again
+     * @return result
+     */
     public function getResult($force = FALSE){
         if (!is_null($this->session)) {
             $sessionSection = $this->session->getSection(self::SESSION_SECTION);

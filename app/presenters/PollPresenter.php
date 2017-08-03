@@ -24,26 +24,35 @@ class PollPresenter extends SecuredPresenter {
     }
     
     public function renderPoll($anketa) {
+                try {
         $poll = $this->poll
                 ->reset()
                 ->recId($this->parseIdFromWebname($anketa))
                 ->getData();
-        
+        $this->template->users = $this->users->getResult();
+        } catch (Tymy\Exception\APIException $ex) {
+            $this->handleTapiException($ex);
+        }
+
         $this->setLevelCaptions(["2" => ["caption" => $poll->caption, "link" => $this->link("Poll:poll", $poll->webName) ] ]);
         
         $this->template->poll = $poll;
-        $this->template->users = $this->users->getResult();
     }
     
-    public function handleVote($pollId){
+    public function handleVote($pollId) {
         $votes = [];
         $post = $this->getRequest()->getPost();
         foreach ($post as $optId => $opt) {
-            if(array_key_exists("value", $opt)){
-                $votes[] = ["optionId" => $optId, $opt["type"] => $opt["type"] == "numericValue" ? (int)$opt["value"] : $opt["value"] ];
+            if (array_key_exists("value", $opt)) {
+                $votes[] = ["optionId" => $optId, $opt["type"] => $opt["type"] == "numericValue" ? (int) $opt["value"] : $opt["value"]];
             }
         }
-        $this->redrawControl ("poll-results");
-        $this->poll->recId($pollId)->vote($votes);
+        $this->redrawControl("poll-results");
+        try {
+            $this->poll->recId($pollId)->vote($votes);
+        } catch (Tymy\Exception\APIException $ex) {
+            $this->handleTapiException($ex);
+        }
     }
+
 }

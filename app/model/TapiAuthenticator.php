@@ -23,15 +23,26 @@ class TapiAuthenticator implements Nette\Security\IAuthenticator {
      */
     public function authenticate(array $credentials) {
         $credentials[1] = md5($credentials[1]); // first login recodes password to md5 hash
-        $loginObj = $this->reAuthenticate($credentials);
+        try {
+            $loginObj = $this->reAuthenticate($credentials);
+        } catch (Tymy\Exception\APIException $ex) {
+            return null;
+        }
+
         $arr = (array) $loginObj->result;
         $arr["hash"] = $credentials[1];
         $arr["tapi_config"] = $this->supplier->getTapi_config();
         return new Nette\Security\Identity($loginObj->result->data->id, $loginObj->result->data->roles, $arr );
     }
     
+    /**
+     * @throws \Tymy\Exception\APIException When something goes wrong
+     * @param array $credentials
+     * @return \Tymy\Login
+     */
     public function reAuthenticate(array $credentials){
         list($username, $password) = $credentials;
+
         $login = new \Tymy\Login($this->supplier);
         $login  ->setUsername($username)
                 ->setPassword($password)

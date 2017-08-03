@@ -36,18 +36,21 @@ class HomepagePresenter extends SecuredPresenter {
     }
     
     public function renderDefault() {
-        $events = $this->events
-                ->loadYearEvents(NULL, NULL);
-        
-        $this->template->discussions = $this->discussions->setWithNew(true)->getData();
+        try {
+            $events = $this->events->loadYearEvents(NULL, NULL);
+            $this->template->discussions = $this->discussions->setWithNew(true)->getData();
+            $this->template->users = $this->sortUsersByLastLogin($this->users->getData());
+        } catch (Tymy\Exception\APIException $ex) {
+            $this->handleTapiException($ex);
+        }
+
         $this->template->currY = date("Y");
         $this->template->currM = date("m");
         $this->template->evMonths = $events->eventsMonthly;
         $this->template->events = $events->eventsJSObject;
         $this->template->eventTypes = $this->eventTypes;
-        $this->template->users = $this->sortUsersByLastLogin($this->users->getData());
     }
-    
+
     private function sortUsersByLastLogin($usersArray){
         $notSetValues = [];
         foreach ($usersArray as $key => $value) {
