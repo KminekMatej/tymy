@@ -35,7 +35,6 @@ final class Discussion extends Tymy{
     
     public function search($text){
         $this->search = $text;
-        $this->page = 1;
         return $this;
     }
     

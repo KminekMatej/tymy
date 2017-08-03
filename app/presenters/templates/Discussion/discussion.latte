@@ -69,10 +69,10 @@ $( document ).ready(function() {
 
 <nav aria-label="Page navigation">
     <ul class="pagination justify-content-center">
-        <li n:class="$currentPage == 1 ? disabled, page-item"><a class="page-link" href="{if $currentPage==2}{plink Discussion:discussion $nazevDiskuze}{else}{plink Discussion:discussion $nazevDiskuze,$currentPage-1}{/if}">Předchozí</a></li>
+        <li n:class="$currentPage == 1 ? disabled, page-item"><a class="page-link" href="{if $currentPage==2}{plink Discussion:discussion $nazevDiskuze}{else}{plink Discussion:discussion $nazevDiskuze,$currentPage-1, $search}{/if}">Předchozí</a></li>
             {foreach $pagination as $page}
-            <li n:class="$currentPage == $page ? active, page-item"><a class="page-link" href="{if $page==1}{plink Discussion:discussion $nazevDiskuze}{else}{plink Discussion:discussion $nazevDiskuze,$page}{/if}">{$page}</a></li>
+            <li n:class="$currentPage == $page ? active, page-item"><a class="page-link" href="{if $page==1}{plink Discussion:discussion $nazevDiskuze}{else}{plink Discussion:discussion $nazevDiskuze,$page, $search}{/if}">{$page}</a></li>
             {/foreach}
-        <li n:class="$currentPage == $lastPage ? disabled, page-item"><a class="page-link" href="{plink Discussion:discussion $nazevDiskuze,$currentPage+1}">Následující</a></li>
+        <li n:class="$currentPage == $lastPage ? disabled, page-item"><a class="page-link" href="{plink Discussion:discussion $nazevDiskuze,$currentPage+1, $search}">Následující</a></li>
     </ul>
 </nav>

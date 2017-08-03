@@ -102,8 +102,12 @@ class DiscussionPresenter extends SecuredPresenter {
                 ->reset()
                 ->recId($discussionId)
                 ->setPage($page);
-        if($search) 
+        $this->template->search = "";
+        if($search){
             $this->discussion->search($search);
+            $this->template->search = $search;
+        }
+            
         try {
             $data = $this->discussion->getData();
             $this->template->users = $this->users->getData();
