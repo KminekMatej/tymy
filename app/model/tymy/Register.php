@@ -83,9 +83,6 @@ final class Register extends Tymy{
                 
         $this->result = $this->execute();
         
-        if($this->result->status == "OK"){
-            //$this->sendRegistrationMail();
-        }
         return $this;
     }
     
