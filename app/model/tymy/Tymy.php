@@ -214,13 +214,17 @@ abstract class Tymy extends Nette\Object{
                     return $this->loginFailure($relogin);
                 case 403: // forbidden, return the error message
                     $forbidden = Json::decode($contents->result);
-                    throw new \Tymy\Exception\APIException($forbidden->statusMessage);
+                    $tapiMSG = $contents->result ? Json::decode($contents->result)->statusMessage : "403 Forbidden";
+                    throw new \Tymy\Exception\APIException($tapiMSG);
                 case 400: // bad request, throw error
-                    throw new \Tymy\Exception\APIException("Failure: 400 Bad Request");
+                    $tapiMSG = $contents->result ? Json::decode($contents->result)->statusMessage : "400 Bad request";
+                    throw new \Tymy\Exception\APIException($tapiMSG);
                 case 500: // error 500 can display when logging out on unlogged account, so this is temporary solution
-                    throw new \Tymy\Exception\APIException("Failure: 500 Internal Server Error");
+                    $tapiMSG = $contents->result ? Json::decode($contents->result)->statusMessage : "500 Internal Server Error";
+                    throw new \Tymy\Exception\APIException($tapiMSG);
                 default:
-                    throw new \Tymy\Exception\APIException("Failure: ".$contents->curlInfo["http_code"]." Unknown error");
+                    $tapiMSG = $contents->result ? Json::decode($contents->result)->statusMessage : $contents->curlInfo["http_code"] . " Unknown error";
+                    throw new \Tymy\Exception\APIException($tapiMSG);
             }
         } else {
             throw new \Tymy\Exception\APIException("TAPI query failed for unknown reason");
