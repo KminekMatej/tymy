@@ -19,6 +19,12 @@ final class EventTypes extends Tymy{
         $this->fullUrl .= self::TAPI_NAME;
     }
     
-    protected function postProcess(){}
+    protected function postProcess(){
+        $newData = [];
+        foreach ($this->getData() as $value) {
+            $newData[$value->code] = $value;
+        }
+        $this->result->data = $newData;
+    }
 
 }
