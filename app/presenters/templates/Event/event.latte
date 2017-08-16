@@ -10,8 +10,16 @@
     <div class="row">
         <div class="col">
             <div class="card sh-box my-3">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col"><h4 class="card-title">{$event->caption}</h4></div>
+                        <div class="col col-md-auto" n:if="$user->isAllowed('SYS','EVE_UPDATE')">
+                            <a class="btn btn-sm btn-secondary" title="Upravit" href="{plink Settings:events $event->webName}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                        </div>
+                    </div>
+                </div>
                 <div class="card-block">
-                    <h4 class="card-title">{$event->caption}</h4>
+                    
                     {var $mapLink = filter_var($event->place, FILTER_VALIDATE_URL) ? $event->place : 'https://www.google.com/maps/search/?api=1&query='.urlencode($event->place)}
                     <h6 class="card-subtitle mb-2 text-muted">{$event->eventType->caption}<span n:if="$event->place"> - <a href="{$mapLink}" target="blank" title="Otevřít mapu...">{$event->place}</a></span><span n:if="$event->link"> - <a href="{$event->link}" target="_blank">[Odkaz]</a></span></h6>
                     <p class="card-text">{$event->description}</p>
@@ -37,17 +45,7 @@
                     </div>
                 </div>
             </div>
-
-            <div class="card sh-box my-3" n:if="$user->isAllowed('SYS','EVE_UPDATE')">
-                <div class="card-header">
-                    <h4>Upravit akci</h4>
-                </div>
-
-                <div class="card-block">
-                    
-                </div>
-            </div>
-                        
+  
             <div class="card sh-box my-3" n:snippet="attendanceTabs">
                 <div class="card-header">
                     <ul class="nav nav-tabs flex-column flex-sm-row card-header-tabs" role="tablist">
