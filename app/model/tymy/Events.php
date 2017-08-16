@@ -175,13 +175,7 @@ final class Events extends Tymy{
     }
     
     private function calendarItemColor($event) {
-        $colorList = [
-            "TRA" => '#5cb85c',
-            "RUN" => '#0275d8',
-            "MEE" => '#795548',
-            "TOU" => '#f0ad4e',
-            "CMP" => '#5bc0de',
-            ];
+        $colorList = $this->supplier->getEventColors();
         $eventColor = [];
         $invertColors = !property_exists($event, 'myAttendance') || !property_exists($event->myAttendance, 'preStatus');
         $eventColor["borderColor"] = $colorList[$event->type];

@@ -17,6 +17,7 @@ class Supplier {
     private $sysapiRoot;
     private $roleClasses;
     private $statusClasses;
+    private $eventColors;
 
     public function __construct($tapi_config) {
         $this->setTapi_config($tapi_config);
@@ -34,6 +35,7 @@ class Supplier {
         $this->setSysapiRoot($this->getTymyRoot() . DIRECTORY_SEPARATOR . $tapi_config["tapi_sysapi_root"]);
         $this->setRoleClasses($tapi_config['roles_classes']);
         $this->setStatusClasses($tapi_config['status_classes']);
+        $this->setEventColors($tapi_config['event_colors']);
         return $this;
     }
 
@@ -88,6 +90,15 @@ class Supplier {
 
     public function setStatusClasses($statusClasses) {
         $this->statusClasses = $statusClasses;
+        return $this;
+    }
+
+    public function getEventColors() {
+        return $this->eventColors;
+    }
+
+    public function setEventColors($eventColors) {
+        $this->eventColors = $eventColors;
         return $this;
     }
 
