@@ -62,11 +62,13 @@
             <li class="nav-item dropdown">
                 <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cogs" aria-hidden="true"></i> Nastavení</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    {foreach $settings as $s}
-                        <a class="dropdown-item" href="#">
-                            {$s}
-                        </a>
-                    {/foreach}
+                    <a class="dropdown-item" n:if="$user->isAllowed('settings','discussions')" href="{plink Settings:discussions}">Diskuze</a>
+                    <a class="dropdown-item" n:if="$user->isAllowed('settings','events')" href="{plink Settings:events}">Události</a>
+                    <a class="dropdown-item" n:if="$user->isAllowed('settings','team')" href="{plink Settings:team}">Tým</a>
+                    <a class="dropdown-item" n:if="$user->isAllowed('settings','polls')" href="{plink Settings:polls}">Ankety</a>
+                    <a class="dropdown-item" n:if="$user->isAllowed('settings','reports')" href="{plink Settings:reports}">Reporty</a>
+                    <a class="dropdown-item" n:if="$user->isAllowed('settings','permissions')" href="{plink Settings:permissions}">Oprávnění</a>
+                    <a class="dropdown-item" n:if="$user->isAllowed('settings','app')" href="{plink Settings:app}">Aplikace</a>
                 </div>
             </li>
         </ul>

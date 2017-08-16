@@ -96,23 +96,7 @@ class NavbarControl extends Control {
     }
 
     private function settings() {
-        //TODO with settings api
-        $settings = [];
-        if ($this->presenterUser->isAllowed("settings", "discussions"))
-            $settings[] = "Diskuze";
-        if ($this->presenterUser->isAllowed("settings", "events"))
-            $settings[] = "Události";
-        if ($this->presenterUser->isAllowed("settings", "team"))
-            $settings[] = "Tým";
-        if ($this->presenterUser->isAllowed("settings", "polls"))
-            $settings[] = "Ankety";
-        if ($this->presenterUser->isAllowed("settings", "reports"))
-            $settings[] = "Reporty";
-        if ($this->presenterUser->isAllowed("settings", "permissions"))
-            $settings[] = "Oprávnění";
-        if ($this->presenterUser->isAllowed("settings", "app"))
-            $settings[] = "Aplikace";
-        $this->template->settings = (object) $settings;
+        //not used now, maybe later
     }
 
     public function render() {
@@ -133,7 +117,7 @@ class NavbarControl extends Control {
         //tapi polls
         $this->polls();
         //tapi settings
-        $this->settings();
+        //$this->settings();
 
         $template->render();
     }
