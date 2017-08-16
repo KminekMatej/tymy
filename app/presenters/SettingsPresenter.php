@@ -6,7 +6,10 @@ class SettingsPresenter extends SecuredPresenter {
         
     /** @var \Tymy\Event @inject */
     public $event;
-    
+        
+    /** @var \Tymy\EventTypes @inject */
+    public $eventTypes;
+        
     protected function startup() {
         parent::startup();
         $this->setLevelCaptions(["1" => ["caption" => "Nastavení", "link" => $this->link("Settings:")]]);
@@ -74,6 +77,17 @@ class SettingsPresenter extends SecuredPresenter {
         $eventObj = $this->event->reset()->recId($eventId)->getData();
         $this->setLevelCaptions(["3" => ["caption" => $eventObj->caption, "link" => $this->link("Settings:events", $eventObj->webName)]]);
         $this->template->event = $eventObj;
+        $eventProps = [];
+        $eventProps[] = (object)["name" => "caption", "label" => "Titulek", "type" => "text", "value" => $eventObj->caption];
+        $eventProps[] = (object)["name" => "type", "label" => "Typ", "type" => "select", "values"=> $this->eventTypes->getData(), "value" => $eventObj->type];
+        $eventProps[] = (object)["name" => "description", "label" => "Popis", "type" => "textarea", "value" => $eventObj->description];
+        $eventProps[] = (object)["name" => "startTime", "label" => "Začátek", "type" => "datetime-local", "value" => strftime('%Y-%m-%dT%H:%M:%S', strtotime($eventObj->startTime)) ];
+        $eventProps[] = (object)["name" => "endTime", "label" => "Konec", "type" => "datetime-local", "value" => strftime('%Y-%m-%dT%H:%M:%S', strtotime($eventObj->endTime))];
+        $eventProps[] = (object)["name" => "closeTime", "label" => "Uzávěrka", "type" => "datetime-local", "value" => strftime('%Y-%m-%dT%H:%M:%S', strtotime($eventObj->closeTime))];
+        $eventProps[] = (object)["name" => "place", "label" => "Místo", "type" => "text", "value" => $eventObj->place];
+        $eventProps[] = (object)["name" => "link", "label" => "Odkaz", "type" => "text", "value" => $eventObj->link];
+        
+        $this->template->props = $eventProps;
     }
     
     public function renderPoll($poll) {
@@ -82,6 +96,14 @@ class SettingsPresenter extends SecuredPresenter {
         $pollObj = $this->event->reset()->recId($pollId)->getData();
         $this->setLevelCaptions(["3" => ["caption" => $pollObj->caption, "link" => $this->link("Settings:polls", $pollObj->webName)]]);
         $this->template->poll = $pollObj;
+    }
+    
+    public function handleEventEdit($eventId){
+        $this->flashMessage("Event edited");
+    }
+    
+    public function handleEventDelete($eventId){
+        $this->flashMessage("Event deleted");
     }
     
 }

@@ -7,5 +7,40 @@
 {block content}
 
 <div class="container settings">
-    <h4>Nastavení:EVENTS - TODO</h4>
+    <div class="row">
+        <div class="col">
+            <div class="card sh-box my-3">
+                <div class="card-header">
+                    <h4>Úprava události {$event->id}</h4>
+                </div>
+                <div class="card-block">
+                    <table class="table">
+                        {foreach $props as $prop}
+                            <tr>
+                                <th>{$prop->label}</th>
+                                <td>
+                                    {if $prop->type == 'textarea'}
+                                        <textarea name="{$prop->name}" data-value="{$prop->value}" class="form-control col-6">{$prop->value}</textarea>
+                                    {elseif $prop->type == 'select'}
+                                        <select value="{$prop->value}" class="form-control col-6">
+                                            <option>Vyberte typ...</option>
+                                            {foreach $prop->values as $option}
+                                                <option name="{$option->code}" n:attr="selected => $prop->value == $option->code">{$option->caption}</option>
+                                            {/foreach}
+                                        </select>
+                                    {else}
+                                        <input type="{$prop->type}" value="{$prop->value}" class="form-control col-6"/>
+                                    {/if}
+                                </td>
+                            </tr>
+                        {/foreach}
+                    </table>
+                </div>
+                <div class="card-footer text-right">
+                    <button n:if="$user->isAllowed('SYS','EVE_DELETE')" onclick="updateEvent(this, {link eventDelete! $event->id})" class="btn btn-danger mx-2">Smazat</button>
+                    <button n:if="$user->isAllowed('SYS','EVE_UPDATE')" onclick="updateEvent(this, {link eventEdit! $event->id})" class="btn btn-primary">Uložit</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
