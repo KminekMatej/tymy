@@ -79,7 +79,7 @@ class SettingsPresenter extends SecuredPresenter {
         $this->template->event = $eventObj;
         $eventProps = [];
         $eventProps[] = (object)["name" => "caption", "label" => "Titulek", "type" => "text", "value" => $eventObj->caption];
-        $eventProps[] = (object)["name" => "type", "label" => "Typ", "type" => "select", "values"=> $this->eventTypes->getData(), "value" => $eventObj->type];
+        $eventProps[] = (object)["name" => "type", "label" => "Typ", "type" => "select", "values"=> $this->eventTypes->getData(), "value" => $eventObj->type, "disabled"=>true];
         $eventProps[] = (object)["name" => "description", "label" => "Popis", "type" => "textarea", "value" => $eventObj->description];
         $eventProps[] = (object)["name" => "startTime", "label" => "Začátek", "type" => "datetime-local", "value" => strftime('%Y-%m-%dT%H:%M:%S', strtotime($eventObj->startTime)) ];
         $eventProps[] = (object)["name" => "endTime", "label" => "Konec", "type" => "datetime-local", "value" => strftime('%Y-%m-%dT%H:%M:%S', strtotime($eventObj->endTime))];
@@ -99,6 +99,14 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function handleEventEdit($eventId){
+        $post = $this->getRequest()->getPost();
+        try {
+            $this->event
+                    ->recId($eventId)
+                    ->edit($post);
+        } catch (\Tymy\Exception\APIException $ex) {
+            $this->handleTapiException($ex);
+        }
         $this->flashMessage("Event edited");
     }
     

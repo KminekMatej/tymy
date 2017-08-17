@@ -20,16 +20,16 @@
                                 <th>{$prop->label}</th>
                                 <td>
                                     {if $prop->type == 'textarea'}
-                                        <textarea name="{$prop->name}" data-value="{$prop->value}" class="form-control col-6">{$prop->value}</textarea>
+                                        <textarea name="{$prop->name}" data-value="{$prop->value}" class="form-control col-6" n:attr="disabled => property_exists($prop,'disabled') && $prop->disabled">{$prop->value}</textarea>
                                     {elseif $prop->type == 'select'}
-                                        <select value="{$prop->value}" class="form-control col-6">
+                                        <select name="{$prop->name}" data-value="{$prop->value}" value="{$prop->value}" class="form-control col-6" n:attr="disabled => property_exists($prop,'disabled') && $prop->disabled">
                                             <option>Vyberte typ...</option>
                                             {foreach $prop->values as $option}
-                                                <option name="{$option->code}" n:attr="selected => $prop->value == $option->code">{$option->caption}</option>
+                                                <option value="{$option->code}" n:attr="selected => $prop->value == $option->code">{$option->caption}</option>
                                             {/foreach}
                                         </select>
                                     {else}
-                                        <input type="{$prop->type}" value="{$prop->value}" class="form-control col-6"/>
+                                        <input name="{$prop->name}" data-value="{$prop->value}" type="{$prop->type}" value="{$prop->value}" class="form-control col-6" n:attr="disabled => property_exists($prop,'disabled') && $prop->disabled"/>
                                     {/if}
                                 </td>
                             </tr>
@@ -37,8 +37,8 @@
                     </table>
                 </div>
                 <div class="card-footer text-right">
-                    <button n:if="$user->isAllowed('SYS','EVE_DELETE')" onclick="updateEvent(this, {link eventDelete! $event->id})" class="btn btn-danger mx-2">Smazat</button>
-                    <button n:if="$user->isAllowed('SYS','EVE_UPDATE')" onclick="updateEvent(this, {link eventEdit! $event->id})" class="btn btn-primary">Uložit</button>
+                    <button n:if="$user->isAllowed('SYS','EVE_DELETE')" onclick="del(this, {link eventDelete! $event->id})" class="btn btn-danger mx-2">Smazat</button>
+                    <button n:if="$user->isAllowed('SYS','EVE_UPDATE')" onclick="update(this, {link eventEdit! $event->id})" class="btn btn-primary">Uložit</button>
                 </div>
             </div>
         </div>
