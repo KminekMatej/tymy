@@ -5,7 +5,7 @@
 {/block}
 
 {block content}
-
+{var isNew = false}
 <div class="container settings">
     <div class="row">
         <div class="col">
@@ -29,7 +29,14 @@
                                             {/foreach}
                                         </select>
                                     {else}
-                                        <input name="{$prop->name}" data-value="{$prop->value}" type="{$prop->type}" value="{$prop->value}" class="form-control col-6" n:attr="disabled => property_exists($prop,'disabled') && $prop->disabled"/>
+                                        <div class="input-group" n:tag-if="$prop->name=='place' || $prop->name=='link'">
+                                            <input name="{$prop->name}" data-value="{$prop->value}" type="{$prop->type}" value="{$prop->value}" class="form-control col-6" n:attr="disabled => property_exists($prop,'disabled') && $prop->disabled"/>
+                                            <span class="input-group-btn">
+                                                <button n:if="$prop->name=='place'" class='btn btn-sm btn-secondary' onclick='map()' title="Zobrazit na mapě"><i class="fa fa-map-marker" aria-hidden="true"></i></button>
+                                                <button n:if="$prop->name=='link'" class='btn btn-sm btn-secondary' onclick='link()' title="Zobrazit v novém okně"><i class="fa fa-external-link" aria-hidden="true"></i></button>
+                                            </span>
+                                            
+                                        </div>
                                     {/if}
                                 </td>
                             </tr>

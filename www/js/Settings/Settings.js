@@ -110,3 +110,13 @@ function isValid(name, value1, value2 = null) {
     return true;
 
 }
+
+function map(){
+    var place=$("INPUT[name='place']").val();
+    window.open('https://www.google.com/maps/search/?api=1&query='+encodeURI(place), "_blank");
+}
+
+function link(){
+    var link=$("INPUT[name='link']").val();
+    window.open(link, "_blank");
+}
