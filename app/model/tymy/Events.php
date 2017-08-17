@@ -113,9 +113,9 @@ final class Events extends Tymy{
                 $this->getResult()->menuWarningCount++;
             }
             
-            $this->timezone($event->closeTime);
-            $this->timezone($event->startTime);
-            $this->timezone($event->endTime);
+            $this->timeLoad($event->closeTime);
+            $this->timeLoad($event->startTime);
+            $this->timeLoad($event->endTime);
             $event->webName = \Nette\Utils\Strings::webalize($event->id . "-" . $event->caption);
             if($this->withMyAttendance){
                 if(!property_exists($event, "myAttendance")) $event->myAttendance = new \stdClass ();
@@ -123,8 +123,8 @@ final class Events extends Tymy{
                 if(!property_exists($event->myAttendance, "preDescription")) $event->myAttendance->preDescription = ""; //set default value
                 if(!property_exists($event->myAttendance, "postStatus")) $event->myAttendance->postStatus = "UNKNOWN"; //set default value
                 if(!property_exists($event->myAttendance, "postDescription")) $event->myAttendance->postDescription = ""; //set default value
-                if (property_exists($event->myAttendance, "preDatMod")) $this->timezone($event->myAttendance->preDatMod);
-                if (property_exists($event->myAttendance, "postDatMod")) $this->timezone($event->myAttendance->postDatMod);
+                if (property_exists($event->myAttendance, "preDatMod")) $this->timeLoad($event->myAttendance->preDatMod);
+                if (property_exists($event->myAttendance, "postDatMod")) $this->timeLoad($event->myAttendance->postDatMod);
             } 
         }
     }

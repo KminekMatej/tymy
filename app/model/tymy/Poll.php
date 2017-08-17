@@ -46,8 +46,8 @@ final class Poll extends Tymy{
     protected function postProcess(){
         $data = $this->getData();
         $data->webName = \Nette\Utils\Strings::webalize($data->id . "-" . $data->caption);
-        $this->timezone($data->createdAt);
-        $this->timezone($data->updatedAt);
+        $this->timeLoad($data->createdAt);
+        $this->timeLoad($data->updatedAt);
         $data->radio = property_exists($data, "minItems") && property_exists($data, "maxItems") && $data->minItems == 1 && $data->maxItems == 1;
         if ($data->radio) {
             foreach ($data->options as $opt) {
@@ -65,7 +65,7 @@ final class Poll extends Tymy{
                     $data->myVotes[$vote->optionId] = $vote;
                 }
                 $orderedVotes[$vote->userId][$vote->optionId] = $vote;
-                $this->timezone($vote->updatedAt);
+                $this->timeLoad($vote->updatedAt);
             }
             $data->orderedVotes = $orderedVotes;
         }

@@ -38,6 +38,8 @@ final class Event extends Tymy{
         $this->method = "PUT";
         
         foreach ($fields as $key => $value) {
+            if(in_array($key, ["startTime","endTime","closeTime"]))
+                $this->timeSave($value);
             $this->addPost($key,$value);
         }
         
@@ -73,9 +75,9 @@ final class Event extends Tymy{
         
         $data->webName = \Nette\Utils\Strings::webalize($data->id . "-" . $data->caption);
 
-        $this->timezone($data->closeTime);
-        $this->timezone($data->startTime);
-        $this->timezone($data->endTime);
+        $this->timeLoad($data->closeTime);
+        $this->timeLoad($data->startTime);
+        $this->timeLoad($data->endTime);
         $myAttendance = new \stdClass();
         $myAttendance->preStatus = "UNKNOWN";
         $myAttendance->postStatus = "UNKNOWN";
@@ -88,9 +90,9 @@ final class Event extends Tymy{
                 if(!property_exists($att, "postStatus")) $att->postStatus = "UNKNOWN"; //set default value
                 if(!property_exists($att, "postDescription")) $att->postDescription = ""; //set default value
                 if (property_exists($att, "preDatMod"))
-                    $this->timezone($att->preDatMod);
+                    $this->timeLoad($att->preDatMod);
                 if (property_exists($att, "postDatMod"))
-                    $this->timezone($att->postDatMod);
+                    $this->timeLoad($att->postDatMod);
                 if($att->userId == $this->user->getId()){
                     $myAttendance = $att;
                 }

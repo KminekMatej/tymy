@@ -41,7 +41,7 @@ final class Discussions extends Tymy{
                 if(!property_exists($discussion, "newPosts")) $discussion->newPosts = 0; //set default value
                 $this->getResult()->menuWarningCount += $discussion->newPosts;
                 if(property_exists($discussion, "newInfo"))
-                    $this->timezone($discussion->newInfo->lastVisit);
+                    $this->timeLoad($discussion->newInfo->lastVisit);
             }
                 
         }

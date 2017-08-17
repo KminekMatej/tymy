@@ -53,7 +53,7 @@ final class User extends UserInterface{
         if(!property_exists($data, "language")) $data->language = "CZ"; //set default value
         if(!property_exists($data, "canEditCallName")) $data->canEditCallName = true; //set default value
         if(property_exists($data, "lastLogin")){
-                $this->timezone($data->lastLogin);
+                $this->timeLoad($data->lastLogin);
             }
         $this->userWarnings($data);
         $this->userPermissions($data);

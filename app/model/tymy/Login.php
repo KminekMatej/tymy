@@ -43,7 +43,7 @@ final class Login extends Tymy{
     
     protected function postProcess(){
         $data = $this->getData();
-        $this->timezone($data->lastLogin);
+        $this->timeLoad($data->lastLogin);
         if(!property_exists($data, "roles"))
             $data->roles = [];
     }

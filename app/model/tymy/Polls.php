@@ -28,8 +28,8 @@ final class Polls extends Tymy{
             $poll->webName = \Nette\Utils\Strings::webalize($poll->id . "-" . $poll->caption);
             if($poll->status == "OPENED" && $poll->canVote && !$poll->voted)
                 $this->getResult()->menuWarningCount++;
-            $this->timezone($poll->createdAt);
-            $this->timezone($poll->updatedAt);
+            $this->timeLoad($poll->createdAt);
+            $this->timeLoad($poll->updatedAt);
         }
     }
 }

@@ -66,8 +66,8 @@ final class Users extends UserInterface{
                 $this->result->menuWarningCount = $player->errCnt;
                 $this->result->me = (object)$player;
             }
-            if(property_exists($player, "lastLogin"))   $this->timezone($player->lastLogin);
-            $this->timezone($player->createdAt);
+            if(property_exists($player, "lastLogin"))   $this->timeLoad($player->lastLogin);
+            $this->timeLoad($player->createdAt);
             if($player->isNew = strtotime($player->createdAt) > strtotime("- 14 days")){
                 $counts["NEW"]++;
             }

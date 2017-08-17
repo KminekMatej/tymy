@@ -260,8 +260,13 @@ abstract class Tymy extends Nette\Object{
         }
     }
 
-    protected function timezone(&$date) {
+    protected function timeLoad(&$date) {
         $date = date('c',strtotime("$date UTC"));
+        return $date;
+    }
+    
+    protected function timeSave(&$date) {
+        $date = gmdate('c',strtotime("$date"));
         return $date;
     }
 
