@@ -7,6 +7,7 @@
 {block styles}
 {include parent}
 <link rel='stylesheet' href="{$basePath}/resources/fullcalendar/fullcalendar.css" />
+<link rel='stylesheet' href="{$basePath}/css/fullcalendar.css" />
 {/block}
 {block scripts}
 {include parent}
@@ -25,6 +26,11 @@
                     events.push({l}id: {$evnt->id}, title: {$evnt->title},start: {$evnt->start},end: {$evnt->end},backgroundColor: {$evnt->backgroundColor},borderColor: {$evnt->borderColor},textColor: {$evnt->textColor},url: {plink 'Event:event', $evnt->webName}{r});
                 {/foreach}
                 callback(events);
+            },
+            eventRender: function (event, element) {
+                element.find('.fc-title').attr("title", event.description);
+                if (event.end < Date.now())
+                    element.addClass("past");
             },
             header: {
                 left: 'title',

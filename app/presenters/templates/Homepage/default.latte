@@ -6,6 +6,7 @@
 
 {block styles}
 <link rel='stylesheet' href="{$basePath}/resources/fullcalendar/fullcalendar.css" />
+<link rel='stylesheet' href="{$basePath}/css/fullcalendar.css" />
 {include parent}
 {/block}
 
@@ -30,6 +31,8 @@
                             },
                             eventRender: function (event, element) {
                                 element.find('.fc-title').attr("title", event.description);
+                                if (event.end < Date.now())
+                                    element.addClass("past");
                             },
                             header: {
                                 left: 'title',
