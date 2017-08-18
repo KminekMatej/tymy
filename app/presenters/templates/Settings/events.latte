@@ -1,5 +1,10 @@
 {import '../common.latte'}
 
+{block styles}
+{include parent}
+<link rel='stylesheet' href="{$basePath}/css/table-xs.css" />
+{/block}
+
 {block navbar}
 {control navbar}
 {/block}
@@ -14,7 +19,7 @@
                     <h4>Nastavení událostí</h4>
                 </div>
                 <div class="card-block">
-                    <table class="table table-sm table-hover table-responsive">
+                    <table class="table table-xs table-hover table-responsive">
                         <tr>
                             <th>Typ</th>
                             <th>Titulek</th>
@@ -24,21 +29,27 @@
                             <th>Uzávěrka</th>
                             <th>Místo</th>
                             <th>Odkaz</th>
+                            <th></th>
                         </tr>
                         {foreach $events as $e}
-                            <tr>
+                            <tr data-id="{$e->id}">
                                 <td><span class="badge" style="background-color: {$e->type|typeColor|noescape}">{$e->type}</span></td>
-                                <td><input name="caption" data-value="{$e->caption}" type="text" value="{$e->caption}" class="form-control form-control-sm" style="max-width: 100px;"/></td>
-                                <td><textarea name="description" data-value="{$e->description}" rows="1" class="form-control form-control-sm">{$e->description}</textarea></td>
-                                <td><input name="startTime" data-value="{$e->startTime}" type="datetime-local" value="{$e->startTime}" class="form-control form-control-sm" style="-webkit-flex-direction:row; max-width: 175px;"/></td>
-                                <td><input name="endTime" data-value="{$e->endTime}" type="datetime-local" value="{$e->endTime}" class="form-control form-control-sm" style="-webkit-flex-direction:row; max-width: 175px;"/></td>
-                                <td><input name="closeTime" data-value="{$e->closeTime}" type="datetime-local" value="{$e->closeTime}" class="form-control form-control-sm" style="-webkit-flex-direction:row; max-width: 175px;"/></td>
-                                <td><input name="place" data-value="{$e->place}" type="text" value="{$e->place}" class="form-control form-control-sm"/></td>
-                                <td><input name="link" data-value="{$e->link}" type="text" value="{$e->link}" class="form-control form-control-sm"/></td>
+                                <td><input onchange="chng(this,'TR')" name="caption" data-value="{$e->caption}" type="text" value="{$e->caption}" class="form-control form-control-sm" style="max-width: 100px;"/></td>
+                                <td><textarea onchange="chng(this,'TR')" name="description" data-value="{$e->description}" rows="1" class="form-control form-control-sm">{$e->description}</textarea></td>
+                                <td><input onchange="chng(this,'TR')" name="startTime" data-value="{$e->startTime|date:'Y-m-d\TH:i:s'}" type="datetime-local" value="{$e->startTime|date:'Y-m-d\TH:i:s'}" class="form-control form-control-sm" style="-webkit-flex-direction:row; max-width: 175px;"/></td>
+                                <td><input onchange="chng(this,'TR')" name="endTime" data-value="{$e->endTime|date:'Y-m-d\TH:i:s'}" type="datetime-local" value="{$e->endTime|date:'Y-m-d\TH:i:s'}" class="form-control form-control-sm" style="-webkit-flex-direction:row; max-width: 175px;"/></td>
+                                <td><input onchange="chng(this,'TR')" name="closeTime" data-value="{$e->closeTime|date:'Y-m-d\TH:i:s'}" type="datetime-local" value="{$e->closeTime|date:'Y-m-d\TH:i:s'}" class="form-control form-control-sm" style="-webkit-flex-direction:row; max-width: 175px;"/></td>
+                                <td><input onchange="chng(this,'TR')" name="place" data-value="{$e->place}" type="text" value="{$e->place}" class="form-control form-control-sm"/></td>
+                                <td><input onchange="chng(this,'TR')" name="link" data-value="{$e->link}" type="text" value="{$e->link}" class="form-control form-control-sm"/></td>
+                                <td><button class="btn btn-sm btn-primary" onclick="save({$e->id})" title="Uložit"><i class="fa fa-floppy-o" aria-hidden="true"></i></button></td>
                             </tr>
                         {/foreach}
                     </table>
                 </div>
+                <div class="card-footer text-right">
+                    <button n:if="$user->isAllowed('SYS','EVE_UPDATE')" class="btn btn-lg btn-primary" onclick="saveAll()" title="Uložit vše"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                </div>
+                
             </div>
         </div>
     </div>
