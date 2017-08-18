@@ -7,12 +7,23 @@ class SettingsPresenter extends SecuredPresenter {
     /** @var \Tymy\Event @inject */
     public $event;
         
+    /** @var \Tymy\Events @inject */
+    public $events;
+        
     /** @var \Tymy\EventTypes @inject */
     public $eventTypes;
+    
+            
+    /** @var \App\Model\Supplier @inject */
+    public $supplier;
         
     protected function startup() {
         parent::startup();
         $this->setLevelCaptions(["1" => ["caption" => "Nastavení", "link" => $this->link("Settings:")]]);
+        $this->template->addFilter("typeColor", function ($type) {
+            $color = $this->supplier->getEventColors();
+            return $color[$type];
+        });
     }
 
     
@@ -34,7 +45,7 @@ class SettingsPresenter extends SecuredPresenter {
         if(!is_null($event)){
             $this->setView("event");
         } else {
-            //TODO render list
+            $this->template->events = $this->events->reset()->setLimit(15)->getData(); // get all events
         }
     }
 
