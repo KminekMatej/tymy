@@ -1,0 +1,13 @@
+
+/* 
+    Created on : 18.8.2017, 14:36:04
+    Author     : kminekmatej
+*/
+
+.table-xs th, .table-xs td {
+    padding: 0.1rem;
+}
+
+.table-xs INPUT[type='datetime-local']{
+    font-size: 12px;
+}
