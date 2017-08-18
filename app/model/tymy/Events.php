@@ -16,6 +16,8 @@ final class Events extends Tymy{
     
     private $from;
     private $order;
+    private $limit;
+    private $offset;
     private $to;
     private $withMyAttendance = FALSE;
     public $eventsJSObject;
@@ -58,7 +60,24 @@ final class Events extends Tymy{
         $this->withMyAttendance = $withMyAttendance;
         return $this;
     }
-    
+    public function getLimit() {
+        return $this->limit;
+    }
+
+    public function getOffset() {
+        return $this->offset;
+    }
+
+    public function setLimit($limit) {
+        $this->limit = $limit;
+        return $this;
+    }
+
+    public function setOffset($offset) {
+        $this->offset = $offset;
+        return $this;
+    }
+
     public function reset() {
         $this->setFrom(NULL);
         $this->setTo(NULL);
@@ -86,6 +105,14 @@ final class Events extends Tymy{
         
         if($this->order){
             $this->setUriParam("order", $this->order);
+        }
+        
+        if($this->limit){
+            $this->setUriParam("limit", $this->limit);
+        }
+        
+        if($this->offset){
+            $this->setUriParam("offset", $this->offset);
         }
         
         $this->fullUrl .= $url;
