@@ -1,7 +1,7 @@
-function update(btn, purl) {
+function update(btn, purl, selector) {
     if ($(btn).prop("disabled") || $(btn).hasClass("disabled"))
         return;
-    var editedArea = $("DIV.container.settings DIV.card-block");
+    var editedArea = $(selector);
     var values = {};
 
     //check for updated INPUT elements
@@ -72,9 +72,12 @@ function update(btn, purl) {
             method: 'POST',
             data: values,
             complete: function (payload) {
-                $(btn).prop("disabled", true);
-                $(btn).attr("disabled", "disabled");
-                $(btn).removeAttr("disabled");
+                editedArea.find("BUTTON.update").each(function(){
+                    $(this).prop("disabled", false);
+                    $(this).removeAttr("disabled");
+                    $(this).removeClass("btn-outline-primary");
+                    $(this).addClass("btn-primary");
+                });
             }
         });
     }
@@ -119,4 +122,36 @@ function map(){
 function link(){
     var link=$("INPUT[name='link']").val();
     window.open(link, "_blank");
+}
+
+function save(id){
+    var row = $("DIV.container.settings TABLE.table-xs TR[data-id='"+id+"']");
+    var btn = row.find("BUTTON");
+    btn.removeClass("btn-outline-primary");
+    btn.addClass("btn-primary");
+}
+
+function saveAll(){
+    var table = $("DIV.container.settings TABLE.table-xs");
+    table.find("BUTTON").each(function(){
+        $(this).removeClass("btn-outline-primary");
+        $(this).addClass("btn-primary");
+    });
+}
+
+function chng(elm, selector){
+    var editedArea = $(elm).closest(selector);
+    var changed = false;
+    editedArea.find("[data-value]").each(function(){
+        if($(this).attr("data-value") != $(this).val())
+            changed = true;
+    });
+    var btn = editedArea.find("BUTTON.update");
+    if(changed){
+        btn.removeClass("btn-primary");
+        btn.addClass("btn-outline-primary");
+    } else {
+        btn.removeClass("btn-outline-primary");
+        btn.addClass("btn-primary");
+    }
 }
