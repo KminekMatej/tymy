@@ -109,18 +109,28 @@ class SettingsPresenter extends SecuredPresenter {
         $this->template->poll = $pollObj;
     }
     
+    public function handleEventsEdit(){
+        $post = $this->getRequest()->getPost();
+        foreach ($post as $evData) {
+            $this->editEvent($evData["id"], $evData);
+        }
+    }
+    
     public function handleEventEdit($eventId){
         $post = $this->getRequest()->getPost();
+        $this->editEvent($eventId, $post);
+    }
+    
+    private function editEvent($eventId, $data) {
         try {
             $this->event
                     ->recId($eventId)
-                    ->edit($post);
+                    ->edit($data);
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
-        $this->flashMessage("Event edited");
     }
-    
+
     public function handleEventDelete($eventId){
         $this->flashMessage("Event deleted");
     }

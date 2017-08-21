@@ -1,11 +1,64 @@
-function update(btn, purl, selector) {
+function updateRow(purl, selector) {
+    var btn = $(selector).find("BUTTON.update");
     if ($(btn).prop("disabled") || $(btn).hasClass("disabled"))
         return;
-    var editedArea = $(selector);
-    var values = {};
+    var changes = getChangedInputs(selector);
+    $.extend(changes, getChangedSelects(selector));
+    $.extend(changes, getChangedTextareas(selector));
 
-    //check for updated INPUT elements
-    editedArea.find("INPUT[data-value]").each(function () {
+    if (!($.isEmptyObject(changes) > 0)) {
+        btnDisable(btn, true);
+        $.nette.ajax({
+            url: purl,
+            method: 'POST',
+            data: changes,
+            complete: function (payload) {
+                btnDisable(btn, false);
+                btnClass(btn, false);
+            }
+        });
+    }
+}
+
+function updateRows(purl, selector) {
+    var allChanges = {};
+    $(selector).find("TR[data-id]").each(function () {
+        var area = $(this);
+        var changes = getChangedInputs(area);
+        $.extend(changes, getChangedSelects(area));
+        $.extend(changes, getChangedTextareas(area));
+        if (!($.isEmptyObject(changes) > 0)) {
+            var id = $(this).attr("data-id");
+            changes.id = id;
+            allChanges[id] = changes;
+        }
+    });
+    if (!($.isEmptyObject(allChanges) > 0)) {
+        var btns = $(selector).find("BUTTON.update");
+        btns.each(function () {
+            btnDisable($(this), true);
+        });
+        
+        $.nette.ajax({
+            url: purl,
+            method: 'POST',
+            data: allChanges,
+            complete: function (payload) {
+                btns.each(function () {
+                    btnDisable($(this), false);
+                    btnClass($(this), false);
+                });
+                btnDisable($("BUTTON.update.all"), false);
+                btnClass($("BUTTON.update.all"), false);
+
+            }
+        });
+    } else alert("No changed field detected");
+}
+
+function getChangedInputs(area) {
+    var values = {};
+    $(area).find("INPUT[data-value]").each(function () {
         if ($(this).attr("data-value") != $(this).val()) {
             name = $(this).attr("name");
             value = $(this).is(':checkbox') ? $(this).is(":checked") : $(this).val();
@@ -23,9 +76,12 @@ function update(btn, purl, selector) {
             values[name] = value;
         }
     });
-    
-        //check for updated TEXTAREA elements
-    editedArea.find("TEXTAREA[data-value]").each(function () {
+    return values;
+}
+
+function getChangedTextareas(area) {
+    var values = {};
+    $(area).find("TEXTAREA[data-value]").each(function () {
         if ($(this).attr("data-value") != $(this).val()) {
             name = $(this).attr("name");
             value = $(this).val();
@@ -43,9 +99,12 @@ function update(btn, purl, selector) {
             values[name] = value;
         }
     });
+    return values;
+}
 
-    //check for updated SELECT elements
-    editedArea.find("SELECT[data-value]").each(function () {
+function getChangedSelects(area) {
+    var values = {};
+    $(area).find("SELECT[data-value]").each(function () {
         if ($(this).attr("data-value") != $(this).val() && $(this).val() != "") {
             name = $(this).attr("name");
             value = $(this).val();
@@ -63,24 +122,7 @@ function update(btn, purl, selector) {
             values[name] = value;
         }
     });
-
-    if (!($.isEmptyObject(values) > 0)) {
-        $(btn).prop("disabled", true);
-        $(btn).attr("disabled", "disabled");
-        $.nette.ajax({
-            url: purl,
-            method: 'POST',
-            data: values,
-            complete: function (payload) {
-                editedArea.find("BUTTON.update").each(function(){
-                    $(this).prop("disabled", false);
-                    $(this).removeAttr("disabled");
-                    $(this).removeClass("btn-outline-primary");
-                    $(this).addClass("btn-primary");
-                });
-            }
-        });
-    }
+    return values;
 }
 
 function del(btn, purl) {
@@ -114,44 +156,46 @@ function isValid(name, value1, value2 = null) {
 
 }
 
-function map(){
-    var place=$("INPUT[name='place']").val();
-    window.open('https://www.google.com/maps/search/?api=1&query='+encodeURI(place), "_blank");
+function map() {
+    var place = $("INPUT[name='place']").val();
+    window.open('https://www.google.com/maps/search/?api=1&query=' + encodeURI(place), "_blank");
 }
 
-function link(){
-    var link=$("INPUT[name='link']").val();
+function link() {
+    var link = $("INPUT[name='link']").val();
     window.open(link, "_blank");
 }
 
-function save(id){
-    var row = $("DIV.container.settings TABLE.table-xs TR[data-id='"+id+"']");
-    var btn = row.find("BUTTON");
-    btn.removeClass("btn-outline-primary");
-    btn.addClass("btn-primary");
-}
-
-function saveAll(){
-    var table = $("DIV.container.settings TABLE.table-xs");
-    table.find("BUTTON").each(function(){
-        $(this).removeClass("btn-outline-primary");
-        $(this).addClass("btn-primary");
-    });
-}
-
-function chng(elm, selector){
-    var editedArea = $(elm).closest(selector);
+function chng(selector) {
     var changed = false;
-    editedArea.find("[data-value]").each(function(){
-        if($(this).attr("data-value") != $(this).val())
+    $(selector).find("[data-value]").each(function () {
+        if ($(this).attr("data-value") != $(this).val())
             changed = true;
     });
-    var btn = editedArea.find("BUTTON.update");
-    if(changed){
-        btn.removeClass("btn-primary");
-        btn.addClass("btn-outline-primary");
-    } else {
-        btn.removeClass("btn-outline-primary");
-        btn.addClass("btn-primary");
+    btnClass($(selector).find("BUTTON.update"), changed);
+    btnClass($("BUTTON.update.all"), changed);
+}
+
+function btnClass(btn, changed) {
+    if (btn.length > 0) {
+        if (changed) {
+            btn.removeClass("btn-primary");
+            btn.addClass("btn-outline-primary");
+        } else {
+            btn.removeClass("btn-outline-primary");
+            btn.addClass("btn-primary");
+        }
+    }
+}
+
+function btnDisable(btn, disable){
+    if (btn.length > 0) {
+        if (disable) {
+            btn.prop("disabled", true);
+            btn.attr("disabled", "disabled");
+        } else {
+            btn.prop("disabled", false);
+            btn.removeAttr("disabled");
+        }
     }
 }
