@@ -34,8 +34,9 @@ function updateRows(purl, selector) {
             allChanges[id] = changes;
         }
     });
+    var btns = $(selector).find("BUTTON.update");
     if (!($.isEmptyObject(allChanges) > 0)) {
-        var btns = $(selector).find("BUTTON.update");
+        
         btns.each(function () {
             btnDisable($(this), true);
         });
@@ -54,7 +55,14 @@ function updateRows(purl, selector) {
                 commitChanges(selector);
             }
         });
-    } else alert("No changed field detected");
+    } else {
+        btns.each(function () {
+            btnDisable($(this), false);
+            btnClass($(this), false);
+        });
+        btnDisable($("BUTTON.update.all"), false);
+        btnClass($("BUTTON.update.all"), false);
+    }
 }
 
 function getChangedInputs(area) {
