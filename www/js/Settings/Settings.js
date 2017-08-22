@@ -15,6 +15,7 @@ function updateRow(purl, selector) {
             complete: function (payload) {
                 btnDisable(btn, false);
                 btnClass(btn, false);
+                commitChanges(selector);
             }
         });
     }
@@ -50,7 +51,7 @@ function updateRows(purl, selector) {
                 });
                 btnDisable($("BUTTON.update.all"), false);
                 btnClass($("BUTTON.update.all"), false);
-
+                commitChanges(selector);
             }
         });
     } else alert("No changed field detected");
@@ -123,6 +124,13 @@ function getChangedSelects(area) {
         }
     });
     return values;
+}
+
+
+function commitChanges(area){
+    $(area).find("[data-value]").each(function () {
+        $(this).attr("data-value", $(this).val());
+    });
 }
 
 function del(btn, purl) {
