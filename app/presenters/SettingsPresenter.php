@@ -121,6 +121,16 @@ class SettingsPresenter extends SecuredPresenter {
         $this->editEvent($eventId, $post);
     }
     
+    public function handleEventDelete($eventId){
+        try {
+            $this->event
+                    ->recId($eventId)
+                    ->delete();
+        } catch (\Tymy\Exception\APIException $ex) {
+            $this->handleTapiException($ex);
+        }
+    }
+    
     private function editEvent($eventId, $data) {
         try {
             $this->event
@@ -129,10 +139,6 @@ class SettingsPresenter extends SecuredPresenter {
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
-    }
-
-    public function handleEventDelete($eventId){
-        $this->flashMessage("Event deleted");
     }
     
 }

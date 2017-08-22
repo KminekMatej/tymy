@@ -47,6 +47,22 @@ final class Event extends Tymy{
         return $this;
     }
     
+    public function delete(){
+        if (!isset($this->recId))
+            throw new \Tymy\Exception\APIException('User ID not set!');
+        
+        $this->urlStart();
+
+        $this->fullUrl .= self::TAPI_NAME . "/" .$this->recId . "/delete";
+
+        $this->urlEnd();
+        
+        $this->method = "DELETE";
+                
+        $this->result = $this->execute();
+        return $this;
+    }
+    
     public function create($eventsArray, $eventTypesArray){
         foreach ($eventsArray as $event) {
             if(!array_key_exists("startTime", $event))

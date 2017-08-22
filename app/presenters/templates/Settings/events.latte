@@ -46,7 +46,7 @@
                                     <button class="btn btn-sm btn-primary update" onclick="updateRow({link eventEdit! $e->id}, {$selector})" title="Uložit" style="margin-right: 2px">
                                         <i class="fa fa-floppy-o" aria-hidden="true"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-danger delete" onclick="del(this, {link eventDelete! $e->id})" title="Smazat">
+                                    <button class="btn btn-sm btn-danger delete" onclick="del({link eventDelete! $e->id}, {$selector})" title="Smazat">
                                         <i class="fa fa-times" aria-hidden="true"></i>
                                     </button>
                                 </td>

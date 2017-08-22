@@ -134,27 +134,27 @@ function getChangedSelects(area) {
     return values;
 }
 
-
 function commitChanges(area){
     $(area).find("[data-value]").each(function () {
         $(this).attr("data-value", $(this).val());
     });
 }
 
-function del(btn, purl) {
+function del(purl, selector) {
+    var btn = $(selector).find("BUTTON.delete");
+    var id = $(selector).attr("data-id");
     if ($(btn).prop("disabled") || $(btn).hasClass("disabled"))
         return;
-    $(btn).prop("disabled", true);
-    $(btn).attr("disabled", "disabled");
-    $.nette.ajax({
-        url: purl,
-        method: 'POST',
-        complete: function (payload) {
-            $(btn).prop("disabled", true);
-            $(btn).attr("disabled", "disabled");
-            $(btn).removeAttr("disabled");
-        }
-    });
+    btnDisable($(btn), true);
+    if (window.confirm("Smazat událost " + id + " ?")) {
+        $.nette.ajax({
+            url: purl,
+            complete: function (payload) {
+                $(selector).remove();
+            }
+        });
+    }
+    
 }
 
 function isValid(name, value1, value2 = null) {
