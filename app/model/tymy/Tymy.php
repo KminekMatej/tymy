@@ -276,8 +276,11 @@ abstract class Tymy extends Nette\Object{
         curl_setopt($ch, CURLOPT_URL, $url); 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         
-        if(in_array($this->method, ["POST","PUT"]) && isset($this->postParams) && is_array($this->postParams)){
+        if($this->method != "GET"){
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->method);
+        }
+        
+        if(in_array($this->method, ["POST","PUT"]) && isset($this->postParams) && is_array($this->postParams)){
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($this->postParams));
             curl_setopt($ch, CURLOPT_HTTPHEADER, array(
                 'Content-Type: application/json')
