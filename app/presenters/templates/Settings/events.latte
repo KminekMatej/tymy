@@ -42,7 +42,14 @@
                                 <td><input onchange="chng({$selector})" name="closeTime" data-value="{$e->closeTime|date:'Y-m-d\TH:i:s'}" type="datetime-local" value="{$e->closeTime|date:'Y-m-d\TH:i:s'}" class="form-control form-control-sm" style="-webkit-flex-direction:row; max-width: 175px;"/></td>
                                 <td><input onchange="chng({$selector})" name="place" data-value="{$e->place}" type="text" value="{$e->place}" class="form-control form-control-sm"/></td>
                                 <td><input onchange="chng({$selector})" name="link" data-value="{$e->link}" type="text" value="{$e->link}" class="form-control form-control-sm"/></td>
-                                <td><button class="btn btn-sm btn-primary update" onclick="updateRow({link eventEdit! $e->id}, {$selector})" title="Uložit"><i class="fa fa-floppy-o" aria-hidden="true"></i></button></td>
+                                <td class="input-group">
+                                    <button class="btn btn-sm btn-primary update" onclick="updateRow({link eventEdit! $e->id}, {$selector})" title="Uložit" style="margin-right: 2px">
+                                        <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger delete" onclick="del(this, {link eventDelete! $e->id})" title="Smazat">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </button>
+                                </td>
                             </tr>
                         {/foreach}
                     </table>
