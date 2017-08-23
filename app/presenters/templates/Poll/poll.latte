@@ -103,10 +103,10 @@
     {if $poll->showResults == 'ALWAYS'}{var $show = TRUE}{/if}
     {if $show}
         <div class="col my-3">
-            <div class="card sh-box card-inverse" style="background-color: #333; border-color: #333;">
+            <div class="card sh-box text-white bg-dark">
                 <div class="card-header">
                     <h4 class="card-title">Výsledky hlasování</h4>
-                    <table class="table table-inverted table-striped table-hover">
+                    <table class="table table-inverse table-striped table-hover">
                         <tr>
                             <th>Uživatel</th>
                             <th n:foreach="$poll->options as $option">{$option->caption}</th>
