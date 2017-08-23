@@ -18,7 +18,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-block">
+                <div class="card-body">
                     
                     {var $mapLink = filter_var($event->place, FILTER_VALIDATE_URL) ? $event->place : 'https://www.google.com/maps/search/?api=1&query='.urlencode($event->place)}
                     <h6 class="card-subtitle mb-2 text-muted">{$event->eventType->caption}<span n:if="$event->place"> - <a href="{$mapLink}" target="blank" title="Otevřít mapu...">{$event->place}</a></span><span n:if="$event->link"> - <a href="{$event->link}" target="_blank">[Odkaz]</a></span></h6>
@@ -63,7 +63,7 @@
                     </ul>
                 </div>
 
-                <div class="card-block">
+                <div class="card-body">
                     <!-- Tab panes -->
                     <div class="tab-content">
                         {var $first = true}

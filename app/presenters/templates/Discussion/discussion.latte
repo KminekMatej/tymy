@@ -54,7 +54,7 @@ $( document ).ready(function() {
                             <span class="float-md-right mx-2">{$item->createdAt|date:'j.n.Y G:i'}</span>
                             <div class="alert alert-warning float-md-right mx-1" n:ifset="$item->updatedAt" style="margin: 0px; padding: 4px; font-size: 10px;">Upravil(a) {$users[$item->updatedById]->callName}, {$item->updatedAt|date:'j.n.Y G:i'}</div>
                         </div>
-                        <div class="card-block">
+                        <div class="card-body">
                             <img class="user_pic" src="{$tymyRoot}/{$item->createdBy->pictureUrl}" />
                             <div class="card-text" id="post-{$item->id}">
                                 {ifset $item->post}{$item->post|noescape}{/ifset}

@@ -70,7 +70,7 @@
         <div class="col-md-7 my-3">
             <div class="card sh-box">
                 <div class="card-header"><h4 class="card-title">Diskuze</h4></div>
-                <div class="card-block">
+                <div class="card-body">
                     {foreach $discussions as $item}
                         <div class="row my-2">
                             <div class="col-sm-4 name" id="discussion-pane-{$item->id}">
@@ -114,7 +114,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="card-block">
+                <div class="card-body">
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="online" role="tabpanel">
                             {var $someOnline = FALSE}

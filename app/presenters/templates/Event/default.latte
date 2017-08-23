@@ -76,7 +76,7 @@
                         <span class="mr-auto">Agenda</span>
                         <button class="btn btn-sm btn-light btn-light-bordered float-right" title="Zobrazit/skrýt již proběhlé akce" onclick="togglePast()"><i class="fa fa-eye" aria-hidden="true"></i></button>
                     </div>
-                    <div class="card-block">
+                    <div class="card-body">
                         {if isset($evMonths[$actMonth]) && count($evMonths[$actMonth]) > 0 }
                             {foreach $evMonths[$actMonth] as $ev}
                                 {var $past = strtotime($ev->closeTime) < strtotime(date('Ymd')) ? 'evnt-past collapse'}
