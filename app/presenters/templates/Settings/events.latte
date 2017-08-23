@@ -26,6 +26,7 @@
                 <div class="card-body">
                     <table class="table table-xs table-hover table-responsive">
                         <tr>
+                            <th></th>
                             <th>Typ</th>
                             <th>Titulek</th>
                             <th>Popis</th>
@@ -39,7 +40,14 @@
                         {foreach $events as $e}
                             <tr data-id="{$e->id}">
                                 {var $selector = 'TABLE.table-xs TR[data-id='.$e->id.']'}
-                                <td><span class="badge" style="background-color: {$e->type|typeColor|noescape}">{$e->type}</span></td>
+                                <td>
+                                    <a href="{plink Settings:events $e->webName}" class="btn btn-sm btn-light btn-light-bordered"  title="Upravit" style="margin-right: 2px">
+                                        <i class="fa fa-external-link" aria-hidden="true"></i>
+                                    </a>
+                                </td>
+                                <td>
+                                    <span class="badge" style="background-color: {$e->type|typeColor|noescape}">{$e->type}</span>
+                                </td>
                                 <td><input onchange="chng({$selector})" name="caption" data-value="{$e->caption}" type="text" value="{$e->caption}" class="form-control form-control-sm" style="max-width: 100px;"/></td>
                                 <td><textarea onchange="chng({$selector})" name="description" data-value="{$e->description}" rows="1" class="form-control form-control-sm">{$e->description}</textarea></td>
                                 <td><input onchange="chng({$selector})" name="startTime" data-value="{$e->startTime|date:'Y-m-d\TH:i:s'}" type="datetime-local" value="{$e->startTime|date:'Y-m-d\TH:i:s'}" class="form-control form-control-sm" style="-webkit-flex-direction:row; max-width: 175px;"/></td>
