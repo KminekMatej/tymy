@@ -7,6 +7,10 @@ body {
         padding-top: 56px;
 }
 
+A {
+    color: #0275d8;
+}
+
 BUTTON.btn, A.btn{
     cursor: pointer;
 }
