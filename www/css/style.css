@@ -257,3 +257,7 @@ INPUT.form-check{
 SPAN.badge.hidden-badge{
     display: none;
 }
+
+.btn-light-bordered{
+    border: 1px solid #c5c5c5;
+}

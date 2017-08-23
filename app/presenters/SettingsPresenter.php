@@ -97,7 +97,6 @@ class SettingsPresenter extends SecuredPresenter {
         $eventProps[] = (object)["name" => "closeTime", "label" => "Uzávěrka", "type" => "datetime-local", "value" => strftime('%Y-%m-%dT%H:%M:%S', strtotime($eventObj->closeTime))];
         $eventProps[] = (object)["name" => "place", "label" => "Místo", "type" => "text", "value" => $eventObj->place];
         $eventProps[] = (object)["name" => "link", "label" => "Odkaz", "type" => "text", "value" => $eventObj->link];
-        
         $this->template->props = $eventProps;
     }
     

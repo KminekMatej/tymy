@@ -12,7 +12,6 @@
         <title>{$tym|firstUpper} | Tymy.CZ v2</title>
 
         {block styles}
-        <link rel="stylesheet" href="{$basePath}/resources/tether/css/tether.{$css}" />
         <link rel="stylesheet" href="{$basePath}/resources/bootstrap4/css/bootstrap.{$css}" />
         <link rel="stylesheet" href="{$basePath}/resources/fontawesome/css/font-awesome.{$css}" />
         <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet" />
@@ -20,7 +19,8 @@
         
         {/block}
 	{block scripts}
-        <script src="{$basePath}/resources/tether/js/tether.{$js}"></script>
+        <script src="{$basePath}/js/css_test.js"></script>
+        <script src="{$basePath}/resources/popper/umd/popper.{$js}"></script>
         <script src="{$basePath}/resources/fullcalendar/lib/moment.min.js"></script>
 	<script src="{$basePath}/resources/jQuery/jquery-3.2.1.{$js}"></script>
         <script src="{$basePath}/resources/bootstrap4/js/bootstrap.{$js}"></script>
