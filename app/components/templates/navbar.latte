@@ -1,7 +1,7 @@
 {snippet nav}
 {var $allWarnings = $discussionWarnings + $eventWarnings + $playersWarnings + $voteWarnings}
-<nav class="navbar navbar-inverse navbar-toggleable-md bg-inverse fixed-top" data-title="{$allWarnings}">
-    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" data-title="{$allWarnings}">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <a class="navbar-brand" href="{$baseUri}" title="{$tym|firstUpper}.Tymy.CZ">{$tym|firstUpper}</a>
@@ -87,7 +87,7 @@
             <ol class="breadcrumb">
                 {foreach $levels as $level}
                     {if $level['caption'] != ''}
-                        <li class="breadcrumb-item"><a href="{$level['link']}">{$level['caption']}</a></li>
+                        <li n:class="breadcrumb-item, $iterator->last ? active"><a href="{$level['link']}" n:tag-if="!$iterator->last">{$level['caption']}</a></li>
                     {/if}
                 {/foreach}
             </ol>
