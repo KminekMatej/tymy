@@ -27,11 +27,11 @@ $( document ).ready(function() {
         {ifset $item->createdBy->callName}
         {var $stickyIcon = ''}
         {if $item->sticky}
-            {var $chc = 'post-sticky card-inverse card-danger'}
+            {var $chc = 'post-sticky bg-warning'}
             {var $cc = 'post-sticky'}
             {var $stickyIcon = 'sticky'}
         {elseif $item->newPost}
-            {var $chc = 'post-new card-inverse card-primary'}
+            {var $chc = 'post-new text-white bg-primary'}
             {var $cc = 'post-new'}
         {elseif $item->createdById == $userId}
             {var $chc = 'post-mine'}
