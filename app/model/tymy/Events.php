@@ -20,6 +20,7 @@ final class Events extends Tymy{
     private $offset;
     private $to;
     private $withMyAttendance = FALSE;
+    private $allEventsCount;
     public $eventsJSObject;
     public $eventsMonthly;
     public $eventsFrom;
@@ -39,6 +40,31 @@ final class Events extends Tymy{
 
     public function getWithMyAttendance() {
         return $this->withMyAttendance;
+    }
+    
+    public function getAllEventsCount() {
+        if (!is_null($this->allEventsCount)) return $this->allEventsCount;
+        if (!is_null($this->session)) {
+            $sessionSection = $this->session->getSection(self::SESSION_SECTION);
+            $key = $this->getTapiName() . ":allEventsCount";
+            if($sessionSection[$key] != null){
+                $this->setAllEventsCount($sessionSection[$key]);
+                return $sessionSection[$key];
+            }
+        }
+        
+        $this->reset()->getData();
+        return $this->allEventsCount;
+    }
+
+    public function setAllEventsCount($allEventsCount) {
+        $this->allEventsCount = $allEventsCount;
+        $sessionSection = $this->session->getSection(self::SESSION_SECTION);
+        $key = $this->getTapiName() . ":allEventsCount";
+        $sessionSection[$key] = $allEventsCount;
+        \Tracy\Debugger::barDump($allEventsCount, "SET:input");
+        \Tracy\Debugger::barDump($sessionSection[$key], "SET:session");
+        return $this;
     }
 
     public function setFrom($from) {
@@ -81,12 +107,14 @@ final class Events extends Tymy{
     public function reset() {
         $this->setFrom(NULL);
         $this->setTo(NULL);
+        $this->setLimit(NULL);
+        $this->setOffset(NULL);
         $this->setOrder(NULL);
         $this->setWithMyAttendance(FALSE);
         return parent::reset();
     }
 
-        public function select() {
+    public function select() {
         $url = self::TAPI_NAME;
         
         if($this->withMyAttendance){
@@ -123,6 +151,10 @@ final class Events extends Tymy{
         $data = $this->getData();
         
         $this->getResult()->menuWarningCount = 0;
+        
+        if($this->getLimit() == null && $this->getOffset() == null && $this->getFrom() == null && $this->getTo() == null){
+            $this->setAllEventsCount(count($data));
+        }
         
         foreach ($data as $event) {
             $event->warning = false;
