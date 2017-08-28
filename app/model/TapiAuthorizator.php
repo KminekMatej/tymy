@@ -34,6 +34,8 @@ class TapiAuthorizator implements Nette\Security\IAuthorizator {
         switch ($privilege) {
             case "EVE_UPDATE":
                 return in_array($this->role, ["ATT"]) ? TapiAuthorizator::ALLOW : TapiAuthorizator::DENY;
+            case "EVE_DELETE":
+                return in_array($this->role, ["ATT"]) ? TapiAuthorizator::ALLOW : TapiAuthorizator::DENY;
             default:
                 return TapiAuthorizator::DENY;
         }

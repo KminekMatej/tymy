@@ -56,10 +56,10 @@
                                 <td><input onchange="chng({$selector})" name="place" data-value="{$e->place}" type="text" value="{$e->place}" class="form-control form-control-sm"/></td>
                                 <td><input onchange="chng({$selector})" name="link" data-value="{$e->link}" type="text" value="{$e->link}" class="form-control form-control-sm"/></td>
                                 <td class="input-group">
-                                    <button class="btn btn-sm btn-primary update" onclick="updateRow({link eventEdit! $e->id}, {$selector})" title="Uložit" style="margin-right: 2px">
+                                    <button n:if="$user->isAllowed('SYS','EVE_UPDATE')" class="btn btn-sm btn-primary update" onclick="updateRow({link eventEdit! $e->id}, {$selector})" title="Uložit" style="margin-right: 2px">
                                         <i class="fa fa-floppy-o" aria-hidden="true"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-danger delete" onclick="del({link eventDelete! $e->id}, {$selector})" title="Smazat">
+                                    <button n:if="$user->isAllowed('SYS','EVE_DELETE')" class="btn btn-sm btn-danger delete" onclick="del({link eventDelete! $e->id}, {$selector})" title="Smazat">
                                         <i class="fa fa-times" aria-hidden="true"></i>
                                     </button>
                                 </td>
