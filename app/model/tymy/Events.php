@@ -63,8 +63,6 @@ final class Events extends Tymy{
         $sessionSection = $this->session->getSection(self::SESSION_SECTION);
         $key = $this->getTapiName() . ":allEventsCount";
         $sessionSection[$key] = $allEventsCount;
-        \Tracy\Debugger::barDump($allEventsCount, "SET:input");
-        \Tracy\Debugger::barDump($sessionSection[$key], "SET:session");
         return $this;
     }
 
