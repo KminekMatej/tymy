@@ -19,6 +19,7 @@ abstract class UserInterface extends Tymy{
         if(!property_exists($player, "permissions")){
             $player->permissions = [];
         }
+        $this->user->getIdentity()->setRoles($player->roles);
         $player->permissions["canSeeRegisteredUsers"] = property_exists($player, "roles") && array_intersect(["SUPER","USR"], $player->roles) ? TRUE : FALSE;
         $player->permissions["canLogin"] = $player->canLogin;
     }

@@ -60,11 +60,11 @@ final class Users extends UserInterface{
             $player->webName = (string)$player->id;
             if(property_exists($player, "fullName")) $player->webName .= "-" . Strings::webalize($player->fullName);
             $this->userWarnings($player);
-            $this->userPermissions($player);
             $players[$player->id] = $player;
             if($player->id == $myId){
                 $this->result->menuWarningCount = $player->errCnt;
                 $this->result->me = (object)$player;
+                $this->userPermissions($player);
             }
             if(property_exists($player, "lastLogin"))   $this->timeLoad($player->lastLogin);
             $this->timeLoad($player->createdAt);
