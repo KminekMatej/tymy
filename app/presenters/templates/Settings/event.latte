@@ -32,8 +32,8 @@
                                         <div class="input-group" n:tag-if="$prop->name=='place' || $prop->name=='link'">
                                             <input onchange="chng(this, 'DIV.container.settings DIV.card')" name="{$prop->name}" data-value="{$prop->value}" type="{$prop->type}" value="{$prop->value}" class="form-control col-6" n:attr="disabled => property_exists($prop,'disabled') && $prop->disabled"/>
                                             <span class="input-group-btn" style="min-width: 50px">
-                                                <button n:if="$prop->name=='place'" class='btn btn-sm btn-light btn-light-bordered' onclick='map()' title="Zobrazit na mapě"><i class="fa fa-map-marker" aria-hidden="true"></i></button>
-                                                <button n:if="$prop->name=='link'" class='btn btn-sm btn-light btn-light-bordered' onclick='link()' title="Zobrazit v novém okně"><i class="fa fa-external-link" aria-hidden="true"></i></button>
+                                                <button n:if="$prop->name=='place'" class='btn btn-light btn-light-bordered' onclick='map()' title="Zobrazit na mapě"><i class="fa fa-map-marker" aria-hidden="true"></i></button>
+                                                <button n:if="$prop->name=='link'" class='btn btn-light btn-light-bordered' onclick='link()' title="Zobrazit v novém okně"><i class="fa fa-external-link" aria-hidden="true"></i></button>
                                             </span>
                                             
                                         </div>
