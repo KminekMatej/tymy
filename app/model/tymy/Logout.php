@@ -26,9 +26,17 @@ final class Logout extends Tymy{
 
         $this->urlEnd();
         
-        return $this->execute();
+        $this->result = $this->execute();
+        
+        $this->postProcess();
+        
+        return $this->result;
     }
     
-    protected function postProcess(){}
+    protected function postProcess(){
+        if (!is_null($this->session)) {
+            $this->session->getSection(self::SESSION_SECTION)->remove(); // destroy TAPI session section
+        }
+    }
     
 }
