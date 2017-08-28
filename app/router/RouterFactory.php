@@ -26,12 +26,12 @@ class RouterFactory
                 $router[] = new Route('tym/marodi', 'Team:sicks');
                 $router[] = new Route('ankety', 'Poll:default');
                 $router[] = new Route('diskuze/<discussion>[/<page>] ? search=<search>', 'Discussion:discussion');
-                $router[] = new Route('udalosti/nova', 'Event:new');
                 $router[] = new Route('udalosti/<udalost>', 'Event:event');
                 $router[] = new Route('ankety/<anketa>', 'Poll:poll');
                 $router[] = new Route('nastaveni', 'Settings:default');
                 $router[] = new Route('nastaveni/diskuze', 'Settings:discussions');
                 $router[] = new Route('nastaveni/udalosti', 'Settings:events');
+                $router[] = new Route('nastaveni/udalosti/nova', 'Settings:event_new');
                 $router[] = new Route('nastaveni/tym', 'Settings:team');
                 $router[] = new Route('nastaveni/ankety', 'Settings:polls');
                 $router[] = new Route('nastaveni/reporty', 'Settings:reports');

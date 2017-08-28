@@ -15,13 +15,12 @@
 {/block}
 
 {block content}
-{dump $events}
 <div class="container settings">
     <div class="row">
         <div class="col">
             <div class="card sh-box my-3">
                 <div class="card-header">
-                    <h4>Nastavení událostí</h4>
+                    <h4>{if $isNew}Nová událost/i{else}Nastavení událostí{/if}</h4>
                 </div>
                 <div class="card-body">
                     <table class="table table-xs table-hover table-responsive">
@@ -41,33 +40,41 @@
                             <tr data-id="{$e->id}">
                                 {var $selector = 'TABLE.table-xs TR[data-id='.$e->id.']'}
                                 <td>
-                                    <a href="{plink Settings:events $e->webName}" class="btn btn-sm btn-light btn-light-bordered"  title="Upravit" style="margin-right: 2px">
+                                    <a n:if="!$isNew" href="{plink Settings:events $e->webName}" class="btn btn-sm btn-light btn-light-bordered"  title="Upravit" style="margin-right: 2px">
                                         <i class="fa fa-external-link" aria-hidden="true"></i>
                                     </a>
                                 </td>
                                 <td>
-                                    <span class="badge" style="background-color: {$e->type|typeColor|noescape}">{$e->type}</span>
+                                    <span n:if="!$isNew" class="badge" style="background-color: {$e->type|typeColor|noescape}">{$e->type}</span>
                                 </td>
                                 <td><input onchange="chng({$selector})" name="caption" data-value="{$e->caption}" type="text" value="{$e->caption}" class="form-control form-control-sm" style="max-width: 100px;"/></td>
                                 <td><textarea onchange="chng({$selector})" name="description" data-value="{$e->description}" rows="1" class="form-control form-control-sm">{$e->description}</textarea></td>
-                                <td><input onchange="chng({$selector})" name="startTime" data-value="{$e->startTime|date:'Y-m-d\TH:i:s'}" type="datetime-local" value="{$e->startTime|date:'Y-m-d\TH:i:s'}" class="form-control form-control-sm" style="-webkit-flex-direction:row; max-width: 175px;"/></td>
-                                <td><input onchange="chng({$selector})" name="endTime" data-value="{$e->endTime|date:'Y-m-d\TH:i:s'}" type="datetime-local" value="{$e->endTime|date:'Y-m-d\TH:i:s'}" class="form-control form-control-sm" style="-webkit-flex-direction:row; max-width: 175px;"/></td>
-                                <td><input onchange="chng({$selector})" name="closeTime" data-value="{$e->closeTime|date:'Y-m-d\TH:i:s'}" type="datetime-local" value="{$e->closeTime|date:'Y-m-d\TH:i:s'}" class="form-control form-control-sm" style="-webkit-flex-direction:row; max-width: 175px;"/></td>
+                                <td><input onchange="chng({$selector})" name="startTime" data-value="{$e->startTime|date:'d.m.Y H:i'}" type="text" value="{$e->startTime|date:'d.m.Y H:i'}" class="form-control form-control-sm" style="-webkit-flex-direction:row; max-width: 175px;"/></td>
+                                <td><input onchange="chng({$selector})" name="endTime" data-value="{$e->endTime|date:'d.m.Y H:i'}" type="text" value="{$e->endTime|date:'d.m.Y H:i'}" class="form-control form-control-sm" style="-webkit-flex-direction:row; max-width: 175px;"/></td>
+                                <td><input onchange="chng({$selector})" name="closeTime" data-value="{$e->closeTime|date:'d.m.Y H:i'}" type="text" value="{$e->closeTime|date:'d.m.Y H:i'}" class="form-control form-control-sm" style="-webkit-flex-direction:row; max-width: 175px;"/></td>
                                 <td><input onchange="chng({$selector})" name="place" data-value="{$e->place}" type="text" value="{$e->place}" class="form-control form-control-sm"/></td>
                                 <td><input onchange="chng({$selector})" name="link" data-value="{$e->link}" type="text" value="{$e->link}" class="form-control form-control-sm"/></td>
                                 <td class="input-group">
-                                    <button n:if="$user->isAllowed('SYS','EVE_UPDATE')" class="btn btn-sm btn-primary update" onclick="updateRow({link eventEdit! $e->id}, {$selector})" title="Uložit" style="margin-right: 2px">
+                                    <button n:if="!$isNew && $user->isAllowed('SYS','EVE_UPDATE')" class="btn btn-sm btn-primary update" onclick="updateRow({link eventEdit! $e->id}, {$selector})" title="Uložit" style="margin-right: 2px">
                                         <i class="fa fa-floppy-o" aria-hidden="true"></i>
                                     </button>
-                                    <button n:if="$user->isAllowed('SYS','EVE_DELETE')" class="btn btn-sm btn-danger delete" onclick="del({link eventDelete! $e->id}, {$selector})" title="Smazat">
+                                    <button n:if="!$isNew && $user->isAllowed('SYS','EVE_DELETE')" class="btn btn-sm btn-danger delete" onclick="del({link eventDelete! $e->id}, {$selector})" title="Smazat">
                                         <i class="fa fa-times" aria-hidden="true"></i>
                                     </button>
                                 </td>
                             </tr>
                         {/foreach}
                     </table>
+                    <div>
+                        <button class="btn btn-sm btn-success" title="Duplikovat poslední událost a posunout časy o 1 den" onclick="duplicate('day')"><i class="fa fa-plus" aria-hidden="true"></i> Den</button>
+                        <button class="btn btn-sm btn-success" title="Duplikovat poslední událost a posunout časy o 1 týden" onclick="duplicate('week')"><i class="fa fa-plus" aria-hidden="true"></i> Týden</button>
+                        <button class="btn btn-sm btn-success" title="Duplikovat poslední událost a posunout časy o 1 měsíc" onclick="duplicate('month')"><i class="fa fa-plus" aria-hidden="true"></i> Měsíc</button>
+                    </div>
                 </div>
                 <div class="card-footer text-right">
+                    <a n:if="!$isNew && $user->isAllowed('SYS','EVE_CREATE')" class="btn btn-lg btn-success" href="{plink Settings:event_new}" title="Vytvořit novou událost" style="margin-right: 10px">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </a>
                     <button n:if="$user->isAllowed('SYS','EVE_UPDATE')" class="btn btn-lg btn-primary update all" onclick="updateRows({link eventsEdit!}, 'TABLE.table-xs')" title="Uložit vše"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                 </div>
                 
@@ -76,7 +83,7 @@
     </div>
 </div>
 
-<nav aria-label="Page navigation">
+<nav aria-label="Page navigation" n:if="!$isNew">
     <ul class="pagination justify-content-center">
         <li n:class="$currentPage == 1 ? disabled, page-item"><a class="page-link" href="{plink Settings:events null,$currentPage-1}">Předchozí</a></li>
             {foreach $pagination as $page}

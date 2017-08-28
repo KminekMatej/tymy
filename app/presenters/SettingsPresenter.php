@@ -45,6 +45,7 @@ class SettingsPresenter extends SecuredPresenter {
         if(!is_null($event)){
             $this->setView("event");
         } else {
+            $this->template->isNew = false;
             $page = is_numeric($page) ? $page : 1;
             $limit = \Tymy\Events::PAGING_EVENTS_PER_PAGE;
             $offset = ($page-1)*$limit;
@@ -91,6 +92,28 @@ class SettingsPresenter extends SecuredPresenter {
         $this->template->discussion = $discussionObj;
     }
     
+    public function renderEvent_new() {
+        $this->setLevelCaptions([
+            "2" => ["caption" => "Události", "link" => $this->link("Settings:events")],
+            "3" => ["caption" => "Nová"]
+            ]);
+        $this->template->isNew = true;
+        
+        $events = [(object)[
+            "id" => -1,
+            "caption" => "",
+            "description" => "",
+            "startTime" => "",
+            "endTime" => "",
+            "closeTime" => "",
+            "place" => "",
+            "link" => "",
+        ]];
+        $this->template->events = $events;
+        
+        $this->setView("events");
+    }
+    
     public function renderEvent($event) {
         //RENDERING EVENT DETAIL
         $eventId = $this->parseIdFromWebname($event);
@@ -101,9 +124,9 @@ class SettingsPresenter extends SecuredPresenter {
         $eventProps[] = (object)["name" => "caption", "label" => "Titulek", "type" => "text", "value" => $eventObj->caption];
         $eventProps[] = (object)["name" => "type", "label" => "Typ", "type" => "select", "values"=> $this->eventTypes->getData(), "value" => $eventObj->type, "disabled"=>true];
         $eventProps[] = (object)["name" => "description", "label" => "Popis", "type" => "textarea", "value" => $eventObj->description];
-        $eventProps[] = (object)["name" => "startTime", "label" => "Začátek", "type" => "datetime-local", "value" => strftime('%Y-%m-%dT%H:%M:%S', strtotime($eventObj->startTime)) ];
-        $eventProps[] = (object)["name" => "endTime", "label" => "Konec", "type" => "datetime-local", "value" => strftime('%Y-%m-%dT%H:%M:%S', strtotime($eventObj->endTime))];
-        $eventProps[] = (object)["name" => "closeTime", "label" => "Uzávěrka", "type" => "datetime-local", "value" => strftime('%Y-%m-%dT%H:%M:%S', strtotime($eventObj->closeTime))];
+        $eventProps[] = (object)["name" => "startTime", "label" => "Začátek", "type" => "datetime", "value" => strftime('%Y-%m-%dT%H:%M:%S', strtotime($eventObj->startTime)) ];
+        $eventProps[] = (object)["name" => "endTime", "label" => "Konec", "type" => "datetime", "value" => strftime('%Y-%m-%dT%H:%M:%S', strtotime($eventObj->endTime))];
+        $eventProps[] = (object)["name" => "closeTime", "label" => "Uzávěrka", "type" => "datetime", "value" => strftime('%Y-%m-%dT%H:%M:%S', strtotime($eventObj->closeTime))];
         $eventProps[] = (object)["name" => "place", "label" => "Místo", "type" => "text", "value" => $eventObj->place];
         $eventProps[] = (object)["name" => "link", "label" => "Odkaz", "type" => "text", "value" => $eventObj->link];
         $this->template->props = $eventProps;
@@ -127,6 +150,10 @@ class SettingsPresenter extends SecuredPresenter {
     public function handleEventEdit($eventId){
         $post = $this->getRequest()->getPost();
         $this->editEvent($eventId, $post);
+    }
+    
+    public function handleEventCreate(){
+        //TODO
     }
     
     public function handleEventDelete($eventId){
