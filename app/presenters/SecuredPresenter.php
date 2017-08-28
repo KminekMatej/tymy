@@ -92,6 +92,15 @@ class SecuredPresenter extends BasePresenter {
         $this->redirect($this->getName() . ":default");
     }
     
+    /**
+     * Smart pagination script
+     * @link https://stackoverflow.com/questions/163809/smart-pagination-algorithm
+     * @param int $data Total count of items
+     * @param int $limit Number of items per page
+     * @param int $current Number of current page
+     * @param int $adjacents Number of shown links
+     * @return type
+     */
     protected function pagination($data, $limit = null, $current = null, $adjacents = null) {
         $result = array();
 

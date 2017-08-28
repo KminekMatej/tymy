@@ -13,6 +13,7 @@ final class Events extends Tymy{
     
     const TAPI_NAME = "events";
     const TSID_REQUIRED = TRUE;
+    const PAGING_EVENTS_PER_PAGE = 15;
     
     private $from;
     private $order;

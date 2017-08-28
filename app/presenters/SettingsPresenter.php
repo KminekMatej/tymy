@@ -3,7 +3,7 @@
 namespace App\Presenters;
 
 class SettingsPresenter extends SecuredPresenter {
-        
+    
     /** @var \Tymy\Event @inject */
     public $event;
         
@@ -40,12 +40,21 @@ class SettingsPresenter extends SecuredPresenter {
         }
     }
 
-    public function actionEvents($event = NULL) {
+    public function actionEvents($event = NULL, $page = 1) {
         $this->setLevelCaptions(["2" => ["caption" => "Události", "link" => $this->link("Settings:events")]]);
         if(!is_null($event)){
             $this->setView("event");
         } else {
-            $this->template->events = $this->events->reset()->setLimit(15)->getData(); // get all events
+            $page = is_numeric($page) ? $page : 1;
+            $limit = \Tymy\Events::PAGING_EVENTS_PER_PAGE;
+            $offset = ($page-1)*$limit;
+            $events = $this->events->reset()->setLimit($limit)->setOffset($offset)->getData(); // get all events
+            $this->template->events = $events;
+            $allEventsCount = $this->events->getAllEventsCount();
+            $this->template->eventsCount = $allEventsCount;
+            $this->template->currentPage = $page;
+            $this->template->lastPage = ceil($allEventsCount / $limit);
+            $this->template->pagination = $this->pagination($allEventsCount, $limit, $page, 5);
         }
     }
 
