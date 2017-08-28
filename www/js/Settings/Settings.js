@@ -162,7 +162,7 @@ function isValid(name, value1, value2 = null) {
         case "startTime":
         case "endTime":
         case "closeTime":
-            var re = /^(19|20)\d\d-(0[1-9]|1[012])-([012]\d|3[01])T([01]\d|2[0-3]):([0-5]\d)$/;
+            var re = /^(0?[1-9]|[12][0-9]|3[01])\.(0?[1-9]|1[012])\.(19|20)\d\d ([01]\d|2[0-3]):([0-5]\d)$/;
             return re.test(value1);
         case "link":
             var re = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i;
@@ -214,4 +214,40 @@ function btnDisable(btn, disable){
             btn.removeAttr("disabled");
         }
     }
+}
+
+function duplicate(timePeriod){
+    var table = $("DIV.container.settings TABLE");
+    var lastRow = table.find("TR:last");
+    var startTime = lastRow.find("INPUT[name=startTime]").val() ? new Date(lastRow.find("INPUT[name=startTime]").val()) : new Date();
+    var endTime = lastRow.find("INPUT[name=endTime]").val() ? new Date(lastRow.find("INPUT[name=endTime]").val()) : new Date();
+    var closeTime = lastRow.find("INPUT[name=closeTime]").val() ? new Date(lastRow.find("INPUT[name=closeTime]").val()) : new Date();
+    
+    switch (timePeriod) {
+        case 'day':
+            startTime.setDate(startTime.getDate() + 1);
+            endTime.setDate(endTime.getDate() + 1);
+            closeTime.setDate(closeTime.getDate() + 1);
+            break;
+        case 'week':
+            startTime.setDate(startTime.getDate() + 7);
+            endTime.setDate(endTime.getDate() + 7);
+            closeTime.setDate(closeTime.getDate() + 7);
+            break;
+        case 'month':
+            startTime.setMonth(startTime.getMonth() + 1);
+            endTime.setMonth(endTime.getMonth() + 1);
+            closeTime.setMonth(closeTime.getMonth() + 1);
+            break;
+    }
+    var offset = startTime.getTimezoneOffset();
+    var startTimeNew = startTime;
+    startTimeNew.setTime(startTime.getTime() + (offset * 60 * 1000));
+    
+    startTimeNew = startTimeNew.substring(0,endTime.toISOString().length-1);
+    alert(startTimeNew);
+    newRow.find("INPUT[name=startTime]").val(startTime.toISOString());
+    newRow.find("INPUT[name=endTime]").val(endTime.toISOString().substring(0,endTime.toISOString().length-1));
+    newRow.find("INPUT[name=closeTime]").val(closeTime.toISOString().substring(0,closeTime.toISOString().length-1));
+    table.append(newRow);
 }
