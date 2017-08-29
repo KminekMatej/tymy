@@ -23,13 +23,15 @@ function updateRow(purl, selector) {
 
 function updateRows(purl, selector) {
     var allChanges = {};
+    var pseudoId = 0;
     $(selector).find("TR[data-id]").each(function () {
+        pseudoId++;
         var area = $(this);
         var changes = getChangedInputs(area);
         $.extend(changes, getChangedSelects(area));
         $.extend(changes, getChangedTextareas(area));
         if (!($.isEmptyObject(changes) > 0)) {
-            var id = $(this).attr("data-id");
+            var id = parseInt($(this).attr("data-id")) || pseudoId;
             changes.id = id;
             allChanges[id] = changes;
         }
@@ -68,20 +70,16 @@ function updateRows(purl, selector) {
 function getChangedInputs(area) {
     var values = {};
     $(area).find("INPUT[data-value]").each(function () {
+        name = $(this).attr("name");
+        value = $(this).is(':checkbox') ? $(this).is(":checked") : $(this).val();
+        
+        if (name == "link")
+            value = prependHttp(value);
+        validate(this, name, value);
         if ($(this).attr("data-value") != $(this).val()) {
-            name = $(this).attr("name");
-            value = $(this).is(':checkbox') ? $(this).is(":checked") : $(this).val();
-
-            var valid = false;
-            valid = isValid(name, value);
-
-            if (!valid) {
-                $(this).parent("TD").addClass("has-danger");
-                throw "Validation error for field " + name;
-            } else {
-                $(this).parent("TD").removeClass("has-danger");
+            if (name == "startTime" || name == "closeTime" || name == "endTime") {
+                value = moment(value, "DD.MM.YYYY HH:mm").toISOString();
             }
-
             values[name] = value;
         }
     });
@@ -91,20 +89,10 @@ function getChangedInputs(area) {
 function getChangedTextareas(area) {
     var values = {};
     $(area).find("TEXTAREA[data-value]").each(function () {
+        name = $(this).attr("name");
+        value = $(this).val();
+        validate(this, name, value);
         if ($(this).attr("data-value") != $(this).val()) {
-            name = $(this).attr("name");
-            value = $(this).val();
-
-            var valid = false;
-            valid = isValid(name, value);
-
-            if (!valid) {
-                $(this).parent("TD").addClass("has-danger");
-                throw "Validation error for field " + name;
-            } else {
-                $(this).parent("TD").removeClass("has-danger");
-            }
-
             values[name] = value;
         }
     });
@@ -114,20 +102,10 @@ function getChangedTextareas(area) {
 function getChangedSelects(area) {
     var values = {};
     $(area).find("SELECT[data-value]").each(function () {
+        name = $(this).attr("name");
+        value = $(this).val();
+        validate(this, name, value);
         if ($(this).attr("data-value") != $(this).val() && $(this).val() != "") {
-            name = $(this).attr("name");
-            value = $(this).val();
-
-            var valid = false;
-            valid = isValid(name, value);
-
-            if (!valid) {
-                $(this).parent("TD").addClass("has-danger");
-                throw "Validation error for field " + name;
-            } else {
-                $(this).parent("TD").removeClass("has-danger");
-            }
-
             values[name] = value;
         }
     });
@@ -157,19 +135,38 @@ function del(purl, selector) {
     
 }
 
-function isValid(name, value1, value2 = null) {
+function validate(elm, name, value1, value2 = null) {
+    var valid = true;
     switch (name) {
         case "startTime":
         case "endTime":
         case "closeTime":
             var re = /^(0?[1-9]|[12][0-9]|3[01])\.(0?[1-9]|1[012])\.(19|20)\d\d ([01]\d|2[0-3]):([0-5]\d)$/;
-            return re.test(value1);
+            valid = re.test(value1);
+            break;
         case "link":
             var re = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i;
-            return re.test(value1);
+            valid = re.test(value1);
+            break;
+        case "caption":
+            valid = value1.trim() != "";
+            break;
     }
-    return true;
+    
+    if (!valid) {
+        $(elm).addClass("is-invalid");
+        throw "Validation error for field " + name;
+    } else {
+        $(elm).removeClass("is-invalid");
+}
 
+}
+
+function prependHttp(url) {
+    if (!/^(?:f|ht)tps?\:\/\//.test(url)) {
+        url = "http://" + url;
+    }
+    return url;
 }
 
 function map() {
@@ -219,35 +216,37 @@ function btnDisable(btn, disable){
 function duplicate(timePeriod){
     var table = $("DIV.container.settings TABLE");
     var lastRow = table.find("TR:last");
-    var startTime = lastRow.find("INPUT[name=startTime]").val() ? new Date(lastRow.find("INPUT[name=startTime]").val()) : new Date();
-    var endTime = lastRow.find("INPUT[name=endTime]").val() ? new Date(lastRow.find("INPUT[name=endTime]").val()) : new Date();
-    var closeTime = lastRow.find("INPUT[name=closeTime]").val() ? new Date(lastRow.find("INPUT[name=closeTime]").val()) : new Date();
+    
+    var startTime = moment(lastRow.find("INPUT[name=startTime]").val(), "DD.MM.YYYY HH:mm");
+    var endTime = moment(lastRow.find("INPUT[name=endTime]").val(), "DD.MM.YYYY HH:mm");
+    var closeTime = moment(lastRow.find("INPUT[name=closeTime]").val(), "DD.MM.YYYY HH:mm");
     
     switch (timePeriod) {
         case 'day':
-            startTime.setDate(startTime.getDate() + 1);
-            endTime.setDate(endTime.getDate() + 1);
-            closeTime.setDate(closeTime.getDate() + 1);
+            startTime.add(1, "days");
+            endTime.add(1, "days");
+            closeTime.add(1, "days");
             break;
         case 'week':
-            startTime.setDate(startTime.getDate() + 7);
-            endTime.setDate(endTime.getDate() + 7);
-            closeTime.setDate(closeTime.getDate() + 7);
+            startTime.add(7, "days");
+            endTime.add(7, "days");
+            closeTime.add(7, "days");
             break;
         case 'month':
-            startTime.setMonth(startTime.getMonth() + 1);
-            endTime.setMonth(endTime.getMonth() + 1);
-            closeTime.setMonth(closeTime.getMonth() + 1);
+            startTime.add(1, "months");
+            endTime.add(1, "months");
+            closeTime.add(1, "months");
             break;
     }
-    var offset = startTime.getTimezoneOffset();
-    var startTimeNew = startTime;
-    startTimeNew.setTime(startTime.getTime() + (offset * 60 * 1000));
-    
-    startTimeNew = startTimeNew.substring(0,endTime.toISOString().length-1);
-    alert(startTimeNew);
-    newRow.find("INPUT[name=startTime]").val(startTime.toISOString());
-    newRow.find("INPUT[name=endTime]").val(endTime.toISOString().substring(0,endTime.toISOString().length-1));
-    newRow.find("INPUT[name=closeTime]").val(closeTime.toISOString().substring(0,closeTime.toISOString().length-1));
+    var newRow = lastRow.clone();
+    newRow.find("INPUT[name=startTime]").val(startTime.format("DD.MM.YYYY HH:mm"));
+    newRow.find("INPUT[name=endTime]").val(endTime.format("DD.MM.YYYY HH:mm"));
+    newRow.find("INPUT[name=closeTime]").val(closeTime.format("DD.MM.YYYY HH:mm"));
     table.append(newRow);
+}
+
+function removeRow(elm){
+    var row = $(elm).closest("TR");
+    if(!row.is(':nth-child(2)') || row.closest("TABLE").find("TR").length > 2)
+        row.remove();
 }

@@ -84,7 +84,10 @@ final class Event extends Tymy{
         
         $this->method = "POST";
         
-        $this->addPost($eventsArray);
+        foreach ($eventsArray as $value) {
+            $this->addPost($value);
+        }
+        
         
         $this->result = $this->execute();
 

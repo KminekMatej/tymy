@@ -100,16 +100,17 @@ class SettingsPresenter extends SecuredPresenter {
         $this->template->isNew = true;
         
         $events = [(object)[
-            "id" => -1,
+            "id" => 0,
             "caption" => "",
             "description" => "",
-            "startTime" => "",
-            "endTime" => "",
-            "closeTime" => "",
+            "startTime" => date("c"),
+            "endTime" => date("c"),
+            "closeTime" => date("c"),
             "place" => "",
             "link" => "",
         ]];
         $this->template->events = $events;
+        $this->template->eventTypes = $this->eventTypes->getData();
         
         $this->setView("events");
     }
@@ -147,14 +148,21 @@ class SettingsPresenter extends SecuredPresenter {
         }
     }
     
+    public function handleEventsCreate(){
+        $post = $this->getRequest()->getPost();
+        try {
+            $this->event->create($post, $this->eventTypes->getData());
+        } catch (\Tymy\Exception\APIException $ex) {
+            $this->handleTapiException($ex);
+        }
+    }
+    
     public function handleEventEdit($eventId){
         $post = $this->getRequest()->getPost();
         $this->editEvent($eventId, $post);
     }
     
-    public function handleEventCreate(){
-        //TODO
-    }
+    
     
     public function handleEventDelete($eventId){
         try {
