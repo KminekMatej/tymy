@@ -41,10 +41,10 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <a class="dropdown-item" href="{plink Team:player $me->webName}">{$me->callName} {if $me->errCnt > 0}<span class="badge badge-danger">{$me->errCnt}</span>{/if}</a>
                     <a class="dropdown-item" href="{plink Team:inits}" n:if="$counts['INIT'] > 0 && $user->isAllowed('users','canSeeRegisteredUsers')">Registrovaní ({$counts['INIT']})</a>
-                    <a class="dropdown-item" href="{plink Team:players}">Hráči ({$counts['PLAYER']})</a>
+                    <a class="dropdown-item" href="{plink Team:players}">Hráči ({$counts['PLAYER']}) <span class="badge badge-success" n:if="$counts['NEW:PLAYER'] > 0">Nový</span></a>
                     <a class="dropdown-item" href="{plink Team:members}">Členové ({$counts['MEMBER']})</a>
                     <a class="dropdown-item" href="{plink Team:sicks}">Marodi ({$counts['SICK']})</a>
-                    <a class="dropdown-item" href="{plink Team:}">Všichni ({$counts['ALL']}) {if $counts['NEW'] > 0}<span class="badge badge-success">Nový</span>{/if}</a>
+                    <a class="dropdown-item" href="{plink Team:}">Všichni ({$counts['ALL']}) <span class="badge badge-success" n:if="$counts['NEW'] > 0">Nový</span></a>
                 </div>
             </li>
             <li class="nav-item dropdown">

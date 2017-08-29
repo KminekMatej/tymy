@@ -43,6 +43,7 @@ final class Users extends UserInterface{
             "ALL"=>0,
             "NEW"=>0,
             "PLAYER"=>0,
+            "NEW:PLAYER"=>0,
             "MEMBER"=>0,
             "SICK"=>0,
             "DELETED"=>0,
@@ -70,6 +71,8 @@ final class Users extends UserInterface{
             $this->timeLoad($player->createdAt);
             if($player->isNew = strtotime($player->createdAt) > strtotime("- 14 days")){
                 $counts["NEW"]++;
+                if($player->status == "PLAYER")
+                    $counts["NEW:PLAYER"]++;
             }
             $players[$player->id] = $player;
         }
