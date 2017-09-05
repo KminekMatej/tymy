@@ -24,9 +24,9 @@
             displayEventTime: false,
             events: function (start, end, timezone, callback) {
                 var events = [];
-                {foreach $events as $evnt}
-                    events.push({l}id: {$evnt->id}, title: {$evnt->title},start: {$evnt->start},end: {$evnt->end},backgroundColor: {$evnt->backgroundColor},borderColor: {$evnt->borderColor},textColor: {$evnt->textColor},url: {plink 'Event:event', $evnt->webName}{r});
-                {/foreach}
+    {foreach $events as $evnt}
+                events.push({l}id: {$evnt->id}, title: {$evnt->title}, start: {$evnt->start}, end: {$evnt->end}, backgroundColor: {$evnt->backgroundColor}, borderColor: {$evnt->borderColor}, textColor: {$evnt->textColor}, url: {plink 'Event:event', $evnt->webName}{r});
+    {/foreach}
                                 callback(events);
                             },
                             eventRender: function (event, element) {
@@ -97,7 +97,7 @@
                 <div n:if="$today==$bDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><a href="{plink Team:player $usr->webName}">{$usr->callName}</a></strong> slaví dnes <strong>{$years}.</strong> narozeniny!</div>
                 <div n:if="$tommorow==$nameDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><a href="{plink Team:player $usr->webName}">{$usr->callName}</a></strong> slaví zítra svátek!</div>
                 <div n:if="$tommorow==$bDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><a href="{plink Team:player $usr->webName}">{$usr->callName}</a></strong> slaví zítra <strong>{$years}.</strong> narozeniny!</div>
-                    {/foreach}
+            {/foreach}
         </div>
     </div>
 
@@ -117,31 +117,24 @@
                 <div class="card-body">
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="live" role="tabpanel">
-                            {var $someOnline = FALSE}
-                            {dump $liveUsers}
-                            {foreach $liveUsers as $live}
-                                {var $someOnline = TRUE}
-                                <figure class="figure text-center" style="width: 100px">
-                                    <a href="{plink Team:player $live->webName}" title="{$live->callName}">
-                                        <img src="{$tymyRoot}/{$live->pictureUrl}" class="figure-img img-fluid rounded user_pic" alt="{$live->callName}" />
-                                        <figcaption class="figure-caption">{$live->callName}</figcaption>
-                                    </a>
-                                </figure>
-                            {/foreach}
-                            <h6 class="card-subtitle mb-2 text-muted" n:if="!$someOnline">Nikdo není online</h6>
+                            <figure class="figure text-center" style="width: 100px" n:foreach="$liveUsers as $live">
+                                <a href="{plink Team:player $live->webName}" title="{$live->callName}">
+                                    <img src="{$tymyRoot}/{$live->pictureUrl}" class="figure-img img-fluid rounded user_pic" alt="{$live->callName}" />
+                                    <figcaption class="figure-caption">{$live->callName}</figcaption>
+                                </a>
+                            </figure>
+                            <h6 class="card-subtitle mb-2 text-muted" n:if="count($liveUsers) == 0">Nikdo není online</h6>
                         </div>
                         <div class="tab-pane fade" id="lastLogin" role="tabpanel">
-                            {foreach $users as $usr}
-                                <figure class="figure text-center" style="width: 100px">
-                                    {var $lastLogin = property_exists($usr, 'lastLogin') ? ($usr->lastLogin|date:'j.n.Y H:i:s') : 'Nikdy'}
-                                    {var $caption = property_exists($usr, 'lastLogin') ? ($usr->lastLogin|lastLogin) : 'Nikdy'}
-                                    <a href="{plink Team:player $usr->webName}" title="{$lastLogin}">
-                                        <img src="{$tymyRoot}/{$usr->pictureUrl}" class="figure-img img-fluid rounded user_pic" alt="{$usr->callName}" />
-                                        <figcaption class="figure-caption">{$usr->callName}</figcaption>
-                                        <figcaption class="figure-caption" style="font-size: 70%; display: inline-block">{$caption}</figcaption>
-                                    </a>
-                                </figure>
-                            {/foreach}
+                            <figure class="figure text-center" style="width: 100px" n:foreach="$users as $usr">
+                                {var $lastLogin = property_exists($usr, 'lastLogin') ? ($usr->lastLogin|date:'j.n.Y H:i:s') : 'Nikdy'}
+                                {var $caption = property_exists($usr, 'lastLogin') ? ($usr->lastLogin|lastLogin) : 'Nikdy'}
+                                <a href="{plink Team:player $usr->webName}" title="{$lastLogin}">
+                                    <img src="{$tymyRoot}/{$usr->pictureUrl}" class="figure-img img-fluid rounded user_pic" alt="{$usr->callName}" />
+                                    <figcaption class="figure-caption">{$usr->callName}</figcaption>
+                                    <figcaption class="figure-caption" style="font-size: 70%; display: inline-block">{$caption}</figcaption>
+                                </a>
+                            </figure>
                         </div>
                     </div>
                 </div>
