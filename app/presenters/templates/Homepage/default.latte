@@ -107,7 +107,7 @@
                 <div class="card-header">
                     <ul class="nav nav-tabs flex-column flex-sm-row card-header-tabs">
                         <li class="nav-item">
-                            <a class="flex-sm-fill text-sm-center nav-link active" href="#online" data-toggle="tab" role="tab">Právě online</a>
+                            <a class="flex-sm-fill text-sm-center nav-link active" href="#live" data-toggle="tab" role="tab">Právě online</a>
                         </li>
                         <li class="nav-item">
                             <a class="flex-sm-fill text-sm-center nav-link" href="#lastLogin" data-toggle="tab" role="tab">Poslední přihlášení</a>
@@ -116,17 +116,15 @@
                 </div>
                 <div class="card-body">
                     <div class="tab-content">
-                        <div class="tab-pane fade show active" id="online" role="tabpanel">
+                        <div class="tab-pane fade show active" id="live" role="tabpanel">
                             {var $someOnline = FALSE}
-                            {foreach $users as $usr}
-                                {breakIf !property_exists($usr, 'lastLogin')}
-                                {breakIf strtotime($usr->lastLogin) < date('U', strtotime('- 5 minutes'))}
+                            {dump $liveUsers}
+                            {foreach $liveUsers as $live}
                                 {var $someOnline = TRUE}
                                 <figure class="figure text-center" style="width: 100px">
-                                    <a href="{plink Team:player $usr->webName}" title="{$usr->lastLogin|date:'j.n.Y H:i:s'}">
-                                        <img src="{$tymyRoot}/{$usr->pictureUrl}" class="figure-img img-fluid rounded user_pic" alt="{$usr->callName}" />
-                                        <figcaption class="figure-caption">{$usr->callName}</figcaption>
-                                        <figcaption class="figure-caption" style="font-size: 70%; display: inline-block">{$usr->lastLogin|lastLogin}</figcaption>
+                                    <a href="{plink Team:player $live->webName}" title="{$live->callName}">
+                                        <img src="{$tymyRoot}/{$live->pictureUrl}" class="figure-img img-fluid rounded user_pic" alt="{$live->callName}" />
+                                        <figcaption class="figure-caption">{$live->callName}</figcaption>
                                     </a>
                                 </figure>
                             {/foreach}

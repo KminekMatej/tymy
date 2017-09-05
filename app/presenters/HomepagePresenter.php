@@ -15,6 +15,8 @@ class HomepagePresenter extends SecuredPresenter {
     public $events;
     /** @var \Tymy\Discussions @inject */
     public $discussions;
+    /** @var \Tymy\Live @inject */
+    public $live;
     
     public function beforeRender() {
         parent::beforeRender();
@@ -49,6 +51,7 @@ class HomepagePresenter extends SecuredPresenter {
         $this->template->evMonths = $events->eventsMonthly;
         $this->template->events = $events->eventsJSObject;
         $this->template->eventTypes = $this->eventTypes;
+        $this->template->liveUsers = $this->live->reset()->getData();
     }
 
     private function sortUsersByLastLogin($usersArray){

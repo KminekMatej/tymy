@@ -30,6 +30,7 @@ services:
         - Tymy\EventTypes
         - Tymy\Events
         - Tymy\Logout
+        - Tymy\Live
         - Tymy\Poll
         - Tymy\Polls
         - Tymy\User
