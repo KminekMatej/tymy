@@ -18,7 +18,7 @@ function nav() {
 }
 
 function homepageRefresh() {
-    if ($("DIV.container.homepage")) {
+    if ($("DIV.container.homepage").length > 0) {
         $("NAV UL.navbar-nav LI.nav-item.dropdown:first-child A.dropdown-item").each(function () {
             count = $(this).find("SPAN.badge").html();
             id = $(this).attr("id").replace("discussion-","discussion-pane-");
