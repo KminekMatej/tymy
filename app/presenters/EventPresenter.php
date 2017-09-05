@@ -132,7 +132,7 @@ class EventPresenter extends SecuredPresenter {
             }
 
             $this->payload->events = $this->events->eventsJSObject;
-            $this->redrawControl("events");
+            $this->redrawControl("events-agenda");
         }
     }
 

@@ -68,7 +68,7 @@
             <div class="card sh-box" id='calendar'></div>
         </div>
 
-        <div class="col-md-5 agenda-wrapper my-3" n:snippet="events">
+        <div class="col-md-5 agenda-wrapper my-3" n:snippet="events-agenda">
             {var $actMonth=$agendaFrom}
             {while strtotime($actMonth)<=strtotime($agendaTo)}
                 <div class="card sh-box agenda" data-month="{$actMonth}" style="display: none">
