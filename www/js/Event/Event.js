@@ -1,50 +1,31 @@
 function loadAgenda(purl) {
     var date = $("#calendar").fullCalendar('getDate');
-    var month = ("0" + (date.month() + 1)).slice(-2);
-    var year = date.year();
 
-    if ($("DIV.agenda[data-month='" + year + "-" + month + "']").length == 0) {    
+    if ($("DIV.agenda[data-month='" + date.format('YYYY-MM') + "']").length == 0) {
         //this month is not loaded yet - call ajax to load new data
         disableCalendar(true);
-        if (date.month() == 11) {
-            datePlus = (year + 1) + "-01";
-            dateMinus = year + "-11";
-        } else if (date.month() == 0) {
-            datePlus = year + "-02";
-            dateMinus = (year - 1) + "-12";
-        } else {
-            datePlus = year + "-" + ("0" + (date.month() + 2)).slice(-2);
-            dateMinus = year + "-" + ("0" + (date.month())).slice(-2);
+        //check previous month exists, if does, the direction is one, if not, direction is -1
+        var direction = -1;
+        var newDate = date.clone().subtract(1, 'months').format('YYYY-MM');
+        if ($("DIV.agenda[data-month='" + newDate + "']").length != 0) { // if previous month agenda already exists, then we should load next month instead
+            direction = 1;
+            newDate = date.clone().add(1, 'months').format('YYYY-MM');
         }
-        if ($("DIV.agenda[data-month='" + datePlus + "']").length == 0 && purl) {
-            $.nette.ajax({
-                url: purl+"?date=" + datePlus + "&direction=1&do=eventLoad",
-                complete: function (payload) {
-                    $('#calendar').fullCalendar('removeEvents');
-                    $('#calendar').fullCalendar('renderEvents', payload.responseJSON.events, false);
-                    $('#calendar').fullCalendar('rerenderEvents');
-                    loadAgenda();
-                }
-            });
-        } else if ($("DIV.agenda[data-month='" + dateMinus + "']").length == 0 && purl) {
-            $.nette.ajax({
-                url: purl+"?date=" + dateMinus + "&direction=-1&do=eventload",
-                complete: function (payload) {
-                    $('#calendar').fullCalendar('removeEvents');
-                    $('#calendar').fullCalendar('renderEvents', payload.responseJSON.events, false);
-                    $('#calendar').fullCalendar('rerenderEvents');
-                    loadAgenda();
-                }
-            });
-        }
-    } else {
-        disableCalendar(false);
+        $.nette.ajax({
+            url: purl + "?date=" + newDate + "&direction=" + direction + "&do=eventLoad",
+            complete: function (payload) {
+                $('#calendar').fullCalendar('removeEvents');
+                $('#calendar').fullCalendar('renderEvents', payload.responseJSON.events, true);
+                $("#calendar").fullCalendar('rerenderEvents');
+                disableCalendar(false);
+                loadAgenda();
+            }
+        });
     }
     $("DIV.agenda").each(function () {
         $(this).css("display", "none");
     });
-    $("DIV.agenda[data-month='" + year + "-" + month + "']").css("display", "block");
-    $("#calendar").css("visibility", "visible");
+    $("DIV.agenda[data-month='" + date.format('YYYY-MM') + "']").css("display", "block");
 }
 
 function disableCalendar(disable) {

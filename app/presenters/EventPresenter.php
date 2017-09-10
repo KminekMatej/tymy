@@ -42,9 +42,9 @@ class EventPresenter extends SecuredPresenter {
         });
     }
 
-    public function renderDefault() {
+    public function renderDefault($date = NULL, $direction = NULL) {
         try {
-            $this->events = $this->events->loadYearEvents(NULL, NULL);
+            $this->events = $this->events->loadYearEvents($date, $direction);
             $eventTypes = $this->eventTypes->getData();
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
@@ -65,6 +65,14 @@ class EventPresenter extends SecuredPresenter {
         $this->template->evMonths = $this->events->eventsMonthly;
         $this->template->events = $this->events->eventsJSObject;
         $this->template->eventTypes = $eventTypes;
+        if ($this->isAjax()) {
+            foreach ($this->events->eventsJSObject as &$eventJs) {
+                $eventJs->url = $this->link("Event:event", $eventJs->webName);
+                unset($eventJs->webName);
+                $eventJs->stick = true;
+            }
+            $this->payload->events = $this->events->eventsJSObject;
+        }
     }
 
     public function renderEvent($udalost) {
@@ -124,16 +132,7 @@ class EventPresenter extends SecuredPresenter {
     }
 
     public function handleEventLoad($date = NULL, $direction = NULL) {
-        if ($this->isAjax()) {
-            try {
-                $this->events->loadYearEvents($date, $direction);
-            } catch (\Tymy\Exception\APIException $ex) {
-                $this->handleTapiException($ex);
-            }
-
-            $this->payload->events = $this->events->eventsJSObject;
-            $this->redrawControl("events-agenda");
-        }
+        $this->redrawControl("events-agenda");
     }
 
     private function getEventCaptions($event, $eventTypes) {
