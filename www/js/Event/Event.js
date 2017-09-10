@@ -15,7 +15,9 @@ function loadAgenda(purl) {
             url: purl + "?date=" + newDate + "&direction=" + direction + "&do=eventLoad",
             complete: function (payload) {
                 $('#calendar').fullCalendar('removeEvents');
-                $('#calendar').fullCalendar('renderEvents', payload.responseJSON.events, true);
+                if(payload.responseJSON !== undefined && payload.responseJSON.events !== undefined){
+                    $('#calendar').fullCalendar('renderEvents', payload.responseJSON.events, true);
+                }
                 $("#calendar").fullCalendar('rerenderEvents');
                 disableCalendar(false);
                 loadAgenda();
