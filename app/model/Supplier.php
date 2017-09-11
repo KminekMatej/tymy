@@ -18,9 +18,12 @@ class Supplier {
     private $roleClasses;
     private $statusClasses;
     private $eventColors;
+    private $version;
 
-    public function __construct($tapi_config) {
+    public function __construct($tapi_config, $version) {
         $this->setTapi_config($tapi_config);
+        \Tracy\Debugger::barDump($version);
+        $this->setVersion($version);
     }
 
     public function getTapi_config() {
@@ -100,6 +103,14 @@ class Supplier {
     public function setEventColors($eventColors) {
         $this->eventColors = $eventColors;
         return $this;
+    }
+
+    public function getVersion() {
+        return $this->version;
+    }
+
+    public function setVersion($version) {
+        $this->version = $version;
     }
 
 
