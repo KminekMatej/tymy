@@ -155,6 +155,7 @@ class SettingsPresenter extends SecuredPresenter {
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
+        $this->redirect('Settings:events');
     }
     
     public function handleEventEdit($eventId){
