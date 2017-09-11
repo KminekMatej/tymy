@@ -174,6 +174,8 @@ final class Events extends Tymy{
             $this->timeLoad($event->closeTime);
             $this->timeLoad($event->startTime);
             $this->timeLoad($event->endTime);
+            if(!property_exists($event, "place")) $event->place = ""; //set default value
+            if(!property_exists($event, "link")) $event->link= ""; //set default value
             $event->webName = \Nette\Utils\Strings::webalize($event->id . "-" . $event->caption);
             if($this->withMyAttendance){
                 if(!property_exists($event, "myAttendance")) $event->myAttendance = new \stdClass ();

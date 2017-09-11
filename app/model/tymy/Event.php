@@ -107,6 +107,8 @@ final class Event extends Tymy{
         $myAttendance->postStatus = "UNKNOWN";
         $myAttendance->preDescription = "";
         $myAttendance->postDescription = "";
+        if(!property_exists($data, "place")) $data->place = ""; //set default value
+        if(!property_exists($data, "link")) $data->link= ""; //set default value
         if (property_exists($data, "attendance"))
             foreach ($data->attendance as $att) {
                 if(!property_exists($att, "preStatus")) $att->preStatus = "UNKNOWN"; //set default value
