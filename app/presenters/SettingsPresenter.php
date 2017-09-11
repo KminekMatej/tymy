@@ -81,8 +81,10 @@ class SettingsPresenter extends SecuredPresenter {
     public function actionApp() {
         //TODO
         $this->setLevelCaptions(["2" => ["caption" => "Aplikace", "link" => $this->link("Settings:app")]]);
+        $this->template->version = $this->supplier->getVersion();
+        $this->template->versionLink = "https://github.com/KminekMatej/tymy/releases/tag/" . $this->supplier->getVersion();
+        
     }
-    
     
     public function renderDiscussion($discussion) {
         //RENDERING DISCUSSION DETAIL
