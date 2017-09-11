@@ -113,7 +113,7 @@ class Supplier {
         $taglog = file(__DIR__ . "/../tag.log");
         foreach ($taglog as $log) {
             $matches = [];
-            preg_match("/([0-9]{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s([0-1][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])\s.\d{4}\s\s[\(]\b\w*tag\w*\b\:\s(\d)\.(\d)\.(\d)/", $log, $matches);
+            preg_match("/([0-9]{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s([0-1][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])\s.\d{4}\s\s[\(].*\b\w*tag\w*\b\:\s(\d)\.(\d)\.(\d)/", $log, $matches);
             if (count($matches)) {
                 $version = new \stdClass();
                 $version->year = $matches[1];
