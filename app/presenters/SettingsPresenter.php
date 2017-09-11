@@ -79,7 +79,6 @@ class SettingsPresenter extends SecuredPresenter {
     }
 
     public function actionApp() {
-        //TODO
         $this->setLevelCaptions(["2" => ["caption" => "Aplikace", "link" => $this->link("Settings:app")]]);
         $this->template->version = $this->supplier->getVersion(0);
         $this->template->previousVersion = $this->supplier->getVersion(1);
