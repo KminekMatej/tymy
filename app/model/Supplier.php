@@ -18,12 +18,12 @@ class Supplier {
     private $roleClasses;
     private $statusClasses;
     private $eventColors;
-    private $version;
+    private $versions;
+    
 
-    public function __construct($tapi_config, $version) {
+    public function __construct($tapi_config) {
         $this->setTapi_config($tapi_config);
-        \Tracy\Debugger::barDump($version);
-        $this->setVersion($version);
+        $this->setVersion();
     }
 
     public function getTapi_config() {
@@ -105,13 +105,33 @@ class Supplier {
         return $this;
     }
 
-    public function getVersion() {
-        return $this->version;
+    public function getVersion($index = 0) {
+        return $this->versions[$index];
     }
 
-    public function setVersion($version) {
-        $this->version = $version;
+    public function setVersion() {
+        $taglog = file(__DIR__ . "/../tag.log");
+        foreach ($taglog as $log) {
+            $matches = [];
+            preg_match("/([0-9]{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s([0-1][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])\s.\d{4}\s\s[\(]\b\w*tag\w*\b\:\s(\d)\.(\d)\.(\d)/", $log, $matches);
+            if (count($matches)) {
+                $version = new \stdClass();
+                $version->year = $matches[1];
+                $version->month = $matches[2];
+                $version->day = $matches[3];
+                $version->hour = $matches[4];
+                $version->minute = $matches[5];
+                $version->second = $matches[6];
+                $version->major = $matches[7];
+                $version->minor = $matches[8];
+                $version->patch = $matches[9];
+                $version->version = $matches[7] . "." . $matches[8] . "." . $matches[9];
+                $version->date = date("c", strtotime($matches[1] . "-" . $matches[2] . "-" . $matches[3] . " " . $matches[4] . ":" . $matches[5] . ":" . $matches[6]));                
+                $this->versions[] = $version;
+            }
+        }
     }
+    
 
 
 
