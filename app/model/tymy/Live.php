@@ -25,7 +25,8 @@ final class Live extends Tymy{
     }
     
     protected function postProcess(){
-        $data = $this->getData();
+        if ($data = $this->getData() == null)
+            return;
         
         foreach ($data as &$live) {
             $live->webName = \Nette\Utils\Strings::webalize($live->id . "-" . $live->callName);

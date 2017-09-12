@@ -109,5 +109,9 @@ final class Register extends Tymy{
         return $this;
     }
 
-    protected function postProcess(){}
+    protected function postProcess() {
+        if ($data = $this->getData() == null)
+            return;
+    }
+
 }

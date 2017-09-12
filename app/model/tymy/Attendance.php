@@ -70,8 +70,11 @@ final class Attendance extends Tymy{
         throw new \Tymy\Exception\APIException("Select is not possible on Attendance object");
     }
     
-    protected function postProcess(){}
-    
+    protected function postProcess() {
+        if ($data = $this->getData() == null)
+            return;
+    }
+
     public function getPreStatus(){
         return $this->preStatus;
     }

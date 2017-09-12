@@ -42,7 +42,8 @@ final class Login extends Tymy{
     }
     
     protected function postProcess(){
-        $data = $this->getData();
+        if ($data = $this->getData() == null)
+            return;
         $this->timeLoad($data->lastLogin);
         if(!property_exists($data, "roles"))
             $data->roles = [];

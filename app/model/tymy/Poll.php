@@ -44,7 +44,8 @@ final class Poll extends Tymy{
     }
     
     protected function postProcess(){
-        $data = $this->getData();
+        if ($data = $this->getData() == null)
+            return;
         $data->webName = \Nette\Utils\Strings::webalize($data->id . "-" . $data->caption);
         $this->timeLoad($data->createdAt);
         $this->timeLoad($data->updatedAt);

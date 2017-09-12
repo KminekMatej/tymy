@@ -20,8 +20,10 @@ final class EventTypes extends Tymy{
     }
     
     protected function postProcess(){
+        if ($data = $this->getData() == null)
+            return;
         $newData = [];
-        foreach ($this->getData() as $value) {
+        foreach ($data as $value) {
             $newPreStatus = [];
             foreach ($value->preStatusSet as $status) {
                 $newPreStatus[$status->code] = $status;

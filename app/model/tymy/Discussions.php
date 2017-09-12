@@ -33,7 +33,8 @@ final class Discussions extends Tymy{
     }
     
     protected function postProcess() {
-        $data = $this->getData();
+        if ($data = $this->getData() == null)
+            return;
         $this->getResult()->menuWarningCount = 0;
         foreach ($data as $discussion) {
             $discussion->webName = \Nette\Utils\Strings::webalize($discussion->caption);

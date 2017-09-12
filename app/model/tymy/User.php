@@ -46,7 +46,8 @@ final class User extends UserInterface{
     }
     
     protected function postProcess(){
-        $data = $this->getData();
+        if ($data = $this->getData() == null)
+            return;
         $data->webName = (string)$data->id;
         if(property_exists($data, "fullName")) $data->webName .= "-" . Strings::webalize($data->fullName);
         if(!property_exists($data, "gender")) $data->gender = "UNKNOWN"; //set default value
