@@ -176,6 +176,9 @@ abstract class Tymy extends Nette\Object{
         if(is_null($this->result) || $force){
             $this->fetch();
         }
+        if(!property_exists($this->result, "data")){
+            return null;
+        }
         return $this->result->data;
     }
     
