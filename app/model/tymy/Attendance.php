@@ -71,7 +71,7 @@ final class Attendance extends Tymy{
     }
     
     protected function postProcess() {
-        if ($data = $this->getData() == null)
+        if (($data = $this->getData()) == null)
             return;
     }
 

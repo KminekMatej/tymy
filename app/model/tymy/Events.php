@@ -147,7 +147,7 @@ final class Events extends Tymy{
     }
     
     protected function postProcess(){
-        if ($data = $this->getData() == null)
+        if (($data = $this->getData()) == null)
             return;
         
         $this->getResult()->menuWarningCount = 0;

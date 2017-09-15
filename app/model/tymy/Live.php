@@ -25,7 +25,7 @@ final class Live extends Tymy{
     }
     
     protected function postProcess(){
-        if ($data = $this->getData() == null)
+        if (($data = $this->getData()) == null)
             return;
         
         foreach ($data as &$live) {

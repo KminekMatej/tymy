@@ -33,7 +33,7 @@ final class Users extends UserInterface{
     }
 
     protected function postProcess(){
-        if ($data = $this->getData() == null)
+        if (($data = $this->getData()) == null)
             return;
         
         $myId = $this->user->getId();

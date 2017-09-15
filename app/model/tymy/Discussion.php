@@ -78,7 +78,7 @@ final class Discussion extends Tymy{
     }
     
     protected function postProcess() {
-        if ($data = $this->getData() == null)
+        if (($data = $this->getData()) == null)
             return;
         $this->timeLoad($data->discussion->newInfo->lastVisit);
         $data->discussion->webName = \Nette\Utils\Strings::webalize($data->discussion->caption);
