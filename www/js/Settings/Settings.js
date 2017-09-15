@@ -183,7 +183,8 @@ function map() {
 
 function link() {
     var link = $("INPUT[name='link']").val();
-    window.open(link, "_blank");
+    if(link != "")
+        window.open(prependHttp(link), "_blank");
 }
 
 function chng(selector) {
