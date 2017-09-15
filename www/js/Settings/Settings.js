@@ -121,14 +121,20 @@ function commitChanges(area){
 function del(purl, selector) {
     var btn = $(selector).find("BUTTON.delete");
     var id = $(selector).attr("data-id");
-    if ($(btn).prop("disabled") || $(btn).hasClass("disabled"))
+    if ($(btn).prop("disabled") || $(btn).hasClass("disabled") || typeof(id)=="undefined")
         return;
     btnDisable($(btn), true);
+    var layout = $("DIV.container.settings").attr("data-layout");
     if (window.confirm("Smazat událost " + id + " ?")) {
         $.nette.ajax({
             url: purl,
+            data: {
+                layout: layout
+            },
             complete: function (payload) {
-                $(selector).remove();
+                if(layout == "list"){
+                    $(selector).remove();
+                }
             }
         });
     }

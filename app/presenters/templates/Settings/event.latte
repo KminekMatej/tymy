@@ -5,10 +5,10 @@
 {/block}
 
 {block content}
-<div class="container settings">
+<div class="container settings" data-layout="form">
     <div class="row">
         <div class="col">
-            <div class="card sh-box my-3">
+            <div class="card sh-box my-3" data-id="{$event->id}">
                 <div class="card-header">
                     <h4>Úprava události {$event->id}</h4>
                 </div>
@@ -43,8 +43,8 @@
                     </table>
                 </div>
                 <div class="card-footer text-right">
-                    <button n:if="$user->isAllowed('SYS','EVE_DELETE')" onclick="del(this, {link eventDelete! $event->id})" class="btn btn-danger mx-2">Smazat</button>
-                    <button n:if="$user->isAllowed('SYS','EVE_UPDATE')" onclick="update(this, {link eventEdit! $event->id}, 'DIV.container.settings DIV.card')" class="btn btn-lg btn-primary update" title="Uložit"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                    <button n:if="$user->isAllowed('SYS','EVE_DELETE')" onclick="del({link eventDelete! $event->id}, 'DIV.container.settings DIV.card')" class="btn btn-danger mx-2">Smazat</button>
+                    <button n:if="$user->isAllowed('SYS','EVE_UPDATE')" onclick="update({link eventEdit! $event->id}, 'DIV.container.settings DIV.card')" class="btn btn-lg btn-primary update" title="Uložit"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                 </div>
             </div>
         </div>

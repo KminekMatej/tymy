@@ -163,13 +163,14 @@ class SettingsPresenter extends SecuredPresenter {
         $this->editEvent($eventId, $post);
     }
     
-    
-    
     public function handleEventDelete($eventId){
         try {
             $this->event
                     ->recId($eventId)
                     ->delete();
+            if($this->getRequest()->getParameter("layout") == "form"){
+                $this->redirect("Settings:events");
+            }
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
