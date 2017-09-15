@@ -55,7 +55,7 @@
                                 <button n:if="!$isNew && $user->isAllowed('SYS','EVE_UPDATE')" class="btn btn-sm btn-primary update" onclick="updateRow({link eventEdit! $e->id}, {$selector})" title="Uložit" style="margin-right: 2px">
                                     <i class="fa fa-floppy-o" aria-hidden="true"></i>
                                 </button>
-                            {capture $delLink}{if $isNew}removeRow(this){else}del({link eventDelete! $e->id}, {$selector}){/if}{/capture}
+                            {capture $delLink}{if $isNew}removeRow(this){else}del('{link eventDelete! $e->id}', '{$selector}'){/if}{/capture}
                             <button n:if="$user->isAllowed('SYS','EVE_DELETE')" class="btn btn-sm btn-danger delete" onclick="{$delLink|noescape}" title="Smazat">
                                 <i class="fa fa-times" aria-hidden="true"></i>
                             </button>
