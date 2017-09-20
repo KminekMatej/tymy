@@ -34,7 +34,8 @@ class EventPresenterTest extends IPresenterTest {
         Assert::true($dom->has('div#snippet-navbar-nav'));
         //has breadcrumbs
         Assert::true($dom->has('div.container div.row div.col ol.breadcrumb'));
-        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 2);
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 1);
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 2); //last item aint link
         
         Assert::true($dom->has('div.container.events'));
         Assert::true(count($dom->find('div.container.events div.row')) >= 1);

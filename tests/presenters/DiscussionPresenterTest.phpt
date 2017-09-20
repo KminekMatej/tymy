@@ -35,7 +35,8 @@ class DiscussionPresenterTest extends IPresenterTest {
         //has breadcrumbs
         Assert::true($dom->has('div.container'));
         Assert::true($dom->has('ol.breadcrumb'));
-        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 2);
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 1);
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 2); //last item aint link
         
         Assert::true($dom->has('div.container.discussions'));
         Assert::true(count($dom->find('div.container.discussions div.row')) >= 1);
@@ -71,7 +72,8 @@ class DiscussionPresenterTest extends IPresenterTest {
         //has breadcrumbs
         
         Assert::true($dom->has('div.container div.row div.col ol.breadcrumb'));
-        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 3);
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 2);
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 3); //last item aint link
         
         Assert::equal(count($dom->find('div.container.my-2 div.row.justify-content-md-center')), 2);
         Assert::true($dom->has('div.container.my-2 div.row.justify-content-md-center div.col-md-10 textarea#addPost'));

@@ -46,7 +46,8 @@ class TeamPresenterTest extends IPresenterTest {
         Assert::true($dom->has('div#snippet-navbar-nav'));
         //has breadcrumbs
         Assert::true($dom->has('div.container div.row div.col ol.breadcrumb'));
-        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 2);
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 1);
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 2); //last item aint link
     }
 
     function testActionPlayers() {
@@ -63,7 +64,8 @@ class TeamPresenterTest extends IPresenterTest {
         Assert::true($dom->has('div#snippet-navbar-nav'));
         //has breadcrumbs
         Assert::true($dom->has('div.container div.row div.col ol.breadcrumb'));
-        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 3);
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 2);
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 3); //last item aint link
 
         //count displayed cards
         Assert::equal(count($dom->find('div.container.users div.col-sm-3')), $this->counts["PLAYER"]);
@@ -83,7 +85,8 @@ class TeamPresenterTest extends IPresenterTest {
         Assert::true($dom->has('div#snippet-navbar-nav'));
         //has breadcrumbs
         Assert::true($dom->has('div.container div.row div.col ol.breadcrumb'));
-        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 3);
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 2);
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 3); //last item aint link
 
         //count displayed cards
         Assert::equal(count($dom->find('div.container.users div.col-sm-3')), $this->counts["MEMBER"]);
@@ -103,7 +106,8 @@ class TeamPresenterTest extends IPresenterTest {
         Assert::true($dom->has('div#snippet-navbar-nav'));
         //has breadcrumbs
         Assert::true($dom->has('div.container div.row div.col ol.breadcrumb'));
-        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 3);
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 2);
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 3); //last item aint link
 
         //count displayed cards
         Assert::equal(count($dom->find('div.container.users div.col-sm-3')), $this->counts["SICK"]);
@@ -137,7 +141,8 @@ class TeamPresenterTest extends IPresenterTest {
         Assert::true($dom->has('div#snippet-navbar-nav'));
         //has breadcrumbs
         Assert::true($dom->has('div.container div.row div.col ol.breadcrumb'));
-        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 3);
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 2);
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 3); //last item aint link
 
         Assert::equal(count($dom->find('div.container.user div.row div.col.my-3 div.card.sh-box div.card-header ul.nav.nav-tabs.card-header-tabs li.nav-item')), 5);
         Assert::equal(count($dom->find('div.container.user div.row div.col.my-3 div.card.sh-box div.card-block div.tab-content div.tab-pane.fade')), 5);

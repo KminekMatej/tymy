@@ -34,7 +34,7 @@ class HomepagePresenterTest extends IPresenterTest {
         Assert::true($dom->has('div#snippet-navbar-nav'));
         //has breadcrumbs
         Assert::true($dom->has('div.container div.row div.col ol.breadcrumb'));
-        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 1);
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 1);
         
         Assert::true($dom->has('div.container.homepage'));
         Assert::true(count($dom->find('div.container.homepage div.row')) >= 2); // at least two rows, two makes the main layout, more rows are inside for discussions
