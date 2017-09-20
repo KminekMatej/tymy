@@ -220,8 +220,7 @@ abstract class Tymy extends Nette\Object{
                     $tapiMSG = $contents->result ? Json::decode($contents->result)->statusMessage : "403 Forbidden";
                     throw new \Tymy\Exception\APIException($tapiMSG);
                 case 400: // bad request, throw error
-                    $tapiMSG = $contents->result ? Json::decode($contents->result)->statusMessage : "400 Bad request";
-                    throw new \Tymy\Exception\APIException($tapiMSG);
+                    throw new \Tymy\Exception\APIException("400 Bad request");
                 case 500: // error 500 can display when logging out on unlogged account, so this is temporary solution
                     $tapiMSG = $contents->result ? Json::decode($contents->result)->statusMessage : "500 Internal Server Error";
                     throw new \Tymy\Exception\APIException($tapiMSG);
