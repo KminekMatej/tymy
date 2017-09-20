@@ -58,7 +58,8 @@ class APIEventTypesTest extends ITapiTest {
         
         Assert::type("array",$this->eventTypes->result->data);
         
-        foreach ($this->eventTypes->result->data as $evt) {
+        foreach ($this->eventTypes->result->data as $key => $evt) {
+            Assert::equal($key, $evt->code); //check that key equals evt->code
             Assert::true(is_object($evt));
             Assert::type("int",$evt->id);
             Assert::true($evt->id > 0);
@@ -69,14 +70,16 @@ class APIEventTypesTest extends ITapiTest {
             Assert::type("int",$evt->postStatusSetId);
             Assert::true($evt->postStatusSetId > 0);
             Assert::type("array",$evt->preStatusSet);
-            foreach ($evt->preStatusSet as $evtSS) {
+            foreach ($evt->preStatusSet as $key_pre => $evtSS) {
+                Assert::equal($key_pre, $evtSS->code); //check that key equals code
                 Assert::type("int",$evtSS->id);
                 Assert::true($evtSS->id > 0);
                 Assert::type("string",$evtSS->code);
                 Assert::type("string",$evtSS->caption);
             }
             Assert::type("array",$evt->postStatusSet);
-            foreach ($evt->postStatusSet as $evtSS) {
+            foreach ($evt->postStatusSet as $key_post => $evtSS) {
+                Assert::equal($key_post, $evtSS->code); //check that key equals code
                 Assert::type("int",$evtSS->id);
                 Assert::true($evtSS->id > 0);
                 Assert::type("string",$evtSS->code);
