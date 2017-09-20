@@ -18,6 +18,8 @@ services:
         - App\Forms\FormFactory
         - App\Forms\SignInFormFactory
         - App\Forms\SignUpFormFactory
+        - App\Forms\PwdLostFormFactory
+        - App\Forms\PwdResetFormFactory
         router: App\RouterFactory::createRouter
         authorizator:
             class: App\Model\TapiAuthorizator
@@ -33,6 +35,8 @@ services:
         - Tymy\Live
         - Tymy\Poll
         - Tymy\Polls
+        - Tymy\PwdLost
+        - Tymy\PwdReset
         - Tymy\User
         - Tymy\Users
 

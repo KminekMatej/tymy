@@ -60,7 +60,7 @@ final class PwdLost extends Tymy{
     }
 
     public function setCallbackUri($callbackUri) {
-        $this->callbackUri = $callbackUri;
+        $this->callbackUri = urldecode($callbackUri);
         return $this;
     }
 

@@ -1,0 +1,13 @@
+{block styles}
+{include parent}
+<link rel="stylesheet" href="{$basePath}/css/sign.pwdlost.css" />
+{/block}
+
+{block content}
+<div class="pwdReset">
+    <h6>Vaše nové heslo:</h6>
+    <form action="{plink Sign:in}">
+    <input type="text" value="{$pwdNew}" disabled="true" class="text-center" id="pwd" onclick="$(this).select()" />
+    <input type="submit" value="Návrat na přihlášení" />
+    </form>
+</div>
