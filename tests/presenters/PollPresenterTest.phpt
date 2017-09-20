@@ -74,10 +74,10 @@ class PollPresenterTest extends IPresenterTest {
         Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 3);
         
         //check showed items
-        Assert::equal(count($dom->find('div.container.poll div.row div.col.my-3 div.card.sh-box div.card-block h4.card-title')), 1);
-        Assert::equal(count($dom->find('div.container.poll div.row div.col.my-3 div.card.sh-box div.card-block h6.card-subtitle')), 1);
+        Assert::equal(count($dom->find('div.container.poll div.row div.col.my-3 div.card.sh-box div.card-body h4.card-title')), 1);
+        Assert::equal(count($dom->find('div.container.poll div.row div.col.my-3 div.card.sh-box div.card-body h6.card-subtitle')), 1);
         
-        Assert::true(count($dom->find('div.container.poll div.row div.col.my-3 div.card.sh-box div.card-block div.container div.row div.col-3.py-3.option')) > 0);
+        Assert::true(count($dom->find('div.container.poll div.row div.col.my-3 div.card.sh-box div.card-body div.container div.row div.col-3.py-3.option')) > 0);
     }
 }
 
