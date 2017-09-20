@@ -71,7 +71,8 @@ class PollPresenterTest extends IPresenterTest {
         Assert::true($dom->has('div#snippet-navbar-nav'));
         //has breadcrumbs
         Assert::true($dom->has('div.container div.row div.col ol.breadcrumb'));
-        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 3);
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 2);
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 3); // last breadcrumb aint link
         
         //check showed items
         Assert::equal(count($dom->find('div.container.poll div.row div.col.my-3 div.card.sh-box div.card-body h4.card-title')), 1);
