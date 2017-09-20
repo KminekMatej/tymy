@@ -216,7 +216,6 @@ abstract class Tymy extends Nette\Object{
                 case 401: // unauthorized, try to refresh
                     return $this->loginFailure($relogin);
                 case 403: // forbidden, return the error message
-                    $forbidden = Json::decode($contents->result);
                     $tapiMSG = $contents->result ? Json::decode($contents->result)->statusMessage : "403 Forbidden";
                     throw new \Tymy\Exception\APIException($tapiMSG);
                 case 400: // bad request, throw error
