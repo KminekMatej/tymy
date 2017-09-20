@@ -16,14 +16,14 @@ final class Discussion extends Tymy{
     const TAPI_NAME = "discussion";
     const TSID_REQUIRED = TRUE;
     
-    private $page;
+    private $page = 1;
     private $search;
     
     public function select() {
         if (!isset($this->recId))
             throw new \Tymy\Exception\APIException('Discussion ID not set!');
 
-        if(!isset($this->search) && (!isset($this->page) || $this->page <= 0)) // page is not set
+        if((!isset($this->page) || $this->page <= 0)) // page is not set
             throw new \Tymy\Exception\APIException("Invalid page specified");
         
         if($this->search)
@@ -100,7 +100,7 @@ final class Discussion extends Tymy{
     }
     
     public function reset() {
-        $this->page = NULL;
+        $this->page = 1;
         $this->search = NULL;
         return parent::reset();
     }
