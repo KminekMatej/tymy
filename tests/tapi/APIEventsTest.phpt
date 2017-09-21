@@ -64,6 +64,11 @@ class APIEventsTest extends ITapiTest {
         Assert::equal($offset, $this->events->getOffset());
     }
     
+    function testAllEventsCount(){
+        $this->events->reset()->getResult(TRUE);
+        Assert::type("int", $this->events->getAllEventsCount());
+    }
+    
     /* TEST TAPI FUNCTIONS */ 
     
     /* TAPI : SELECT */
@@ -182,6 +187,10 @@ class APIEventsTest extends ITapiTest {
             Assert::type("string",$ev->myAttendance->postStatus);
             Assert::type("string",$ev->myAttendance->postDescription);
         }
+    }
+    
+    function testSelectLimitOffset() {
+        Assert::true(FALSE); //todo
     }
 
 }
