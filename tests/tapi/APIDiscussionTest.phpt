@@ -208,6 +208,7 @@ class APIDiscussionTest extends ITapiTest {
         Assert::type("int",$this->discussion->result->data->discussion->id);
         Assert::same($discussionId,$this->discussion->result->data->discussion->id);
         
+        //test posts
         Assert::type("array",$this->discussion->result->data->posts);
         Assert::same(1,count($this->discussion->result->data->posts)); // only one post with that hash
         
@@ -232,6 +233,14 @@ class APIDiscussionTest extends ITapiTest {
         Assert::same(false,$this->discussion->result->data->posts[0]->newPost);
         Assert::type("string",$this->discussion->result->data->posts[0]->createdAtStr);
         Assert::true(is_object($this->discussion->result->data->posts[0]->createdBy));
+        
+        //test paging
+        Assert::true(is_object($this->discussion->result->data->paging));
+        Assert::type("int",$this->discussion->result->data->paging->currentPage);
+        Assert::same(1,$this->discussion->result->data->paging->currentPage);
+        Assert::type("int",$this->discussion->result->data->paging->numberOfPages);
+        Assert::same(1,$this->discussion->result->data->paging->numberOfPages);
+        
     }
 
 }
