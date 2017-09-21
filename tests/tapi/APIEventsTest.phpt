@@ -52,6 +52,18 @@ class APIEventsTest extends ITapiTest {
         Assert::equal($order, $this->events->getOrder());
     }
     
+    function testLimit(){
+        $limit = 2;
+        $this->events->reset()->setLimit($limit);
+        Assert::equal($limit, $this->events->getLimit());
+    }
+    
+    function testOffset(){
+        $offset = 15;
+        $this->events->reset()->setOffset($offset);
+        Assert::equal($offset, $this->events->getOffset());
+    }
+    
     /* TEST TAPI FUNCTIONS */ 
     
     /* TAPI : SELECT */
