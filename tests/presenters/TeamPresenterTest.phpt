@@ -127,7 +127,6 @@ class TeamPresenterTest extends IPresenterTest {
      * @dataProvider allWebNames
      */
     function testPlayer($player) {
-        var_dump($player->webName);
         $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
         $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', array('action' => 'player', "player" => $player->webName));
         $response = $this->presenter->run($request);
@@ -148,7 +147,10 @@ class TeamPresenterTest extends IPresenterTest {
         Assert::equal(count($dom->find('div.container.user div.row div.col.my-3 div.card.sh-box div.card-body div.tab-content div.tab-pane.fade')), 5);
         Assert::equal(count($dom->find('div.container.user div.row div.col.my-3 div.card.sh-box div.card-body div.tab-content div.tab-pane.fade.active.show')), 1);
         
-        Assert::true($dom->has('div.container.user div.row div.col.my-3 div.card.sh-box div.card-footer.text-right button.btn.btn-primary'));
+        if($this->user->isAllowed('users','canDelete')){
+            Assert::true($dom->has('div.container.user div.row div.col.my-3 div.card.sh-box div.card-footer.text-right button.btn.btn-lg.btn-danger.mx-2 i.fa.fa-times'));
+        }
+        Assert::true($dom->has('div.container.user div.row div.col.my-3 div.card.sh-box div.card-footer.text-right button.btn.btn-lg.btn-primary i.fa.fa-floppy-o'));
     }
 
 }
