@@ -21,6 +21,9 @@ class APIEventTest extends ITapiTest {
 
     /** @var \Tymy\Event */
     private $event;
+    
+    /** @var int */
+    private $createdEventId;
 
     function __construct(Nette\DI\Container $container) {
         $this->container = $container;
@@ -123,6 +126,56 @@ class APIEventTest extends ITapiTest {
             Assert::type("string", $set->code);
             Assert::type("string", $set->caption);
         }
+    }
+    
+    /* TAPI : CREATE */
+    
+    function testCreate() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $caption = "Autotest event";
+        $createdEvent = [[
+            "type"=>"TRA",
+            "caption"=>$caption,
+            "description"=>"Událost vytvořená autotestem, měla by být zase autotestem smazána",
+            "startTime"=>date("c"),
+            "endTime"=>date("c"),
+            "closeTime"=>date("c"),
+            "place"=>"Kdesi na východě",
+            "link"=>"http://www.tymy.cz",
+        ]];
+        $eventTypes = $this->container->getByType('Tymy\EventTypes');
+        $result = $this->event->reset()->create($createdEvent, $eventTypes->getData())->getResult();
+                
+        Assert::true(is_object($result));
+        Assert::type("string", $result->status);
+        Assert::same("OK", $result->status);
+        Assert::type("int", $result->data[0]->id);
+        $this->createdEventId = $result->data[0]->id;
+        Assert::equal($result->data[0]->caption, $caption);
+    }
+
+    /* TAPI : EDIT */
+    
+    function testEdit() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $newCaption = "Autotest event changed caption";
+        $result = $this->event->reset()->recId($this->createdEventId)->edit(["caption" => $newCaption])->getResult();
+        Assert::true(is_object($result));
+        Assert::type("string", $result->status);
+        Assert::same("OK", $result->status);
+        Assert::type("int", $result->data->id);
+        $this->createdEventId = $result->data->id;
+        Assert::equal($result->data->caption, $newCaption);
+    }
+
+    /* TAPI : DELETE */
+    
+    function testDelete() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $result = $this->event->reset()->recId($this->createdEventId)->delete()->getResult();
+        Assert::true(is_object($result));
+        Assert::type("string", $result->status);
+        Assert::same("OK", $result->status);
     }
 
 }
