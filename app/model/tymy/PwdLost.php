@@ -71,6 +71,9 @@ final class PwdLost extends Tymy{
 
             
     public function reset() {
+        $this->mail = NULL;
+        $this->hostname = NULL;
+        $this->callbackUri = NULL;
         return parent::reset();
     }
 
