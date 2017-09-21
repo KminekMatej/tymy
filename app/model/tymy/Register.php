@@ -76,10 +76,18 @@ final class Register extends Tymy{
         $this->addPost("email",$this->email);
         $this->addPost("callName",$this->composeCallName());
         
-        if($this->firstName)
+        if($this->firstName){
+            if (count($this->firstName) > 20)
+                throw new \Tymy\Exception\APIException('First name too long!');
             $this->addPost("firstName",$this->firstName);
-        if($this->lastName)
+        }
+            
+        if($this->lastName){
+            if (count($this->lastName) > 20)
+                throw new \Tymy\Exception\APIException('Last name too long!');
             $this->addPost("lastName",$this->lastName);
+        }
+            
                 
         $this->result = $this->execute();
         
@@ -90,12 +98,12 @@ final class Register extends Tymy{
         $callName = $this->firstName . " " . $this->lastName;
         if(trim($callName) == "")
             $callName = $this->login;
-        return $callName;
+        return substr($callName, 0, 30);
     }
     
     
     /**
-     * @todo Dodelat nette mailung
+     * @todo Dodelat nette mailing
      */
     private function sendRegistrationMail() {
         $latte = new Latte\Engine;
