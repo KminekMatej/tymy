@@ -53,7 +53,24 @@ class SupplierTest extends Tester\TestCase {
         Assert::equal("danger", $this->supplier->getStatusClass("NO"));
         Assert::equal("success", $this->supplier->getStatusClass("YES"));
         Assert::equal("warning", $this->supplier->getStatusClass("DKY"));
-        
+        Assert::type("array", $this->supplier->getEventColors());
+    }
+    
+    function testSupplierVersion(){
+        $version = $this->supplier->getVersion(0);
+        Assert::type("object", $version);
+        Assert::type("int", $version->year);
+        Assert::type("int", $version->month);
+        Assert::type("int", $version->day);
+        Assert::type("int", $version->hour);
+        Assert::type("int", $version->minute);
+        Assert::type("int", $version->second);
+        Assert::type("int", $version->major);
+        Assert::type("int", $version->minor);
+        Assert::type("int", $version->patch);
+        Assert::type("string", $version->version);
+        Assert::equal($version->version, $version->major . "." . $version->minor . "." . $version->patch);
+        Assert::type("object", $version->date);
         
     }
 }
