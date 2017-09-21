@@ -61,6 +61,8 @@ class APILogoutTest extends ITapiTest {
         Assert::same("OK",$this->logout->result->status);
 
         Assert::true(!property_exists($this->logout->result, "data"));
+        $session = $this->container->getByType('Nette\Http\Session');
+        Assert::null($session->getSection("TAPI"));
     }
 
 }
