@@ -115,6 +115,7 @@ class APIDiscussionsTest extends ITapiTest {
             Assert::type("bool",$dis->canWrite);
             Assert::type("bool",$dis->canDelete);
             Assert::type("bool",$dis->canStick);
+            Assert::type("int", $dis->newPosts);
             if ($dis->newPosts > 0) {
                 Assert::true(is_object($dis->newInfo));
                 Assert::type("int", $dis->newInfo->newsCount);
