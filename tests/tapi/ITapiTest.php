@@ -56,7 +56,7 @@ abstract class ITapiTest extends Tester\TestCase {
         Tester\Assert::type("\Nette\Reflection\ClassType", $object->getReflection());
         $tapiname = $object->getTapiName();
         Tester\Assert::type("string", $tapiname);
-        if($tapiname == "login"){
+        if($tapiname == "login" || $tapiname == "users/register"){
             Tester\Assert::equal(FALSE, $object->getTSIDRequired());
         } else {
             Tester\Assert::equal(TRUE, $object->getTSIDRequired());
