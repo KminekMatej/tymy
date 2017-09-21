@@ -65,7 +65,8 @@ class APIEventsTest extends ITapiTest {
     }
     
     function testAllEventsCount(){
-        $this->events->reset()->getResult(TRUE);
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->events->reset()->getResult();
         Assert::type("int", $this->events->getAllEventsCount());
     }
     
@@ -189,8 +190,18 @@ class APIEventsTest extends ITapiTest {
         }
     }
     
+    function testSelectLimit() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $limit = 2;
+        $data = $this->events->reset()->setLimit($limit)->getData();
+        Assert::same($limit, count($data));
+    }
+    
     function testSelectLimitOffset() {
-        Assert::true(FALSE); //todo
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $offset = 10;
+        $limit = 5;
+        Assert::same($limit, count($this->events->reset()->setOffset($offset)->setLimit($limit)->getData()));
     }
 
 }
