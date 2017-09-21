@@ -49,7 +49,7 @@ class APIUserTest extends ITapiTest {
         $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
         Assert::exception(function(){$this->tapi_user->reset()->recId(1)->getResult(TRUE);} , "\Tymy\Exception\APIException", "Login failed. Wrong username or password.");
     }
-        
+    
     function testSelectSuccess() {
         $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
         $userId = 1;
@@ -64,6 +64,7 @@ class APIUserTest extends ITapiTest {
         Assert::true($this->tapi_user->result->data->id > 0);
         Assert::type("string",$this->tapi_user->result->data->login);
         Assert::type("bool",$this->tapi_user->result->data->canLogin);
+        Assert::type("bool",$this->tapi_user->result->data->canEditCallName);
         Assert::type("string",$this->tapi_user->result->data->lastLogin);
         Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $this->tapi_user->result->data->lastLogin)); //timezone correction check
         Assert::type("string",$this->tapi_user->result->data->status);
@@ -100,34 +101,7 @@ class APIUserTest extends ITapiTest {
         }
         
     }
-
-    /* TAPI : REGISTER */
-    /*
     
-    function testRegisterFailsNoLogin(){
-        Assert::exception(function(){$this->tapi_user->reset()->register();} , "\Tymy\Exception\APIException", "Login not set!");
-    }
-    
-    function testRegisterFailsNoPassword(){
-        Assert::exception(function(){$this->tapi_user->reset()->setLogin("test")->register();} , "\Tymy\Exception\APIException", "Password not set!");
-    }
-    
-    function testRegisterFailsNoEmail(){
-        Assert::exception(function(){$this->tapi_user->reset()->setLogin("test")->setPassword("test")->register();} , "\Tymy\Exception\APIException", "Email not set!");
-    }
-    
-    function testRegisterSuccess(){
-        if(!$GLOBALS["testedTeam"]["invasive"])
-            return null;
-        
-        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
-        $this->tapi_user->reset()->setLogin("test" . rand(0,10000))->setPassword("test")->setEmail("test@test-matej.com")->register();
-        
-        Assert::true(is_object($this->tapi_user));
-        Assert::true(is_object($this->tapi_user->result));
-        Assert::type("string",$this->tapi_user->result->status);
-        Assert::same("OK",$this->tapi_user->result->status);
-    }*/
 }
 
 $test = new APIUserTest($container);
