@@ -63,6 +63,7 @@ class APIUsersTest extends ITapiTest{
             Assert::type("int",$u->id);
             Assert::type("string",$u->login);
             Assert::type("bool",$u->canLogin);
+            Assert::type("bool",$u->canEditCallName);
             if(property_exists($u, "lastLogin")){ // last login not returned for users that never logged before
                 Assert::type("string",$u->lastLogin);
                 Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $u->lastLogin)); //timezone correction check
