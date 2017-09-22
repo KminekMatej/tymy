@@ -1,7 +1,7 @@
 $(function () {
     $.nette.init();
     
-    setTimeout(function(){nav();}, 5000);
+    setTimeout(function(){nav();}, 60000);
 });
 
 function nav() {
@@ -11,7 +11,7 @@ function nav() {
             reTitle();
             setTimeout(function () {
                 nav();
-            }, 5000);
+            }, 60000);
             homepageRefresh();
         }
     });
