@@ -123,9 +123,9 @@ class NavbarTest extends Tester\TestCase {
         Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")), 5); //5 of them with dropdown
         
         Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")[0]->div->a), count((array)$dObj)); //check if the discussions are all displayed
-        Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")[1]->div->a), count((array)$eObj) + 1); //check display all events + 1
-        $teamMenuDropdownCount = $uObj->counts["INIT"] > 0 && $this->user->isAllowed('users','canSeeRegisteredUsers') ? 6 : 5;
-        Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")[2]->div->a), $teamMenuDropdownCount); //there are 5 menu items on second dropdown (team)
+        Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")[1]->div->a), count((array)$eObj) + 1, "Displayed " . count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")[1]->div->a) . "events instead of expected " . count((array)$eObj) + 1); //check display all events + 1
+        $teamMenuDropdownCount = ($uObj->counts["INIT"] > 0 && $this->user->isAllowed('users','canSeeRegisteredUsers')) ? 6 : 5;
+        Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")[2]->div->a), $teamMenuDropdownCount);
         Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")[3]->div->a), count((array)$pObj)); //check if the polls are all displayed
         
         $settingsMenuDropdownCount = 0;
