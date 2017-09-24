@@ -116,15 +116,15 @@ class Supplier {
             preg_match("/([0-9]{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s([0-1][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])\s\+\d{4}\|(\d)\.(\d)\.(\d)/", $log, $matches);
             if (count($matches)) {
                 $version = new \stdClass();
-                $version->year = $matches[1];
-                $version->month = $matches[2];
-                $version->day = $matches[3];
-                $version->hour = $matches[4];
-                $version->minute = $matches[5];
-                $version->second = $matches[6];
-                $version->major = $matches[7];
-                $version->minor = $matches[8];
-                $version->patch = $matches[9];
+                $version->year = (int)$matches[1];
+                $version->month = (int)$matches[2];
+                $version->day = (int)$matches[3];
+                $version->hour = (int)$matches[4];
+                $version->minute = (int)$matches[5];
+                $version->second = (int)$matches[6];
+                $version->major = (int)$matches[7];
+                $version->minor = (int)$matches[8];
+                $version->patch = (int)$matches[9];
                 $version->version = $matches[7] . "." . $matches[8] . "." . $matches[9];
                 $version->date = date("c", strtotime($matches[1] . "-" . $matches[2] . "-" . $matches[3] . " " . $matches[4] . ":" . $matches[5] . ":" . $matches[6]));                
                 $this->versions[] = $version;
