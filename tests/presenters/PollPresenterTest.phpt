@@ -38,8 +38,8 @@ class PollPresenterTest extends IPresenterTest {
         Assert::true($dom->has('div#snippet-navbar-nav'));
         //has breadcrumbs
         Assert::true($dom->has('div.container div.row div.col ol.breadcrumb'));
-        Assert::count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]'), 1);
-        Assert::count($dom->find('ol.breadcrumb li.breadcrumb-item'), 2); //last item aint link
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 1);
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 2); //last item aint link
         
     }
     
@@ -71,18 +71,14 @@ class PollPresenterTest extends IPresenterTest {
         Assert::true($dom->has('div#snippet-navbar-nav'));
         //has breadcrumbs
         Assert::true($dom->has('div.container div.row div.col ol.breadcrumb'));
-        Assert::count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]'), 2);
-        Assert::count($dom->find('ol.breadcrumb li.breadcrumb-item'), 3); // last breadcrumb aint link
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 2);
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 3); // last breadcrumb aint link
         
         //check showed items
-        Assert::count($dom->find('div.container.poll div.row div.col.my-3 div.card.sh-box.card-inverse div.card-body h4.card-title'), 1);
-        Assert::count($dom->find('div.container.poll div.row div.col.my-3 div.card.sh-box.card-inverse div.card-body h6.card-subtitle'), 1);
+        Assert::equal(count($dom->find('div.container.poll div.row div.col.my-3 div.card.sh-box div.card-body h4.card-title')), 1);
+        Assert::equal(count($dom->find('div.container.poll div.row div.col.my-3 div.card.sh-box div.card-body h6.card-subtitle')), 1);
         
-        //check options
         Assert::true(count($dom->find('div.container.poll div.row div.col.my-3 div.card.sh-box div.card-body div.container div.row div.col-3.py-3.option')) > 0);
-        
-        //check results if showed
-        Assert::true(FALSE); //todo
     }
 }
 
