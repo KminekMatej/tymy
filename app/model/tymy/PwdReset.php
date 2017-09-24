@@ -42,6 +42,7 @@ final class PwdReset extends Tymy{
 
                 
     public function reset() {
+        $this->code = NULL;
         return parent::reset();
     }
 
