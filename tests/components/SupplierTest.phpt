@@ -70,7 +70,7 @@ class SupplierTest extends Tester\TestCase {
         Assert::type("int", $version->patch);
         Assert::type("string", $version->version);
         Assert::equal($version->version, $version->major . "." . $version->minor . "." . $version->patch);
-        Assert::type("object", $version->date);
+        Assert::type("string", $version->date);
         
     }
 }
