@@ -59,11 +59,16 @@ class SignPresenter extends BasePresenter {
     protected function createComponentPwdLostForm() {
         $form = $this->pwdLostFactory->create();
         $form->onSuccess[] = function (Nette\Application\UI\Form $form, \stdClass $values) {
-            $this->pwdLost
-                    ->setCallbackUri($this->getHttpRequest()->getUrl()->getBaseUrl() . $this->link('Sign:pwdreset', ["code" => "%s"]))
-                    ->setHostname($this->getHttpRequest()->getRemoteHost())
-                    ->setMail($values->email)
-                    ->getData();
+            try {
+                $this->pwdLost
+                        ->setCallbackUri($this->getHttpRequest()->getUrl()->getBaseUrl() . $this->link('Sign:pwdreset', ["code" => "%s"]))
+                        ->setHostname($this->getHttpRequest()->getRemoteHost())
+                        ->setMail($values->email)
+                        ->getData();    
+            } catch (\Tymy\Exception\APIException $ex) {
+                $this->flashMessage('Uživatel nebyl nalezen, je zablokován nebo došlo k chybě. Zkuste to znovu, nebo kontaktujte týmového administrátora.');
+                $this->redirect('Sign:pwdlost');
+            }
             
             $this->flashMessage('Kód k resetování byl zaslán na Vaši e-mailovou adresu');
 
