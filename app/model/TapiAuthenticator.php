@@ -50,7 +50,6 @@ class TapiAuthenticator implements Nette\Security\IAuthenticator {
         return $login;
     }
     
-    //TODO password lost
     /**
      * Adds new user.
      * @param  string

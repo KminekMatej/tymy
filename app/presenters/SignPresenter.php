@@ -36,9 +36,21 @@ class SignPresenter extends BasePresenter {
      * @return Nette\Application\UI\Form
      */
     protected function createComponentSignInForm() {
-        return $this->signInFactory->create(function () {
-                    $this->redirect('Homepage:');
-                }, $this->supplier);
+        $form = $this->signInFactory->create(function (Nette\Application\UI\Form $form, $values) {
+            try {
+                $this->user->setExpiration('20 minutes');
+                $this->user->login($values->name, $values->password);
+            } catch (\Tymy\Exception\APIException $exc) {
+                switch ($exc->getMessage()) {
+                    case "Login not approved":
+                        $this->flashMessage('Tento uživatel zatím nemá povolené přihlášení');
+                        break;
+                }
+            }
+            $this->redirect('Homepage:');
+        });
+
+        return $form;
     }
 
     /**

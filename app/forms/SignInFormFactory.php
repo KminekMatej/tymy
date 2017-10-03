@@ -69,14 +69,7 @@ class SignInFormFactory {
         $form->addSubmit('send', 'LOGIN');
         $form->onSuccess[] = [$this, 'formValid'];
         $form->onSuccess[] = function (Form $form, $values) use ($onSuccess) {
-            try {
-                $this->user->setExpiration('20 minutes');
-                $this->user->login($values->name, $values->password);
-            } catch (\Tymy\Exception\APIException $ex){
-                $form->addError($ex->getMessage());
-                return;
-            }
-            $onSuccess();
+            $onSuccess($form, $values);
         };
         
         return $form;
