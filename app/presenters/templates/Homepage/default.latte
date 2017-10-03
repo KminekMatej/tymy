@@ -69,7 +69,14 @@
         </div>
         <div class="col-md-7 my-3">
             <div class="card sh-box">
-                <div class="card-header"><h4 class="card-title">Diskuze</h4></div>
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col"><h4 class="card-title">Diskuze</h4></div>
+                        <div class="col col-md-auto">
+                            <button class="btn btn-sm btn-light btn-light-bordered" title="Obnovit" onclick="refresh()"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                </div>
                 <div class="card-body">
                     {foreach $discussions as $item}
                         <div class="row my-2">

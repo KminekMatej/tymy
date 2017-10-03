@@ -1,17 +1,26 @@
 $(function () {
     $.nette.init();
-    
-    setTimeout(function(){nav();}, 60000);
+    var interval = 60000;
+    setTimeout(function(){refresh(interval);}, interval);
 });
 
-function nav() {
+function refresh(timer) {
+    if($(".fa-refresh").length>0){
+        $(".fa-refresh").addClass("fa-spin");
+    }
+     
     $.nette.ajax({
         url: "/?do=navbar-refresh",
         complete: function (payload) {
             reTitle();
-            setTimeout(function () {
-                nav();
-            }, 60000);
+            if ($(".fa-refresh").length > 0) {
+                $(".fa-refresh").removeClass("fa-spin");
+            }
+            if (timer > 0) {
+                setTimeout(function () {
+                    nav();
+                }, timer);
+            }
             homepageRefresh();
         }
     });
