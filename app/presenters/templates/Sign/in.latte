@@ -1,14 +1,27 @@
 {block styles}
 {include parent}
-<link rel="stylesheet" href="{$basePath}/css/sign.in.css" />
+<link rel="stylesheet" href="{$basePath}/css/sign.css" />
 {/block}
 
 {block content}
-<div class="login">
-    {control signInForm}
-    <table class="under">
-        <tr>
-            <td style="padding-right:5px"><a href="{plink Sign:up}">Registrovat</a></td>
-            <td style="padding-left:5px"><a href="{plink Sign:pwdlost}">Ztracené heslo</a></td></tr>
-    </table>
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="col-md-4 sh-box bg-light p-5 my-5">
+            {form signInForm}
+                <div class="row">
+                    <div class="col">{input name}</div>
+                </div>
+                <div class="row">
+                    <div class="col">{input password}</div>
+                </div>
+                <div class="row">
+                    <div class="col">{input send}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6"><a href="{plink Sign:up}">Registrovat</a></div>
+                    <div class="col-6"><a href="{plink Sign:pwdlost}">Ztracené heslo</a></div>
+                </div>
+            {/form}
+        </div>
+    </div>
 </div>

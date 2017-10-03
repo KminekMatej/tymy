@@ -12,15 +12,6 @@ body{
     text-align: center;
 }
 
-div.login{
-    max-width: 360px;
-    margin: 100px auto auto auto;
-    padding: 45px;
-    background-color: white;
-    text-align: center;
-    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
-}
-
 table{
     width: 100%;
 }
@@ -46,11 +37,7 @@ INPUT[type='submit']:hover {
     background: linear-gradient(to bottom right, #ff5f49, #d14836);
 }
 
-TABLE.under TD{
-    width: 50%;
-}
-
-TABLE.under A{
+A{
     display: block;
     background: linear-gradient(to bottom right, #d0d0d0, #bbbbbb);
     color: white;
@@ -59,7 +46,8 @@ TABLE.under A{
     font-size: 14px;
 }
 
-TABLE.under A:hover{
+A:hover{
+    color: white;
     text-decoration: none;
     background: linear-gradient(to bottom right, #d0d0d0, #616161);
     
