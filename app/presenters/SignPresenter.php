@@ -112,6 +112,10 @@ class SignPresenter extends BasePresenter {
         }
     }
     
+    public function renderIn(){
+        $this->template->multiple = $this->supplier->getTapi_config()["multiple_team"];
+    }
+    
     private function resetPwd($code){
         return $this->pwdReset
                     ->setCode($code)
