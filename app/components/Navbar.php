@@ -72,7 +72,7 @@ class NavbarControl extends Control {
 
     private function polls() {
         try {
-            $this->template->voteWarnings = $this->polls->reset()->getResult()->menuWarningCount;
+            $this->template->voteWarnings = $this->polls->reset()->setMenu(TRUE)->getResult()->menuWarningCount;
             $this->template->polls = (object) $this->polls->getData();
         } catch (Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);

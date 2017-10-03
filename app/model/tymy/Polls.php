@@ -14,8 +14,13 @@ final class Polls extends Tymy{
     const TAPI_NAME = "polls";
     const TSID_REQUIRED = TRUE;
     
+    private $menu = FALSE;
+    
     public function select() {
         $this->fullUrl .= self::TAPI_NAME;
+        
+        if($this->menu) $this->fullUrl .= "/menu";
+        
         return $this;
     }
     
@@ -33,4 +38,15 @@ final class Polls extends Tymy{
             $this->timeLoad($poll->updatedAt);
         }
     }
+    
+    public function getMenu() {
+        return $this->menu;
+    }
+
+    public function setMenu($menu) {
+        $this->menu = $menu;
+        return $this;
+    }
+
+
 }
