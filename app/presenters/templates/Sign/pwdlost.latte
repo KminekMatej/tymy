@@ -4,7 +4,24 @@
 {/block}
 
 {block content}
-<div class="pwdReset">
-    <h6>Zadejte Váš e-mail:</h6>
-    {control pwdLostForm}
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="col-md-4 sh-box bg-light p-5 my-5">
+            <h6>Zadejte Váš e-mail:</h6>
+            {form pwdLostForm}
+                <div class="row">
+                    <div class="col">
+                        {input email}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">{input send}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6"><a href="{plink Sign:in}">Zpět</a></div>
+                    <div class="col-6"><a href="{plink Sign:pwdreset}">Zadat kód</a></div>
+                </div>
+            {/form}
+        </div>
+    </div>
 </div>
