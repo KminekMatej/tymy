@@ -92,19 +92,35 @@ class EventPresenter extends SecuredPresenter {
 
         //array keys are pre-set for sorting purposes
         $attArray = [];
-        $attArray["YES"] = NULL;
-        $attArray["LAT"] = NULL;
-        $attArray["DKY"] = NULL;
-        $attArray["NO"] = NULL;
-        $attArray["UNKNOWN"] = NULL;
-
+        $attArray["POST"] = [];
+        $attArray["POST"]["YES"] = [];
+        $attArray["POST"]["NO"] = [];
+        $attArray["PRE"] = [];
+        $attArray["PRE"]["YES"] = [];
+        $attArray["PRE"]["DKY"] = [];
+        $attArray["PRE"]["LAT"] = [];
+        $attArray["PRE"]["NO"] = [];
+        $attArray["PRE"]["UNKNOWN"] = [];
+        
+        
         foreach ($event->attendance as $attendee) {
             $user = $users->data[$attendee->userId];
             if ($user->status != "PLAYER")
                 continue; // display only players on event detail
             $gender = $user->gender;
             $user->preDescription = $attendee->preDescription;
-            $attArray[$attendee->preStatus][$gender][$attendee->userId] = $user;
+            $mainKey = "PRE";
+            $secondaryKey = $attendee->preStatus;
+            if($attendee->postStatus != "UNKNOWN"){
+                $mainKey = "POST";
+                $secondaryKey = $attendee->postStatus;
+            }
+            if(!array_key_exists($secondaryKey, $attArray[$mainKey]))
+                    $attArray[$mainKey][$secondaryKey] = [];
+            if(!array_key_exists($gender, $attArray[$mainKey][$secondaryKey]))
+                    $attArray[$mainKey][$secondaryKey][$gender] = [];
+            
+            $attArray[$mainKey][$secondaryKey][$gender][$attendee->userId] = $user;
         }
 
         $event->allUsers = $attArray;

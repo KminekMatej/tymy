@@ -55,15 +55,22 @@
                 <div class="card-header">
                     <ul class="nav nav-tabs flex-column flex-sm-row card-header-tabs" role="tablist">
                         {var $first = true}
-                        {foreach $event->allUsers as $key => $preStatus}
-                            {ifset $preStatus}
-                                {var $count = array_sum(array_map('count', $preStatus))}
-                                {var $caption = $key == 'UNKNOWN' ? 'Nerozhodnutí' : $eventTypes[$event->eventType->code]->preStatusSet[$key]->caption}
-                                <li class="nav-item">
-                                    <a n:class="flex-sm-fill, text-sm-center, nav-link, $first ? active" href="#{$caption|webalize}" data-toggle="tab" role="tab">{$caption} ({$count})</a>
-                                </li>
-                                {var $first = false}
-                            {/ifset}
+                        {foreach $event->allUsers as $mainKey => $statusSet}
+                            {foreach $event->allUsers[$mainKey] as $key => $status}
+                                {if count($status)}
+                                    {var $count = array_sum(array_map('count', $status))}
+                                    {if $mainKey == 'PRE'}
+                                        {var $caption = $key == 'UNKNOWN' ? 'Nerozhodnutí' : $eventTypes[$event->eventType->code]->preStatusSet[$key]->caption}
+                                    {else}
+                                        {var $caption = $key == 'YES' ? 'Přišli' : 'Nepřišli'}
+                                    {/if}
+                                    
+                                    <li class="nav-item">
+                                        <a n:class="flex-sm-fill, text-sm-center, nav-link, $first ? active" href="#{$caption|webalize}" data-toggle="tab" role="tab">{$caption} ({$count})</a>
+                                    </li>
+                                    {var $first = false}
+                                {/if}
+                            {/foreach}
                         {/foreach}
                     </ul>
                 </div>
@@ -72,11 +79,16 @@
                     <!-- Tab panes -->
                     <div class="tab-content">
                         {var $first = true}
-                        {foreach $event->allUsers as $key => $preStatus}
-                            {ifset $preStatus}
-                                {var $caption = $key == 'UNKNOWN' ? 'Nerozhodnutí' : $eventTypes[$event->eventType->code]->preStatusSet[$key]->caption}
+                        {foreach $event->allUsers as $mainKey => $statusSet}
+                        {foreach $event->allUsers[$mainKey] as $key => $status}
+                            {if count($status)}
+                                    {if $mainKey == 'PRE'}
+                                        {var $caption = $key == 'UNKNOWN' ? 'Nerozhodnutí' : $eventTypes[$event->eventType->code]->preStatusSet[$key]->caption}
+                                    {else}
+                                        {var $caption = $key == 'YES' ? 'Přišli' : 'Nepřišli'}
+                                    {/if}
                                 <div n:class="tab-pane, fade, $first ? show, $first ? active, player-list" id="{$caption|webalize}" role="tabpanel">
-                                    <div n:if="count($usrs)>0" n:foreach="$preStatus as $gender => $usrs" class="row my-2">
+                                    <div n:if="count($usrs)>0" n:foreach="$status as $gender => $usrs" class="row my-2">
                                         <div class="col-2 player-heading">
                                             <h6 style="font-weight: bold">{$gender|genderTranslate} ({count($usrs)}):</h6>
                                             <div class="btn-group" role="group" aria-label="Attendance result ({$gender|genderTranslate})" n:if="$event->canResult">
@@ -100,7 +112,8 @@
                                     </div>
                                 </div>
                                 {var $first = false}
-                            {/ifset}
+                            {/if}
+                        {/foreach}
                         {/foreach}
                     </div>
                 </div>
