@@ -17,9 +17,7 @@ function refresh(timer) {
                 $(".fa-refresh").removeClass("fa-spin");
             }
             if (timer > 0) {
-                setTimeout(function () {
-                    nav();
-                }, timer);
+                setTimeout(function(){refresh(timer);}, timer);
             }
             homepageRefresh();
         }
