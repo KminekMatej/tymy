@@ -44,8 +44,8 @@
                 </div>
                 <div class="card-footer text-right">
                     {capture $delLink}del('{link eventDelete! $event->id}', 'DIV.container.settings DIV.card'){/capture}
-                    {capture $editLink}update('{link eventEdit! $event->id}', 'DIV.container.settings DIV.card'){/capture}
-                    <button n:if="$user->isAllowed('SYS','EVE_DELETE')" onclick="{$delLink|noescape}" class="btn btn-danger mx-2">Smazat</button>
+                    {capture $editLink}updateRow('{link eventEdit! $event->id}', 'DIV.container.settings DIV.card'){/capture}
+                    <button n:if="$user->isAllowed('SYS','EVE_DELETE')" onclick="{$delLink|noescape}" class="btn btn-danger mx-2 delete" title="Smazat"><i class="fa fa-times" aria-hidden="true"></i></button>
                     <button n:if="$user->isAllowed('SYS','EVE_UPDATE')" onclick="{$editLink|noescape}" class="btn btn-lg btn-primary update" title="Uložit"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                 </div>
             </div>

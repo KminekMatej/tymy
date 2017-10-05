@@ -3,6 +3,7 @@ function updateUser(btn, purl){
         return;
     var activeTab = $("DIV.container.user DIV.tab-pane.active");
     var values = {};
+    btnDisable($(btn), true);
     
     //check for updated INPUT elements
     activeTab.find("INPUT[data-value]").each(function (){
@@ -64,14 +65,14 @@ function updateUser(btn, purl){
         values["roles"] = rolesNew;
     
     if (!($.isEmptyObject(values) > 0)) {
-        $(btn).prop("disabled", true);
+        btnDisable($(btn), true);
         $(btn).attr("disabled", "disabled");
         $.nette.ajax({
             url: purl,
             method: 'POST',
             data: values,
             complete: function (payload) {
-                $(btn).prop("disabled", true);
+                btnDisable($(btn), false);
                 $(btn).attr("disabled", "disabled");
                 $(btn).removeAttr("disabled");
             }
@@ -111,7 +112,7 @@ function checkRole(btn){
 function deleteUser(btn, purl){
     if ($(btn).prop("disabled") || $(btn).hasClass("disabled"))
         return;
-    $(btn).prop("disabled", true);
+    btnDisable($(btn), true);
     $(btn).attr("disabled", "disabled");
     $.nette.ajax({url: purl});
 }

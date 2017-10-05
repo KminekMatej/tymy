@@ -42,7 +42,7 @@ function updateRows(purl, selector) {
         btns.each(function () {
             btnDisable($(this), true);
         });
-        
+        btnDisable($("BUTTON.update.all"), true);
         $.nette.ajax({
             url: purl,
             method: 'POST',
@@ -123,9 +123,9 @@ function del(purl, selector) {
     var id = $(selector).attr("data-id");
     if ($(btn).prop("disabled") || $(btn).hasClass("disabled") || typeof(id)=="undefined")
         return;
-    btnDisable($(btn), true);
     var layout = $("DIV.container.settings").attr("data-layout");
     if (window.confirm("Smazat událost " + id + " ?")) {
+        btnDisable($(btn), true);
         $.nette.ajax({
             url: purl,
             data: {
@@ -205,18 +205,6 @@ function btnClass(btn, changed) {
         } else {
             btn.removeClass("btn-outline-primary");
             btn.addClass("btn-primary");
-        }
-    }
-}
-
-function btnDisable(btn, disable){
-    if (btn.length > 0) {
-        if (disable) {
-            btn.prop("disabled", true);
-            btn.attr("disabled", "disabled");
-        } else {
-            btn.prop("disabled", false);
-            btn.removeAttr("disabled");
         }
     }
 }

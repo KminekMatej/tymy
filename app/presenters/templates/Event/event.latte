@@ -4,8 +4,13 @@
 {control navbar}
 {/block}
 
-{block content}
+{block scripts}
+{include parent}
+<script src="{$basePath}/js/Event/EventAttendanceSet.js"></script>
+{/block}
 
+{block content}
+{var $event->canResult = strtotime($event->closeTime) < date('U')} {*TEMP TODO TO BE REMOVED AFTER TAPI UPDATE*}
 <div class="container event">
     <div class="row">
         <div class="col">
@@ -71,29 +76,36 @@
                             {ifset $preStatus}
                                 {var $caption = $key == 'UNKNOWN' ? 'Nerozhodnutí' : $eventTypes[$event->eventType->code]->preStatusSet[$key]->caption}
                                 <div n:class="tab-pane, fade, $first ? show, $first ? active, player-list" id="{$caption|webalize}" role="tabpanel">
-                                    {foreach $preStatus as $gender => $usrs}
-                                        {if count($usrs)>0}
-                                            <div class="row my-2">
-                                                <div class="col-2 player-heading"><h6 style="font-weight: bold">{$gender|genderTranslate} ({count($usrs)}):</h6></div>
-                                                <div class="col-10">
-                                                    {foreach $usrs as $usr}
-                                                            <figure class="figure text-center" style="width: 100px">
-                                                                <a href="{plink Team:player $usr->webName}">
-                                                                    <img src="{$tymyRoot}/{$usr->pictureUrl}" class="figure-img img-fluid rounded" alt="{$usr->callName}" />
-                                                                    <figcaption class="figure-caption">{$usr->callName}</figcaption>
-                                                                    <figcaption class="figure-caption" style="font-size: 70%; display: inline-block">{$usr->preDescription}</figcaption>
-                                                                </a>
-                                                            </figure>
-                                                    {/foreach}
-                                                </div>
+                                    <div n:if="count($usrs)>0" n:foreach="$preStatus as $gender => $usrs" class="row my-2">
+                                        <div class="col-2 player-heading">
+                                            <h6 style="font-weight: bold">{$gender|genderTranslate} ({count($usrs)}):</h6>
+                                            <div class="btn-group" role="group" aria-label="Attendance result ({$gender|genderTranslate})" n:if="$event->canResult">
+                                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="genderNCame(this)" title="NEPŘIŠLI"><i class="fa fa-window-close-o" aria-hidden="true"></i></button>
+                                                <button type="button" class="btn btn-sm btn-outline-success" onclick="genderCame(this)" title="PŘIŠLI"><i class="fa fa-check-square-o" aria-hidden="true"></i></button>
                                             </div>
-                                        {/if}
-                                    {/foreach}
+                                        </div>
+                                        <div class="col-10">
+                                            <figure n:foreach="$usrs as $usr" class="figure text-center" style="width: 100px">
+                                                <a href="{plink Team:player $usr->webName}">
+                                                    <img src="{$tymyRoot}/{$usr->pictureUrl}" class="figure-img img-fluid rounded" alt="{$usr->callName}" />
+                                                    <figcaption class="figure-caption">{$usr->callName}</figcaption>
+                                                    <figcaption n:if="trim($usr->preDescription) != ''" class="figure-caption" style="font-size: 70%; display: inline-block">{$usr->preDescription}</figcaption>
+                                                </a>
+                                                <div class="btn-group" role="group" aria-label="Attendance result" n:if="$event->canResult">
+                                                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="ncame(this)" title="NEPŘIŠEL"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                                    <button type="button" class="btn btn-sm btn-outline-success" onclick="came(this)" title="PŘIŠEL"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                                </div>
+                                            </figure>
+                                        </div>
+                                    </div>
                                 </div>
                                 {var $first = false}
                             {/ifset}
                         {/foreach}
                     </div>
+                </div>
+                <div class="card-footer text-right" n:if="$event->canResult">
+                    <button class="btn btn-lg btn-outline-primary update" onclick="saveAttendanceResults()" title="Uložit výslednou docházku"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                 </div>
             </div>
 

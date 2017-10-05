@@ -69,7 +69,7 @@
                     </div>
                 </div>
                 <div class="card-footer text-right">
-                    <a n:if="!$isNew && $user->isAllowed('SYS','EVE_CREATE')" class="btn btn-lg btn-success" href="{plink Settings:event_new}" title="Vytvořit novou událost" style="margin-right: 10px">
+                    <a n:if="!$isNew && $user->isAllowed('SYS','EVE_CREATE')" class="btn btn-lg btn-success" href="{plink Settings:event_new}" onclick="btnDisable($(this), true)" title="Vytvořit novou událost" style="margin-right: 10px">
                         <i class="fa fa-plus" aria-hidden="true"></i>
                     </a>
                     {capture $saveLink}{if $isNew}updateRows('{link eventsCreate!}', 'TABLE.table-xs'){else}updateRows('{link eventsEdit!}', 'TABLE.table-xs'){/if}{/capture}
