@@ -84,9 +84,7 @@
 <nav aria-label="Page navigation" n:if="!$isNew">
     <ul class="pagination justify-content-center">
         <li n:class="$currentPage == 1 ? disabled, page-item"><a class="page-link" href="{plink Settings:events null,$currentPage-1}">Předchozí</a></li>
-            {foreach $pagination as $page}
-            <li n:class="$currentPage == $page ? active, page-item"><a class="page-link" href="{plink Settings:events null,$page}">{$page}</a></li>
-            {/foreach}
+        <li n:foreach="$pagination as $page" n:class="$currentPage == $page ? active, page-item"><a class="page-link" href="{plink Settings:events null,$page}">{$page}</a></li>
         <li n:class="$currentPage == $lastPage ? disabled, page-item"><a class="page-link" href="{plink Settings:events null,$currentPage+1}">Následující</a></li>
     </ul>
 </nav>

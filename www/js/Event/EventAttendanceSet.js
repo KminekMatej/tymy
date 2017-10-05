@@ -46,3 +46,38 @@ function attendanceToggler(arrived, elm){
         $(elm).addClass("btn-danger");
     }
 }
+
+function saveAttendanceResults(btn, purl){
+ if ($(btn).prop("disabled") || $(btn).hasClass("disabled"))
+        return;
+       var resultSet = [];
+    $("FIGURE.player").each(function(){
+        var playerId = $(this).attr("id");
+        var yes = $(this).find("DIV.result BUTTON.btn-success").length > 0;
+        var no = $(this).find("DIV.result BUTTON.btn-danger").length > 0;
+        if(yes){
+            playerResult = "YES";
+        } else if(no){
+            playerResult = "NO";
+        } else {
+            playerResult = null;
+        }
+        if(playerResult != null){
+            playerData = {};
+            playerData.userId = parseInt(playerId.replace("player-",""));
+            playerData.postStatus = playerResult;
+            resultSet.push(playerData);
+        }
+    });
+    if(resultSet.length > 0){
+        btnDisable(btn, true);
+    }
+    $.nette.ajax({
+        url: purl,
+        type: "POST",
+        data: {resultSet},
+        complete: function (payload) {
+            btnDisable(btn, false);
+        }
+    });
+}

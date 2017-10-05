@@ -66,6 +66,27 @@ final class Attendance extends Tymy{
         return $this->result;
     }
     
+    public function confirm($postStatuses) {
+        if (!isset($this->recId))
+            throw new \Tymy\Exception\APIException('Event ID not set!');
+
+        $this->urlStart();
+
+        $this->fullUrl .= self::TAPI_NAME;
+
+        $this->urlEnd();
+        
+        $this->method = "POST";
+        
+        foreach ($postStatuses as $status) {
+            $status["eventId"] = $this->recId;
+            $this->addPost($status);
+        }
+        
+        $this->result = $this->execute();
+        return $this->result;
+    }
+    
     public function select() {
         throw new \Tymy\Exception\APIException("Select is not possible on Attendance object");
     }

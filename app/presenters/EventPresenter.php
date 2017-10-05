@@ -130,6 +130,21 @@ class EventPresenter extends SecuredPresenter {
             $this->redrawControl("attendanceTabs");
         }
     }
+    
+    public function handleAttendanceResult($id) {
+        $results = $this->getRequest()->getPost()["resultSet"];
+        try {
+            $this->attendance
+                    ->recId($id)
+                    ->confirm($results);
+        } catch (\Tymy\Exception\APIException $ex) {
+            $this->handleTapiException($ex);
+        }
+        if ($this->isAjax()) {
+            $this->redrawControl("attendanceTabs");
+        }
+    }
+
 
     public function handleEventLoad($date = NULL, $direction = NULL) {
         $this->redrawControl("events-agenda");
