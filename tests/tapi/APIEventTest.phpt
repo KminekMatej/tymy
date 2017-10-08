@@ -157,7 +157,7 @@ class APIEventTest extends ITapiTest {
     /* TAPI : EDIT */
     
     function testEdit() {
-        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user_admin"], $GLOBALS["testedTeam"]["pass_admin"]);
         $newCaption = "Autotest event changed caption";
         $result = $this->event->reset()->recId($this->createdEventId)->edit(["caption" => $newCaption])->getResult();
         Assert::true(is_object($result));
@@ -171,7 +171,7 @@ class APIEventTest extends ITapiTest {
     /* TAPI : DELETE */
     
     function testDelete() {
-        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user_admin"], $GLOBALS["testedTeam"]["pass_admin"]);
         $result = $this->event->reset()->recId($this->createdEventId)->delete()->getResult();
         Assert::true(is_object($result));
         Assert::type("string", $result->status);
