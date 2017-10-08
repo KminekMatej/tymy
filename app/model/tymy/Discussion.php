@@ -64,12 +64,13 @@ final class Discussion extends Tymy{
         
         $this->urlStart();
 
-        $this->fullUrl .= self::TAPI_NAME . "/" . $this->recId . "/editPost/$idPost";
+        $this->fullUrl .= self::TAPI_NAME . "/" . $this->recId . "/post";
 
         $this->urlEnd();
         
         $this->method = "PUT";
-
+        
+        $this->addPost("id", $idPost);
         if($text != NULL) $this->addPost("post", $text);
         if($sticky != NULL) $this->addPost("sticky", $sticky);
         

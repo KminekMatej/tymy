@@ -34,7 +34,7 @@ final class Event extends Tymy{
         
         $this->urlStart();
 
-        $this->fullUrl .= self::TAPI_NAME . "/" .$this->recId . "/edit";
+        $this->fullUrl .= self::TAPI_NAME . "/" .$this->recId;
 
         $this->urlEnd();
         
@@ -58,7 +58,7 @@ final class Event extends Tymy{
         
         $this->urlStart();
 
-        $this->fullUrl .= self::TAPI_NAME . "/" .$this->recId . "/delete";
+        $this->fullUrl .= self::TAPI_NAME . "/" .$this->recId;
 
         $this->urlEnd();
         
@@ -80,7 +80,7 @@ final class Event extends Tymy{
         
         $this->urlStart();
 
-        $this->fullUrl .= "events/create";
+        $this->fullUrl .= "events";
         
         $this->method = "POST";
         

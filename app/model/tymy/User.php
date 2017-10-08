@@ -31,7 +31,7 @@ final class User extends UserInterface{
         
         $this->urlStart();
 
-        $this->fullUrl .= "users/" .$this->recId . "/edit/";
+        $this->fullUrl .= "users/" .$this->recId;
 
         $this->urlEnd();
         
