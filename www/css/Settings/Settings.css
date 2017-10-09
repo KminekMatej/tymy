@@ -1,0 +1,21 @@
+/* 
+    Created on : 9.10.2017, 21:55:58
+    Author     : kminekmatej
+*/
+
+.set-box{
+    transition: background-color 0.4s ease;
+}
+
+.set-box A{
+    transition: color 0.7s ease;
+}
+
+.set-box:hover{
+    color: white;
+    background: linear-gradient(to bottom right, #333030, #403b3b);
+}
+
+.set-box:hover A{
+    color: white;
+}
