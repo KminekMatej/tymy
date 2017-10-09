@@ -34,6 +34,8 @@ class NavbarControl extends Control {
 
     /** @var Nette\Security\User */
     private $presenterUser;
+    
+    private $accessibleSettings;
 
     public function __construct(\App\Presenters\SecuredPresenter $presenter) {
         parent::__construct();
@@ -45,6 +47,7 @@ class NavbarControl extends Control {
         $this->users = $this->presenter->users;
         $this->supplier = $this->presenter->supplier;
         $this->presenterUser = $this->presenter->getUser();
+        $this->accessibleSettings = $this->presenter->getAccessibleSettings();
     }
 
     private function discussions() {
@@ -96,7 +99,7 @@ class NavbarControl extends Control {
     }
 
     private function settings() {
-        //not used now, maybe later
+        $this->template->accessibleSettings = $this->accessibleSettings;
     }
 
     public function render() {
@@ -117,7 +120,7 @@ class NavbarControl extends Control {
         //tapi polls
         $this->polls();
         //tapi settings
-        //$this->settings();
+        $this->settings();
 
         $template->render();
     }

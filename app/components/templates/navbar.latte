@@ -62,13 +62,8 @@
             <li class="nav-item dropdown">
                 <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cogs" aria-hidden="true"></i> Nastavení</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item" n:if="$user->isAllowed('settings','discussions')" href="{plink Settings:discussions}"><i class="fa fa-comments" aria-hidden="true"></i> Diskuze</a>
-                    <a class="dropdown-item" n:if="$user->isAllowed('settings','events')" href="{plink Settings:events}"><i class="fa fa-calendar-o" aria-hidden="true"></i> Události</a>
-                    <a class="dropdown-item" n:if="$user->isAllowed('settings','team')" href="{plink Settings:team}"><i class="fa fa-users" aria-hidden="true"></i> Tým</a>
-                    <a class="dropdown-item" n:if="$user->isAllowed('settings','polls')" href="{plink Settings:polls}"><i class="fa fa-pie-chart" aria-hidden="true"></i> Ankety</a>
-                    <a class="dropdown-item" n:if="$user->isAllowed('settings','reports')" href="{plink Settings:reports}"><i class="fa fa-bar-chart" aria-hidden="true"></i> Reporty</a>
-                    <a class="dropdown-item" n:if="$user->isAllowed('settings','permissions')" href="{plink Settings:permissions}"><i class="fa fa-gavel" aria-hidden="true"></i> Oprávnění</a>
-                    <a class="dropdown-item" n:if="$user->isAllowed('settings','app')" href="{plink Settings:app}"><i class="fa fa-laptop" aria-hidden="true"></i> Aplikace</a>
+                    {dump $accessibleSettings}
+                    <a n:foreach="$accessibleSettings as $set" class="dropdown-item" href="{$set->href}"><i class="fa {$set->icon}" aria-hidden="true"></i> {$set->name}</a>
                 </div>
             </li>
         </ul>

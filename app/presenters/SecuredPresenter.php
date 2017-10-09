@@ -10,7 +10,7 @@ namespace App\Presenters;
 
 use Nette;
 use Nette\Application\UI\NavbarControl;
-
+use App\Model\SettingMenu;
 /**
  * Description of SecuredPresenter
  *
@@ -44,6 +44,8 @@ class SecuredPresenter extends BasePresenter {
     /** @var \Tymy\EventTypes @inject */
     public $eventTypes;
     
+    public $accessibleSettings = [];
+    
     public function getLevelCaptions(){
         return $this->levelCaptions;
     }
@@ -67,6 +69,7 @@ class SecuredPresenter extends BasePresenter {
             }
             $this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
         }
+        $this->setAccessibleSettings();
         $this->supplier->setTapi_config($this->getUser()->getIdentity()->getData()["tapi_config"]);
         $this->tapiAuthorizator->setUser($this->getUser()->getIdentity()->getData()["data"]);
         $this->setLevelCaptions(["0" => ["caption" => "Hlavní stránka", "link" => $this->link("Homepage:")]]);
@@ -117,4 +120,20 @@ class SecuredPresenter extends BasePresenter {
         return $result;
     }
     
+    public function getAccessibleSettings() {
+        return $this->accessibleSettings;
+    }
+
+    private function setAccessibleSettings() {
+        if($this->getUser()->isAllowed('settings','discussions')) $this->accessibleSettings[] = new SettingMenu("discussions", "Diskuze", $this->link("Settings:discussions"), "fa-comments");
+        if($this->getUser()->isAllowed('settings','events')) $this->accessibleSettings[] = new SettingMenu("events", "Události", $this->link("Settings:events"), "fa-calendar-o");
+        if($this->getUser()->isAllowed('settings','team')) $this->accessibleSettings[] = new SettingMenu("team", "Tým", $this->link("Settings:team"), "fa-users");
+        if($this->getUser()->isAllowed('settings','polls')) $this->accessibleSettings[] = new SettingMenu("polls", "Ankety", $this->link("Settings:polls"), "fa-pie-chart");
+        if($this->getUser()->isAllowed('settings','reports')) $this->accessibleSettings[] = new SettingMenu("reports", "Reporty", $this->link("Settings:reports"), "fa-bar-chart");
+        if($this->getUser()->isAllowed('settings','permissions')) $this->accessibleSettings[] = new SettingMenu("permissions", "Oprávnění", $this->link("Settings:permissions"), "fa-gavel");
+        if($this->getUser()->isAllowed('settings','app')) $this->accessibleSettings[] = new SettingMenu("app", "Aplikace", $this->link("Settings:app"), "fa-laptop");
+        return $this;
+    }
+
+
 }
