@@ -52,3 +52,9 @@ A:hover{
     background: linear-gradient(to bottom right, #d0d0d0, #616161);
     
 }
+
+DIV.brand{
+    color: white;
+    font-size: 20pt;
+    background: linear-gradient(to bottom right, #333030, #403b3b);
+}
