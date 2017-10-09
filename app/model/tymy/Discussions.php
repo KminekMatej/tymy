@@ -32,6 +32,70 @@ final class Discussions extends Tymy{
         return $this;
     }
     
+    public function edit($fields){
+        if (!isset($this->recId))
+            throw new \Tymy\Exception\APIException('Discussion ID not set!');
+        if (!$fields)
+            throw new \Tymy\Exception\APIException('Fields to edit not set!');
+        if (!$this->user->isAllowed("SYS","DSSETUP"))
+            throw new \Tymy\Exception\APIException('Permission denied!');
+        
+        $this->urlStart();
+
+        $this->fullUrl .= self::TAPI_NAME;
+
+        $this->urlEnd();
+        
+        $this->method = "PUT";
+        
+        foreach ($fields as $key => $value) {
+            $this->addPost($key,$value);
+        }
+        
+        $this->result = $this->execute();
+        return $this;
+    }
+    
+    public function delete() {
+        if (!isset($this->recId))
+            throw new \Tymy\Exception\APIException('Discussion ID not set!');
+        if (!$this->user->isAllowed("SYS", "DSSETUP"))
+            throw new \Tymy\Exception\APIException('Permission denied!');
+
+        $this->urlStart();
+
+        $this->fullUrl .= self::TAPI_NAME;
+
+        $this->urlEnd();
+
+        $this->method = "DELETE";
+        
+        $this->addPost("id",$this->recId);
+
+        $this->result = $this->execute();
+        return $this;
+    }
+
+    public function create($discussion){
+        if (!array_key_exists("caption", $discussion))
+            throw new \Tymy\Exception\APIException('Caption not set!');
+        
+        if (!$this->user->isAllowed("SYS", "DSSETUP"))
+            throw new \Tymy\Exception\APIException('Permission denied!');
+        
+        $this->urlStart();
+
+        $this->fullUrl .= "discussions";
+        
+        $this->method = "POST";
+        
+        $this->addPost($discussion);
+        
+        $this->result = $this->execute();
+
+        return $this;
+    }
+    
     protected function postProcess() {
         if (($data = $this->getData()) == null)
             return;
