@@ -30,7 +30,7 @@ abstract class Tymy extends Nette\Object{
     protected $user;
     
     private $uriParams;
-    private $postParams;
+    private $postData;
     /** @var \App\Model\Supplier */
     protected $supplier;
     /** @var \Tymy\TracyPanelTymy */
@@ -108,7 +108,7 @@ abstract class Tymy extends Nette\Object{
         $this->result = NULL;
         $this->recId = NULL;
         $this->fullUrl = NULL;
-        $this->postParams = NULL;
+        $this->postData = NULL;
         $this->method = "GET";
         return $this;
     }
@@ -152,8 +152,8 @@ abstract class Tymy extends Nette\Object{
         return $this->uriParams;
     }
     
-    public function getPostParams(){
-        return $this->postParams;
+    public function getPostData(){
+        return $this->postData;
     }
     
     public function getRecId(){
@@ -281,8 +281,8 @@ abstract class Tymy extends Nette\Object{
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->method);
         }
         
-        if(in_array($this->method, ["POST","PUT"]) && isset($this->postParams) && is_array($this->postParams)){
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($this->postParams));
+        if(in_array($this->method, ["POST","PUT"]) && isset($this->postData) && is_array($this->postData)){
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($this->postData));
             curl_setopt($ch, CURLOPT_HTTPHEADER, array(
                 'Content-Type: application/json')
             );
@@ -299,17 +299,12 @@ abstract class Tymy extends Nette\Object{
     }
     
     /**
-     * Adds post parameter to prepared request. If Key is an array, whole array is added to the body. Otherwise a standard key/value pair is added.
-     * @param array or string $key
-     * @param string $value
+     * Set post data to send with request
+     * @param $data Data to be set
      * @return $this
      */
-    protected function addPost($key, $value = NULL){
-        if($value == NULL && is_array($key)){
-            $this->postParams[] = $key;
-        } else {
-            $this->postParams[$key] = $value;
-        }
+    protected function setPostData($data){
+        $this->postData = $data;
         return $this;
     }
     

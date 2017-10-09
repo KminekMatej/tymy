@@ -71,23 +71,25 @@ final class Register extends Tymy{
         
         $this->method = "POST";
         
-        $this->addPost("login",$this->login);
-        $this->addPost("password",$this->password);
-        $this->addPost("email",$this->email);
-        $this->addPost("callName",$this->composeCallName());
+        $data = new \stdClass();
+        $data->login = $this->login;
+        $data->password = $this->password;
+        $data->email = $this->email;
+        $data->callName = $this->composeCallName();
         
         if($this->firstName){
             if (count($this->firstName) > 20)
                 throw new \Tymy\Exception\APIException('First name too long!');
-            $this->addPost("firstName",$this->firstName);
+            $data->firstName = $this->firstName;
         }
             
         if($this->lastName){
             if (count($this->lastName) > 20)
                 throw new \Tymy\Exception\APIException('Last name too long!');
-            $this->addPost("lastName",$this->lastName);
+            $data->lastName = $this->lastName;
         }
-            
+        
+        $this->setPostData($data);
                 
         $this->result = $this->execute();
         

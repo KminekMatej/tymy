@@ -87,9 +87,9 @@ class SecuredPresenter extends BasePresenter {
             return intval($webName);
     }
     
-    protected function handleTapiException(\Tymy\Exception\APIException $ex){
+    protected function handleTapiException(\Tymy\Exception\APIException $ex, $redirect = null){
         $this->flashMessage("Došlo k nečekané chybě: " . $ex->getMessage());
-        $this->redirect($this->getName() . ":default");
+        $this->redirect($redirect == NULL ? $this->getName() . ":default" : $redirect);
     }
     
     /**

@@ -48,9 +48,7 @@ final class Discussions extends Tymy{
         
         $this->method = "PUT";
         
-        foreach ($fields as $key => $value) {
-            $this->addPost($key,$value);
-        }
+        $this->setPostData((object)$fields);
         
         $this->result = $this->execute();
         return $this;
@@ -70,7 +68,7 @@ final class Discussions extends Tymy{
 
         $this->method = "DELETE";
         
-        $this->addPost("id",$this->recId);
+        $this->setPostData((object)["id" => $this->recId]);
 
         $this->result = $this->execute();
         return $this;
@@ -89,7 +87,7 @@ final class Discussions extends Tymy{
         
         $this->method = "POST";
         
-        $this->addPost($discussion);
+        $this->setPostData($discussion);
         
         $this->result = $this->execute();
 

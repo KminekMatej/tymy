@@ -34,10 +34,11 @@ final class Poll extends Tymy{
         
         $this->method = "POST";
         
-        foreach ($votes as $vote) {
-            $vote["userId"] = $this->user->getId();
-            $this->addPost($vote);
+        foreach ($votes as &$vote) {
+            $vote->userId = $this->user->getId();
         }
+        $this->setPostData($votes);
+        
         $this->result = $this->execute();
         return $this->result;
         

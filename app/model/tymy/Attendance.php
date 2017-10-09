@@ -55,7 +55,7 @@ final class Attendance extends Tymy{
         
         $this->method = "POST";
         
-        $this->addPost([
+        $this->setPostData((object)[
             "userId" => $this->user->getId(),
             "eventId" => $this->recId,
             "preStatus" => $this->preStatus,
@@ -80,8 +80,8 @@ final class Attendance extends Tymy{
         
         foreach ($postStatuses as $status) {
             $status["eventId"] = $this->recId;
-            $this->addPost($status);
         }
+        $this->setPostData((object)$status);
         
         $this->result = $this->execute();
         return $this->result;

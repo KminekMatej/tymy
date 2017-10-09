@@ -43,8 +43,9 @@ final class Event extends Tymy{
         foreach ($fields as $key => $value) {
             if(in_array($key, ["startTime","endTime","closeTime"]))
                 $this->timeSave($value);
-            $this->addPost($key,$value);
         }
+        
+        $this->setPostData((object)$fields);
         
         $this->result = $this->execute();
         return $this;
@@ -84,10 +85,7 @@ final class Event extends Tymy{
         
         $this->method = "POST";
         
-        foreach ($eventsArray as $value) {
-            $this->addPost($value);
-        }
-        
+        $this->setPostData($eventsArray);
         
         $this->result = $this->execute();
 

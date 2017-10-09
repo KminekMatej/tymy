@@ -30,9 +30,11 @@ final class PwdLost extends Tymy{
         $this->fullUrl .= self::TAPI_NAME;
         $this->method = "POST";
         
-        $this->addPost("email", $this->mail);
-        $this->addPost("callbackUri", $this->callbackUri);
-        $this->addPost("hostname", $this->hostname);
+        $data = new \stdClass();
+        $data->email = $this->mail;
+        $data->callbackUri = $this->callbackUri;
+        $data->hostname = $this->hostname;
+        $this->setPostData($data);
         
         return $this;
     }

@@ -50,7 +50,8 @@ final class Discussion extends Tymy{
 
         $this->method = "POST";
         
-        $this->addPost("post", $text);
+        $this->setPostData((object)["post" => $text]);
+        
         $this->result = $this->execute();
         return $this->result;
     }
@@ -70,9 +71,12 @@ final class Discussion extends Tymy{
         
         $this->method = "PUT";
         
-        $this->addPost("id", $idPost);
-        if($text != NULL) $this->addPost("post", $text);
-        if($sticky != NULL) $this->addPost("sticky", $sticky);
+        $data = new \stdClass();
+        $data->id = $idPost;
+        if($text != null) $data->post = $text;
+        if($sticky != null) $data->sticky = $sticky;
+        
+        $this->setPostData($data);
         
         $this->result = $this->execute();
         return $this->result;

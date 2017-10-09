@@ -37,9 +37,7 @@ final class User extends UserInterface{
         
         $this->method = "PUT";
         
-        foreach ($fields as $key => $value) {
-            $this->addPost($key,$value);
-        }
+        $this->setPostData($fields);
         
         $this->result = $this->execute();
         return $this;
