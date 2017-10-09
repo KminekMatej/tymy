@@ -8,17 +8,15 @@
 
 <div class="container settings">
     <div class="row my-4 justify-content-center">
-    {foreach $accessibleSettings as $set}
-        <div class="col-md-4">
+        <div class="col-md-4" n:foreach="$accessibleSettings as $set">
             <div class="card sh-box my-4 text-center set-box">
                 <a href="{$set->href}">
-                <div class="card-body">
-                    <h1><i class="fa {$set->icon}"></i></h1>
-                    <h2 class="my-3">{$set->name}</h2>
-                </div>
+                    <div class="card-body">
+                        <h1><i class="fa {$set->icon}"></i></h1>
+                        <h2 class="my-3">{$set->name}</h2>
+                    </div>
                 </a>
             </div>
         </div>
-    {/foreach}
     </div>
 </div>
