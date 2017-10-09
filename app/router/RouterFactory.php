@@ -30,6 +30,7 @@ class RouterFactory
                 $router[] = new Route('ankety/<anketa>', 'Poll:poll');
                 $router[] = new Route('nastaveni', 'Settings:default');
                 $router[] = new Route('nastaveni/diskuze', 'Settings:discussions');
+                $router[] = new Route('nastaveni/diskuze/nova', 'Settings:discussion_new');
                 $router[] = new Route('nastaveni/udalosti', 'Settings:events');
                 $router[] = new Route('nastaveni/udalosti/nova', 'Settings:event_new');
                 $router[] = new Route('nastaveni/tym', 'Settings:team');

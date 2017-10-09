@@ -76,7 +76,7 @@ function getChangedInputs(area) {
         if (name == "link")
             value = prependHttp(value);
         validate(this, name, value);
-        if ($(this).attr("data-value") != $(this).val()) {
+        if ($(this).attr("data-value") != value) {
             if (name == "startTime" || name == "closeTime" || name == "endTime") {
                 value = moment(value, "DD.MM.YYYY HH:mm").toISOString();
             }

@@ -87,6 +87,26 @@ class SettingsPresenter extends SecuredPresenter {
         $this->template->previousVersion = $this->supplier->getVersion(1);
     }
     
+    public function renderDiscussion_new() {
+        $this->setLevelCaptions([
+            "2" => ["caption" => "Diskuze", "link" => $this->link("Settings:discussions")],
+            "3" => ["caption" => "Nová"]
+            ]);
+        $this->template->isNew = true;
+            
+        $discussions = [(object)[
+            "id" => 0,
+            "caption" => "",
+            "description" => "",
+            "publicRead" => FALSE,
+            "editablePosts" => TRUE,
+            "order" => 0,
+        ]];
+        $this->template->discussions = $discussions;
+        
+        $this->setView("discussions");
+    }
+    
     public function renderDiscussion($discussion) {
         //RENDERING DISCUSSION DETAIL
         $discussionId = $this->parseIdFromWebname($discussion);
@@ -183,6 +203,51 @@ class SettingsPresenter extends SecuredPresenter {
         try {
             $this->event
                     ->recId($eventId)
+                    ->edit($data);
+        } catch (\Tymy\Exception\APIException $ex) {
+            $this->handleTapiException($ex);
+        }
+    }
+    
+    public function handleDiscussionsEdit(){
+        $post = $this->getRequest()->getPost();
+        foreach ($post as $dData) {
+            $this->editDiscussion($dData["id"], $dData);
+        }
+    }
+    
+    public function handleDiscussionCreate(){
+        $discussionData = $this->getRequest()->getPost()[1]; // new discussion is always as ID 1
+        try {
+            $this->discussions->create($discussionData);
+        } catch (\Tymy\Exception\APIException $ex) {
+            $this->handleTapiException($ex, "Settings:discussions");
+        }
+        $this->redirect('Settings:discussions');
+    }
+    
+    public function handleDiscussionEdit($discussionId){
+        $discussionData = $this->getRequest()->getPost();
+        $this->editDiscussion($discussionId, $discussionData);
+    }
+    
+    public function handleDiscussionDelete($discussionId){
+        try {
+            $this->discussions
+                    ->recId($discussionId)
+                    ->delete();
+            if($this->getRequest()->getParameter("layout") == "form"){
+                $this->redirect("Settings:discussions");
+            }
+        } catch (\Tymy\Exception\APIException $ex) {
+            $this->handleTapiException($ex);
+        }
+    }
+    
+    private function editDiscussion($discussionId, $data) {
+        try {
+            $this->discussions
+                    ->recId($discussionId)
                     ->edit($data);
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);

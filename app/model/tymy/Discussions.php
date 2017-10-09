@@ -48,6 +48,8 @@ final class Discussions extends Tymy{
         
         $this->method = "PUT";
         
+        $fields["id"] = $this->recId;
+        
         $this->setPostData((object)$fields);
         
         $this->result = $this->execute();
