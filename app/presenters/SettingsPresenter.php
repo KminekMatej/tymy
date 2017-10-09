@@ -164,6 +164,10 @@ class SettingsPresenter extends SecuredPresenter {
         $this->template->poll = $pollObj;
     }
     
+    public function renderDefault(){
+        $this->template->accessibleSettings = $this->getAccessibleSettings();
+    }
+    
     public function handleEventsEdit(){
         $post = $this->getRequest()->getPost();
         foreach ($post as $evData) {
