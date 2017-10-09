@@ -209,7 +209,15 @@ function btnClass(btn, changed) {
     }
 }
 
-function duplicate(timePeriod){
+
+function duplicateLastRow(){
+    var table = $("DIV.container.settings TABLE");
+    var lastRow = table.find("TR:last");
+    var newRow = lastRow.clone();
+    table.append(newRow);
+}
+
+function duplicateEventRow(timePeriod){
     var table = $("DIV.container.settings TABLE");
     var lastRow = table.find("TR:last");
     
@@ -217,6 +225,8 @@ function duplicate(timePeriod){
     var startTime = moment(lastRow.find("INPUT[name=startTime]").val(), "DD.MM.YYYY HH:mm");
     var endTime = moment(lastRow.find("INPUT[name=endTime]").val(), "DD.MM.YYYY HH:mm");
     var closeTime = moment(lastRow.find("INPUT[name=closeTime]").val(), "DD.MM.YYYY HH:mm");
+    
+    duplicateRow();
     
     switch (timePeriod) {
         case 'day':
@@ -235,12 +245,11 @@ function duplicate(timePeriod){
             closeTime.add(1, "months");
             break;
     }
-    var newRow = lastRow.clone();
-    newRow.find("SELECT[name=type]").val(type);
-    newRow.find("INPUT[name=startTime]").val(startTime.format("DD.MM.YYYY HH:mm"));
-    newRow.find("INPUT[name=endTime]").val(endTime.format("DD.MM.YYYY HH:mm"));
-    newRow.find("INPUT[name=closeTime]").val(closeTime.format("DD.MM.YYYY HH:mm"));
-    table.append(newRow);
+    lastRow = table.find("TR:last");
+    lastRow.find("SELECT[name=type]").val(type);
+    lastRow.find("INPUT[name=startTime]").val(startTime.format("DD.MM.YYYY HH:mm"));
+    lastRow.find("INPUT[name=endTime]").val(endTime.format("DD.MM.YYYY HH:mm"));
+    lastRow.find("INPUT[name=closeTime]").val(closeTime.format("DD.MM.YYYY HH:mm"));
 }
 
 function removeRow(elm){
