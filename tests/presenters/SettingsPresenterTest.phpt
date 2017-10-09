@@ -12,6 +12,8 @@ if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
 
+Tester\Environment::skip('Test skipped - no finished yet.');
+
 class SettingsPresenterTest extends IPresenterTest {
 
     const PRESENTERNAME = "Settings";
