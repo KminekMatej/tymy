@@ -17,6 +17,8 @@ if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Tester\Environment::skip('Test skipped as set in config file.');
 }
 
+Tester\Environment::lock('tapi', __DIR__ . '/../lockdir'); //belong to the group of tests which should not run paralelly
+        
 class NavbarTest extends Tester\TestCase {
 
     private $container;
