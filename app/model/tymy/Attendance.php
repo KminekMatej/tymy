@@ -55,12 +55,13 @@ final class Attendance extends Tymy{
         
         $this->method = "POST";
         
-        $this->setPostData((object)[
-            "userId" => $this->user->getId(),
-            "eventId" => $this->recId,
-            "preStatus" => $this->preStatus,
-            "preDescription" => $this->preDescription,
-        ]);
+        $data = new \stdClass();
+        $data->userId = $this->user->getId();
+        $data->eventId = $this->recId;
+        $data->preStatus = $this->preStatus;
+        $data->preDescription = $this->preDescription;
+        
+        $this->setPostData([$data]);
         
         $this->result = $this->execute();
         return $this->result;
