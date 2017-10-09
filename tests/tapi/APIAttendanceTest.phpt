@@ -99,18 +99,7 @@ class APIAttendanceTest extends ITapiTest {
                 ->setPreStatus("YES")
                 ->setPreDescription("Tymyv2-AutoTest-yes")
                 ->plan();
-        Assert::type("array",$this->attendance->postParams[0]);
-        Assert::same(4,count($this->attendance->postParams[0]));
-        
-        Assert::type("int",$this->attendance->postParams[0]["userId"]);
-        Assert::same($this->user->getId(),$this->attendance->postParams[0]["userId"]);
-        Assert::type("int",$this->attendance->postParams[0]["eventId"]);
-        Assert::same($idActionToUpdateOn,$this->attendance->postParams[0]["eventId"]);
-        Assert::type("string",$this->attendance->postParams[0]["preStatus"]);
-        Assert::same("YES",$this->attendance->postParams[0]["preStatus"]);
-        Assert::type("string",$this->attendance->postParams[0]["preDescription"]);
-        Assert::same("Tymyv2-AutoTest-yes",$this->attendance->postParams[0]["preDescription"]); //Tested if POST params can be added as an array
-        
+
         Assert::true(is_object($this->attendance));
         Assert::true(is_object($this->attendance->result));
         Assert::type("string",$this->attendance->result->status);
