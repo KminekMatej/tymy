@@ -36,7 +36,10 @@ class SettingsPresenter extends SecuredPresenter {
         if(!is_null($discussion)){
             $this->setView("discussion");
         } else {
-            //TODO render list
+            $this->template->isNew = false;
+            $discussions = $this->discussions->reset()->getData(); // get all events
+            $this->template->discussions = $discussions;
+            $this->template->discussionsCount = count($discussions);
         }
     }
 

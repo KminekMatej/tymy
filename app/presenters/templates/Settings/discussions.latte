@@ -1,11 +1,98 @@
 {import '../common.latte'}
 
+{block styles}
+{include parent}
+<link rel='stylesheet' href="{$basePath}/css/table-xs.css" />
+{/block}
+
 {block navbar}
 {control navbar}
 {/block}
 
 {block content}
+<div class="container settings" data-layout="list">
+    <div class="row">
+        <div class="col">
+            <div class="card sh-box my-3">
+                <div class="card-header">
+                    <h4>{if $isNew}Nová diskuze/i{else}Nastavení diskuzí{/if}</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table table-xs table-hover table-responsive">
+                        <tr>
+                            <th></th>
+                            <th>Název</th>
+                            <th>Popis</th>
+                            <th>Číst může</th>
+                            <th>Psát může</th>
+                            <th>Mazat může</th>
+                            <th>Topovat může</th>
+                            <th>Veřejná</th>
+                            <th>Úpravy</th>
+                            <th>Pořadí</th>
+                            <th></th>
+                        </tr>
+                        <tr n:foreach="$discussions as $d" data-id="{$d->id}">
+                            {var $selector = 'TABLE.table-xs TR[data-id='.$d->id.']'}
+                            <td>
+                                <a n:if="!$isNew" href="{plink Settings:discussions $d->webName}" class="btn btn-sm btn-light btn-light-bordered"  title="Upravit" style="margin-right: 2px">
+                                    <i class="fa fa-external-link" aria-hidden="true"></i>
+                                </a>
+                            </td>
+                            <td><input onchange="chng({$selector})" name="caption" data-value="{$d->caption}" type="text" value="{$d->caption}" class="form-control form-control-sm" style="max-width: 100px;" required/><div class="invalid-feedback">Chybně zadaná hodnota</div></td>
+                            <td><textarea onchange="chng({$selector})" name="description" data-value="{$d->description}" rows="1" class="form-control form-control-sm">{$d->description}</textarea></td>
 
-<div class="container settings">
-    <h4>Nastavení:DISCUSSIONS - TODO</h4>
+                            <td>
+                                <select name="readRightName" data-value class="form-control form-control-sm">
+                                    <option value="">-- Všichni --</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="writeRightName" data-value class="form-control form-control-sm">
+                                    <option value="">-- Všichni --</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="deleteRightName" data-value class="form-control form-control-sm">
+                                    <option value="">-- Všichni --</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="stickyRightName" data-value class="form-control form-control-sm">
+                                    <option value="">-- Všichni --</option>
+                                </select>
+                            </td>
+
+                            <td><input onchange="chng({$selector})" name="publicRead" data-value type="checkbox" checked="{$d->publicRead}" class="form-control form-control-sm" style="-webkit-flex-direction:row;" /></td>
+                            <td><input onchange="chng({$selector})" name="editablePosts" data-value type="checkbox" checked="{$d->editablePosts}" class="form-control form-control-sm" style="-webkit-flex-direction:row;" /></td>
+                            <td><input onchange="chng({$selector})" name="order" data-value="{$d->order}" type="number" value="{$d->order}" class="form-control form-control-sm" style="max-width: 100px;"/></td>
+
+                            <td class="input-group" n:if="$user->isAllowed('SYS','DSSETUP')">
+                                <button n:if="!$isNew" class="btn btn-sm btn-primary update" onclick="updateRow({link discussionEdit! $d->id}, {$selector})" title="Uložit" style="margin-right: 2px">
+                                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                </button>
+                                {capture $delLink}{if $isNew}removeRow(this){else}del('{link discussionDelete! $d->id}', '{$selector}'){/if}{/capture}
+                                <button class="btn btn-sm btn-danger delete" onclick="{$delLink|noescape}" title="Smazat">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="text-center" n:if="$isNew">
+                        <button class="btn btn-sm btn-outline-success" title="Duplikovat poslední událost a posunout časy o 1 den" onclick="duplicate('day')"><i class="fa fa-plus" aria-hidden="true"></i> Den</button>
+                        <button class="btn btn-sm btn-outline-success" title="Duplikovat poslední událost a posunout časy o 1 týden" onclick="duplicate('week')"><i class="fa fa-plus" aria-hidden="true"></i> Týden</button>
+                        <button class="btn btn-sm btn-outline-success" title="Duplikovat poslední událost a posunout časy o 1 měsíc" onclick="duplicate('month')"><i class="fa fa-plus" aria-hidden="true"></i> Měsíc</button>
+                    </div>
+                </div>
+                <div class="card-footer text-right" n:if="$user->isAllowed('SYS','DSSETUP')">
+                    <a n:if="!$isNew" class="btn btn-lg btn-success" href="{plink Settings:discussions_new}" onclick="btnDisable($(this), true)" title="Vytvořit novou diskuzi" style="margin-right: 10px">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </a>
+                    {capture $saveLink}{if $isNew}updateRows('{link discussionsCreate!}', 'TABLE.table-xs'){else}updateRows('{link discussionsEdit!}', 'TABLE.table-xs'){/if}{/capture}
+                    <button class="btn btn-lg btn-primary update all" onclick="{$saveLink|noescape}" title="Uložit vše"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                </div>
+                
+            </div>
+        </div>
+    </div>
 </div>
