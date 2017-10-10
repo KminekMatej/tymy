@@ -82,7 +82,7 @@ final class Attendance extends Tymy{
         foreach ($postStatuses as $status) {
             $status["eventId"] = $this->recId;
         }
-        $this->setPostData((object)$status);
+        $this->setPostData([$status]);
         
         $this->result = $this->execute();
         return $this->result;
