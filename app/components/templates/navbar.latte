@@ -62,7 +62,6 @@
             <li class="nav-item dropdown">
                 <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cogs" aria-hidden="true"></i> Nastavení</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    {dump $accessibleSettings}
                     <a n:foreach="$accessibleSettings as $set" class="dropdown-item" href="{$set->href}"><i class="fa {$set->icon}" aria-hidden="true"></i> {$set->name}</a>
                 </div>
             </li>

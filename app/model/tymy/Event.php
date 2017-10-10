@@ -101,6 +101,7 @@ final class Event extends Tymy{
         $this->timeLoad($data->closeTime);
         $this->timeLoad($data->startTime);
         $this->timeLoad($data->endTime);
+        $data->resultsClosed = false;
         $myAttendance = new \stdClass();
         $myAttendance->preStatus = "UNKNOWN";
         $myAttendance->postStatus = "UNKNOWN";
@@ -112,7 +113,11 @@ final class Event extends Tymy{
             foreach ($data->attendance as $att) {
                 if(!property_exists($att, "preStatus")) $att->preStatus = "UNKNOWN"; //set default value
                 if(!property_exists($att, "preDescription")) $att->preDescription = ""; //set default value
-                if(!property_exists($att, "postStatus")) $att->postStatus = "UNKNOWN"; //set default value
+                if(!property_exists($att, "postStatus")){
+                    $att->postStatus = "UNKNOWN"; //set default value
+                } else {
+                    $data->resultsClosed = true;
+                }
                 if(!property_exists($att, "postDescription")) $att->postDescription = ""; //set default value
                 if (property_exists($att, "preDatMod"))
                     $this->timeLoad($att->preDatMod);
