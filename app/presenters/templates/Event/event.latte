@@ -93,7 +93,7 @@
                                     <div n:if="count($usrs)>0" n:foreach="$status as $gender => $usrs" class="row my-2">
                                         <div class="col-2 player-heading">
                                             <h6 style="font-weight: bold">{$gender|genderTranslate} ({count($usrs)}):</h6>
-                                            <div class="btn-group" role="group" aria-label="Attendance result ({$gender|genderTranslate})" n:if="$event->canResult">
+                                            <div n:class="btn-group,result,$event->resultsClosed ? d-none" role="group" aria-label="Attendance result ({$gender|genderTranslate})" n:if="$event->canResult">
                                                 <button type="button" class="btn btn-sm btn-outline-danger" onclick="genderNCame(this)" title="NEPŘIŠLI"><i class="fa fa-window-close-o" aria-hidden="true"></i></button>
                                                 <button type="button" class="btn btn-sm btn-outline-success" onclick="genderCame(this)" title="PŘIŠLI"><i class="fa fa-check-square-o" aria-hidden="true"></i></button>
                                             </div>
@@ -105,7 +105,7 @@
                                                     <figcaption class="figure-caption">{$usr->callName}</figcaption>
                                                     <figcaption n:if="trim($usr->preDescription) != ''" class="figure-caption" style="font-size: 70%; display: inline-block">{$usr->preDescription}</figcaption>
                                                 </a>
-                                                <div class="btn-group result" role="group" aria-label="Attendance result" n:if="$event->canResult">
+                                                <div n:class="btn-group,result,$event->resultsClosed ? d-none" role="group" aria-label="Attendance result" n:if="$event->canResult">
                                                     <button type="button" class="btn btn-sm btn-outline-danger" onclick="ncame(this)" title="NEPŘIŠEL"><i class="fa fa-times" aria-hidden="true"></i></button>
                                                     <button type="button" class="btn btn-sm btn-outline-success" onclick="came(this)" title="PŘIŠEL"><i class="fa fa-check" aria-hidden="true"></i></button>
                                                 </div>
@@ -120,7 +120,8 @@
                     </div>
                 </div>
                 <div class="card-footer text-right" n:if="$event->canResult">
-                    <button class="btn btn-lg btn-outline-primary update" onclick="saveAttendanceResults(this, {link attendanceResult! $event->id})" title="Uložit výslednou docházku"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                    <button class="btn btn-lg btn-light btn-light-bordered" n:if="$event->resultsClosed" onclick="resultsToggle(true)" title="Zadat docházku"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                    <button n:class="btn,btn-lg,btn-outline-primary,result,update,$event->resultsClosed ? d-none" onclick="saveAttendanceResults(this, {link attendanceResult! $event->id})" title="Uložit výslednou docházku"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                 </div>
             </div>
 

@@ -81,3 +81,13 @@ function saveAttendanceResults(btn, purl){
         }
     });
 }
+
+function resultsToggle(show){
+    $(".result").each(function(){
+        if(show){
+            $(this).removeClass("d-none");
+        } else 
+            $(this).addClass("d-none");
+    });
+    
+}
