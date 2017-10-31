@@ -75,6 +75,7 @@ final class Register extends Tymy{
         $data->login = $this->login;
         $data->password = $this->password;
         $data->email = $this->email;
+        $data->note = $this->admin_note;
         $data->callName = $this->composeCallName();
         
         if($this->firstName){
