@@ -100,25 +100,25 @@ class TeamPresenter extends SecuredPresenter {
         $this->template->allRoles = $allRoles;
     }
 
-    public function handleEdit($playerId){
-        $post = $this->getRequest()->getPost();
+    public function handleEdit(){
+        $bind = $this->getRequest()->getPost();
         try {
             $this->user
-                ->recId($playerId)
-                ->edit($post);
+                ->recId($bind["id"])
+                ->edit($bind["changes"]);
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
     }
     
-    public function handleDelete($playerId){
+    public function handleDelete() {
         if (!$this->getUser()->isAllowed("users", "canDelete"))
             return;
-        $post = ["status" => "DELETED"];
+        $bind = $this->getRequest()->getPost();
         try {
             $this->user
-                    ->recId($playerId)
-                    ->edit($post);
+                    ->recId($bind["id"])
+                    ->edit(["status" => "DELETED"]);
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }

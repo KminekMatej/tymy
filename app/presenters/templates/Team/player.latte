@@ -4,12 +4,17 @@
 {control navbar}
 {/block}
 
+{block scripts}
+{include parent}
+<script src="{$basePath}/js/Binder.js"></script>
+{/block}
+
 {block content}
 
 <div class="container user">
     <div class="row">
         <div class="col my-3">
-            <div class="card sh-box">
+            <div class="card sh-box" data-binder-id="{$player->id}">
                 <div class="card-header">
                     <ul class="nav nav-tabs flex-column flex-sm-row card-header-tabs">
                         <li class="nav-item">
@@ -29,7 +34,7 @@
                             <a class="flex-sm-fill text-sm-center nav-link" data-toggle="tab" href="#adresa" role="tab">Adresa <span n:if="$cnt > 0" class="badge badge-pill badge-danger">{$cnt}</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="flex-sm-fill text-sm-center nav-link" data-toggle="tab" href="#opravneni" role="tab">Oprávnění</a>
+                            <a class="flex-sm-fill text-sm-center nav-link" data-toggle="tab" href="#role" role="tab">Role</a>
                         </li>
                     </ul>
                 </div>
@@ -39,7 +44,13 @@
                         <div class="tab-pane fade show active" id="osobni-udaje" role="tabpanel">
                             <table class="table">
                                 <tr>
-                                    <th>Profilovka:</th><td n:class="in_array('pictureUrl',$player->errFls) ? is-invalid"><img class="user_pic" src="{$tymyRoot}/{$player->pictureUrl}" /></td>
+                                    <th>Profilovka:</th><td n:class="in_array('pictureUrl',$player->errFls) ? is-invalid">
+                                        
+                                        <label class="custom-file">
+                                            <input type="file" id="file2" class="custom-file-input">
+                                            <span class="custom-file-control"><img class="user_pic" src="{$tymyRoot}/{$player->pictureUrl}" /></span>
+                                        </label>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th>Pohlaví:</th><td>
@@ -150,18 +161,18 @@
 
                         </div>
 
-                        <div class="tab-pane fade" id="opravneni" role="tabpanel">
+                        <div class="tab-pane fade" id="role" role="tabpanel">
                             {foreach $allRoles as $role}
                                 {var $hasRole = property_exists($player, 'roles') && in_array($role->code,$player->roles)}
-                                <button name="role" n:class="btn,$role->class,$hasRole ? active" style="min-width:69px" data-role="{$role->code}" data-value="{$hasRole}" onclick="checkRole(this)">{$role->caption}</button>
+                                <button name="roles[{$role->code}]" n:class="btn,$role->class,$hasRole ? active" style="min-width:69px" data-role="{$role->code}" data-value="{implode($player->roles, ',')}" onclick="checkRole(this)">{$role->caption}</button>
                             {/foreach}
 
                         </div>
                     </div>
                 </div>
                 <div class="card-footer text-right">
-                    <button n:if="$user->isAllowed('users','canDelete')" onclick="deleteUser(this, {link delete! $player->id})" class="btn btn-danger btn-lg mx-2"><i class="fa fa-times" aria-hidden="true"></i></button>
-                    <button onclick="updateUser(this, {link edit! $player->id})" class="btn btn-lg btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                    <button n:if="$user->isAllowed('users','canDelete')" href="{link delete!}" class="btn btn-danger btn-lg mx-2 binder-delete-btn"><i class="fa fa-times" aria-hidden="true"></i></button>
+                    <button href="{link edit!}" class="btn btn-lg btn-primary binder-save-btn"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                 </div>
             </div>
 
