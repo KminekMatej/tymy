@@ -31,6 +31,7 @@ abstract class Tymy extends Nette\Object{
     
     private $uriParams;
     private $postData;
+    private $jsonEncoding = TRUE;
     /** @var \App\Model\Supplier */
     protected $supplier;
     /** @var \Tymy\TracyPanelTymy */
@@ -96,6 +97,12 @@ abstract class Tymy extends Nette\Object{
         $this->uriParams[$key] = $value;
     }
     
+    public function setJsonEncoding($jsonEncoding) {
+        $this->jsonEncoding = $jsonEncoding;
+        return $this;
+    }
+
+        
     protected function composeUriParams(){
         if(is_null($this->uriParams))
             return "";
@@ -110,6 +117,7 @@ abstract class Tymy extends Nette\Object{
         $this->fullUrl = NULL;
         $this->postData = NULL;
         $this->method = "GET";
+        $this->jsonEncoding = TRUE;
         return $this;
     }
     
@@ -282,10 +290,8 @@ abstract class Tymy extends Nette\Object{
         }
         
         if(in_array($this->method, ["POST","PUT","DELETE"]) && isset($this->postData)){
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($this->postData));
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                'Content-Type: application/json')
-            );
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $this->jsonEncoding ? json_encode($this->postData) : $this->postData);
         }
         $result = curl_exec($ch);
         $output = new \stdClass();
