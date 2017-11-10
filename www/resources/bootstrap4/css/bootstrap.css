@@ -3128,6 +3128,10 @@ tbody.collapse.show {
   content: "Choose file...";
 }
 
+.custom-file-control:lang(cs):empty::after {
+  content: "Vyberte soubor...";
+}
+
 .custom-file-control::before {
   position: absolute;
   top: -1px;
@@ -3146,6 +3150,10 @@ tbody.collapse.show {
 
 .custom-file-control:lang(en)::before {
   content: "Browse";
+}
+
+.custom-file-control:lang(cs)::before {
+  content: "Procházet";
 }
 
 .nav {
