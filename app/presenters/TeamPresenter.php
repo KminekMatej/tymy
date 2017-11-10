@@ -2,11 +2,6 @@
 
 namespace App\Presenters;
 
-use Nette;
-use App\Model;
-use Nette\Application\UI\Form;
-use Nette\Utils\Strings;
-
 class TeamPresenter extends SecuredPresenter {
     
     private $userType;
@@ -124,6 +119,25 @@ class TeamPresenter extends SecuredPresenter {
         }
         $this->flashMessage("Uživatel byl úspešně smazán", "success");
         $this->redirect('Team:');
+    }
+
+    public function handleUpload() {
+        $bind = $this->getRequest()->getPost();
+        $files = $this->getRequest()->getFiles();
+        $file = $files["files"][0];
+        if ($file->isImage() && $file->isOk()) {
+            $avatarB64 = 'data:' . mime_content_type($file->getTemporaryFile()) . ';base64,' . base64_encode(file_get_contents($file->getTemporaryFile()));
+            try {
+                $this->user
+                        ->recId($bind["id"])
+                        ->setAvatar($avatarB64);
+            } catch (\Tymy\Exception\APIException $ex) {
+                $this->handleTapiException($ex);
+            }
+        } else {
+            $response = $this->getHttpResponse();
+            $response->setCode(400);
+        }
     }
 
 }

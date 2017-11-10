@@ -7,6 +7,15 @@
 {block scripts}
 {include parent}
 <script src="{$basePath}/js/Binder.js"></script>
+
+<script src="{$basePath}/resources/fileUpload/js/vendor/jquery.ui.widget.js"></script>
+<script src="{$basePath}/resources/fileUpload/js/load-image.all.min.js"></script>
+<script src="{$basePath}/resources/fileUpload/js/canvas-to-blob.min.js"></script>
+<script src="{$basePath}/resources/fileUpload/js/jquery.iframe-transport.js"></script>
+<script src="{$basePath}/resources/fileUpload/js/jquery.fileupload.js"></script>
+<script src="{$basePath}/resources/fileUpload/js/jquery.fileupload-process.js"></script>
+<script src="{$basePath}/resources/fileUpload/js/jquery.fileupload-image.js"></script>
+
 {/block}
 
 {block content}
@@ -45,11 +54,21 @@
                             <table class="table">
                                 <tr>
                                     <th>Profilovka:</th><td n:class="in_array('pictureUrl',$player->errFls) ? is-invalid">
-                                        
-                                        <label class="custom-file">
-                                            <input type="file" id="file2" class="custom-file-input">
-                                            <span class="custom-file-control"><img class="user_pic" src="{$tymyRoot}/{$player->pictureUrl}" /></span>
-                                        </label>
+                                        <div class="row">
+                                            <div class="col-1">
+                                                <img class="user_pic" src="{$tymyRoot}/{$player->pictureUrl}" />
+                                            </div>
+                                            <div class="col-10 ">
+                                                <label class="custom-file mb-1" lang="cs" >
+                                                    <span class="custom-file-control"></span>
+                                                    <input id="fileupload" type="file" name="files[]" data-url="{link upload!}" class="custom-file-input">
+                                                </label>
+                                                <div class="progress">
+                                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="height: 6px;"></div>
+                                                </div>
+
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>

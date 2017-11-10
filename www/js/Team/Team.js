@@ -26,6 +26,40 @@ $(document).ready(function () {
             }
         }));
     });
+    $(function () {
+        $('#fileupload').fileupload({
+            dataType: 'json',
+            disableImageResize: /Android(?!.*Chrome)|Opera/
+                    .test(window.navigator && navigator.userAgent),
+            imageMaxWidth: 40,
+            imageMaxHeight: 50,
+            imageCrop: true, // Force cropped images
+            imageType: 'image/png',
+            formData: {
+                id: $("[data-binder-id]").attr("data-binder-id")
+            },
+            always: function () {
+                var imgsrc = $("IMG.user_pic").attr("src") + "?random="+new Date().getTime();
+                $("IMG.user_pic").attr("src", imgsrc);
+                $('DIV.progress-bar').removeClass("progress-bar-striped");
+                $('DIV.progress-bar').removeClass("progress-bar-animated");
+                $('DIV.progress-bar').addClass("bg-success");
+            },
+            error: function(xhr, ajaxOptions, thrownError){
+                if(xhr.status == 400){
+                    alert("Soubor není obrázek, nebo je poškozený");
+                }
+                
+            },
+            progressall: function (e, data) {
+                var progress = parseInt(data.loaded / data.total * 100, 10);
+                $('DIV.progress-bar').css(
+                        'width',
+                        progress + '%'
+                        );
+            }
+        });
+    });
 });
 
 function checkRole(btn){

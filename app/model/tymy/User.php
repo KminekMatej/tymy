@@ -31,7 +31,7 @@ final class User extends UserInterface{
         
         $this->urlStart();
 
-        $this->fullUrl .= "users/" .$this->recId;
+        $this->fullUrl .= "user/" .$this->recId;
 
         $this->urlEnd();
         
@@ -42,6 +42,29 @@ final class User extends UserInterface{
         $this->result = $this->execute();
         return $this;
     }
+
+    public function setAvatar($avatarBase64){
+        if (!isset($this->recId))
+            throw new \Tymy\Exception\APIException('User ID not set!');
+        if (!$avatarBase64 && !preg_match('/^data:(\w+)\/(\w+);base64,(.*)/', $avatarBase64))
+            throw new \Tymy\Exception\APIException('Avatar not set!');
+        
+        $this->setJsonEncoding(FALSE);
+        
+        $this->urlStart();
+
+        $this->fullUrl .= "user/" .$this->recId . "/avatar";
+
+        $this->urlEnd();
+        
+        $this->method = "POST";
+        
+        $this->setPostData($avatarBase64);
+        
+        $this->result = $this->execute();
+        return $this;
+    }
+
     
     protected function postProcess(){
         if (($data = $this->getData()) == null)
