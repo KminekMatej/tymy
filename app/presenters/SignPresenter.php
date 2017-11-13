@@ -43,7 +43,10 @@ class SignPresenter extends BasePresenter {
             } catch (\Tymy\Exception\APIException $exc) {
                 switch ($exc->getMessage()) {
                     case "Login not approved":
-                        $this->flashMessage('Tento uživatel zatím nemá povolené přihlášení');
+                        $this->flashMessage('Tento uživatel zatím nemá povolené přihlášení', "danger");
+                        break;
+                    default:
+                        $this->flashMessage('Přihlášení bylo neúspěšné', "danger");
                         break;
                 }
             }
