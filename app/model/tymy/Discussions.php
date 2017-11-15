@@ -97,11 +97,13 @@ final class Discussions extends Tymy{
     }
     
     protected function postProcess() {
+        $this->getResult()->menuWarningCount = 0;
         if (($data = $this->getData()) == null)
             return;
-        $this->getResult()->menuWarningCount = 0;
+        
         foreach ($data as $discussion) {
             $discussion->webName = \Nette\Utils\Strings::webalize($discussion->caption);
+            if(!property_exists($discussion, "description")) $discussion->description = ""; //set default value
             if ($this->withNew){
                 if(!property_exists($discussion, "newPosts")) $discussion->newPosts = 0; //set default value
                 $this->getResult()->menuWarningCount += $discussion->newPosts;
