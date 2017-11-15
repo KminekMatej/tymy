@@ -147,6 +147,8 @@ class TeamPresenterTest extends IPresenterTest {
         Assert::equal(count($dom->find('div.container.user div.row div.col.my-3 div.card.sh-box div.card-body div.tab-content div.tab-pane.fade')), 5);
         Assert::equal(count($dom->find('div.container.user div.row div.col.my-3 div.card.sh-box div.card-body div.tab-content div.tab-pane.fade.active.show')), 1);
         
+        //TODO : check all the elements on player page, but when the page is finished
+        
         if($this->user->isAllowed('users','canDelete')){
             Assert::true($dom->has('div.container.user div.row div.col.my-3 div.card.sh-box div.card-footer.text-right button.btn.btn-lg.btn-danger.mx-2 i.fa.fa-times'));
         }
