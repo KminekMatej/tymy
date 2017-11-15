@@ -203,6 +203,18 @@ class APIEventsTest extends ITapiTest {
         $limit = 5;
         Assert::same($limit, count($this->events->reset()->setOffset($offset)->setLimit($limit)->getData()));
     }
+    
+    function testResetWorks(){
+        $this->events->setFrom("akjdb")->setTo("khfbk")->setLimit(15)->setOffset(45)->setOrder("ASC")->setWithMyAttendance(TRUE);
+        $this->events->reset();
+        Assert::null($this->events->getFrom());
+        Assert::null($this->events->getTo());
+        Assert::null($this->events->getLimit());
+        Assert::null($this->events->getOffset());
+        Assert::null($this->events->getOrder());
+        Assert::equal(FALSE, $this->events->getWithMyAttendance());
+        parent::resetParentTest($this->events);
+    }
 
 }
 

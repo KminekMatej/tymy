@@ -132,6 +132,16 @@ class APIAttendanceTest extends ITapiTest {
         }
         Assert::true($found);
     }
+    
+    function testResetWorks(){
+        $this->attendance->setPreDescription("sdaf")->setPreStatus("shdfavk")->setPostDescription("jkhbk")->setPostStatus("zutvj");
+        $this->attendance->reset();
+        Assert::null($this->attendance->getPreDescription());
+        Assert::null($this->attendance->getPostStatus());
+        Assert::null($this->attendance->getPreDescription());
+        Assert::null($this->attendance->getPostStatus());
+        parent::resetParentTest($this->attendance);
+    }
 
 }
 

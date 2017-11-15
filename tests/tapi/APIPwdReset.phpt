@@ -53,7 +53,12 @@ class APIPwdReset extends ITapiTest {
     
     function testSelectSuccessFailsNoCode(){
         Assert::exception(function(){$this->pwdReset->reset()->setCode("abc123test")->getResult();} , "\Tymy\Exception\APIException", "Not found");
-        
+    }
+
+    function testResetWorks(){
+        $this->pwdReset->setCode("103f5aabf99f879ecc3e");
+        $this->pwdReset->reset();
+        Assert::null($this->pwdReset->getCode());
     }
 }
 

@@ -102,7 +102,10 @@ abstract class Tymy extends Nette\Object{
         return $this;
     }
 
-        
+    public function getJsonEncoding() {
+        return $this->jsonEncoding;
+    }
+  
     protected function composeUriParams(){
         if(is_null($this->uriParams))
             return "";
@@ -243,8 +246,15 @@ abstract class Tymy extends Nette\Object{
         }
     }
     
-    
-    private function apiResponse($response, $relogin) {
+    public function getFullUrl() {
+        return $this->fullUrl;
+    }
+
+    public function getMethod() {
+        return $this->method;
+    }
+
+        private function apiResponse($response, $relogin) {
         switch ($response->status) {
             case "ERROR":
                 switch ($response->statusMessage) { //TODO add some another reasons when they appear

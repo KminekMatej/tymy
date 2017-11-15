@@ -242,6 +242,13 @@ class APIDiscussionTest extends ITapiTest {
         Assert::same(1,$this->discussion->result->data->paging->numberOfPages);
         
     }
+    
+    function testResetWorks(){
+        $this->discussion->setPage(35)->search("search");
+        $this->discussion->reset();
+        Assert::equal(1, $this->discussion->getPage());
+        parent::resetParentTest($this->discussion);
+    }
 
 }
 

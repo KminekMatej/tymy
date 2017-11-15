@@ -2,6 +2,7 @@
 
 namespace Test;
 use Tester;
+use Tester\Assert;
 
 /**
  * APITymyTest - header class for all API tests
@@ -52,20 +53,31 @@ abstract class ITapiTest extends Tester\TestCase {
     }
     
     protected function objectPreTests($object){
-        Tester\Assert::truthy($object);
-        Tester\Assert::type("\Nette\Reflection\ClassType", $object->getReflection());
+        Assert::truthy($object);
+        Assert::type("\Nette\Reflection\ClassType", $object->getReflection());
         $tapiname = $object->getTapiName();
-        Tester\Assert::type("string", $tapiname);
+        Assert::type("string", $tapiname);
         if(in_array($tapiname, ["login","users/register", "pwdlost", "pwdreset"])){
-            Tester\Assert::equal(FALSE, $object->getTSIDRequired());
+            Assert::equal(FALSE, $object->getTSIDRequired());
         } else {
-            Tester\Assert::equal(TRUE, $object->getTSIDRequired());
+            Assert::equal(TRUE, $object->getTSIDRequired());
         }
         
         $tsid = "123456";
         $object->setTsid($tsid);
-        Tester\Assert::equal($tsid, $object->getTsid());
-        Tester\Assert::equal($tsid, $object->getUriParams()["TSID"]);
+        Assert::equal($tsid, $object->getTsid());
+        Assert::equal($tsid, $object->getUriParams()["TSID"]);
+    }
+    
+    protected function resetParentTest($object){
+        Assert::null($object->getUriParams());
+        Assert::null($object->getTsid());
+        Assert::null($object->getRecId());
+        Assert::null($object->getFullUrl());
+        Assert::null($object->getPostData());
+        Assert::type("string", $object->getMethod());
+        Assert::equal("GET", $object->getMethod());
+        Assert::equal(TRUE, $object->getJsonEncoding());
     }
     
 }

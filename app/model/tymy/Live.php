@@ -14,10 +14,6 @@ final class Live extends Tymy{
     const TAPI_NAME = "live";
     const TSID_REQUIRED = TRUE;
        
-    public function reset() {
-        return parent::reset();
-    }
-
     public function select() {
         $url = self::TAPI_NAME;        
         $this->fullUrl .= $url;

@@ -58,7 +58,7 @@ class APIPollsTest extends ITapiTest {
         Assert::same("OK",$this->polls->result->status);
         
         Assert::type("array",$this->polls->result->data);
-        
+        var_dump($this->polls->result->data);
         foreach ($this->polls->result->data as $poll) {
             Assert::true(is_object($poll));
             Assert::type("int",$poll->id);
@@ -68,12 +68,12 @@ class APIPollsTest extends ITapiTest {
             Assert::type("string",$poll->createdAt);
             Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $poll->createdAt)); //timezone correction check
             Assert::type("int",$poll->updatedById);
-            Assert::true($poll->updatedById > 0);
+            Assert::true($poll->updatedById >= 0); //updatedById can be zero if nobody updated it yet
             Assert::type("string",$poll->updatedAt);
             Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $poll->updatedAt)); //timezone correction check
             Assert::type("string",$poll->caption);
-            Assert::type("string",$poll->description);
-            Assert::type("string",$poll->descriptionHtml);
+            if(property_exists($poll, "description")) Assert::type("string",$poll->description);
+            if(property_exists($poll, "descriptionHtml")) Assert::type("string",$poll->descriptionHtml);
             if(property_exists($poll, "minItems")){
                 Assert::type("int",$poll->minItems);
                 Assert::true($poll->minItems > 0 || $poll->minItems == -1);
