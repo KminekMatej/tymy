@@ -36,6 +36,12 @@ class APIPollsTest extends ITapiTest {
     
     /* TEST GETTERS AND SETTERS */ 
     
+    function testMenu(){
+        $value = TRUE;
+        $this->polls->setMenu($value);
+        Assert::equal($this->polls->getMenu(), $value);
+    }
+    
     /* TEST TAPI FUNCTIONS */ 
     
     /* TAPI : SELECT */
