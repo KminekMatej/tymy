@@ -21,6 +21,8 @@ class APIDiscussionsTest extends ITapiTest {
     /** @var \Tymy\Discussions */
     private $discussions;
 
+    private $createdDiscussionId;
+
     function __construct(Nette\DI\Container $container) {
         $this->container = $container;
     }
@@ -127,6 +129,94 @@ class APIDiscussionsTest extends ITapiTest {
         }
     }
 
+    /* TAPI : CREATE */
+    
+    function testCreateFailsNoCaption(){
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception(function(){$this->discussions->reset()->create([NULL]);} , "\Tymy\Exception\APIException", "Caption not set!");
+    }
+    
+    function testCreateFailsNoRights(){
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        Assert::exception(function(){$this->discussions->reset()->create(["caption" => "Autotest " . rand(0, 100)]);} , "\Tymy\Exception\APIException", "Permission denied!");
+    }
+    
+    function testCreateSuccess() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user_admin"], $GLOBALS["testedTeam"]["pass_admin"]);
+        $discussionCaption = "Autotest " . rand(0, 100);
+        $this->discussions->reset()->create(["caption" => $discussionCaption]);
+        
+        Assert::true(is_object($this->discussions));
+        Assert::true(is_object($this->discussions->result));
+        Assert::type("string",$this->discussions->result->status);
+        Assert::same("OK",$this->discussions->result->status);
+        Assert::type("int",$this->discussions->result->data->id);
+        $this->createdDiscussionId = $this->discussions->result->data->id;
+        Assert::type("string",$this->discussions->result->data->caption);
+        Assert::type("string",$this->discussions->result->data->readRightName);
+        Assert::type("string",$this->discussions->result->data->writeRightName);
+        Assert::type("string",$this->discussions->result->data->deleteRightName);
+        Assert::type("string",$this->discussions->result->data->stickyRightName);
+        Assert::type("bool",$this->discussions->result->data->publicRead);
+        Assert::same(FALSE, $this->discussions->result->data->publicRead);
+        Assert::type("string",$this->discussions->result->data->status);
+        Assert::same("ACTIVE", $this->discussions->result->data->status);
+        Assert::type("bool",$this->discussions->result->data->editablePosts);
+    }
+    
+    /* TAPI : EDIT */
+    
+    function testEditFailsNoRecId() {
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception(function(){$this->discussions->reset()->edit(NULL);} , "\Tymy\Exception\APIException", "Discussion ID not set!");
+    }
+    
+    function testEditFailsNoFields() {
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception(function(){$this->discussions->reset()->recId($this->createdDiscussionId)->edit(NULL);} , "\Tymy\Exception\APIException", "Fields to edit not set!");
+    }
+    
+    function testEditFailsNoRights() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        Assert::exception(function(){$this->discussions->reset()->recId($this->createdDiscussionId)->edit(["caption" => "Autotest " . rand(100, 200)]);} , "\Tymy\Exception\APIException", "Permission denied!");
+    }
+    
+    function testEditSuccess() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user_admin"], $GLOBALS["testedTeam"]["pass_admin"]);
+        $discussionCaption = "Autotest " . rand(100, 200);
+        $this->discussions->reset()->recId($this->createdDiscussionId)->edit(["caption" => $discussionCaption]);
+        
+        Assert::true(is_object($this->discussions));
+        Assert::true(is_object($this->discussions->result));
+        Assert::type("string",$this->discussions->result->status);
+        Assert::same("OK",$this->discussions->result->status);
+        Assert::equal($this->createdDiscussionId,$this->discussions->result->data->id);
+        Assert::type("string",$this->discussions->result->data->caption);
+        Assert::equal($discussionCaption,$this->discussions->result->data->caption);
+    }
+    
+    /* TAPI : DELETE */
+    
+    function testDeleteFailsNoRecId() {
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception(function(){$this->discussions->reset()->delete();} , "\Tymy\Exception\APIException", "Discussion ID not set!");
+    }
+    
+    function testDeleteFailsNoRights() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        Assert::exception(function(){$this->discussions->reset()->recId($this->createdDiscussionId)->delete();} , "\Tymy\Exception\APIException", "Permission denied!");
+    }
+    
+    function testDeleteSuccess() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user_admin"], $GLOBALS["testedTeam"]["pass_admin"]);
+        $this->discussions->reset()->recId($this->createdDiscussionId)->delete();
+        
+        Assert::true(is_object($this->discussions));
+        Assert::true(is_object($this->discussions->result));
+        Assert::type("string",$this->discussions->result->status);
+        Assert::same("OK",$this->discussions->result->status);
+    }
+    
 }
 
 $test = new APIDiscussionsTest($container);

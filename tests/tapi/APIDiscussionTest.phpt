@@ -22,7 +22,7 @@ class APIDiscussionTest extends ITapiTest {
     
     /** @var \Tymy\Discussion */
     private $discussion;
-
+    
     function __construct(Nette\DI\Container $container) {
         $this->container = $container;
     }
