@@ -133,6 +133,68 @@ class APIAttendanceTest extends ITapiTest {
         Assert::true($found);
     }
     
+    /* TAPI : CONFIRM */
+    
+    function testConfirmFailsNoEventId(){
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception(function(){$this->attendance->reset()->confirm(NULL);} , "\Tymy\Exception\APIException", "Event ID not set!");
+    }
+    
+    function testConfirmNotLoggedInFails404() {
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception(function(){$this->attendance->reset()->recId($GLOBALS["testedTeam"]["testEventId"])->confirm(NULL);} , "\Tymy\Exception\APIException", "Login failed. Wrong username or password.");
+    }
+    
+    function testConfirmRelogin() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user_admin"], $GLOBALS["testedTeam"]["pass_admin"]);
+        $this->attendance->reset()->recId($GLOBALS["testedTeam"]["testEventId"])->confirm(["userId" => $GLOBALS["testedTeam"]["testEventUserId"], "postStatus" => "YES"]);
+        
+        $logoutObj = $this->container->getByType('Tymy\Logout');
+        $logoutObj ->logout();
+        
+        $this->attendance->reset()->recId($GLOBALS["testedTeam"]["testEventId"])->confirm(["userId" => $GLOBALS["testedTeam"]["testEventUserId"], "postStatus" => "YES"]);
+    }
+    
+    function testConfirmSuccess() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user_admin"], $GLOBALS["testedTeam"]["pass_admin"]);
+        
+        $allEvents = $this->container->getByType('Tymy\Events');
+        $idActionToUpdateOn = $GLOBALS["testedTeam"]["testEventId"];
+         
+        $this->attendance->reset()->recId($idActionToUpdateOn)
+                ->confirm(["userId" => $GLOBALS["testedTeam"]["testEventUserId"], "postStatus" => "YES"]);
+
+        Assert::true(is_object($this->attendance));
+        Assert::true(is_object($this->attendance->result));
+        Assert::type("string",$this->attendance->result->status);
+        Assert::same("OK",$this->attendance->result->status);
+
+        //now check if the event is correctly filled
+        $updatedEventObj = $this->container->getByType('Tymy\Event');
+        $updatedEventObj
+                ->reset()
+                ->recId($idActionToUpdateOn)
+                ->getResult();
+        
+        Assert::true(is_object($updatedEventObj));
+        Assert::true(is_object($updatedEventObj->result));
+        Assert::type("string",$updatedEventObj->result->status);
+        Assert::same("OK",$updatedEventObj->result->status);
+        
+        Assert::true(is_object($updatedEventObj->result->data));
+        $found = FALSE;
+        foreach ($updatedEventObj->result->data->attendance as $att) {
+            if($att->userId == $this->user->getId()){
+                $found = TRUE;
+                Assert::type("int",$att->eventId);
+                Assert::same($idActionToUpdateOn,$att->eventId);
+                Assert::type("string",$att->postStatus);
+                Assert::same("YES",$att->postStatus);
+            }
+        }
+        Assert::true($found);
+    }
+    
     function testResetWorks(){
         $this->attendance->setPreDescription("sdaf")->setPreStatus("shdfavk")->setPostDescription("jkhbk")->setPostStatus("zutvj");
         $this->attendance->reset();
