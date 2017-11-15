@@ -74,6 +74,8 @@ class APIPwdLost extends ITapiTest {
     }
     
     function testSelectSuccess(){
+        if(!$GLOBALS["testedTeam"]["invasive"])
+            return null;
         $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
         $hostname = "autotester_host";
         $callback = "http://www.autotest.tymy.cz/?code=%s";
@@ -82,6 +84,15 @@ class APIPwdLost extends ITapiTest {
         Assert::true(is_object($this->pwdLost->result));
         Assert::type("string",$this->pwdLost->result->status);
         Assert::same("OK",$this->pwdLost->result->status);
+    }
+    
+    function testResetWorks(){
+        $this->pwdLost->setMail("kajlsdf")->setHostname("temphost")->setCallbackUri("callnowhere");
+        $this->pwdLost->reset();
+        Assert::null($this->pwdLost->getMail());
+        Assert::null($this->pwdLost->getHostname());
+        Assert::null($this->pwdLost->getCallbackUri());
+        parent::resetParentTest($this->pwdLost);
     }
 }
 
