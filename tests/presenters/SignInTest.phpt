@@ -40,7 +40,7 @@ class SignInTest extends IPresenterTest {
         
         
         Assert::true($dom->has('a[href="/sign/up"]'));
-        Assert::true($dom->has('a[href="/sign/pwdLost"]'));
+        Assert::true($dom->has('a[href="/sign/pwdlost"]'));
     }
     
     /**
