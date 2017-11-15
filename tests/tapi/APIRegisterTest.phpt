@@ -112,6 +112,7 @@ class APIRegisterTest extends ITapiTest {
         Assert::type("string",$createdUser->gender);
         Assert::same($createdUser->gender, "MALE");
         Assert::type("string",$createdUser->pictureUrl);
+        Assert::type("string",$createdUser->note);
         
         //delete registered user
         $this->tapi_user->reset()->recId($createdUser->id)->edit(["status" => "DELETED"])->getResult();
