@@ -140,19 +140,24 @@ class APIAttendanceTest extends ITapiTest {
         Assert::exception(function(){$this->attendance->reset()->confirm(NULL);} , "\Tymy\Exception\APIException", "Event ID not set!");
     }
     
+    function testConfirmFailsNoPostStatuses(){
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception(function(){$this->attendance->reset()->recId($GLOBALS["testedTeam"]["testEventId"])->confirm(NULL);} , "\Tymy\Exception\APIException", "Post statuses not set!");
+    }
+    
     function testConfirmNotLoggedInFails404() {
         $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
-        Assert::exception(function(){$this->attendance->reset()->recId($GLOBALS["testedTeam"]["testEventId"])->confirm(NULL);} , "\Tymy\Exception\APIException", "Login failed. Wrong username or password.");
+        Assert::exception(function(){$this->attendance->reset()->recId($GLOBALS["testedTeam"]["testEventId"])->confirm([["userId" => $GLOBALS["testedTeam"]["testEventUserId"], "postStatus" => "YES"]]);} , "\Tymy\Exception\APIException", "Login failed. Wrong username or password.");
     }
     
     function testConfirmRelogin() {
         $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user_admin"], $GLOBALS["testedTeam"]["pass_admin"]);
-        $this->attendance->reset()->recId($GLOBALS["testedTeam"]["testEventId"])->confirm(["userId" => $GLOBALS["testedTeam"]["testEventUserId"], "postStatus" => "YES"]);
+        $this->attendance->reset()->recId($GLOBALS["testedTeam"]["testEventId"])->confirm([["userId" => $GLOBALS["testedTeam"]["testEventUserId"], "postStatus" => "YES"]]);
         
         $logoutObj = $this->container->getByType('Tymy\Logout');
         $logoutObj ->logout();
         
-        $this->attendance->reset()->recId($GLOBALS["testedTeam"]["testEventId"])->confirm(["userId" => $GLOBALS["testedTeam"]["testEventUserId"], "postStatus" => "YES"]);
+        $this->attendance->reset()->recId($GLOBALS["testedTeam"]["testEventId"])->confirm([["userId" => $GLOBALS["testedTeam"]["testEventUserId"], "postStatus" => "YES"]]);
     }
     
     function testConfirmSuccess() {
@@ -162,7 +167,7 @@ class APIAttendanceTest extends ITapiTest {
         $idActionToUpdateOn = $GLOBALS["testedTeam"]["testEventId"];
          
         $this->attendance->reset()->recId($idActionToUpdateOn)
-                ->confirm(["userId" => $GLOBALS["testedTeam"]["testEventUserId"], "postStatus" => "YES"]);
+                ->confirm([["userId" => $GLOBALS["testedTeam"]["testEventUserId"], "postStatus" => "YES"]]);
 
         Assert::true(is_object($this->attendance));
         Assert::true(is_object($this->attendance->result));
