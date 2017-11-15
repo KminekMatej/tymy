@@ -71,6 +71,9 @@ final class Attendance extends Tymy{
         if (!isset($this->recId))
             throw new \Tymy\Exception\APIException('Event ID not set!');
 
+        if (!$postStatuses)
+            throw new \Tymy\Exception\APIException('Post statuses not set!');
+
         $this->urlStart();
 
         $this->fullUrl .= self::TAPI_NAME;
