@@ -89,6 +89,7 @@ class APIEventTest extends ITapiTest {
         Assert::type("array", $this->event->result->data->attendance);
         Assert::true(count($this->event->result->data->attendance) > 0);
 
+        
         foreach ($this->event->result->data->attendance as $att) {
             Assert::true(is_object($att));
             Assert::type("int", $att->userId);
@@ -98,9 +99,13 @@ class APIEventTest extends ITapiTest {
                 Assert::type("string", $att->preStatus);
                 if (property_exists($att, "preDescription"))
                     Assert::type("string", $att->preDescription);
-                Assert::type("int", $att->preUserMod);
-                Assert::type("string", $att->preDatMod);
-                Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $att->preDatMod)); //timezone correction check
+                var_dump($att);
+                if (property_exists($att, "preUserMod"))
+                    Assert::type("int", $att->preUserMod);
+                if (property_exists($att, "preDatMod")){
+                    Assert::type("string", $att->preDatMod);
+                    Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $att->preDatMod)); //timezone correction check
+                }
             }
 
             Assert::true(is_object($att->user));
