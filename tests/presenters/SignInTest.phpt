@@ -34,6 +34,9 @@ class SignInTest extends IPresenterTest {
         Assert::true($dom->has('input[name="name"]'));
         Assert::true($dom->has('input[name="password"]'));
         Assert::true($dom->has('input[name="send"]'));
+        
+        Assert::true($dom->has('a[href="/sign/up"]'));
+        Assert::true($dom->has('a[href="/sign/pwdLost"]'));
     }
     
     /**
