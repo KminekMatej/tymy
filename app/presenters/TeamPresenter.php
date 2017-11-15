@@ -97,6 +97,9 @@ class TeamPresenter extends SecuredPresenter {
 
     public function handleEdit(){
         $bind = $this->getRequest()->getPost();
+        if($bind["changes"]["roles"] === ""){
+            $bind["changes"]["roles"] = [];
+        }
         try {
             $this->user
                 ->recId($bind["id"])

@@ -220,7 +220,7 @@ Binder.prototype.getChanges = function () {
             var value = binderObj.getValue($(this));
             if (["INPUT", "SELECT", "TEXTAREA", "BUTTON"].indexOf(tagName) > -1) {
                 if (binderObj.isChanged($(this))) {
-                    values[name] = value;
+                    values[name] = $.isArray(value) && $.isEmptyObject(value) ? "" : value;
                 }
             } else {
                 throw "Unexpected tag " + tagName + " found, containing binded values";
