@@ -41,7 +41,8 @@ class HomepagePresenterTest extends IPresenterTest {
         Assert::true($dom->has('div.container.homepage div.row div.col-md-5.my-3 div.card.sh-box#calendar'));
         Assert::true($dom->has('div.container.homepage div.row div.col-md-5.my-3 a.btn.btn-sm.btn-light.btn-light-bordered.my-1.d-block'));
         
-        Assert::true($dom->has('div.container.homepage div.row div.col-md-7.my-3 div.card.sh-box div.card-header h4.card-title'));
+        Assert::true($dom->has('div.container.homepage div.row div.col-md-7.my-3 div.card.sh-box div.card-header div.row div.col h4.card-title'));
+        Assert::true($dom->has('div.container.homepage div.row div.col-md-7.my-3 div.card.sh-box div.card-header div.row div.col.col-md-auto button.btn.btn-sm.btn-light.btn-light-bordered i.fa.fa-refresh'));
         Assert::true($dom->has('div.container.homepage div.row div.col-md-7.my-3 div.card.sh-box div.card-body'));
         
     }
