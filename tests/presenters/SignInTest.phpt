@@ -34,6 +34,10 @@ class SignInTest extends IPresenterTest {
         Assert::true($dom->has('input[name="name"]'));
         Assert::true($dom->has('input[name="password"]'));
         Assert::true($dom->has('input[name="send"]'));
+        if($this->supplier->getTapi_config()["multiple_team"]){
+            Assert::true($dom->has('select[name="team"]'));
+        }
+        
         
         Assert::true($dom->has('a[href="/sign/up"]'));
         Assert::true($dom->has('a[href="/sign/pwdLost"]'));
