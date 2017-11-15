@@ -99,7 +99,6 @@ class APIEventTest extends ITapiTest {
                 Assert::type("string", $att->preStatus);
                 if (property_exists($att, "preDescription"))
                     Assert::type("string", $att->preDescription);
-                var_dump($att);
                 if (property_exists($att, "preUserMod"))
                     Assert::type("int", $att->preUserMod);
                 if (property_exists($att, "preDatMod")){
@@ -138,7 +137,7 @@ class APIEventTest extends ITapiTest {
     /* TAPI : CREATE */
     
     function testCreate() {
-        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user_admin"], $GLOBALS["testedTeam"]["pass_admin"]);
         $caption = "Autotest event";
         $createdEvent = [[
             "type"=>"TRA",
