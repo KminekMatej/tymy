@@ -25,10 +25,10 @@ final class Polls extends Tymy{
     }
     
     protected function postProcess(){
+        $this->getResult()->menuWarningCount = 0;
+        
         if (($data = $this->getData()) == null)
             return;
-        
-        $this->getResult()->menuWarningCount = 0;
         
         foreach ($data as $poll) {
             $poll->webName = \Nette\Utils\Strings::webalize($poll->id . "-" . $poll->caption);

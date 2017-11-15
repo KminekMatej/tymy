@@ -229,7 +229,10 @@ abstract class Tymy extends Nette\Object{
                 case 400: // bad request, throw error
                     throw new \Tymy\Exception\APIException("400 Bad request");
                 case 500: // error 500 can display when logging out on unlogged account, so this is temporary solution
+                    Debugger::barDump($contents->curlInfo);
+                    Debugger::barDump($this);
                     $tapiMSG = $contents->result ? Json::decode($contents->result)->statusMessage : "500 Internal Server Error";
+                    Debugger::barDump($tapiMSG);
                     throw new \Tymy\Exception\APIException($tapiMSG);
                 default:
                     $tapiMSG = $contents->result ? Json::decode($contents->result)->statusMessage : $contents->curlInfo["http_code"] . " Unknown error";

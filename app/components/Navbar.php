@@ -54,7 +54,7 @@ class NavbarControl extends Control {
         try {
             $discussionsResult = $this->discussions->reset()->setWithNew(true)->getResult();
             $this->template->discussionWarnings = $discussionsResult->menuWarningCount;
-            $this->template->discussions = (object) $this->discussions->getData();
+            $this->template->discussions = $this->discussions->getData();
         } catch (Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
@@ -76,7 +76,7 @@ class NavbarControl extends Control {
     private function polls() {
         try {
             $this->template->voteWarnings = $this->polls->reset()->setMenu(TRUE)->getResult()->menuWarningCount;
-            $this->template->polls = (object) $this->polls->getData();
+            $this->template->polls = $this->polls->getData();
         } catch (Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
@@ -92,7 +92,7 @@ class NavbarControl extends Control {
                     ->setOrder("startTime")
                     ->getData();
             $this->template->eventWarnings = $this->events->getResult()->menuWarningCount;
-            $this->template->events = (object) $this->events->getData();
+            $this->template->events = $this->events->getData();
         } catch (Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
