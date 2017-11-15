@@ -46,6 +46,19 @@ class HomepagePresenterTest extends IPresenterTest {
         Assert::true($dom->has('div.container.homepage div.row div.col-md-7.my-3 div.card.sh-box div.card-body'));
         
     }
+    
+    function testAccessibleSettings(){
+        $accessibleSettings = $this->presenter->getAccessibleSettings();
+        Assert::type("array", $accessibleSettings);
+        foreach ($accessibleSettings as $setting) {
+            Assert::type("SettingMenu", $setting);
+            Assert::truthy($setting->code);
+            Assert::truthy($setting->name);
+            Assert::truthy($setting->href);
+            Assert::truthy($setting->icon);
+        }
+        
+    }
 }
 
 $test = new HomepagePresenterTest($container);
