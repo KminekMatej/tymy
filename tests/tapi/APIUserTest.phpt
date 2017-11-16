@@ -52,8 +52,7 @@ class APIUserTest extends ITapiTest {
     
     function testSelectSuccess() {
         $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
-        $userId = 1;
-        $this->tapi_user->reset()->recId($userId)->getResult(TRUE);
+        $this->tapi_user->reset()->recId($GLOBALS["testedTeam"]["testUserId"])->getResult(TRUE);
         
         Assert::true(is_object($this->tapi_user));
         Assert::true(is_object($this->tapi_user->result));
@@ -69,9 +68,11 @@ class APIUserTest extends ITapiTest {
         Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $this->tapi_user->result->data->lastLogin)); //timezone correction check
         Assert::type("string",$this->tapi_user->result->data->status);
         Assert::true(in_array($this->tapi_user->result->data->status, ["PLAYER", "MEMBER", "SICK"]));
-        Assert::type("array",$this->tapi_user->result->data->roles);
-        foreach ($this->tapi_user->result->data->roles as $role) {
-            Assert::type("string",$role);
+        if (property_exists($this->tapi_user->result->data, "roles")) {
+            Assert::type("array", $this->tapi_user->result->data->roles);
+            foreach ($this->tapi_user->result->data->roles as $role) {
+                Assert::type("string", $role);
+            }
         }
         Assert::type("string",$this->tapi_user->result->data->firstName);
         Assert::type("string",$this->tapi_user->result->data->lastName);
@@ -86,7 +87,8 @@ class APIUserTest extends ITapiTest {
         Assert::type("string",$this->tapi_user->result->data->zipCode);
         Assert::type("string",$this->tapi_user->result->data->phone);
         Assert::type("string",$this->tapi_user->result->data->phone2);
-        Assert::type("string",$this->tapi_user->result->data->birthDate);
+        if(property_exists($this->tapi_user->result->data, "birthDate"))
+            Assert::type("string",$this->tapi_user->result->data->birthDate);
         Assert::type("int",$this->tapi_user->result->data->nameDayMonth);
         Assert::type("int",$this->tapi_user->result->data->nameDayDay);
         Assert::type("string",$this->tapi_user->result->data->pictureUrl);
@@ -100,6 +102,64 @@ class APIUserTest extends ITapiTest {
             Assert::type("string",$errF);
         }
         
+    }
+    
+    /* TAPI : EDIT */
+    
+    function testEditFailsNoRecId(){
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception(function(){$this->tapi_user->reset()->edit([NULL]);} , "\Tymy\Exception\APIException", "User ID not set!");
+    }
+    
+    function testEditFailsNoFields(){
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception(function(){$this->tapi_user->reset()->recId($GLOBALS["testedTeam"]["testUserId"])->edit(NULL);} , "\Tymy\Exception\APIException", "Fields to edit not set!");
+    }
+    
+    function testEditSuccess(){
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user_admin"], $GLOBALS["testedTeam"]["pass_admin"]);
+        $newCallName = "Callname " . rand(0, 200);
+        $this->tapi_user->reset()->recId($GLOBALS["testedTeam"]["testUserId"])->edit(["callName" => $newCallName]);
+        
+        Assert::true(is_object($this->tapi_user));
+        Assert::true(is_object($this->tapi_user->result));
+        Assert::type("string",$this->tapi_user->result->status);
+        Assert::same("OK",$this->tapi_user->result->status);
+        
+        Assert::equal($GLOBALS["testedTeam"]["testUserId"],$this->tapi_user->result->data->id);
+        Assert::equal($newCallName,$this->tapi_user->result->data->callName);
+    }
+    
+    /* TAPI : AVATAR */
+    
+    function testAvatarFailsNoRecId(){
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception(function(){$this->tapi_user->reset()->setAvatar("12345");} , "\Tymy\Exception\APIException", "User ID not set!");
+    }
+    
+    function testAvatarFailsWrongImg(){
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception(function(){$this->tapi_user->reset()->recId($GLOBALS["testedTeam"]["testUserId"])->setAvatar("12345");} , "\Tymy\Exception\APIException", "Avatar not set!");
+        Assert::exception(function(){$this->tapi_user->reset()->recId($GLOBALS["testedTeam"]["testUserId"])->setAvatar(NULL);} , "\Tymy\Exception\APIException", "Avatar not set!");
+    }
+    
+    function testAvatarSuccess(){
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->tapi_user->reset()->recId($GLOBALS["testedTeam"]["testUserId"])->getResult();
+        $origImgUrl = $this->supplier->getTymyRoot() . $this->tapi_user->result->data->pictureUrl;
+        $origImgExt = pathinfo($origImgUrl, PATHINFO_EXTENSION);
+        $origImgB64 = 'data:image/' . $origImgExt . ';base64,' . base64_encode(file_get_contents($origImgUrl));
+        
+        $testImgB64 = $GLOBALS["testedTeam"]["avatarB64"];
+        
+        $this->tapi_user->reset()->recId($GLOBALS["testedTeam"]["testUserId"])->setAvatar($testImgB64);
+        
+        Assert::true(is_object($this->tapi_user));
+        Assert::true(is_object($this->tapi_user->result));
+        Assert::type("string",$this->tapi_user->result->status);
+        Assert::same("OK",$this->tapi_user->result->status);
+        
+        $this->tapi_user->reset()->recId($GLOBALS["testedTeam"]["testUserId"])->setAvatar($origImgB64);
     }
     
 }
