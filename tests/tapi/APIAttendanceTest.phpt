@@ -189,8 +189,10 @@ class APIAttendanceTest extends ITapiTest {
         Assert::true(is_object($updatedEventObj->result->data));
         $found = FALSE;
         foreach ($updatedEventObj->result->data->attendance as $att) {
-            if($att->userId == $this->user->getId()){
+            if($att->userId == $GLOBALS["testedTeam"]["testEventUserId"]){
                 $found = TRUE;
+                Assert::type("int",$att->eventId);
+                Assert::same($idActionToUpdateOn,$att->eventId);
                 Assert::type("string",$att->postStatus);
                 Assert::same("YES",$att->postStatus);
             }
