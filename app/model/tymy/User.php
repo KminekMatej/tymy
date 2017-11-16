@@ -14,7 +14,7 @@ use Nette\Mail\Message;
 final class User extends UserInterface{
     
     const TSID_REQUIRED = TRUE;
-    const TAPI_NAME = "user";
+    const TAPI_NAME = "users";
     
     public function select() {
         if (!isset($this->recId))
@@ -31,7 +31,7 @@ final class User extends UserInterface{
         
         $this->urlStart();
 
-        $this->fullUrl .= "user/" .$this->recId;
+        $this->fullUrl .= self::TAPI_NAME . "/" .$this->recId;
 
         $this->urlEnd();
         
@@ -46,14 +46,14 @@ final class User extends UserInterface{
     public function setAvatar($avatarBase64){
         if (!isset($this->recId))
             throw new \Tymy\Exception\APIException('User ID not set!');
-        if (!$avatarBase64 && !preg_match('/^data:(\w+)\/(\w+);base64,(.*)/', $avatarBase64))
+        if (!$avatarBase64 || !preg_match('/^data:(\w+)\/(\w+);base64,(.*)/', $avatarBase64))
             throw new \Tymy\Exception\APIException('Avatar not set!');
         
         $this->setJsonEncoding(FALSE);
         
         $this->urlStart();
 
-        $this->fullUrl .= "user/" .$this->recId . "/avatar";
+        $this->fullUrl .= self::TAPI_NAME . "/" .$this->recId . "/avatar";
 
         $this->urlEnd();
         
