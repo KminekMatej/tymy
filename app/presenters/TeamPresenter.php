@@ -97,7 +97,7 @@ class TeamPresenter extends SecuredPresenter {
 
     public function handleEdit(){
         $bind = $this->getRequest()->getPost();
-        if($bind["changes"]["roles"] === ""){
+        if(array_key_exists("roles", $bind["changes"]) && $bind["changes"]["roles"] === ""){
             $bind["changes"]["roles"] = [];
         }
         try {
