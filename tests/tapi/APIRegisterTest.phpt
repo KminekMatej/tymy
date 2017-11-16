@@ -67,7 +67,7 @@ class APIRegisterTest extends ITapiTest {
     function testRegisterSuccess() {
         if(!$GLOBALS["testedTeam"]["invasive"])
             return null;
-        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user_admin"], $GLOBALS["testedTeam"]["pass_admin"]);
         $login = substr(md5("" . rand(0, 1000)),0,15);
         $password = md5("" . rand(0, 1000));
         $email = "test@example.com";
