@@ -125,15 +125,17 @@ class SecuredPresenter extends BasePresenter {
     }
 
     private function setAccessibleSettings() {
-        if($this->getUser()->isAllowed('settings','discussions')) $this->accessibleSettings[] = new SettingMenu("discussions", "Diskuze", $this->link("Settings:discussions"), "fa-comments");
-        if($this->getUser()->isAllowed('settings','events')) $this->accessibleSettings[] = new SettingMenu("events", "Události", $this->link("Settings:events"), "fa-calendar-o");
-        if($this->getUser()->isAllowed('settings','team')) $this->accessibleSettings[] = new SettingMenu("team", "Tým", $this->link("Settings:team"), "fa-users");
-        if($this->getUser()->isAllowed('settings','polls')) $this->accessibleSettings[] = new SettingMenu("polls", "Ankety", $this->link("Settings:polls"), "fa-pie-chart");
-        // TO BE UNCOMMENTED WHEN ITS READY
-        //if($this->getUser()->isAllowed('settings','reports')) $this->accessibleSettings[] = new SettingMenu("reports", "Reporty", $this->link("Settings:reports"), "fa-bar-chart");
-        // TO BE UNCOMMENTED WHEN ITS READY
-        //if($this->getUser()->isAllowed('settings','permissions')) $this->accessibleSettings[] = new SettingMenu("permissions", "Oprávnění", $this->link("Settings:permissions"), "fa-gavel");
-        if($this->getUser()->isAllowed('settings','app')) $this->accessibleSettings[] = new SettingMenu("app", "Aplikace", $this->link("Settings:app"), "fa-laptop");
+        if($this->getUser()->isAllowed('settings','discussions')) $this->accessibleSettings[] = new SettingMenu("discussions", "Diskuze", $this->link("Settings:discussions"), "fa-comments", TRUE);
+        if($this->getUser()->isAllowed('settings','events')) $this->accessibleSettings[] = new SettingMenu("events", "Události", $this->link("Settings:events"), "fa-calendar-o", TRUE);
+        //TO BE ENABLED WHEN ITS READY
+        if($this->getUser()->isAllowed('settings','team')) $this->accessibleSettings[] = new SettingMenu("team", "Tým", $this->link("Settings:team"), "fa-users", FALSE);
+        // TO BE ENABLED WHEN ITS READY
+        if($this->getUser()->isAllowed('settings','polls')) $this->accessibleSettings[] = new SettingMenu("polls", "Ankety", $this->link("Settings:polls"), "fa-pie-chart", FALSE);
+        // TO BE ENABLED WHEN ITS READY
+        if($this->getUser()->isAllowed('settings','reports')) $this->accessibleSettings[] = new SettingMenu("reports", "Reporty", $this->link("Settings:reports"), "fa-bar-chart", FALSE);
+        // TO BE ENABLED WHEN ITS READY
+        if($this->getUser()->isAllowed('settings','permissions')) $this->accessibleSettings[] = new SettingMenu("permissions", "Oprávnění", $this->link("Settings:permissions"), "fa-gavel", FALSE);
+        if($this->getUser()->isAllowed('settings','app')) $this->accessibleSettings[] = new SettingMenu("app", "Aplikace", $this->link("Settings:app"), "fa-laptop", TRUE);
         return $this;
     }
 

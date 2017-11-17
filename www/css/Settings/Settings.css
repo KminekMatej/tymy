@@ -19,3 +19,9 @@
 .set-box:hover A{
     color: white;
 }
+
+A.disabled, A.disabled H1, A.disabled H2 {
+    cursor: default;
+    text-decoration: none;
+    color: #868e96;
+}

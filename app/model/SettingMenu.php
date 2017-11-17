@@ -13,12 +13,14 @@ class SettingMenu {
     public $name;
     public $href;
     public $icon;
+    public $enabled;
     
-    public function __construct($code, $name, $href, $icon) {
+    public function __construct($code, $name, $href, $icon, $enabled) {
         $this->code = $code;
         $this->name = $name;
         $this->href = $href;
         $this->icon = $icon;
+        $this->enabled = $enabled;
     }
     
 }
