@@ -125,7 +125,7 @@
                                     <th>Registrován:</th><td>{$player->createdAt|date:'j.n.Y G:i'}</td>
                                 </tr>
                                 <tr>
-                                    <th>Zobrazované jméno:</th><td><input name="displayName" data-value="{$player->displayName}" type="text" value="{$player->displayName}" n:class="col-6, form-control, in_array('displayName',$player->errFls) ? is-invalid" /></td>
+                                    <th>Zobrazované jméno:</th><td><input name="callName" data-value="{$player->callName}" type="text" value="{$player->callName}" n:class="col-6, form-control, in_array('callName',$player->errFls) ? is-invalid" /></td>
                                 </tr>
                                 <tr>
                                     <th>Editovatelné uživatelem:</th><td><input name="canEditCallName" data-value="{$player->canEditCallName}" type="checkbox" n:attr='checked => $player->canEditCallName' class="form-control form-check col-6" /></td>

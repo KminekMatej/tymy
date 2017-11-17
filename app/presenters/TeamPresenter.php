@@ -58,7 +58,7 @@ class TeamPresenter extends SecuredPresenter {
         }
 
 
-        $this->setLevelCaptions(["2" => ["caption" => $user->callName, "link" => $this->link("Team:player", $user->webName)]]);
+        $this->setLevelCaptions(["2" => ["caption" => $user->displayName, "link" => $this->link("Team:player", $user->webName)]]);
 
         //set default values to avoid latte exceptions
         if (!isset($user->firstName))

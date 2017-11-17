@@ -51,10 +51,6 @@ abstract class UserInterface extends Tymy{
             $player->errCnt++;
             $player->errFls[] = "birthDate";
         }
-        if (!isset($player->callName) || empty($player->callName)) {
-            $player->errCnt++;
-            $player->errFls[] = "callName";
-        }
         if (!isset($player->jerseyNumber) || empty($player->jerseyNumber)) {
             $player->errCnt++;
             $player->errFls[] = "jerseyNumber";

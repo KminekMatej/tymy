@@ -25,7 +25,7 @@ final class Live extends Tymy{
             return;
         
         foreach ($data as &$live) {
-            $live->webName = \Nette\Utils\Strings::webalize($live->id . "-" . $live->callName);
+            $live->webName = \Nette\Utils\Strings::webalize($live->id . "-" . $live->displayName);
         }
         
     }

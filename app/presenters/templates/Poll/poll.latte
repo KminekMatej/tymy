@@ -113,7 +113,7 @@
                         </tr>
                         {foreach $poll->orderedVotes as $userId => $vote}
                             <tr data-vote data-gender="{$users->data[$userId]->gender}" data-status="{$users->data[$userId]->status}">
-                                <th><a href="{plink Team:player $users->data[$userId]->webName}">{$users->data[$userId]->callName}</a></th>
+                                <th><a href="{plink Team:player $users->data[$userId]->webName}">{$users->data[$userId]->displayName}</a></th>
                                     {foreach $poll->options as $option}
                                     {ifset $vote[$option->id]}
                                         {ifset $vote[$option->id]->numericValue}

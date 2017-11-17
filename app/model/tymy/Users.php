@@ -60,7 +60,7 @@ final class Users extends UserInterface{
             if(!property_exists($player, "canEditCallName")) $player->canEditCallName = true; //set default value
             
             $player->webName = (string)$player->id;
-            if(property_exists($player, "fullName")) $player->webName .= "-" . Strings::webalize($player->fullName);
+            if(property_exists($player, "fullName")) $player->webName .= "-" . Strings::webalize($player->displayName);
             $this->userWarnings($player);
             $players[$player->id] = $player;
             if($player->id == $myId){

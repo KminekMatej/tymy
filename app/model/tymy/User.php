@@ -70,7 +70,7 @@ final class User extends UserInterface{
         if (($data = $this->getData()) == null)
             return;
         $data->webName = (string)$data->id;
-        if(property_exists($data, "fullName")) $data->webName .= "-" . Strings::webalize($data->fullName);
+        if(property_exists($data, "fullName")) $data->webName .= "-" . Strings::webalize($data->displayName);
         if(!property_exists($data, "gender")) $data->gender = "UNKNOWN"; //set default value
         if(!property_exists($data, "language")) $data->language = "CZ"; //set default value
         if(!property_exists($data, "canEditCallName")) $data->canEditCallName = true; //set default value

@@ -100,10 +100,10 @@
                 {var $nameDay = date('m-d', strtotime(date('Y').'-'.$usr->nameDayMonth.'-'.$usr->nameDayDay))}
                 {var $bDay = property_exists($usr, 'birthDate') ? date('m-d', strtotime($usr->birthDate)) : '0-0'}
                 {var $years = property_exists($usr, 'birthDate') ? date('Y') - date('Y', strtotime($usr->birthDate)) : '0'}
-                <div n:if="$today==$nameDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><a href="{plink Team:player $usr->webName}">{$usr->callName}</a></strong> slaví dnes svátek!</div>
-                <div n:if="$today==$bDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><a href="{plink Team:player $usr->webName}">{$usr->callName}</a></strong> slaví dnes <strong>{$years}.</strong> narozeniny!</div>
-                <div n:if="$tommorow==$nameDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><a href="{plink Team:player $usr->webName}">{$usr->callName}</a></strong> slaví zítra svátek!</div>
-                <div n:if="$tommorow==$bDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><a href="{plink Team:player $usr->webName}">{$usr->callName}</a></strong> slaví zítra <strong>{$years}.</strong> narozeniny!</div>
+                <div n:if="$today==$nameDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><a href="{plink Team:player $usr->webName}">{$usr->displayName}</a></strong> slaví dnes svátek!</div>
+                <div n:if="$today==$bDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><a href="{plink Team:player $usr->webName}">{$usr->displayName}</a></strong> slaví dnes <strong>{$years}.</strong> narozeniny!</div>
+                <div n:if="$tommorow==$nameDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><a href="{plink Team:player $usr->webName}">{$usr->displayName}</a></strong> slaví zítra svátek!</div>
+                <div n:if="$tommorow==$bDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><a href="{plink Team:player $usr->webName}">{$usr->displayName}</a></strong> slaví zítra <strong>{$years}.</strong> narozeniny!</div>
             {/foreach}
         </div>
     </div>
@@ -125,9 +125,9 @@
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="live" role="tabpanel">
                             <figure class="figure text-center" style="width: 100px" n:foreach="$liveUsers as $live">
-                                <a href="{plink Team:player $live->webName}" title="{$live->callName}">
-                                    <img src="{$tymyRoot}/{$live->pictureUrl}" class="figure-img img-fluid rounded user_pic" alt="{$live->callName}" />
-                                    <figcaption class="figure-caption">{$live->callName}</figcaption>
+                                <a href="{plink Team:player $live->webName}" title="{$live->fullName}">
+                                    <img src="{$tymyRoot}/{$live->pictureUrl}" class="figure-img img-fluid rounded user_pic" alt="{$live->fullName}" />
+                                    <figcaption class="figure-caption">{$live->displayName}</figcaption>
                                 </a>
                             </figure>
                             <h6 class="card-subtitle mb-2 text-muted" n:if="count($liveUsers) == 0">Nikdo není online</h6>
@@ -137,8 +137,8 @@
                                 {var $lastLogin = property_exists($usr, 'lastLogin') ? ($usr->lastLogin|date:'j.n.Y H:i:s') : 'Nikdy'}
                                 {var $caption = property_exists($usr, 'lastLogin') ? ($usr->lastLogin|lastLogin) : 'Nikdy'}
                                 <a href="{plink Team:player $usr->webName}" title="{$lastLogin}">
-                                    <img src="{$tymyRoot}/{$usr->pictureUrl}" class="figure-img img-fluid rounded user_pic" alt="{$usr->callName}" />
-                                    <figcaption class="figure-caption">{$usr->callName}</figcaption>
+                                    <img src="{$tymyRoot}/{$usr->pictureUrl}" class="figure-img img-fluid rounded user_pic" alt="{$usr->fullName}" />
+                                    <figcaption class="figure-caption">{$usr->displayName}</figcaption>
                                     <figcaption class="figure-caption" style="font-size: 70%; display: inline-block">{$caption}</figcaption>
                                 </a>
                             </figure>

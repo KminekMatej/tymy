@@ -101,8 +101,8 @@
                                         <div class="col-10">
                                             <figure n:foreach="$usrs as $usr" id="player-{$usr->id}" class="figure text-center player" style="width: 100px">
                                                 <a href="{plink Team:player $usr->webName}">
-                                                    <img src="{$tymyRoot}/{$usr->pictureUrl}" class="figure-img img-fluid rounded" alt="{$usr->callName}" />
-                                                    <figcaption class="figure-caption">{$usr->callName}</figcaption>
+                                                    <img src="{$tymyRoot}/{$usr->pictureUrl}" class="figure-img img-fluid rounded" alt="{$usr->fullName}" />
+                                                    <figcaption class="figure-caption">{$usr->displayName}</figcaption>
                                                     <figcaption n:if="trim($usr->preDescription) != ''" class="figure-caption" style="font-size: 70%; display: inline-block">{$usr->preDescription}</figcaption>
                                                 </a>
                                                 <div n:class="btn-group,result,$event->resultsClosed ? d-none" role="group" aria-label="Attendance result" n:if="$event->canResult">

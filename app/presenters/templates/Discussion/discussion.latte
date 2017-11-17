@@ -10,9 +10,9 @@
 <script src="{$basePath}/resources/ckeditor/ckeditor.js"></script>
 <script src="{$basePath}/resources/clipboard/dist/clipboard.{$js}"></script>
 <script>
-$( document ).ready(function() {
-    new Clipboard('BUTTON.clipboard-btn');
-});
+    $(document).ready(function () {
+        new Clipboard('BUTTON.clipboard-btn');
+    });
 </script>
 {/block}
 
@@ -24,47 +24,45 @@ $( document ).ready(function() {
 
 <div class="container discussion" n:snippet="discussion">
     {foreach $discussion->posts as $item}
-        {ifset $item->createdBy->callName}
-        {var $stickyIcon = ''}
-        {if $item->sticky}
-            {var $chc = 'post-sticky bg-warning'}
-            {var $cc = 'post-sticky'}
-            {var $stickyIcon = 'sticky'}
-        {elseif $item->newPost}
-            {var $chc = 'post-new text-white bg-primary'}
-            {var $cc = 'post-new'}
-        {elseif $item->createdById == $userId}
-            {var $chc = 'post-mine'}
-            {var $cc = 'post-mine'}
-        {else}
-            {var $chc = ''}
-            {var $cc = ''}
-        {/if}
+            {var $stickyIcon = ''}
+            {if $item->sticky}
+                {var $chc = 'post-sticky bg-warning'}
+                {var $cc = 'post-sticky'}
+                {var $stickyIcon = 'sticky'}
+            {elseif $item->newPost}
+                {var $chc = 'post-new text-white bg-primary'}
+                {var $cc = 'post-new'}
+            {elseif $item->createdById == $userId}
+                {var $chc = 'post-mine'}
+                {var $cc = 'post-mine'}
+            {else}
+                {var $chc = ''}
+                {var $cc = ''}
+            {/if}
             <div class="row">
                 <div class="col">
                     <div class="card my-1 {$cc} sh-box">
                         <div class="card-header {$chc} py-1">
-                            <span class="name">{$item->createdBy->callName}</span>
-                            
+                            <span class="name">{$item->createdBy->displayName}</span>
+
                             <div class="btn-group btn-group-sm float-md-right" role="group">
                                 <button n:class="btn,btn-sm,$item->sticky ? active,$item->sticky ? btn-dark:btn-light,!$item->sticky ? btn-light-bordered" onclick="stickPost({plink Discussion:stickPost $discussion->discussion->id}, {$item->id}, {$item->sticky ? false : true})" ><i class="fa fa-thumb-tack" aria-hidden="true"></i></button>
                                 <button class="btn btn-sm btn-light btn-light-bordered clipboard-btn" data-clipboard-target="#post-{$item->id}" title="Kopírovat do schránky"><i class="fa fa-files-o" aria-hidden="true"></i></button>
                                 <button class="btn btn-sm btn-light btn-light-bordered" onclick="loadPost({$item->id})" title="Upravit / Kopírovat"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                             </div>
                             <span class="float-md-right mx-2">{$item->createdAt|date:'j.n.Y G:i'}</span>
-                            <div class="alert alert-warning float-md-right mx-1" n:ifset="$item->updatedAt" style="margin: 0px; padding: 4px; font-size: 10px;">Upravil(a) {$users[$item->updatedById]->callName}, {$item->updatedAt|date:'j.n.Y G:i'}</div>
+                            <div class="alert alert-warning float-md-right mx-1" n:ifset="$item->updatedAt" style="margin: 0px; padding: 4px; font-size: 10px;">Upravil(a) {$users[$item->updatedById]->displayName}, {$item->updatedAt|date:'j.n.Y G:i'}</div>
                         </div>
                         <div class="card-body">
                             <img class="user_pic" src="{$tymyRoot}/{$item->createdBy->pictureUrl}" />
                             <div class="card-text" id="post-{$item->id}">
-                                {ifset $item->post}{$item->post|noescape}{/ifset}
-                            </div>
+                            {ifset $item->post}{$item->post|noescape}{/ifset}
                         </div>
                     </div>
                 </div>
             </div>
-        {/ifset}
-    {/foreach}
+        </div>
+{/foreach}
 </div>
 
 <nav aria-label="Page navigation">
