@@ -43,7 +43,7 @@
                 <div class="col">
                     <div class="card my-1 {$cc} sh-box">
                         <div class="card-header {$chc} py-1">
-                            <span class="name">{$item->createdBy->displayName}</span>
+                            <span class="name">{$item->createdBy->callName}</span>
 
                             <div class="btn-group btn-group-sm float-md-right" role="group">
                                 <button n:class="btn,btn-sm,$item->sticky ? active,$item->sticky ? btn-dark:btn-light,!$item->sticky ? btn-light-bordered" onclick="stickPost({plink Discussion:stickPost $discussion->discussion->id}, {$item->id}, {$item->sticky ? false : true})" ><i class="fa fa-thumb-tack" aria-hidden="true"></i></button>
