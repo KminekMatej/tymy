@@ -12,9 +12,7 @@ use Tester\Assert;
 
 $container = require __DIR__ . '/../bootstrap.php';
 
-if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
-    Tester\Environment::skip('Test skipped as set in config file.');
-}
+Tester\Environment::skip('Test skipped temporarily - was way too invasive (sending mail to all the admins).');
 
 Tester\Environment::lock('tapi', __DIR__ . '/../lockdir'); //belong to the group of tests which should not run paralelly
 
