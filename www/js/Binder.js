@@ -36,7 +36,7 @@ function Binder (settings) {
     this.SAVE_BTN_CLASS = !settings.saveBtnClass ? "binder-save-btn" : settings.saveBtnClass;
     this.DELETE_BTN_CLASS = !settings.deleteBtnClass ? "binder-delete-btn" : settings.deleteBtnClass;
     this.BUTTON_CHECKED_CLASS = !settings.checkedBtnClass ? "active" : settings.checkedBtnClass;
-    this.SAVE_ALL_SELECTOR = !settings.saveAllSelector;
+    this.SAVE_ALL_BTN_CLASS = !settings.saveAllSelector ? "binder-save-all-btn" : settings.saveAllSelector;
     this.isValid = !settings.isValid ? true : settings.isValid;
     this.changed = false;
     this.bindChangeEvents();
@@ -83,12 +83,18 @@ Binder.prototype.bindSaveEvent = function () {
 
 Binder.prototype.bindSaveAllEvent = function () {
     var binderObj = this;
-    var targets = binderObj.area.find(this.SAVE_ALL_SELECTOR);
+    var targets = $("." + this.SAVE_ALL_BTN_CLASS);
     if (targets.length > 0) {
         targets.each(function () {
+            if($(this).data("binders")){
+                var binders = $(this).data("binders");
+                binders.push(binderObj);
+            } else {
+                $(this).data("binders", [binderObj]);
+            }
+            $(this).off("click");
             $(this).click(function () {
-                binderObj.extractBind();
-                binderObj.save($(this));
+                binderObj.saveAll($(this));
             });
         });
     }
@@ -114,7 +120,7 @@ Binder.prototype.save = function(caller){
     if(typeof this.bind == "undefined")
         throw "Binder performig error - undefined binding object!";
     var binderObj = this;
-    if (!($.isEmptyObject(binderObj.bind.changes) > 0)) {
+    if (!($.isEmptyObject(binderObj.bind.changes))) {
         binderObj.disableBtn(caller, true, true);
         $.nette.ajax({
             url: caller.attr("href"),
@@ -125,6 +131,31 @@ Binder.prototype.save = function(caller){
                 binderObj.commit();
             }
         });
+    }
+};
+
+Binder.prototype.saveAll = function(caller){
+    var allBinders = $(caller).data("binders");
+    if(allBinders.length > 0){
+        var data = [];
+        for (index = 0; index < allBinders.length; ++index) {
+            var binderObj = allBinders[index];
+            binderObj.extractBind();
+            if (!($.isEmptyObject(binderObj.bind.changes))) {
+                data.push(binderObj.bind);
+            }
+        }
+        if(data.length > 0){
+            $.nette.ajax({
+                url: caller.attr("href"),
+                method: 'POST',
+                data: {binders: data},
+                complete: function (payload) {
+                    binderObj.disableBtn(caller, false);
+                    binderObj.commit();
+                }
+            });
+        }
     }
 };
 
