@@ -2,11 +2,16 @@
 {include parent}
 <script src="{$basePath}/js/main.js"></script>
 <script src="{$basePath}/js/timer.js"></script>
+
+{* Check if exists script with the same name as presenter, if so, import it*}
 {var $presenterName = $presenter->request->getPresenterName()}
+{var $view = $presenter->getView()}
 {var $presenterScript = "{$basePath}/js/{$presenterName}/{$presenterName}.js"}
 {var $presenterScriptPath = "./{$presenterScript}"}
-
+{var $viewScript = "{$basePath}/js/{$presenterName}/{$view}.js"}
+{var $viewScriptPath = "./{$viewScript}"}
 <script src="{$presenterScript}" n:if="file_exists($presenterScriptPath)"></script>
+<script src="{$viewScript}" n:if="file_exists($viewScriptPath)"></script>
 {/block}
 
 {block styles}
