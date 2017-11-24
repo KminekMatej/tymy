@@ -118,29 +118,6 @@ function commitChanges(area){
     });
 }
 
-function del(purl, selector) {
-    var btn = $(selector).find("BUTTON.delete");
-    var id = $(selector).attr("data-id");
-    if ($(btn).prop("disabled") || $(btn).hasClass("disabled") || typeof(id)=="undefined")
-        return;
-    var layout = $("DIV.container.settings").attr("data-layout");
-    if (window.confirm("Smazat událost " + id + " ?")) {
-        btnDisable($(btn), true);
-        $.nette.ajax({
-            url: purl,
-            data: {
-                layout: layout
-            },
-            complete: function (payload) {
-                if(layout == "list"){
-                    $(selector).remove();
-                }
-            }
-        });
-    }
-    
-}
-
 function validate(elm, name, value1, value2 = null) {
     var valid = true;
     switch (name) {

@@ -1,52 +1,54 @@
 {import '../common.latte'}
 
+{block scripts}
+{include parent}
+<script src="{$basePath}/js/Binder.js"></script>
+{/block}
+
 {block navbar}
 {control navbar}
 {/block}
 
 {block content}
-<div class="container settings" data-layout="form">
+<div class="container settings">
     <div class="row">
         <div class="col">
-            <div class="card sh-box my-3" data-id="{$event->id}">
+            <div class="card sh-box my-3" data-binder-id="{$event->id}">
                 <div class="card-header">
                     <h4>Úprava události {$event->id}</h4>
                 </div>
                 <div class="card-body">
                     <table class="table">
-                        {foreach $props as $prop}
-                            <tr>
-                                <th>{$prop->label}</th>
-                                <td>
-                                    {if $prop->type == 'textarea'}
-                                        <textarea name="{$prop->name}" onchange="chng(this, 'DIV.container.settings DIV.card')" data-value="{$prop->value}" class="form-control col-6" n:attr="disabled => property_exists($prop,'disabled') && $prop->disabled">{$prop->value}</textarea>
-                                    {elseif $prop->type == 'select'}
-                                        <select onchange="chng(this, 'DIV.container.settings DIV.card')" name="{$prop->name}" data-value="{$prop->value}" value="{$prop->value}" class="form-control col-6" n:attr="disabled => property_exists($prop,'disabled') && $prop->disabled">
-                                            <option>Vyberte typ...</option>
-                                            {foreach $prop->values as $option}
-                                                <option value="{$option->code}" n:attr="selected => $prop->value == $option->code">{$option->caption}</option>
-                                            {/foreach}
-                                        </select>
-                                    {else}
-                                        <div class="input-group" n:tag-if="$prop->name=='place' || $prop->name=='link'">
-                                            <input onchange="chng(this, 'DIV.container.settings DIV.card')" name="{$prop->name}" data-value="{$prop->type == 'datetime' ? ($prop->value|date:'d.m.Y H:i') : $prop->value}" type="{$prop->type == 'datetime' ? 'text' : $prop->type}" value="{$prop->type == 'datetime' ? ($prop->value|date:'d.m.Y H:i') : $prop->value}" class="form-control col-6" n:attr="disabled => property_exists($prop,'disabled') && $prop->disabled"/>
-                                            <span class="input-group-btn" style="min-width: 50px">
-                                                <button n:if="$prop->name=='place'" class='btn btn-light btn-light-bordered' onclick='map()' title="Zobrazit na mapě"><i class="fa fa-map-marker" aria-hidden="true"></i></button>
-                                                <button n:if="$prop->name=='link'" class='btn btn-light btn-light-bordered' onclick='link()' title="Zobrazit v novém okně"><i class="fa fa-external-link" aria-hidden="true"></i></button>
-                                            </span>
-                                            
-                                        </div>
-                                    {/if}
-                                </td>
-                            </tr>
-                        {/foreach}
+                        <tr><th>Titulek</th>
+                            <td>
+                                <input type="text" name="caption" value="{$event->caption}" data-value="{$event->caption}" class="col-6 form-control" />
+                            </td></tr>
+                        <tr><th>Typ</th>
+                            <td>
+                                <select name="type" value="{$event->type}" data-value="{$event->type}" class="col-6 form-control disabled" disabled>
+                                    <option>Vyberte typ...</option>
+                                    <option n:foreach="$eventTypes as $option" value="{$option->code}" n:attr="selected => $event->type == $option->code">{$option->caption}</option>
+                                </select>
+                            </td></tr>
+                        <tr><th>Popis</th><td><textarea name="description" data-value="{$event->description}" class="form-control col-6">{$event->description}</textarea></td></tr>
+                        <tr><th>Začátek</th><td><input type="text" name="startTime" value="{$event->startTime|date:'d.m.Y H:i'}" data-value="{$event->startTime}" class="col-6 form-control" /></td></tr>
+                        <tr><th>Konec</th><td><input type="text" name="endTime" value="{$event->endTime|date:'d.m.Y H:i'}" data-value="{$event->endTime}" class="col-6 form-control" /></td></tr>
+                        <tr><th>Uzávěrka</th><td><input type="text" name="closeTime" value="{$event->closeTime|date:'d.m.Y H:i'}" data-value="{$event->closeTime}" class="col-6 form-control" /></td></tr>
+                        <tr><th>Místo</th><td>
+                                            <div class="input-group">
+                                                <input type="text" name="place" value="{$event->place}" data-value="{$event->place}" class="col-6 form-control" />
+                                                <span class="input-group-btn"><button style="min-width: 45px" class='btn btn-light btn-light-bordered' onclick='map()' title="Zobrazit na mapě"><i class="fa fa-map-marker" aria-hidden="true"></i></button></span>
+                                            </div></td></tr>
+                        <tr><th>Odkaz</th><td>
+                                            <div class="input-group">
+                                                <input type="text" name="link" value="{$event->link}" data-value="{$event->link}" class="col-6 form-control" />
+                                                <span class="input-group-btn"><button style="min-width: 45px" class='btn btn-light btn-light-bordered' onclick='link()' title="Zobrazit v novém okně"><i class="fa fa-external-link" aria-hidden="true"></i></button></span>
+                                            </div></td></tr>
                     </table>
                 </div>
                 <div class="card-footer text-right">
-                    {capture $delLink}del('{link eventDelete! $event->id}', 'DIV.container.settings DIV.card'){/capture}
-                    {capture $editLink}updateRow('{link eventEdit! $event->id}', 'DIV.container.settings DIV.card'){/capture}
-                    <button n:if="$user->isAllowed('SYS','EVE_DELETE')" onclick="{$delLink|noescape}" class="btn btn-danger mx-2 delete" title="Smazat"><i class="fa fa-times" aria-hidden="true"></i></button>
-                    <button n:if="$user->isAllowed('SYS','EVE_UPDATE')" onclick="{$editLink|noescape}" class="btn btn-lg btn-primary update" title="Uložit"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                    <button n:if="$user->isAllowed('SYS','EVE_DELETE')" href="{link eventDelete!}" class="btn btn-danger mx-2 binder-delete-btn" title="Smazat"><i class="fa fa-times" aria-hidden="true"></i></button>
+                    <button n:if="$user->isAllowed('SYS','EVE_UPDATE')" href="{link eventEdit!}" class="btn btn-lg btn-primary binder-save-btn" title="Uložit"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                 </div>
             </div>
         </div>

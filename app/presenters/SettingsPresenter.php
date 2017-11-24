@@ -144,16 +144,7 @@ class SettingsPresenter extends SecuredPresenter {
         $eventObj = $this->event->reset()->recId($eventId)->getData();
         $this->setLevelCaptions(["3" => ["caption" => $eventObj->caption, "link" => $this->link("Settings:events", $eventObj->webName)]]);
         $this->template->event = $eventObj;
-        $eventProps = [];
-        $eventProps[] = (object)["name" => "caption", "label" => "Titulek", "type" => "text", "value" => $eventObj->caption];
-        $eventProps[] = (object)["name" => "type", "label" => "Typ", "type" => "select", "values"=> $this->eventTypes->getData(), "value" => $eventObj->type, "disabled"=>true];
-        $eventProps[] = (object)["name" => "description", "label" => "Popis", "type" => "textarea", "value" => $eventObj->description];
-        $eventProps[] = (object)["name" => "startTime", "label" => "Začátek", "type" => "datetime", "value" => strftime('%Y-%m-%dT%H:%M:%S', strtotime($eventObj->startTime)) ];
-        $eventProps[] = (object)["name" => "endTime", "label" => "Konec", "type" => "datetime", "value" => strftime('%Y-%m-%dT%H:%M:%S', strtotime($eventObj->endTime))];
-        $eventProps[] = (object)["name" => "closeTime", "label" => "Uzávěrka", "type" => "datetime", "value" => strftime('%Y-%m-%dT%H:%M:%S', strtotime($eventObj->closeTime))];
-        $eventProps[] = (object)["name" => "place", "label" => "Místo", "type" => "text", "value" => $eventObj->place];
-        $eventProps[] = (object)["name" => "link", "label" => "Odkaz", "type" => "text", "value" => $eventObj->link];
-        $this->template->props = $eventProps;
+        $this->template->eventTypes = $this->eventTypes->getData();
     }
     
     public function renderPoll($poll) {
@@ -170,8 +161,9 @@ class SettingsPresenter extends SecuredPresenter {
     
     public function handleEventsEdit(){
         $post = $this->getRequest()->getPost();
-        foreach ($post as $evData) {
-            $this->editEvent($evData["id"], $evData);
+        $binders = $post["binders"];
+        foreach ($binders as $bind) {
+            $this->editEvent($bind);
         }
     }
     
@@ -185,29 +177,31 @@ class SettingsPresenter extends SecuredPresenter {
         $this->redirect('Settings:events');
     }
     
-    public function handleEventEdit($eventId){
-        $post = $this->getRequest()->getPost();
-        $this->editEvent($eventId, $post);
+    public function handleEventEdit(){
+        $bind = $this->getRequest()->getPost();
+        $this->editEvent($bind);
     }
     
-    public function handleEventDelete($eventId){
+    public function handleEventDelete(){
+        $bind = $this->getRequest()->getPost();
         try {
             $this->event
-                    ->recId($eventId)
+                    ->recId($bind["id"])
                     ->delete();
-            if($this->getRequest()->getParameter("layout") == "form"){
-                $this->redirect("Settings:events");
-            }
+            $this->redirect("Settings:events");
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
     }
     
-    private function editEvent($eventId, $data) {
+    private function editEvent($bind) {
+        if(array_key_exists("startTime", $bind["changes"])) $bind["changes"]["startTime"] = gmdate("Y-m-d\TH:i:s\Z", strtotime($bind["changes"]["startTime"]));
+        if(array_key_exists("endTime", $bind["changes"])) $bind["changes"]["endTime"] = gmdate("Y-m-d\TH:i:s\Z", strtotime($bind["changes"]["endTime"]));
+        if(array_key_exists("closeTime", $bind["changes"])) $bind["changes"]["closeTime"] = gmdate("Y-m-d\TH:i:s\Z", strtotime($bind["changes"]["closeTime"]));
         try {
             $this->event
-                    ->recId($eventId)
-                    ->edit($data);
+                    ->recId($bind["id"])
+                    ->edit($bind["changes"]);
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }

@@ -1,5 +1,10 @@
 {import '../common.latte'}
 
+{block scripts}
+{include parent}
+<script src="{$basePath}/js/Binder.js"></script>
+{/block}
+
 {block styles}
 {include parent}
 <link rel='stylesheet' href="{$basePath}/css/table-xs.css" />
@@ -10,7 +15,7 @@
 {/block}
 
 {block content}
-<div class="container settings" data-layout="list">
+<div class="container settings">
     <div class="row">
         <div class="col">
             <div class="card sh-box my-3">
@@ -31,8 +36,7 @@
                             <th>Odkaz</th>
                             <th></th>
                         </tr>
-                        <tr n:foreach="$events as $e" data-id="{$e->id}">
-                            {var $selector = 'TABLE.table-xs TR[data-id='.$e->id.']'}
+                        <tr n:foreach="$events as $e" data-binder-id="{$e->id}">
                             <td>
                                 <a n:if="!$isNew" href="{plink Settings:events $e->webName}" class="btn btn-sm btn-light btn-light-bordered"  title="Upravit" style="margin-right: 2px">
                                     <i class="fa fa-external-link" aria-hidden="true"></i>
@@ -44,24 +48,19 @@
                                     <option n:foreach="$eventTypes as $type => $evType" value="{$type}">{$evType->caption}</option>
                                 </select>
                             </td>
-                            <td><input onchange="chng({$selector})" name="caption" data-value="{$e->caption}" type="text" value="{$e->caption}" class="form-control form-control-sm" style="max-width: 100px;" required/><div class="invalid-feedback">Chybně zadaná hodnota</div></td>
-                            <td><textarea onchange="chng({$selector})" name="description" data-value="{$e->description}" rows="1" class="form-control form-control-sm">{$e->description}</textarea></td>
-                            <td><input onchange="chng({$selector})" name="startTime" data-value="{$isNew ? '' : $e->startTime|date:'d.m.Y H:i'}" type="text" value="{$e->startTime|date:'d.m.Y H:i'}" class="form-control form-control-sm" style="-webkit-flex-direction:row; max-width: 175px;" required placeholder="dd.mm.rrrr hh:mm"/><div class="invalid-feedback">Chybně zadaná hodnota</div></td>
-                            <td><input onchange="chng({$selector})" name="endTime" data-value="{$isNew ? '' : $e->endTime|date:'d.m.Y H:i'}" type="text" value="{$e->endTime|date:'d.m.Y H:i'}" class="form-control form-control-sm" style="-webkit-flex-direction:row; max-width: 175px;" required placeholder="dd.mm.rrrr hh:mm"/><div class="invalid-feedback">Chybně zadaná hodnota</div></td>
-                            <td><input onchange="chng({$selector})" name="closeTime" data-value="{$isNew ? '' : $e->closeTime|date:'d.m.Y H:i'}" type="text" value="{$e->closeTime|date:'d.m.Y H:i'}" class="form-control form-control-sm" style="-webkit-flex-direction:row; max-width: 175px;" required placeholder="dd.mm.rrrr hh:mm"/><div class="invalid-feedback">Chybně zadaná hodnota</div></td>
-                            <td><input onchange="chng({$selector})" name="place" data-value="{$e->place}" type="text" value="{$e->place}" class="form-control form-control-sm"/></td>
-                            <td><input onchange="chng({$selector})" name="link" data-value="{$e->link}" type="text" value="{$e->link}" class="form-control form-control-sm"/></td>
+                            <td><input type="text" name="caption" data-value="{$e->caption}" value="{$e->caption}" class="form-control form-control-sm" style="max-width: 100px;" required/><div class="invalid-feedback">Chybně zadaná hodnota</div></td>
+                            <td><textarea name="description" data-value="{$e->description}" rows="1" class="form-control form-control-sm">{$e->description}</textarea></td>
+                            <td><input type="text" name="startTime" data-value="{$isNew ? '' : $e->startTime|date:'d.m.Y H:i'}" value="{$e->startTime|date:'d.m.Y H:i'}" class="form-control form-control-sm" style="-webkit-flex-direction:row; max-width: 175px;" required placeholder="dd.mm.rrrr hh:mm"/><div class="invalid-feedback">Chybně zadaná hodnota</div></td>
+                            <td><input type="text" name="endTime" data-value="{$isNew ? '' : $e->endTime|date:'d.m.Y H:i'}" value="{$e->endTime|date:'d.m.Y H:i'}" class="form-control form-control-sm" style="-webkit-flex-direction:row; max-width: 175px;" required placeholder="dd.mm.rrrr hh:mm"/><div class="invalid-feedback">Chybně zadaná hodnota</div></td>
+                            <td><input type="text" name="closeTime" data-value="{$isNew ? '' : $e->closeTime|date:'d.m.Y H:i'}" value="{$e->closeTime|date:'d.m.Y H:i'}" class="form-control form-control-sm" style="-webkit-flex-direction:row; max-width: 175px;" required placeholder="dd.mm.rrrr hh:mm"/><div class="invalid-feedback">Chybně zadaná hodnota</div></td>
+                            <td><input type="text" name="place" data-value="{$e->place}" value="{$e->place}" class="form-control form-control-sm"/></td>
+                            <td><input type="text" name="link" data-value="{$e->link}" value="{$e->link}" class="form-control form-control-sm"/></td>
                             <td class="input-group">
-                                <button n:if="!$isNew && $user->isAllowed('SYS','EVE_UPDATE')" class="btn btn-sm btn-primary update" onclick="updateRow({link eventEdit! $e->id}, {$selector})" title="Uložit" style="margin-right: 2px">
-                                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
-                                </button>
-                            {capture $delLink}{if $isNew}removeRow(this){else}del('{link eventDelete! $e->id}', '{$selector}'){/if}{/capture}
-                            <button n:if="$user->isAllowed('SYS','EVE_DELETE')" class="btn btn-sm btn-danger delete" onclick="{$delLink|noescape}" title="Smazat">
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                            </button>
-                        </td>
-                    </tr>
-                </table>
+                                <button n:if="!$isNew && $user->isAllowed('SYS','EVE_UPDATE')" href="{link eventEdit!}" class="btn btn-sm btn-primary binder-save-btn" title="Uložit" style="margin-right: 2px"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                <button n:if="$user->isAllowed('SYS','EVE_DELETE')" href="{link eventDelete!}" class="btn btn-sm btn-danger binder-delete-btn" title="Smazat"><i class="fa fa-times" aria-hidden="true"></i></button>
+                            </td>
+                        </tr>
+                    </table>
                     <div class="text-center" n:if="$isNew">
                         <button class="btn btn-sm btn-outline-success" title="Duplikovat poslední událost a posunout časy o 1 den" onclick="duplicateEventRow('day')"><i class="fa fa-plus" aria-hidden="true"></i> Den</button>
                         <button class="btn btn-sm btn-outline-success" title="Duplikovat poslední událost a posunout časy o 1 týden" onclick="duplicateEventRow('week')"><i class="fa fa-plus" aria-hidden="true"></i> Týden</button>
@@ -72,8 +71,7 @@
                     <a n:if="!$isNew && $user->isAllowed('SYS','EVE_CREATE')" class="btn btn-lg btn-success" href="{plink Settings:event_new}" onclick="btnDisable($(this), true)" title="Vytvořit novou událost" style="margin-right: 10px">
                         <i class="fa fa-plus" aria-hidden="true"></i>
                     </a>
-                    {capture $saveLink}{if $isNew}updateRows('{link eventsCreate!}', 'TABLE.table-xs'){else}updateRows('{link eventsEdit!}', 'TABLE.table-xs'){/if}{/capture}
-                    <button n:if="$user->isAllowed('SYS','EVE_UPDATE')" class="btn btn-lg btn-primary update all" onclick="{$saveLink|noescape}" title="Uložit vše"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                    <button n:if="$user->isAllowed('SYS','EVE_UPDATE')" class="btn btn-lg btn-primary binder-save-all-btn" href="{link eventsEdit!}" title="Uložit vše"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                 </div>
                 
             </div>
