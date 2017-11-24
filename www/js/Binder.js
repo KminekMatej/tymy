@@ -37,6 +37,8 @@ function Binder (settings) {
     this.DELETE_BTN_CLASS = !settings.deleteBtnClass ? "binder-delete-btn" : settings.deleteBtnClass;
     this.BUTTON_CHECKED_CLASS = !settings.checkedBtnClass ? "active" : settings.checkedBtnClass;
     this.SAVE_ALL_BTN_CLASS = !settings.saveAllSelector ? "binder-save-all-btn" : settings.saveAllSelector;
+    this.saveButtons = this.area.find("." + this.SAVE_BTN_CLASS);
+    this.saveAllButtons = $("." + this.SAVE_ALL_BTN_CLASS);
     this.isValid = !settings.isValid ? true : settings.isValid;
     this.changed = false;
     this.bindChangeEvents();
@@ -69,9 +71,8 @@ Binder.prototype.bindChangeEvents = function () {
 
 Binder.prototype.bindSaveEvent = function () {
     var binderObj = this;
-    var targets = binderObj.area.find("." + this.SAVE_BTN_CLASS);
-    if (targets.length > 0) {
-        targets.each(function () {
+    if (this.saveButtons.length > 0) {
+        this.saveButtons.each(function () {
             $(this).off("click");
             $(this).click(function () {
                 binderObj.extractBind();
@@ -83,9 +84,8 @@ Binder.prototype.bindSaveEvent = function () {
 
 Binder.prototype.bindSaveAllEvent = function () {
     var binderObj = this;
-    var targets = $("." + this.SAVE_ALL_BTN_CLASS);
-    if (targets.length > 0) {
-        targets.each(function () {
+    if (this.saveAllButtons.length > 0) {
+        this.saveAllButtons.each(function () {
             if($(this).data("binders")){
                 var binders = $(this).data("binders");
                 binders.push(binderObj);
@@ -114,10 +114,10 @@ Binder.prototype.bindDeleteEvent = function () {
     }
 };
 
-Binder.prototype.save = function(caller){
-    if(typeof this.area == "undefined")
+Binder.prototype.save = function (caller) {
+    if (typeof this.area == "undefined")
         throw "Binder performing error - undefined area!";
-    if(typeof this.bind == "undefined")
+    if (typeof this.bind == "undefined")
         throw "Binder performig error - undefined binding object!";
     var binderObj = this;
     if (!($.isEmptyObject(binderObj.bind.changes))) {
@@ -134,9 +134,9 @@ Binder.prototype.save = function(caller){
     }
 };
 
-Binder.prototype.saveAll = function(caller){
+Binder.prototype.saveAll = function (caller) {
     var allBinders = $(caller).data("binders");
-    if(allBinders.length > 0){
+    if (allBinders.length > 0) {
         var data = [];
         for (index = 0; index < allBinders.length; ++index) {
             var binderObj = allBinders[index];
@@ -145,14 +145,20 @@ Binder.prototype.saveAll = function(caller){
                 data.push(binderObj.bind);
             }
         }
-        if(data.length > 0){
+        if (data.length > 0) {
             $.nette.ajax({
                 url: caller.attr("href"),
                 method: 'POST',
                 data: {binders: data},
                 complete: function (payload) {
-                    binderObj.disableBtn(caller, false);
-                    binderObj.commit();
+                    for (index = 0; index < allBinders.length; ++index) {
+                        var binderObj = allBinders[index];
+                        binderObj.saveAllButtons.each(function () {
+                            binderObj.disableBtn($(this), false);
+                        });
+                        binderObj.commit();
+                    }
+
                 }
             });
         }
@@ -190,7 +196,7 @@ Binder.prototype.commit = function () {
 
 Binder.prototype.saveButtonState = function (commitPending){
     var binderObj = this;
-    var targets = binderObj.area.find("." + this.SAVE_BTN_CLASS);
+    var targets = binderObj.saveButtons;
     if (targets.length > 0) {
         if (commitPending) {
             var cls = null;
@@ -215,6 +221,8 @@ Binder.prototype.saveButtonState = function (commitPending){
             var newCls = cls.replace("btn-", "btn-outline-");
             targets.removeClass(cls);
             targets.addClass(newCls);
+            binderObj.saveAllButtons.removeClass(cls);
+            binderObj.saveAllButtons.addClass(newCls);
         } else {
             var classList = targets.attr("class").split(" ");
             for (var cls in classList) {
