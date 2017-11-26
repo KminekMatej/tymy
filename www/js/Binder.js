@@ -129,6 +129,7 @@ Binder.prototype.save = function (caller) {
             complete: function (payload) {
                 binderObj.disableBtn(caller, false);
                 binderObj.commit();
+                binderObj.saveAllButtonState();
             }
         });
     }
@@ -194,48 +195,74 @@ Binder.prototype.commit = function () {
     this.changed = false;
 };
 
+Binder.prototype.getButtonClass = function(button){
+    var classArray = button.attr("class").split(" ");
+    var lookForClasses = ["primary", "secondary", "success", "danger", "warning", "info", "light", "dark"];
+    var detectedClass = null;
+    lookForClasses.forEach(function(cls){
+        if((index = classArray.indexOf("btn-" + cls)) !== -1){
+            return detectedClass = classArray[index];
+        }
+        if((index = classArray.indexOf("btn-outline-" + cls)) !== -1){
+            return detectedClass = classArray[index];
+        }
+    });
+    return detectedClass;
+}
+
 Binder.prototype.saveButtonState = function (commitPending){
     var binderObj = this;
     var targets = binderObj.saveButtons;
+    var cls, newCls;
     if (targets.length > 0) {
-        if (commitPending) {
-            var cls = null;
-            if (targets.hasClass("btn-primary"))
-                cls = "btn-primary";
-            if (targets.hasClass("btn-secondary"))
-                cls = "btn-secondary";
-            if (targets.hasClass("btn-success"))
-                cls = "btn-success";
-            if (targets.hasClass("btn-danger"))
-                cls = "btn-danger";
-            if (targets.hasClass("btn-warning"))
-                cls = "btn-warning";
-            if (targets.hasClass("btn-info"))
-                cls = "btn-info";
-            if (targets.hasClass("btn-light"))
-                cls = "btn-light";
-            if (targets.hasClass("btn-dark"))
-                cls = "btn-dark";
-            if (cls === null)
-                return;
-            var newCls = cls.replace("btn-", "btn-outline-");
-            targets.removeClass(cls);
-            targets.addClass(newCls);
-            binderObj.saveAllButtons.removeClass(cls);
-            binderObj.saveAllButtons.addClass(newCls);
-        } else {
-            var classList = targets.attr("class").split(" ");
-            for (var cls in classList) {
-                if (classList[cls].indexOf("btn-outline") > -1) {
-                    var newCls = classList[cls].replace("outline-", "");
-                    targets.removeClass(classList[cls]);
-                    targets.addClass(newCls);
+        targets.each(function () {
+            cls = binderObj.getButtonClass($(this));
+            var isOutlined = cls.indexOf("btn-outline") !== -1;
+            if (commitPending) {
+                if(isOutlined) return;
+                newCls = cls.replace("btn", "btn-outline");
+                binderObj.saveAllButtonState(commitPending);
+            } else {
+                if(!isOutlined) return;
+                newCls = cls.replace("btn-outline", "btn");
+                binderObj.saveAllButtonState();
+            }
+            $(this).removeClass(cls);
+            $(this).addClass(newCls);
+        });
+    }
+};
+
+Binder.prototype.saveAllButtonState = function (commitPending) {
+    var binderObj = this;
+    var cls, newCls;
+    if (typeof commitPending == "undefined") {
+        commitPending = false;
+        var allBinders = $(binderObj.saveAllButtons[0]).data("binders");
+        if (allBinders.length > 0) {
+            for (index = 0; index < allBinders.length; ++index) {
+                var binderObj = allBinders[index];
+                if (binderObj.changed) {
+                    commitPending = true;
                     break;
                 }
             }
         }
     }
-};
+    binderObj.saveAllButtons.each(function () {
+        cls = binderObj.getButtonClass($(this));
+        var isOutlined = cls.indexOf("btn-outline") !== -1;
+        if (commitPending) {
+            if(isOutlined) return;
+            newCls = cls.replace("btn", "btn-outline");
+        } else {
+            if(!isOutlined) return;
+            newCls = cls.replace("btn-outline", "btn");
+        }
+        $(this).removeClass(cls);
+        $(this).addClass(newCls);
+    });
+}
 
 Binder.prototype.extractBind = function() {
     var obj = {};
