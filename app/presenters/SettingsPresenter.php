@@ -26,7 +26,6 @@ class SettingsPresenter extends SecuredPresenter {
         });
     }
 
-    
     public function actionDefault() {
         //TODO
     }
@@ -194,23 +193,11 @@ class SettingsPresenter extends SecuredPresenter {
         }
     }
     
-    private function editEvent($bind) {
-        if(array_key_exists("startTime", $bind["changes"])) $bind["changes"]["startTime"] = gmdate("Y-m-d\TH:i:s\Z", strtotime($bind["changes"]["startTime"]));
-        if(array_key_exists("endTime", $bind["changes"])) $bind["changes"]["endTime"] = gmdate("Y-m-d\TH:i:s\Z", strtotime($bind["changes"]["endTime"]));
-        if(array_key_exists("closeTime", $bind["changes"])) $bind["changes"]["closeTime"] = gmdate("Y-m-d\TH:i:s\Z", strtotime($bind["changes"]["closeTime"]));
-        try {
-            $this->event
-                    ->recId($bind["id"])
-                    ->edit($bind["changes"]);
-        } catch (\Tymy\Exception\APIException $ex) {
-            $this->handleTapiException($ex);
-        }
-    }
-    
     public function handleDiscussionsEdit(){
         $post = $this->getRequest()->getPost();
-        foreach ($post as $dData) {
-            $this->editDiscussion($dData["id"], $dData);
+        $binders = $post["binders"];
+        foreach ($binders as $bind) {
+            $this->editDiscussion($bind);
         }
     }
     
@@ -224,29 +211,41 @@ class SettingsPresenter extends SecuredPresenter {
         $this->redirect('Settings:discussions');
     }
     
-    public function handleDiscussionEdit($discussionId){
-        $discussionData = $this->getRequest()->getPost();
-        $this->editDiscussion($discussionId, $discussionData);
+    public function handleDiscussionEdit(){
+        $bind = $this->getRequest()->getPost();
+        $this->editDiscussion($bind);
     }
     
-    public function handleDiscussionDelete($discussionId){
+    public function handleDiscussionDelete() {
+        $bind = $this->getRequest()->getPost();
         try {
             $this->discussions
-                    ->recId($discussionId)
+                    ->recId($bind["id"])
                     ->delete();
-            if($this->getRequest()->getParameter("layout") == "form"){
-                $this->redirect("Settings:discussions");
-            }
+            $this->redirect("Settings:discussions");
+        } catch (\Tymy\Exception\APIException $ex) {
+            $this->handleTapiException($ex);
+        }
+    }
+
+    private function editEvent($bind) {
+        if(array_key_exists("startTime", $bind["changes"])) $bind["changes"]["startTime"] = gmdate("Y-m-d\TH:i:s\Z", strtotime($bind["changes"]["startTime"]));
+        if(array_key_exists("endTime", $bind["changes"])) $bind["changes"]["endTime"] = gmdate("Y-m-d\TH:i:s\Z", strtotime($bind["changes"]["endTime"]));
+        if(array_key_exists("closeTime", $bind["changes"])) $bind["changes"]["closeTime"] = gmdate("Y-m-d\TH:i:s\Z", strtotime($bind["changes"]["closeTime"]));
+        try {
+            $this->event
+                    ->recId($bind["id"])
+                    ->edit($bind["changes"]);
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
     }
     
-    private function editDiscussion($discussionId, $data) {
+    private function editDiscussion($bind) {
         try {
             $this->discussions
-                    ->recId($discussionId)
-                    ->edit($data);
+                    ->recId($bind["id"])
+                    ->edit($bind["changes"]);
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
