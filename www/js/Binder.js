@@ -19,7 +19,6 @@
  * After clicking on delete button, object, containing just id and table properties is sent to url, specified by delete button's href attribute. After succesfull ajax request, whole binder area gets deleted.
  */
 
-
 window.onload = function(e){ 
     if (!window.jQuery) {
         throw "Jquery is neccessary to run Binder!";
@@ -56,13 +55,15 @@ Binder.prototype.bindChangeEvents = function () {
                 $(this).off("click");
                 $(this).click(function(){
                     binderObj.getChanges();
-                    binderObj.saveButtonState(binderObj.changed);
+                    binderObj.changeSaveButtonClass(binderObj.changed);
+                    binderObj.changeSaveAllButtonClass(binderObj.changed);
                 });
             } else {
                 $(this).off("change");
                 $(this).change(function(){
                     binderObj.getChanges();
-                    binderObj.saveButtonState(binderObj.changed);
+                    binderObj.changeSaveButtonClass(binderObj.changed);
+                    binderObj.changeSaveAllButtonClass(binderObj.changed);
                 });
             }
         });
@@ -121,45 +122,60 @@ Binder.prototype.save = function (caller) {
         throw "Binder performig error - undefined binding object!";
     var binderObj = this;
     if (!($.isEmptyObject(binderObj.bind.changes))) {
-        binderObj.disableBtn(caller, true, true);
+        binderObj.disableSaveButtons(true, true);
+        binderObj.disableSaveAllButtons(true, true);
         $.nette.ajax({
             url: caller.attr("href"),
             method: 'POST',
             data: binderObj.bind,
             complete: function (payload) {
-                binderObj.disableBtn(caller, false);
                 binderObj.commit();
-                binderObj.saveAllButtonState();
+                binderObj.disableSaveAllButtons(false);
+                binderObj.changeSaveAllButtonClass();
             }
         });
     }
 };
 
+Binder.prototype.disableSaveButtons = function(disable, spin = false){
+    var binderObj = this;
+    this.saveButtons.each(function(){
+        binderObj.disableBtn($(this), disable, spin);
+    });
+}
+
+Binder.prototype.disableSaveAllButtons = function(disable, spin = false){
+    var binderObj = this;
+    this.saveAllButtons.each(function(){
+        binderObj.disableBtn($(this), disable, spin);
+    });
+}
+
 Binder.prototype.saveAll = function (caller) {
     var allBinders = $(caller).data("binders");
+    var index;
     if (allBinders.length > 0) {
         var data = [];
         for (index = 0; index < allBinders.length; ++index) {
             var binderObj = allBinders[index];
             binderObj.extractBind();
             if (!($.isEmptyObject(binderObj.bind.changes))) {
+                binderObj.changeSaveButtonClass(true);
                 data.push(binderObj.bind);
             }
         }
         if (data.length > 0) {
+            binderObj.changeSaveAllButtonClass(true);
             $.nette.ajax({
                 url: caller.attr("href"),
                 method: 'POST',
                 data: {binders: data},
                 complete: function (payload) {
-                    for (index = 0; index < allBinders.length; ++index) {
-                        var binderObj = allBinders[index];
-                        binderObj.saveAllButtons.each(function () {
-                            binderObj.disableBtn($(this), false);
-                        });
+                    allBinders.forEach(function(binderObj){
                         binderObj.commit();
-                    }
-
+                    });
+                    binderObj.disableSaveAllButtons(false);
+                    binderObj.changeSaveAllButtonClass(false);
                 }
             });
         }
@@ -191,7 +207,8 @@ Binder.prototype.commit = function () {
             $(this).attr(binderObj.ORIGINAL_VALUE_ATTRIBUTE, binderObj.getValue($(this)));
         });
     }
-    binderObj.saveButtonState(false);
+    binderObj.changeSaveButtonClass(false);
+    binderObj.disableSaveButtons(false);
     this.changed = false;
 };
 
@@ -210,7 +227,7 @@ Binder.prototype.getButtonClass = function(button){
     return detectedClass;
 }
 
-Binder.prototype.saveButtonState = function (commitPending){
+Binder.prototype.changeSaveButtonClass = function (commitPending){
     var binderObj = this;
     var targets = binderObj.saveButtons;
     var cls, newCls;
@@ -221,11 +238,9 @@ Binder.prototype.saveButtonState = function (commitPending){
             if (commitPending) {
                 if(isOutlined) return;
                 newCls = cls.replace("btn", "btn-outline");
-                binderObj.saveAllButtonState(commitPending);
             } else {
                 if(!isOutlined) return;
                 newCls = cls.replace("btn-outline", "btn");
-                binderObj.saveAllButtonState();
             }
             $(this).removeClass(cls);
             $(this).addClass(newCls);
@@ -233,13 +248,13 @@ Binder.prototype.saveButtonState = function (commitPending){
     }
 };
 
-Binder.prototype.saveAllButtonState = function (commitPending) {
+Binder.prototype.changeSaveAllButtonClass = function (commitPending) {
     var binderObj = this;
     var cls, newCls;
     if (typeof commitPending == "undefined") {
         commitPending = false;
         var allBinders = $(binderObj.saveAllButtons[0]).data("binders");
-        if (allBinders.length > 0) {
+        if (allBinders && allBinders.length > 0) {
             for (index = 0; index < allBinders.length; ++index) {
                 var binderObj = allBinders[index];
                 if (binderObj.changed) {
@@ -251,6 +266,7 @@ Binder.prototype.saveAllButtonState = function (commitPending) {
     }
     binderObj.saveAllButtons.each(function () {
         cls = binderObj.getButtonClass($(this));
+        binderObj.disableBtn($(this), false);
         var isOutlined = cls.indexOf("btn-outline") !== -1;
         if (commitPending) {
             if(isOutlined) return;
