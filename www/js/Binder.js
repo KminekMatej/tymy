@@ -160,11 +160,13 @@ Binder.prototype.saveAll = function (caller) {
             var binderObj = allBinders[index];
             binderObj.extractBind();
             if (!($.isEmptyObject(binderObj.bind.changes))) {
+                binderObj.disableSaveButtons(true, true);
                 binderObj.changeSaveButtonClass(true);
                 data.push(binderObj.bind);
             }
         }
         if (data.length > 0) {
+            binderObj.disableSaveAllButtons(true, true);
             binderObj.changeSaveAllButtonClass(true);
             $.nette.ajax({
                 url: caller.attr("href"),
@@ -266,7 +268,6 @@ Binder.prototype.changeSaveAllButtonClass = function (commitPending) {
     }
     binderObj.saveAllButtons.each(function () {
         cls = binderObj.getButtonClass($(this));
-        binderObj.disableBtn($(this), false);
         var isOutlined = cls.indexOf("btn-outline") !== -1;
         if (commitPending) {
             if(isOutlined) return;
@@ -358,7 +359,7 @@ Binder.prototype.parseValueFromGroupOfElements = function (element) {
 };
 
 Binder.prototype.parseValueFromElement = function(element){
-    if(element.is(":checkbox")) return element.is(":checked");
+    if(element.is(":checkbox")) return element.is(":checked") ? "true" : "false";
     if(element.prop("tagName") == "BUTTON") return element.hasClass(this.BUTTON_CHECKED_CLASS);
     return element.val();
 }
