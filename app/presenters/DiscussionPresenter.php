@@ -79,22 +79,8 @@ class DiscussionPresenter extends SecuredPresenter {
     }
     
     public function renderDiscussion($discussion, $page, $search) {
-        $discussionId = NULL;
-        if (!$discussionId = intval($discussion)) {
-            try {
-                $discussions = $this->discussions->getData();
-            } catch (\Tymy\Exception\APIException $ex) {
-                $this->handleTapiException($ex);
-            }
-
-            foreach ($discussions as $dis) {
-                if ($dis->webName == $discussion) {
-                    $discussionId = $dis->id;
-                    break;
-                }
-            }
-        }
-
+        $discussionId = $this->discussions->getIdFromWebname($discussion);
+        
         if (is_null($discussionId) || $discussionId < 1)
             $this->error("Tato diskuze neexistuje");
         

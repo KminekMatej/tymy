@@ -114,4 +114,14 @@ final class Discussions extends Tymy{
         }
     }
 
+    public function getIdFromWebname($webname){
+        if (intval($webname)) return (int)$webname;
+        $discussions = $this->reset()->getData();
+        foreach ($discussions as $dis) {
+            if ($dis->webName == $webname) {
+                return (int)$dis->id;
+            }
+        }
+        return null;
+    }
 }
