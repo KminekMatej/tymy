@@ -1,0 +1,75 @@
+{import '../common.latte'}
+
+{block navbar}
+{control navbar}
+{/block}
+
+{block scripts}
+{include parent}
+<script src="{$basePath}/js/Binder.js"></script>
+{/block}
+
+{block content}
+{dump $discussion}
+<div class="container settings">
+    <div class="row">
+        <div class="col">
+            <div class="card sh-box my-3" data-binder-id="{$discussion->id}">
+                <div class="card-header">
+                    <h4>Úprava diskuze {$discussion->id}</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <tr><th>Titulek</th>
+                            <td>
+                                <input type="text" name="caption" value="{$discussion->caption}" data-value="{$discussion->caption}" class="col-6 form-control" />
+                            </td></tr>
+                        <tr><th>Popis</th><td><textarea name="description" data-value="{$discussion->description}" class="form-control col-6">{$discussion->description}</textarea></td></tr>
+                        <tr><th>Číst může</th>
+                            <td>
+                                <select name="readRightName" class="col-6 form-control disabled" disabled>
+                                    <option value="">-- Všichni --</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr><th>Psát může</th>
+                            <td>
+                                <select name="writeRightName" class="col-6 form-control disabled" disabled>
+                                    <option value="">-- Všichni --</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr><th>Mazat může</th>
+                            <td>
+                                <select name="deleteRightName" class="col-6 form-control disabled" disabled>
+                                    <option value="">-- Všichni --</option>
+                                </select>
+                            </td>
+                        </tr>
+                            <tr><th>Topovat může</th>
+                                <td>
+                                    <select name="stickyRightName" class="col-6 form-control disabled" disabled>
+                                        <option value="">-- Všichni --</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        <tr><th title="Viditelná na výchozí stránce bez přihlášení">Veřejná</th>
+                            <td><label class="custom-control custom-checkbox">
+                              <input type="checkbox" name="publicRead" n:attr="data-value => ($discussion->publicRead ? 'true':'false'), checked => $discussion->publicRead" class="col-6 form-control custom-control-input" />
+                              <span class="custom-control-indicator"></span>
+                            </label></td></tr>
+                        <tr><th>Povolit úpravy</th>
+                            <td><label class="custom-control custom-checkbox">
+                              <input type="checkbox" name="editablePosts" n:attr="data-value => ($discussion->editablePosts ? 'true':'false'), checked => $discussion->editablePosts" class="col-6 form-control custom-control-input" />
+                              <span class="custom-control-indicator"></span>
+                            </label></td></tr>
+                    </table>
+                </div>
+                <div class="card-footer text-right" n:if="$user->isAllowed('SYS','DSSETUP')">
+                    <button href="{link discussionDelete!}" class="btn btn-danger mx-2 binder-delete-btn" title="Smazat"><i class="fa fa-times" aria-hidden="true"></i></button>
+                    <button href="{link discussionEdit!}" class="btn btn-lg btn-primary binder-save-btn" title="Uložit"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

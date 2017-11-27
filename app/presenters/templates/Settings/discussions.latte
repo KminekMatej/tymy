@@ -1,5 +1,10 @@
 {import '../common.latte'}
 
+{block scripts}
+{include parent}
+<script src="{$basePath}/js/Binder.js"></script>
+{/block}
+
 {block styles}
 {include parent}
 <link rel='stylesheet' href="{$basePath}/css/table-xs.css" />
@@ -10,7 +15,7 @@
 {/block}
 
 {block content}
-<div class="container settings" data-layout="list">
+<div class="container settings">
     <div class="row">
         <div class="col">
             <div class="card sh-box my-3">
@@ -32,15 +37,14 @@
                             <th>Pořadí</th>
                             <th></th>
                         </tr>
-                        <tr n:foreach="$discussions as $d" data-id="{$d->id}">
-                            {var $selector = 'TABLE.table-xs TR[data-id='.$d->id.']'}
+                        <tr n:foreach="$discussions as $d" data-binder-id="{$d->id}">
                             <td>
                                 <a n:if="!$isNew" href="{plink Settings:discussions $d->webName}" class="btn btn-sm btn-light btn-light-bordered"  title="Upravit" style="margin-right: 2px">
                                     <i class="fa fa-external-link" aria-hidden="true"></i>
                                 </a>
                             </td>
-                            <td><input onchange="chng({$selector})" name="caption" data-value="{$d->caption}" type="text" value="{$d->caption}" class="form-control form-control-sm" style="max-width: 100px;" required/><div class="invalid-feedback">Chybně zadaná hodnota</div></td>
-                            <td><textarea onchange="chng({$selector})" name="description" data-value="{$d->description}" rows="1" class="form-control form-control-sm">{$d->description}</textarea></td>
+                            <td><input name="caption" data-value="{$d->caption}" type="text" value="{$d->caption}" class="form-control form-control-sm" style="max-width: 100px;" required/></td>
+                            <td><textarea name="description" data-value="{$d->description}" rows="1" class="form-control form-control-sm">{$d->description}</textarea></td>
 
                             <td>
                                 <select name="readRightName" data-value class="form-control form-control-sm">
@@ -63,18 +67,12 @@
                                 </select>
                             </td>
 
-                            <td><input onchange="chng({$selector})" name="publicRead" data-value="{$d->publicRead}" type="checkbox" n:attr="data-value => $d->publicRead ? 'true':'false', checked => $d->publicRead" class="form-control form-control-sm" /></td>
-                            <td><input onchange="chng({$selector})" name="editablePosts" data-value="{$d->editablePosts}" type="checkbox" n:attr="data-value => $d->editablePosts ? 'true':'false', checked => $d->editablePosts" class="form-control form-control-sm" /></td>
-                            <td><input onchange="chng({$selector})" name="order" data-value="{$d->order}" type="number" value="{$d->order}" class="form-control form-control-sm" style="max-width: 100px;"/></td>
-
+                            <td><input name="publicRead" type="checkbox" n:attr="data-value => $d->publicRead ? 'true':'false', checked => $d->publicRead" class="form-control form-control-sm" /></td>
+                            <td><input name="editablePosts" type="checkbox" n:attr="data-value => $d->editablePosts ? 'true':'false', checked => $d->editablePosts" class="form-control form-control-sm" /></td>
+                            <td><input name="order" data-value="{$d->order}" type="number" value="{$d->order}" class="form-control form-control-sm" style="max-width: 100px;"/></td>
                             <td class="input-group" n:if="$user->isAllowed('SYS','DSSETUP')">
-                                <button n:if="!$isNew" class="btn btn-sm btn-primary update" onclick="updateRow({link discussionEdit! $d->id}, {$selector})" title="Uložit" style="margin-right: 2px">
-                                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
-                                </button>
-                                {capture $delLink}{if $isNew}removeRow(this){else}del('{link discussionDelete! $d->id}', '{$selector}'){/if}{/capture}
-                                <button class="btn btn-sm btn-danger delete" onclick="{$delLink|noescape}" title="Smazat">
-                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                </button>
+                                <button class="btn btn-sm btn-primary binder-save-btn" href="{link discussionEdit!}" title="Uložit" style="margin-right: 2px"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                <button n:if="!$isNew" href="{link discussionDelete!}" class="btn btn-sm btn-danger binder-delete-btn" title="Smazat"><i class="fa fa-times" aria-hidden="true"></i></button>
                             </td>
                         </tr>
                     </table>
@@ -86,8 +84,7 @@
                     <a n:if="!$isNew" class="btn btn-lg btn-success" href="{plink Settings:discussion_new}" onclick="btnDisable($(this), true)" title="Vytvořit novou diskuzi" style="margin-right: 10px">
                         <i class="fa fa-plus" aria-hidden="true"></i>
                     </a>
-                    {capture $saveLink}{if $isNew}updateRows('{link discussionCreate!}', 'TABLE.table-xs'){else}updateRows('{link discussionsEdit!}', 'TABLE.table-xs'){/if}{/capture}
-                    <button class="btn btn-lg btn-primary update all" onclick="{$saveLink|noescape}" title="Uložit vše"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                    <button n:if="!$isNew" class="btn btn-lg btn-primary binder-save-all-btn" href="{link discussionsEdit!}" title="Uložit vše"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                 </div>
                 
             </div>

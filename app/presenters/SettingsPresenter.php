@@ -4,6 +4,9 @@ namespace App\Presenters;
 
 class SettingsPresenter extends SecuredPresenter {
     
+    /** @var \Tymy\Discussion @inject */
+    public $discussion;
+        
     /** @var \Tymy\Event @inject */
     public $event;
         
@@ -108,8 +111,8 @@ class SettingsPresenter extends SecuredPresenter {
     
     public function renderDiscussion($discussion) {
         //RENDERING DISCUSSION DETAIL
-        $discussionId = $this->parseIdFromWebname($discussion);
-        $discussionObj = $this->event->reset()->recId($discussionId)->getData();
+        $discussionId = $this->discussions->getIdFromWebname($discussion);
+        $discussionObj = $this->discussion->reset()->recId($discussionId)->getData()->discussion;
         $this->setLevelCaptions(["3" => ["caption" => $discussionObj->caption, "link" => $this->link("Settings:discussions", $discussionObj->webName)]]);
         $this->template->discussion = $discussionObj;
     }
