@@ -4,6 +4,10 @@
     Author     : kminekmatej
 */
 
+.table-xs th {
+    text-align: center;
+}
+
 .table-xs th, .table-xs td {
     padding: 0.1rem;
 }
