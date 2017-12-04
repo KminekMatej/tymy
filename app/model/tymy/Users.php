@@ -10,7 +10,7 @@ use Nette\Utils\Strings;
  *
  * @author matej
  */
-final class Users extends UserInterface{
+final class Users extends UserAbstraction{
     
     const TAPI_NAME = "users";
     const TSID_REQUIRED = TRUE;

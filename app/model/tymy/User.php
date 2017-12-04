@@ -11,7 +11,7 @@ use Nette\Mail\Message;
  *
  * @author matej
  */
-final class User extends UserInterface{
+final class User extends UserAbstraction{
     
     const TSID_REQUIRED = TRUE;
     const TAPI_NAME = "users";
