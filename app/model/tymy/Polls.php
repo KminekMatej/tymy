@@ -9,7 +9,7 @@ use Nette;
  *
  * @author matej
  */
-final class Polls extends Tymy{
+final class Polls extends PollAbstraction{
     
     const TAPI_NAME = "polls";
     const TSID_REQUIRED = TRUE;
@@ -31,11 +31,7 @@ final class Polls extends Tymy{
             return;
         
         foreach ($data as $poll) {
-            $poll->webName = \Nette\Utils\Strings::webalize($poll->id . "-" . $poll->caption);
-            if($poll->status == "OPENED" && $poll->canVote && !$poll->voted)
-                $this->getResult()->menuWarningCount++;
-            $this->timeLoad($poll->createdAt);
-            $this->timeLoad($poll->updatedAt);
+            parent::postProccess($poll);
         }
     }
     

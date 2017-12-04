@@ -69,7 +69,9 @@ class SettingsPresenter extends SecuredPresenter {
         if(!is_null($poll)){
             $this->setView("poll");
         } else {
-            //TODO render list
+            $this->template->isNew = false;
+            $polls = $this->polls->reset()->setMenu(FALSE)->getData();
+            $this->template->polls = $polls;
         }
     }
 
@@ -247,6 +249,16 @@ class SettingsPresenter extends SecuredPresenter {
     private function editDiscussion($bind) {
         try {
             $this->discussions
+                    ->recId($bind["id"])
+                    ->edit($bind["changes"]);
+        } catch (\Tymy\Exception\APIException $ex) {
+            $this->handleTapiException($ex);
+        }
+    }
+    
+    private function editPoll($bind) {
+        try {
+            $this->polls
                     ->recId($bind["id"])
                     ->edit($bind["changes"]);
         } catch (\Tymy\Exception\APIException $ex) {

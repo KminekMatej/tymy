@@ -9,7 +9,7 @@ use Nette;
  *
  * @author matej
  */
-final class Poll extends Tymy{
+final class Poll extends PollAbstraction {
     
     const TAPI_NAME = "poll";
     const TSID_REQUIRED = TRUE;
@@ -47,31 +47,7 @@ final class Poll extends Tymy{
     protected function postProcess(){
         if (($data = $this->getData()) == null)
             return;
-        $data->webName = \Nette\Utils\Strings::webalize($data->id . "-" . $data->caption);
-        $this->timeLoad($data->createdAt);
-        $this->timeLoad($data->updatedAt);
-        $data->radio = property_exists($data, "minItems") && property_exists($data, "maxItems") && $data->minItems == 1 && $data->maxItems == 1;
-        if ($data->radio) {
-            foreach ($data->options as $opt) {
-                if ($opt->type != "BOOLEAN") {
-                    $data->radio = FALSE;
-                    break;
-                }
-            }
-        }
-
-        if (property_exists($data, "votes")){
-            $orderedVotes = [];
-            foreach ($data->votes as $vote) {
-                if (!$data->anonymousResults && $vote->userId == $this->user->getId()) {
-                    $data->myVotes[$vote->optionId] = $vote;
-                }
-                $orderedVotes[$vote->userId][$vote->optionId] = $vote;
-                $this->timeLoad($vote->updatedAt);
-            }
-            $data->orderedVotes = $orderedVotes;
-        }
-            
+        parent::postProccess($data);
     }
     
 }
