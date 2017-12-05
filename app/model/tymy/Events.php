@@ -147,10 +147,11 @@ final class Events extends Tymy{
     }
     
     protected function postProcess(){
-        if (($data = $this->getData()) == null)
-            return;
         
         $this->getResult()->menuWarningCount = 0;
+        
+        if (($data = $this->getData()) == null)
+            return;
         
         if($this->getLimit() == null && $this->getOffset() == null && $this->getFrom() == null && $this->getTo() == null){
             $this->setAllEventsCount(count($data));
