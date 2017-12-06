@@ -35,6 +35,7 @@ services:
         - Tymy\Live
         - Tymy\Poll
         - Tymy\Polls
+        - Tymy\PollOption
         - Tymy\PwdLost
         - Tymy\PwdReset
         - Tymy\User
