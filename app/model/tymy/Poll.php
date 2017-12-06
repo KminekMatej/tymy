@@ -70,7 +70,7 @@ final class Poll extends PollAbstraction {
     public function delete(){
         if (!isset($this->recId))
             throw new \Tymy\Exception\APIException('User ID not set!');
-        if (!$this->user->isAllowed("SYS","EVE_DELETE"))
+        if (!$this->user->isAllowed("SYS","ASK.VOTE_UPDATE"))
             throw new \Tymy\Exception\APIException('Permission denied!');
         
         $this->urlStart();
