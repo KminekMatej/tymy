@@ -41,7 +41,15 @@ class TeamPresenter extends SecuredPresenter {
     
     public function renderDefault() {
         try {
-            $this->template->users = $this->users->reset()->setUserType($this->userType)->getData();
+            $users = $this->users->reset()->setUserType($this->userType)->getData();
+            $allMails = [];
+            foreach ($users as $u) {
+                if(property_exists($u, "email")){
+                    $allMails[] = $u->email;
+                }
+            }
+            $this->template->users = $users;
+            $this->template->allMails = join(",", $allMails);
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }

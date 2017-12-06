@@ -24,13 +24,26 @@
                                 <p class="card-text"><strong n:if="property_exists($u, 'fullName')">{$u->fullName}</strong></p>
                             </div>
                         </div>
-                        <a href="{plink Team:player $u->webName}" class="btn btn-light btn-light-bordered btn-sm user" role="button" aria-pressed="true"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                        <div class="btn-group user" role="group" aria-label="Basic example">
+                            <a href="mailto:{$u->email}" n:if="property_exists($u, 'email')" class="btn btn-sm btn-light btn-light-bordered" title="Nový e-mail na {$u->email}" role="button" aria-pressed="true"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+                            <a href="{plink Team:player $u->webName}" class="btn btn-light btn-light-bordered btn-sm" role="button" aria-pressed="true"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                        </div>
+
                     </div>
                 </div>
             </div>
             {if $iterator->getCounter() % 4 == 0}
-                </div><div class="row">
+            </div><div class="row">
             {/if}
             {if $iterator->last}</div>{/if}
         {/foreach}
+    <div class="row mt-3">
+        <div class="col">
+            <div class="card sh-box bg-light">
+                <div class="card-header text-right py-2">
+                    <a href="mailto:{$allMails}" class="btn btn-lg btn-light btn-light-bordered" title="Nový e-mail všem" role="button" aria-pressed="true"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
