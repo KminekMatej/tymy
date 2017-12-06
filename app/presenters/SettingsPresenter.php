@@ -10,6 +10,9 @@ class SettingsPresenter extends SecuredPresenter {
     /** @var \Tymy\Event @inject */
     public $event;
         
+    /** @var \Tymy\Poll @inject */
+    public $poll;
+        
     /** @var \Tymy\Events @inject */
     public $events;
         
@@ -151,6 +154,23 @@ class SettingsPresenter extends SecuredPresenter {
         $this->template->eventTypes = $this->eventTypes->getData();
     }
     
+    public function renderPoll_new() {
+        $this->setLevelCaptions([
+            "2" => ["caption" => "Ankety", "link" => $this->link("Settings:polls")],
+            "3" => ["caption" => "Nová"]
+            ]);
+        $this->template->isNew = true;
+        
+        $polls = [(object)[
+            "id" => 0,
+            "caption" => "",
+            "description" => "",
+        ]];
+        $this->template->polls = $polls;
+        
+        $this->setView("polls");
+    }
+    
     public function renderPoll($poll) {
         //RENDERING POLL DETAIL
         $pollId = $this->parseIdFromWebname($poll);
@@ -233,6 +253,41 @@ class SettingsPresenter extends SecuredPresenter {
         }
     }
 
+    public function handlePollsEdit(){
+        $post = $this->getRequest()->getPost();
+        $binders = $post["binders"];
+        foreach ($binders as $bind) {
+            $this->editPoll($bind);
+        }
+    }
+    
+    public function handlePollCreate(){
+        $pollData = $this->getRequest()->getPost()[1]; // new discussion is always as item 1
+        try {
+            $this->polls->create($pollData);
+        } catch (\Tymy\Exception\APIException $ex) {
+            $this->handleTapiException($ex, "Settings:polls");
+        }
+        $this->redirect('Settings:polls');
+    }
+    
+    public function handlePollEdit(){
+        $bind = $this->getRequest()->getPost();
+        $this->editPoll($bind);
+    }
+    
+    public function handlePollDelete() {
+        $bind = $this->getRequest()->getPost();
+        try {
+            $this->polls
+                    ->recId($bind["id"])
+                    ->delete();
+            $this->redirect("Settings:polls");
+        } catch (\Tymy\Exception\APIException $ex) {
+            $this->handleTapiException($ex);
+        }
+    }
+
     private function editEvent($bind) {
         if(array_key_exists("startTime", $bind["changes"])) $bind["changes"]["startTime"] = gmdate("Y-m-d\TH:i:s\Z", strtotime($bind["changes"]["startTime"]));
         if(array_key_exists("endTime", $bind["changes"])) $bind["changes"]["endTime"] = gmdate("Y-m-d\TH:i:s\Z", strtotime($bind["changes"]["endTime"]));
@@ -258,7 +313,7 @@ class SettingsPresenter extends SecuredPresenter {
     
     private function editPoll($bind) {
         try {
-            $this->polls
+            $this->poll
                     ->recId($bind["id"])
                     ->edit($bind["changes"]);
         } catch (\Tymy\Exception\APIException $ex) {

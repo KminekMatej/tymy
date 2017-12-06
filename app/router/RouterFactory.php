@@ -33,8 +33,9 @@ class RouterFactory
                 $router[] = new Route('nastaveni/diskuze/nova', 'Settings:discussion_new');
                 $router[] = new Route('nastaveni/udalosti', 'Settings:events');
                 $router[] = new Route('nastaveni/udalosti/nova', 'Settings:event_new');
-                $router[] = new Route('nastaveni/tym', 'Settings:team');
                 $router[] = new Route('nastaveni/ankety', 'Settings:polls');
+                $router[] = new Route('nastaveni/ankety/nova', 'Settings:poll_new');
+                $router[] = new Route('nastaveni/tym', 'Settings:team');
                 $router[] = new Route('nastaveni/reporty', 'Settings:reports');
                 $router[] = new Route('nastaveni/opravneni', 'Settings:permissions');
                 $router[] = new Route('nastaveni/aplikace', 'Settings:app');
