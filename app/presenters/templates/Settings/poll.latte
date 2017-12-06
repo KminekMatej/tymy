@@ -5,6 +5,11 @@
 <script src="{$basePath}/js/Binder.js"></script>
 {/block}
 
+{block styles}
+{include parent}
+<link rel='stylesheet' href="{$basePath}/css/table-xs.css" />
+{/block}
+
 {block navbar}
 {control navbar}
 {/block}
@@ -15,7 +20,7 @@
         <div class="col">
             <div class="card sh-box my-3" data-binder-id="{$poll->id}">
                 <div class="card-header">
-                    <h4>Úprava události {$poll->id}</h4>
+                    <h4>Úprava ankety {$poll->id}</h4>
                 </div>
                 <div class="card-body">
                     <table class="table">
@@ -23,32 +28,102 @@
                             <td>
                                 <input type="text" name="caption" value="{$poll->caption}" data-value="{$poll->caption}" class="col-6 form-control" />
                             </td></tr>
-                        <tr><th>Typ</th>
+                        <tr><th>Popis</th><td><textarea name="description" data-value="{$poll->description}" class="form-control col-6">{$poll->description}</textarea></td></tr>
+                        <tr><th>Status</th>
                             <td>
-                                <select name="type" value="{$poll->type}" data-value="{$poll->type}" class="col-6 form-control disabled" disabled>
-                                    <option>Vyberte typ...</option>
-                                    <option n:foreach="$pollTypes as $option" value="{$option->code}" n:attr="selected => $poll->type == $option->code">{$option->caption}</option>
+                                <select name="status" value="{$poll->status}" data-value="{$poll->status}" class="col-6 form-control">
+                                    <option>Vyberte ...</option>
+                                    <option value="DESIGN" n:attr="selected => $poll->status == 'DESIGN'">Design</option>
+                                    <option value="OPENED" n:attr="selected => $poll->status == 'OPENED'">Aktivní</option>
+                                    <option value="CLOSED" n:attr="selected => $poll->status == 'CLOSED'">Uzavřená</option>
                                 </select>
                             </td></tr>
-                        <tr><th>Popis</th><td><textarea name="description" data-value="{$poll->description}" class="form-control col-6">{$poll->description}</textarea></td></tr>
-                        <tr><th>Začátek</th><td><input type="text" name="startTime" value="{$poll->startTime|date:'d.m.Y H:i'}" data-value="{$poll->startTime}" class="col-6 form-control" /></td></tr>
-                        <tr><th>Konec</th><td><input type="text" name="endTime" value="{$poll->endTime|date:'d.m.Y H:i'}" data-value="{$poll->endTime}" class="col-6 form-control" /></td></tr>
-                        <tr><th>Uzávěrka</th><td><input type="text" name="closeTime" value="{$poll->closeTime|date:'d.m.Y H:i'}" data-value="{$poll->closeTime}" class="col-6 form-control" /></td></tr>
-                        <tr><th>Místo</th><td>
-                                            <div class="input-group">
-                                                <input type="text" name="place" value="{$poll->place}" data-value="{$poll->place}" class="col-6 form-control" />
-                                                <span class="input-group-btn"><button style="min-width: 45px" class='btn btn-light btn-light-bordered' onclick='map()' title="Zobrazit na mapě"><i class="fa fa-map-marker" aria-hidden="true"></i></button></span>
-                                            </div></td></tr>
-                        <tr><th>Odkaz</th><td>
-                                            <div class="input-group">
-                                                <input type="text" name="link" value="{$poll->link}" data-value="{$poll->link}" class="col-6 form-control" />
-                                                <span class="input-group-btn"><button style="min-width: 45px" class='btn btn-light btn-light-bordered' onclick='link()' title="Zobrazit v novém okně"><i class="fa fa-external-link" aria-hidden="true"></i></button></span>
-                                            </div></td></tr>
+                        
+                        <tr><th>Minimální počet vyplněných položek</th><td><input type="number" name="minItems" data-value="{$poll->minItems}" value="{$poll->minItems}" class="col-6 form-control" required /></td></tr>
+                        <tr><th>Maximální počet vyplněných položek</th><td><input type="number" name="maxItems" data-value="{$poll->maxItems}" value="{$poll->maxItems}" class="col-6 form-control" required /></td></tr>
+                        
+                        <tr><th>Uvést v hlavním menu</th><td><input type="checkbox" name="mainMenu" n:attr="data-value => $poll->mainMenu ? 'true':'false', checked => $poll->mainMenu" class="col-6 form-control" /></td></tr>
+                        <tr><th>Anonymní hlasování</th><td><input type="checkbox" name="anonymousResults" n:attr="data-value => $poll->anonymousResults ? 'true':'false', checked => $poll->anonymousResults" class="col-6 form-control" /></td></tr>
+                        <tr><th>Povolit změnu názoru</th><td><input type="checkbox" name="changeableVotes" n:attr="data-value => $poll->changeableVotes ? 'true':'false', checked => $poll->changeableVotes" class="col-6 form-control" /></td></tr>
+
+                        <tr><th>Zobrazit výsledky</th>
+                            <td>
+                                <select name="showResults" value="{$poll->showResults}" data-value="{$poll->showResults}" class="col-6 form-control">
+                                    <option>Vyberte ...</option>
+                                    <option value="NEVER" n:attr="selected => $poll->showResults == 'NEVER'">Nikdy</option>
+                                    <option value="ALWAYS" n:attr="selected => $poll->showResults == 'ALWAYS'">Vždy</option>
+                                    <option value="AFTER_VOTE" n:attr="selected => $poll->showResults == 'AFTER_VOTE'">Hlasujícím</option>
+                                    <option value="WHEN_CLOSED" n:attr="selected => $poll->showResults == 'WHEN_CLOSED'">Po uzavření</option>
+                                </select>
+                            </td></tr>
+                        <tr><th>Hlasovat může</th>
+                            <td>
+                                <select name="voteRightName" class="col-6 form-control disabled" disabled>
+                                    <option value="">-- Všichni --</option>
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr><th>Prohlížet výsledky může</th>
+                            <td>
+                                <select name="resultRightName" class="col-6 form-control disabled" disabled>
+                                    <option value="">-- Všichni --</option>
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr><th>Zastupovat může</th>
+                            <td>
+                                <select name="alienVoteRightName" class="col-6 form-control disabled" disabled>
+                                    <option value="">-- Všichni --</option>
+                                </select>
+                            </td>
+                        </tr>
                     </table>
                 </div>
                 <div class="card-footer text-right">
-                    <button n:if="$user->isAllowed('SYS','EVE_DELETE')" href="{link pollDelete!}" class="btn btn-danger mx-2 binder-delete-btn" title="Smazat"><i class="fa fa-times" aria-hidden="true"></i></button>
-                    <button n:if="$user->isAllowed('SYS','EVE_UPDATE')" href="{link pollEdit!}" class="btn btn-lg btn-primary binder-save-btn" title="Uložit"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                    <button n:if="$user->isAllowed('SYS','ASK.VOTE_UPDATE')" href="{link pollEdit!}" class="btn btn-lg btn-primary binder-save-btn" title="Uložit"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                    <button n:if="$user->isAllowed('SYS','ASK.VOTE_DELETE')" href="{link pollDelete!}" class="btn btn-danger mx-2 binder-delete-btn" title="Smazat"><i class="fa fa-times" aria-hidden="true"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+                
+    <div class="row">
+        <div class="col">
+            <div class="card sh-box my-3">
+                <div class="card-header">
+                    <h4>Položky ankety</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row my-1" n:foreach="$poll->options as $opt" data-binder-id="{$opt->id}" data-option>
+                        <div class="col-5 input-group">
+                            <span class="input-group-addon form-control-sm" id="input-title">Název:</span>
+                            <input name="caption" class="form-control form-control-sm" type="text" data-value="{$opt->caption}" value="{$opt->caption}" aria-describedby="input-title" />
+                        </div>
+                        <div class="col-5 input-group">
+                            <span class="input-group-addon form-control-sm" id="type-title">Typ:</span>
+                            <select name="type" class="form-control form-control-sm" data-value="{$opt->type}" aria-describedby="type-title" >
+                                <option value="TEXT" n:attr="selected => $opt->type == 'TEXT'">Text</option>
+                                <option value="NUMBER" n:attr="selected => $opt->type == 'NUMBER'">Číslo</option>
+                                <option value="BOOLEAN" n:attr="selected => $opt->type == 'BOOLEAN'">Ano / Ne</option>
+                            </select>
+                        </div>
+                        <div class="col-2 text-right">
+                            <button n:if="$user->isAllowed('SYS','ASK.VOTE_UPDATE')" href="{link pollOptionEdit!}" class="btn btn-sm btn-primary binder-save-btn" title="Uložit"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                            <button n:if="$user->isAllowed('SYS','ASK.VOTE_DELETE')" href="{link pollOptionDelete!}" class="btn btn-sm btn-danger mx-1 binder-delete-btn" title="Smazat"><i class="fa fa-times" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                    <div class="row my-3 text-center">
+                        <div class="col">
+                            <button n:if="$user->isAllowed('SYS','ASK.VOTE_CREATE')" class="btn btn-sm btn-outline-success" onclick="createNewRow()" title="Vytvořit novou položku">
+                                <i class="fa fa-plus" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-right">
+                    
                 </div>
             </div>
         </div>

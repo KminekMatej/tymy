@@ -13,6 +13,9 @@ class SettingsPresenter extends SecuredPresenter {
     /** @var \Tymy\Poll @inject */
     public $poll;
         
+    /** @var \Tymy\PollOption @inject */
+    public $pollOption;
+        
     /** @var \Tymy\Events @inject */
     public $events;
         
@@ -174,7 +177,7 @@ class SettingsPresenter extends SecuredPresenter {
     public function renderPoll($poll) {
         //RENDERING POLL DETAIL
         $pollId = $this->parseIdFromWebname($poll);
-        $pollObj = $this->event->reset()->recId($pollId)->getData();
+        $pollObj = $this->poll->reset()->recId($pollId)->getData();
         $this->setLevelCaptions(["3" => ["caption" => $pollObj->caption, "link" => $this->link("Settings:polls", $pollObj->webName)]]);
         $this->template->poll = $pollObj;
     }
@@ -288,6 +291,51 @@ class SettingsPresenter extends SecuredPresenter {
         }
     }
 
+    public function handlePollOptionsEdit($poll){
+        $post = $this->getRequest()->getPost();
+        $binders = $post["binders"];
+        $pollId = $this->parseIdFromWebname($poll);
+        foreach ($binders as $bind) {
+            $bind["pollId"] = $pollId;
+            $this->editPollOption($bind);
+        }
+    }
+    
+    public function handlePollOptionCreate($poll){
+        $pollData = $this->getRequest()->getPost()[1]; // new poll option is always as item 1
+        $pollId = $this->parseIdFromWebname($poll);
+        try {
+            $this->pollOption
+                    ->recId($pollId)
+                    ->create($pollData);
+        } catch (\Tymy\Exception\APIException $ex) {
+            $this->handleTapiException($ex, "Settings:polls", $poll);
+        }
+    }
+    
+    public function handlePollOptionEdit($poll) {
+        $bind = $this->getRequest()->getPost();
+        $bind["pollId"] = $this->parseIdFromWebname($poll);
+        try {
+            $this->editPollOption($bind);
+        } catch (\Tymy\Exception\APIException $ex) {
+            $this->handleTapiException($ex, "Settings:polls", $poll);
+        }
+    }
+
+    public function handlePollOptionDelete($poll) {
+        $bind = $this->getRequest()->getPost();
+        $bind["pollId"] = $this->parseIdFromWebname($poll);
+        try {
+            $this->pollOption
+                    ->setOptionId($bind["id"])
+                    ->recId($bind["pollId"])
+                    ->delete();
+        } catch (\Tymy\Exception\APIException $ex) {
+            $this->handleTapiException($ex, "Settings:polls", $poll);
+        }
+    }
+
     private function editEvent($bind) {
         if(array_key_exists("startTime", $bind["changes"])) $bind["changes"]["startTime"] = gmdate("Y-m-d\TH:i:s\Z", strtotime($bind["changes"]["startTime"]));
         if(array_key_exists("endTime", $bind["changes"])) $bind["changes"]["endTime"] = gmdate("Y-m-d\TH:i:s\Z", strtotime($bind["changes"]["endTime"]));
@@ -297,7 +345,7 @@ class SettingsPresenter extends SecuredPresenter {
                     ->recId($bind["id"])
                     ->edit($bind["changes"]);
         } catch (\Tymy\Exception\APIException $ex) {
-            $this->handleTapiException($ex);
+            $this->handleTapiException($ex, "Settings:events");
         }
     }
     
@@ -307,7 +355,7 @@ class SettingsPresenter extends SecuredPresenter {
                     ->recId($bind["id"])
                     ->edit($bind["changes"]);
         } catch (\Tymy\Exception\APIException $ex) {
-            $this->handleTapiException($ex);
+            $this->handleTapiException($ex, "Settings:discussions");
         }
     }
     
@@ -317,8 +365,21 @@ class SettingsPresenter extends SecuredPresenter {
                     ->recId($bind["id"])
                     ->edit($bind["changes"]);
         } catch (\Tymy\Exception\APIException $ex) {
-            $this->handleTapiException($ex);
+            $this->handleTapiException($ex, "Settings:polls");
         }
     }
     
+    private function editPollOption($bind) {
+        if ($bind["id"] == -1) {
+            $this->pollOption
+                    ->recId($bind["pollId"])
+                    ->create([$bind["changes"]]);
+        } else {
+            $this->pollOption
+                    ->recId($bind["pollId"])
+                    ->setOptionId($bind["id"])
+                    ->edit($bind["changes"]);
+        }
+    }
+
 }
