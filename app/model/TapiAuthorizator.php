@@ -40,6 +40,12 @@ class TapiAuthorizator implements Nette\Security\IAuthorizator {
                 return in_array($this->role, ["ATT"]) ? TapiAuthorizator::ALLOW : TapiAuthorizator::DENY;
             case "DSSETUP":
                 return in_array($this->role, ["SUPER"]) ? TapiAuthorizator::ALLOW : TapiAuthorizator::DENY;
+            case "ASK.VOTE_UPDATE":
+                return in_array($this->role, ["SUPER"]) ? TapiAuthorizator::ALLOW : TapiAuthorizator::DENY;
+            case "ASK.VOTE_DELETE":
+                return in_array($this->role, ["SUPER"]) ? TapiAuthorizator::ALLOW : TapiAuthorizator::DENY;
+            case "ASK.VOTE_CREATE":
+                return in_array($this->role, ["SUPER"]) ? TapiAuthorizator::ALLOW : TapiAuthorizator::DENY;
             default:
                 return TapiAuthorizator::DENY;
         }
