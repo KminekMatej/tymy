@@ -60,32 +60,18 @@
                     <h6 class="card-subtitle mb-2 text-muted">{$poll->description}</h6>
                     <div class="container">
                         <div class="row">
-                            {foreach $poll->options as $opt}
-                                <div class="col-3 py-3 option" id="option-{$opt->id}">
-                                    <h5 n:if="!$poll->radio">{$opt->caption}</h5>
-                                    {if $opt->type == 'TEXT'}
-                                        <input type="text" value="{ifset $poll->myVotes[$opt->id]}{$poll->myVotes[$opt->id]->stringValue}{/ifset}" class="form-control" />
-                                    {/if}
-                                    {if $opt->type == 'NUMBER'}
-                                        <input type="number" value="{ifset $poll->myVotes[$opt->id]}{$poll->myVotes[$opt->id]->numericValue}{/ifset}" class="form-control" />
-                                    {/if}
-                                    {if $opt->type == 'BOOLEAN'}
-                                        {if $poll->radio}
-                                            <div class="btn-group">
-                                                <button n:class="btn,btn-outline-warning,isset($poll->myVotes[$opt->id]) && $poll->myVotes[$opt->id]->booleanValue ? active" style="min-width:69px" data-value="true" onclick="checkBool(this)">{$opt->caption}</button>
-                                            </div>
-                                        {else}
-                                            <div class="btn-group">
-                                                <button n:class="btn,btn-outline-success,isset($poll->myVotes[$opt->id]) && $poll->myVotes[$opt->id]->booleanValue ? active" style="width:69px" data-value="true" onclick="checkBool(this)">ANO</button>
-                                                <button n:class="btn,btn-outline-danger,isset($poll->myVotes[$opt->id]) && !$poll->myVotes[$opt->id]->booleanValue ? active" style="width:69px" data-value="false" onclick="checkBool(this)">NE</button>
-                                            </div>
-                                        {/if}
-                                        
-                                    {/if}
-
+                            <div n:foreach="$poll->options as $opt" class="col-3 py-3 option" id="option-{$opt->id}">
+                                <h5 n:if="!$poll->radio">{$opt->caption}</h5>
+                                <input n:if="$opt->type == 'TEXT'" type="text" value="{ifset $poll->myVotes[$opt->id]}{$poll->myVotes[$opt->id]->stringValue}{/ifset}" class="form-control" />
+                                <input n:if="$opt->type == 'NUMBER'" type="number" value="{ifset $poll->myVotes[$opt->id]}{$poll->myVotes[$opt->id]->numericValue}{/ifset}" class="form-control" />
+                                <div n:if="$opt->type == 'BOOLEAN'" class="btn-group">
+                                    <button n:if="$poll->radio" n:class="btn,btn-outline-warning,isset($poll->myVotes[$opt->id]) && $poll->myVotes[$opt->id]->booleanValue ? active" style="min-width:69px" data-value="true" onclick="checkBool(this)">{$opt->caption}</button>
+                                    <button n:if="!$poll->radio" n:class="btn,btn-outline-success,isset($poll->myVotes[$opt->id]) && $poll->myVotes[$opt->id]->booleanValue ? active" style="width:69px" data-value="true" onclick="checkBool(this)">ANO</button>
+                                    <button n:if="!$poll->radio" n:class="btn,btn-outline-danger,isset($poll->myVotes[$opt->id]) && !$poll->myVotes[$opt->id]->booleanValue ? active" style="width:69px" data-value="false" onclick="checkBool(this)">NE</button>
                                 </div>
-                            {/foreach}
-                        </div></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-footer text-right">
                     <button onclick="updatePoll(this, {link vote! $poll->id})" class="btn btn-primary">Hlasovat</button>
@@ -97,12 +83,7 @@
 
     <div class="row" n:snippet="poll-results">
     {*SHOW RESULTS ONLY UNDER SPECIFIC CONDITIONS*}
-    {var $show = FALSE}
-    {if $poll->showResults == 'AFTER_VOTE' && $poll->voted}{var $show = TRUE}{/if}
-    {if $poll->showResults == 'WHEN_CLOSED' && $poll->status == 'CLOSED'}{var $show = TRUE}{/if}
-    {if $poll->showResults == 'ALWAYS'}{var $show = TRUE}{/if}
-    {if $show}
-        <div class="col my-3">
+        <div n:if="$poll->canSeeResults" class="col my-3">
             <div class="card sh-box text-white bg-dark">
                 <div class="card-header">
                     <h4 class="card-title">Výsledky hlasování</h4>
@@ -111,38 +92,25 @@
                             <th>Uživatel</th>
                             <th n:foreach="$poll->options as $option">{$option->caption}</th>
                         </tr>
-                        {dump $poll}
-                        {foreach $poll->orderedVotes as $userId => $vote}
-                            <tr data-vote n:attr="data-gender => !$poll->anonymousResults ? $users->data[$userId]->gender, data-status => !$poll->anonymousResults ? $users->data[$userId]->status">
-                                <th>
-                                    <a n:if="!$poll->anonymousResults" href="{plink Team:player $users->data[$userId]->webName}">{$users->data[$userId]->displayName}</a>
-                                    <a n:if="$poll->anonymousResults" href="#">Anonym</a>
-                                </th>
-                                    {foreach $poll->options as $option}
-                                    {ifset $vote[$option->id]}
-                                        {ifset $vote[$option->id]->numericValue}
-                                            <td data-option-type="{$option->type}" data-option-id="{$option->id}" data-option-value="{$vote[$option->id]->numericValue}">{$vote[$option->id]->numericValue}</td>
-                                        {/ifset}
-                                        {ifset $vote[$option->id]->stringValue}
-                                            <td data-option-type="{$option->type}" data-option-id="{$option->id}" data-option-value="{$vote[$option->id]->stringValue}">{$vote[$option->id]->stringValue}</td>
-                                        {/ifset}
-                                        {ifset $vote[$option->id]->booleanValue}
-                                            {if $poll->radio}
-                                                <td data-option-type="{$option->type}" data-option-id="{$option->id}" data-option-value="true"><span n:class="badge, badge-warning">{$option->caption}</span></td>
-                                            {else}
-                                                <td data-option-type="{$option->type}" data-option-id="{$option->id}" data-option-value="{$vote[$option->id]->booleanValue ? 'true' : 'false'}"><span n:class="badge, $vote[$option->id]->booleanValue ? 'badge-success' : 'badge-danger' ">{if $vote[$option->id]->booleanValue}ANO{else}NE{/if}</span></td>
-                                            {/if}
-                                        {/ifset}
-                                    {else}
-                                        <td data-option-type="{$option->type}" data-option-id="{$option->id}" data-option-value></td>
-                                    {/ifset}
-                                {/foreach}
-                            </tr>
-                        {/foreach}
+                        <tr n:foreach="$poll->orderedVotes as $userId => $vote" data-vote n:attr="data-gender => !$poll->anonymousResults ? $users->data[$userId]->gender, data-status => !$poll->anonymousResults ? $users->data[$userId]->status">
+                            <th>
+                                <a n:if="!$poll->anonymousResults" href="{plink Team:player $users->data[$userId]->webName}">{$users->data[$userId]->displayName}</a>
+                                <a n:if="$poll->anonymousResults">Anonym</a>
+                            </th>
+                                {foreach $poll->options as $option}
+                                {ifset $vote[$option->id]}
+                                    <td n:ifset="$vote[$option->id]->numericValue" data-option-type="{$option->type}" data-option-id="{$option->id}" data-option-value="{$vote[$option->id]->numericValue}">{$vote[$option->id]->numericValue}</td>
+                                    <td n:ifset="$vote[$option->id]->stringValue" data-option-type="{$option->type}" data-option-id="{$option->id}" data-option-value="{$vote[$option->id]->stringValue}">{$vote[$option->id]->stringValue}</td>
+                                    <td n:ifset="$vote[$option->id]->booleanValue" n:if="$poll->radio" data-option-type="{$option->type}" data-option-id="{$option->id}" data-option-value="true"><span n:class="badge, badge-warning">{$option->caption}</span></td>
+                                    <td n:ifset="$vote[$option->id]->booleanValue" n:if="!$poll->radio" data-option-type="{$option->type}" data-option-id="{$option->id}" data-option-value="{$vote[$option->id]->booleanValue ? 'true' : 'false'}"><span n:class="badge, $vote[$option->id]->booleanValue ? 'badge-success' : 'badge-danger' ">{if $vote[$option->id]->booleanValue}ANO{else}NE{/if}</span></td>
+                                {else}
+                                    <td data-option-type="{$option->type}" data-option-id="{$option->id}" data-option-value></td>
+                                {/ifset}
+                            {/foreach}
+                        </tr>
                     </table>
                 </div>
             </div>
         </div>
-    {/if}
     </div>
 </div>
