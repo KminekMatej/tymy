@@ -7,6 +7,11 @@
 {block content}
 
 <div class="container users">
+        <div class="row mt-2">
+        <div class="col text-right">
+            <div class="settings-bar"><a href="mailto:{$allMails}" class="btn btn-lg btn-light btn-light-bordered" title="Nový e-mail všem" role="button" aria-pressed="true"><i class="fa fa-envelope" aria-hidden="true"></i></a></div>
+        </div>
+    </div>
     {foreach $users as $u}
         {if $iterator->first}<div class="row">{/if}
             <div class="col-sm-3 mt-3" cnt="{$iterator->getCounter()}">
@@ -37,13 +42,4 @@
             {/if}
             {if $iterator->last}</div>{/if}
         {/foreach}
-    <div class="row mt-3">
-        <div class="col">
-            <div class="card sh-box bg-light">
-                <div class="card-header text-right py-2">
-                    <a href="mailto:{$allMails}" class="btn btn-lg btn-light btn-light-bordered" title="Nový e-mail všem" role="button" aria-pressed="true"><i class="fa fa-envelope" aria-hidden="true"></i></a>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
