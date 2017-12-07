@@ -43,6 +43,12 @@ a[href^="#error:"] {
 	color: white;
 }
 
+div.settings-bar{
+    background-color: rgba(0,0,0,0.3);
+    border-radius: 5px;
+    padding: 8px;
+}
+
 form th, form td {
 	vertical-align: top;
 	font-weight: normal;

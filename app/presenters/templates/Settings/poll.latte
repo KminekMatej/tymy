@@ -98,12 +98,12 @@
                 <div class="card-body">
                     <div class="row my-1" n:foreach="$poll->options as $opt" data-binder-id="{$opt->id}" data-option>
                         <div class="col-5 input-group">
-                            <span class="input-group-addon form-control-sm" id="input-title">Název:</span>
-                            <input name="caption" class="form-control form-control-sm" type="text" data-value="{$opt->caption}" value="{$opt->caption}" aria-describedby="input-title" />
+                            <span class="input-group-addon form-control-sm">Název:</span>
+                            <input name="caption" class="form-control form-control-sm" type="text" data-value="{$opt->caption}" value="{$opt->caption}" />
                         </div>
                         <div class="col-5 input-group">
-                            <span class="input-group-addon form-control-sm" id="type-title">Typ:</span>
-                            <select name="type" class="form-control form-control-sm" data-value="{$opt->type}" aria-describedby="type-title" >
+                            <span class="input-group-addon form-control-sm">Typ:</span>
+                            <select name="type" class="form-control form-control-sm" data-value="{$opt->type}">
                                 <option value="TEXT" n:attr="selected => $opt->type == 'TEXT'">Text</option>
                                 <option value="NUMBER" n:attr="selected => $opt->type == 'NUMBER'">Číslo</option>
                                 <option value="BOOLEAN" n:attr="selected => $opt->type == 'BOOLEAN'">Ano / Ne</option>
