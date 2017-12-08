@@ -72,6 +72,8 @@ abstract class TapiAbstraction {
     
     abstract function composeUrl();
     
+    protected abstract function postProcess();
+    
     public function __construct(\App\Model\Supplier $supplier, \App\Model\TapiAuthenticator $tapiAuthenticator, Nette\Security\User $user, Nette\Http\Session $session) {
         $this->initTapiDebugPanel();
         $this->tapiAuthenticator = $tapiAuthenticator;
@@ -101,23 +103,22 @@ abstract class TapiAbstraction {
         if (!$this->dataReady || is_null($this->session))
             return null;
         $sessionSection = $this->session->getSection(self::SESSION_SECTION);
-        $className = get_class($this);
-        $sessionSection[$className] = new CachedResult(date("U") + $this->cachingTimeout, $this->data);
+        $sessionSection[$this->getClassCacheName()] = new CachedResult(date("U") + $this->cachingTimeout, $this->data);
     }
     
-    private function resetCache(){
+    public function resetCache(){
         if (is_null($this->session))
             return null;
         $sessionSection = $this->session->getSection(self::SESSION_SECTION);
-        unset($sessionSection[get_class($this)]);
+        unset($sessionSection[$this->getClassCacheName()]);
+        return $this;
     }
     
     private function loadFromCache(){
         if (is_null($this->session))
             return null;
         $sessionSection = $this->session->getSection(self::SESSION_SECTION);
-        $className = get_class($this);
-        $cachedResult = $sessionSection[$className];
+        $cachedResult = $sessionSection[$this->getClassCacheName()];
         if($cachedResult == null || !$cachedResult->isValid())
             return null;
         $this->data = $cachedResult->load();
@@ -164,6 +165,7 @@ abstract class TapiAbstraction {
         if($this->resultStatus->isValid()){
             $this->data = $this->resultStatus->getData();
             $this->dataReady = TRUE;
+            $this->postProcess();
             $this->saveToCache();
         }
         
@@ -258,9 +260,28 @@ abstract class TapiAbstraction {
         if($this->data == null){
             $this->request();
         }
-            
+        $sessionSection = $this->session->getSection(self::SESSION_SECTION);
+        foreach ($sessionSection as $key => $val) {//TODO to be removed
+            Debugger::barDump($val, "Cached $key");
+        }
         return $this->data;
     }
+    
+    private function getClassCacheName(){
+        $className = get_class($this);
+        if($this->getId() != null)
+            $className .= ":" . $this->getId ();
+        return $className;
+    }
 
+    protected function timeLoad(&$date) {
+        $date = date('c',strtotime("$date UTC"));
+        return $date;
+    }
+    
+    protected function timeSave(&$date) {
+        $date = gmdate('c',strtotime("$date"));
+        return $date;
+    }
 
 }

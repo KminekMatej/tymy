@@ -9,7 +9,7 @@ use Tymy\Exception\APIException;
  *
  * @author kminekmatej created on 8.12.2017, 10:39:17
  */
-class DiscussionDetail extends DiscussionResource {
+class Discussions extends DiscussionResource {
     
     public function init() {
         $this->setCachingTimeout(600);
@@ -22,7 +22,8 @@ class DiscussionDetail extends DiscussionResource {
     }
 
     protected function postProcess() {
-        $this->postProcessDiscussion($this->getData());
+        parent::postProcess();
+        $this->timeLoad($this->getData()->updatedAt);
     }
 
 

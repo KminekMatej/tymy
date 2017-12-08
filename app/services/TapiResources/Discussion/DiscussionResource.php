@@ -11,8 +11,9 @@ use Nette\Utils\Strings;
  */
 abstract class DiscussionResource extends TapiAbstraction {
     
-    protected function postProcess() {
-        $this->getData()->webName = Strings::webalize($this->getData()->caption);    
+    protected function postProcessDiscussion($discussion) {
+        $discussion->webName = Strings::webalize($discussion->caption);
+        $this->timeLoad($discussion->updatedAt);
     }
     
 }

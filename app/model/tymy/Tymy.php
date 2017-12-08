@@ -256,7 +256,7 @@ abstract class Tymy extends Nette\Object{
         return $this->method;
     }
 
-        private function apiResponse($response, $relogin) {
+    private function apiResponse($response, $relogin) {
         switch ($response->status) {
             case "ERROR":
                 switch ($response->statusMessage) { //TODO add some another reasons when they appear
