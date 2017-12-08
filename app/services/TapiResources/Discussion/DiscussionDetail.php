@@ -12,7 +12,7 @@ use Tymy\Exception\APIException;
 class DiscussionDetail extends DiscussionResource {
     
     public function init() {
-        //everything initializeded in constructor properly
+        $this->setCachingTimeout(600);
     }
     
     public function composeUrl() {
