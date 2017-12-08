@@ -12,7 +12,7 @@ use Tymy\Exception\APIException;
 class DiscussionDetail extends DiscussionResource {
     
     public function init() {
-        //everything inited in constructor properly
+        //everything initializeded in constructor properly
     }
     
     public function composeUrl() {
@@ -21,6 +21,10 @@ class DiscussionDetail extends DiscussionResource {
         return $this;
     }
 
-    
+    protected function postProcess() {
+        parent::postProcess();
+        $this->timeLoad($this->getData()->updatedAt);
+    }
+
 
 }
