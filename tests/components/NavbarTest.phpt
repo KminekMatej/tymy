@@ -137,9 +137,9 @@ class NavbarTest extends Tester\TestCase {
         if($this->user->isAllowed('settings','team')) $settingsMenuDropdownCount++;
         if($this->user->isAllowed('settings','polls')) $settingsMenuDropdownCount++;
         // TO BE UNCOMMENTED WHEN ITS READY
-        //if($this->user->isAllowed('settings','reports')) $settingsMenuDropdownCount++;
+        if($this->user->isAllowed('settings','reports')) $settingsMenuDropdownCount++;
         // TO BE UNCOMMENTED WHEN ITS READY
-        //if($this->user->isAllowed('settings','permissions')) $settingsMenuDropdownCount++;
+        if($this->user->isAllowed('settings','permissions')) $settingsMenuDropdownCount++;
         if($this->user->isAllowed('settings','app')) $settingsMenuDropdownCount++;
         
         Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")[4]->div->a), $settingsMenuDropdownCount); //check if the settings are all displayed
