@@ -103,6 +103,7 @@ class APIPollTest extends ITapiTest {
             Assert::type("string",$opt->type);
             Assert::true(in_array($opt->type, ["TEXT", "NUMBER", "BOOLEAN"]));
         }
+        var_dump($this->poll->result->data);
         foreach ($this->poll->result->data->votes as $vote) {
             Assert::type("int",$vote->pollId);
             Assert::same($pollId,$vote->pollId);
@@ -113,36 +114,6 @@ class APIPollTest extends ITapiTest {
             Assert::type("int",$vote->optionId);
             Assert::true($vote->optionId > 0);
             
-            $found = FALSE;
-            foreach ($this->poll->result->data->options as $option) {
-                if($option->id == $vote->optionId){
-                    $found = TRUE;
-                    switch ($option->type) {
-                        case "TEXT":
-                            Assert::true(property_exists($vote, "stringValue"));
-                            Assert::true(!property_exists($vote, "numericValue"));
-                            Assert::true(!property_exists($vote, "booleanValue"));
-                            Assert::type("string",$vote->stringValue);
-                            break;
-                        case "NUMBER":
-                            Assert::true(!property_exists($vote, "stringValue"));
-                            Assert::true(property_exists($vote, "numericValue"));
-                            Assert::true(!property_exists($vote, "booleanValue"));
-                            Assert::type("int",$vote->numericValue);
-                            break;
-                        case "BOOLEAN":
-                            Assert::true(!property_exists($vote, "stringValue"));
-                            Assert::true(!property_exists($vote, "numericValue"));
-                            Assert::true(property_exists($vote, "booleanValue"));
-                            Assert::type("bool",$vote->booleanValue);
-                            break;
-                        default:
-                            Assert::true(FALSE, "Vote is neither text, number or bool");
-                    }
-                    break;
-                }
-            }
-            Assert::true($found);
             Assert::type("int",$vote->updatedById);
             Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $vote->updatedAt)); //timezone correction check
         }
