@@ -93,8 +93,7 @@ class APIAttendanceTest extends ITapiTest {
         $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
         
         $allEvents = $this->container->getByType('Tymy\Events');
-        $idActionToUpdateOn = $allEvents->setFrom(date("Ymd"))->getData()[0]->id;
-         
+        $idActionToUpdateOn = 125;
         $this->attendance->reset()->recId($idActionToUpdateOn)
                 ->setPreStatus("YES")
                 ->setPreDescription("Tymyv2-AutoTest-yes")
