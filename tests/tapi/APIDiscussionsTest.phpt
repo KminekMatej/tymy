@@ -38,6 +38,22 @@ class APIDiscussionsTest extends ITapiTest {
         parent::setUp();
     }
     
+    public function idWebnameProvider(){
+        return [
+            ["tymova-diskuze", 1],
+            ["testovaci-diskuze", 2],
+            ["oznameni", 3],
+            ["api", 4],
+            ["bugy", 5]
+        ];
+    }
+    
+    /** @dataProvider idWebnameProvider */
+    function testIdWebnameParse($webname, $idExpected){
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        Assert::equal($idExpected, $this->discussions->getIdFromWebname($webname));
+    }
+    
     /* TEST GETTERS AND SETTERS */ 
     
     function testWithNew(){
