@@ -21,6 +21,11 @@ class APIPollTest extends ITapiTest {
     /** @var \Tymy\Poll */
     private $poll;
 
+    /** @var \Tymy\PollOption */
+    private $pollOption;
+    
+    private $createdPollId;
+
     function __construct(Nette\DI\Container $container) {
         $this->container = $container;
     }
@@ -31,12 +36,129 @@ class APIPollTest extends ITapiTest {
     
     protected function setUp() {
         $this->poll = $this->container->getByType('Tymy\Poll');
+        $this->pollOption = $this->container->getByType('Tymy\PollOption');
         parent::setUp();
     }
     
     /* TEST GETTERS AND SETTERS */ 
     
     /* TEST TAPI FUNCTIONS */ 
+    
+    /* TAPI : CREATE */
+    
+    function testCreateFailsNoData(){
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception(function(){$this->poll->reset()->create(NULL);} , "\Tymy\Exception\APIException", "Poll not set!");
+    }
+    
+    function testCreateFailsNoRights(){
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        Assert::exception(function(){$this->poll->reset()->create(["caption" => "Autotest " . rand(0, 100)]);} , "\Tymy\Exception\APIException", "Permission denied!");
+    }
+    
+    function testCreateSuccess() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user_admin"], $GLOBALS["testedTeam"]["pass_admin"]);
+        $pollCaption = "Autotest " . rand(0, 100);
+        $this->poll->reset()->create(["caption" => $pollCaption]);
+        
+        Assert::true(is_object($this->poll));
+        Assert::true(is_object($this->poll->result));
+        Assert::type("string",$this->poll->result->status);
+        Assert::same("OK",$this->poll->result->status);
+        $data = $this->poll->result->data;
+        Assert::type("int",$data->id);
+        $this->createdPollId = $data->id;
+        Assert::equal($pollCaption,$data->caption);
+        Assert::type("int",$data->createdById);
+        Assert::equal(-1,$data->minItems);
+        Assert::equal(-1,$data->maxItems);
+        Assert::true($data->changeableVotes);
+        Assert::true(!$data->mainMenu);
+        Assert::true(!$data->anonymousResults);
+        Assert::equal("NEVER",$data->showResults);
+        Assert::equal("DESIGN",$data->status);
+        Assert::true($data->resultRightName == "");
+        Assert::true($data->voteRightName == "");
+        Assert::true($data->alienVoteRightName == "");
+        Assert::true($data->resultRightName == "");
+        Assert::equal(0,$data->orderFlag);
+        Assert::true(!$data->voted);
+    }
+    
+    /* TAPI : EDIT */
+    
+    function testEditFailsNoRecId() {
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception(function(){$this->poll->reset()->edit(NULL);} , "\Tymy\Exception\APIException", "Poll ID not set!");
+    }
+    
+    function testEditFailsNoFields() {
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception(function(){$this->poll->reset()->recId($this->createdPollId)->edit(NULL);} , "\Tymy\Exception\APIException", "Fields to edit not set!");
+    }
+    
+    function testEditFailsNoRights() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        Assert::exception(function(){$this->poll->reset()->recId($this->createdPollId)->edit(["caption" => "Autotest " . rand(100, 200)]);} , "\Tymy\Exception\APIException", "Permission denied!");
+    }
+    
+    function testEditSuccess() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user_admin"], $GLOBALS["testedTeam"]["pass_admin"]);
+        $pollCaption = "Autotest " . rand(100, 200);
+        $this->poll->reset()->recId($this->createdPollId)->edit(["caption" => $pollCaption]);
+        
+        Assert::true(is_object($this->poll));
+        Assert::true(is_object($this->poll->result));
+        Assert::type("string",$this->poll->result->status);
+        Assert::same("OK",$this->poll->result->status);
+        Assert::equal($this->createdPollId,$this->poll->result->data->id);
+        Assert::type("string",$this->poll->result->data->caption);
+        Assert::equal($pollCaption,$this->poll->result->data->caption);
+    }
+    
+    /* TAPI : CREATE POLL OPTION */
+    
+    function testCreatePollOptionFailsNoPollId(){
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception(function(){$this->pollOption->reset()->create(NULL);} , "\Tymy\Exception\APIException", "Poll ID not set!");
+    }
+    
+    function testCreatePollOptionFailsNoData(){
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception(function(){$this->pollOption->reset()->recId($this->createdPollId)->create(NULL);} , "\Tymy\Exception\APIException", "Fields to create not set!");
+    }
+    
+    function testCreatePollOptionFailsNoRights(){
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        Assert::exception(function(){$this->pollOption->reset()->recId($this->createdPollId)->create([["caption"=>"Polozka text 1", "type"=>"TEXT"]]);} , "\Tymy\Exception\APIException", "Permission denied!");
+    }
+    
+    function testCreatePollOptionSuccess(){
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user_admin"], $GLOBALS["testedTeam"]["pass_admin"]);
+        $this->pollOption->reset()->recId($this->createdPollId)->create([["caption"=>"Polozka text 1", "type"=>"TEXT"],["caption"=>"Polozka num 1", "type"=>"NUMBER"],["caption"=>"Polozka boolean 1", "type"=>"BOOLEAN"]]);
+    }
+    
+    /* TAPI : DELETE */
+    
+    function testDeleteFailsNoRecId() {
+        $this->userTestAuthenticate("TESTLOGIN", "TESTPASS");
+        Assert::exception(function(){$this->poll->reset()->delete();} , "\Tymy\Exception\APIException", "Poll ID not set!");
+    }
+    
+    function testDeleteFailsNoRights() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        Assert::exception(function(){$this->poll->reset()->recId($this->createdPollId)->delete();} , "\Tymy\Exception\APIException", "Permission denied!");
+    }
+    
+    function testDeleteSuccess() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user_admin"], $GLOBALS["testedTeam"]["pass_admin"]);
+        $this->poll->reset()->recId($this->createdPollId)->delete();
+        
+        Assert::true(is_object($this->poll));
+        Assert::true(is_object($this->poll->result));
+        Assert::type("string",$this->poll->result->status);
+        Assert::same("OK",$this->poll->result->status);
+    }
     
     /* TAPI : SELECT */
 
