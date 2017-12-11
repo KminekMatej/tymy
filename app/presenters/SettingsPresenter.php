@@ -178,6 +178,10 @@ class SettingsPresenter extends SecuredPresenter {
         //RENDERING POLL DETAIL
         $pollId = $this->parseIdFromWebname($poll);
         $pollObj = $this->poll->reset()->recId($pollId)->getData();
+        
+        if(count($pollObj->options) == 0){
+            $pollObj->options[] = (object)["id" => -1, "pollId" => $pollId, "caption" => "", "type" => "TEXT"];
+        }
         $this->setLevelCaptions(["3" => ["caption" => $pollObj->caption, "link" => $this->link("Settings:polls", $pollObj->webName)]]);
         $this->template->poll = $pollObj;
     }
