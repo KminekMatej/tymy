@@ -36,8 +36,13 @@
                                     {var $resultsDesc = 'Výsledky budou zobrazeny po odhlasování'}
                                 {/if}
                             {elseif $poll->showResults == 'NEVER'}
-                                {var $resultsClass = 'badge-danger'}
-                                {var $resultsDesc = 'Výsledky jsou tajné'}
+                                {if $poll->canSeeResults == TRUE && $poll->createdById == $user->id}
+                                    {var $resultsClass = 'badge-danger'}
+                                    {var $resultsDesc = 'Výsledky vidíte pouze vy'}
+                                {else}
+                                    {var $resultsClass = 'badge-danger'}
+                                    {var $resultsDesc = 'Výsledky jsou tajné'}
+                                {/if}
                             {elseif $poll->showResults == 'ALWAYS'}
                                 {var $resultsClass = 'badge-success'}
                                 {var $resultsDesc = 'Výsledky jsou zobrazeny'}
@@ -58,7 +63,8 @@
                 <div class="card-body">
                     <h4 class="card-title">{$poll->caption}</h4>
                     <h6 class="card-subtitle mb-2 text-muted">{$poll->description}</h6>
-                    <div class="container">
+                    <p n:if="!$poll->canVote" class="font-italic">V této anketě nemůžete volit</p>
+                    <div class="container" n:if="$poll->canVote">
                         <div class="row">
                             <div n:foreach="$poll->options as $opt" class="col-3 py-3 option" id="option-{$opt->id}">
                                 <h5 n:if="!$poll->radio">{$opt->caption}</h5>
@@ -73,7 +79,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-footer text-right">
+                <div class="card-footer text-right" n:if="$poll->canVote">
                     <button onclick="updatePoll(this, {link vote! $poll->id})" class="btn btn-primary">Hlasovat</button>
                 </div>
             </div>
