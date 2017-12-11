@@ -96,6 +96,7 @@
                     <h4>Položky ankety</h4>
                 </div>
                 <div class="card-body">
+                    {dump $poll->options}
                     <div class="row my-1" n:foreach="$poll->options as $opt" data-binder-id="{$opt->id}" data-option>
                         <div class="col-5 input-group">
                             <span class="input-group-addon form-control-sm">Název:</span>
@@ -111,7 +112,7 @@
                         </div>
                         <div class="col-2 text-right">
                             <button n:if="$user->isAllowed('SYS','ASK.VOTE_UPDATE')" href="{link pollOptionEdit!}" class="btn btn-sm btn-primary binder-save-btn" title="Uložit"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
-                            <button n:if="$user->isAllowed('SYS','ASK.VOTE_DELETE')" href="{link pollOptionDelete!}" class="btn btn-sm btn-danger mx-1 binder-delete-btn" title="Smazat"><i class="fa fa-times" aria-hidden="true"></i></button>
+                            <button n:if="$user->isAllowed('SYS','ASK.VOTE_DELETE') && $opt->id != -1" href="{link pollOptionDelete!}" class="btn btn-sm btn-danger mx-1 binder-delete-btn" title="Smazat"><i class="fa fa-times" aria-hidden="true"></i></button>
                         </div>
                     </div>
                     <div class="row my-3 text-center">
