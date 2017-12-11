@@ -286,10 +286,9 @@ class SettingsPresenter extends SecuredPresenter {
     public function handlePollDelete() {
         $bind = $this->getRequest()->getPost();
         try {
-            $this->polls
+            $this->poll
                     ->recId($bind["id"])
                     ->delete();
-            $this->redirect("Settings:polls");
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
