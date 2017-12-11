@@ -202,10 +202,10 @@ class SettingsPresenter extends SecuredPresenter {
         $post = $this->getRequest()->getPost();
         try {
             $this->event->create($post, $this->eventTypes->getData());
+            $this->redirect('Settings:events');
         } catch (\Tymy\Exception\APIException $ex) {
-            $this->handleTapiException($ex);
+            $this->handleTapiException($ex, 'this');
         }
-        $this->redirect('Settings:events');
     }
     
     public function handleEventEdit(){
@@ -221,7 +221,7 @@ class SettingsPresenter extends SecuredPresenter {
                     ->delete();
             $this->redirect("Settings:events");
         } catch (\Tymy\Exception\APIException $ex) {
-            $this->handleTapiException($ex);
+            $this->handleTapiException($ex, 'this');
         }
     }
     
@@ -238,7 +238,7 @@ class SettingsPresenter extends SecuredPresenter {
         try {
             $this->discussions->create($discussionData);
         } catch (\Tymy\Exception\APIException $ex) {
-            $this->handleTapiException($ex, "Settings:discussions");
+            $this->handleTapiException($ex, 'this');
         }
         $this->redirect('Settings:discussions');
     }
@@ -256,7 +256,7 @@ class SettingsPresenter extends SecuredPresenter {
                     ->delete();
             $this->redirect("Settings:discussions");
         } catch (\Tymy\Exception\APIException $ex) {
-            $this->handleTapiException($ex);
+            $this->handleTapiException($ex, 'this');
         }
     }
 
@@ -273,7 +273,7 @@ class SettingsPresenter extends SecuredPresenter {
         try {
             $this->polls->create($pollData);
         } catch (\Tymy\Exception\APIException $ex) {
-            $this->handleTapiException($ex, "Settings:polls");
+            $this->handleTapiException($ex, 'this');
         }
         $this->redirect('Settings:polls');
     }
@@ -290,7 +290,7 @@ class SettingsPresenter extends SecuredPresenter {
                     ->recId($bind["id"])
                     ->delete();
         } catch (\Tymy\Exception\APIException $ex) {
-            $this->handleTapiException($ex);
+            $this->handleTapiException($ex, 'this');
         }
     }
 
@@ -312,7 +312,7 @@ class SettingsPresenter extends SecuredPresenter {
                     ->recId($pollId)
                     ->create($pollData);
         } catch (\Tymy\Exception\APIException $ex) {
-            $this->handleTapiException($ex, "Settings:polls", $poll);
+            $this->handleTapiException($ex, 'this');
         }
     }
     
@@ -322,7 +322,7 @@ class SettingsPresenter extends SecuredPresenter {
         try {
             $this->editPollOption($bind);
         } catch (\Tymy\Exception\APIException $ex) {
-            $this->handleTapiException($ex, "Settings:polls", $poll);
+            $this->handleTapiException($ex, 'this');
         }
     }
 
@@ -335,7 +335,7 @@ class SettingsPresenter extends SecuredPresenter {
                     ->recId($bind["pollId"])
                     ->delete();
         } catch (\Tymy\Exception\APIException $ex) {
-            $this->handleTapiException($ex, "Settings:polls", $poll);
+            $this->handleTapiException($ex, 'this');
         }
     }
 
@@ -348,7 +348,7 @@ class SettingsPresenter extends SecuredPresenter {
                     ->recId($bind["id"])
                     ->edit($bind["changes"]);
         } catch (\Tymy\Exception\APIException $ex) {
-            $this->handleTapiException($ex, "Settings:events");
+            $this->handleTapiException($ex, 'this');
         }
     }
     
@@ -358,7 +358,7 @@ class SettingsPresenter extends SecuredPresenter {
                     ->recId($bind["id"])
                     ->edit($bind["changes"]);
         } catch (\Tymy\Exception\APIException $ex) {
-            $this->handleTapiException($ex, "Settings:discussions");
+            $this->handleTapiException($ex, 'this');
         }
     }
     
@@ -368,7 +368,7 @@ class SettingsPresenter extends SecuredPresenter {
                     ->recId($bind["id"])
                     ->edit($bind["changes"]);
         } catch (\Tymy\Exception\APIException $ex) {
-            $this->handleTapiException($ex, "Settings:polls");
+            $this->handleTapiException($ex, 'this');
         }
     }
     
