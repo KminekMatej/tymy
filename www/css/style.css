@@ -20,6 +20,24 @@ A.disabled:hover{
     text-decoration: none;
 }
 
+
+.set-box{
+    transition: background-color 0.4s ease;
+}
+
+.set-box A{
+    transition: color 0.7s ease;
+}
+
+.set-box:hover{
+    color: white;
+    background: linear-gradient(to bottom right, #333030, #403b3b);
+}
+
+.set-box:hover A{
+    color: white;
+}
+
 BUTTON.btn, A.btn{
     cursor: pointer;
 }
