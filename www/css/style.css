@@ -11,6 +11,15 @@ A {
     color: #0275d8;
 }
 
+A.disabled{
+    cursor: not-allowed;
+    color: #868e96;
+}
+
+A.disabled:hover{
+    text-decoration: none;
+}
+
 BUTTON.btn, A.btn{
     cursor: pointer;
 }
