@@ -78,17 +78,7 @@ class APIPollsTest extends ITapiTest {
             Assert::type("string",$poll->updatedAt);
             Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $poll->updatedAt)); //timezone correction check
             Assert::type("string",$poll->caption);
-            if(property_exists($poll, "description")) Assert::type("string",$poll->description);
             if(property_exists($poll, "descriptionHtml")) Assert::type("string",$poll->descriptionHtml);
-            if(property_exists($poll, "minItems")){
-                Assert::type("int",$poll->minItems);
-                Assert::true($poll->minItems > 0 || $poll->minItems == -1);
-            }
-            if(property_exists($poll, "maxItems")){
-                Assert::type("int",$poll->maxItems);
-                Assert::true($poll->maxItems > 0 || $poll->maxItems == -1);
-                Assert::true($poll->maxItems >= $poll->minItems);
-            }
             Assert::type("bool",$poll->changeableVotes);
             Assert::type("bool",$poll->mainMenu);
             Assert::type("bool",$poll->anonymousResults);
@@ -104,6 +94,7 @@ class APIPollsTest extends ITapiTest {
             Assert::type("bool",$poll->canVote);
             Assert::type("bool",$poll->canAlienVote);
             Assert::type("bool",$poll->voted);
+            Assert::type("bool",$poll->radio);
         }
     }
 }
