@@ -69,13 +69,13 @@ final class Poll extends PollAbstraction {
     
     public function delete(){
         if (!isset($this->recId))
-            throw new \Tymy\Exception\APIException('User ID not set!');
-        if (!$this->user->isAllowed("SYS","ASK.VOTE_UPDATE"))
+            throw new \Tymy\Exception\APIException('Poll ID not set!');
+        if (!$this->user->isAllowed("SYS","ASK.VOTE_DELETE"))
             throw new \Tymy\Exception\APIException('Permission denied!');
         
         $this->urlStart();
 
-        $this->fullUrl .= self::TAPI_NAME . "/" .$this->recId;
+        $this->fullUrl .= "polls/" .$this->recId;
 
         $this->urlEnd();
         
@@ -85,23 +85,20 @@ final class Poll extends PollAbstraction {
         return $this;
     }
     
-    public function create($eventsArray, $eventTypesArray){
-        foreach ($eventsArray as $event) {
-            if(!array_key_exists("startTime", $event))
-                throw new \Tymy\Exception\APIException('Start time not set!');
-            if(!array_key_exists("type", $event))
-                throw new \Tymy\Exception\APIException('Type not set!');
-            if(!array_key_exists($event["type"], $eventTypesArray))
-                throw new \Tymy\Exception\APIException('Unrecognized type!');
-        }
+    public function create($poll){
+        if (!isset($poll))
+            throw new \Tymy\Exception\APIException('Poll not set!');
+        if (!$this->user->isAllowed("SYS","ASK.VOTE_CREATE"))
+            throw new \Tymy\Exception\APIException('Permission denied!');
+        
         
         $this->urlStart();
 
-        $this->fullUrl .= "events";
+        $this->fullUrl .= "polls";
         
         $this->method = "POST";
         
-        $this->setPostData($eventsArray);
+        $this->setPostData($poll);
         
         $this->result = $this->execute();
 
