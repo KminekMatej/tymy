@@ -124,25 +124,14 @@ class NavbarTest extends Tester\TestCase {
         Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item")), 5); //5 menu items in the first menu
         Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")), 5); //5 of them with dropdown
         
-        Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")[0]->div->a), count((array)$dObj)); //check if the discussions are all displayed
-        Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")[1]->div->a), count((array)$eObj) + 1, "Displayed " . count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")[1]->div->a) . "events instead of expected " . count((array)$eObj) + 1); //check display all events + 1
+        Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown[name='discussions'] div a")), count((array)$dObj)); //check if the discussions are all displayed
+        Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown[name='events'] div a")), count((array)$eObj) + 1, "Displayed " . count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")[1]->div->a) . "events instead of expected " . count((array)$eObj) + 1); //check display all events + 1
         $caption = "Inits " . $uObj->counts["INIT"];
         $teamMenuDropdownCount = ($uObj->counts["INIT"] > 0 && $this->user->isAllowed('users','canSeeRegisteredUsers')) ? 6 : 5;
-        Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")[2]->div->a), $teamMenuDropdownCount, $caption);
-        Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")[3]->div->a), count((array)$pObj)); //check if the polls are all displayed
-        
-        $settingsMenuDropdownCount = 0;
-        if($this->user->isAllowed('settings','discussions')) $settingsMenuDropdownCount++;
-        if($this->user->isAllowed('settings','events')) $settingsMenuDropdownCount++;
-        if($this->user->isAllowed('settings','team')) $settingsMenuDropdownCount++;
-        if($this->user->isAllowed('settings','polls')) $settingsMenuDropdownCount++;
-        // TO BE UNCOMMENTED WHEN ITS READY
-        if($this->user->isAllowed('settings','reports')) $settingsMenuDropdownCount++;
-        // TO BE UNCOMMENTED WHEN ITS READY
-        if($this->user->isAllowed('settings','permissions')) $settingsMenuDropdownCount++;
-        if($this->user->isAllowed('settings','app')) $settingsMenuDropdownCount++;
-        
-        Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")[4]->div->a), $settingsMenuDropdownCount); //check if the settings are all displayed
+        Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown[name='team'] div a")), $teamMenuDropdownCount, $caption);
+        Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown[name='polls'] div a")), count((array)$pObj)); //check if the polls are all displayed
+        $settingsDropdownCount = count($this->presenter->getAccessibleSettings());
+        Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown[name='settings'] div a")), $settingsDropdownCount); //7 settings items are in menu
         
         Assert::equal(count($dom->find("ul.navbar-nav li.nav-item.dropdown")[5]->div->a), 1); //check if the right menu is displayed
     }
