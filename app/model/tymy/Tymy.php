@@ -237,9 +237,12 @@ abstract class Tymy extends Nette\Object{
                     Debugger::barDump($this->postData);
                     Debugger::barDump($this);
                     $tapiMSG = $contents->result ? Json::decode($contents->result)->statusMessage : "500 Internal Server Error";
-                    Debugger::barDump($tapiMSG);
                     throw new \Tymy\Exception\APIException($tapiMSG);
                 default:
+                    Debugger::barDump($contents->curlInfo["url"]);
+                    Debugger::barDump($this->method);
+                    Debugger::barDump($this->postData);
+                    Debugger::barDump($this);
                     $tapiMSG = $contents->result ? Json::decode($contents->result)->statusMessage : $contents->curlInfo["http_code"] . " Unknown error";
                     throw new \Tymy\Exception\APIException($tapiMSG);
             }
