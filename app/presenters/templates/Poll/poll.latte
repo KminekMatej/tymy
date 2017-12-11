@@ -91,9 +91,11 @@
     {*SHOW RESULTS ONLY UNDER SPECIFIC CONDITIONS*}
         <div n:if="$poll->canSeeResults" class="col my-3">
             <div class="card sh-box text-white bg-dark">
-                <div class="card-header">
+                <div class="card-header border-bottom-0">
                     <h4 class="card-title">Výsledky hlasování</h4>
-                    <table class="table table-inverse table-striped table-hover">
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-inverse table-striped table-hover mb-0">
                         <tr>
                             <th>Uživatel</th>
                             <th n:foreach="$poll->options as $option">{$option->caption}</th>
