@@ -50,30 +50,18 @@ class TeamPresenterTest extends IPresenterTest {
         Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 2); //last item aint link
     }
 
-    function testActionPlayers() {
-        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
-        $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', array('action' => 'players'));
-        $response = $this->presenter->run($request);
-
-        Assert::type('Nette\Application\Responses\TextResponse', $response);
-
-        $html = (string) $response->getSource();
-        $dom = Tester\DomQuery::fromHtml($html);
-
-        //has navbar
-        Assert::true($dom->has('div#snippet-navbar-nav'));
-        //has breadcrumbs
-        Assert::true($dom->has('div.container div.row div.col ol.breadcrumb'));
-        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 2);
-        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 3); //last item aint link
-
-        //count displayed cards
-        Assert::equal(count($dom->find('div.container.users div.col-sm-3')), $this->counts["PLAYER"]);
+    function getActions(){
+        return [
+            ["players", $this->counts["PLAYER"]],
+            ["members", $this->counts["MEMBER"]],
+            ["sicks", $this->counts["SICK"]]
+        ];
     }
-
-    function testActionMembers() {
+    
+    /** @dataProvider getActions */
+    function testAction($actionName, $itemsCount) {
         $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
-        $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', array('action' => 'members'));
+        $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', array('action' => $actionName));
         $response = $this->presenter->run($request);
 
         Assert::type('Nette\Application\Responses\TextResponse', $response);
@@ -88,29 +76,11 @@ class TeamPresenterTest extends IPresenterTest {
         Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 2);
         Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 3); //last item aint link
 
+        //has settings bar
+        Assert::true($dom->has('div.container.users div.row.mt-2 div.col.text-right div.settings-bar a.btn.btn-lg.btn-light.btn-light-bordered i.fa.fa-envelope'), "Has email all button"); 
+        
         //count displayed cards
-        Assert::equal(count($dom->find('div.container.users div.col-sm-3')), $this->counts["MEMBER"]);
-    }
-
-    function testActionSicks() {
-        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
-        $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', array('action' => 'sicks'));
-        $response = $this->presenter->run($request);
-
-        Assert::type('Nette\Application\Responses\TextResponse', $response);
-
-        $html = (string) $response->getSource();
-        $dom = Tester\DomQuery::fromHtml($html);
-
-        //has navbar
-        Assert::true($dom->has('div#snippet-navbar-nav'));
-        //has breadcrumbs
-        Assert::true($dom->has('div.container div.row div.col ol.breadcrumb'));
-        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 2);
-        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 3); //last item aint link
-
-        //count displayed cards
-        Assert::equal(count($dom->find('div.container.users div.col-sm-3')), $this->counts["SICK"]);
+        Assert::equal(count($dom->find('div.container.users div.col-sm-3')), $itemsCount);
     }
 
     function allWebNames() {
