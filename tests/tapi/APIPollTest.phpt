@@ -103,7 +103,7 @@ class APIPollTest extends ITapiTest {
             Assert::type("string",$opt->type);
             Assert::true(in_array($opt->type, ["TEXT", "NUMBER", "BOOLEAN"]));
         }
-        var_dump($this->poll->result->data);
+        
         foreach ($this->poll->result->data->votes as $vote) {
             Assert::type("int",$vote->pollId);
             Assert::same($pollId,$vote->pollId);
@@ -116,6 +116,29 @@ class APIPollTest extends ITapiTest {
             
             Assert::type("int",$vote->updatedById);
             Assert::same(1, preg_match_all($GLOBALS["dateRegex"], $vote->updatedAt)); //timezone correction check
+        }
+    }
+    
+    function testFetchAnonymousSuccess() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $pollId = $GLOBALS["testedTeam"]["testAnonymousPollId"];
+        $this->poll->reset()->recId($pollId)->getResult(TRUE);
+
+        Assert::true(is_object($this->poll));
+        Assert::true(is_object($this->poll->result));
+        Assert::type("string",$this->poll->result->status);
+        Assert::same("OK",$this->poll->result->status);
+        
+        Assert::type("int",$this->poll->result->data->id);
+        Assert::same($pollId,$this->poll->result->data->id);
+        
+        Assert::equal(true,$this->poll->result->data->anonymousResults);
+        
+        Assert::type("array",$this->poll->result->data->options);
+        print_r($this->poll->result->data->options);
+        foreach ($this->poll->result->data->options as $opt) {
+            Assert::true(!property_exists($opt, "updatedById"));
+            Assert::true(!property_exists($opt, "updatedBy"));
         }
     }
     
