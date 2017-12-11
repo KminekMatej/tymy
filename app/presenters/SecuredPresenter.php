@@ -90,9 +90,9 @@ class SecuredPresenter extends BasePresenter {
             return intval($webName);
     }
     
-    protected function handleTapiException(\Tymy\Exception\APIException $ex, $redirect = null, $redirectDestination = null){
-        $this->flashMessage("Došlo k nečekané chybě: " . $ex->getMessage());
-        $this->redirect($redirect == NULL ? $this->getName() . ":default" : $redirect, $redirectDestination);
+    protected function handleTapiException(\Tymy\Exception\APIException $ex, $redirect = null, $args = []){
+        $this->flashMessage("Došlo k nečekané chybě: ||" . $ex->getMessage());
+        $this->redirect($redirect == NULL ? $this->getName() . ":default" : $redirect, $args);
     }
     
     /**

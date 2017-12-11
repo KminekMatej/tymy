@@ -30,7 +30,14 @@
 
 <body>
     {block navbar}{/block}
-	<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+    <div class="container">
+        <div n:foreach="$flashes as $flash" class="row">
+            <div class="col">
+                {var $msgItems = explode('||', $flash->message)}
+                <div n:class="flash, $flash->type">{$msgItems[0]}<strong n:if="array_key_exists(1, $msgItems)" style="color: red">{$msgItems[1]}</strong></div>
+            </div>
+        </div>
+    </div>
 
 	{include content}
 

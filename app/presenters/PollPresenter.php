@@ -51,7 +51,7 @@ class PollPresenter extends SecuredPresenter {
         try {
             $this->poll->recId($pollId)->vote($votes);
         } catch (\Tymy\Exception\APIException $ex) {
-            $this->handleTapiException($ex);
+            $this->handleTapiException($ex, "this");
         }
     }
 
