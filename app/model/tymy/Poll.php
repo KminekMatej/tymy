@@ -46,7 +46,7 @@ final class Poll extends PollAbstraction {
     
     public function edit($fields){
         if (!isset($this->recId))
-            throw new \Tymy\Exception\APIException('User ID not set!');
+            throw new \Tymy\Exception\APIException('Poll ID not set!');
         if (!$fields)
             throw new \Tymy\Exception\APIException('Fields to edit not set!');
         if (!$this->user->isAllowed("SYS","ASK.VOTE_UPDATE"))
