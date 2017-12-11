@@ -44,6 +44,17 @@ function Binder (settings) {
     this.bindSaveEvent();
     this.bindSaveAllEvent();
     this.bindDeleteEvent();
+    this.checkNewRow();
+}
+
+Binder.prototype.checkNewRow = function () {
+    var objId = this.area.attr(this.RECORD_ID_ATTRIBUTE);
+    if(objId == -1){
+        this.changed = true;
+        this.changeSaveButtonClass(true);
+        this.changeSaveAllButtonClass(true);
+        this.area.find("[" + this.ORIGINAL_VALUE_ATTRIBUTE + "]").attr(this.ORIGINAL_VALUE_ATTRIBUTE,"null");
+    }
 }
 
 Binder.prototype.bindChangeEvents = function () {
