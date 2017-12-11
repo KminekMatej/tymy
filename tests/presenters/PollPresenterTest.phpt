@@ -74,11 +74,14 @@ class PollPresenterTest extends IPresenterTest {
         Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 2);
         Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 3); // last breadcrumb aint link
         
-        //check showed items
+        //check shown items
         Assert::equal(count($dom->find('div.container.poll div.row div.col.my-3 div.card.sh-box div.card-body h4.card-title')), 1);
         Assert::equal(count($dom->find('div.container.poll div.row div.col.my-3 div.card.sh-box div.card-body h6.card-subtitle')), 1);
-        
-        Assert::true(count($dom->find('div.container.poll div.row div.col.my-3 div.card.sh-box div.card-body div.container div.row div.col-3.py-3.option')) > 0);
+        if($obj->canSeeResults){
+            Assert::true(count($dom->find('div.container.poll div.row div.col.my-3 div.card.sh-box div.card-body div.container div.row div.col-3.py-3.option')) > 0);
+            Assert::true($dom->has('div.container.poll div.row#snippet--poll-results div.col.my-3 div.card.sh-box.text-white.bg-dark div.card-header'));
+            Assert::true(count($dom->find('div.container.poll div.row#snippet--poll-results div.col.my-3 div.card.sh-box.text-white.bg-dark div.card-body.p-0 table.table.table-inverse.table-striped.table-hover.mb-0 tr[data-vote]')) > 0);
+        }
     }
 }
 
