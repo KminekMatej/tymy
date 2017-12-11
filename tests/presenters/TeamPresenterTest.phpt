@@ -77,10 +77,10 @@ class TeamPresenterTest extends IPresenterTest {
         Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 3); //last item aint link
 
         //has settings bar
-        Assert::true($dom->has('div.container.users div.row.mt-2 div.col.text-right div.settings-bar a.btn.btn-lg.btn-light.btn-light-bordered i.fa.fa-envelope'), "Has email all button"); 
+        Assert::true($dom->has('div.container.users div.row.mt-2 div.col.text-right div.settings-bar a.btn.btn-outline-light i.fa.fa-envelope'), "Has email all button"); 
         
         //count displayed cards
-        Assert::equal(count($dom->find('div.container.users div.col-sm-3')), $itemsCount);
+        Assert::equal(count($dom->find('div.container.users div.row div.col-md-3.my-2 div.card.sh-box.set-box')), $itemsCount);
     }
 
     function allWebNames() {
