@@ -93,6 +93,8 @@ class APIEventsTest extends ITapiTest {
         
         Assert::type("array",$this->events->result->data);
         
+        Assert::type("int",$this->events->result->menuWarningCount);
+        
         foreach ($this->events->result->data as $ev) {
             Assert::true(is_object($ev));
             Assert::type("int",$ev->id);
