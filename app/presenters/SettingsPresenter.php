@@ -101,7 +101,7 @@ class SettingsPresenter extends SecuredPresenter {
         $this->template->isNew = true;
             
         $discussions = [(object)[
-            "id" => 0,
+            "id" => -1,
             "caption" => "",
             "description" => "",
             "publicRead" => FALSE,
@@ -129,7 +129,7 @@ class SettingsPresenter extends SecuredPresenter {
         $this->template->isNew = true;
         
         $events = [(object)[
-            "id" => 0,
+            "id" => -1,
             "caption" => "",
             "description" => "",
             "startTime" => date("c"),

@@ -14,7 +14,7 @@ function reTitle() {
         document.title = document.title.replace(new RegExp(/\d+/), numTitle);
 }
 
-function btnDisable(btn, disable){
+function btnRotate(btn, disable){
     if (btn.length > 0) {
         if (disable) {
             btn.find("i.fa").addClass("fa-spin");

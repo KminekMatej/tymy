@@ -70,14 +70,14 @@ function saveAttendanceResults(btn, purl){
         }
     });
     if(resultSet.length > 0){
-        btnDisable(btn, true);
+        btnRotate(btn, true);
     }
     $.nette.ajax({
         url: purl,
         type: "POST",
         data: {resultSet},
         complete: function (payload) {
-            btnDisable(btn, false);
+            btnRotate(btn, false);
         }
     });
 }

@@ -4,26 +4,24 @@ $(document).ready(function () {
             area: this,
             isValid: function (name, value1, value2) {
                 switch (name) {
-                    case "email":
-                        var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                    case "startTime":
+                    case "endTime":
+                    case "closeTime":
+                        var re = /^(0?[1-9]|[12][0-9]|3[01])\.(0?[1-9]|1[012])\.(19|20)\d\d ([01]\d|2[0-3]):([0-5]\d)$/;
                         return re.test(value1);
-                    case "phone":
-                        if (value1 == "")
-                            return true;
-                        var re = /^[+]?[()/0-9. -]{9,}$/;
-                        return re.test(value1);
-                    case "login":
-                        var re = /^[\w-]{3,20}$/;
-                        return re.test(value1);
-                    case "password":
-                        var re = /^[^\s]{3,}$/;
-                        if (re.test(value1))
-                            return value1 == value2;
-                        else
-                            return false;
+                    case "link":
+                        var re = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i;
+                        return value1 == "" || re.test(value1);
+                    case "caption":
+                        return value1.trim() != "";
                 }
                 return true;
             }
         }));
     });
 });
+
+var valid = true;
+    switch (name) {
+        
+    }

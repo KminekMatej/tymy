@@ -138,8 +138,73 @@ class SettingsPresenterTest extends IPresenterTest {
         
     }
 
-    function testActionEvent_new() {
-        Assert::true(FALSE); //TODO
+    function testActionDiscussionNew() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', ["action" => "discussion_new"]);
+        $response = $this->presenter->run($request);
+
+        Assert::type('Nette\Application\Responses\TextResponse', $response);
+        
+        $html = (string)$response->getSource();
+        $dom = Tester\DomQuery::fromHtml($html);
+        //has navbar
+        Assert::true($dom->has('div#snippet-navbar-nav'));
+        //has breadcrumbs
+        Assert::true($dom->has('div.container div.row div.col ol.breadcrumb'));
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 3);
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 4); //last item aint link
+        
+        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-header h4'));
+        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table'));
+        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive'));
+        Assert::equal(count($dom->find('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr th')), 11);
+        Assert::equal(count($dom->find('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr[data-binder-id] td')), 10);
+        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr[data-binder-id] button.btn.btn-sm.btn-primary.binder-save-btn'));
+        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body div.text-center button.btn.btn-sm.btn-outline-success i.fa.fa-plus'));
+    }
+
+    function testActionEventNew() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', ["action" => "discussion_new"]);
+        $response = $this->presenter->run($request);
+
+        Assert::type('Nette\Application\Responses\TextResponse', $response);
+        
+        $html = (string)$response->getSource();
+        $dom = Tester\DomQuery::fromHtml($html);
+        //has navbar
+        Assert::true($dom->has('div#snippet-navbar-nav'));
+        //has breadcrumbs
+        Assert::true($dom->has('div.container div.row div.col ol.breadcrumb'));
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 3);
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 4); //last item aint link
+        
+        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-header h4'));
+        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive'));
+        Assert::equal(count($dom->find('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr th')), 11);
+        Assert::equal(count($dom->find('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr[data-binder-id] td')), 10);
+        
+        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body div.text-center button.btn.btn-sm.btn-outline-success i.fa.fa-plus'));
+    }
+
+    function testActionPollNew() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', ["action" => "discussion_new"]);
+        $response = $this->presenter->run($request);
+
+        Assert::type('Nette\Application\Responses\TextResponse', $response);
+        
+        $html = (string)$response->getSource();
+        $dom = Tester\DomQuery::fromHtml($html);
+        //has navbar
+        Assert::true($dom->has('div#snippet-navbar-nav'));
+        //has breadcrumbs
+        Assert::true($dom->has('div.container div.row div.col ol.breadcrumb'));
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 3);
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 4); //last item aint link
+        
+        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-header h4'));
+        //TODO
     }
 
 }
