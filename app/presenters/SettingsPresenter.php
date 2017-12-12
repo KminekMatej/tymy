@@ -35,10 +35,6 @@ class SettingsPresenter extends SecuredPresenter {
         });
     }
 
-    public function actionDefault() {
-        //TODO
-    }
-
     public function actionDiscussions($discussion = NULL) {
         $this->setLevelCaptions(["2" => ["caption" => "Diskuze", "link" => $this->link("Settings:discussions")]]);
         if(!is_null($discussion)){
