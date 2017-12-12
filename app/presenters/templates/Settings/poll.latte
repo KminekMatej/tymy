@@ -82,8 +82,8 @@
                     </table>
                 </div>
                 <div class="card-footer text-right">
-                    <button n:if="$user->isAllowed('SYS','ASK.VOTE_UPDATE')" href="{link pollEdit!}" class="btn btn-lg btn-primary binder-save-btn" title="Uložit"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                     <button n:if="$user->isAllowed('SYS','ASK.VOTE_DELETE')" href="{link pollDelete!}" class="btn btn-danger mx-2 binder-delete-btn" title="Smazat"><i class="fa fa-times" aria-hidden="true"></i></button>
+                    <button n:if="$user->isAllowed('SYS','ASK.VOTE_UPDATE')" href="{link pollEdit!}" class="btn btn-lg btn-primary binder-save-btn" title="Uložit"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                 </div>
             </div>
         </div>
@@ -112,7 +112,7 @@
                         </div>
                         <div class="col-2 text-right">
                             <button n:if="$user->isAllowed('SYS','ASK.VOTE_UPDATE')" href="{link pollOptionEdit!}" class="btn btn-sm btn-primary binder-save-btn" title="Uložit"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
-                            <button n:if="$user->isAllowed('SYS','ASK.VOTE_DELETE') && $opt->id != -1" href="{link pollOptionDelete!}" class="btn btn-sm btn-danger mx-1 binder-delete-btn" title="Smazat"><i class="fa fa-times" aria-hidden="true"></i></button>
+                            <button n:if="$user->isAllowed('SYS','ASK.VOTE_DELETE') && $opt->id != -1" href="{link pollOptionDelete!}" class="btn btn-sm btn-danger binder-delete-btn" title="Smazat"><i class="fa fa-times" aria-hidden="true"></i></button>
                         </div>
                     </div>
                     <div class="row my-3 text-center">
