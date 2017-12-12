@@ -30,6 +30,7 @@ function Binder (settings) {
     this.TABLE_NAME_ATTRIBUTE = !settings.tableNameAttribute ? "data-binder-table" : settings.tableNameAttribute;
     this.RECORD_ID_ATTRIBUTE = !settings.recordIdAttribute ? "data-binder-id" : settings.recordIdAttribute;
     this.ORIGINAL_VALUE_ATTRIBUTE = !settings.originalValueAttribute ? "data-value" : settings.originalValueAttribute;
+    this.VALIDATION_FIELD2_ATTRIBUTE = !settings.validationField2Attribute ? "data-validation-field2" : settings.validationField2Attribute;
     this.DBFIELD_NAME_ATTRIBUTE = !settings.dbFieldNameAttribute ? "name" : settings.dbFieldNameAttribute;
     this.SPINNER_CLASS = !settings.spinClass ? "fa-spin" : settings.spinClass;
     this.SAVE_BTN_CLASS = !settings.saveBtnClass ? "binder-save-btn" : settings.saveBtnClass;
@@ -39,6 +40,7 @@ function Binder (settings) {
     this.saveButtons = this.area.find("." + this.SAVE_BTN_CLASS);
     this.saveAllButtons = $("." + this.SAVE_ALL_BTN_CLASS);
     this.isValid = !settings.isValid ? true : settings.isValid;
+    this.isValidated = false;
     this.changed = false;
     this.bindChangeEvents();
     this.bindSaveEvent();
@@ -131,6 +133,8 @@ Binder.prototype.save = function (caller) {
         throw "Binder performing error - undefined area!";
     if (typeof this.bind == "undefined")
         throw "Binder performig error - undefined binding object!";
+    if (!this.isValidated)
+        throw "Validation failing, saving disabled!";
     var binderObj = this;
     if (!($.isEmptyObject(binderObj.bind.changes))) {
         binderObj.disableSaveButtons(true, true);
@@ -170,6 +174,8 @@ Binder.prototype.saveAll = function (caller) {
         for (index = 0; index < allBinders.length; ++index) {
             var binderObj = allBinders[index];
             binderObj.extractBind();
+            if (!binderObj.isValidated)
+                throw "Validation failing, saving disabled!";
             if (!($.isEmptyObject(binderObj.bind.changes))) {
                 binderObj.disableSaveButtons(true, true);
                 binderObj.changeSaveButtonClass(true);
@@ -308,6 +314,7 @@ Binder.prototype.getChanges = function () {
     var binderObj = this;
     var targets = binderObj.area.find("[" + binderObj.ORIGINAL_VALUE_ATTRIBUTE + "]");
     if (targets.length > 0) {
+        this.isValidated = true;
         targets.each(function () {
             var tagName = $(this).prop("tagName");
             var name = binderObj.parseNameFromElement($(this));
@@ -375,11 +382,16 @@ Binder.prototype.parseValueFromElement = function(element){
     return element.val();
 }
 
-Binder.prototype.isChanged = function (element){
+Binder.prototype.isChanged = function (element) {
     var binderObj = this;
     var changed = element.attr(binderObj.ORIGINAL_VALUE_ATTRIBUTE) != this.getValue(element);
-    if(changed){
-        binderObj.validate(element);
+    if (changed) {
+        var value2 = element.attr(binderObj.VALIDATION_FIELD2_ATTRIBUTE);
+        if (typeof value2 !== typeof undefined && value2 !== false) {
+            binderObj.validate(element, binderObj.getValue(binderObj.area.find("[name='" + value2 + "']")));
+        } else {
+            binderObj.validate(element);
+        }
     }
     return changed;
 };
@@ -407,13 +419,13 @@ Binder.prototype.validate = function(element, value2 = null) {
         valid = binderObj.isValid;
     } else {
         var name = binderObj.parseNameFromElement(element);
-        var value = this.getValue(element);
+        var value = binderObj.getValue(element);
         valid = binderObj.isValid(name, value, value2);
     }
 
     if (!valid) {
+        this.isValidated = false;
         element.addClass("is-invalid");
-        throw "Validation error for field " + name;
     } else {
         element.removeClass("is-invalid");
     }
