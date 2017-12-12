@@ -58,9 +58,10 @@
                             </td>
                             <td><input type="number" name="minItems" data-value="{$poll->minItems}" value="{$poll->minItems}" class="form-control form-control-sm" style="max-width: 70px;" required/></td>
                             <td><input type="number" name="maxItems" data-value="{$poll->maxItems}" value="{$poll->maxItems}" class="form-control form-control-sm" style="max-width: 70px;" required/></td>
-                            <td><input type="checkbox" name="mainMenu" n:attr="data-value => $poll->mainMenu ? 'true':'false', checked => $poll->mainMenu" class="form-control form-control-sm" /></td>
-                            <td><input type="checkbox" name="anonymousResults" n:attr="data-value => $poll->anonymousResults ? 'true':'false', checked => $poll->anonymousResults" class="form-control form-control-sm" /></td>
-                            <td><input type="checkbox" name="changeableVotes" n:attr="data-value => $poll->changeableVotes ? 'true':'false', checked => $poll->changeableVotes" class="form-control form-control-sm" /></td>
+                            
+                            <td class="text-center"><label class="custom-control custom-checkbox"><input type="checkbox" name="mainMenu" n:attr="data-value => $poll->mainMenu ? 'true':'false', checked => $poll->mainMenu" class="form-control form-control-sm custom-control-input" /><span class="custom-control-indicator"></span></label></td>
+                            <td class="text-center"><label class="custom-control custom-checkbox"><input type="checkbox" name="anonymousResults" n:attr="data-value => $poll->anonymousResults ? 'true':'false', checked => $poll->anonymousResults" class="form-control form-control-sm custom-control-input" /><span class="custom-control-indicator"></span></label></td>
+                            <td class="text-center"><label class="custom-control custom-checkbox"><input type="checkbox" name="changeableVotes" n:attr="data-value => $poll->changeableVotes ? 'true':'false', checked => $poll->changeableVotes" class="form-control form-control-sm custom-control-input" /><span class="custom-control-indicator"></span></label></td>
                             <td>
                                 <select name="showResults" data-value="{$poll->showResults}" class="form-control form-control-sm">
                                     <option value="NEVER" n:attr="selected => $poll->showResults == 'NEVER'">Nikdy</option>
