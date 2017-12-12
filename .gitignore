@@ -6,3 +6,4 @@
 /tests/test.json
 /tests/setup_DEV_LOCAL.php
 /update-patch.bat
+/update-minor.bat
