@@ -42,9 +42,9 @@
                         <tr><th>Minimální počet vyplněných položek</th><td><input type="number" name="minItems" data-value="{$poll->minItems}" value="{$poll->minItems}" class="col-6 form-control" required /></td></tr>
                         <tr><th>Maximální počet vyplněných položek</th><td><input type="number" name="maxItems" data-value="{$poll->maxItems}" value="{$poll->maxItems}" class="col-6 form-control" required /></td></tr>
                         
-                        <tr><th>Uvést v hlavním menu</th><td><input type="checkbox" name="mainMenu" n:attr="data-value => $poll->mainMenu ? 'true':'false', checked => $poll->mainMenu" class="col-6 form-control" /></td></tr>
-                        <tr><th>Anonymní hlasování</th><td><input type="checkbox" name="anonymousResults" n:attr="data-value => $poll->anonymousResults ? 'true':'false', checked => $poll->anonymousResults" class="col-6 form-control" /></td></tr>
-                        <tr><th>Povolit změnu názoru</th><td><input type="checkbox" name="changeableVotes" n:attr="data-value => $poll->changeableVotes ? 'true':'false', checked => $poll->changeableVotes" class="col-6 form-control" /></td></tr>
+                        <tr><th>Uvést v hlavním menu</th><td><label class="custom-control custom-checkbox"><input type="checkbox" name="mainMenu" n:attr="data-value => $poll->mainMenu ? 'true':'false', checked => $poll->mainMenu" class="col-6 form-control custom-control-input" /><span class="custom-control-indicator"></span></label></td></tr>
+                        <tr><th>Anonymní hlasování</th><td><label class="custom-control custom-checkbox"><input type="checkbox" name="anonymousResults" n:attr="data-value => $poll->anonymousResults ? 'true':'false', checked => $poll->anonymousResults" class="col-6 form-control custom-control-input" /><span class="custom-control-indicator"></span></label></td></tr>
+                        <tr><th>Povolit změnu názoru</th><td><label class="custom-control custom-checkbox"><input type="checkbox" name="changeableVotes" n:attr="data-value => $poll->changeableVotes ? 'true':'false', checked => $poll->changeableVotes" class="col-6 form-control custom-control-input" /><span class="custom-control-indicator"></span></label></td></tr>
 
                         <tr><th>Zobrazit výsledky</th>
                             <td>
