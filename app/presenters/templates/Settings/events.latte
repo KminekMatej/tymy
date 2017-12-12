@@ -56,8 +56,8 @@
                             <td><input type="text" name="place" data-value="{$e->place}" value="{$e->place}" class="form-control form-control-sm"/></td>
                             <td><input type="text" name="link" data-value="{$e->link}" value="{$e->link}" class="form-control form-control-sm"/></td>
                             <td class="input-group">
-                                <button n:if="$user->isAllowed('SYS','EVE_UPDATE')" href="{link eventEdit!}" class="btn btn-sm btn-primary binder-save-btn" title="Uložit" style="margin-right: 2px"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
-                                <button n:if="$user->isAllowed('SYS','EVE_DELETE')" href="{link eventDelete!}" n:class="btn,btn-sm,btn-danger, !$isNew ? binder-delete-btn" title="Smazat" n:attr="onclick => $isNew ? 'removeRow(this)'"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                <button n:if="$user->isAllowed('SYS','EVE_UPDATE') || $isNew" href="{link eventEdit!}" class="btn btn-sm btn-primary binder-save-btn" title="Uložit" style="margin-right: 2px"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                <button n:if="$user->isAllowed('SYS','EVE_DELETE') || $isNew" href="{link eventDelete!}" n:class="btn,btn-sm,btn-danger, !$isNew ? binder-delete-btn" title="Smazat" n:attr="onclick => $isNew ? 'removeRow(this)'"><i class="fa fa-times" aria-hidden="true"></i></button>
                             </td>
                         </tr>
                     </table>
