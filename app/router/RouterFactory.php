@@ -24,22 +24,22 @@ class RouterFactory
                 $router[] = new Route('tym/hraci', 'Team:players');
                 $router[] = new Route('tym/clenove', 'Team:members');
                 $router[] = new Route('tym/marodi', 'Team:sicks');
+                $router[] = new Route('tym/<player>', 'Team:player');
                 $router[] = new Route('ankety', 'Poll:default');
                 $router[] = new Route('diskuze/<discussion>[/<page>] ? search=<search>', 'Discussion:discussion');
                 $router[] = new Route('udalosti/<udalost>', 'Event:event');
                 $router[] = new Route('ankety/<anketa>', 'Poll:poll');
                 $router[] = new Route('nastaveni', 'Settings:default');
-                $router[] = new Route('nastaveni/diskuze', 'Settings:discussions');
                 $router[] = new Route('nastaveni/diskuze/nova', 'Settings:discussion_new');
-                $router[] = new Route('nastaveni/udalosti', 'Settings:events');
+                $router[] = new Route('nastaveni/diskuze[/<discussion>]', 'Settings:discussions');
                 $router[] = new Route('nastaveni/udalosti/nova', 'Settings:event_new');
-                $router[] = new Route('nastaveni/ankety', 'Settings:polls');
+                $router[] = new Route('nastaveni/udalosti[/<event>]', 'Settings:events');
                 $router[] = new Route('nastaveni/ankety/nova', 'Settings:poll_new');
+                $router[] = new Route('nastaveni/ankety[/<poll>]', 'Settings:polls');
                 $router[] = new Route('nastaveni/tym', 'Settings:team');
                 $router[] = new Route('nastaveni/reporty', 'Settings:reports');
                 $router[] = new Route('nastaveni/opravneni', 'Settings:permissions');
                 $router[] = new Route('nastaveni/aplikace', 'Settings:app');
-                $router[] = new Route('tym/<player>', 'Team:player');
 		$router[] = new Route('<presenter>/<action>', 'Homepage:default');
 		return $router;
 	}
