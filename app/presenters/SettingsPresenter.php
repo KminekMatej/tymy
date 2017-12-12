@@ -161,9 +161,17 @@ class SettingsPresenter extends SecuredPresenter {
         $this->template->isNew = true;
         
         $polls = [(object)[
-            "id" => 0,
+            "id" => -1,
             "caption" => "",
             "description" => "",
+            "status" => "DESIGN",
+            "minItems" => "",
+            "maxItems" => "",
+            "mainMenu" => FALSE,
+            "anonymousResults" => FALSE,
+            "changeableVotes" => FALSE,
+            "showResults" => "NEVER",
+            "orderFlag" => 0
         ]];
         $this->template->polls = $polls;
         
