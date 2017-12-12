@@ -45,6 +45,9 @@ class AllPresentersTest extends IPresenterTest {
             ["presenter" => "Settings", "action" => "event", "params" => ["event" => $GLOBALS["testedTeam"]["testEventId"]]],
             ["presenter" => "Settings", "action" => "event_new", "params" => []],
             ["presenter" => "Settings", "action" => "poll", "params" => ["poll" => $GLOBALS["testedTeam"]["testPollId"]]],
+            ["presenter" => "Settings", "action" => "poll_new", "params" => []],
+            ["presenter" => "Settings", "action" => "discussion", "params" => ["discussion" => $GLOBALS["testedTeam"]["testDiscussionId"]]],
+            ["presenter" => "Settings", "action" => "discussion_new", "params" => []],
             
         ];
         
