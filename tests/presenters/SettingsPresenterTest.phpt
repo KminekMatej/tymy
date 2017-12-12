@@ -75,7 +75,7 @@ class SettingsPresenterTest extends IPresenterTest {
         Assert::true(count($dom->find('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr[data-binder-id]'))>0);
     }
     
-    function getFormActions(){ // TODO
+    function getFormActions(){
         return [
             [["action" => "discussions", "discussion" => "testovaci-diskuze"]],
             [["action" => "discussions", "discussion" => "tymova-diskuze"]],
