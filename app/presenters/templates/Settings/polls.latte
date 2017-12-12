@@ -56,9 +56,9 @@
                                     <option value="CLOSED" n:attr="selected => $poll->status == 'CLOSED'">Uzavřená</option>
                                 </select>
                             </td>
-                            <td><input type="number" name="minItems" data-value="{$poll->minItems}" value="{$poll->minItems}" class="form-control form-control-sm" style="max-width: 70px;" required/></td>
-                            <td><input type="number" name="maxItems" data-value="{$poll->maxItems}" value="{$poll->maxItems}" class="form-control form-control-sm" style="max-width: 70px;" required/></td>
-                            
+                            <td><input type="number" name="minItems" data-validation-field2="maxItems" min="0" data-value="{$poll->minItems}" value="{$poll->minItems}" class="form-control form-control-sm" style="max-width: 70px;" required/></td>
+                            <td><input type="number" name="maxItems" data-validation-field2="minItems" min="0" data-value="{$poll->maxItems}" value="{$poll->maxItems}" class="form-control form-control-sm" style="max-width: 70px;" required/></td>
+
                             <td class="text-center"><label class="custom-control custom-checkbox"><input type="checkbox" name="mainMenu" n:attr="data-value => $poll->mainMenu ? 'true':'false', checked => $poll->mainMenu" class="form-control form-control-sm custom-control-input" /><span class="custom-control-indicator"></span></label></td>
                             <td class="text-center"><label class="custom-control custom-checkbox"><input type="checkbox" name="anonymousResults" n:attr="data-value => $poll->anonymousResults ? 'true':'false', checked => $poll->anonymousResults" class="form-control form-control-sm custom-control-input" /><span class="custom-control-indicator"></span></label></td>
                             <td class="text-center"><label class="custom-control custom-checkbox"><input type="checkbox" name="changeableVotes" n:attr="data-value => $poll->changeableVotes ? 'true':'false', checked => $poll->changeableVotes" class="form-control form-control-sm custom-control-input" /><span class="custom-control-indicator"></span></label></td>
@@ -86,7 +86,7 @@
                                 </select>
                             </td>
                             <td><input name="order" data-value="{$poll->orderFlag}" type="number" value="{$poll->orderFlag}" class="form-control form-control-sm" style="max-width: 70px;"/></td>
-                            
+
                             <td class="input-group">
                                 <button n:if="$user->isAllowed('SYS','ASK.VOTE_UPDATE')" href="{link pollEdit!}" class="btn btn-sm btn-primary binder-save-btn" title="Uložit" style="margin-right: 2px"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                                 <button n:if="$user->isAllowed('SYS','ASK.VOTE_DELETE')" href="{link pollDelete!}" n:class="btn,btn-sm,btn-danger, !$isNew ? binder-delete-btn" title="Smazat" n:attr="onclick => $isNew ? 'removeRow(this)'"><i class="fa fa-times" aria-hidden="true"></i></button>
@@ -98,9 +98,7 @@
                     <a n:if="!$isNew && $user->isAllowed('SYS','ASK.VOTE_CREATE')" class="btn btn-lg btn-success" href="{plink Settings:poll_new}" onclick="btnRotate($(this), true)" title="Vytvořit novou anketu" style="margin-right: 10px">
                         <i class="fa fa-plus" aria-hidden="true"></i>
                     </a>
-                    <button n:if="$user->isAllowed('SYS','ASK.VOTE_UPDATE')" class="btn btn-lg btn-primary binder-save-all-btn" href="{link pollsEdit!}" title="Uložit vše"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                 </div>
-                
             </div>
         </div>
     </div>
