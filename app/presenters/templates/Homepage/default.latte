@@ -81,7 +81,7 @@
                     {foreach $discussions as $item}
                         <div class="row my-2">
                             <div class="col-sm-4 name" id="discussion-pane-{$item->id}">
-                                <span n:class="badge,badge-pill,badge-danger,$item->newPosts == 0 ? hidden-badge">{$item->newPosts}</span>
+                                <span n:class="badge,badge-pill,badge-danger,$item->newPosts == 0 ? d-none">{$item->newPosts}</span>
                                 <a href="{plink Discussion:discussion $item->webName}">{$item->caption}</a>
                             </div>
                             <div class="col-sm-8 dis-description">{$item->description}</div>

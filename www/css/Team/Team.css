@@ -7,3 +7,19 @@
 .set-box A:hover{
     text-decoration: none;
 }
+
+DIV.btnbox{
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+}
+
+.card-header.MALE{
+    font-weight: bold;
+    color: #7193BD;
+}
+
+.card-header.FEMALE{
+    font-weight: bold;
+    color: violet;
+}

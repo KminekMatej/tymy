@@ -101,30 +101,9 @@ form .error {
     }
 }
 
-DIV.dis-item{
-    margin: 10px;
-    border: 1px solid black;
-}
-
-DIV.row DIV.avatar{
-    padding: 0px;
-}
-
-DIV.discussion DIV.avatar IMG{
-    max-width: 60%;
-}
-
 .sh-box{
     border-radius: 0px;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 3px 3px 0 rgba(0, 0, 0, 0.24);
-}
-
-DIV.discussion DIV.card DIV.card-header SPAN.name{
-    font-weight: bold;
-}
-
-DIV.discussion DIV.card-header.post-mine{
-    color: #0275d8;
 }
 
 .card-unread{
@@ -141,30 +120,9 @@ IMG.user_pic{
     min-height: 50px;
 }
 
-
-DIV.discussion IMG.user_pic{
-    float: left;
-    margin: 0px 30px 10px 0px;
-}
-
-DIV.discussion DIV.card-block OL{
-    display: inline-block;
-}
-
-DIV.page-caption{
-    background-color: #8f8f8f;
-    border-top-left-radius: 0px;
-    border-top-right-radius: 0px;
-}
-
 NAV LI.nav-item SPAN.navbar-text{
     padding-right: .5rem;
     padding-left: .5rem;
-}
-
-DIV.container.discussions DIV.name{
-    font-weight: bold;
-    font-size: 17px;
 }
 
 .breadcrumb{
@@ -175,97 +133,8 @@ DIV.container.discussions DIV.name{
     margin-bottom: 0px;
 }
 
-.card-header.MALE{
-    font-weight: bold;
-    color: #7193BD;
-}
-
-.card-header.FEMALE{
-    font-weight: bold;
-    color: violet;
-}
-
-.container.users .user{
-    position: absolute;
-    right: 5px;
-    bottom: 5px;
-}
-
-.badge-new{
-    position: absolute;
-    right: 0px;
-}
-
-.addPost{
-    background-color: white; 
-    padding: 2px; 
-    text-align: right; 
-    border: 1px solid #d1d1d1; 
-    border-top-width: 0px;
-}
-
-.addPost[data-postId=''] BUTTON#editPost{
-    display: none;
-}
-
-I.sticky{
-    background-color: red;
-}
-
-DIV.container.events DIV.agenda DIV.card-block{
-    font-size: 10pt;
-}
-DIV.container.events DIV.agenda SPAN.event-time{
-    font-size: 0.8rem;
-}
-DIV.container.events DIV.agenda A.event-heading{
-    font-size: 0.9rem;
-    margin-left: 8px;
-    font-weight: bold;
-}
-
-DIV.container.discussion DIV.row DIV.card-block blockquote{
-    margin: 10px;
-    border-left: solid 5px #dedede;
-    padding: 10px;
-    font-style: italic;
-}
-
-DIV.container.discussion DIV.row DIV.card-block blockquote P{
-    margin: 0px;
-}
-
-DIV.container.poll DIV.row DIV.card-block DIV.option{
-    text-align: center;
-}
-
-DIV.container.poll DIV.row DIV.card-block DIV.option:hover{
-    background-color: rgb(247, 247, 249);
-    transition: background-color 500ms linear;
-}
-
-DIV.homepage .fc h2 {
-   font-size: 20px;
-}
-
-DIV.homepage .fc .fc-day-number {
-   font-size: 7pt;
-}
-
 body .fc { 
    font-size: 0.9em;
-}
-
-DIV.homepage DIV.dis-description{
-    font-size: 0.83em;
-}
-
-DIV.poll TR[data-vote] A{
-    color: rgb(129, 191, 245);
-}
-
-DIV.poll TR[data-vote] A:hover{
-    color: white;
 }
 
 @media screen and (max-width: 544px) {
@@ -289,10 +158,6 @@ DIV.poll TR[data-vote] A:hover{
 INPUT.form-check{
     width: 25px;
     height: 25px;
-}
-
-SPAN.badge.hidden-badge{
-    display: none;
 }
 
 .btn-light-bordered{

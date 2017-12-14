@@ -32,9 +32,9 @@ function homepageRefresh() {
             var badge = $("DIV.container.homepage DIV#" + id + ".name SPAN.badge");
             badge.html(count);
             if (count > 0) {
-                badge.removeClass("hidden-badge");
+                badge.removeClass("d-none");
             } else {
-                badge.addClass("hidden-badge");
+                badge.addClass("d-none");
             }
 
         });
