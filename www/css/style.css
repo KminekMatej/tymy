@@ -144,7 +144,7 @@ IMG.user_pic{
 
 DIV.discussion IMG.user_pic{
     float: left;
-    margin: 0px 10px 10px 0px;
+    margin: 0px 30px 10px 0px;
 }
 
 DIV.discussion DIV.card-block OL{
