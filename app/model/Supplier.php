@@ -9,6 +9,8 @@
 namespace App\Model;
 
 class Supplier {
+    
+    const AUTODETECT = "_autodetect";
 
     private $tapi_config;
     private $tym;
@@ -33,7 +35,7 @@ class Supplier {
     public function setTapi_config($tapi_config) {
         $this->tapi_config = $tapi_config;
         $this->setTym($tapi_config['tym']);
-        $this->setTymyRoot($tapi_config["protocol"] . "://" . $tapi_config["tym"] . "." . $tapi_config["root"]);
+        $this->setTymyRoot($tapi_config["protocol"] . "://" . $this->getTym() . "." . $tapi_config["root"]);
         $this->setApiRoot($this->getTymyRoot() . DIRECTORY_SEPARATOR . $tapi_config["tapi_api_root"]);
         $this->setSysapiRoot($this->getTymyRoot() . DIRECTORY_SEPARATOR . $tapi_config["tapi_sysapi_root"]);
         $this->setRoleClasses($tapi_config['roles_classes']);
@@ -59,7 +61,7 @@ class Supplier {
     }
 
     public function setTym($tym) {
-        $this->tym = $tym;
+        $this->tym = $tym == self::AUTODETECT ? explode(".", $_SERVER["HTTP_HOST"])[0] : $tym;
         return $this;
     }
 

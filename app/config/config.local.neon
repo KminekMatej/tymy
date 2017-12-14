@@ -1,11 +1,11 @@
 parameters:
     tapi:
-        tym: dev # needs to be changed for each different team
+        tym: _autodetect # needs to be changed for each different team. Can be set to _autodetect to automatically be detected from url
         protocol: http
         root: tymy.cz
         tapi_api_root: api
         tapi_sysapi_root: sysapi
-        multiple_team: false #if changed to true, user can pick which team he wants to login to
+        multiple_team: false #if changed to true, user can pick which team he wants to login to. If selected, picked value overwrites the tym property
         roles_classes:
             SUPER: btn-outline-success
             USR: btn-outline-info

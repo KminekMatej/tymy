@@ -247,6 +247,10 @@ abstract class Tymy extends Nette\Object{
                     throw new \Tymy\Exception\APIException($tapiMSG);
             }
         } else {
+            Debugger::barDump($contents->curlInfo["url"]);
+            Debugger::barDump($this->method);
+            Debugger::barDump($this->postData);
+            Debugger::barDump($this);
             throw new \Tymy\Exception\APIException("TAPI query failed for unknown reason");
         }
     }
