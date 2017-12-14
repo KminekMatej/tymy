@@ -1,0 +1,10 @@
+/* 
+    Created on : 14.12.2017, 13:12:06
+    Author     : kminekmatej
+*/
+
+BUTTON.btn.delete:hover, A.btn.delete:hover{
+    color: #fff;
+    background-color: #c82333;
+    border-color: #bd2130;
+}

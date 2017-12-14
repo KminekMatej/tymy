@@ -46,9 +46,10 @@
                             <span class="name">{$item->createdBy->callName}</span>
 
                             <div class="btn-group btn-group-sm float-md-right" role="group">
-                                <button n:class="btn,btn-sm,$item->sticky ? active,$item->sticky ? btn-dark:btn-light,!$item->sticky ? btn-light-bordered" onclick="stickPost({plink Discussion:stickPost $discussion->discussion->id}, {$item->id}, {$item->sticky ? false : true})" ><i class="fa fa-thumb-tack" aria-hidden="true"></i></button>
+                                <button n:class="btn,btn-sm,$item->sticky ? active,$item->sticky ? btn-dark:btn-light,!$item->sticky ? btn-light-bordered" onclick="stickPost({plink Discussion:stickPost $discussion->discussion->id}, {$item->id}, {$item->sticky ? false : true})" n:attr="title => $item->sticky ? 'Odepnout' : 'Připnout'"><i class="fa fa-thumb-tack" aria-hidden="true"></i></button>
                                 <button class="btn btn-sm btn-light btn-light-bordered clipboard-btn" data-clipboard-target="#post-{$item->id}" title="Kopírovat do schránky"><i class="fa fa-files-o" aria-hidden="true"></i></button>
                                 <button class="btn btn-sm btn-light btn-light-bordered" onclick="loadPost({$item->id})" title="Upravit / Kopírovat"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                                <button class="btn btn-sm btn-light btn-light-bordered delete" onclick="deletePost({$item->id})" title="Smazat"><i class="fa fa-times" aria-hidden="true"></i></button>
                             </div>
                             <span class="float-md-right mx-2">{$item->createdAt|date:'j.n.Y G:i'}</span>
                             <div class="alert alert-warning float-md-right mx-1" n:ifset="$item->updatedAt" style="margin: 0px; padding: 4px; font-size: 10px;">Upravil(a) {$users[$item->updatedById]->displayName}, {$item->updatedAt|date:'j.n.Y G:i'}</div>
