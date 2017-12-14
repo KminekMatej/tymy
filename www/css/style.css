@@ -38,7 +38,7 @@ A.disabled:hover{
     color: white;
 }
 
-BUTTON.btn, A.btn{
+BUTTON.btn, A.btn, INPUT.btn{
     cursor: pointer;
 }
 
@@ -162,4 +162,9 @@ INPUT.form-check{
 
 .btn-light-bordered{
     border: 1px solid #c5c5c5;
+}
+
+NAV.navbar .badge-new{
+    position: absolute;
+    right: 0px;
 }
