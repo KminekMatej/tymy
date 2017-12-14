@@ -67,7 +67,7 @@ class SecuredPresenter extends BasePresenter {
             if ($this->getUser()->getLogoutReason() === Nette\Security\IUserStorage::INACTIVITY) {
                 $this->flashMessage('You have been signed out due to inactivity. Please sign in again.');
             }
-            $this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
+            $this->redirect('Sign:in');
         }
         $this->setAccessibleSettings();
         $this->supplier->setTapi_config($this->getUser()->getIdentity()->getData()["tapi_config"]);
