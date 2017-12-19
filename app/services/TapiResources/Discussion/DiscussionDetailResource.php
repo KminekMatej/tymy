@@ -9,10 +9,10 @@ use Tymy\Exception\APIException;
  *
  * @author kminekmatej created on 8.12.2017, 10:39:17
  */
-class DiscussionDetail extends DiscussionResource {
+class DiscussionDetailResource extends DiscussionResource {
     
     public function init() {
-        $this->setCachingTimeout(600);
+        $this->setCachingTimeout(CachedResult::TIMEOUT_LARGE);
     }
     
     public function composeUrl() {
@@ -22,7 +22,7 @@ class DiscussionDetail extends DiscussionResource {
     }
 
     protected function postProcess() {
-        $this->postProcessDiscussion($this->getData());
+        $this->postProcessDiscussion($this->data);
     }
 
 
