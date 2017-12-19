@@ -8,6 +8,11 @@ namespace Tapi;
  */
 class CachedResult {
     
+    const TIMEOUT_NONE = 0; // turn off caching
+    const TIMEOUT_SMALL = 180; // 3 minutes - smallest allowed timeout
+    const TIMEOUT_MEDIUM = 300; // 5 minutes - medium timeout
+    const TIMEOUT_LARGE = 600; // 10 minutes - timeout larger than user usually stays on site
+    
     private $timeout;
     private $data;
     

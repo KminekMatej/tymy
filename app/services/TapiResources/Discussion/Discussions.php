@@ -12,7 +12,7 @@ use Tymy\Exception\APIException;
 class Discussions extends DiscussionResource {
     
     public function init() {
-        $this->setCachingTimeout(600);
+        $this->setCachingTimeout(CachedResult::TIMEOUT_LARGE);
     }
     
     public function composeUrl() {
