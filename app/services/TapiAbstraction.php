@@ -12,7 +12,7 @@ use Tracy\Debugger;
  */
 
 abstract class TapiAbstraction {
-    const SESSION_SECTION = "TAPI";
+    const SESSION_SECTION = "TAPI_SECTION";
     
     /** @var integer ID */
     private $id;
@@ -39,7 +39,7 @@ abstract class TapiAbstraction {
     private $dataReady;
     
     /** @var object data returned by request */
-    private $data;
+    protected $data;
     
     /** @var object data to be sent along with request */
     private $requestData;
@@ -55,9 +55,6 @@ abstract class TapiAbstraction {
     
     /** @var \App\Model\TapiAuthenticator */
     protected $tapiAuthenticator;
-    
-    /** @var \Tymy\TracyPanelTymy */
-    private $tapiDebugPanel;
     
     /** @var Nette\Http\Session */
     private $session;
@@ -81,7 +78,7 @@ abstract class TapiAbstraction {
         $this->user = $user;
         $this->session = $session;
         $this->cacheable = TRUE;
-        $this->cachingTimeout = 180;
+        $this->cachingTimeout = CachedResult::TIMEOUT_SMALL;
         $this->jsonEncoding = TRUE;
         $this->dataReady = FALSE;
         $this->tsidRequired = TRUE;
@@ -125,7 +122,7 @@ abstract class TapiAbstraction {
         $this->dataReady = TRUE;
     }
     
-    private function request($relogin = TRUE){
+    private function requestFromApi($relogin = TRUE){
         $this->composeUrl();
         
         if(is_null($this->url))
@@ -181,7 +178,7 @@ abstract class TapiAbstraction {
                     $newLogin = $this->tapiAuthenticator->reAuthenticate([$this->user->getIdentity()->data["data"]->login, $this->user->getIdentity()->data["hash"]]);
                     $this->user->getIdentity()->sessionKey = $newLogin->result->sessionKey;
                     $this->setTsid($this->user->getIdentity()->sessionKey);
-                    $this->request(FALSE);
+                    $this->requestFromApi(FALSE);
                     return TRUE;
                 } 
                 return FALSE;
@@ -258,16 +255,12 @@ abstract class TapiAbstraction {
     public function getData() {
         $this->loadFromCache();
         if($this->data == null){
-            $this->request();
-        }
-        $sessionSection = $this->session->getSection(self::SESSION_SECTION);
-        foreach ($sessionSection as $key => $val) {//TODO to be removed
-            Debugger::barDump($val, "Cached $key");
+            $this->requestFromApi();
         }
         return $this->data;
     }
     
-    private function getClassCacheName(){
+    protected function getClassCacheName(){
         $className = get_class($this);
         if($this->getId() != null)
             $className .= ":" . $this->getId ();
