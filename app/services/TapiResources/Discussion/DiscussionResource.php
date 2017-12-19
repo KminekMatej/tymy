@@ -13,7 +13,12 @@ abstract class DiscussionResource extends TapiAbstraction {
     
     protected function postProcessDiscussion($discussion) {
         $discussion->webName = Strings::webalize($discussion->caption);
-        $this->timeLoad($discussion->updatedAt);
+        if(!empty($discussion->updatedAt)){
+            $this->timeLoad($discussion->updatedAt);
+        }
+        if(!empty($discussion->newInfo->lastVisit)){
+            $this->timeLoad($discussion->newInfo->lastVisit);
+        }
     }
     
 }
