@@ -40,6 +40,11 @@ services:
         - Tymy\PwdReset
         - Tymy\User
         - Tymy\Users
+        - Tapi\DiscussionNewsListResource
+        - Tapi\DiscussionPageResource
+        - Tapi\DiscussionPostAddResource
+        - Tapi\DiscussionDetailResource
+        - Tapi\DiscussionListResource
 
 tracy:
     email: matej.kminek@attendees.eu
