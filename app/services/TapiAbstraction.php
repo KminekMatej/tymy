@@ -23,7 +23,7 @@ abstract class TapiAbstraction {
     /** @var integer Timeout in seconds to drop cache  */
     private $cachingTimeout;
     
-    /** @var RequestMethod Url request method */
+    /** @var string Url request method */
     private $method;
     
     /** @var ResultStatus Tapi result status */
@@ -67,7 +67,7 @@ abstract class TapiAbstraction {
     
     abstract function init();
     
-    abstract function composeUrl();
+    protected abstract function preProcess();
     
     protected abstract function postProcess();
     
@@ -113,7 +113,7 @@ abstract class TapiAbstraction {
     }
     
     private function saveToCache() {
-        if (!$this->dataReady || is_null($this->session))
+        if (!$this->dataReady || !$this->cacheable || is_null($this->session))
             return null;
         $sessionSection = $this->session->getSection(self::SESSION_SECTION);
         $sessionSection[$this->getClassCacheName()] = new CachedResult(date("U") + $this->cachingTimeout, $this->data);
@@ -139,7 +139,7 @@ abstract class TapiAbstraction {
     }
     
     private function requestFromApi($relogin = TRUE){
-        $this->composeUrl();
+        $this->preProcess();
         
         if(is_null($this->url))
             return FALSE;
@@ -170,7 +170,13 @@ abstract class TapiAbstraction {
         if($curl === FALSE){
             throw new \Tymy\Exception\APIException("Unknown error while procesing tapi request");
         } else {
-            $this->resultStatus = new ResultStatus(Json::decode($curl));
+            try {
+                $this->resultStatus = new ResultStatus(Json::decode($curl));
+            } catch (Nette\Utils\JsonException $exc) {
+                throw new \Tymy\Exception\APIException("Unknown error while procesing tapi request");
+            }
+
+            
         }
         $curlInfo = curl_getinfo($ch);
         curl_close($ch);
@@ -226,16 +232,16 @@ abstract class TapiAbstraction {
         return $this->cacheable;
     }
 
-    public function getMethod() {
-        return $this->method;
-    }
-
     public function setCacheable($cacheable) {
         $this->cacheable = $cacheable;
         return $this;
     }
+    
+    public function getMethod() {
+        return $this->method;
+    }
 
-    public function setMethod(RequestMethod $method) {
+    public function setMethod($method) {
         $this->method = $method;
         return $this;
     }
@@ -244,15 +250,15 @@ abstract class TapiAbstraction {
         return $this->cachingTimeout;
     }
 
-    public function getUrl() {
-        return $this->url;
-    }
-
     public function setCachingTimeout($cachingTimeout) {
         $this->cachingTimeout = $cachingTimeout;
         return $this;
     }
 
+    public function getUrl() {
+        return $this->url;
+    }
+    
     public function setUrl($url) {
         $this->url = $this->supplier->getApiRoot() . DIRECTORY_SEPARATOR . $url;
         return $this;
@@ -274,6 +280,22 @@ abstract class TapiAbstraction {
             $this->requestFromApi();
         }
         return $this->data;
+    }
+    
+    /**
+     * An alias for getData() function. Used in actions.
+     */
+    public function perform(){
+        return $this->getData();
+    }
+    
+    public function getRequestData() {
+        return $this->requestData;
+    }
+
+    public function setRequestData($requestData) {
+        $this->requestData = $requestData;
+        return $this;
     }
     
     protected function getClassCacheName(){
