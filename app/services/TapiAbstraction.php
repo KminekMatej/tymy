@@ -96,6 +96,22 @@ abstract class TapiAbstraction {
         }
     }
     
+    public static function dumpCache($session){
+        $sessionSection = $session->getSection(self::SESSION_SECTION);
+        $cacheContents = [];
+        foreach ($sessionSection as $key => $val) {
+            $cacheContents[$key] = $val;
+        }
+        Debugger::barDump($cacheContents, "Cache contents");
+    }
+    
+    public static function dropCache($session){
+        $sessionSection = $session->getSection(self::SESSION_SECTION);
+        foreach ($sessionSection as $key => $val) {
+            unset($sessionSection[$key]);
+        }
+    }
+    
     private function saveToCache() {
         if (!$this->dataReady || is_null($this->session))
             return null;
