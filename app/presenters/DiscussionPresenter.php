@@ -3,9 +3,14 @@
 namespace App\Presenters;
 
 use Nette\Application\UI\NewPostControl;
-use Nette\Utils\Strings;
-use Tymy;
-use Tracy\Debugger;
+use Tapi\DiscussionDetailResource;
+use Tapi\DiscussionListResource;
+use Tapi\DiscussionNewsListResource;
+use Tapi\DiscussionPageResource;
+use Tapi\DiscussionPostCreateResource;
+use Tapi\DiscussionPostDeleteResource;
+use Tapi\DiscussionPostEditResource;
+use Tapi\DiscussionResource;
 
 /**
  * Description of DiscussionPresenter
@@ -14,11 +19,21 @@ use Tracy\Debugger;
  */
 class DiscussionPresenter extends SecuredPresenter {
     
-    /** @var \Tymy\Discussion @inject */
-    public $discussion;
+    /** @var DiscussionPageResource @inject */
+    public $discussionPage;
 
-    /** @var \Tymy\Discussions @inject */
-    public $discussions;
+    /** @var DiscussionListResource @inject */
+    public $discussionsList;
+    
+    /** @var DiscussionPostCreateResource @inject */
+    public $discussionPostCreate;
+    
+    /** @var DiscussionPostEditResource @inject */
+    public $discussionPostEdit;
+    
+    /** @var DiscussionPostDeleteResource @inject */
+    public $discussionPostDelete;
+    
 
     public function __construct() {
         parent::__construct();
@@ -30,8 +45,9 @@ class DiscussionPresenter extends SecuredPresenter {
     }
 
     public function renderDefault() {
+        \Tapi\TapiAbstraction::dumpCache($this->session);
         try{
-            $this->template->discussions = $this->discussions->setWithNew(true)->getData();
+            $this->template->discussions = $this->discussionsList->getData();
         } catch (\Tymy\Exception\APIException $ex){
             $this->handleTapiException($ex);
         }
@@ -41,11 +57,12 @@ class DiscussionPresenter extends SecuredPresenter {
         $post = $this->getHttpRequest()->getPost("post");
         if (trim($post) != "") {
             try {
-                $this->discussion
-                        ->recId($discussion)
-                        ->insert($post);
+                $this->discussionPostCreate
+                        ->setId($discussion)
+                        ->setPost($post)
+                        ->perform();
             } catch (\Tymy\Exception\APIException $ex) {
-                $this->handleTapiException($ex);
+                $this->handleTapiException($ex, 'this');
             }
         }
         $this->setView('discussion');
@@ -56,11 +73,27 @@ class DiscussionPresenter extends SecuredPresenter {
         $text = $this->getHttpRequest()->getPost("post");
         $sticky = $this->getHttpRequest()->getPost("sticky");
         try {
-            $this->discussion
-                    ->recId($discussion)
-                    ->editPost($postId, $text, $sticky);
+            $this->discussionPostEdit
+                        ->setId($discussion)
+                        ->setPostId($postId)
+                        ->setPost($text)
+                        ->setSticky($sticky)
+                        ->perform();
         } catch (\Tymy\Exception\APIException $ex) {
-            $this->handleTapiException($ex);
+            $this->handleTapiException($ex, 'this');
+        }
+        $this->setView('discussion');
+    }
+    
+    public function actionDeletePost($discussion) {
+        $postId = $this->getHttpRequest()->getPost("postId");
+        try {
+            $this->discussionPostDelete
+                        ->setId($discussion)
+                        ->setPostId($postId)
+                        ->perform();
+        } catch (\Tymy\Exception\APIException $ex) {
+            $this->handleTapiException($ex, 'this');
         }
         $this->setView('discussion');
     }
@@ -76,26 +109,28 @@ class DiscussionPresenter extends SecuredPresenter {
             $this->handleTapiException($ex);
         }
         $this->setView('discussion');
+        if($this->isAjax())
+            $this->redrawControl("discussion");
     }
     
     public function renderDiscussion($discussion, $page, $search) {
-        $discussionId = $this->discussions->getIdFromWebname($discussion);
+        $discussionId = DiscussionResource::getIdFromWebname($discussion, $this->discussionsList->getData());
         
         if (is_null($discussionId) || $discussionId < 1)
             $this->error("Tato diskuze neexistuje");
         
-        $this->discussion
-                ->reset()
-                ->recId($discussionId)
+        $this->discussionPage
+                ->setId($discussionId)
                 ->setPage($page);
+        
         $this->template->search = "";
         if($search){
-            $this->discussion->search($search);
+            $this->discussionPage->setSearch($search);
             $this->template->search = $search;
         }
             
         try {
-            $data = $this->discussion->getData();
+            $data = $this->discussionPage->getData();
             $this->template->users = $this->users->getData();
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
@@ -111,8 +146,6 @@ class DiscussionPresenter extends SecuredPresenter {
         $lastPage = is_numeric($data->paging->numberOfPages) ? $data->paging->numberOfPages : 1 ;
         $this->template->lastPage = $lastPage;
         $this->template->pagination = $this->pagination($lastPage, 1, $currentPage, 5);
-        if($this->isAjax())
-            $this->redrawControl("discussion");
     }
     
     protected function createComponentNewPost($discussion) {

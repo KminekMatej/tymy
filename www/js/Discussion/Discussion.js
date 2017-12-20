@@ -39,6 +39,22 @@ function updatePost(url) {
     });
 }
 
+function deletePost(id, url) {
+    postElm = $("DIV#row-" + id)
+    postElm.hide('slow', function () {
+        postElm.remove();
+    });
+    $.nette.ajax({
+        type: 'POST',
+        url: url,
+        data: {
+            'postId': id,
+        },
+    }).done(function () {
+        
+    });
+}
+
 function stickPost(url, postId, sticky) {
     $("DIV.addPost BUTTON").prop("disabled", true);
     $.nette.ajax({
