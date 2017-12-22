@@ -26,8 +26,11 @@ class SecuredPresenter extends BasePresenter {
     /** @var \App\Model\TapiAuthorizator @inject */
     public $tapiAuthorizator;
     
-    /** @var \Tymy\Discussions @inject */
-    public $discussions;
+    /** @var \Tapi\DiscussionListResource @inject */
+    public $discussionList;
+    
+    /** @var \Tapi\DiscussionNewsListResource @inject */
+    public $discussionNews;
     
     /** @var \Tymy\Polls @inject */
     public $polls;

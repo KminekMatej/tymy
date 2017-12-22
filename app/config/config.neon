@@ -42,7 +42,9 @@ services:
         - Tymy\Users
         - Tapi\DiscussionNewsListResource
         - Tapi\DiscussionPageResource
-        - Tapi\DiscussionPostAddResource
+        - Tapi\DiscussionPostCreateResource
+        - Tapi\DiscussionPostDeleteResource
+        - Tapi\DiscussionPostEditResource
         - Tapi\DiscussionDetailResource
         - Tapi\DiscussionListResource
 

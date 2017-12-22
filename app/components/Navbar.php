@@ -14,8 +14,11 @@ class NavbarControl extends Control {
     /** @var \App\Presenters\SecuredPresenter */
     private $presenter;
 
-    /** @var \Tymy\Discussions */
-    private $discussions;
+    /** @var \Tapi\DiscussionNewsListResource */
+    private $discussionNewsList;
+
+    /** @var \Tapi\DiscussionListResource */
+    private $discussionList;
 
     /** @var \Tymy\Polls */
     private $polls;
@@ -40,7 +43,7 @@ class NavbarControl extends Control {
     public function __construct(\App\Presenters\SecuredPresenter $presenter) {
         parent::__construct();
         $this->presenter = $presenter;
-        $this->discussions = $this->presenter->discussions;
+        $this->discussionList = \Tapi\DiscussionResource::mergeListWithNews($presenter->discussionList, $presenter->discussionNews);
         $this->polls = $this->presenter->polls;
         $this->events = $this->presenter->events;
         $this->user = $this->presenter->user;
@@ -52,9 +55,8 @@ class NavbarControl extends Control {
 
     private function discussions() {
         try {
-            $discussionsResult = $this->discussions->reset()->setWithNew(true)->getResult();
-            $this->template->discussionWarnings = $discussionsResult->menuWarningCount;
-            $this->template->discussions = $this->discussions->getData();
+            $this->template->discussionWarnings = $this->discussionList->getWarnings();
+            $this->template->discussions = $this->discussionList->getData();
         } catch (Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
