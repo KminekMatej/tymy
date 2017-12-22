@@ -65,6 +65,9 @@ abstract class TapiAbstraction {
     /** @var \Tymy\TracyPanelTymy */
     private $tymyPanel;
     
+    /** @var integer Warnings for user */
+    protected $warnings;
+    
     abstract function init();
     
     protected abstract function preProcess();
@@ -173,7 +176,13 @@ abstract class TapiAbstraction {
             try {
                 $this->resultStatus = new ResultStatus(Json::decode($curl));
             } catch (Nette\Utils\JsonException $exc) {
-                throw new \Tymy\Exception\APIException("Unknown error while procesing tapi request");
+                if(!Debugger::$productionMode){
+                    Debugger::barDump($this->method, "CURL method");
+                    Debugger::barDump($this->url, "CURL URL");
+                    Debugger::barDump($this->jsonEncoding ? json_encode($this->requestData) : $this->requestData, "CURL Data");
+                } else {
+                    throw new \Tymy\Exception\APIException("Unknown error while procesing tapi request");
+                }
             }
 
             
@@ -274,19 +283,25 @@ abstract class TapiAbstraction {
         return $this;
     }
 
-    public function getData() {
-        $this->loadFromCache();
-        if($this->data == null){
+    public function getData($forceRequest = FALSE) {
+        if($this->cacheable){
+            $this->loadFromCache();
+        }
+        if($this->data == null || $forceRequest){
             $this->requestFromApi();
         }
         return $this->data;
     }
     
+    public function getWarnings() {
+        return $this->warnings;
+    }
+    
     /**
      * An alias for getData() function. Used in actions.
      */
-    public function perform(){
-        return $this->getData();
+    public function perform($forceRequest = FALSE){
+        return $this->getData($forceRequest);
     }
     
     public function getRequestData() {
