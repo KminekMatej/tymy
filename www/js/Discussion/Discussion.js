@@ -40,6 +40,9 @@ function updatePost(url) {
 }
 
 function deletePost(id, url) {
+    if (!confirm("Smazat? To jako vážně?")) {
+        return;
+    }
     postElm = $("DIV#row-" + id)
     postElm.hide('slow', function () {
         postElm.remove();
