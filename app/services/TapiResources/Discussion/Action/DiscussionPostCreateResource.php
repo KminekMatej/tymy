@@ -5,11 +5,11 @@ use Tymy\Exception\APIException;
 
 /**
  * Project: tymy_v2
- * Description of DiscussionDetail
+ * Description of DiscussionPostCreateResource
  *
  * @author kminekmatej created on 8.12.2017, 10:39:17
  */
-class DiscussionPostAdd extends DiscussionResource {
+class DiscussionPostCreateResource extends DiscussionResource {
     
     private $post;
         
@@ -18,23 +18,18 @@ class DiscussionPostAdd extends DiscussionResource {
         $this->setMethod(RequestMethod::POST);
     }
     
-    public function composeUrl() {
+    public function preProcess() {
         if($this->getId() == null) throw new APIException ("Discussion ID is missing");
         if($this->getPost() == null) throw new APIException ("Post is missing");
-        $this->setUrl("discussion/" . $this->getId() . "/" . $this->getMode() . "/" . $this->getPage());
+        $this->setUrl("discussion/" . $this->getId() . "/post");
+        $this->setRequestData((object)[
+            "post" => $this->getPost(),
+        ]);
         return $this;
     }
 
     protected function postProcess() {
-        parent::postProcessDiscussion($this->getData());
-        $this->timeLoad($this->getData()->updatedAt);
-        $this->timeLoad($this->getData()->newInfo->lastVisit);
-        foreach ($this->getData()->posts as $post) {
-            $this->timeLoad($post->createdAt);
-            if (property_exists($post, "updatedAt")) {
-                $this->timeLoad($post->updatedAt);
-            }
-        }
+        parent::postProcessDiscussionPost($this->data);
     }
     
     public function getPost() {

@@ -102,15 +102,15 @@ class DiscussionPresenter extends SecuredPresenter {
         $postId = $this->getHttpRequest()->getPost("postId");
         $sticky = $this->getHttpRequest()->getPost("sticky");
         try {
-            $this->discussion
-                    ->recId($discussion)
-                    ->editPost($postId, NULL, $sticky);
+            $this->discussionPostEdit
+                        ->setId($discussion)
+                        ->setPostId($postId)
+                        ->setSticky($sticky)
+                        ->perform();
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
         $this->setView('discussion');
-        if($this->isAjax())
-            $this->redrawControl("discussion");
     }
     
     public function renderDiscussion($discussion, $page, $search) {
@@ -146,6 +146,8 @@ class DiscussionPresenter extends SecuredPresenter {
         $lastPage = is_numeric($data->paging->numberOfPages) ? $data->paging->numberOfPages : 1 ;
         $this->template->lastPage = $lastPage;
         $this->template->pagination = $this->pagination($lastPage, 1, $currentPage, 5);
+        if($this->isAjax())
+            $this->redrawControl("discussion");
     }
     
     protected function createComponentNewPost($discussion) {

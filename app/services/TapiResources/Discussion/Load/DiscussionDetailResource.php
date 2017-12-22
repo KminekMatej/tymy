@@ -9,21 +9,20 @@ use Tymy\Exception\APIException;
  *
  * @author kminekmatej created on 8.12.2017, 10:39:17
  */
-class Discussions extends DiscussionResource {
+class DiscussionDetailResource extends DiscussionResource {
     
     public function init() {
         $this->setCachingTimeout(CachedResult::TIMEOUT_LARGE);
     }
     
-    public function composeUrl() {
+    public function preProcess() {
         if($this->getId() == null) throw new APIException ("Discussion ID is missing");
         $this->setUrl("discussion/" . $this->getId());
         return $this;
     }
 
     protected function postProcess() {
-        parent::postProcess();
-        $this->timeLoad($this->getData()->updatedAt);
+        $this->postProcessDiscussion($this->data);
     }
 
 
