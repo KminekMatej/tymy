@@ -12,7 +12,6 @@ use Tracy\Debugger;
  */
 
 abstract class TapiAbstraction {
-    const SESSION_SECTION = "TAPI_SECTION";
     
     /** @var integer ID */
     private $id;
@@ -22,6 +21,9 @@ abstract class TapiAbstraction {
     
     /** @var integer Timeout in seconds to drop cache  */
     private $cachingTimeout;
+    
+    /**  @var CacheService */
+    private $cacheService;
     
     /** @var string Url request method */
     private $method;
@@ -74,14 +76,15 @@ abstract class TapiAbstraction {
     
     protected abstract function postProcess();
     
-    public function __construct(\App\Model\Supplier $supplier, \App\Model\TapiAuthenticator $tapiAuthenticator, Nette\Security\User $user, Nette\Http\Session $session) {
+    public function __construct(\App\Model\Supplier $supplier, \App\Model\TapiAuthenticator $tapiAuthenticator, Nette\Security\User $user, Nette\Http\Session $session, CacheService $cacheService) {
         $this->initTapiDebugPanel();
         $this->tapiAuthenticator = $tapiAuthenticator;
         $this->supplier = $supplier;
         $this->user = $user;
         $this->session = $session;
         $this->cacheable = TRUE;
-        $this->cachingTimeout = CachedResult::TIMEOUT_SMALL;
+        $this->cachingTimeout = CacheService::TIMEOUT_SMALL;
+        $this->cacheService = $cacheService;
         $this->jsonEncoding = TRUE;
         $this->dataReady = FALSE;
         $this->tsidRequired = TRUE;
@@ -116,29 +119,23 @@ abstract class TapiAbstraction {
     }
     
     private function saveToCache() {
-        if (!$this->dataReady || !$this->cacheable || is_null($this->session))
+        if (!$this->dataReady || !$this->cacheable)
             return null;
-        $sessionSection = $this->session->getSection(self::SESSION_SECTION);
-        $sessionSection[$this->getClassCacheName()] = new CachedResult(date("U") + $this->cachingTimeout, $this->data);
+        $this->cacheService->save($this->getClassCacheName(), $this->data, $this->cachingTimeout);
     }
     
     public function resetCache(){
-        if (is_null($this->session))
-            return null;
-        $sessionSection = $this->session->getSection(self::SESSION_SECTION);
-        unset($sessionSection[$this->getClassCacheName()]);
+        $this->cacheService->clear($this->getClassCacheName());
         return $this;
     }
     
     private function loadFromCache(){
-        if (is_null($this->session))
-            return null;
-        $sessionSection = $this->session->getSection(self::SESSION_SECTION);
-        $cachedResult = $sessionSection[$this->getClassCacheName()];
-        if($cachedResult == null || !$cachedResult->isValid())
-            return null;
-        $this->data = $cachedResult->load();
-        $this->dataReady = TRUE;
+        $data = $this->cacheService->load($this->getClassCacheName());
+        if(is_null($data)) return null;
+        else {
+            $this->data = $data;
+            $this->dataReady = TRUE;
+        }
     }
     
     private function requestFromApi($relogin = TRUE){

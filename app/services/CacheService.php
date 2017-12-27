@@ -11,6 +11,10 @@ namespace Tapi;
 class CacheService {
     
     const TAPI_SECTION = "TAPI_SECTION";
+    const TIMEOUT_NONE = 0; // turn off caching
+    const TIMEOUT_SMALL = 180; // 3 minutes - smallest allowed timeout
+    const TIMEOUT_MEDIUM = 300; // 5 minutes - medium timeout
+    const TIMEOUT_LARGE = 600; // 10 minutes - timeout larger than user usually stays on site
     
     /** @var \Nette\Http\SessionSection */
     private $tapiSection;
