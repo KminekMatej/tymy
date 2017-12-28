@@ -52,8 +52,6 @@
             </div>
   
             <div class="card sh-box my-3" n:snippet="attendanceTabs">
-                {var $event->canResult = strtotime($event->closeTime) < date('U')} {*TEMP TODO TO BE REMOVED AFTER TAPI UPDATE*}
-                {dump $event}
                 <div class="card-header">
                     <ul class="nav nav-tabs flex-column flex-sm-row card-header-tabs" role="tablist">
                         {var $first = true}
