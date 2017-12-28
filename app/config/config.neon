@@ -28,9 +28,6 @@ services:
         - Tymy\Attendance
         - Tymy\Discussion
         - Tymy\Discussions
-        - Tymy\Event
-        - Tymy\EventTypes
-        - Tymy\Events
         - Tymy\Logout
         - Tymy\Live
         - Tymy\Poll
@@ -40,6 +37,7 @@ services:
         - Tymy\PwdReset
         - Tymy\User
         - Tymy\Users
+        - Tapi\CacheService
         - Tapi\DiscussionNewsListResource
         - Tapi\DiscussionPageResource
         - Tapi\DiscussionPostCreateResource
@@ -47,6 +45,11 @@ services:
         - Tapi\DiscussionPostEditResource
         - Tapi\DiscussionDetailResource
         - Tapi\DiscussionListResource
+        - Tapi\EventDetailResource
+        - Tapi\EventListResource
+        - Tapi\EventTypeListResource
+
+
 
 tracy:
     email: matej.kminek@attendees.eu

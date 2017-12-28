@@ -25,17 +25,32 @@ class CacheService {
 
     
     public function save($key, $value, $timeout) {
-        if(is_null($this->session)) return null;
+        if(is_null($this->tapiSection)) return null;
         $this->tapiSection[$key] = new CachedResult(date("U") + $timeout, $value);
     }
     
     public function load($key){
+        if(is_null($this->tapiSection)) return null;
         $cachedResult = $this->tapiSection[$key];
         return $cachedResult == null || !$cachedResult->isValid() ? null : $cachedResult->load();
     }
     
     public function clear($key){
-        if(is_null($this->session)) return null;
+        if(is_null($this->tapiSection)) return null;
         unset($this->tapiSection[$key]);
+    }
+    
+    public function dumpCache(){
+        $cacheContents = [];
+        foreach ($this->tapiSection as $key => $val) {
+            $cacheContents[$key] = $val;
+        }
+        Debugger::barDump($cacheContents, "Contents of cache " . self::TAPI_SECTION);
+    }
+    
+    public function dropCache(){
+        foreach ($this->tapiSection as $key => $val) {
+            unset($this->tapiSection[$key]);
+        }
     }
 }

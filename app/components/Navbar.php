@@ -3,6 +3,9 @@
 namespace Nette\Application\UI;
 
 use Nette;
+use Tapi\DiscussionListResource;
+use Tapi\EventListResource;
+
 
 /**
  * Description of Navbar
@@ -14,17 +17,14 @@ class NavbarControl extends Control {
     /** @var \App\Presenters\SecuredPresenter */
     private $presenter;
 
-    /** @var \Tapi\DiscussionNewsListResource */
-    private $discussionNewsList;
-
-    /** @var \Tapi\DiscussionListResource */
+    /** @var DiscussionListResource */
     private $discussionList;
 
     /** @var \Tymy\Polls */
     private $polls;
 
-    /** @var \Tymy\Events */
-    private $events;
+    /** @var EventListResource */
+    private $eventList;
 
     /** @var \Tymy\User */
     private $user;
@@ -45,7 +45,7 @@ class NavbarControl extends Control {
         $this->presenter = $presenter;
         $this->discussionList = \Tapi\DiscussionResource::mergeListWithNews($presenter->discussionList, $presenter->discussionNews);
         $this->polls = $this->presenter->polls;
-        $this->events = $this->presenter->events;
+        $this->eventList = $this->presenter->eventList;
         $this->user = $this->presenter->user;
         $this->users = $this->presenter->users;
         $this->supplier = $this->presenter->supplier;
@@ -86,15 +86,13 @@ class NavbarControl extends Control {
 
     private function events() {
         try {
-            $this->events
-                    ->reset()
-                    ->setWithMyAttendance(true)
+            $this->template->events = $this->eventList
                     ->setFrom(date("Ymd"))
                     ->setTo(date("Ymd", strtotime(" + 1 month")))
                     ->setOrder("startTime")
                     ->getData();
-            $this->template->eventWarnings = $this->events->getResult()->menuWarningCount;
-            $this->template->events = $this->events->getData();
+            $this->template->eventWarnings = $this->eventList->getWarnings();
+            
         } catch (Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
@@ -105,6 +103,7 @@ class NavbarControl extends Control {
     }
 
     public function render() {
+        
         $template = $this->template;
         $template->setFile(__DIR__ . '/templates/navbar.latte');
         $this->template->levels = $this->presenter->getLevelCaptions();

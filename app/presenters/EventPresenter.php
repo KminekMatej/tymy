@@ -2,22 +2,15 @@
 
 namespace App\Presenters;
 
-use Nette;
-use App\Model;
-use Nette\Application\UI\Form;
-use Nette\Utils\Strings;
+use Tapi\EventDetailResource;
 
 class EventPresenter extends SecuredPresenter {
 
-    /** @var \Tymy\Event @inject */
-    public $event;
+    /** @var EventDetailResource @inject */
+    public $eventDetail;
 
     /** @var \Tymy\Attendance @inject */
     public $attendance;
-    private $eventsFrom;
-    private $eventsTo;
-    private $eventsJSObject;
-    private $eventsMonthly;
 
     public function startup() {
         parent::startup();
@@ -44,45 +37,46 @@ class EventPresenter extends SecuredPresenter {
 
     public function renderDefault($date = NULL, $direction = NULL) {
         try {
-            $this->events = $this->events->loadYearEvents($date, $direction);
-            $eventTypes = $this->eventTypes->getData();
+            $this->eventList
+                    ->setHalfYearFrom($date, $direction)
+                    ->getData();
+            $eventTypes = $this->eventTypeList->getData();
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
 
 
-        foreach ($this->events->eventsMonthly as $eventMonth) {
+        foreach ($this->eventList->getAsMonthArray() as $eventMonth) {
             foreach ($eventMonth as $event) {
                 $eventCaptions = $this->getEventCaptions($event, $eventTypes);
                 $event->myPreStatusCaption = $eventCaptions["myPreStatusCaption"];
                 $event->myPostStatusCaption = $eventCaptions["myPostStatusCaption"];
             }
         }
-        $this->template->agendaFrom = date("Y-m", strtotime($this->events->eventsFrom));
-        $this->template->agendaTo = date("Y-m", strtotime($this->events->eventsTo));
+        $this->template->agendaFrom = date("Y-m", strtotime($this->eventList->getFrom()));
+        $this->template->agendaTo = date("Y-m", strtotime($this->eventList->getTo()));
         $this->template->currY = date("Y");
         $this->template->currM = date("m");
-        $this->template->evMonths = $this->events->eventsMonthly;
-        $this->template->events = $this->events->eventsJSObject;
+        $this->template->evMonths = $this->eventList->getAsMonthArray();
+        $this->template->events = $this->eventList->getAsArray();
         $this->template->eventTypes = $eventTypes;
         if ($this->isAjax()) {
-            foreach ($this->events->eventsJSObject as &$eventJs) {
+            foreach ($this->eventList->getAsArray() as &$eventJs) {
                 $eventJs->url = $this->link("Event:event", $eventJs->webName);
                 unset($eventJs->webName);
                 $eventJs->stick = true;
             }
-            $this->payload->events = $this->events->eventsJSObject;
+            $this->payload->events = $this->eventList->getAsArray();
         }
     }
 
     public function renderEvent($udalost) {
         
         try {
-            $event = $this->event
-                    ->reset()
-                    ->recId($this->parseIdFromWebname($udalost))
+            $event = $this->eventDetail
+                    ->setId($this->parseIdFromWebname($udalost))
                     ->getData();
-            $eventTypes = $this->eventTypes->getData();
+            $eventTypes = $this->eventTypeList->getData();
             $users = $this->users->getResult();
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
@@ -161,8 +155,7 @@ class EventPresenter extends SecuredPresenter {
         }
     }
 
-
-    public function handleEventLoad($date = NULL, $direction = NULL) {
+    public function handleEventLoad() {
         $this->redrawControl("events-agenda");
     }
 

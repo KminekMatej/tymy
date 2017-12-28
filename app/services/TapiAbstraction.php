@@ -13,6 +13,9 @@ use Tracy\Debugger;
 
 abstract class TapiAbstraction {
     
+    /** @var Nette\Security\User */
+    protected $user;
+    
     /** @var integer ID */
     private $id;
     
@@ -23,7 +26,7 @@ abstract class TapiAbstraction {
     private $cachingTimeout;
     
     /**  @var CacheService */
-    private $cacheService;
+    protected $cacheService;
     
     /** @var string Url request method */
     private $method;
@@ -58,9 +61,6 @@ abstract class TapiAbstraction {
     /** @var \App\Model\TapiAuthenticator */
     protected $tapiAuthenticator;
     
-    /** @var Nette\Http\Session */
-    private $session;
-    
     /** @var boolean Should sent data be encoded in JSON */
     private $jsonEncoding;
 
@@ -76,12 +76,11 @@ abstract class TapiAbstraction {
     
     protected abstract function postProcess();
     
-    public function __construct(\App\Model\Supplier $supplier, \App\Model\TapiAuthenticator $tapiAuthenticator, Nette\Security\User $user, Nette\Http\Session $session, CacheService $cacheService) {
+    public function __construct(\App\Model\Supplier $supplier, \App\Model\TapiAuthenticator $tapiAuthenticator, Nette\Security\User $user, CacheService $cacheService) {
         $this->initTapiDebugPanel();
         $this->tapiAuthenticator = $tapiAuthenticator;
         $this->supplier = $supplier;
         $this->user = $user;
-        $this->session = $session;
         $this->cacheable = TRUE;
         $this->cachingTimeout = CacheService::TIMEOUT_SMALL;
         $this->cacheService = $cacheService;
@@ -99,22 +98,6 @@ abstract class TapiAbstraction {
             Debugger::getBar()->addPanel($this->tymyPanel, $panelId);
         } else {
             $this->tymyPanel = Debugger::getBar()->getPanel($panelId);
-        }
-    }
-    
-    public static function dumpCache($session){
-        $sessionSection = $session->getSection(self::SESSION_SECTION);
-        $cacheContents = [];
-        foreach ($sessionSection as $key => $val) {
-            $cacheContents[$key] = $val;
-        }
-        Debugger::barDump($cacheContents, "Cache contents");
-    }
-    
-    public static function dropCache($session){
-        $sessionSection = $session->getSection(self::SESSION_SECTION);
-        foreach ($sessionSection as $key => $val) {
-            unset($sessionSection[$key]);
         }
     }
     
@@ -284,7 +267,7 @@ abstract class TapiAbstraction {
         if($this->cacheable){
             $this->loadFromCache();
         }
-        if($this->data == null || $forceRequest){
+        if($this->data == null || $forceRequest || !$this->cacheable){
             $this->requestFromApi();
         }
         return $this->data;

@@ -1,31 +1,22 @@
 <?php
 
 namespace App\Presenters;
+use Tapi\EventDetailResource;
 
 class SettingsPresenter extends SecuredPresenter {
     
     /** @var \Tymy\Discussion @inject */
     public $discussion;
         
-    /** @var \Tymy\Event @inject */
-    public $event;
+    /** @var EventDetailResource @inject */
+    public $eventDetail;
         
     /** @var \Tymy\Poll @inject */
     public $poll;
         
     /** @var \Tymy\PollOption @inject */
     public $pollOption;
-        
-    /** @var \Tymy\Events @inject */
-    public $events;
-        
-    /** @var \Tymy\EventTypes @inject */
-    public $eventTypes;
-    
             
-    /** @var \App\Model\Supplier @inject */
-    public $supplier;
-        
     protected function startup() {
         parent::startup();
         $this->setLevelCaptions(["1" => ["caption" => "Nastavení", "link" => $this->link("Settings:")]]);
@@ -41,7 +32,7 @@ class SettingsPresenter extends SecuredPresenter {
             $this->setView("discussion");
         } else {
             $this->template->isNew = false;
-            $discussions = $this->discussions->reset()->getData(); // get all events
+            $discussions = $this->discussions->reset()->getData();
             $this->template->discussions = $discussions;
             $this->template->discussionsCount = count($discussions);
         }
@@ -54,11 +45,11 @@ class SettingsPresenter extends SecuredPresenter {
         } else {
             $this->template->isNew = false;
             $page = is_numeric($page) ? $page : 1;
-            $limit = \Tymy\Events::PAGING_EVENTS_PER_PAGE;
+            $limit = \Tapi\EventListResource::PAGING_EVENTS_PER_PAGE;
             $offset = ($page-1)*$limit;
-            $events = $this->events->reset()->setLimit($limit)->setOffset($offset)->getData(); // get all events
+            $events = $this->eventList->setLimit($limit)->setOffset($offset)->getData(); // get all events
             $this->template->events = $events;
-            $allEventsCount = $this->events->getAllEventsCount();
+            $allEventsCount = $this->eventList->getAllEventsCount();
             $this->template->eventsCount = $allEventsCount;
             $this->template->currentPage = $page;
             $this->template->lastPage = ceil($allEventsCount / $limit);
@@ -139,7 +130,7 @@ class SettingsPresenter extends SecuredPresenter {
             "link" => "",
         ]];
         $this->template->events = $events;
-        $this->template->eventTypes = $this->eventTypes->getData();
+        $this->template->eventTypes = $this->eventTypeList->getData();
         
         $this->setView("events");
     }
@@ -147,10 +138,10 @@ class SettingsPresenter extends SecuredPresenter {
     public function renderEvent($event) {
         //RENDERING EVENT DETAIL
         $eventId = $this->parseIdFromWebname($event);
-        $eventObj = $this->event->reset()->recId($eventId)->getData();
-        $this->setLevelCaptions(["3" => ["caption" => $eventObj->caption, "link" => $this->link("Settings:events", $eventObj->webName)]]);
-        $this->template->event = $eventObj;
-        $this->template->eventTypes = $this->eventTypes->getData();
+        $event = $this->eventDetail->setId($eventId)->getData();
+        $this->setLevelCaptions(["3" => ["caption" => $event->caption, "link" => $this->link("Settings:events", $event->webName)]]);
+        $this->template->event = $event;
+        $this->template->eventTypes = $this->eventTypeList->getData();
     }
     
     public function renderPoll_new() {
@@ -205,7 +196,7 @@ class SettingsPresenter extends SecuredPresenter {
     public function handleEventsCreate(){
         $post = $this->getRequest()->getPost();
         try {
-            $this->event->create($post, $this->eventTypes->getData());
+            $this->event->create($post, $this->eventTypeList->getData());
             $this->redirect('Settings:events');
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex, 'this');

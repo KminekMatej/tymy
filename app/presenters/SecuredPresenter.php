@@ -11,6 +11,9 @@ namespace App\Presenters;
 use Nette;
 use Nette\Application\UI\NavbarControl;
 use App\Model\SettingMenu;
+use Tapi\EventListResource;
+use Tapi\EventTypeListResource;
+
 /**
  * Description of SecuredPresenter
  *
@@ -35,8 +38,8 @@ class SecuredPresenter extends BasePresenter {
     /** @var \Tymy\Polls @inject */
     public $polls;
     
-    /** @var \Tymy\Events @inject */
-    public $events;
+    /** @var EventListResource @inject */
+    public $eventList;
     
     /** @var \Tymy\User @inject */
     public $user;
@@ -44,8 +47,12 @@ class SecuredPresenter extends BasePresenter {
     /** @var \Tymy\Users @inject */
     public $users;
     
-    /** @var \Tymy\EventTypes @inject */
-    public $eventTypes;
+    /** @var EventTypeListResource @inject */
+    public $eventTypeList;
+    
+    
+    /** @var \Tapi\CacheService @inject */
+    public $cacheService;
     
     public $accessibleSettings = [];
     
@@ -72,6 +79,7 @@ class SecuredPresenter extends BasePresenter {
             }
             $this->redirect('Sign:in');
         }
+        //$this->cacheService->dropCache();
         $this->setAccessibleSettings();
         $this->supplier->setTapi_config($this->getUser()->getIdentity()->getData()["tapi_config"]);
         $this->tapiAuthorizator->setUser($this->getUser()->getIdentity()->getData()["data"]);

@@ -45,7 +45,6 @@ class DiscussionPresenter extends SecuredPresenter {
     }
 
     public function renderDefault() {
-        \Tapi\TapiAbstraction::dumpCache($this->session);
         try{
             $this->template->discussions = $this->discussionsList->getData();
         } catch (\Tymy\Exception\APIException $ex){
