@@ -21,11 +21,12 @@ class DiscussionEditResource extends DiscussionResource {
     protected function preProcess() {
         if($this->getDiscussion() == null)
             throw new APIException('Discussion not set!');
-        if(empty($this->getDiscussion()->id))
+        if($this->getId() == null)
             throw new APIException('Discussion ID not set!');
         
         $this->setUrl("discussions");
-        $this->setRequestData($this->getDiscussion());  
+        $this->getDiscussion()->id = $this->getId();
+        $this->setRequestData($this->getDiscussion());
     }
 
     protected function postProcess() {

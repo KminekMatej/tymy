@@ -43,6 +43,9 @@ services:
         - Tapi\DiscussionPostEditResource
         - Tapi\DiscussionDetailResource
         - Tapi\DiscussionListResource
+        - Tapi\DiscussionCreateResource
+        - Tapi\DiscussionEditResource
+        - Tapi\DiscussionDeleteResource
         - Tapi\EventDetailResource
         - Tapi\EventListResource
         - Tapi\EventTypeListResource

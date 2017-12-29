@@ -21,6 +21,8 @@ class DiscussionDeleteResource extends DiscussionResource {
             throw new APIException('Discussion ID not set!');
         
         $this->setUrl("discussions/" . $this->getId());
+        
+        $this->setRequestData((object)["id" => $this->getId()]);
     }
 
     protected function postProcess() {

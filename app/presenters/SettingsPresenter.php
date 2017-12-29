@@ -6,12 +6,24 @@ use Tapi\EventDetailResource;
 use Tapi\EventCreateResource;
 use Tapi\EventEditResource;
 use Tapi\EventDeleteResource;
+use Tapi\DiscussionCreateResource;
+use Tapi\DiscussionEditResource;
+use Tapi\DiscussionDeleteResource;
 
 
 class SettingsPresenter extends SecuredPresenter {
     
     /** @var DiscussionDetailResource @inject */
     public $discussionDetail;
+        
+    /** @var DiscussionCreateResource @inject */
+    public $discussionCreator;
+        
+    /** @var DiscussionEditResource @inject */
+    public $discussionEditor;
+        
+    /** @var DiscussionDeleteResource @inject */
+    public $discussionDeleter;
         
     /** @var EventDetailResource @inject */
     public $eventDetail;
@@ -210,7 +222,7 @@ class SettingsPresenter extends SecuredPresenter {
     public function handleEventsCreate(){
         $post = $this->getRequest()->getPost();
         try {
-            $this->event->create($post, $this->eventTypeList->getData());
+            $this->eventCreator->setEventsArray($post)->setEventTypesArray($this->eventTypeList->getData())->perform();
             $this->redirect('Settings:events');
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex, 'this');
@@ -225,9 +237,9 @@ class SettingsPresenter extends SecuredPresenter {
     public function handleEventDelete(){
         $bind = $this->getRequest()->getPost();
         try {
-            $this->event
-                    ->recId($bind["id"])
-                    ->delete();
+            $this->eventDeleter
+                    ->setId($bind["id"])
+                    ->perform();
             $this->redirect("Settings:events");
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex, 'this');
@@ -260,7 +272,7 @@ class SettingsPresenter extends SecuredPresenter {
     public function handleDiscussionDelete() {
         $bind = $this->getRequest()->getPost();
         try {
-            $this->discussions
+            $this->discussionDeleter
                     ->recId($bind["id"])
                     ->delete();
             $this->redirect("Settings:discussions");
