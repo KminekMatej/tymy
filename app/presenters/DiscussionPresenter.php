@@ -3,7 +3,6 @@
 namespace App\Presenters;
 
 use Nette\Application\UI\NewPostControl;
-use Tapi\DiscussionDetailResource;
 use Tapi\DiscussionListResource;
 use Tapi\DiscussionNewsListResource;
 use Tapi\DiscussionPageResource;
