@@ -1,6 +1,7 @@
 <?php
 
 namespace Tapi;
+use Tracy\Debugger;
 
 /**
  * Project: tymy_v2
