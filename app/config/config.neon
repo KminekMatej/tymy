@@ -36,6 +36,7 @@ services:
         - Tymy\User
         - Tymy\Users
         - Tapi\CacheService
+
         - Tapi\DiscussionNewsListResource
         - Tapi\DiscussionPageResource
         - Tapi\DiscussionPostCreateResource
