@@ -1,15 +1,29 @@
 <?php
 
 namespace App\Presenters;
+use Tapi\DiscussionDetailResource;
 use Tapi\EventDetailResource;
+use Tapi\EventCreateResource;
+use Tapi\EventEditResource;
+use Tapi\EventDeleteResource;
+
 
 class SettingsPresenter extends SecuredPresenter {
     
-    /** @var \Tymy\Discussion @inject */
-    public $discussion;
+    /** @var DiscussionDetailResource @inject */
+    public $discussionDetail;
         
     /** @var EventDetailResource @inject */
     public $eventDetail;
+        
+    /** @var EventCreateResource @inject */
+    public $eventCreator;
+        
+    /** @var EventEditResource @inject */
+    public $eventEditor;
+        
+    /** @var EventDeleteResource @inject */
+    public $eventDeleter;
         
     /** @var \Tymy\Poll @inject */
     public $poll;
@@ -32,7 +46,7 @@ class SettingsPresenter extends SecuredPresenter {
             $this->setView("discussion");
         } else {
             $this->template->isNew = false;
-            $discussions = $this->discussions->reset()->getData();
+            $discussions = $this->discussionList->getData();
             $this->template->discussions = $discussions;
             $this->template->discussionsCount = count($discussions);
         }
@@ -106,8 +120,8 @@ class SettingsPresenter extends SecuredPresenter {
     
     public function renderDiscussion($discussion) {
         //RENDERING DISCUSSION DETAIL
-        $discussionId = $this->discussions->getIdFromWebname($discussion);
-        $discussionObj = $this->discussion->reset()->recId($discussionId)->getData()->discussion;
+        $discussionId = $this->discussionList->getIdFromWebname($discussion, $this->discussionList->getData());
+        $discussionObj = $this->discussionDetail->setId($discussionId)->getData();
         $this->setLevelCaptions(["3" => ["caption" => $discussionObj->caption, "link" => $this->link("Settings:discussions", $discussionObj->webName)]]);
         $this->template->discussion = $discussionObj;
     }
@@ -339,9 +353,10 @@ class SettingsPresenter extends SecuredPresenter {
         if(array_key_exists("endTime", $bind["changes"])) $bind["changes"]["endTime"] = gmdate("Y-m-d\TH:i:s\Z", strtotime($bind["changes"]["endTime"]));
         if(array_key_exists("closeTime", $bind["changes"])) $bind["changes"]["closeTime"] = gmdate("Y-m-d\TH:i:s\Z", strtotime($bind["changes"]["closeTime"]));
         try {
-            $this->event
-                    ->recId($bind["id"])
-                    ->edit($bind["changes"]);
+            $this->eventEditor
+                    ->setId($bind["id"])
+                    ->setEvent($bind["changes"])
+                    ->perform();
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex, 'this');
         }
