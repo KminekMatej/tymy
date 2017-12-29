@@ -31,6 +31,10 @@ class EventCreateResource extends EventResource {
                 throw new \Tymy\Exception\APIException('Type not set!');
             if(!array_key_exists($event["type"], $this->eventTypesArray))
                 throw new \Tymy\Exception\APIException('Unrecognized type!');
+            foreach ($event as $key => $value) {
+                if (in_array($key, ["startTime", "endTime", "closeTime"]))
+                    $this->timeSave($value);
+            }
         }
         
         $this->setUrl("events");

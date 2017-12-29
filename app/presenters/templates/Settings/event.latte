@@ -31,9 +31,9 @@
                                 </select>
                             </td></tr>
                         <tr><th>Popis</th><td><textarea name="description" data-value="{$event->description}" class="form-control col-6">{$event->description}</textarea></td></tr>
-                        <tr><th>Začátek</th><td><input type="text" name="startTime" value="{$event->startTime|date:'d.m.Y H:i'}" data-value="{$event->startTime}" class="col-6 form-control" /></td></tr>
-                        <tr><th>Konec</th><td><input type="text" name="endTime" value="{$event->endTime|date:'d.m.Y H:i'}" data-value="{$event->endTime}" class="col-6 form-control" /></td></tr>
-                        <tr><th>Uzávěrka</th><td><input type="text" name="closeTime" value="{$event->closeTime|date:'d.m.Y H:i'}" data-value="{$event->closeTime}" class="col-6 form-control" /></td></tr>
+                        <tr><th>Začátek</th><td><input type="text" name="startTime" value="{$event->startTime|date:'d.m.Y H:i'}" data-value="{$event->startTime|date:'d.m.Y H:i'}" class="col-6 form-control" /></td></tr>
+                        <tr><th>Konec</th><td><input type="text" name="endTime" value="{$event->endTime|date:'d.m.Y H:i'}" data-value="{$event->endTime|date:'d.m.Y H:i'}" class="col-6 form-control" /></td></tr>
+                        <tr><th>Uzávěrka</th><td><input type="text" name="closeTime" value="{$event->closeTime|date:'d.m.Y H:i'}" data-value="{$event->closeTime|date:'d.m.Y H:i'}" class="col-6 form-control" /></td></tr>
                         <tr><th>Místo</th><td>
                                             <div class="input-group">
                                                 <input type="text" name="place" value="{$event->place}" data-value="{$event->place}" class="col-6 form-control" />

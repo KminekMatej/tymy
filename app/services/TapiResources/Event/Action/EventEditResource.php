@@ -25,6 +25,12 @@ class EventEditResource extends EventResource {
             throw new APIException('Event id not set!');
         
         $this->setUrl("event/" . $this->getId());
+        
+        foreach ($this->event as $key => $value) {
+            if(in_array($key, ["startTime","endTime","closeTime"]))
+                $this->timeSave($value);
+        }
+        
         $this->setRequestData($this->event);
     }
     
