@@ -226,20 +226,20 @@ abstract class TapiAbstraction {
         return $this;
     }
     
-    public function getMethod() {
+    protected function getMethod() {
         return $this->method;
     }
 
-    public function setMethod($method) {
+    protected function setMethod($method) {
         $this->method = $method;
         return $this;
     }
     
-    public function getCachingTimeout() {
+    protected function getCachingTimeout() {
         return $this->cachingTimeout;
     }
 
-    public function setCachingTimeout($cachingTimeout) {
+    protected function setCachingTimeout($cachingTimeout) {
         $this->cachingTimeout = $cachingTimeout;
         return $this;
     }
@@ -284,11 +284,11 @@ abstract class TapiAbstraction {
         return $this->getData($forceRequest);
     }
     
-    public function getRequestData() {
+    protected function getRequestData() {
         return $this->requestData;
     }
 
-    public function setRequestData($requestData) {
+    protected function setRequestData($requestData) {
         $this->requestData = $requestData;
         return $this;
     }
