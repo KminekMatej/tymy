@@ -11,8 +11,6 @@ class HomepagePresenter extends SecuredPresenter {
 
     public $navbar;
     
-    /** @var \Tymy\Discussions @inject */
-    public $discussions;
     /** @var \Tymy\Live @inject */
     public $live;
     
@@ -38,7 +36,7 @@ class HomepagePresenter extends SecuredPresenter {
     public function renderDefault() {
         try {
             $events = $this->eventList->setHalfYearFrom(NULL, NULL)->getData();
-            $this->template->discussions = $this->discussions->setWithNew(true)->getData();
+            $this->template->discussions = $this->discussionList->getData();
             $this->template->users = $this->sortUsersByLastLogin($this->users->getData());
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);

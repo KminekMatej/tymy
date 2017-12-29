@@ -11,8 +11,12 @@ namespace App\Presenters;
 use Nette;
 use Nette\Application\UI\NavbarControl;
 use App\Model\SettingMenu;
+use App\Model\TapiAuthenticator;
+use App\Model\TapiAuthorizator;
 use Tapi\EventListResource;
 use Tapi\EventTypeListResource;
+use Tapi\DiscussionListResource;
+use Tapi\DiscussionNewsListResource;
 
 /**
  * Description of SecuredPresenter
@@ -23,16 +27,16 @@ class SecuredPresenter extends BasePresenter {
     
     protected $levelCaptions;
     
-    /** @var \App\Model\TapiAuthenticator @inject */
+    /** @var TapiAuthenticator @inject */
     public $tapiAuthenticator;
     
-    /** @var \App\Model\TapiAuthorizator @inject */
+    /** @var TapiAuthorizator @inject */
     public $tapiAuthorizator;
     
-    /** @var \Tapi\DiscussionListResource @inject */
+    /** @var DiscussionListResource @inject */
     public $discussionList;
     
-    /** @var \Tapi\DiscussionNewsListResource @inject */
+    /** @var DiscussionNewsListResource @inject */
     public $discussionNews;
     
     /** @var \Tymy\Polls @inject */

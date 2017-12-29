@@ -26,8 +26,6 @@ services:
         cacheStorage:
             class: Nette\Caching\Storages\DevNullStorage
         - Tymy\Attendance
-        - Tymy\Discussion
-        - Tymy\Discussions
         - Tymy\Logout
         - Tymy\Live
         - Tymy\Poll
