@@ -54,4 +54,12 @@ abstract class DiscussionResource extends TapiAbstraction {
         }
     }
     
+    protected function clearCache($id = NULL){
+        $this->cacheService->clear("Tapi\DiscussionListResource");
+        $this->cacheService->clear("Tapi\DiscussionNewsListResource");
+        $this->cacheService->clear("Tapi\DiscussionPageResource");
+        if($id != NULL){
+            $this->cacheService->clear("Tapi\DiscussionDetailResource:$id");
+        }
+    }
 }
