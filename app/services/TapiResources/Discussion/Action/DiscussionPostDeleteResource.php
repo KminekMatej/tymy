@@ -29,6 +29,7 @@ class DiscussionPostDeleteResource extends DiscussionResource {
     }
 
     protected function postProcess() {
+        $this->clearCache();
     }
     
     public function getPostId() {

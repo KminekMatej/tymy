@@ -38,6 +38,7 @@ class DiscussionPostEditResource extends DiscussionResource {
     }
 
     protected function postProcess() {
+        $this->clearCache($this->getId());
         parent::postProcessDiscussionPost($this->data);
     }
     

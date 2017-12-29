@@ -29,6 +29,7 @@ class DiscussionPostCreateResource extends DiscussionResource {
     }
 
     protected function postProcess() {
+        $this->clearCache();
         parent::postProcessDiscussionPost($this->data);
     }
     
