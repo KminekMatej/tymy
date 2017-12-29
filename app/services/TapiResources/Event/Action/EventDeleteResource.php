@@ -24,6 +24,6 @@ class EventDeleteResource extends EventResource {
     }
     
     protected function postProcess() {
-        //nothing is returned
+        $this->clearCache($this->getId());
     }
 }

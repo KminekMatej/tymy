@@ -40,6 +40,7 @@ class EventCreateResource extends EventResource {
     }
 
     protected function postProcess() {
+        $this->clearCache();
         $this->postProcessEvent($this->data);
     }
     

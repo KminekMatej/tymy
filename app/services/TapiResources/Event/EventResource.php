@@ -82,4 +82,10 @@ abstract class EventResource extends TapiAbstraction {
         
     }
     
+    protected function clearCache($id = NULL){
+        $this->cacheService->clear("Tapi\EventListResource");
+        if($id != NULL){
+            $this->cacheService->clear("Tapi\EventDetailResource:$id");
+        }
+    }
 }

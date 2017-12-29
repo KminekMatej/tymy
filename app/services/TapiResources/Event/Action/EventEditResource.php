@@ -29,7 +29,7 @@ class EventEditResource extends EventResource {
     }
     
     protected function postProcess() {
-        $this->postProcessEvent($this->data);
+        $this->clearCache($this->getId());
     }
     
     public function getEvent() {
