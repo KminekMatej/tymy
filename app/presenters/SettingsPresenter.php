@@ -257,7 +257,9 @@ class SettingsPresenter extends SecuredPresenter {
     public function handleDiscussionCreate(){
         $discussionData = $this->getRequest()->getPost()[1]; // new discussion is always as ID 1
         try {
-            $this->discussions->create($discussionData);
+            $this->discussionCreator
+                    ->setDiscussion($discussionData)
+                    ->perform();
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex, 'this');
         }
@@ -273,8 +275,8 @@ class SettingsPresenter extends SecuredPresenter {
         $bind = $this->getRequest()->getPost();
         try {
             $this->discussionDeleter
-                    ->recId($bind["id"])
-                    ->delete();
+                    ->setId($bind["id"])
+                    ->perform();
             $this->redirect("Settings:discussions");
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex, 'this');
@@ -376,9 +378,10 @@ class SettingsPresenter extends SecuredPresenter {
     
     private function editDiscussion($bind) {
         try {
-            $this->discussions
-                    ->recId($bind["id"])
-                    ->edit($bind["changes"]);
+            $this->discussionEditor
+                    ->setId($bind["id"])
+                    ->setDiscussion($bind["changes"])
+                    ->perform();
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex, 'this');
         }
