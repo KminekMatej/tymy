@@ -19,18 +19,18 @@ class DiscussionEditResource extends DiscussionResource {
     }
 
     protected function preProcess() {
-        if($this->getDiscussion() == null)
+        if($this->discussion == null)
             throw new APIException('Discussion not set!');
         if($this->getId() == null)
             throw new APIException('Discussion ID not set!');
         
         $this->setUrl("discussions");
-        $this->getDiscussion()->id = $this->getId();
-        $this->setRequestData($this->getDiscussion());
+        $this->discussion["id"] = $this->getId();
+        $this->setRequestData($this->discussion);
     }
 
     protected function postProcess() {
-        $this->clearCache($this->data->id);
+        $this->clearCache($this->getId());
     }
     
     public function getDiscussion() {
