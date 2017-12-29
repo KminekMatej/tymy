@@ -309,5 +309,16 @@ abstract class TapiAbstraction {
         $date = gmdate('c',strtotime("$date"));
         return $date;
     }
+    
+    protected function getTsidRequired() {
+        return $this->tsidRequired;
+    }
+
+    protected function setTsidRequired($tsidRequired) {
+        $this->tsidRequired = $tsidRequired;
+        return $this;
+    }
+
+
 
 }
