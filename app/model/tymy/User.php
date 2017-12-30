@@ -65,7 +65,6 @@ final class User extends UserAbstraction{
         return $this;
     }
 
-    
     protected function postProcess(){
         if (($data = $this->getData()) == null)
             return;
