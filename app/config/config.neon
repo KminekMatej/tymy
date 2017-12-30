@@ -26,15 +26,9 @@ services:
         cacheStorage:
             class: Nette\Caching\Storages\DevNullStorage
         - Tymy\Attendance
-        - Tymy\Logout
-        - Tymy\Live
         - Tymy\Poll
         - Tymy\Polls
         - Tymy\PollOption
-        - Tymy\PwdLost
-        - Tymy\PwdReset
-        - Tymy\User
-        - Tymy\Users
         - Tapi\CacheService
 
         - Tapi\DiscussionNewsListResource
@@ -53,7 +47,15 @@ services:
         - Tapi\EventCreateResource
         - Tapi\EventEditResource
         - Tapi\EventDeleteResource
-
+        - Tapi\UserCreateResource
+        - Tapi\UserEditResource
+        - Tapi\UserDeleteResource
+        - Tapi\UsersLiveResource
+        - Tapi\UserDetailResource
+        - Tapi\UserListResource
+        - Tapi\LogoutResource
+        - Tapi\PasswordLostResource
+        - Tapi\PasswordResetResource
 
 
 tracy:
