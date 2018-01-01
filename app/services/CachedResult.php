@@ -11,9 +11,14 @@ class CachedResult {
     private $timeout;
     private $data;
     
-    public function __construct($timeout, $data) {
+    /** @var array Additional object attributes */
+    private $options;
+    
+    
+    public function __construct($timeout, $data, $options) {
         $this->timeout = $timeout;
         $this->data = $data;
+        $this->options = $options;
     }
     
     public function isValid(){
@@ -30,6 +35,10 @@ class CachedResult {
     
     public function getData() {
         return $this->data;
+    }
+    
+    public function getOptions() {
+        return $this->options;
     }
 
     public function setTimeout($timeout) {
