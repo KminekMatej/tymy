@@ -13,6 +13,7 @@ use Nette\Application\UI\NavbarControl;
 use App\Model\SettingMenu;
 use App\Model\TapiAuthenticator;
 use App\Model\TapiAuthorizator;
+use Tracy\Debugger;
 use Tapi\EventListResource;
 use Tapi\EventTypeListResource;
 use Tapi\DiscussionListResource;
@@ -79,6 +80,7 @@ class SecuredPresenter extends BasePresenter {
         
     protected function startup() {
         parent::startup();
+        Debugger::$maxDepth = 7;
         if (!$this->getUser()->isLoggedIn()) {
             if ($this->getUser()->getLogoutReason() === Nette\Security\IUserStorage::INACTIVITY) {
                 $this->flashMessage('You have been signed out due to inactivity. Please sign in again.');
@@ -91,6 +93,11 @@ class SecuredPresenter extends BasePresenter {
         $this->tapiAuthorizator->setUser($this->getUser()->getIdentity()->getData()["data"]);
         $this->setLevelCaptions(["0" => ["caption" => "Hlavní stránka", "link" => $this->link("Homepage:")]]);
         $this->template->tym = $this->supplier->getTym();
+    }
+    
+    protected function shutdown($response) {
+        parent::shutdown($response);
+        $this->cacheService->dumpCache();
     }
     
     protected function createComponentNavbar() {
