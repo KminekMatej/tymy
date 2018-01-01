@@ -131,7 +131,7 @@ class TeamPresenter extends SecuredPresenter {
                 ->setUserData($bind["changes"])
                 ->perform();
         } catch (APIException $ex) {
-            $this->handleTapiException($ex);
+            $this->handleTapiException($ex, "this");
         }
     }
     
@@ -161,7 +161,7 @@ class TeamPresenter extends SecuredPresenter {
                         ->setId($bind["id"])
                         ->setAvatar($avatarB64);
             } catch (\Tymy\Exception\APIException $ex) {
-                $this->handleTapiException($ex);
+                $this->handleTapiException($ex, "this");
             }
         } else {
             $response = $this->getHttpResponse();
