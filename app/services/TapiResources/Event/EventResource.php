@@ -9,7 +9,7 @@ use \Nette\Utils\Strings;
  *
  * @author kminekmatej created on 22.12.2017, 21:04:05
  */
-abstract class EventResource extends TapiAbstraction {
+abstract class EventResource extends TapiObject {
     
     protected function postProcessEvent($event){
         $event->webName = Strings::webalize($event->id . "-" . $event->caption);

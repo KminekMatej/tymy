@@ -1,7 +1,7 @@
 <?php
 
 namespace Tapi;
-use Tapi\TapiAbstraction;
+use Tapi\TapiObject;
 use Nette\Utils\Strings;
 
 /**
@@ -9,7 +9,7 @@ use Nette\Utils\Strings;
  *
  * @author kminekmatej
  */
-abstract class DiscussionResource extends TapiAbstraction {
+abstract class DiscussionResource extends TapiObject {
     
     public static function getIdFromWebname($webname, $discussionsList){
         if (intval($webname)) return (int)$webname;

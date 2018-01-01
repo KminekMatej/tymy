@@ -8,7 +8,7 @@ use Nette\Utils\Strings;
  *
  * @author kminekmatej created on 22.12.2017, 21:04:36
  */
-abstract class UserResource extends TapiAbstraction{
+abstract class UserResource extends TapiObject{
     
     protected function postProcessSimpleUser($user){
         $user->webName = (string)$user->id;

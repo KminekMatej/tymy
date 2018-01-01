@@ -11,7 +11,7 @@ use Tracy\Debugger;
  * @author kminekmatej created on 8.12.2017, 9:48:27
  */
 
-abstract class TapiAbstraction {
+abstract class TapiObject {
     
     /** @var Nette\Security\User */
     protected $user;
