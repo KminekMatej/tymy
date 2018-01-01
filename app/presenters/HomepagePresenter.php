@@ -6,12 +6,13 @@ use Nette;
 use Nette\Application\UI\NavbarControl;
 use App\Model; 
 use Nette\Application\UI\Form;
+use Tapi\UsersLiveResource;
 
 class HomepagePresenter extends SecuredPresenter {
 
     public $navbar;
     
-    /** @var \Tymy\Live @inject */
+    /** @var UsersLiveResource @inject */
     public $live;
     
     public function beforeRender() {
@@ -35,9 +36,9 @@ class HomepagePresenter extends SecuredPresenter {
     
     public function renderDefault() {
         try {
-            $events = $this->eventList->setHalfYearFrom(NULL, NULL)->getData();
+            $this->eventList->setHalfYearFrom(NULL, NULL)->getData();
             $this->template->discussions = $this->discussionList->getData();
-            $this->template->users = $this->sortUsersByLastLogin($this->users->getData());
+            $this->template->users = $this->sortUsersByLastLogin($this->userList->getData());
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
@@ -47,7 +48,7 @@ class HomepagePresenter extends SecuredPresenter {
         $this->template->evMonths = $this->eventList->getAsMonthArray();
         $this->template->events = $this->eventList->getAsArray();
         $this->template->eventTypes = $this->eventTypeList;
-        $this->template->liveUsers = $this->live->reset()->getData();
+        $this->template->liveUsers = $this->live->getData();
     }
 
     private function sortUsersByLastLogin($usersArray){

@@ -5,6 +5,8 @@ namespace Nette\Application\UI;
 use Nette;
 use Tapi\DiscussionListResource;
 use Tapi\EventListResource;
+use Tapi\UserListResource;
+use Tapi\UserDetailResource;
 
 
 /**
@@ -26,11 +28,11 @@ class NavbarControl extends Control {
     /** @var EventListResource */
     private $eventList;
 
-    /** @var \Tymy\User */
-    private $user;
+    /** @var UserDetailResource */
+    private $userDetail;
 
-    /** @var \Tymy\Users */
-    private $users;
+    /** @var UserListResource */
+    private $userList;
 
     /** @var \App\Model\Supplier */
     private $supplier;
@@ -46,8 +48,8 @@ class NavbarControl extends Control {
         $this->discussionList = \Tapi\DiscussionResource::mergeListWithNews($presenter->discussionList, $presenter->discussionNews);
         $this->polls = $this->presenter->polls;
         $this->eventList = $this->presenter->eventList;
-        $this->user = $this->presenter->user;
-        $this->users = $this->presenter->users;
+        $this->userDetail = $this->presenter->userDetail;
+        $this->userList = $this->presenter->userList;
         $this->supplier = $this->presenter->supplier;
         $this->presenterUser = $this->presenter->getUser();
         $this->accessibleSettings = $this->presenter->getAccessibleSettings();
@@ -64,15 +66,14 @@ class NavbarControl extends Control {
 
     private function players() {
         try {
-            $players = $this->users->reset()->getResult(TRUE);
+            $players = $this->userList->getData();
         } catch (Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
 
-
-        $this->template->counts = $players->counts;
-        $this->template->playersWarnings = $players->menuWarningCount;
-        $this->template->me = $players->me;
+        $this->template->counts = $this->userList->getCounts();
+        $this->template->playersWarnings = $this->userList->getWarnings();
+        $this->template->me = $this->userList->getMe();
     }
 
     private function polls() {

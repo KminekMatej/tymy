@@ -29,7 +29,7 @@ class PollPresenter extends SecuredPresenter {
                 ->reset()
                 ->recId($this->parseIdFromWebname($anketa))
                 ->getData();
-        $this->template->users = $this->users->getResult();
+        $this->template->users = $this->userList->getData();
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }

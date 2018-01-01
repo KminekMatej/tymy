@@ -1,10 +1,27 @@
 <?php
 
 namespace App\Presenters;
+use Tapi\UserCreateResource;
+use Tapi\UserEditResource;
+use Tapi\UserDeleteResource;
+use Tapi\AvatarUploadResource;
+use Tymy\Exception\APIException;
 
 class TeamPresenter extends SecuredPresenter {
     
     private $userType;
+    
+    /** @var UserCreateResource @inject */
+    public $userCreator;
+    
+    /** @var UserEditResource @inject */
+    public $userEditor;
+    
+    /** @var UserDeleteResource @inject */
+    public $userDeleter;
+    
+    /** @var AvatarUploadResource @inject */
+    public $avatarUploader;
     
     public function __construct() {
         parent::__construct();
@@ -41,7 +58,7 @@ class TeamPresenter extends SecuredPresenter {
     
     public function renderDefault() {
         try {
-            $users = $this->users->reset()->setUserType($this->userType)->getData();
+            $users = $this->userList->setUserType($this->userType)->getData();
             $allMails = [];
             foreach ($users as $u) {
                 if(property_exists($u, "email")){
@@ -50,16 +67,16 @@ class TeamPresenter extends SecuredPresenter {
             }
             $this->template->users = $users;
             $this->template->allMails = join(",", $allMails);
-        } catch (\Tymy\Exception\APIException $ex) {
+        } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
+        $this->cacheService->dumpCache();
     }
 
     public function renderPlayer($player) {
         try {
-            $user = $this->user
-                    ->reset()
-                    ->recId($this->parseIdFromWebname($player))
+            $user = $this->userDetail
+                    ->setId($this->parseIdFromWebname($player))
                     ->getData();
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
@@ -69,7 +86,7 @@ class TeamPresenter extends SecuredPresenter {
         $this->setLevelCaptions(["2" => ["caption" => $user->displayName, "link" => $this->link("Team:player", $user->webName)]]);
 
         //set default values to avoid latte exceptions
-        if (!isset($user->firstName))
+        if (!isset($user->firstName))//TODO handle in latte or postProcess
             $user->firstName = "";
         if (!isset($user->lastName))
             $user->lastName = "";
@@ -109,10 +126,11 @@ class TeamPresenter extends SecuredPresenter {
             $bind["changes"]["roles"] = [];
         }
         try {
-            $this->user
-                ->recId($bind["id"])
-                ->edit($bind["changes"]);
-        } catch (\Tymy\Exception\APIException $ex) {
+            $this->userEditor
+                ->setId($bind["id"])
+                ->setUserData($bind["changes"])
+                ->perform();
+        } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
     }
@@ -122,9 +140,9 @@ class TeamPresenter extends SecuredPresenter {
             return;
         $bind = $this->getRequest()->getPost();
         try {
-            $this->user
-                    ->recId($bind["id"])
-                    ->edit(["status" => "DELETED"]);
+            $this->userDeleter
+                    ->setId($bind["id"])
+                    ->perform();
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
@@ -139,8 +157,8 @@ class TeamPresenter extends SecuredPresenter {
         if ($file->isImage() && $file->isOk()) {
             $avatarB64 = 'data:' . mime_content_type($file->getTemporaryFile()) . ';base64,' . base64_encode(file_get_contents($file->getTemporaryFile()));
             try {
-                $this->user
-                        ->recId($bind["id"])
+                $this->avatarUploader
+                        ->setId($bind["id"])
                         ->setAvatar($avatarB64);
             } catch (\Tymy\Exception\APIException $ex) {
                 $this->handleTapiException($ex);

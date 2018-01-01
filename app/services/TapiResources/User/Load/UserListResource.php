@@ -66,4 +66,25 @@ class UserListResource extends UserResource {
         return $this;
     }
     
+    public function getCounts() {
+        return $this->counts;
+    }
+
+    public function getById() {
+        return $this->byId;
+    }
+
+    public function getMe() {
+        return $this->me;
+    }
+
+    
+    protected function getClassCacheName() {
+        $ccName = parent::getClassCacheName();
+        if (!is_null($this->userType)) {
+            $ccName .= ":" . $this->userType;
+        }
+        return $ccName;
+    }
+
 }

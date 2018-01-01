@@ -53,6 +53,7 @@ services:
         - Tapi\UsersLiveResource
         - Tapi\UserDetailResource
         - Tapi\UserListResource
+        - Tapi\AvatarUploadResource
         - Tapi\LogoutResource
         - Tapi\PasswordLostResource
         - Tapi\PasswordResetResource

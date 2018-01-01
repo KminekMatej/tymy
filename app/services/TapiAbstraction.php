@@ -319,6 +319,15 @@ abstract class TapiAbstraction {
         return $this;
     }
 
+    protected function getJsonEncoding() {
+        return $this->jsonEncoding;
+    }
+
+    protected function setJsonEncoding($jsonEncoding) {
+        $this->jsonEncoding = $jsonEncoding;
+        return $this;
+    }
+
 
 
 }

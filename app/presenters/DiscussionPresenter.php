@@ -129,7 +129,7 @@ class DiscussionPresenter extends SecuredPresenter {
             
         try {
             $data = $this->discussionPage->getData();
-            $this->template->users = $this->users->getData();
+            $this->template->users = $this->userList->getData();
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }

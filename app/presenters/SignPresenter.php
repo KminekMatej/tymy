@@ -4,6 +4,9 @@ namespace App\Presenters;
 
 use Nette;
 use App\Forms;
+use Tapi\LogoutResource;
+use Tapi\PasswordLostResource;
+use Tapi\PasswordResetResource;
 
 class SignPresenter extends BasePresenter {
 
@@ -22,13 +25,13 @@ class SignPresenter extends BasePresenter {
     /** @var \App\Model\Supplier @inject */
     public $supplier;
 
-    /** @var \Tymy\Logout @inject */
+    /** @var LogoutResource @inject */
     public $logout;
     
-    /** @var \Tymy\PwdLost @inject */
+    /** @var PasswordLostResource @inject */
     public $pwdLost;
     
-    /** @var \Tymy\PwdReset @inject */
+    /** @var PasswordResetResource @inject */
     public $pwdReset;
     
     /**
@@ -108,7 +111,7 @@ class SignPresenter extends BasePresenter {
     
     public function actionOut() {
         if (!is_null($this->getUser()->getIdentity())) {
-            $this->logout->logout();
+            $this->logout->perform();
             $this->getUser()->logout();
         }
         $this->flashMessage('You have been succesfully signed out');

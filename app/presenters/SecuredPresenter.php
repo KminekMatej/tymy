@@ -17,6 +17,8 @@ use Tapi\EventListResource;
 use Tapi\EventTypeListResource;
 use Tapi\DiscussionListResource;
 use Tapi\DiscussionNewsListResource;
+use Tapi\UserDetailResource;
+use Tapi\UserListResource;
 
 /**
  * Description of SecuredPresenter
@@ -45,11 +47,11 @@ class SecuredPresenter extends BasePresenter {
     /** @var EventListResource @inject */
     public $eventList;
     
-    /** @var \Tymy\User @inject */
-    public $user;
+    /** @var UserDetailResource @inject */
+    public $userDetail;
     
-    /** @var \Tymy\Users @inject */
-    public $users;
+    /** @var UserListResource @inject */
+    public $userList;
     
     /** @var EventTypeListResource @inject */
     public $eventTypeList;

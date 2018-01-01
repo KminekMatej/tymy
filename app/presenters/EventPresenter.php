@@ -77,7 +77,7 @@ class EventPresenter extends SecuredPresenter {
                     ->setId($this->parseIdFromWebname($udalost))
                     ->getData();
             $eventTypes = $this->eventTypeList->getData();
-            $users = $this->users->getResult();
+            $users = $this->userList->getData();
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
