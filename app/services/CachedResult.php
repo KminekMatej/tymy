@@ -29,10 +29,6 @@ class CachedResult {
         return max(0, $this->timeout - date("U"));
     }
     
-    public function load() {
-        return $this->isValid() ? $this->data : null;
-    }
-    
     public function getData() {
         return $this->data;
     }
