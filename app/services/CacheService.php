@@ -25,15 +25,20 @@ class CacheService {
     }
 
     
-    public function save($key, $value, $timeout) {
+    public function save($key, $timeout, $value, $options = NULL) {
         if(is_null($this->tapiSection)) return null;
-        $this->tapiSection[$key] = new CachedResult(date("U") + $timeout, $value);
+        $this->tapiSection[$key] = new CachedResult(date("U") + $timeout, $value, $options);
     }
     
+    /**
+     * 
+     * @param string $key
+     * @return CachedResult
+     */
     public function load($key){
         if(is_null($this->tapiSection)) return null;
         $cachedResult = $this->tapiSection[$key];
-        return $cachedResult == null || !$cachedResult->isValid() ? null : $cachedResult->load();
+        return $cachedResult == null || !$cachedResult->isValid() ? null : $cachedResult;
     }
     
     public function clear($key){

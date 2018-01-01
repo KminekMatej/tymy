@@ -20,9 +20,9 @@ class DiscussionNewsListResource extends DiscussionResource {
     }
 
     protected function postProcess() {
-        $this->warnings = 0;
+        $this->options->warnings = 0;
         foreach ($this->data as $discussion) {
-            if($discussion->newPosts > 0) $this->warnings++;
+            if($discussion->newPosts > 0) $this->options->warnings++;
         }
     }
     

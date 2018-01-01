@@ -23,14 +23,14 @@ abstract class DiscussionResource extends TapiAbstraction {
     
     public static function mergeListWithNews($discussionList, $discussionNewsList) {
         $news = [];
-        $discussionList->warnings = 0;
+        $discussionList->options->warnings = 0;
         foreach ($discussionNewsList->getData() as $n) {
             $news[$n->id] = $n->newPosts;
         }
         foreach ($discussionList->getData() as $discussion) {
             $discussion->newInfo->newsCount = $news[$discussion->id];
             if ($news[$discussion->id] > 0)
-                $discussionList->warnings++;
+                $discussionList->options->warnings++;
         }
         return $discussionList;
     }

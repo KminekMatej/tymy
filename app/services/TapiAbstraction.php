@@ -46,6 +46,9 @@ abstract class TapiAbstraction {
     /** @var object data returned by request */
     protected $data;
     
+    /** @var object options returned by request */
+    protected $options;
+    
     /** @var object data to be sent along with request */
     private $requestData;
     
@@ -67,9 +70,6 @@ abstract class TapiAbstraction {
     /** @var \Tymy\TracyPanelTymy */
     private $tymyPanel;
     
-    /** @var integer Warnings for user */
-    protected $warnings;
-    
     abstract function init();
     
     protected abstract function preProcess();
@@ -88,6 +88,8 @@ abstract class TapiAbstraction {
         $this->dataReady = FALSE;
         $this->tsidRequired = TRUE;
         $this->method = RequestMethod::GET;
+        $this->options = new \stdClass();
+        $this->options->warnings = 0;
         $this->init();
     }
     
@@ -104,7 +106,7 @@ abstract class TapiAbstraction {
     private function saveToCache() {
         if (!$this->dataReady || !$this->cacheable)
             return null;
-        $this->cacheService->save($this->getClassCacheName(), $this->data, $this->cachingTimeout);
+        $this->cacheService->save($this->getClassCacheName(), $this->cachingTimeout, $this->data, $this->options);
     }
     
     public function resetCache(){
@@ -116,11 +118,12 @@ abstract class TapiAbstraction {
         $data = $this->cacheService->load($this->getClassCacheName());
         if(is_null($data)) return null;
         else {
-            $this->data = $data;
+            $this->data = $data->getData();
+            $this->options = $data->getOptions();
             $this->dataReady = TRUE;
         }
     }
-    
+
     private function requestFromApi($relogin = TRUE){
         $this->preProcess();
         
@@ -274,7 +277,7 @@ abstract class TapiAbstraction {
     }
     
     public function getWarnings() {
-        return $this->warnings;
+        return $this->options->warnings;
     }
     
     /**
@@ -327,7 +330,14 @@ abstract class TapiAbstraction {
         $this->jsonEncoding = $jsonEncoding;
         return $this;
     }
+    
+    public function getOptions() {
+        return $this->options;
+    }
 
-
+    public function setOptions($options) {
+        $this->options = $options;
+        return $this;
+    }
 
 }

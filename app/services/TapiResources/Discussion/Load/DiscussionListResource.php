@@ -20,10 +20,10 @@ class DiscussionListResource extends DiscussionResource {
     }
 
     protected function postProcess() {
-        $this->warnings = 0;
+        $this->options->warnings = 0;
         foreach ($this->data as $discussion) {
             parent::postProcessDiscussion($discussion);
-            if($discussion->newInfo->newsCount > 0) $this->warnings++;
+            if($discussion->newInfo->newsCount > 0) $this->options->warnings++;
         }
         
     }

@@ -10,26 +10,26 @@ namespace Tapi;
  */
 class UserListResource extends UserResource {
     
-    private $userType;
-    private $byId;
-    private $me;
-    private $counts;
-    
     public function init() {
         $this->setCachingTimeout(CacheService::TIMEOUT_LARGE);
+        $this->options->userType = null;
+        $this->options->byId = null;
+        $this->options->me = null;
+        $this->options->counts = null;
+        
     }
 
     protected function preProcess() {
-        $this->setUrl(is_null($this->userType) ? "users" : "users/status/" . $this->userType);
+        $this->setUrl(is_null($this->options->userType) ? "users" : "users/status/" . $this->options->userType);
         return $this;
     }
     
     protected function postProcess() {
-        $this->warnings = 0;
-        $this->byId = [];
+        $this->options->warnings = 0;
+        $this->options->byId = [];
         $myId = $this->user->getId();
         
-        $this->counts = [
+        $this->options->counts = [
             "ALL"=>0,
             "NEW"=>0,
             "PLAYER"=>0,
@@ -42,47 +42,47 @@ class UserListResource extends UserResource {
         
         foreach ($this->data as $user) {
             parent::postProcessUser($user);
-            $this->counts["ALL"]++;
-            $this->counts[$user->status]++;
+            $this->options->counts["ALL"]++;
+            $this->options->counts[$user->status]++;
             if($user->id == $myId){
-                $this->warnings = $user->errCnt;
-                $this->me = (object)$user;
+                $this->options->warnings = $user->errCnt;
+                $this->options->me = (object)$user;
             }
             if($user->isNew = strtotime($user->createdAt) > strtotime("- 14 days")){
-                $this->counts["NEW"]++;
+                $this->options->counts["NEW"]++;
                 if($user->status == "PLAYER")
-                    $this->counts["NEW:PLAYER"]++;
+                    $this->options->counts["NEW:PLAYER"]++;
             }
-            $this->byId[$user->id] = $user;
+            $this->options->byId[$user->id] = $user;
         }
     }
     
     public function getUserType() {
-        return $this->userType;
+        return $this->options->userType;
     }
 
     public function setUserType($userType) {
-        $this->userType = $userType;
+        $this->options->userType = $userType;
         return $this;
     }
     
     public function getCounts() {
-        return $this->counts;
+        return $this->options->counts;
     }
 
     public function getById() {
-        return $this->byId;
+        return $this->options->byId;
     }
 
     public function getMe() {
-        return $this->me;
+        return $this->options->me;
     }
 
     
     protected function getClassCacheName() {
         $ccName = parent::getClassCacheName();
-        if (!is_null($this->userType)) {
-            $ccName .= ":" . $this->userType;
+        if (!is_null($this->options->userType)) {
+            $ccName .= ":" . $this->options->userType;
         }
         return $ccName;
     }
