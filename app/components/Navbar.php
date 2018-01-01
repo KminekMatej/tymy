@@ -134,5 +134,5 @@ class NavbarControl extends Control {
             $this->parent->redirect('this');
         }
     }
-
+    
 }

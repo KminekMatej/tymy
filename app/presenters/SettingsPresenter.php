@@ -362,6 +362,11 @@ class SettingsPresenter extends SecuredPresenter {
         }
     }
 
+    public function handleCacheDrop() {
+        $this->cacheService->dropCache();
+        $this->parent->redirect('this');
+    }
+    
     private function editEvent($bind) {
         if(array_key_exists("startTime", $bind["changes"])) $bind["changes"]["startTime"] = gmdate("Y-m-d\TH:i:s\Z", strtotime($bind["changes"]["startTime"]));
         if(array_key_exists("endTime", $bind["changes"])) $bind["changes"]["endTime"] = gmdate("Y-m-d\TH:i:s\Z", strtotime($bind["changes"]["endTime"]));
