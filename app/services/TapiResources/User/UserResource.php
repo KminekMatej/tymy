@@ -31,6 +31,13 @@ abstract class UserResource extends TapiAbstraction{
         }
     }
     
+    protected function clearCache($id = NULL){
+        $this->cacheService->clear("Tapi\UserListResource");
+        if($id != NULL){
+            $this->cacheService->clear("Tapi\UserDetailResource:$id");
+        }
+    }
+    
     protected function postProcessUserWarnings($player) {
         $player->errCnt = 0;
         $player->errFls = [];

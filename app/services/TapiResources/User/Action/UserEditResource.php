@@ -22,25 +22,25 @@ class UserEditResource extends UserResource {
         if($this->getId() == null)
             throw new APIException('ID not set!');
         
-        if ($this->getUser())
+        if (!$this->getUserData())
             throw new APIException('User not set!');
         
         $this->setUrl("users/" . $this->getId());
-        $this->setRequestData($this->userDaa);
+        $this->setRequestData($this->userData);
 
         return $this;
     }
     
     protected function postProcess() {
-        $this->postProcessUser($this->data);
+        $this->clearCache($this->getId());
     }
     
     public function getUserData() {
-        return $this->userDaa;
+        return $this->userData;
     }
 
     public function setUserData($userData) {
-        $this->userDaa = $userData;
+        $this->userData = $userData;
         return $this;
     }
 
