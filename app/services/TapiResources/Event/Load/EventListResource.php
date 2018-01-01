@@ -26,37 +26,46 @@ class EventListResource extends EventResource {
     public function init() {
         $this->setCacheable(FALSE);
         $this->setWithMyAttendance(TRUE);
+        $this->options->from = NULL;
+        $this->options->to = NULL;
+        $this->options->order = NULL;
+        $this->options->limit = NULL;
+        $this->options->offset = NULL;
+        $this->options->asArray = NULL;
+        $this->options->asMonthArray = NULL;
+        $this->options->allEventsCount = NULL;
+        $this->options->withMyAttendance = NULL;
     }
 
     protected function preProcess() {
-        $this->setUrl($this->withMyAttendance ? "events/withMyAttendance" : "events");
+        $this->setUrl($this->options->withMyAttendance ? "events/withMyAttendance" : "events");
         
         $filter = [];
-        if($this->from)
-            $filter[] = "startTime>" . $this->from;
-        if($this->to)
-            $filter[] = "startTime<" . $this->to;
+        if($this->options->from)
+            $filter[] = "startTime>" . $this->options->from;
+        if($this->options->to)
+            $filter[] = "startTime<" . $this->options->to;
             
         if(count($filter)){
             $this->setRequestParameter("filter", join("~", $filter));
         }
         
-        if($this->order){
-            $this->setRequestParameter("order", $this->order);
+        if($this->options->order){
+            $this->setRequestParameter("order", $this->options->order);
         }
         
-        if($this->limit){
-            $this->setRequestParameter("limit", $this->limit);
+        if($this->options->limit){
+            $this->setRequestParameter("limit", $this->options->limit);
         }
         
-        if($this->offset){
-            $this->setRequestParameter("offset", $this->offset);
+        if($this->options->offset){
+            $this->setRequestParameter("offset", $this->options->offset);
         }
     }
     
     protected function postProcess() {
-        $this->asArray = []; //eventJSObject
-        $this->asMonthArray = []; //eventsMonthly
+        $this->options->asArray = []; //eventJSObject
+        $this->options->asMonthArray = []; //eventsMonthly
         
         if($this->data == null)
             return null;
@@ -75,54 +84,54 @@ class EventListResource extends EventResource {
                 "end" => $event->endTime,
                 "webName" => $event->webName
             ];
-            $this->asArray[] = (object)array_merge($eventProps, $eventColors);
+            $this->options->asArray[] = (object)array_merge($eventProps, $eventColors);
             $month = date("Y-m", strtotime($event->startTime));
-            $this->asMonthArray[$month][] = $event;
+            $this->options->asMonthArray[$month][] = $event;
         }
     }
     
     public function getFrom() {
-        return $this->from;
+        return $this->options->from;
     }
 
     public function getTo() {
-        return $this->to;
+        return $this->options->to;
     }
 
     public function getOrder() {
-        return $this->order;
+        return $this->options->order;
     }
 
     public function getLimit() {
-        return $this->limit;
+        return $this->options->limit;
     }
 
     public function getOffset() {
-        return $this->offset;
+        return $this->options->offset;
     }
 
     public function setFrom($from) {
-        $this->from = $from;
+        $this->options->from = $from;
         return $this;
     }
 
     public function setTo($to) {
-        $this->to = $to;
+        $this->options->to = $to;
         return $this;
     }
 
     public function setOrder($order) {
-        $this->order = $order;
+        $this->options->order = $order;
         return $this;
     }
 
     public function setLimit($limit) {
-        $this->limit = $limit;
+        $this->options->limit = $limit;
         return $this;
     }
 
     public function setOffset($offset) {
-        $this->offset = $offset;
+        $this->options->offset = $offset;
         return $this;
     }
     
@@ -142,11 +151,11 @@ class EventListResource extends EventResource {
     }
 
     public function getAsArray() {
-        return $this->asArray;
+        return $this->options->asArray;
     }
 
     public function getAsMonthArray() {
-        return $this->asMonthArray;
+        return $this->options->asMonthArray;
     }
 
     public function getAllEventsCount() {
@@ -156,21 +165,21 @@ class EventListResource extends EventResource {
             $allEventsCount = count($listAllEvents->setWithMyAttendance(FALSE)->getData());
             $this->setAllEventsCount($allEventsCount);
         }
-        return $this->allEventsCount;
+        return $this->options->allEventsCount;
     }
 
     public function setAllEventsCount($allEventsCount) {
         $this->cacheService->save(self::EVENT_COUNT_CACHE_KEY, $allEventsCount, CacheService::TIMEOUT_NONE);
-        $this->allEventsCount = $allEventsCount;
+        $this->options->allEventsCount = $allEventsCount;
         return $this;
     }
 
     public function getWithMyAttendance() {
-        return $this->withMyAttendance;
+        return $this->options->withMyAttendance;
     }
 
     public function setWithMyAttendance($withMyAttendance) {
-        $this->withMyAttendance = $withMyAttendance;
+        $this->options->withMyAttendance = $withMyAttendance;
         return $this;
     }
 

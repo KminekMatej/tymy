@@ -12,7 +12,7 @@ use Tymy\Exception\APIException;
 class EventDetailResource extends EventResource {
     
     public function init() {
-        //everything inites correctly
+        //everything inited correctly
     }
 
     protected function preProcess() {
