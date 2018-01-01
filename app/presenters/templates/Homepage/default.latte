@@ -93,18 +93,14 @@
     </div>
 
     <div class="row">
-        <div class="col">
-            {var $today = date('m-d')}
-            {var $tommorow = date('m-d', strtotime('+ 1 day'))}
-            {foreach $users as $usr}
-                    {var $nameDay = date('m-d', strtotime(date('Y').'-'.$usr->nameDayMonth.'-'.$usr->nameDayDay))}
-                    {var $bDay = property_exists($usr, 'birthDate') ? date('m-d', strtotime($usr->birthDate)) : '0-0'}
-                    {var $years = property_exists($usr, 'birthDate') ? date('Y') - date('Y', strtotime($usr->birthDate)) : '0'}
-                    <div n:if="$usr->nameDayMonth > 0 && $usr->nameDayDay > 0 && $today==$nameDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><a href="{plink Team:player $usr->webName}">{$usr->displayName}</a></strong> slaví dnes svátek!</div>
-                    <div n:if="property_exists($usr, 'birthDate') && $today==$bDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><a href="{plink Team:player $usr->webName}">{$usr->displayName}</a></strong> slaví dnes <strong>{$years}.</strong> narozeniny!</div>
-                    <div n:if="$usr->nameDayMonth > 0 && $usr->nameDayDay > 0 && $tommorow==$nameDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><a href="{plink Team:player $usr->webName}">{$usr->displayName}</a></strong> slaví zítra svátek!</div>
-                    <div n:if="property_exists($usr, 'birthDate') && $tommorow==$bDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><a href="{plink Team:player $usr->webName}">{$usr->displayName}</a></strong> slaví zítra <strong>{$years}.</strong> narozeniny!</div>
-            {/foreach}
+        <div class="col" n:inner-foreach="$users as $usr">
+            {var $nameDay = date('m-d', strtotime(date('Y').'-'.$usr->nameDayMonth.'-'.$usr->nameDayDay))}
+            {var $bDay = property_exists($usr, 'birthDate') ? date('m-d', strtotime($usr->birthDate)) : '0-0'}
+            {var $years = property_exists($usr, 'birthDate') ? date('Y') - date('Y', strtotime($usr->birthDate)) : '0'}
+            <div n:if="$usr->nameDayMonth > 0 && $usr->nameDayDay > 0 && $today==$nameDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><a href="{plink Team:player $usr->webName}">{$usr->displayName}</a></strong> slaví dnes svátek!</div>
+            <div n:if="property_exists($usr, 'birthDate') && $today==$bDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><a href="{plink Team:player $usr->webName}">{$usr->displayName}</a></strong> slaví dnes <strong>{$years}.</strong> narozeniny!</div>
+            <div n:if="$usr->nameDayMonth > 0 && $usr->nameDayDay > 0 && $tommorow==$nameDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><a href="{plink Team:player $usr->webName}">{$usr->displayName}</a></strong> slaví zítra svátek!</div>
+            <div n:if="property_exists($usr, 'birthDate') && $tommorow==$bDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><a href="{plink Team:player $usr->webName}">{$usr->displayName}</a></strong> slaví zítra <strong>{$years}.</strong> narozeniny!</div>
         </div>
     </div>
 

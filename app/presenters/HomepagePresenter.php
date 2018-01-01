@@ -39,6 +39,8 @@ class HomepagePresenter extends SecuredPresenter {
             $this->eventList->setHalfYearFrom(NULL, NULL)->getData();
             $this->template->discussions = $this->discussionList->getData();
             $this->template->users = $this->sortUsersByLastLogin($this->userList->getData());
+            $this->template->today = date('m-d');
+            $this->template->tommorow = date('m-d', strtotime('+ 1 day'));
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
