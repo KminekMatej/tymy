@@ -3,14 +3,20 @@
 namespace App\Presenters;
 
 use Tapi\EventDetailResource;
+use Tapi\AttendanceConfirmResource;
+use Tapi\AttendancePlanResource;
+use Tymy\Exception\APIException;
 
 class EventPresenter extends SecuredPresenter {
 
     /** @var EventDetailResource @inject */
     public $eventDetail;
 
-    /** @var \Tymy\Attendance @inject */
-    public $attendance;
+    /** @var AttendanceConfirmResource @inject */
+    public $attendanceConfirmer;
+
+    /** @var AttendancePlanResource @inject */
+    public $attendancePlanner;
 
     public function startup() {
         parent::startup();
@@ -41,7 +47,7 @@ class EventPresenter extends SecuredPresenter {
                     ->setHalfYearFrom($date, $direction)
                     ->getData();
             $eventTypes = $this->eventTypeList->getData();
-        } catch (\Tymy\Exception\APIException $ex) {
+        } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
 
@@ -78,7 +84,7 @@ class EventPresenter extends SecuredPresenter {
                     ->getData();
             $eventTypes = $this->eventTypeList->getData();
             $users = $this->userList->getData();
-        } catch (\Tymy\Exception\APIException $ex) {
+        } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
         
@@ -127,13 +133,13 @@ class EventPresenter extends SecuredPresenter {
 
     public function handleAttendance($id, $code, $desc) {
         try {
-            $this->attendance
-                    ->recId($id)
+            $this->attendancePlanner
+                    ->setId($id)
                     ->setPreStatus($code)
                     ->setPreDescription($desc)
-                    ->plan();
-        } catch (\Tymy\Exception\APIException $ex) {
-            $this->handleTapiException($ex);
+                    ->perform();
+        } catch (APIException $ex) {
+            $this->handleTapiException($ex, "this");
         }
         if ($this->isAjax()) {
             $this->redrawControl("attendanceWarning");
@@ -144,11 +150,12 @@ class EventPresenter extends SecuredPresenter {
     public function handleAttendanceResult($id) {
         $results = $this->getRequest()->getPost()["resultSet"];
         try {
-            $this->attendance
-                    ->recId($id)
-                    ->confirm($results);
-        } catch (\Tymy\Exception\APIException $ex) {
-            $this->handleTapiException($ex);
+            $this->attendanceConfirmer
+                    ->setId($id)
+                    ->setPostStatuses($results)
+                    ->perform();
+        } catch (APIException $ex) {
+            $this->handleTapiException($ex, "this");
         }
         if ($this->isAjax()) {
             $this->redrawControl("attendanceTabs");

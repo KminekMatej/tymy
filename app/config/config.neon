@@ -47,6 +47,8 @@ services:
         - Tapi\EventCreateResource
         - Tapi\EventEditResource
         - Tapi\EventDeleteResource
+        - Tapi\AttendanceConfirmResource
+        - Tapi\AttendancePlanResource
         - Tapi\UserCreateResource
         - Tapi\UserEditResource
         - Tapi\UserDeleteResource
