@@ -83,7 +83,8 @@ class EventPresenter extends SecuredPresenter {
                     ->setId($this->parseIdFromWebname($udalost))
                     ->getData();
             $eventTypes = $this->eventTypeList->getData();
-            $users = $this->userList->getData();
+            $this->userList->getData();
+            $users = $this->userList->getById();
         } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
@@ -102,9 +103,9 @@ class EventPresenter extends SecuredPresenter {
         $attArray["PRE"]["NO"] = [];
         $attArray["PRE"]["UNKNOWN"] = [];
         
-        
+        \Tracy\Debugger::barDump($users);
         foreach ($event->attendance as $attendee) {
-            $user = $users->data[$attendee->userId];
+            $user = $users[$attendee->userId];
             if ($user->status != "PLAYER")
                 continue; // display only players on event detail
             $gender = $user->gender;

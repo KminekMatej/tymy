@@ -31,7 +31,7 @@ class AttendancePlanResource extends EventResource {
     }
 
     protected function postProcess() {
-        
+        $this->clearCache($this->getId());
     }
     
     public function getPreStatus() {
