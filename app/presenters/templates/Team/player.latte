@@ -134,7 +134,7 @@
                                     <th>Uživatelské jméno:</th><td><input name="login" data-value="{$player->login}" type="text" value="{$player->login}" n:class="col-6, form-control, in_array('login',$player->errFls) ? is-invalid" /></td>
                                 </tr>
                                 <tr>
-                                    <th>Nové heslo:</th><td><input name="password" data-value="" type="password" value="" class="form-control col-6" /></td>
+                                    <th>Nové heslo:</th><td><input name="password" data-value="" type="password" value="" class="form-control col-6" data-validation-field2="password-check"/></td>
                                 </tr>
                                 <tr>
                                     <th>Nové heslo znovu:</th><td><input name="password-check" type="password" value="" class="form-control col-6" /></td>

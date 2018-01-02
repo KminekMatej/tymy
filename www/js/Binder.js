@@ -134,7 +134,7 @@ Binder.prototype.save = function (caller) {
     if (typeof this.bind == "undefined")
         throw "Binder performig error - undefined binding object!";
     if (!this.isValidated)
-        throw "Validation failing, saving disabled!";
+        alert("Validation failing, saving disabled!");
     var binderObj = this;
     if (!($.isEmptyObject(binderObj.bind.changes))) {
         binderObj.disableSaveButtons(true, true);
