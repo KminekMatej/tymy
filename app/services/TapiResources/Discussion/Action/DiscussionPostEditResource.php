@@ -14,9 +14,9 @@ class DiscussionPostEditResource extends DiscussionResource {
     public function init() {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::PUT);
-        $this->setPost(NULL) = NULL;
-        $this->setPostId(NULL) = NULL;
-        $this->getSticky(NULL) = NULL;
+        $this->setPost(NULL);
+        $this->setPostId(NULL);
+        $this->setSticky(NULL);
     }
     
     public function preProcess() {
