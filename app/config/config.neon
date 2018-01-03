@@ -25,7 +25,6 @@ services:
             class: App\Model\TapiAuthorizator
         cacheStorage:
             class: Nette\Caching\Storages\DevNullStorage
-        - Tymy\Attendance
         - Tymy\Poll
         - Tymy\Polls
         - Tymy\PollOption
