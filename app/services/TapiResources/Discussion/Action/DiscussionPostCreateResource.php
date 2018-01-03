@@ -11,11 +11,10 @@ use Tymy\Exception\APIException;
  */
 class DiscussionPostCreateResource extends DiscussionResource {
     
-    private $post;
-        
     public function init() {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::POST);
+        $this->setPost(NULL);
     }
     
     public function preProcess() {
@@ -34,11 +33,11 @@ class DiscussionPostCreateResource extends DiscussionResource {
     }
     
     public function getPost() {
-        return $this->post;
+        return $this->options->post;
     }
 
     public function setPost($post) {
-        $this->post = $post;
+        $this->options->post = $post;
         return $this;
     }
 

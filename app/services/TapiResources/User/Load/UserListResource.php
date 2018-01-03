@@ -12,7 +12,7 @@ class UserListResource extends UserResource {
     
     public function init() {
         $this->setCachingTimeout(CacheService::TIMEOUT_LARGE);
-        $this->options->userType = null;
+        $this->setUserType(NULL);
         $this->options->byId = null;
         $this->options->me = null;
         $this->options->counts = null;
@@ -20,7 +20,7 @@ class UserListResource extends UserResource {
     }
 
     protected function preProcess() {
-        $this->setUrl(is_null($this->options->userType) ? "users" : "users/status/" . $this->options->userType);
+        $this->setUrl(is_null($this->getUserType()) ? "users" : "users/status/" . $this->getUserType());
         return $this;
     }
     

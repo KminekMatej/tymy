@@ -11,8 +11,6 @@ use Tymy\Exception\APIException;
  */
 class UserEditResource extends UserResource {
     
-    private $userData;
-    
     public function init() {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::PUT);
@@ -26,7 +24,7 @@ class UserEditResource extends UserResource {
             throw new APIException('User not set!');
         
         $this->setUrl("users/" . $this->getId());
-        $this->setRequestData($this->userData);
+        $this->setRequestData($this->getUserData());
 
         return $this;
     }
@@ -36,11 +34,11 @@ class UserEditResource extends UserResource {
     }
     
     public function getUserData() {
-        return $this->userData;
+        return $this->options->userData;
     }
 
     public function setUserData($userData) {
-        $this->userData = $userData;
+        $this->options->userData = $userData;
         return $this;
     }
 

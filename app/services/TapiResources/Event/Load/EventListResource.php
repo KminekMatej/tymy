@@ -13,24 +13,14 @@ class EventListResource extends EventResource {
     const PAGING_EVENTS_PER_PAGE = 15;
     const EVENT_COUNT_CACHE_KEY = "EVENT_COUNT_CACHE_KEY";
     
-    private $from;
-    private $to;
-    private $order;
-    private $limit;
-    private $offset;
-    private $asArray;
-    private $asMonthArray;
-    private $allEventsCount;
-    private $withMyAttendance;
-    
     public function init() {
         $this->setCacheable(FALSE);
         $this->setWithMyAttendance(TRUE);
-        $this->options->from = NULL;
-        $this->options->to = NULL;
-        $this->options->order = NULL;
-        $this->options->limit = NULL;
-        $this->options->offset = NULL;
+        $this->setFrom(NULL);
+        $this->setTo(NULL);
+        $this->setOrder(NULL);
+        $this->setLimit(NULL);
+        $this->setOffset(NULL);
         $this->options->asArray = NULL;
         $this->options->asMonthArray = NULL;
         $this->options->allEventsCount = NULL;
@@ -38,28 +28,28 @@ class EventListResource extends EventResource {
     }
 
     protected function preProcess() {
-        $this->setUrl($this->options->withMyAttendance ? "events/withMyAttendance" : "events");
+        $this->setUrl($this->getWithMyAttendance() ? "events/withMyAttendance" : "events");
         
         $filter = [];
-        if($this->options->from)
-            $filter[] = "startTime>" . $this->options->from;
-        if($this->options->to)
-            $filter[] = "startTime<" . $this->options->to;
+        if($this->getFrom())
+            $filter[] = "startTime>" . $this->getFrom();
+        if($this->getTo())
+            $filter[] = "startTime<" . $this->getTo();
             
         if(count($filter)){
             $this->setRequestParameter("filter", join("~", $filter));
         }
         
-        if($this->options->order){
-            $this->setRequestParameter("order", $this->options->order);
+        if($this->getOrder()){
+            $this->setRequestParameter("order", $this->getOrder());
         }
         
-        if($this->options->limit){
-            $this->setRequestParameter("limit", $this->options->limit);
+        if($this->getLimit()){
+            $this->setRequestParameter("limit", $this->getLimit());
         }
         
-        if($this->options->offset){
-            $this->setRequestParameter("offset", $this->options->offset);
+        if($this->getOffset()){
+            $this->setRequestParameter("offset", $this->getOffset());
         }
     }
     

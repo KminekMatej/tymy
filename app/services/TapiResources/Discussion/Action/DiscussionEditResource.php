@@ -11,22 +11,21 @@ use Tymy\Exception\APIException;
  */
 class DiscussionEditResource extends DiscussionResource {
 
-    private $discussion;
-    
     public function init() {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::PUT);
+        $this->setDiscussion(NULL);
     }
 
     protected function preProcess() {
-        if($this->discussion == null)
+        if($this->getDiscussion() == null)
             throw new APIException('Discussion not set!');
         if($this->getId() == null)
             throw new APIException('Discussion ID not set!');
         
         $this->setUrl("discussions");
-        $this->discussion["id"] = $this->getId();
-        $this->setRequestData($this->discussion);
+        $this->options->discussion["id"] = $this->getId();
+        $this->setRequestData($this->getDiscussion());
     }
 
     protected function postProcess() {
@@ -34,11 +33,11 @@ class DiscussionEditResource extends DiscussionResource {
     }
     
     public function getDiscussion() {
-        return $this->discussion;
+        return $this->options->discussion;
     }
 
     public function setDiscussion($discussion) {
-        $this->discussion = $discussion;
+        $this->options->discussion = $discussion;
         return $this;
     }
 

@@ -11,18 +11,16 @@ use Tymy\Exception\APIException;
  */
 class PasswordResetResource extends UserResource {
     
-    private $code;
-    
     public function init() {
         $this->setCacheable(FALSE);
         $this->setTsidRequired(FALSE);
     }
 
     protected function preProcess() {
-        if($this->code == null)
+        if($this->getCode() == null)
             throw new APIException('Code not set!');
         
-        $this->setUrl("pwdreset/" . $this->code);
+        $this->setUrl("pwdreset/" . $this->getCode());
 
         return $this;
     }
@@ -32,11 +30,11 @@ class PasswordResetResource extends UserResource {
     }
     
     public function getCode() {
-        return $this->code;
+        return $this->options->code;
     }
 
     public function setCode($code) {
-        $this->code = $code;
+        $this->options->code = $code;
         return $this;
     }
 

@@ -11,8 +11,6 @@ use Tymy\Exception\APIException;
  */
 class DiscussionCreateResource extends DiscussionResource {
 
-    private $discussion;
-    
     public function init() {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::POST);
@@ -32,11 +30,11 @@ class DiscussionCreateResource extends DiscussionResource {
     }
     
     public function getDiscussion() {
-        return $this->discussion;
+        return $this->options->discussion;
     }
 
     public function setDiscussion($discussion) {
-        $this->discussion = $discussion;
+        $this->options->discussion = $discussion;
         return $this;
     }
 

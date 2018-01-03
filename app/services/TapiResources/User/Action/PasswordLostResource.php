@@ -12,10 +12,6 @@ use Tymy\Exception\APIException;
 
 class PasswordLostResource extends UserResource {
     
-    private $mail;
-    private $callbackUri;
-    private $hostname;
-    
     public function init() {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::POST);
@@ -23,19 +19,19 @@ class PasswordLostResource extends UserResource {
     }
 
     protected function preProcess() {
-        if (!isset($this->mail))
+        if (!$this->getMail())
             throw new APIException('E-mail not set!');
-        if (!isset($this->hostname))
+        if (!$this->getHostname())
             throw new APIException('Hostname not set!');
-        if (!isset($this->callbackUri))
+        if (!$this->getCallbackUri())
             throw new APIException('Callback not set!');
         
         $this->setUrl("pwdlost");
         
         $data = [
-            "email" => $this->mail,
-            "callbackUri" => $this->callbackUri,
-            "hostname" => $this->hostname,
+            "email" => $this->getMail(),
+            "callbackUri" => $this->getCallbackUri(),
+            "hostname" => $this->getHostname(),
         ];
         
         $this->setRequestData((object)$data);
@@ -48,29 +44,29 @@ class PasswordLostResource extends UserResource {
     }
     
     public function getMail() {
-        return $this->mail;
+        return $this->options->mail;
     }
 
     public function getCallbackUri() {
-        return $this->callbackUri;
+        return $this->options->callbackUri;
     }
 
     public function getHostname() {
-        return $this->hostname;
+        return $this->options->hostname;
     }
 
     public function setMail($mail) {
-        $this->mail = $mail;
+        $this->options->mail = $mail;
         return $this;
     }
 
     public function setCallbackUri($callbackUri) {
-        $this->callbackUri = $callbackUri;
+        $this->options->callbackUri = $callbackUri;
         return $this;
     }
 
     public function setHostname($hostname) {
-        $this->hostname = $hostname;
+        $this->options->hostname = $hostname;
         return $this;
     }
 

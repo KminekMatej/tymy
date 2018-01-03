@@ -11,26 +11,25 @@ use Tymy\Exception\APIException;
  */
 class EventCreateResource extends EventResource {
     
-    private $eventsArray;
-    private $eventTypesArray;
-    
     public function init() {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::POST);
+        $this->setEventsArray(NULL);
+        $this->setEventTypesArray(NULL);
     }
     
     protected function preProcess() {
-        if($this->eventsArray == null)
-            throw new \Tymy\Exception\APIException('Event array not set!');
-        if($this->eventTypesArray == null)
-            throw new \Tymy\Exception\APIException('Event types array not set!');
-        foreach ($this->eventsArray as $event) {
+        if($this->getEventsArray() == null)
+            throw new APIException('Event array not set!');
+        if($this->getEventTypesArray() == null)
+            throw new APIException('Event types array not set!');
+        foreach ($this->options->eventsArray as $event) {
             if(!array_key_exists("startTime", $event))
-                throw new \Tymy\Exception\APIException('Start time not set!');
+                throw new APIException('Start time not set!');
             if(!array_key_exists("type", $event))
-                throw new \Tymy\Exception\APIException('Type not set!');
-            if(!array_key_exists($event["type"], $this->eventTypesArray))
-                throw new \Tymy\Exception\APIException('Unrecognized type!');
+                throw new APIException('Type not set!');
+            if(!array_key_exists($event["type"], $this->getEventTypesArray()))
+                throw new APIException('Unrecognized type!');
             foreach ($event as $key => $value) {
                 if (in_array($key, ["startTime", "endTime", "closeTime"]))
                     $this->timeSave($value);
@@ -38,31 +37,31 @@ class EventCreateResource extends EventResource {
         }
         
         $this->setUrl("events");
-        $this->setRequestData($this->eventsArray);
+        $this->setRequestData($this->getEventsArray());
 
         return $this;
     }
 
     protected function postProcess() {
         $this->clearCache();
-        $this->postProcessEvent($this->data);
+        parent::postProcessEvent($this->data);
     }
     
     public function getEventsArray() {
-        return $this->eventsArray;
+        return $this->options->eventsArray;
     }
 
     public function getEventTypesArray() {
-        return $this->eventTypesArray;
+        return $this->options->eventTypesArray;
     }
 
     public function setEventsArray($eventsArray) {
-        $this->eventsArray = $eventsArray;
+        $this->options->eventsArray = $eventsArray;
         return $this;
     }
 
     public function setEventTypesArray($eventTypesArray) {
-        $this->eventTypesArray = $eventTypesArray;
+        $this->options->eventTypesArray = $eventTypesArray;
         return $this;
     }
 

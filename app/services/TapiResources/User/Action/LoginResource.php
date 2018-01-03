@@ -20,10 +20,10 @@ class LoginResource extends UserResource  {
     }
 
     protected function preProcess() {
-        if($this->login == null)
+        if($this->options->login == null)
             throw new APIException('Login not set!');
         
-        $this->setUrl("login/" . $this->login . "/" . $this->hash);
+        $this->setUrl("login/" . $this->options->login . "/" . $this->options->hash);
 
         return $this;
     }
@@ -33,7 +33,7 @@ class LoginResource extends UserResource  {
     }
     
     public function setLogin($login) {
-        $this->login = $login;
+        $this->options->login = $login;
         return $this;
     }
 
@@ -43,7 +43,7 @@ class LoginResource extends UserResource  {
         for ($index = 0; $index < $n; $index++) {
             $h = md5($password);
         }
-        $this->hash = $h;
+        $this->options->hash = $h;
         return $this;
     }
 

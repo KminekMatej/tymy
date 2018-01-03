@@ -10,8 +10,6 @@ namespace Tapi;
  */
 class AvatarUploadResource extends UserResource{
     
-    private $avatar;
-    
     public function init() {
         $this->setCacheable(FALSE);
     }
@@ -33,11 +31,11 @@ class AvatarUploadResource extends UserResource{
     }
     
     public function getAvatar() {
-        return $this->avatar;
+        return $this->options->avatar;
     }
 
     public function setAvatar($avatar) {
-        $this->avatar = $avatar;
+        $this->options->avatar = $avatar;
         return $this;
     }
 

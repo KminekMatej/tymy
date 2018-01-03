@@ -11,11 +11,10 @@ use Tymy\Exception\APIException;
  */
 class DiscussionPostDeleteResource extends DiscussionResource {
     
-    private $postId;
-    
     public function init() {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::DELETE);
+        $this->setPostId(NULL);
     }
     
     public function preProcess() {
@@ -33,11 +32,11 @@ class DiscussionPostDeleteResource extends DiscussionResource {
     }
     
     public function getPostId() {
-        return $this->postId;
+        return $this->options->postId;
     }
 
     public function setPostId($postId) {
-        $this->postId = $postId;
+        $this->options->postId = $postId;
         return $this;
     }
 

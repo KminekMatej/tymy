@@ -28,38 +28,45 @@ class UserRegisterResource extends UserResource {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::POST);
         $this->setTsidRequired(FALSE);
+        $this->setCallName(NULL);
+        $this->setEmail(NULL);
+        $this->setFirstName(NULL);
+        $this->setLastName(NULL);
+        $this->setLogin(NULL);
+        $this->setNote(NULL);
+        $this->setPassword(NULL);
     }
 
     protected function preProcess() {
-        if (!$this->login)
+        if (!$this->getLogin())
             throw new APIException('Login not set!');
-        if (!$this->password)
+        if (!$this->getPassword())
             throw new APIException('Password not set!');
-        if (!$this->email)
+        if (!$this->getEmail())
             throw new APIException('Email not set!');
         
         $this->setUrl("users/register");
         
         $data = [
-            "login" => $this->login,
-            "password" => $this->password,
-            "email" => $this->email,
-            "note" => $this->note,
+            "login" => $this->getLogin(),
+            "password" => $this->getPassword(),
+            "email" => $this->getEmail(),
+            "note" => $this->getNote(),
             "callName" => $this->composeCallName()
         ];
         
         
         
-        if($this->firstName){
-            if (count($this->firstName) > 20)
+        if($this->getFirstName()){
+            if (count($this->getFirstName()) > 20)
                 throw new APIException('First name too long!');
-            $data["firstName"] = $this->firstName;
+            $data["firstName"] = $this->getFirstName();
         }
             
-        if($this->lastName){
-            if (count($this->lastName) > 20)
+        if($this->getLastName()){
+            if (count($this->getLastName()) > 20)
                 throw new APIException('Last name too long!');
-            $data["lastName"] = $this->lastName;
+            $data["lastName"] = $this->getLastName();
         }
         
         $this->setRequestData((object)$data);
@@ -72,72 +79,72 @@ class UserRegisterResource extends UserResource {
     }
     
     private function composeCallName(){
-        $callName = $this->firstName . " " . $this->lastName;
+        $callName = $this->getFirstName() . " " . $this->getLastName();
         if(trim($callName) == "")
-            $callName = $this->login;
+            $callName = $this->getLogin();
         return substr($callName, 0, 30);
     }
     
     public function getLogin() {
-        return $this->login;
+        return $this->options->login;
     }
 
     public function getPassword() {
-        return $this->password;
+        return $this->options->password;
     }
 
     public function getEmail() {
-        return $this->email;
+        return $this->options->email;
     }
 
     public function getCallName() {
-        return $this->callName;
+        return $this->options->callName;
     }
 
     public function getFirstName() {
-        return $this->firstName;
+        return $this->options->firstName;
     }
 
     public function getLastName() {
-        return $this->lastName;
+        return $this->options->lastName;
     }
 
     public function getNote() {
-        return $this->note;
+        return $this->options->note;
     }
 
     public function setLogin($login) {
-        $this->login = $login;
+        $this->options->login = $login;
         return $this;
     }
 
     public function setPassword($password) {
-        $this->password = $password;
+        $this->options->password = $password;
         return $this;
     }
 
     public function setEmail($email) {
-        $this->email = $email;
+        $this->options->email = $email;
         return $this;
     }
 
     public function setCallName($callName) {
-        $this->callName = $callName;
+        $this->options->callName = $callName;
         return $this;
     }
 
     public function setFirstName($firstName) {
-        $this->firstName = $firstName;
+        $this->options->firstName = $firstName;
         return $this;
     }
 
     public function setLastName($lastName) {
-        $this->lastName = $lastName;
+        $this->options->lastName = $lastName;
         return $this;
     }
 
     public function setNote($note) {
-        $this->note = $note;
+        $this->options->note = $note;
         return $this;
     }
 

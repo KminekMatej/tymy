@@ -11,27 +11,26 @@ use Tymy\Exception\APIException;
  */
 class EventEditResource extends EventResource {
     
-    private $event;
-    
     public function init() {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::PUT);
+        $this->setEvent(NULL);
     }
 
     protected function preProcess() {
-        if($this->event == null)
+        if($this->getEvent() == null)
             throw new APIException('Event not set!');
         if($this->getId() == null)
             throw new APIException('Event id not set!');
         
         $this->setUrl("event/" . $this->getId());
         
-        foreach ($this->event as $key => $value) {
+        foreach ($this->options->event as $key => $value) {
             if(in_array($key, ["startTime","endTime","closeTime"]))
                 $this->timeSave($value);
         }
         
-        $this->setRequestData($this->event);
+        $this->setRequestData($this->getEvent());
     }
     
     protected function postProcess() {
@@ -39,11 +38,11 @@ class EventEditResource extends EventResource {
     }
     
     public function getEvent() {
-        return $this->event;
+        return $this->options->event;
     }
 
     public function setEvent($event) {
-        $this->event = $event;
+        $this->options->event = $event;
         return $this;
     }
 

@@ -11,20 +11,18 @@ use Tymy\Exception\APIException;
  */
 class DiscussionPostEditResource extends DiscussionResource {
     
-    private $post;
-    private $sticky;
-    private $postId;
-    
-        
     public function init() {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::PUT);
+        $this->setPost(NULL) = NULL;
+        $this->setPostId(NULL) = NULL;
+        $this->getSticky(NULL) = NULL;
     }
     
     public function preProcess() {
         if($this->getId() == null) throw new APIException ("Discussion ID is missing");
         if($this->getPostId() == null) throw new APIException ("Post ID is missing");
-        if($this->post == NULL && $this->sticky == NULL)
+        if($this->options->post == NULL && $this->options->sticky == NULL)
             return null;
         $this->setUrl("discussion/" . $this->getId() . "/post");
         
@@ -43,29 +41,29 @@ class DiscussionPostEditResource extends DiscussionResource {
     }
     
     public function getPost() {
-        return $this->post;
+        return $this->options->post;
     }
 
     public function setPost($post) {
-        $this->post = $post;
+        $this->options->post = $post;
         return $this;
     }
     
     public function getSticky() {
-        return $this->sticky;
+        return $this->options->sticky;
     }
 
     public function setSticky($sticky) {
-        $this->sticky = $sticky;
+        $this->options->sticky = $sticky;
         return $this;
     }
 
     public function getPostId() {
-        return $this->postId;
+        return $this->options->postId;
     }
 
     public function setPostId($postId) {
-        $this->postId = $postId;
+        $this->options->postId = $postId;
         return $this;
     }
 
