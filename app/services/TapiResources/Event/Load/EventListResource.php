@@ -14,7 +14,7 @@ class EventListResource extends EventResource {
     const EVENT_COUNT_CACHE_KEY = "EVENT_COUNT_CACHE_KEY";
     
     public function init() {
-        $this->setCacheable(FALSE);
+        $this->setCachingTimeout(CacheService::TIMEOUT_TINY);
         $this->setWithMyAttendance(TRUE);
         $this->setFrom(NULL);
         $this->setTo(NULL);
