@@ -78,13 +78,4 @@ class UserListResource extends UserResource {
         return $this->options->me;
     }
 
-    
-    protected function getClassCacheName() {
-        $ccName = parent::getClassCacheName();
-        if (!is_null($this->options->userType)) {
-            $ccName .= ":" . $this->options->userType;
-        }
-        return $ccName;
-    }
-
 }

@@ -5,6 +5,7 @@ use Nette;
 use Nette\Utils\Json;
 use Tapi\RequestMethod;
 use Tracy\Debugger;
+use Tymy\Exception\APIException;
 
 /**
  * Project: tymy_v2
@@ -125,27 +126,27 @@ abstract class TapiObject {
     }
 
     private function requestFromApi($relogin = TRUE){
-        $this->preProcess();
-        
-        if(is_null($this->url))
+        if(is_null($this->supplier->getApiRoot()) || is_null($this->getUrl()))
             return FALSE;
         
-        if($this->tsidRequired)
-            $this->setTsid ($this->user->getIdentity()->sessionKey);
+        $url = $this->getFullUrl();
+        
+        $paramArray = $this->requestParameters;
+        if($this->tsidRequired) $paramArray["TSID"] = $this->user->getIdentity()->sessionKey;
         
         //add parameters to url
-        if(!is_null($this->requestParameters)){
-            $this->url = preg_replace('/\\?.*/', '', $this->url); // firstly try to remove all url params before adding them - important for relogins
-            $this->url .= "?" . http_build_query($this->requestParameters);
+        if(count($paramArray)){
+            $url = preg_replace('/\\?.*/', '', $url); // firstly try to remove all url params before adding them - important for relogins
+            $url .= "?" . http_build_query($paramArray);
         }
         
         Debugger::timer("tapi-request" . spl_object_hash($this));
         $ch = curl_init(); 
-        curl_setopt($ch, CURLOPT_URL, $this->url); 
+        curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         
-        if($this->method != RequestMethod::GET){
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->method);
+        if($this->getMethod() != RequestMethod::GET){
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->getMethod());
             if(isset($this->requestData)){
                 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $this->jsonEncoding ? json_encode($this->requestData) : $this->requestData);
@@ -154,21 +155,19 @@ abstract class TapiObject {
         
         $curl = curl_exec($ch);
         if($curl === FALSE){
-            throw new \Tymy\Exception\APIException("Unknown error while procesing tapi request");
+            throw new APIException("Unknown error while procesing tapi request");
         } else {
             try {
                 $this->resultStatus = new ResultStatus(Json::decode($curl));
             } catch (Nette\Utils\JsonException $exc) {
                 if(!Debugger::$productionMode){
                     Debugger::barDump($this->method, "CURL method");
-                    Debugger::barDump($this->url, "CURL URL");
+                    Debugger::barDump($url, "CURL URL");
                     Debugger::barDump($this->jsonEncoding ? json_encode($this->requestData) : $this->requestData, "CURL Data");
                 } else {
-                    throw new \Tymy\Exception\APIException("Unknown error while procesing tapi request");
+                    throw new APIException("Unknown error while procesing tapi request");
                 }
             }
-
-            
         }
         $curlInfo = curl_getinfo($ch);
         curl_close($ch);
@@ -180,7 +179,7 @@ abstract class TapiObject {
             $this->saveToCache();
         }
         
-        $this->tymyPanel->logAPI("TAPI request", $this->url, Debugger::timer("tapi-request" . spl_object_hash($this)));
+        $this->tymyPanel->logAPI("TAPI request", $url, Debugger::timer("tapi-request" . spl_object_hash($this)));
         
         if($this->resultStatus->isValid()){// tapi request loaded succesfully
             return TRUE;
@@ -191,17 +190,16 @@ abstract class TapiObject {
                 if($this->tsidRequired && $relogin){// may be only already invalid TSID, try to obtain new one
                     $newLogin = $this->tapiAuthenticator->reAuthenticate([$this->user->getIdentity()->data["data"]->login, $this->user->getIdentity()->data["hash"]]);
                     $this->user->getIdentity()->sessionKey = $newLogin->result->sessionKey;
-                    $this->setTsid($this->user->getIdentity()->sessionKey);
                     $this->requestFromApi(FALSE);
                     return TRUE;
                 } 
                 return FALSE;
             default:
-                Debugger::barDump($this->url);
+                Debugger::barDump($url);
                 Debugger::barDump($this->method);
                 Debugger::barDump($this->requestData);
                 Debugger::barDump($curlInfo);
-                throw new \Tymy\Exception\APIException("Request [".$this->method."] ".$this->url." failed with error code " . $errorData["http_code"]);
+                throw new APIException("Request [".$this->method."] $url failed with error code " . $errorData["http_code"]);
         }
     }
     
@@ -246,27 +244,22 @@ abstract class TapiObject {
         $this->cachingTimeout = $cachingTimeout;
         return $this;
     }
+    
+    private function getFullUrl(){
+        return $this->supplier->getApiRoot() . DIRECTORY_SEPARATOR . $this->getUrl();
+    }
 
     public function getUrl() {
         return $this->url;
     }
-    
+
     public function setUrl($url) {
-        $this->url = $this->supplier->getApiRoot() . DIRECTORY_SEPARATOR . $url;
+        $this->url = $url;
         return $this;
     }
-
-    public function getTsid() {
-        return $this->tsid;
-    }
-
-    public function setTsid($tsid) {
-        $this->tsid = $tsid;
-        $this->setRequestParameter("TSID", $this->tsid);
-        return $this;
-    }
-
+    
     public function getData($forceRequest = FALSE) {
+        $this->preProcess();
         if($this->cacheable){
             $this->loadFromCache();
         }
@@ -296,11 +289,9 @@ abstract class TapiObject {
         return $this;
     }
     
-    protected function getClassCacheName(){
-        $className = get_class($this);
-        if($this->getId() != null)
-            $className .= ":" . $this->getId ();
-        return $className;
+    private function getClassCacheName(){
+        if($this->getUrl() == NULL) throw new \Exception ("No url to save");
+        return $this->getMethod() . ":" . $this->getUrl() . ($this->requestParameters ? "?" . http_build_query($this->requestParameters) : "");
     }
 
     protected function timeLoad(&$date) {

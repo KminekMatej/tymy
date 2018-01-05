@@ -22,7 +22,6 @@ class DiscussionCreateResource extends DiscussionResource {
         
         $this->setUrl("discussions");
         $this->setRequestData($this->getDiscussion());
-        
     }
 
     protected function postProcess() {
