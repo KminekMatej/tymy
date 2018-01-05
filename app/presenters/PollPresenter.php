@@ -7,12 +7,20 @@ use Nette\Application\UI\NavbarControl;
 use App\Model;
 use Nette\Application\UI\Form;
 use Nette\Utils\Strings;
+use Tapi\PollDetailResource;
+use Tapi\PollListResource;
+use Tapi\PollVoteResource;
+use Tymy\Exception\APIException;
 
 class PollPresenter extends SecuredPresenter {
 
     public $navbar;
-    /** @var \Tymy\Poll @inject */
+    
+    /** @var PollDetailResource @inject */
     public $poll;
+    
+    /** @var PollVoteResource @inject */
+    public $pollVoter;
     
     public function startup() {
         parent::startup();
@@ -26,11 +34,10 @@ class PollPresenter extends SecuredPresenter {
     public function renderPoll($anketa) {
                 try {
         $poll = $this->poll
-                ->reset()
-                ->recId($this->parseIdFromWebname($anketa))
+                ->setId($this->parseIdFromWebname($anketa))
                 ->getData();
         $this->template->users = $this->userList->getData();
-        } catch (\Tymy\Exception\APIException $ex) {
+        } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
 
@@ -49,7 +56,7 @@ class PollPresenter extends SecuredPresenter {
         }
         $this->redrawControl("poll-results");
         try {
-            $this->poll->recId($pollId)->vote($votes);
+            $this->pollVoter->setId($pollId)->setVotes($votes)->perform();
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex, "this");
         }

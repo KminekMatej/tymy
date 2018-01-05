@@ -20,6 +20,7 @@ use Tapi\DiscussionListResource;
 use Tapi\DiscussionNewsListResource;
 use Tapi\UserDetailResource;
 use Tapi\UserListResource;
+use Tapi\PollListResource;
 
 /**
  * Description of SecuredPresenter
@@ -42,7 +43,7 @@ class SecuredPresenter extends BasePresenter {
     /** @var DiscussionNewsListResource @inject */
     public $discussionNews;
     
-    /** @var \Tymy\Polls @inject */
+    /** @var PollListResource @inject */
     public $polls;
     
     /** @var EventListResource @inject */

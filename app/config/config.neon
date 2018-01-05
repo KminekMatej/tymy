@@ -58,6 +58,12 @@ services:
         - Tapi\LogoutResource
         - Tapi\PasswordLostResource
         - Tapi\PasswordResetResource
+        - Tapi\PollDetailResource
+        - Tapi\PollListResource
+        - Tapi\PollVoteResource
+        - Tapi\PollCreateResource
+        - Tapi\PollEditResource
+        - Tapi\PollDeleteResource
 
 
 tracy:

@@ -7,6 +7,7 @@ use Tapi\DiscussionListResource;
 use Tapi\EventListResource;
 use Tapi\UserListResource;
 use Tapi\UserDetailResource;
+use Tapi\PollListResource;
 
 
 /**
@@ -22,7 +23,7 @@ class NavbarControl extends Control {
     /** @var DiscussionListResource */
     private $discussionList;
 
-    /** @var \Tymy\Polls */
+    /** @var PollListResource */
     private $polls;
 
     /** @var EventListResource */
@@ -78,7 +79,8 @@ class NavbarControl extends Control {
 
     private function polls() {
         try {
-            $this->template->voteWarnings = $this->polls->reset()->setMenu(TRUE)->getResult()->menuWarningCount;
+            $this->polls->setMenu(TRUE)->getData();
+            $this->template->voteWarnings = $this->polls->getWarnings();
             $this->template->polls = $this->polls->getData();
         } catch (Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex);
