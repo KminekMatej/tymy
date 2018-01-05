@@ -9,6 +9,10 @@ use Tapi\EventDeleteResource;
 use Tapi\DiscussionCreateResource;
 use Tapi\DiscussionEditResource;
 use Tapi\DiscussionDeleteResource;
+use Tapi\PollDetailResource;
+use Tapi\PollCreateResource;
+use Tapi\PollEditResource;
+use Tapi\PollDeleteResource;
 
 
 class SettingsPresenter extends SecuredPresenter {
@@ -37,8 +41,17 @@ class SettingsPresenter extends SecuredPresenter {
     /** @var EventDeleteResource @inject */
     public $eventDeleter;
         
-    /** @var \Tymy\Poll @inject */
-    public $poll;
+    /** @var PollDetailResource @inject */
+    public $pollDetail;
+        
+    /** @var PollCreateResource @inject */
+    public $pollCreator;
+    
+    /** @var PollEditResource @inject */
+    public $pollEditor;
+    
+    /** @var PollDeleteResource @inject */
+    public $pollDeleter;
         
     /** @var \Tymy\PollOption @inject */
     public $pollOption;
@@ -89,7 +102,7 @@ class SettingsPresenter extends SecuredPresenter {
             $this->setView("poll");
         } else {
             $this->template->isNew = false;
-            $polls = $this->polls->reset()->setMenu(FALSE)->getData();
+            $polls = $this->polls->setMenu(FALSE)->getData();
             $this->template->polls = $polls;
         }
     }
@@ -198,7 +211,7 @@ class SettingsPresenter extends SecuredPresenter {
     public function renderPoll($poll) {
         //RENDERING POLL DETAIL
         $pollId = $this->parseIdFromWebname($poll);
-        $pollObj = $this->poll->reset()->recId($pollId)->getData();
+        $pollObj = $this->poll->setId($pollId)->getData();
         
         if(count($pollObj->options) == 0){
             $pollObj->options[] = (object)["id" => -1, "pollId" => $pollId, "caption" => "", "type" => "TEXT"];
@@ -294,7 +307,7 @@ class SettingsPresenter extends SecuredPresenter {
     public function handlePollCreate(){
         $pollData = $this->getRequest()->getPost()[1]; // new discussion is always as item 1
         try {
-            $this->polls->create($pollData);
+            $this->pollCreator->setPoll($pollData)->perform();
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex, 'this');
         }
@@ -309,9 +322,7 @@ class SettingsPresenter extends SecuredPresenter {
     public function handlePollDelete() {
         $bind = $this->getRequest()->getPost();
         try {
-            $this->poll
-                    ->recId($bind["id"])
-                    ->delete();
+            $this->pollDeleter->setId($bind["id"])->perform();
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex, 'this');
         }
@@ -364,7 +375,7 @@ class SettingsPresenter extends SecuredPresenter {
 
     public function handleCacheDrop() {
         $this->cacheService->dropCache();
-        $this->parent->redirect('this');
+        $this->redirect('this');
     }
     
     private function editEvent($bind) {
@@ -394,9 +405,10 @@ class SettingsPresenter extends SecuredPresenter {
     
     private function editPoll($bind) {
         try {
-            $this->poll
-                    ->recId($bind["id"])
-                    ->edit($bind["changes"]);
+            $this->pollEditor
+                    ->setId($bind["id"])
+                    ->setPoll($bind["changes"])
+                    ->perform();
         } catch (\Tymy\Exception\APIException $ex) {
             $this->handleTapiException($ex, 'this');
         }
