@@ -36,7 +36,8 @@ class PollPresenter extends SecuredPresenter {
         $poll = $this->poll
                 ->setId($this->parseIdFromWebname($anketa))
                 ->getData();
-        $this->template->users = $this->userList->getData();
+        $this->userList->getData();
+        $this->template->users = $this->userList->getById();
         } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }

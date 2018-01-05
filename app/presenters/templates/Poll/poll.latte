@@ -100,9 +100,9 @@
                             <th>Uživatel</th>
                             <th n:foreach="$poll->options as $option">{$option->caption}</th>
                         </tr>
-                        <tr n:foreach="$poll->orderedVotes as $userId => $vote" data-vote n:attr="data-gender => !$poll->anonymousResults ? $users->data[$userId]->gender, data-status => !$poll->anonymousResults ? $users->data[$userId]->status">
+                        <tr n:foreach="$poll->orderedVotes as $userId => $vote" data-vote n:attr="data-gender => !$poll->anonymousResults ? $users[$userId]->gender, data-status => !$poll->anonymousResults ? $users[$userId]->status">
                             <th>
-                                <a n:if="!$poll->anonymousResults" href="{plink Team:player $users->data[$userId]->webName}">{$users->data[$userId]->displayName}</a>
+                                <a n:if="!$poll->anonymousResults" href="{plink Team:player $users[$userId]->webName}">{$users[$userId]->displayName}</a>
                                 <a n:if="$poll->anonymousResults">Anonym</a>
                             </th>
                                 {foreach $poll->options as $option}
