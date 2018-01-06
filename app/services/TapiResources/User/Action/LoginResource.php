@@ -14,7 +14,7 @@ class LoginResource extends UserResource  {
     private $login;
     private $hash;
     
-    public function init() {
+    protected function init() {
         $this->setCacheable(FALSE);
         $this->setTsidRequired(FALSE);
     }

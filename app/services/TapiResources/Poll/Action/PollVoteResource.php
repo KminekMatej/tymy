@@ -11,7 +11,7 @@ use Tymy\Exception\APIException;
  */
 class PollVoteResource extends PollResource {
     
-    public function init() {
+    protected function init() {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::POST);
         $this->setVotes(NULL);

@@ -11,7 +11,7 @@ use Tymy\Exception\APIException;
  */
 class DiscussionPostDeleteResource extends DiscussionResource {
     
-    public function init() {
+    protected function init() {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::DELETE);
         $this->setPostId(NULL);

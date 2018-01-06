@@ -10,7 +10,7 @@ namespace Tapi;
  */
 class UserListResource extends UserResource {
     
-    public function init() {
+    protected function init() {
         $this->setCachingTimeout(CacheService::TIMEOUT_LARGE);
         $this->setUserType(NULL);
         $this->options->byId = null;

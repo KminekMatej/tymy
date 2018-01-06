@@ -11,7 +11,7 @@ use Tymy\Exception\APIException;
  */
 class DiscussionDetailResource extends DiscussionResource {
     
-    public function init() {
+    protected function init() {
         $this->setCachingTimeout(CacheService::TIMEOUT_LARGE);
     }
     

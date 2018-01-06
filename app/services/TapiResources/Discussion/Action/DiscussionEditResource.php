@@ -11,7 +11,7 @@ use Tymy\Exception\APIException;
  */
 class DiscussionEditResource extends DiscussionResource {
 
-    public function init() {
+    protected function init() {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::PUT);
         $this->setDiscussion(NULL);

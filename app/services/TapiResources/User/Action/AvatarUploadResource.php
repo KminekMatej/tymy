@@ -10,7 +10,7 @@ namespace Tapi;
  */
 class AvatarUploadResource extends UserResource{
     
-    public function init() {
+    protected function init() {
         $this->setCacheable(FALSE);
     }
 

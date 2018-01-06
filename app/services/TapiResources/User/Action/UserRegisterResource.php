@@ -24,7 +24,7 @@ class UserRegisterResource extends UserResource {
         parent::__construct($supplier, NULL, NULL, NULL);
     }
     
-    public function init() {
+    protected function init() {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::POST);
         $this->setTsidRequired(FALSE);

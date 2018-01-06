@@ -10,7 +10,7 @@ namespace Tapi;
  */
 class AttendancePlanResource extends EventResource {
     
-    public function init() {
+    protected function init() {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::POST);
         $this->setPreStatus(NULL);

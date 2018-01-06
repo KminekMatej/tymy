@@ -11,7 +11,7 @@ use Tymy\Exception\APIException;
  */
 class DiscussionPageResource extends DiscussionResource {
     
-    public function init() {
+    protected function init() {
         $this->setCacheable(FALSE);
         $this->setPage(NULL);
         $this->setSearch(NULL);

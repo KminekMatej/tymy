@@ -12,7 +12,7 @@ use Tymy\Exception\APIException;
 
 class PasswordLostResource extends UserResource {
     
-    public function init() {
+    protected function init() {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::POST);
         $this->setTsidRequired(FALSE);

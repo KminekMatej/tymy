@@ -10,7 +10,7 @@ namespace Tapi;
  */
 class DiscussionListResource extends DiscussionResource {
     
-    public function init() {
+    protected function init() {
         $this->setCachingTimeout(CacheService::TIMEOUT_LARGE);
     }
     

@@ -11,7 +11,7 @@ use Tymy\Exception\APIException;
  */
 class PasswordResetResource extends UserResource {
     
-    public function init() {
+    protected function init() {
         $this->setCacheable(FALSE);
         $this->setTsidRequired(FALSE);
     }

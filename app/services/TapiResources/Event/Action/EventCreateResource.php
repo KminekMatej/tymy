@@ -11,7 +11,7 @@ use Tymy\Exception\APIException;
  */
 class EventCreateResource extends EventResource {
     
-    public function init() {
+    protected function init() {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::POST);
         $this->setEventsArray(NULL);

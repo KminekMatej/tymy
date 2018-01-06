@@ -10,7 +10,7 @@ namespace Tapi;
  */
 class LogoutResource extends UserResource {
     
-    public function init() {
+    protected function init() {
         $this->setCacheable(FALSE);
     }
 

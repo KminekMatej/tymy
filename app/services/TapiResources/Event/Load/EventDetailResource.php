@@ -11,7 +11,7 @@ use Tymy\Exception\APIException;
  */
 class EventDetailResource extends EventResource {
     
-    public function init() {
+    protected function init() {
         //everything inited correctly
     }
 
