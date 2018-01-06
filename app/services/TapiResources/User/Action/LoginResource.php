@@ -14,6 +14,10 @@ class LoginResource extends UserResource  {
     private $login;
     private $hash;
     
+    public function __construct(\App\Model\Supplier $supplier) {
+        parent::__construct($supplier, NULL, NULL, NULL);
+    }
+    
     protected function init() {
         $this->setCacheable(FALSE);
         $this->setTsidRequired(FALSE);
