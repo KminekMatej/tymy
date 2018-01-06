@@ -38,10 +38,10 @@ abstract class TapiObject {
     /** @var string */
     private $tsid;
     
-    /** @var boolean TSID is required in this resource */
+    /** @var bool TSID is required in this resource */
     private $tsidRequired;
     
-    /** @var boolean Tapi is ready */
+    /** @var bool Tapi is ready */
     private $dataReady;
     
     /** @var object data returned by request */
@@ -71,7 +71,7 @@ abstract class TapiObject {
     /** @var \Tymy\TracyPanelTymy */
     private $tymyPanel;
     
-    abstract function init();
+    protected abstract function init();
     
     protected abstract function preProcess();
     
@@ -117,8 +117,7 @@ abstract class TapiObject {
     
     private function loadFromCache(){
         $data = $this->cacheService->load($this->getClassCacheName());
-        if(is_null($data)) return null;
-        else {
+        if($data != null){
             $this->data = $data->getData();
             $this->options = $data->getOptions();
             $this->dataReady = TRUE;
@@ -260,10 +259,11 @@ abstract class TapiObject {
     
     public function getData($forceRequest = FALSE) {
         $this->preProcess();
+        $this->dataReady = FALSE;
         if($this->cacheable){
             $this->loadFromCache();
         }
-        if($this->data == null || $forceRequest || !$this->cacheable){
+        if(!$this->dataReady || $forceRequest || !$this->cacheable){
             $this->requestFromApi();
         }
         return $this->data;
