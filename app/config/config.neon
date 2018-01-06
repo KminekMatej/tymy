@@ -25,11 +25,7 @@ services:
             class: App\Model\TapiAuthorizator
         cacheStorage:
             class: Nette\Caching\Storages\DevNullStorage
-        - Tymy\Poll
-        - Tymy\Polls
-        - Tymy\PollOption
         - Tapi\CacheService
-
         - Tapi\DiscussionNewsListResource
         - Tapi\DiscussionPageResource
         - Tapi\DiscussionPostCreateResource
@@ -64,6 +60,11 @@ services:
         - Tapi\PollCreateResource
         - Tapi\PollEditResource
         - Tapi\PollDeleteResource
+        - Tapi\OptionCreateResource
+        - Tapi\OptionEditResource
+        - Tapi\OptionDeleteResource
+        - Tapi\OptionListResource
+
 
 
 tracy:
