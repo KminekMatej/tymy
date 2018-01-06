@@ -19,10 +19,8 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
         
         date_default_timezone_set('Europe/Prague');
         
-        $this->template->js = "min.js";
-        $this->template->css = "min.css";
-//        $this->template->js = \Tracy\Debugger::$productionMode ? "min.js" : "js";
-  //      $this->template->css = \Tracy\Debugger::$productionMode ? "min.css" : "css";
+        $this->template->js = \Tracy\Debugger::$productionMode ? "min.js" : "js";
+        $this->template->css = \Tracy\Debugger::$productionMode ? "min.css" : "css";
         
         $this->template->tym = $this->supplier->getTym();
         $this->template->tymyRoot = $this->supplier->getTymyRoot();
