@@ -3,6 +3,11 @@
 namespace App\Model;
 
 use Nette;
+use Tapi\LoginResource;
+use Tapi\UserRegisterResource;
+use Tymy\Exception\APIException;
+use Nette\Security\Identity;
+use InvalidArgumentException;
 
 /**
  * Users management.
@@ -25,29 +30,25 @@ class TapiAuthenticator implements Nette\Security\IAuthenticator {
         $credentials[1] = md5($credentials[1]); // first login recodes password to md5 hash
         try {
             $loginObj = $this->reAuthenticate($credentials);
-        } catch (Tymy\Exception\APIException $ex) {
+        } catch (APIException $ex) {
             return null;
         }
 
         $arr = (array) $loginObj->result;
         $arr["hash"] = $credentials[1];
         $arr["tapi_config"] = $this->supplier->getTapi_config();
-        return new Nette\Security\Identity($loginObj->result->data->id, $loginObj->result->data->roles, $arr );
+        return new Identity($loginObj->result->data->id, $loginObj->result->data->roles, $arr );
     }
     
     /**
-     * @throws \Tymy\Exception\APIException When something goes wrong
+     * @throws APIException When something goes wrong
      * @param array $credentials
-     * @return \Tymy\Login
+     * @return LoginResource
      */
     public function reAuthenticate(array $credentials){
         list($username, $password) = $credentials;
-
-        $login = new \Tymy\Login($this->supplier);
-        $login  ->setUsername($username)
-                ->setPassword($password)
-                ->getData();
-        return $login;
+        $login = new LoginResource($this->supplier);
+        return $login->setLogin($username)->setPassword($password)->getData();
     }
     
     /**
@@ -60,7 +61,7 @@ class TapiAuthenticator implements Nette\Security\IAuthenticator {
      * @throws \Nette\InvalidArgumentException
      */
     public function add($login, $password, $email, $firstName = NULL, $lastName = NULL, $adminNote = NULL) {
-        $register = new \Tymy\Register($this->supplier);
+        $register = new UserRegisterResource($this->supplier);
         try {
             $register
                     ->setLogin($login)
@@ -68,10 +69,10 @@ class TapiAuthenticator implements Nette\Security\IAuthenticator {
                     ->setEmail($email)
                     ->setFirstName($firstName)
                     ->setLastName($lastName)
-                    ->setAdmin_note($adminNote)
-                    ->register();
-        } catch (\Tymy\Exception\APIException $exc) {
-            throw new \Nette\InvalidArgumentException($exc->getMessage(), self::FAILURE);
+                    ->setNote($adminNote)
+                    ->perform();
+        } catch (APIException $exc) {
+            throw new InvalidArgumentException($exc->getMessage(), self::FAILURE);
         }
     }
 
