@@ -103,7 +103,6 @@ class EventPresenter extends SecuredPresenter {
         $attArray["PRE"]["NO"] = [];
         $attArray["PRE"]["UNKNOWN"] = [];
         
-        \Tracy\Debugger::barDump($users);
         foreach ($event->attendance as $attendee) {
             $user = $users[$attendee->userId];
             if ($user->status != "PLAYER")

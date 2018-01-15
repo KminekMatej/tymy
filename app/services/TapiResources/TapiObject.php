@@ -115,7 +115,6 @@ abstract class TapiObject {
 
     protected function requestFromApi($relogin = TRUE) {
         $resultStatus = $relogin ? $this->tapiService->request($this) : $this->tapiService->requestNoRelogin($this);
-        Debugger::barDump($resultStatus, "RS");
         if ($resultStatus->isValid()) {
             $this->data = $resultStatus->getData();
             $this->dataReady = TRUE;

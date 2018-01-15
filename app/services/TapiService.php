@@ -133,9 +133,10 @@ class TapiService {
             $resultStatus = new ResultStatus(Json::decode($curl_data));
         } catch (JsonException $exc) {
             if (!Debugger::$productionMode) {
-                Debugger::barDump($curl_info["method"], "CURL method");
-                Debugger::barDump($curl_info["url"], "CURL URL");
-                Debugger::barDump($curl_info["data"], "CURL Data");
+                Debugger::barDump($curl_info);
+                Debugger::barDump($this->url);
+                Debugger::barDump($this->tapiObject->getMethod());
+                Debugger::barDump($this->tapiObject->getRequestData());
             } else {
                 throw new APIException("Unknown error while procesing tapi request");
             }
