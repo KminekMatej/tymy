@@ -1,13 +1,13 @@
 <?php
 
-namespace Tymy;
+namespace Tapi;
 
 /**
- * Description of TymyRequestTimestamp
+ * Description of TapiRequestTimestamp
  *
  * @author matej
  */
-class TymyRequestTimestamp {
+class TapiRequestTimestamp {
     private $actionName;
     private $actionDesc;
     private $time;

@@ -2,10 +2,14 @@
 
 namespace Tapi;
 use Nette\Utils\JsonException;
+use Nette\Security\User;
 use Tapi\Exception\APIAuthenticationException;
 use Tapi\Exception\APIException;
+use App\Model\TapiAuthenticator;
 use Tracy\Debugger;
 use Nette\Utils\Json;
+use Tapi\TracyTapiPanel;
+use App\Model\Supplier;
 
 /**
  * Project: tymy_v2
@@ -15,16 +19,16 @@ use Nette\Utils\Json;
  */
 class TapiService {
     
-    /** @var \Nette\Security\User */
+    /** @var User */
     private $user;
     
-    /** @var \App\Model\TapiAuthenticator */
+    /** @var TapiAuthenticator */
     private $authenticator;
     
-    /** @var \App\Model\Supplier */
+    /** @var Supplier */
     private $supplier;
     
-    /** @var \Tymy\TracyPanelTymy */
+    /** @var TracyTapiPanel */
     private $tapiPanel;
     
     /** @var TapiObject */
@@ -33,7 +37,7 @@ class TapiService {
     /** @var string */
     private $url;
     
-    public function __construct(\Nette\Security\User $user, \App\Model\TapiAuthenticator $authenticator, \App\Model\Supplier $supplier) {
+    public function __construct(User $user, TapiAuthenticator $authenticator, Supplier $supplier) {
         $this->user = $user;
         $this->authenticator = $authenticator;
         $this->supplier = $supplier;
@@ -44,7 +48,7 @@ class TapiService {
     private function initTapiDebugPanel(){
         $panelId = "TAPI";
         if(is_null(Debugger::getBar()->getPanel($panelId))){
-            $this->tapiPanel = new \Tymy\TracyPanelTymy;
+            $this->tapiPanel = new TracyTapiPanel;
             Debugger::getBar()->addPanel($this->tapiPanel, $panelId);
         } else {
             $this->tapiPanel = Debugger::getBar()->getPanel($panelId);

@@ -1,15 +1,15 @@
 <?php
 
-namespace Tymy;
+namespace Tapi;
 
 use Nette;
 use Tracy;
 /**
- * Description of TracyPanelTymy
+ * Description of TracyTapiPanel
  *
  * @author matej
  */
-class TracyPanelTymy extends Nette\Object implements Tracy\IBarPanel{
+class TracyTapiPanel extends Nette\Object implements Tracy\IBarPanel{
     
     private $requests = [];
     private $team = "API tymy.cz";
@@ -32,7 +32,7 @@ class TracyPanelTymy extends Nette\Object implements Tracy\IBarPanel{
     }
     
     public function logAPI($name, $desc, $time) {
-        $reqT = new TymyRequestTimestamp();
+        $reqT = new TapiRequestTimestamp();
         $reqT->name($name)
                 ->desc($desc)
                 ->time($time);
