@@ -3,7 +3,7 @@
 namespace App\Presenters;
 
 use Nette\Application\UI\NewPostControl;
-use Tymy\Exception\APIException;
+use Tapi\Exception\APIException;
 use Tapi\DiscussionListResource;
 use Tapi\DiscussionNewsListResource;
 use Tapi\DiscussionPageResource;

@@ -59,11 +59,11 @@ final class Register extends Tymy{
         
     public function register() {
         if (!$this->login)
-            throw new \Tymy\Exception\APIException('Login not set!');
+            throw new \Tapi\Exception\APIException('Login not set!');
         if (!$this->password)
-            throw new \Tymy\Exception\APIException('Password not set!');
+            throw new \Tapi\Exception\APIException('Password not set!');
         if (!$this->email)
-            throw new \Tymy\Exception\APIException('Email not set!');
+            throw new \Tapi\Exception\APIException('Email not set!');
         
         $this->urlStart();
 
@@ -80,13 +80,13 @@ final class Register extends Tymy{
         
         if($this->firstName){
             if (count($this->firstName) > 20)
-                throw new \Tymy\Exception\APIException('First name too long!');
+                throw new \Tapi\Exception\APIException('First name too long!');
             $data->firstName = $this->firstName;
         }
             
         if($this->lastName){
             if (count($this->lastName) > 20)
-                throw new \Tymy\Exception\APIException('Last name too long!');
+                throw new \Tapi\Exception\APIException('Last name too long!');
             $data->lastName = $this->lastName;
         }
         

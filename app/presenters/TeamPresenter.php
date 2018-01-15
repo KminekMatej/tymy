@@ -5,7 +5,7 @@ use Tapi\UserCreateResource;
 use Tapi\UserEditResource;
 use Tapi\UserDeleteResource;
 use Tapi\AvatarUploadResource;
-use Tymy\Exception\APIException;
+use Tapi\Exception\APIException;
 
 class TeamPresenter extends SecuredPresenter {
     
@@ -78,7 +78,7 @@ class TeamPresenter extends SecuredPresenter {
             $user = $this->userDetail
                     ->setId($this->parseIdFromWebname($player))
                     ->getData();
-        } catch (\Tymy\Exception\APIException $ex) {
+        } catch (\Tapi\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
 
@@ -143,7 +143,7 @@ class TeamPresenter extends SecuredPresenter {
             $this->userDeleter
                     ->setId($bind["id"])
                     ->perform();
-        } catch (\Tymy\Exception\APIException $ex) {
+        } catch (\Tapi\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
         $this->flashMessage("Uživatel byl úspešně smazán", "success");
@@ -160,7 +160,7 @@ class TeamPresenter extends SecuredPresenter {
                 $this->avatarUploader
                         ->setId($bind["id"])
                         ->setAvatar($avatarB64);
-            } catch (\Tymy\Exception\APIException $ex) {
+            } catch (\Tapi\Exception\APIException $ex) {
                 $this->handleTapiException($ex, "this");
             }
         } else {

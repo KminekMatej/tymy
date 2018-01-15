@@ -60,7 +60,7 @@ class NavbarControl extends Control {
         try {
             $this->template->discussionWarnings = $this->discussionList->getWarnings();
             $this->template->discussions = $this->discussionList->getData();
-        } catch (Tymy\Exception\APIException $ex) {
+        } catch (Tapi\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
     }
@@ -68,7 +68,7 @@ class NavbarControl extends Control {
     private function players() {
         try {
             $players = $this->userList->getData();
-        } catch (Tymy\Exception\APIException $ex) {
+        } catch (Tapi\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
 
@@ -82,7 +82,7 @@ class NavbarControl extends Control {
             $this->polls->setMenu(TRUE)->getData();
             $this->template->voteWarnings = $this->polls->getWarnings();
             $this->template->polls = $this->polls->getData();
-        } catch (Tymy\Exception\APIException $ex) {
+        } catch (Tapi\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
     }
@@ -96,7 +96,7 @@ class NavbarControl extends Control {
                     ->getData();
             $this->template->eventWarnings = $this->eventList->getWarnings();
             
-        } catch (Tymy\Exception\APIException $ex) {
+        } catch (Tapi\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
     }

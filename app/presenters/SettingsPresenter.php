@@ -17,7 +17,7 @@ use Tapi\OptionListResource;
 use Tapi\OptionCreateResource;
 use Tapi\OptionEditResource;
 use Tapi\OptionDeleteResource;
-use Tymy\Exception\APIException;
+use Tapi\Exception\APIException;
 
 
 class SettingsPresenter extends SecuredPresenter {

@@ -21,10 +21,10 @@ final class Discussion extends Tymy{
     
     public function select() {
         if (!isset($this->recId))
-            throw new \Tymy\Exception\APIException('Discussion ID not set!');
+            throw new \Tapi\Exception\APIException('Discussion ID not set!');
 
         if((!isset($this->page) || $this->page <= 0)) // page is not set
-            throw new \Tymy\Exception\APIException("Invalid page specified");
+            throw new \Tapi\Exception\APIException("Invalid page specified");
         
         if($this->search)
             $this->setUriParam("search", $this->search);
@@ -40,7 +40,7 @@ final class Discussion extends Tymy{
     
     public function insert($text) {
         if (!isset($this->recId))
-            throw new \Tymy\Exception\APIException('Discussion ID not set!');
+            throw new \Tapi\Exception\APIException('Discussion ID not set!');
 
         $this->urlStart();
 
@@ -58,7 +58,7 @@ final class Discussion extends Tymy{
     
     public function editPost($idPost, $text = NULL, $sticky = NULL){
         if (!isset($idPost))
-            throw new \Tymy\Exception\APIException('Post ID not set!');
+            throw new \Tapi\Exception\APIException('Post ID not set!');
         
         if($text == NULL && $sticky == NULL)
             return null;

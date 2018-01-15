@@ -18,16 +18,16 @@ final class User extends UserAbstraction{
     
     public function select() {
         if (!isset($this->recId))
-            throw new \Tymy\Exception\APIException('User ID not set!');
+            throw new \Tapi\Exception\APIException('User ID not set!');
         $this->fullUrl .= "user/" .$this->recId;
         return $this;
     }
     
     public function edit($fields){
         if (!isset($this->recId))
-            throw new \Tymy\Exception\APIException('User ID not set!');
+            throw new \Tapi\Exception\APIException('User ID not set!');
         if (!$fields)
-            throw new \Tymy\Exception\APIException('Fields to edit not set!');
+            throw new \Tapi\Exception\APIException('Fields to edit not set!');
         
         $this->urlStart();
 
@@ -45,9 +45,9 @@ final class User extends UserAbstraction{
 
     public function setAvatar($avatarBase64){
         if (!isset($this->recId))
-            throw new \Tymy\Exception\APIException('User ID not set!');
+            throw new \Tapi\Exception\APIException('User ID not set!');
         if (!$avatarBase64 || !preg_match('/^data:(\w+)\/(\w+);base64,(.*)/', $avatarBase64))
-            throw new \Tymy\Exception\APIException('Avatar not set!');
+            throw new \Tapi\Exception\APIException('Avatar not set!');
         
         $this->setJsonEncoding(FALSE);
         

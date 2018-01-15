@@ -10,7 +10,7 @@ use Nette\Utils\Strings;
 use Tapi\PollDetailResource;
 use Tapi\PollListResource;
 use Tapi\PollVoteResource;
-use Tymy\Exception\APIException;
+use Tapi\Exception\APIException;
 
 class PollPresenter extends SecuredPresenter {
 

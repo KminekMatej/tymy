@@ -1,6 +1,6 @@
 <?php
 
-namespace Tymy\Exception;
+namespace Tapi\Exception;
 
 /**
  * Description of APIException

@@ -25,11 +25,11 @@ final class Event extends Tymy{
     
     public function edit($fields){
         if (!isset($this->recId))
-            throw new \Tymy\Exception\APIException('User ID not set!');
+            throw new \Tapi\Exception\APIException('User ID not set!');
         if (!$fields)
-            throw new \Tymy\Exception\APIException('Fields to edit not set!');
+            throw new \Tapi\Exception\APIException('Fields to edit not set!');
         if (!$this->user->isAllowed("SYS","EVE_UPDATE"))
-            throw new \Tymy\Exception\APIException('Permission denied!');
+            throw new \Tapi\Exception\APIException('Permission denied!');
         
         
         $this->urlStart();
@@ -53,9 +53,9 @@ final class Event extends Tymy{
     
     public function delete(){
         if (!isset($this->recId))
-            throw new \Tymy\Exception\APIException('User ID not set!');
+            throw new \Tapi\Exception\APIException('User ID not set!');
         if (!$this->user->isAllowed("SYS","EVE_DELETE"))
-            throw new \Tymy\Exception\APIException('Permission denied!');
+            throw new \Tapi\Exception\APIException('Permission denied!');
         
         $this->urlStart();
 
@@ -72,11 +72,11 @@ final class Event extends Tymy{
     public function create($eventsArray, $eventTypesArray){
         foreach ($eventsArray as $event) {
             if(!array_key_exists("startTime", $event))
-                throw new \Tymy\Exception\APIException('Start time not set!');
+                throw new \Tapi\Exception\APIException('Start time not set!');
             if(!array_key_exists("type", $event))
-                throw new \Tymy\Exception\APIException('Type not set!');
+                throw new \Tapi\Exception\APIException('Type not set!');
             if(!array_key_exists($event["type"], $eventTypesArray))
-                throw new \Tymy\Exception\APIException('Unrecognized type!');
+                throw new \Tapi\Exception\APIException('Unrecognized type!');
         }
         
         $this->urlStart();

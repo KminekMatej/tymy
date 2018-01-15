@@ -5,7 +5,7 @@ namespace App\Model;
 use Nette;
 use Tapi\LoginResource;
 use Tapi\TapiService;
-use Tymy\Exception\APIException;
+use Tapi\Exception\APIException;
 use Nette\Security\Identity;
 use InvalidArgumentException;
 

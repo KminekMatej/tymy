@@ -28,7 +28,7 @@ final class PollOption extends Tymy {
         
     public function select() {
         if (!isset($this->recId))
-            throw new \Tymy\Exception\APIException('Poll ID not set!');
+            throw new \Tapi\Exception\APIException('Poll ID not set!');
         
         $this->fullUrl .= self::TAPI_NAME . "/" .$this->recId . "/options";
         
@@ -37,13 +37,13 @@ final class PollOption extends Tymy {
         
     public function edit($fields){
         if (!isset($this->recId))
-            throw new \Tymy\Exception\APIException('Poll ID not set!');
+            throw new \Tapi\Exception\APIException('Poll ID not set!');
         if (!isset($this->optionId))
-            throw new \Tymy\Exception\APIException('Option ID not set!');
+            throw new \Tapi\Exception\APIException('Option ID not set!');
         if (!$fields)
-            throw new \Tymy\Exception\APIException('Fields to edit not set!');
+            throw new \Tapi\Exception\APIException('Fields to edit not set!');
         if (!$this->user->isAllowed("SYS","ASK.VOTE_UPDATE"))
-            throw new \Tymy\Exception\APIException('Permission denied!');
+            throw new \Tapi\Exception\APIException('Permission denied!');
         
         $fields["id"] = $this->getOptionId();
                 
@@ -63,11 +63,11 @@ final class PollOption extends Tymy {
     
     public function delete(){
         if (!isset($this->recId))
-            throw new \Tymy\Exception\APIException('Poll ID not set!');
+            throw new \Tapi\Exception\APIException('Poll ID not set!');
         if (!isset($this->optionId))
-            throw new \Tymy\Exception\APIException('Option ID not set!');
+            throw new \Tapi\Exception\APIException('Option ID not set!');
         if (!$this->user->isAllowed("SYS","ASK.VOTE_DELETE"))
-            throw new \Tymy\Exception\APIException('Permission denied!');
+            throw new \Tapi\Exception\APIException('Permission denied!');
         
         $this->urlStart();
 
@@ -85,16 +85,16 @@ final class PollOption extends Tymy {
     
     public function create($optionsArray){
         if (!isset($this->recId))
-            throw new \Tymy\Exception\APIException('Poll ID not set!');
+            throw new \Tapi\Exception\APIException('Poll ID not set!');
         if (!$optionsArray)
-            throw new \Tymy\Exception\APIException('Fields to create not set!');
+            throw new \Tapi\Exception\APIException('Fields to create not set!');
         if (!$this->user->isAllowed("SYS", "ASK.VOTE_UPDATE"))
-            throw new \Tymy\Exception\APIException('Permission denied!');
+            throw new \Tapi\Exception\APIException('Permission denied!');
         foreach ($optionsArray as $option) {
             if(!array_key_exists("caption", $option))
-                throw new \Tymy\Exception\APIException('Caption not set!');
+                throw new \Tapi\Exception\APIException('Caption not set!');
             if(!array_key_exists("type", $option))
-                throw new \Tymy\Exception\APIException('Type not set!');
+                throw new \Tapi\Exception\APIException('Type not set!');
         }
         
         $this->urlStart();

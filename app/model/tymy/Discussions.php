@@ -34,11 +34,11 @@ final class Discussions extends Tymy{
     
     public function edit($fields){
         if (!isset($this->recId))
-            throw new \Tymy\Exception\APIException('Discussion ID not set!');
+            throw new \Tapi\Exception\APIException('Discussion ID not set!');
         if (!$fields)
-            throw new \Tymy\Exception\APIException('Fields to edit not set!');
+            throw new \Tapi\Exception\APIException('Fields to edit not set!');
         if (!$this->user->isAllowed("SYS","DSSETUP"))
-            throw new \Tymy\Exception\APIException('Permission denied!');
+            throw new \Tapi\Exception\APIException('Permission denied!');
         
         $this->urlStart();
 
@@ -58,9 +58,9 @@ final class Discussions extends Tymy{
     
     public function delete() {
         if (!isset($this->recId))
-            throw new \Tymy\Exception\APIException('Discussion ID not set!');
+            throw new \Tapi\Exception\APIException('Discussion ID not set!');
         if (!$this->user->isAllowed("SYS", "DSSETUP"))
-            throw new \Tymy\Exception\APIException('Permission denied!');
+            throw new \Tapi\Exception\APIException('Permission denied!');
 
         $this->urlStart();
 
@@ -78,10 +78,10 @@ final class Discussions extends Tymy{
 
     public function create($discussion){
         if (!array_key_exists("caption", $discussion))
-            throw new \Tymy\Exception\APIException('Caption not set!');
+            throw new \Tapi\Exception\APIException('Caption not set!');
         
         if (!$this->user->isAllowed("SYS", "DSSETUP"))
-            throw new \Tymy\Exception\APIException('Permission denied!');
+            throw new \Tapi\Exception\APIException('Permission denied!');
         
         $this->urlStart();
 

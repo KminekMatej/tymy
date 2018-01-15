@@ -5,7 +5,7 @@ namespace App\Presenters;
 use Tapi\EventDetailResource;
 use Tapi\AttendanceConfirmResource;
 use Tapi\AttendancePlanResource;
-use Tymy\Exception\APIException;
+use Tapi\Exception\APIException;
 
 class EventPresenter extends SecuredPresenter {
 

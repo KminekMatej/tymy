@@ -42,10 +42,10 @@ final class Attendance extends Tymy{
 
     public function plan() {
         if (!isset($this->recId))
-            throw new \Tymy\Exception\APIException('Event ID not set!');
+            throw new \Tapi\Exception\APIException('Event ID not set!');
 
         if(!isset($this->preStatus))
-            throw new \Tymy\Exception\APIException("Pre status not set");
+            throw new \Tapi\Exception\APIException("Pre status not set");
         
         $this->urlStart();
 
@@ -69,10 +69,10 @@ final class Attendance extends Tymy{
     
     public function confirm($postStatuses) {
         if (!isset($this->recId))
-            throw new \Tymy\Exception\APIException('Event ID not set!');
+            throw new \Tapi\Exception\APIException('Event ID not set!');
 
         if (!$postStatuses)
-            throw new \Tymy\Exception\APIException('Post statuses not set!');
+            throw new \Tapi\Exception\APIException('Post statuses not set!');
 
         $this->urlStart();
 
@@ -92,7 +92,7 @@ final class Attendance extends Tymy{
     }
     
     public function select() {
-        throw new \Tymy\Exception\APIException("Select is not possible on Attendance object");
+        throw new \Tapi\Exception\APIException("Select is not possible on Attendance object");
     }
     
     protected function postProcess() {

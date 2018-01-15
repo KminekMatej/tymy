@@ -19,7 +19,7 @@ final class PwdReset extends Tymy{
     
     public function select() {
         if (!isset($this->code))
-            throw new \Tymy\Exception\APIException('Code not set!');
+            throw new \Tapi\Exception\APIException('Code not set!');
         
         $this->fullUrl .= self::TAPI_NAME . "/" . $this->code;
         

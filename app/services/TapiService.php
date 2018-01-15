@@ -2,8 +2,8 @@
 
 namespace Tapi;
 use Nette\Utils\JsonException;
-use Tymy\Exception\APIAuthenticationException;
-use Tymy\Exception\APIException;
+use Tapi\Exception\APIAuthenticationException;
+use Tapi\Exception\APIException;
 use Tracy\Debugger;
 use Nette\Utils\Json;
 

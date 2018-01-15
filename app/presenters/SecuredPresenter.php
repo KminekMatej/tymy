@@ -21,7 +21,7 @@ use Tapi\DiscussionNewsListResource;
 use Tapi\UserDetailResource;
 use Tapi\UserListResource;
 use Tapi\PollListResource;
-use Tymy\Exception\APIException;
+use Tapi\Exception\APIException;
 
 /**
  * Description of SecuredPresenter

@@ -140,7 +140,7 @@ abstract class Tymy extends Nette\Object{
     }
 
     /**
-     * @throws \Tymy\Exception\APIException when something goes wrong
+     * @throws \Tapi\Exception\APIException when something goes wrong
      * @return type
      */
     public function fetch(){
@@ -172,7 +172,7 @@ abstract class Tymy extends Nette\Object{
     }
     
     /**
-     * @throws \Tymy\Exception\APIException when something goes wrong
+     * @throws \Tapi\Exception\APIException when something goes wrong
      * @param bool $force Force tapi request again
      * @return data
      */
@@ -194,7 +194,7 @@ abstract class Tymy extends Nette\Object{
     }
     
     /**
-     * @throws \Tymy\Exception\APIException when something goes wrong 
+     * @throws \Tapi\Exception\APIException when something goes wrong 
      * @param bool $force Force tapi request again
      * @return result
      */
@@ -216,7 +216,7 @@ abstract class Tymy extends Nette\Object{
     /**
      * @param bool $relogin TRUE if after unsuccesfull request should be performed relogin to obtain new TSID
      * @return object containing the response
-     * @throws \Tymy\Exception\APIException when something goes wrong
+     * @throws \Tapi\Exception\APIException when something goes wrong
      */
     protected function execute($relogin = TRUE) {
         $contents = $this->request($this->fullUrl);
@@ -228,30 +228,30 @@ abstract class Tymy extends Nette\Object{
                     return $this->loginFailure($relogin);
                 case 403: // forbidden, return the error message
                     $tapiMSG = $contents->result ? Json::decode($contents->result)->statusMessage : "403 Forbidden";
-                    throw new \Tymy\Exception\APIException($tapiMSG);
+                    throw new \Tapi\Exception\APIException($tapiMSG);
                 case 400: // bad request, throw error
-                    throw new \Tymy\Exception\APIException("400 Bad request");
+                    throw new \Tapi\Exception\APIException("400 Bad request");
                 case 500: // error 500 can display when logging out on unlogged account, so this is temporary solution
                     Debugger::barDump($contents->curlInfo["url"]);
                     Debugger::barDump($this->method);
                     Debugger::barDump($this->postData);
                     Debugger::barDump($this);
                     $tapiMSG = $contents->result ? Json::decode($contents->result)->statusMessage : "500 Internal Server Error";
-                    throw new \Tymy\Exception\APIException($tapiMSG);
+                    throw new \Tapi\Exception\APIException($tapiMSG);
                 default:
                     Debugger::barDump($contents->curlInfo["url"]);
                     Debugger::barDump($this->method);
                     Debugger::barDump($this->postData);
                     Debugger::barDump($this);
                     $tapiMSG = $contents->result ? Json::decode($contents->result)->statusMessage : $contents->curlInfo["http_code"] . " Unknown error";
-                    throw new \Tymy\Exception\APIException($tapiMSG);
+                    throw new \Tapi\Exception\APIException($tapiMSG);
             }
         } else {
             Debugger::barDump($contents->curlInfo["url"]);
             Debugger::barDump($this->method);
             Debugger::barDump($this->postData);
             Debugger::barDump($this);
-            throw new \Tymy\Exception\APIException("TAPI query failed for unknown reason");
+            throw new \Tapi\Exception\APIException("TAPI query failed for unknown reason");
         }
     }
     
@@ -275,7 +275,7 @@ abstract class Tymy extends Nette\Object{
                 $this->result = (object) $response;
                 return $this->result;
             default:
-                throw new \Tymy\Exception\APIException("API request " . $this->fullUrl . " returned abnormal status " . $response->status . " : " . $response->statusMessage);
+                throw new \Tapi\Exception\APIException("API request " . $this->fullUrl . " returned abnormal status " . $response->status . " : " . $response->statusMessage);
         }
     }
 
@@ -287,7 +287,7 @@ abstract class Tymy extends Nette\Object{
             $this->urlEnd();
             return $this->execute(FALSE);
         } else {
-            throw new \Tymy\Exception\APIAuthenticationException("Login failed. Wrong username or password.");
+            throw new \Tapi\Exception\APIAuthenticationException("Login failed. Wrong username or password.");
         }
     }
 

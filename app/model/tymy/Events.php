@@ -209,7 +209,7 @@ final class Events extends Tymy{
         $this->urlEnd();
         try {
             $this->result = $this->execute();
-        } catch (\Tymy\Exception\APIAuthenticationException $exc) {
+        } catch (\Tapi\Exception\APIAuthenticationException $exc) {
             $this->user->logout(true);
             $this->presenter->flashMessage('You have been signed out due to inactivity. Please sign in again.');
             $this->presenter->redirect('Sign:in', ['backlink' => $this->presenter->storeRequest()]);

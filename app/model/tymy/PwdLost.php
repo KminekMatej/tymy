@@ -21,11 +21,11 @@ final class PwdLost extends Tymy{
     
     public function select() {
         if (!isset($this->mail))
-            throw new \Tymy\Exception\APIException('E-mail not set!');
+            throw new \Tapi\Exception\APIException('E-mail not set!');
         if (!isset($this->hostname))
-            throw new \Tymy\Exception\APIException('Hostname not set!');
+            throw new \Tapi\Exception\APIException('Hostname not set!');
         if (!isset($this->callbackUri))
-            throw new \Tymy\Exception\APIException('Callback not set!');
+            throw new \Tapi\Exception\APIException('Callback not set!');
         
         $this->fullUrl .= self::TAPI_NAME;
         $this->method = "POST";

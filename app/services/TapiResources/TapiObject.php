@@ -4,7 +4,7 @@ namespace Tapi;
 use Nette;
 use Tapi\RequestMethod;
 use Tracy\Debugger;
-use Tymy\Exception\APIException;
+use Tapi\Exception\APIException;
 use Tapi\TapiService;
 
 /**

@@ -16,7 +16,7 @@ final class Poll extends PollAbstraction {
     
     public function select() {
         if (!isset($this->recId))
-            throw new \Tymy\Exception\APIException('Poll ID not set!');
+            throw new \Tapi\Exception\APIException('Poll ID not set!');
         
         $this->fullUrl .= "polls/" .$this->recId;
         return $this;
@@ -24,7 +24,7 @@ final class Poll extends PollAbstraction {
     
     public function vote($votes){
         if (!isset($this->recId))
-            throw new \Tymy\Exception\APIException('Poll ID not set!');
+            throw new \Tapi\Exception\APIException('Poll ID not set!');
         
         $this->urlStart();
 
@@ -46,11 +46,11 @@ final class Poll extends PollAbstraction {
     
     public function edit($fields){
         if (!isset($this->recId))
-            throw new \Tymy\Exception\APIException('Poll ID not set!');
+            throw new \Tapi\Exception\APIException('Poll ID not set!');
         if (!$fields)
-            throw new \Tymy\Exception\APIException('Fields to edit not set!');
+            throw new \Tapi\Exception\APIException('Fields to edit not set!');
         if (!$this->user->isAllowed("SYS","ASK.VOTE_UPDATE"))
-            throw new \Tymy\Exception\APIException('Permission denied!');
+            throw new \Tapi\Exception\APIException('Permission denied!');
         
         
         $this->urlStart();
@@ -69,9 +69,9 @@ final class Poll extends PollAbstraction {
     
     public function delete(){
         if (!isset($this->recId))
-            throw new \Tymy\Exception\APIException('Poll ID not set!');
+            throw new \Tapi\Exception\APIException('Poll ID not set!');
         if (!$this->user->isAllowed("SYS","ASK.VOTE_DELETE"))
-            throw new \Tymy\Exception\APIException('Permission denied!');
+            throw new \Tapi\Exception\APIException('Permission denied!');
         
         $this->urlStart();
 
@@ -87,9 +87,9 @@ final class Poll extends PollAbstraction {
     
     public function create($poll){
         if (!isset($poll))
-            throw new \Tymy\Exception\APIException('Poll not set!');
+            throw new \Tapi\Exception\APIException('Poll not set!');
         if (!$this->user->isAllowed("SYS","ASK.VOTE_CREATE"))
-            throw new \Tymy\Exception\APIException('Permission denied!');
+            throw new \Tapi\Exception\APIException('Permission denied!');
         
         
         $this->urlStart();

@@ -52,7 +52,7 @@ class SignPresenter extends BasePresenter {
                 $this->tapiAuthenticator->setTapiService($this->tapiService);
                 $this->user->setExpiration('20 minutes');
                 $this->user->login($values->name, $values->password);
-            } catch (\Tymy\Exception\APIException $exc) {
+            } catch (\Tapi\Exception\APIException $exc) {
                 switch ($exc->getMessage()) {
                     case "Login not approved":
                         $this->flashMessage('Tento uživatel zatím nemá povolené přihlášení', "danger");
@@ -92,7 +92,7 @@ class SignPresenter extends BasePresenter {
                         ->setHostname($this->getHttpRequest()->getRemoteHost())
                         ->setMail($values->email)
                         ->getData();    
-            } catch (\Tymy\Exception\APIException $ex) {
+            } catch (\Tapi\Exception\APIException $ex) {
                 $this->flashMessage('Uživatel nebyl nalezen, je zablokován nebo došlo k chybě. Zkuste to znovu, nebo kontaktujte týmového administrátora.');
                 $this->redirect('Sign:pwdlost');
             }

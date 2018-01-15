@@ -2,7 +2,7 @@
 
 namespace Tapi;
 use App\Model\Supplier;
-use Tymy\Exception\APIException;
+use Tapi\Exception\APIException;
 
 /**
  * Project: tymy_v2

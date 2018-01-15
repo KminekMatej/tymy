@@ -7,7 +7,7 @@ use Nette\Application\UI\NavbarControl;
 use App\Model; 
 use Nette\Application\UI\Form;
 use Tapi\UsersLiveResource;
-use Tymy\Exception\APIException;
+use Tapi\Exception\APIException;
 
 class HomepagePresenter extends SecuredPresenter {
 
