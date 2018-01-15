@@ -7,6 +7,7 @@ use Nette\Application\UI\NavbarControl;
 use App\Model; 
 use Nette\Application\UI\Form;
 use Tapi\UsersLiveResource;
+use Tymy\Exception\APIException;
 
 class HomepagePresenter extends SecuredPresenter {
 
@@ -41,7 +42,7 @@ class HomepagePresenter extends SecuredPresenter {
             $this->template->users = $this->sortUsersByLastLogin($this->userList->getData());
             $this->template->today = date('m-d');
             $this->template->tommorow = date('m-d', strtotime('+ 1 day'));
-        } catch (\Tymy\Exception\APIException $ex) {
+        } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
 

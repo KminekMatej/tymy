@@ -4,7 +4,7 @@ namespace App\Model;
 
 use Nette;
 use Tapi\LoginResource;
-use Tapi\UserRegisterResource;
+use Tapi\TapiService;
 use Tymy\Exception\APIException;
 use Nette\Security\Identity;
 use InvalidArgumentException;
@@ -17,8 +17,20 @@ class TapiAuthenticator implements Nette\Security\IAuthenticator {
     /** @var Supplier */
     private $supplier;
     
+    /** @var TapiService */
+    private $tapiService;
+    
     public function __construct(Supplier $supplier) {
         $this->supplier = $supplier;
+    }
+
+    public function getTapiService() {
+        return $this->tapiService;
+    }
+
+    public function setTapiService(TapiService $tapiService) {
+        $this->tapiService = $tapiService;
+        return $this;
     }
     
     /**
@@ -34,10 +46,9 @@ class TapiAuthenticator implements Nette\Security\IAuthenticator {
             return null;
         }
 
-        $arr = (array) $loginObj->result;
-        $arr["hash"] = $credentials[1];
-        $arr["tapi_config"] = $this->supplier->getTapi_config();
-        return new Identity($loginObj->result->data->id, $loginObj->result->data->roles, $arr );
+        $loginObj->hash = $credentials[1];
+        $loginObj->tapi_config = $this->supplier->getTapi_config();
+        return new Identity($loginObj->id, $loginObj->roles, $loginObj );
     }
     
     /**
@@ -47,8 +58,8 @@ class TapiAuthenticator implements Nette\Security\IAuthenticator {
      */
     public function reAuthenticate(array $credentials){
         list($username, $password) = $credentials;
-        $login = new LoginResource($this->supplier);
-        return $login->setLogin($username)->setPassword($password)->getData();
+        $loginResource = new LoginResource($this->supplier, NULL, NULL, $this->tapiService);
+        return $loginResource->setLogin($username)->setPassword($password)->getData();
     }
     
     /**
@@ -61,9 +72,8 @@ class TapiAuthenticator implements Nette\Security\IAuthenticator {
      * @throws \Nette\InvalidArgumentException
      */
     public function add($login, $password, $email, $firstName = NULL, $lastName = NULL, $adminNote = NULL) {
-        $register = new UserRegisterResource($this->supplier);
         try {
-            $register
+            $this->registerService
                     ->setLogin($login)
                     ->setPassword($password)
                     ->setEmail($email)

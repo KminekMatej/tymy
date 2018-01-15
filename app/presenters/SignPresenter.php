@@ -7,6 +7,8 @@ use App\Forms;
 use Tapi\LogoutResource;
 use Tapi\PasswordLostResource;
 use Tapi\PasswordResetResource;
+use App\Model\TapiAuthenticator;
+use Tapi\TapiService;
 
 class SignPresenter extends BasePresenter {
 
@@ -34,6 +36,12 @@ class SignPresenter extends BasePresenter {
     /** @var PasswordResetResource @inject */
     public $pwdReset;
     
+    /** @var TapiAuthenticator @inject */
+    public $tapiAuthenticator;
+    
+    /** @var TapiService @inject */
+    public $tapiService;
+    
     /**
      * Sign-in form factory.
      * @return Nette\Application\UI\Form
@@ -41,6 +49,7 @@ class SignPresenter extends BasePresenter {
     protected function createComponentSignInForm() {
         $form = $this->signInFactory->create(function (Nette\Application\UI\Form $form, $values) {
             try {
+                $this->tapiAuthenticator->setTapiService($this->tapiService);
                 $this->user->setExpiration('20 minutes');
                 $this->user->login($values->name, $values->password);
             } catch (\Tymy\Exception\APIException $exc) {

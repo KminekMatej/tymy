@@ -3,6 +3,7 @@
 namespace App\Presenters;
 
 use Nette\Application\UI\NewPostControl;
+use Tymy\Exception\APIException;
 use Tapi\DiscussionListResource;
 use Tapi\DiscussionNewsListResource;
 use Tapi\DiscussionPageResource;
@@ -46,7 +47,7 @@ class DiscussionPresenter extends SecuredPresenter {
     public function renderDefault() {
         try{
             $this->template->discussions = $this->discussionsList->getData();
-        } catch (\Tymy\Exception\APIException $ex){
+        } catch (APIException $ex){
             $this->handleTapiException($ex);
         }
     }
@@ -59,7 +60,7 @@ class DiscussionPresenter extends SecuredPresenter {
                         ->setId($discussion)
                         ->setPost($post)
                         ->perform();
-            } catch (\Tymy\Exception\APIException $ex) {
+            } catch (APIException $ex) {
                 $this->handleTapiException($ex, 'this');
             }
         }
@@ -77,7 +78,7 @@ class DiscussionPresenter extends SecuredPresenter {
                         ->setPost($text)
                         ->setSticky($sticky)
                         ->perform();
-        } catch (\Tymy\Exception\APIException $ex) {
+        } catch (APIException $ex) {
             $this->handleTapiException($ex, 'this');
         }
         $this->setView('discussion');
@@ -90,7 +91,7 @@ class DiscussionPresenter extends SecuredPresenter {
                         ->setId($discussion)
                         ->setPostId($postId)
                         ->perform();
-        } catch (\Tymy\Exception\APIException $ex) {
+        } catch (APIException $ex) {
             $this->handleTapiException($ex, 'this');
         }
         $this->setView('discussion');
@@ -105,7 +106,7 @@ class DiscussionPresenter extends SecuredPresenter {
                         ->setPostId($postId)
                         ->setSticky($sticky)
                         ->perform();
-        } catch (\Tymy\Exception\APIException $ex) {
+        } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
         $this->setView('discussion');
@@ -130,7 +131,7 @@ class DiscussionPresenter extends SecuredPresenter {
         try {
             $data = $this->discussionPage->getData();
             $this->template->users = $this->userList->getData();
-        } catch (\Tymy\Exception\APIException $ex) {
+        } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
         

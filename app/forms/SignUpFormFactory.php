@@ -5,6 +5,7 @@ namespace App\Forms;
 use Nette;
 use Nette\Application\UI\Form;
 use App\Model;
+use App\Model\TapiAuthenticator;
 
 
 class SignUpFormFactory
@@ -21,11 +22,11 @@ class SignUpFormFactory
 	/** @var FormFactory */
 	private $factory;
 
-	/** @var Model\UserManager */
+	/** @var TapiAuthenticator */
 	private $tapiAuthenticator;
 
 
-	public function __construct(FormFactory $factory, Model\TapiAuthenticator $tapiAuthenticator)
+	public function __construct(FormFactory $factory, TapiAuthenticator $tapiAuthenticator)
 	{
 		$this->factory = $factory;
 		$this->tapiAuthenticator = $tapiAuthenticator;

@@ -15,12 +15,14 @@ class ResultStatus {
     private $status;
     private $message;
     private $data;
+    private $object;
     
     
     public function __construct($tapiResponse) {
         $this->status = $tapiResponse->status;
         $this->message = empty($tapiResponse->statusMessage) ? null : $tapiResponse->statusMessage;
         $this->data = empty($tapiResponse->data) ? null : $tapiResponse->data;
+        $this->object = $tapiResponse;
         $this->valid = $this->status == self::OK;
     }
     
@@ -39,6 +41,15 @@ class ResultStatus {
     
     public function getData() {
         return $this->data;
+    }
+    
+    public function getObject() {
+        return $this->object;
+    }
+
+    public function setObject($object) {
+        $this->object = $object;
+        return $this;
     }
 
 }

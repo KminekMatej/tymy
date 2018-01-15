@@ -2,10 +2,10 @@
 
 namespace Tapi;
 use Nette;
-use Nette\Utils\Json;
 use Tapi\RequestMethod;
 use Tracy\Debugger;
 use Tymy\Exception\APIException;
+use Tapi\TapiService;
 
 /**
  * Project: tymy_v2
@@ -67,9 +67,9 @@ abstract class TapiObject {
     
     /** @var boolean Should sent data be encoded in JSON */
     private $jsonEncoding;
-
-    /** @var \Tymy\TracyPanelTymy */
-    private $tymyPanel;
+    
+    /** @var TapiService */
+    private $tapiService;
     
     protected abstract function init();
     
@@ -77,14 +77,13 @@ abstract class TapiObject {
     
     protected abstract function postProcess();
     
-    public function __construct(\App\Model\Supplier $supplier, \App\Model\TapiAuthenticator $tapiAuthenticator, Nette\Security\User $user, CacheService $cacheService) {
-        $this->initTapiDebugPanel();
-        $this->tapiAuthenticator = $tapiAuthenticator;
+    public function __construct(\App\Model\Supplier $supplier,  Nette\Security\User $user = NULL, CacheService $cacheService = NULL, TapiService $tapiService = NULL) {
         $this->supplier = $supplier;
-        $this->user = $user;
+        if($user) $this->user = $user;
         $this->cacheable = TRUE;
         $this->cachingTimeout = CacheService::TIMEOUT_SMALL;
-        $this->cacheService = $cacheService;
+        if($cacheService) $this->cacheService = $cacheService;
+        if($tapiService) $this->tapiService = $tapiService;
         $this->jsonEncoding = TRUE;
         $this->dataReady = FALSE;
         $this->tsidRequired = TRUE;
@@ -92,16 +91,6 @@ abstract class TapiObject {
         $this->options = new \stdClass();
         $this->options->warnings = 0;
         $this->init();
-    }
-    
-    protected function initTapiDebugPanel(){
-        $panelId = "TymyAPI";
-        if(is_null(Debugger::getBar()->getPanel($panelId))){
-            $this->tymyPanel = new \Tymy\TracyPanelTymy;
-            Debugger::getBar()->addPanel($this->tymyPanel, $panelId);
-        } else {
-            $this->tymyPanel = Debugger::getBar()->getPanel($panelId);
-        }
     }
     
     private function saveToCache() {
@@ -124,90 +113,30 @@ abstract class TapiObject {
         }
     }
 
-    private function requestFromApi($relogin = TRUE){
-        if(is_null($this->supplier->getApiRoot()) || is_null($this->getUrl()))
-            return FALSE;
-        
-        $url = $this->getFullUrl();
-        
-        $paramArray = $this->requestParameters;
-        if($this->tsidRequired) $paramArray["TSID"] = $this->user->getIdentity()->sessionKey;
-        
-        //add parameters to url
-        if(count($paramArray)){
-            $url = preg_replace('/\\?.*/', '', $url); // firstly try to remove all url params before adding them - important for relogins
-            $url .= "?" . http_build_query($paramArray);
-        }
-        
-        Debugger::timer("tapi-request" . spl_object_hash($this));
-        $ch = curl_init(); 
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        
-        if($this->getMethod() != RequestMethod::GET){
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->getMethod());
-            if(isset($this->requestData)){
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $this->jsonEncoding ? json_encode($this->requestData) : $this->requestData);
-            }
-        }
-        
-        $curl = curl_exec($ch);
-        if($curl === FALSE){
-            throw new APIException("Unknown error while procesing tapi request");
-        } else {
-            try {
-                $this->resultStatus = new ResultStatus(Json::decode($curl));
-            } catch (Nette\Utils\JsonException $exc) {
-                if(!Debugger::$productionMode){
-                    Debugger::barDump($this->method, "CURL method");
-                    Debugger::barDump($url, "CURL URL");
-                    Debugger::barDump($this->jsonEncoding ? json_encode($this->requestData) : $this->requestData, "CURL Data");
-                } else {
-                    throw new APIException("Unknown error while procesing tapi request");
-                }
-            }
-        }
-        $curlInfo = curl_getinfo($ch);
-        curl_close($ch);
-        
-        if($this->resultStatus->isValid()){
-            $this->data = $this->resultStatus->getData();
+    protected function requestFromApi($relogin = TRUE) {
+        $resultStatus = $relogin ? $this->tapiService->request($this) : $this->tapiService->requestNoRelogin($this);
+        Debugger::barDump($resultStatus, "RS");
+        if ($resultStatus->isValid()) {
+            $this->data = $resultStatus->getData();
             $this->dataReady = TRUE;
             $this->postProcess();
             $this->saveToCache();
+        } else {
+            throw new APIException($resultStatus->getMessage());
         }
-        
-        $this->tymyPanel->logAPI("TAPI request", $url, Debugger::timer("tapi-request" . spl_object_hash($this)));
-        
-        if($this->resultStatus->isValid()){// tapi request loaded succesfully
-            return TRUE;
-        }
-        
-        switch ($curlInfo["http_code"]) {
-            case 401: // unauthorized, try to refresh
-                if($this->tsidRequired && $relogin){// may be only already invalid TSID, try to obtain new one
-                    $newLogin = $this->tapiAuthenticator->reAuthenticate([$this->user->getIdentity()->data["data"]->login, $this->user->getIdentity()->data["hash"]]);
-                    $this->user->getIdentity()->sessionKey = $newLogin->result->sessionKey;
-                    $this->requestFromApi(FALSE);
-                    return TRUE;
-                } 
-                return FALSE;
-            default:
-                Debugger::barDump($url);
-                Debugger::barDump($this->method);
-                Debugger::barDump($this->requestData);
-                Debugger::barDump($curlInfo);
-                throw new APIException("Request [".$this->method."] $url failed with error code " . $errorData["http_code"]);
-        }
+        return $resultStatus;
     }
-    
+
     protected function setRequestParameter($key, $value) {
         $this->requestParameters[$key] = $value;
     }
 
     //GETTERS AND SETTERS
     
+    public function getRequestParameters() {
+        return $this->requestParameters;
+    }
+        
     public function getId() {
         return $this->id;
     }
@@ -226,11 +155,11 @@ abstract class TapiObject {
         return $this;
     }
     
-    protected function getMethod() {
+    public function getMethod() {
         return $this->method;
     }
 
-    protected function setMethod($method) {
+    public function setMethod($method) {
         $this->method = $method;
         return $this;
     }
@@ -244,10 +173,6 @@ abstract class TapiObject {
         return $this;
     }
     
-    private function getFullUrl(){
-        return $this->supplier->getApiRoot() . DIRECTORY_SEPARATOR . $this->getUrl();
-    }
-
     public function getUrl() {
         return $this->url;
     }
@@ -280,11 +205,11 @@ abstract class TapiObject {
         return $this->getData($forceRequest);
     }
     
-    protected function getRequestData() {
+    public function getRequestData() {
         return $this->requestData;
     }
 
-    protected function setRequestData($requestData) {
+    public function setRequestData($requestData) {
         $this->requestData = $requestData;
         return $this;
     }
@@ -304,20 +229,20 @@ abstract class TapiObject {
         return $date;
     }
     
-    protected function getTsidRequired() {
+    public function getTsidRequired() {
         return $this->tsidRequired;
     }
 
-    protected function setTsidRequired($tsidRequired) {
+    public function setTsidRequired($tsidRequired) {
         $this->tsidRequired = $tsidRequired;
         return $this;
     }
 
-    protected function getJsonEncoding() {
+    public function getJsonEncoding() {
         return $this->jsonEncoding;
     }
 
-    protected function setJsonEncoding($jsonEncoding) {
+    public function setJsonEncoding($jsonEncoding) {
         $this->jsonEncoding = $jsonEncoding;
         return $this;
     }

@@ -9,7 +9,7 @@ namespace Tapi;
  * @author kminekmatej created on 5.1.2018, 15:24:17
  */
 class OptionDeleteResource extends PollResource{
-   
+    
     protected function init() {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::DELETE);
@@ -23,4 +23,14 @@ class OptionDeleteResource extends PollResource{
         
     }
     
+    public function getOptionId() {
+        return $this->options->optionId;
+    }
+
+    public function setOptionId($optionId) {
+        $this->options->optionId = $optionId;
+        return $this;
+    }
+
+
 }

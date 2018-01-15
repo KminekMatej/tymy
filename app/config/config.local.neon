@@ -1,22 +1,21 @@
 parameters:
     tapi:
-        tym: _autodetect # needs to be changed for each different team. Can be set to _autodetect to automatically be detected from url
-        protocol: http
-        root: tymy.cz
-        tapi_api_root: api
-        tapi_sysapi_root: sysapi
-        multiple_team: false #if changed to true, user can pick which team he wants to login to. If selected, picked value overwrites the tym property
+        tym: _autodetect                                                        # Can be set to _autodetect to automatically be detected from url
+        protocol: http                                                          # Used to compose address of api
+        root: tymy.cz                                                           # Used to compose address of api
+        tapi_api_root: api                                                      # Used to compose address of api
+        multiple_team: false                                                    # if changed to true, user can pick which team he wants to login to. If selected, picked value overwrites the tym property
         roles_classes:
-            SUPER: btn-outline-success
-            USR: btn-outline-info
-            ATT: btn-outline-warning
+            SUPER: btn-outline-success                                          # Sets css class which will be used for players roles buttons (classes from Bootstrap)
+            USR: btn-outline-info                                               # Sets css class which will be used for players roles buttons (classes from Bootstrap)
+            ATT: btn-outline-warning                                            # Sets css class which will be used for players roles buttons (classes from Bootstrap)
         status_classes:
-            LAT: warning
+            LAT: warning                                                        # Sets css class which will be used for event statuses (classes from Bootstrap)
             NO: danger
             YES: success
             DKY: warning
         event_colors:
-            TRA: '#5cb85c'
+            TRA: '#5cb85c'                                                      # Sets css color which will be used for events in calendar - if you are using different events than standard, simply add them here with code and color
             RUN: '#0275d8'
             MEE: '#795548'
             TOU: '#f0ad4e'

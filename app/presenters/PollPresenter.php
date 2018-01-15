@@ -58,7 +58,7 @@ class PollPresenter extends SecuredPresenter {
         $this->redrawControl("poll-results");
         try {
             $this->pollVoter->setId($pollId)->setVotes($votes)->perform();
-        } catch (\Tymy\Exception\APIException $ex) {
+        } catch (APIException $ex) {
             $this->handleTapiException($ex, "this");
         }
     }

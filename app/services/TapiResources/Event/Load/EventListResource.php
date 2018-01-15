@@ -151,7 +151,7 @@ class EventListResource extends EventResource {
     public function getAllEventsCount() {
         $allEventsCount = $this->cacheService->load(self::EVENT_COUNT_CACHE_KEY);
         if($allEventsCount == null){
-            $listAllEvents = new EventListResource($this->supplier, $this->tapiAuthenticator, $this->user, $this->cacheService);
+            $listAllEvents = new EventListResource($this->supplier, $this->user, $this->cacheService);
             $allEventsCount = count($listAllEvents->setWithMyAttendance(FALSE)->getData());
             $this->setAllEventsCount($allEventsCount);
         }

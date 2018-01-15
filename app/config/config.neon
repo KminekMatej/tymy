@@ -26,6 +26,7 @@ services:
         cacheStorage:
             class: Nette\Caching\Storages\DevNullStorage
         - Tapi\CacheService
+        - Tapi\TapiService
         - Tapi\DiscussionNewsListResource
         - Tapi\DiscussionPageResource
         - Tapi\DiscussionPostCreateResource
@@ -50,8 +51,8 @@ services:
         - Tapi\UsersLiveResource
         - Tapi\UserDetailResource
         - Tapi\UserListResource
-        - Tapi\AvatarUploadResource
         - Tapi\LogoutResource
+        - Tapi\AvatarUploadResource
         - Tapi\PasswordLostResource
         - Tapi\PasswordResetResource
         - Tapi\PollDetailResource

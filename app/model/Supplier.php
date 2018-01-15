@@ -16,7 +16,6 @@ class Supplier {
     private $tym;
     private $tymyRoot;
     private $apiRoot;
-    private $sysapiRoot;
     private $roleClasses;
     private $statusClasses;
     private $eventColors;
@@ -37,7 +36,6 @@ class Supplier {
         $this->setTym($tapi_config['tym']);
         $this->setTymyRoot($tapi_config["protocol"] . "://" . $this->getTym() . "." . $tapi_config["root"]);
         $this->setApiRoot($this->getTymyRoot() . DIRECTORY_SEPARATOR . $tapi_config["tapi_api_root"]);
-        $this->setSysapiRoot($this->getTymyRoot() . DIRECTORY_SEPARATOR . $tapi_config["tapi_sysapi_root"]);
         $this->setRoleClasses($tapi_config['roles_classes']);
         $this->setStatusClasses($tapi_config['status_classes']);
         $this->setEventColors($tapi_config['event_colors']);
@@ -56,10 +54,6 @@ class Supplier {
         return $this->apiRoot;
     }
 
-    public function getSysapiRoot() {
-        return $this->sysapiRoot;
-    }
-
     public function setTym($tym) {
         $this->tym = $tym == self::AUTODETECT ? explode(".", $_SERVER["HTTP_HOST"])[0] : $tym;
         return $this;
@@ -67,11 +61,6 @@ class Supplier {
 
     private function setApiRoot($apiRoot) {
         $this->apiRoot = $apiRoot;
-        return $this;
-    }
-
-    private function setSysapiRoot($sysapiRoot) {
-        $this->sysapiRoot = $sysapiRoot;
         return $this;
     }
 

@@ -21,6 +21,7 @@ use Tapi\DiscussionNewsListResource;
 use Tapi\UserDetailResource;
 use Tapi\UserListResource;
 use Tapi\PollListResource;
+use Tymy\Exception\APIException;
 
 /**
  * Description of SecuredPresenter
@@ -91,7 +92,7 @@ class SecuredPresenter extends BasePresenter {
         //$this->cacheService->dropCache();
         $this->setAccessibleSettings();
         $this->supplier->setTapi_config($this->getUser()->getIdentity()->getData()["tapi_config"]);
-        $this->tapiAuthorizator->setUser($this->getUser()->getIdentity()->getData()["data"]);
+        $this->tapiAuthorizator->setUser($this->getUser()->getIdentity()->getData());
         $this->setLevelCaptions(["0" => ["caption" => "Hlavní stránka", "link" => $this->link("Homepage:")]]);
         $this->template->tym = $this->supplier->getTym();
     }
@@ -115,7 +116,7 @@ class SecuredPresenter extends BasePresenter {
             return intval($webName);
     }
     
-    protected function handleTapiException(\Tymy\Exception\APIException $ex, $redirect = null, $args = []){
+    protected function handleTapiException(APIException $ex, $redirect = null, $args = []){
         $this->flashMessage("Došlo k nečekané chybě: ||" . $ex->getMessage());
         $this->redirect($redirect == NULL ? $this->getName() . ":default" : $redirect, $args);
     }

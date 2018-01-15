@@ -11,19 +11,13 @@ use Tymy\Exception\APIException;
  */
 class LoginResource extends UserResource  {
     
-    private $login;
-    private $hash;
-    
-    public function __construct(\App\Model\Supplier $supplier) {
-        parent::__construct($supplier, NULL, NULL, NULL);
-    }
-    
     protected function init() {
         $this->setCacheable(FALSE);
         $this->setTsidRequired(FALSE);
     }
 
     protected function preProcess() {
+        $this->sessionKey = NULL;
         if($this->options->login == null)
             throw new APIException('Login not set!');
         
@@ -33,7 +27,7 @@ class LoginResource extends UserResource  {
     }
     
     protected function postProcess() {
-        
+        $this->data->sessionKey = $this->sessionKey;
     }
     
     public function setLogin($login) {
@@ -49,6 +43,14 @@ class LoginResource extends UserResource  {
         }
         $this->options->hash = $h;
         return $this;
+    }
+    
+    public function getData($forceRequest = FALSE) {
+        $this->preProcess();
+        $this->dataReady = FALSE;
+        $resultStatus = $this->requestFromApi(FALSE);
+        $this->data->sessionKey = $resultStatus->getObject()->sessionKey;
+        return $this->data;
     }
 
 

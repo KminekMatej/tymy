@@ -13,6 +13,11 @@ use Tapi\PollDetailResource;
 use Tapi\PollCreateResource;
 use Tapi\PollEditResource;
 use Tapi\PollDeleteResource;
+use Tapi\OptionListResource;
+use Tapi\OptionCreateResource;
+use Tapi\OptionEditResource;
+use Tapi\OptionDeleteResource;
+use Tymy\Exception\APIException;
 
 
 class SettingsPresenter extends SecuredPresenter {
@@ -53,8 +58,17 @@ class SettingsPresenter extends SecuredPresenter {
     /** @var PollDeleteResource @inject */
     public $pollDeleter;
         
-    /** @var \Tymy\PollOption @inject */
-    public $pollOption;
+    /** @var OptionListResource @inject */
+    public $pollOptionList;
+            
+    /** @var OptionCreateResource @inject */
+    public $pollOptionCreator;
+            
+    /** @var OptionEditResource @inject */
+    public $pollOptionEditor;
+            
+    /** @var OptionDeleteResource @inject */
+    public $pollOptionDeleter;
             
     protected function startup() {
         parent::startup();
@@ -237,7 +251,7 @@ class SettingsPresenter extends SecuredPresenter {
         try {
             $this->eventCreator->setEventsArray($post)->setEventTypesArray($this->eventTypeList->getData())->perform();
             $this->redirect('Settings:events');
-        } catch (\Tymy\Exception\APIException $ex) {
+        } catch (APIException $ex) {
             $this->handleTapiException($ex, 'this');
         }
     }
@@ -254,7 +268,7 @@ class SettingsPresenter extends SecuredPresenter {
                     ->setId($bind["id"])
                     ->perform();
             $this->redirect("Settings:events");
-        } catch (\Tymy\Exception\APIException $ex) {
+        } catch (APIException $ex) {
             $this->handleTapiException($ex, 'this');
         }
     }
@@ -273,7 +287,7 @@ class SettingsPresenter extends SecuredPresenter {
             $this->discussionCreator
                     ->setDiscussion($discussionData)
                     ->perform();
-        } catch (\Tymy\Exception\APIException $ex) {
+        } catch (APIException $ex) {
             $this->handleTapiException($ex, 'this');
         }
         $this->redirect('Settings:discussions');
@@ -291,7 +305,7 @@ class SettingsPresenter extends SecuredPresenter {
                     ->setId($bind["id"])
                     ->perform();
             $this->redirect("Settings:discussions");
-        } catch (\Tymy\Exception\APIException $ex) {
+        } catch (APIException $ex) {
             $this->handleTapiException($ex, 'this');
         }
     }
@@ -308,7 +322,7 @@ class SettingsPresenter extends SecuredPresenter {
         $pollData = $this->getRequest()->getPost()[1]; // new discussion is always as item 1
         try {
             $this->pollCreator->setPoll($pollData)->perform();
-        } catch (\Tymy\Exception\APIException $ex) {
+        } catch (APIException $ex) {
             $this->handleTapiException($ex, 'this');
         }
         $this->redirect('Settings:polls');
@@ -323,7 +337,7 @@ class SettingsPresenter extends SecuredPresenter {
         $bind = $this->getRequest()->getPost();
         try {
             $this->pollDeleter->setId($bind["id"])->perform();
-        } catch (\Tymy\Exception\APIException $ex) {
+        } catch (APIException $ex) {
             $this->handleTapiException($ex, 'this');
         }
     }
@@ -342,10 +356,11 @@ class SettingsPresenter extends SecuredPresenter {
         $pollData = $this->getRequest()->getPost()[1]; // new poll option is always as item 1
         $pollId = $this->parseIdFromWebname($poll);
         try {
-            $this->pollOption
-                    ->recId($pollId)
-                    ->create($pollData);
-        } catch (\Tymy\Exception\APIException $ex) {
+            $this->pollOptionCreator
+                    ->setId($pollId)
+                    ->setPollOptions($pollData)
+                    ->perform();
+        } catch (APIException $ex) {
             $this->handleTapiException($ex, 'this');
         }
     }
@@ -355,7 +370,7 @@ class SettingsPresenter extends SecuredPresenter {
         $bind["pollId"] = $this->parseIdFromWebname($poll);
         try {
             $this->editPollOption($bind);
-        } catch (\Tymy\Exception\APIException $ex) {
+        } catch (APIException $ex) {
             $this->handleTapiException($ex, 'this');
         }
     }
@@ -364,11 +379,11 @@ class SettingsPresenter extends SecuredPresenter {
         $bind = $this->getRequest()->getPost();
         $bind["pollId"] = $this->parseIdFromWebname($poll);
         try {
-            $this->pollOption
-                    ->setOptionId($bind["id"])
+            $this->pollOptionDeleter
+                    ->set($bind["id"])
                     ->recId($bind["pollId"])
                     ->delete();
-        } catch (\Tymy\Exception\APIException $ex) {
+        } catch (APIException $ex) {
             $this->handleTapiException($ex, 'this');
         }
     }
@@ -387,7 +402,7 @@ class SettingsPresenter extends SecuredPresenter {
                     ->setId($bind["id"])
                     ->setEvent($bind["changes"])
                     ->perform();
-        } catch (\Tymy\Exception\APIException $ex) {
+        } catch (APIException $ex) {
             $this->handleTapiException($ex, 'this');
         }
     }
@@ -398,7 +413,7 @@ class SettingsPresenter extends SecuredPresenter {
                     ->setId($bind["id"])
                     ->setDiscussion($bind["changes"])
                     ->perform();
-        } catch (\Tymy\Exception\APIException $ex) {
+        } catch (APIException $ex) {
             $this->handleTapiException($ex, 'this');
         }
     }
@@ -409,7 +424,7 @@ class SettingsPresenter extends SecuredPresenter {
                     ->setId($bind["id"])
                     ->setPoll($bind["changes"])
                     ->perform();
-        } catch (\Tymy\Exception\APIException $ex) {
+        } catch (APIException $ex) {
             $this->handleTapiException($ex, 'this');
         }
     }
