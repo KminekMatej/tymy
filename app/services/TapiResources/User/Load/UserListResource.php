@@ -16,7 +16,7 @@ class UserListResource extends UserResource {
         $this->options->byId = null;
         $this->options->me = null;
         $this->options->counts = null;
-        
+        return $this;
     }
 
     protected function preProcess() {

@@ -225,7 +225,7 @@ class SettingsPresenter extends SecuredPresenter {
     public function renderPoll($poll) {
         //RENDERING POLL DETAIL
         $pollId = $this->parseIdFromWebname($poll);
-        $pollObj = $this->poll->setId($pollId)->getData();
+        $pollObj = $this->pollDetail->setId($pollId)->getData();
         
         if(count($pollObj->options) == 0){
             $pollObj->options[] = (object)["id" => -1, "pollId" => $pollId, "caption" => "", "type" => "TEXT"];
