@@ -78,7 +78,7 @@ class TeamPresenter extends SecuredPresenter {
             $user = $this->userDetail
                     ->setId($this->parseIdFromWebname($player))
                     ->getData();
-        } catch (\Tapi\Exception\APIException $ex) {
+        } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
 
@@ -143,7 +143,7 @@ class TeamPresenter extends SecuredPresenter {
             $this->userDeleter
                     ->setId($bind["id"])
                     ->perform();
-        } catch (\Tapi\Exception\APIException $ex) {
+        } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
         $this->flashMessage("Uživatel byl úspešně smazán", "success");
@@ -160,7 +160,7 @@ class TeamPresenter extends SecuredPresenter {
                 $this->avatarUploader
                         ->setId($bind["id"])
                         ->setAvatar($avatarB64);
-            } catch (\Tapi\Exception\APIException $ex) {
+            } catch (APIException $ex) {
                 $this->handleTapiException($ex, "this");
             }
         } else {

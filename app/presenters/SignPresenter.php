@@ -4,27 +4,35 @@ namespace App\Presenters;
 
 use Nette;
 use App\Forms;
+use Nette\Application\UI\Form;
+use App\Forms\SignInFormFactory;
+use App\Forms\SignUpFormFactory;
+use App\Forms\PwdLostFormFactory;
+use App\Forms\PwdResetFormFactory;
+use App\Model\Supplier;
 use Tapi\LogoutResource;
 use Tapi\PasswordLostResource;
 use Tapi\PasswordResetResource;
 use App\Model\TapiAuthenticator;
 use Tapi\TapiService;
+use Tapi\Exception\APIException;
+
 
 class SignPresenter extends BasePresenter {
 
-    /** @var Forms\SignInFormFactory @inject */
+    /** @var SignInFormFactory @inject */
     public $signInFactory;
 
-    /** @var Forms\SignUpFormFactory @inject */
+    /** @var SignUpFormFactory @inject */
     public $signUpFactory;
     
-    /** @var Forms\PwdLostFormFactory @inject */
+    /** @var PwdLostFormFactory @inject */
     public $pwdLostFactory;
     
-    /** @var Forms\PwdResetFormFactory @inject */
+    /** @var PwdResetFormFactory @inject */
     public $pwdResetFactory;
     
-    /** @var \App\Model\Supplier @inject */
+    /** @var Supplier @inject */
     public $supplier;
 
     /** @var LogoutResource @inject */
@@ -47,12 +55,12 @@ class SignPresenter extends BasePresenter {
      * @return Nette\Application\UI\Form
      */
     protected function createComponentSignInForm() {
-        $form = $this->signInFactory->create(function (Nette\Application\UI\Form $form, $values) {
+        $form = $this->signInFactory->create(function (Form $form, $values) {
             try {
                 $this->tapiAuthenticator->setTapiService($this->tapiService);
                 $this->user->setExpiration('20 minutes');
                 $this->user->login($values->name, $values->password);
-            } catch (\Tapi\Exception\APIException $exc) {
+            } catch (APIException $exc) {
                 switch ($exc->getMessage()) {
                     case "Login not approved":
                         $this->flashMessage('Tento uživatel zatím nemá povolené přihlášení', "danger");
@@ -92,7 +100,7 @@ class SignPresenter extends BasePresenter {
                         ->setHostname($this->getHttpRequest()->getRemoteHost())
                         ->setMail($values->email)
                         ->getData();    
-            } catch (\Tapi\Exception\APIException $ex) {
+            } catch (APIException $ex) {
                 $this->flashMessage('Uživatel nebyl nalezen, je zablokován nebo došlo k chybě. Zkuste to znovu, nebo kontaktujte týmového administrátora.');
                 $this->redirect('Sign:pwdlost');
             }
