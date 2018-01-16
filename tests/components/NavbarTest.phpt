@@ -8,7 +8,6 @@
 namespace Test;
 
 use Nette;
-use Tester;
 use Tester\Assert;
 use Tester\TestCase;
 use Tester\Environment;
