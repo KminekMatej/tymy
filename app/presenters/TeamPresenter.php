@@ -68,7 +68,6 @@ class TeamPresenter extends SecuredPresenter {
                 }
             } else {
                 $this->flashMessage("Nikdo nenalezen!");
-                $this->redirect("Team:");
             }
 
             $this->template->users = $users;
