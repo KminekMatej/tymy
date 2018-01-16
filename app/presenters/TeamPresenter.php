@@ -60,11 +60,14 @@ class TeamPresenter extends SecuredPresenter {
         try {
             $users = $this->userList->setUserType($this->userType)->getData();
             $allMails = [];
-            foreach ($users as $u) {
-                if(property_exists($u, "email")){
-                    $allMails[] = $u->email;
+            if ($users) {
+                foreach ($users as $u) {
+                    if (property_exists($u, "email")) {
+                        $allMails[] = $u->email;
+                    }
                 }
             }
+
             $this->template->users = $users;
             $this->template->allMails = join(",", $allMails);
         } catch (APIException $ex) {

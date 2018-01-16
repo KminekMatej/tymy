@@ -34,7 +34,7 @@ class SignOutTest extends IPresenterTest {
     }
     
     /**
-     * @throws \Tapi\Exception\APIAuthenticationException
+     * @throws \Tapi\Exception\APIAuthenticationException Login failed. Wrong username or password.
      */
     function testSignOutFails(){
         $this->userTestAuthenticate("Beatles","Ladyda");
