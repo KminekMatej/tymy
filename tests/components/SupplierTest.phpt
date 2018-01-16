@@ -7,16 +7,17 @@
 namespace Test;
 
 use Nette;
-use Tester;
 use Tester\Assert;
+use Tester\TestCase;
+use Environment;
 
 $container = require __DIR__ . '/../bootstrap.php';
 
 if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
-    Tester\Environment::skip('Test skipped as set in config file.');
+    Environment::skip('Test skipped as set in config file.');
 }
 
-class SupplierTest extends Tester\TestCase {
+class SupplierTest extends TestCase {
     
     /** @var \App\Model\Supplier */
     private $supplier;
@@ -45,7 +46,6 @@ class SupplierTest extends Tester\TestCase {
         Assert::equal($team, $this->supplier->getTym());
         Assert::equal("http://$team.$root", $this->supplier->getTymyRoot());
         Assert::equal("http://$team.$root/api", $this->supplier->getApiRoot());
-        Assert::equal("http://$team.$root/sysapi", $this->supplier->getSysapiRoot());
         Assert::equal("btn-outline-success", $this->supplier->getRoleClass("SUPER"));
         Assert::equal("btn-outline-info", $this->supplier->getRoleClass("USR"));
         Assert::equal("btn-outline-warning", $this->supplier->getRoleClass("ATT"));

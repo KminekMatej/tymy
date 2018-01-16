@@ -28,6 +28,7 @@ class LoginResource extends UserResource  {
     
     protected function postProcess() {
         $this->data->sessionKey = $this->sessionKey;
+        parent::postProcessUser($this->data);
     }
     
     public function setLogin($login) {

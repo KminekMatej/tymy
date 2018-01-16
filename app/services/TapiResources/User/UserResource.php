@@ -22,6 +22,7 @@ abstract class UserResource extends TapiObject{
         if(!property_exists($user, "canEditCallName")) $user->canEditCallName = true; //set default value
         if(property_exists($user, "lastLogin")) $this->timeLoad($user->lastLogin);
         if(property_exists($user, "createdAt")) $this->timeLoad($user->createdAt);
+        if(!property_exists($user, "roles")) $user->roles = [];
         $this->postProcessUserWarnings($user);
     }
     
