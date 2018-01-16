@@ -2,6 +2,7 @@
 
 namespace Tapi;
 use Nette;
+use Nette\Caching\Cache;
 use Tapi\RequestMethod;
 use Tracy\Debugger;
 use Tapi\Exception\APIException;
@@ -182,6 +183,7 @@ abstract class TapiObject {
     }
     
     public function getData($forceRequest = FALSE) {
+        $this->init();
         $this->preProcess();
         $this->dataReady = FALSE;
         if($this->cacheable){

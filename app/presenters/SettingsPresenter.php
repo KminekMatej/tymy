@@ -100,7 +100,7 @@ class SettingsPresenter extends SecuredPresenter {
             $page = is_numeric($page) ? $page : 1;
             $limit = \Tapi\EventListResource::PAGING_EVENTS_PER_PAGE;
             $offset = ($page-1)*$limit;
-            $events = $this->eventList->init()->setLimit($limit)->setOffset($offset)->getData(); // get all events
+            $events = $this->eventList->setLimit($limit)->setOffset($offset)->getData(); // get all events
             $this->template->events = $events;
             $allEventsCount = $this->eventList->getAllEventsCount();
             $this->template->eventsCount = $allEventsCount;

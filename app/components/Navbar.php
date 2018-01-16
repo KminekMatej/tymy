@@ -8,6 +8,7 @@ use Tapi\EventListResource;
 use Tapi\UserListResource;
 use Tapi\UserDetailResource;
 use Tapi\PollListResource;
+use Tapi\Exception\APIException;
 
 
 /**
@@ -60,15 +61,15 @@ class NavbarControl extends Control {
         try {
             $this->template->discussionWarnings = $this->discussionList->getWarnings();
             $this->template->discussions = $this->discussionList->getData();
-        } catch (Tapi\Exception\APIException $ex) {
+        } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
     }
 
     private function players() {
         try {
-            $players = $this->userList->setUserType(null)->getData();
-        } catch (Tapi\Exception\APIException $ex) {
+            $this->userList->getData();
+        } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
 
@@ -82,7 +83,7 @@ class NavbarControl extends Control {
             $this->polls->setMenu(TRUE)->getData();
             $this->template->voteWarnings = $this->polls->getWarnings();
             $this->template->polls = $this->polls->getData();
-        } catch (Tapi\Exception\APIException $ex) {
+        } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
     }
@@ -96,7 +97,7 @@ class NavbarControl extends Control {
                     ->getData();
             $this->template->eventWarnings = $this->eventList->getWarnings();
             
-        } catch (Tapi\Exception\APIException $ex) {
+        } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
     }
