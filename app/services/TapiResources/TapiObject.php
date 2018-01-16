@@ -3,6 +3,7 @@
 namespace Tapi;
 use Nette;
 use Nette\Caching\Cache;
+use Nette\Caching\Storages\FileStorage;
 use Tapi\RequestMethod;
 use Tracy\Debugger;
 use Tapi\Exception\APIException;
@@ -72,13 +73,20 @@ abstract class TapiObject {
     /** @var TapiService */
     protected $tapiService;
     
+    /** @var Nette\Caching\IStorage */
+    public $cacheStorage;
+    
+    /** @var Nette\Caching\Cache */
+    public $cache;
+    
     public abstract function init();
     
     protected abstract function preProcess();
     
     protected abstract function postProcess();
     
-    public function __construct(\App\Model\Supplier $supplier,  Nette\Security\User $user = NULL, CacheService $cacheService = NULL, TapiService $tapiService = NULL) {
+    public function __construct(\App\Model\Supplier $supplier,  Nette\Security\User $user = NULL, CacheService $cacheService = NULL, TapiService $tapiService = NULL, FileStorage $cacheStorage = NULL) {
+        if($cacheStorage) $this->cache = new Cache($cacheStorage, "TapiObjects");
         $this->supplier = $supplier;
         if($user) $this->user = $user;
         $this->cacheable = TRUE;
@@ -97,21 +105,29 @@ abstract class TapiObject {
     private function saveToCache() {
         if (!$this->dataReady || !$this->cacheable)
             return null;
-        $this->cacheService->save($this->getClassCacheName(), $this->cachingTimeout, $this->data, $this->options);
+        $this->cache->save($this->getCacheKey(), ["data" => $this->data, "options" => $this->options], [Cache::EXPIRE => $this->cachingTimeout . ' seconds']);
+        $allKeys = $this->cache->load("allkeys");
+        $allKeys[] = $this->getCacheKey();
+        $this->cache->save("allkeys", $allKeys, [Cache::EXPIRE => '30 minutes']);
+        Debugger::barDump($allKeys, "Contents of cache TAPI_FileCache");
     }
     
     public function resetCache(){
-        $this->cacheService->clear($this->getClassCacheName());
+        $this->cacheService->clear($this->getCacheKey());
         return $this;
     }
     
     private function loadFromCache(){
-        $data = $this->cacheService->load($this->getClassCacheName());
+        $data = $this->cache->load($this->getCacheKey());
         if($data != null){
-            $this->data = $data->getData();
-            $this->options = $data->getOptions();
+            $this->data = $data["data"];
+            $this->options = $data["options"];
             $this->dataReady = TRUE;
         }
+        $allKeys = $this->cache->load("allkeys");
+        $allKeys[] = $this->getCacheKey();
+        $this->cache->save("allkeys", $allKeys, [Cache::EXPIRE => '30 minutes']);
+        Debugger::barDump($allKeys, "Contents of cache TAPI_FileCache");
     }
 
     protected function requestFromApi($relogin = TRUE) {
@@ -215,9 +231,12 @@ abstract class TapiObject {
         return $this;
     }
     
-    private function getClassCacheName(){
-        if($this->getUrl() == NULL) throw new \Exception ("No url to save");
-        return $this->getMethod() . ":" . $this->getUrl() . ($this->requestParameters ? "?" . http_build_query($this->requestParameters) : "");
+    protected function getCacheKey($key_override = NULL){
+        if($this->getUrl() == NULL) throw new APIException("No url to save");
+        $key = $this->user->getId() . ":";
+        if(!is_null($key_override)) $key .= $key_override;
+        else $key .= $this->getMethod() . ":" . $this->getUrl() . ($this->requestParameters ? "?" . http_build_query($this->requestParameters) : "");
+        return $key;
     }
 
     protected function timeLoad(&$date) {

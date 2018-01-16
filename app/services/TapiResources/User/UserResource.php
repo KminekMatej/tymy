@@ -33,9 +33,9 @@ abstract class UserResource extends TapiObject{
     }
     
     protected function clearCache($id = NULL){
-        $this->cacheService->clear("Tapi\UserListResource");
+        $this->cache->remove($this->getCacheKey("GET:users"));
         if($id != NULL){
-            $this->cacheService->clear("Tapi\UserDetailResource:$id");
+            $this->cache->remove($this->getCacheKey("GET:user/$id"));
         }
     }
     

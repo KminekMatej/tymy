@@ -55,11 +55,10 @@ abstract class DiscussionResource extends TapiObject {
     }
     
     protected function clearCache($id = NULL){
-        $this->cacheService->clear("Tapi\DiscussionListResource");
-        $this->cacheService->clear("Tapi\DiscussionNewsListResource");
-        $this->cacheService->clear("Tapi\DiscussionPageResource");
+        $this->cache->remove($this->getCacheKey("GET:discussions/accessible/withNew"));
+        $this->cache->remove($this->getCacheKey("GET:discussions"));
         if($id != NULL){
-            $this->cacheService->clear("Tapi\DiscussionDetailResource:$id");
+            $$this->cache->remove("GET:discussions/$id");
         }
     }
 }

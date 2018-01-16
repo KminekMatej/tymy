@@ -47,12 +47,14 @@ class CacheService {
         unset($this->tapiSection[$key]);
     }
     
-    public function dumpCache(){
+    public function dumpCache($return = FALSE, $dump_key = NULL){
         $cacheContents = [];
         foreach ($this->tapiSection as $key => $val) {
-            $cacheContents[$key] = $val;
+            if($dump_key == $key || $key == NULL)
+                $cacheContents[$key] = $val;
         }
-        Debugger::barDump($cacheContents, "Contents of cache " . self::TAPI_SECTION);
+        if($return) return $cacheContents;
+        else Debugger::barDump($cacheContents, "Contents of cache " . self::TAPI_SECTION);
     }
     
     public function dropCache(){

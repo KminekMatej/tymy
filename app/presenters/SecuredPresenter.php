@@ -9,6 +9,7 @@
 namespace App\Presenters;
 
 use Nette;
+use Nette\Caching\Cache;
 use Nette\Application\UI\NavbarControl;
 use App\Model\SettingMenu;
 use App\Model\TapiAuthenticator;
@@ -58,7 +59,6 @@ class SecuredPresenter extends BasePresenter {
     
     /** @var EventTypeListResource @inject */
     public $eventTypeList;
-    
     
     /** @var \Tapi\CacheService @inject */
     public $cacheService;
