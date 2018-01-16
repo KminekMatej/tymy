@@ -69,7 +69,7 @@ abstract class TapiObject {
     private $jsonEncoding;
     
     /** @var TapiService */
-    private $tapiService;
+    protected $tapiService;
     
     protected abstract function init();
     
