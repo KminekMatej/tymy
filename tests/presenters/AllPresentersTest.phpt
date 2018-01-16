@@ -3,16 +3,17 @@
 namespace Test;
 
 use Nette;
-use Tester;
 use Tester\Assert;
+use Tester\Environment;
+use Tester\DomQuery;
 
 $container = require __DIR__ . '/../bootstrap.php';
 
 if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
-    Tester\Environment::skip('Test skipped as set in config file.');
+    Environment::skip('Test skipped as set in config file.');
 }
 
-Tester\Environment::lock('tapi', __DIR__ . '/../lockdir'); //belong to the group of tests which should not run paralelly
+Environment::lock('tapi', __DIR__ . '/../lockdir'); //belong to the group of tests which should not run paralelly
 
 class AllPresentersTest extends IPresenterTest {
 
@@ -62,7 +63,7 @@ class AllPresentersTest extends IPresenterTest {
             Assert::type('Nette\Application\Responses\TextResponse', $response);
 
             $html = (string) $response->getSource();
-            $dom = Tester\DomQuery::fromHtml($html);
+            $dom = DomQuery::fromHtml($html);
 
             //has navbar
             Assert::true($dom->has('div#snippet-navbar-nav'));

@@ -3,13 +3,14 @@
 namespace Test;
 
 use Nette;
-use Tester;
 use Tester\Assert;
+use Tester\Environment;
+use Tester\DomQuery;
 
 $container = require __DIR__ . '/../bootstrap.php';
 
 if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
-    Tester\Environment::skip('Test skipped as set in config file.');
+    Environment::skip('Test skipped as set in config file.');
 }
 
 class SettingsPresenterTest extends IPresenterTest {
@@ -28,7 +29,7 @@ class SettingsPresenterTest extends IPresenterTest {
         Assert::type('Nette\Application\Responses\TextResponse', $response);
         
         $html = (string)$response->getSource();
-        $dom = Tester\DomQuery::fromHtml($html);
+        $dom = DomQuery::fromHtml($html);
         
         //has navbar
         Assert::true($dom->has('div#snippet-navbar-nav'));
@@ -59,7 +60,7 @@ class SettingsPresenterTest extends IPresenterTest {
         Assert::type('Nette\Application\Responses\TextResponse', $response);
         
         $html = (string)$response->getSource();
-        $dom = Tester\DomQuery::fromHtml($html);
+        $dom = DomQuery::fromHtml($html);
         
         //has navbar
         Assert::true($dom->has('div#snippet-navbar-nav'));
@@ -91,7 +92,7 @@ class SettingsPresenterTest extends IPresenterTest {
         Assert::type('Nette\Application\Responses\TextResponse', $response);
         
         $html = (string)$response->getSource();
-        $dom = Tester\DomQuery::fromHtml($html);
+        $dom = DomQuery::fromHtml($html);
         //has navbar
         Assert::true($dom->has('div#snippet-navbar-nav'));
         //has breadcrumbs
@@ -124,7 +125,7 @@ class SettingsPresenterTest extends IPresenterTest {
         //replace unescaped ampersands in html to prevent tests from failing
         $html = preg_replace($re, "&amp;", $html);
         
-        $dom = Tester\DomQuery::fromHtml($html);
+        $dom = DomQuery::fromHtml($html);
         
         //has navbar
         Assert::true($dom->has('div#snippet-navbar-nav'));
@@ -133,8 +134,8 @@ class SettingsPresenterTest extends IPresenterTest {
         Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 2);
         Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 3); //last item aint link
         
-        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-header h4'));
-        Assert::equal(count($dom->find('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table tr')), 5);
+        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-2 div.card-header h4'));
+        Assert::equal(count($dom->find('div.container.settings div.row div.col div.card.sh-box.my-2 div.card-body table.table tr')), 5);
         
     }
 
@@ -146,7 +147,7 @@ class SettingsPresenterTest extends IPresenterTest {
         Assert::type('Nette\Application\Responses\TextResponse', $response);
         
         $html = (string)$response->getSource();
-        $dom = Tester\DomQuery::fromHtml($html);
+        $dom = DomQuery::fromHtml($html);
         //has navbar
         Assert::true($dom->has('div#snippet-navbar-nav'));
         //has breadcrumbs
@@ -174,7 +175,7 @@ class SettingsPresenterTest extends IPresenterTest {
         Assert::type('Nette\Application\Responses\TextResponse', $response);
         
         $html = (string)$response->getSource();
-        $dom = Tester\DomQuery::fromHtml($html);
+        $dom = DomQuery::fromHtml($html);
         //has navbar
         Assert::true($dom->has('div#snippet-navbar-nav'));
         //has breadcrumbs
@@ -201,7 +202,7 @@ class SettingsPresenterTest extends IPresenterTest {
         Assert::type('Nette\Application\Responses\TextResponse', $response);
         
         $html = (string)$response->getSource();
-        $dom = Tester\DomQuery::fromHtml($html);
+        $dom = DomQuery::fromHtml($html);
         //has navbar
         Assert::true($dom->has('div#snippet-navbar-nav'));
         //has breadcrumbs
