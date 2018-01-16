@@ -11,7 +11,7 @@ use Tapi\Exception\APIException;
  */
 class UserDeleteResource extends UserResource {
     
-    protected function init() {
+    public function init() {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::PUT);
     }

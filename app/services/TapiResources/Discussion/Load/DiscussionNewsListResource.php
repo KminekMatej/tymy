@@ -10,7 +10,7 @@ namespace Tapi;
  */
 class DiscussionNewsListResource extends DiscussionResource {
     
-    protected function init() {
+    public function init() {
         $this->setCacheable(FALSE);
     }
     

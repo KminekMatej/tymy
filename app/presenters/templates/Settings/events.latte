@@ -36,6 +36,7 @@
                             <th>Odkaz</th>
                             <th></th>
                         </tr>
+                        {if $events}
                         <tr n:foreach="$events as $e" data-binder-id="{$e->id}">
                             <td>
                                 <a n:if="!$isNew" href="{plink Settings:events $e->webName}" class="btn btn-sm btn-light btn-light-bordered"  title="Upravit" style="margin-right: 2px">
@@ -60,6 +61,7 @@
                                 <button n:if="$user->isAllowed('SYS','EVE_DELETE') || $isNew" href="{link eventDelete!}" n:class="btn,btn-sm,btn-danger, !$isNew ? binder-delete-btn" title="Smazat" n:attr="onclick => $isNew ? 'removeRow(this)'"><i class="fa fa-times" aria-hidden="true"></i></button>
                             </td>
                         </tr>
+                        {/if}
                     </table>
                     <div class="text-center" n:if="$isNew">
                         <button class="btn btn-sm btn-outline-success" title="Duplikovat poslední událost a posunout časy o 1 den" onclick="duplicateEventRow('day')"><i class="fa fa-plus" aria-hidden="true"></i> Den</button>

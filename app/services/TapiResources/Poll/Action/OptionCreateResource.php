@@ -10,7 +10,7 @@ namespace Tapi;
  */
 class OptionCreateResource extends PollResource {
        
-    protected function init() {
+    public function init() {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::POST);
         $this->setPollOptions(NULL);

@@ -54,7 +54,7 @@ abstract class TapiObject {
     private $requestData;
     
     /** @var array(String) Request parameters to be sent along with request */
-    private $requestParameters;
+    protected $requestParameters;
     
     /** @var string Request url */
     private $url;
@@ -71,7 +71,7 @@ abstract class TapiObject {
     /** @var TapiService */
     protected $tapiService;
     
-    protected abstract function init();
+    public abstract function init();
     
     protected abstract function preProcess();
     

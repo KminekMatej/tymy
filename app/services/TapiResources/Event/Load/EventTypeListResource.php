@@ -10,7 +10,7 @@ namespace Tapi;
  */
 class EventTypeListResource extends EventResource {
     
-    protected function init() {
+    public function init() {
         $this->setCacheable(CacheService::TIMEOUT_LARGE);
     }
     

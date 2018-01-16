@@ -10,7 +10,7 @@ namespace Tapi;
  */
 class UsersLiveResource extends UserResource {
     
-    protected function init() {
+    public function init() {
         $this->setCacheable(FALSE);
     }
 

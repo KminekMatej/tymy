@@ -11,7 +11,7 @@ use Tapi\Exception\APIException;
  */
 class OptionListResource extends PollResource{
    
-    protected function init() {
+    public function init() {
         //everything inited correctly
     }
 

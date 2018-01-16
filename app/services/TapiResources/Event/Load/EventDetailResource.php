@@ -11,7 +11,7 @@ use Tapi\Exception\APIException;
  */
 class EventDetailResource extends EventResource {
     
-    protected function init() {
+    public function init() {
         //everything inited correctly
     }
 

@@ -11,7 +11,7 @@ namespace Tapi;
 
 class PollListResource extends PollResource {
     
-    protected function init() {
+    public function init() {
         $this->setCachingTimeout(CacheService::TIMEOUT_LARGE);
         $this->setMenu(NULL);
     }

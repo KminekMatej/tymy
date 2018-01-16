@@ -10,7 +10,7 @@ namespace Tapi;
  */
 class UserCreateResource extends UserResource {
     
-    protected function init() {
+    public function init() {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::POST);
     }

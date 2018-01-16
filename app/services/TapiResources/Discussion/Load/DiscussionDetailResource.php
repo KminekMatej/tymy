@@ -11,7 +11,7 @@ use Tapi\Exception\APIException;
  */
 class DiscussionDetailResource extends DiscussionResource {
     
-    protected function init() {
+    public function init() {
         $this->setCachingTimeout(CacheService::TIMEOUT_LARGE);
     }
     

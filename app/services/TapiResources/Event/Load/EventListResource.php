@@ -13,7 +13,7 @@ class EventListResource extends EventResource {
     const PAGING_EVENTS_PER_PAGE = 15;
     const EVENT_COUNT_CACHE_KEY = "EVENT_COUNT_CACHE_KEY";
     
-    protected function init() {
+    public function init() {
         $this->setCachingTimeout(CacheService::TIMEOUT_TINY);
         $this->setWithMyAttendance(TRUE);
         $this->setFrom(NULL);
@@ -25,6 +25,8 @@ class EventListResource extends EventResource {
         $this->options->asMonthArray = NULL;
         $this->options->allEventsCount = NULL;
         $this->options->withMyAttendance = NULL;
+        $this->requestParameters = NULL;
+        return $this;
     }
 
     protected function preProcess() {

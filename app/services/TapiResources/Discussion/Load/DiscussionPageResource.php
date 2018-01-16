@@ -11,7 +11,7 @@ use Tapi\Exception\APIException;
  */
 class DiscussionPageResource extends DiscussionResource {
     
-    protected function init() {
+    public function init() {
         $this->setCacheable(FALSE);
         $this->setPage(NULL);
         $this->setSearch(NULL);

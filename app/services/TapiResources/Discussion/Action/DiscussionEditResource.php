@@ -11,7 +11,7 @@ use Tapi\Exception\APIException;
  */
 class DiscussionEditResource extends DiscussionResource {
 
-    protected function init() {
+    public function init() {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::PUT);
         $this->setDiscussion(NULL);
