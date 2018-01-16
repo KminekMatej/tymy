@@ -27,8 +27,6 @@ class TestAuthenticator implements Nette\Security\IAuthenticator {
      */
     public function authenticate(array $credentials) {
         list($username, $password) = $credentials;
-        $dataMock = new \stdClass();
-        $dataMock->login = $username;
         $this->setId(38);
         $this->setStatus(["TESTROLE", "TESTROLE2"]);
         $this->setArr([
@@ -36,7 +34,7 @@ class TestAuthenticator implements Nette\Security\IAuthenticator {
             "sessionKey" => "dsfbglsdfbg13546",
             "hash" => "123hash",
             "tapi_config" => $this->supplier->getTapi_config(),
-            "data" => $dataMock
+            "login" => $username
             ]);
         return new Nette\Security\Identity($this->id, $this->status, $this->arr );
     }
