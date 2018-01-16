@@ -66,6 +66,9 @@ class TeamPresenter extends SecuredPresenter {
                         $allMails[] = $u->email;
                     }
                 }
+            } else {
+                $this->flashMessage("Nikdo nenalezen!");
+                $this->redirect("Team:");
             }
 
             $this->template->users = $users;

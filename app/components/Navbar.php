@@ -67,7 +67,7 @@ class NavbarControl extends Control {
 
     private function players() {
         try {
-            $players = $this->userList->getData();
+            $players = $this->userList->setUserType(null)->getData();
         } catch (Tapi\Exception\APIException $ex) {
             $this->handleTapiException($ex);
         }
