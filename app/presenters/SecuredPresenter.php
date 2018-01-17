@@ -105,7 +105,8 @@ class SecuredPresenter extends BasePresenter {
         $allKeys = $cache->load("allkeys");
         $cache_dump = [];
         foreach ($allKeys as $key) {
-            $cache_dump[$key] = $cache->load($key);
+            $val = $cache->load($key);
+            if(!is_null($val)) $cache_dump[$key] = $val;
         }
         Debugger::barDump($cache_dump, "Cache contents");
     }
