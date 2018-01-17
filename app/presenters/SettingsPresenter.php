@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Presenters;
+use Nette\Caching\Cache;
 use Tapi\DiscussionDetailResource;
 use Tapi\EventDetailResource;
 use Tapi\EventCreateResource;
@@ -389,7 +390,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
 
     public function handleCacheDrop() {
-        $this->cacheService->dropCache();
+        $this->discussionDetail->cleanCache(); //can use any tapi object
         $this->redirect('this');
     }
     

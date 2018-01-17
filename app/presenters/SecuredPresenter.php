@@ -10,11 +10,13 @@ namespace App\Presenters;
 
 use Nette;
 use Nette\Caching\Cache;
+use Nette\Caching\Storages\FileStorage;
 use Nette\Application\UI\NavbarControl;
 use App\Model\SettingMenu;
 use App\Model\TapiAuthenticator;
 use App\Model\TapiAuthorizator;
 use Tracy\Debugger;
+use Tapi\TapiObject;
 use Tapi\EventListResource;
 use Tapi\EventTypeListResource;
 use Tapi\DiscussionListResource;
@@ -60,8 +62,8 @@ class SecuredPresenter extends BasePresenter {
     /** @var EventTypeListResource @inject */
     public $eventTypeList;
     
-    /** @var \Tapi\CacheService @inject */
-    public $cacheService;
+    /** @var FileStorage @inject */
+    public $cacheStorage;
     
     public $accessibleSettings = [];
     
@@ -99,7 +101,13 @@ class SecuredPresenter extends BasePresenter {
     
     protected function shutdown($response) {
         parent::shutdown($response);
-        $this->cacheService->dumpCache();
+        $cache = new Cache($this->cacheStorage, TapiObject::CACHE_STORAGE);
+        $allKeys = $cache->load("allkeys");
+        $cache_dump = [];
+        foreach ($allKeys as $key) {
+            $cache_dump[$key] = $cache->load($key);
+        }
+        Debugger::barDump($cache_dump, "Cache contents");
     }
     
     protected function createComponentNavbar() {

@@ -20,7 +20,7 @@ class LogoutResource extends UserResource {
     }
     
     protected function postProcess() {
-        $this->cacheService->dropCache();
+        $this->cleanCache();
     }
     
 }

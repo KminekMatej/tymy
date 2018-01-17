@@ -12,7 +12,7 @@ use Tapi\Exception\APIException;
 class UserDetailResource extends UserResource {
     
     public function init() {
-        $this->setCachingTimeout(CacheService::TIMEOUT_LARGE);
+        $this->setCachingTimeout(TapiObject::CACHE_TIMEOUT_LARGE);
     }
 
     protected function preProcess() {

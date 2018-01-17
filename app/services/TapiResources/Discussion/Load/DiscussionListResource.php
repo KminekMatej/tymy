@@ -11,7 +11,7 @@ namespace Tapi;
 class DiscussionListResource extends DiscussionResource {
     
     public function init() {
-        $this->setCachingTimeout(CacheService::TIMEOUT_LARGE);
+        $this->setCachingTimeout(TapiObject::CACHE_TIMEOUT_LARGE);
     }
     
     public function preProcess() {

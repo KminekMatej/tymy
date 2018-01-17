@@ -75,7 +75,6 @@ class TeamPresenter extends SecuredPresenter {
         } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
-        $this->cacheService->dumpCache();
     }
 
     public function renderPlayer($player) {

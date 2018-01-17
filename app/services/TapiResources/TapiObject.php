@@ -16,6 +16,13 @@ use Tapi\TapiService;
 
 abstract class TapiObject {
     
+    const CACHE_STORAGE = "TapiObjects";
+    const CACHE_TIMEOUT_NONE = 0; // turn off caching
+    const CACHE_TIMEOUT_TINY = 60; // turn off caching
+    const CACHE_TIMEOUT_SMALL = 180; // 3 minutes - smallest allowed timeout
+    const CACHE_TIMEOUT_MEDIUM = 300; // 5 minutes - medium timeout
+    const CACHE_TIMEOUT_LARGE = 600; // 10 minutes - timeout larger than user usually stays on site
+    
     /** @var Nette\Security\User */
     protected $user;
     
@@ -27,9 +34,6 @@ abstract class TapiObject {
     
     /** @var integer Timeout in seconds to drop cache  */
     private $cachingTimeout;
-    
-    /**  @var CacheService */
-    protected $cacheService;
     
     /** @var string Url request method */
     private $method;
@@ -73,9 +77,6 @@ abstract class TapiObject {
     /** @var TapiService */
     protected $tapiService;
     
-    /** @var Nette\Caching\IStorage */
-    public $cacheStorage;
-    
     /** @var Nette\Caching\Cache */
     public $cache;
     
@@ -85,13 +86,12 @@ abstract class TapiObject {
     
     protected abstract function postProcess();
     
-    public function __construct(\App\Model\Supplier $supplier,  Nette\Security\User $user = NULL, CacheService $cacheService = NULL, TapiService $tapiService = NULL, FileStorage $cacheStorage = NULL) {
-        if($cacheStorage) $this->cache = new Cache($cacheStorage, "TapiObjects");
+    public function __construct(\App\Model\Supplier $supplier,  Nette\Security\User $user = NULL, TapiService $tapiService = NULL, FileStorage $cacheStorage = NULL) {
+        if($cacheStorage) $this->cache = new Cache($cacheStorage, TapiObject::CACHE_STORAGE);
         $this->supplier = $supplier;
         if($user) $this->user = $user;
         $this->cacheable = TRUE;
-        $this->cachingTimeout = CacheService::TIMEOUT_SMALL;
-        if($cacheService) $this->cacheService = $cacheService;
+        $this->cachingTimeout = TapiObject::CACHE_TIMEOUT_SMALL;
         if($tapiService) $this->tapiService = $tapiService;
         $this->jsonEncoding = TRUE;
         $this->dataReady = FALSE;
@@ -105,15 +105,15 @@ abstract class TapiObject {
     private function saveToCache() {
         if (!$this->dataReady || !$this->cacheable)
             return null;
-        $this->cache->save($this->getCacheKey(), ["data" => $this->data, "options" => $this->options], [Cache::EXPIRE => $this->cachingTimeout . ' seconds']);
+        $key = $this->getCacheKey();
+        $this->cache->save($key, ["data" => $this->data, "options" => $this->options], [Cache::EXPIRE => $this->cachingTimeout . ' seconds']);
         $allKeys = $this->cache->load("allkeys");
-        $allKeys[] = $this->getCacheKey();
+        $allKeys[$key] = $key;
         $this->cache->save("allkeys", $allKeys, [Cache::EXPIRE => '30 minutes']);
-        Debugger::barDump($allKeys, "Contents of cache TAPI_FileCache");
     }
     
-    public function resetCache(){
-        $this->cacheService->clear($this->getCacheKey());
+    public function cleanCache(){
+        $this->cache->clean([Cache::ALL]);
         return $this;
     }
     
@@ -124,10 +124,6 @@ abstract class TapiObject {
             $this->options = $data["options"];
             $this->dataReady = TRUE;
         }
-        $allKeys = $this->cache->load("allkeys");
-        $allKeys[] = $this->getCacheKey();
-        $this->cache->save("allkeys", $allKeys, [Cache::EXPIRE => '30 minutes']);
-        Debugger::barDump($allKeys, "Contents of cache TAPI_FileCache");
     }
 
     protected function requestFromApi($relogin = TRUE) {

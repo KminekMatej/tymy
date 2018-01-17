@@ -1,6 +1,7 @@
 <?php
 
 namespace Tapi;
+use Nette\Caching\Cache;
 
 /**
  * Project: tymy_v2
@@ -14,7 +15,7 @@ class EventListResource extends EventResource {
     const EVENT_COUNT_CACHE_KEY = "EVENT_COUNT_CACHE_KEY";
     
     public function init() {
-        $this->setCachingTimeout(CacheService::TIMEOUT_TINY);
+        $this->setCachingTimeout(TapiObject::CACHE_TIMEOUT_TINY);
         $this->setWithMyAttendance(TRUE);
         $this->setFrom(NULL);
         $this->setTo(NULL);
@@ -151,9 +152,9 @@ class EventListResource extends EventResource {
     }
 
     public function getAllEventsCount() {
-        $allEventsCount = $this->cacheService->load(self::EVENT_COUNT_CACHE_KEY);
+        $allEventsCount = $this->cache->load($this->getCacheKey(self::EVENT_COUNT_CACHE_KEY));
         if($allEventsCount == null){
-            $listAllEvents = new EventListResource($this->supplier, $this->user, $this->cacheService, $this->tapiService);
+            $listAllEvents = new EventListResource($this->supplier, $this->user, $this->tapiService);
             $allEventsCount = count($listAllEvents->setWithMyAttendance(FALSE)->getData());
             $this->setAllEventsCount($allEventsCount);
         }
@@ -161,7 +162,7 @@ class EventListResource extends EventResource {
     }
 
     public function setAllEventsCount($allEventsCount) {
-        $this->cacheService->save(self::EVENT_COUNT_CACHE_KEY, $allEventsCount, CacheService::TIMEOUT_NONE);
+        $this->cache->save($this->getCacheKey(self::EVENT_COUNT_CACHE_KEY), $allEventsCount, [Cache::EXPIRE => TapiObject::CACHE_TIMEOUT_MEDIUM . ' seconds'] );
         $this->options->allEventsCount = $allEventsCount;
         return $this;
     }
