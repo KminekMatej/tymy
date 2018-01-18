@@ -195,7 +195,6 @@ abstract class TapiObject {
     }
     
     public function getData($forceRequest = FALSE) {
-        $this->init();
         $this->preProcess();
         $this->dataReady = FALSE;
         if($this->cacheable){
