@@ -12,6 +12,7 @@ class AvatarUploadResource extends UserResource{
     
     public function init() {
         $this->setCacheable(FALSE);
+        $this->setAvatar(NULL);
     }
 
     protected function preProcess() {

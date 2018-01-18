@@ -14,6 +14,7 @@ class DiscussionCreateResource extends DiscussionResource {
     public function init() {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::POST);
+        $this->setDiscussion(NULL);
     }
 
     protected function preProcess() {

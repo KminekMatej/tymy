@@ -16,6 +16,9 @@ class PasswordLostResource extends UserResource {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::POST);
         $this->setTsidRequired(FALSE);
+        $this->setCallbackUri(NULL);
+        $this->setHostname(NULL);
+        $this->setMail(NULL);
     }
 
     protected function preProcess() {

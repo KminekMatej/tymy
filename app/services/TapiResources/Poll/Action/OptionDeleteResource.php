@@ -13,6 +13,7 @@ class OptionDeleteResource extends PollResource{
     public function init() {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::DELETE);
+        $this->setOptionId(NULL);
     }
 
     protected function preProcess() {
