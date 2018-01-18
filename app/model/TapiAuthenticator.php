@@ -53,7 +53,7 @@ class TapiAuthenticator implements Nette\Security\IAuthenticator {
      */
     public function reAuthenticate(array $credentials){
         list($username, $password) = $credentials;
-        $loginResource = new LoginResource($this->supplier, NULL, NULL, $this->tapiService);
+        $loginResource = new LoginResource($this->supplier, NULL, $this->tapiService);
         return $loginResource->setLogin($username)->setPassword($password)->getData();
     }
     
