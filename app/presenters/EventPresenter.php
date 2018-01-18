@@ -51,8 +51,8 @@ class EventPresenter extends SecuredPresenter {
             $this->handleTapiException($ex);
         }
 
-
-        foreach ($this->eventList->getAsMonthArray() as $eventMonth) {
+        $months = $this->eventList->getAsMonthArray();
+        foreach ($months as $eventMonth) {
             foreach ($eventMonth as $event) {
                 $eventCaptions = $this->getEventCaptions($event, $eventTypes);
                 $event->myPreStatusCaption = $eventCaptions["myPreStatusCaption"];
