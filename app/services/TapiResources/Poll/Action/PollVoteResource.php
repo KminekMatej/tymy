@@ -15,6 +15,7 @@ class PollVoteResource extends PollResource {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::POST);
         $this->setVotes(NULL);
+        return $this;
     }
 
     protected function preProcess() {

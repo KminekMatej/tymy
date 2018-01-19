@@ -13,6 +13,7 @@ class OptionEditResource extends PollResource{
     public function init() {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::PUT);
+        return $this;
     }
 
     protected function preProcess() {

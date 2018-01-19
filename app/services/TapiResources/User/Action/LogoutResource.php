@@ -12,6 +12,7 @@ class LogoutResource extends UserResource {
     
     public function init() {
         $this->setCacheable(FALSE);
+        return $this;
     }
 
     protected function preProcess() {

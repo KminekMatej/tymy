@@ -13,6 +13,7 @@ class OptionListResource extends PollResource{
    
     public function init() {
         //everything inited correctly
+        return $this;
     }
 
     protected function preProcess() {

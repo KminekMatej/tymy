@@ -15,6 +15,7 @@ class LoginResource extends UserResource  {
         $this->setCacheable(FALSE);
         $this->setTsidRequired(FALSE);
         $this->setLogin(NULL);
+        return $this;
     }
 
     protected function preProcess() {

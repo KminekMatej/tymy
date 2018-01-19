@@ -15,6 +15,7 @@ class DiscussionEditResource extends DiscussionResource {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::PUT);
         $this->setDiscussion(NULL);
+        return $this;
     }
 
     protected function preProcess() {

@@ -14,6 +14,7 @@ class UserDeleteResource extends UserResource {
     public function init() {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::PUT);
+        return $this;
     }
 
     protected function preProcess() {

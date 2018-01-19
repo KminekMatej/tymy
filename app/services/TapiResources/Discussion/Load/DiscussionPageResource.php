@@ -15,6 +15,7 @@ class DiscussionPageResource extends DiscussionResource {
         $this->setCacheable(FALSE);
         $this->setPage(NULL);
         $this->setSearch(NULL);
+        return $this;
     }
     
     public function preProcess() {

@@ -15,6 +15,7 @@ class PasswordResetResource extends UserResource {
         $this->setCacheable(FALSE);
         $this->setTsidRequired(FALSE);
         $this->setCode(NULL);
+        return $this;
     }
 
     protected function preProcess() {

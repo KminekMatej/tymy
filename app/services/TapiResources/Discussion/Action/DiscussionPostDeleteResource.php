@@ -15,6 +15,7 @@ class DiscussionPostDeleteResource extends DiscussionResource {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::DELETE);
         $this->setPostId(NULL);
+        return $this;
     }
     
     public function preProcess() {

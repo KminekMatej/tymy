@@ -12,6 +12,7 @@ class DiscussionListResource extends DiscussionResource {
     
     public function init() {
         $this->setCachingTimeout(TapiObject::CACHE_TIMEOUT_LARGE);
+        return $this;
     }
     
     public function preProcess() {

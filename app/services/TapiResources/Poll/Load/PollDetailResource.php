@@ -13,6 +13,7 @@ class PollDetailResource extends PollResource {
     
     public function init() {
         $this->setCachingTimeout(TapiObject::CACHE_TIMEOUT_LARGE);
+        return $this;
     }
 
     protected function preProcess() {

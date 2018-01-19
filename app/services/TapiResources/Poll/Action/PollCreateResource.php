@@ -15,6 +15,7 @@ class PollCreateResource extends PollResource {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::POST);
         $this->setPoll(NULL);
+        return $this;
     }
 
     protected function preProcess() {

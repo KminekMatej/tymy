@@ -15,6 +15,7 @@ class AttendancePlanResource extends EventResource {
         $this->setMethod(RequestMethod::POST);
         $this->setPreStatus(NULL);
         $this->setPreDescription(NULL);
+        return $this;
     }
 
     protected function preProcess() {

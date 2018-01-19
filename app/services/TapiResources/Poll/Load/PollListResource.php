@@ -14,6 +14,7 @@ class PollListResource extends PollResource {
     public function init() {
         $this->setCachingTimeout(TapiObject::CACHE_TIMEOUT_LARGE);
         $this->setMenu(NULL);
+        return $this;
     }
 
     protected function preProcess() {

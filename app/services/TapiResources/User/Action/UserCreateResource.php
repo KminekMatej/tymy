@@ -13,6 +13,7 @@ class UserCreateResource extends UserResource {
     public function init() {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::POST);
+        return $this;
     }
 
     protected function preProcess() {

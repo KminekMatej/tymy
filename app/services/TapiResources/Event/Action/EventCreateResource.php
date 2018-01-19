@@ -16,6 +16,7 @@ class EventCreateResource extends EventResource {
         $this->setMethod(RequestMethod::POST);
         $this->setEventsArray(NULL);
         $this->setEventTypesArray(NULL);
+        return $this;
     }
     
     protected function preProcess() {

@@ -15,6 +15,7 @@ class PollEditResource extends PollResource {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::PUT);
         $this->setPoll(NULL);
+        return $this;
     }
 
     protected function preProcess() {

@@ -14,6 +14,7 @@ class OptionCreateResource extends PollResource {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::POST);
         $this->setPollOptions(NULL);
+        return $this;
     }
 
     protected function preProcess() {

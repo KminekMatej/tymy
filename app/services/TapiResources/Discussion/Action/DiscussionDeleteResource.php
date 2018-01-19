@@ -14,6 +14,7 @@ class DiscussionDeleteResource extends DiscussionResource {
     public function init() {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::DELETE);
+        return $this;
     }
 
     protected function preProcess() {

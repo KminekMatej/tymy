@@ -35,6 +35,7 @@ class UserRegisterResource extends UserResource {
         $this->setLogin(NULL);
         $this->setNote(NULL);
         $this->setPassword(NULL);
+        return $this;
     }
 
     protected function preProcess() {

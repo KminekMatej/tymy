@@ -15,6 +15,7 @@ class UserEditResource extends UserResource {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::PUT);
         $this->setUserData(NULL);
+        return $this;
     }
 
     protected function preProcess() {

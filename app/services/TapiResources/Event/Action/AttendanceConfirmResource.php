@@ -14,6 +14,7 @@ class AttendanceConfirmResource extends EventResource {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::POST);
         $this->setPostStatuses(NULL);
+        return $this;
     }
 
     protected function preProcess() {

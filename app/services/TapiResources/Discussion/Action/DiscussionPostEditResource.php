@@ -17,6 +17,7 @@ class DiscussionPostEditResource extends DiscussionResource {
         $this->setPost(NULL);
         $this->setPostId(NULL);
         $this->setSticky(NULL);
+        return $this;
     }
     
     public function preProcess() {

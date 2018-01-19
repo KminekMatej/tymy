@@ -13,6 +13,7 @@ class EventDetailResource extends EventResource {
     
     public function init() {
         //everything inited correctly
+        return $this;
     }
 
     protected function preProcess() {

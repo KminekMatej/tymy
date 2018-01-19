@@ -12,6 +12,7 @@ class DiscussionNewsListResource extends DiscussionResource {
     
     public function init() {
         $this->setCacheable(FALSE);
+        return $this;
     }
     
     public function preProcess() {

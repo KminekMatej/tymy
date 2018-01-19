@@ -19,6 +19,7 @@ class PasswordLostResource extends UserResource {
         $this->setCallbackUri(NULL);
         $this->setHostname(NULL);
         $this->setMail(NULL);
+        return $this;
     }
 
     protected function preProcess() {

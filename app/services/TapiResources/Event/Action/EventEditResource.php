@@ -15,6 +15,7 @@ class EventEditResource extends EventResource {
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::PUT);
         $this->setEvent(NULL);
+        return $this;
     }
 
     protected function preProcess() {
