@@ -59,8 +59,8 @@ class NavbarControl extends Control {
 
     private function discussions() {
         try {
+            $this->template->discussions = $this->discussionList->init()->getData();
             $this->template->discussionWarnings = $this->discussionList->getWarnings();
-            $this->template->discussions = $this->discussionList->getData();
         } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
@@ -68,7 +68,7 @@ class NavbarControl extends Control {
 
     private function players() {
         try {
-            $this->userList->getData();
+            $this->userList->init()->getData();
         } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
@@ -80,9 +80,9 @@ class NavbarControl extends Control {
 
     private function polls() {
         try {
-            $this->polls->setMenu(TRUE)->getData();
+            $this->template->polls = $this->polls->init()->setMenu(TRUE)->getData();
             $this->template->voteWarnings = $this->polls->getWarnings();
-            $this->template->polls = $this->polls->getData();
+            
         } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
@@ -90,7 +90,7 @@ class NavbarControl extends Control {
 
     private function events() {
         try {
-            $this->template->events = $this->eventList
+            $this->template->events = $this->eventList->init()
                     ->setFrom(date("Ymd"))
                     ->setTo(date("Ymd", strtotime(" + 1 month")))
                     ->setOrder("startTime")
