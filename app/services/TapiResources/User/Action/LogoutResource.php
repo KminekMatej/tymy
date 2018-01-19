@@ -11,6 +11,7 @@ namespace Tapi;
 class LogoutResource extends UserResource {
     
     public function init() {
+        parent::globalInit();
         $this->setCacheable(FALSE);
         return $this;
     }

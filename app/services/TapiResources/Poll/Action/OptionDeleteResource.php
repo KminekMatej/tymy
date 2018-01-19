@@ -11,6 +11,7 @@ namespace Tapi;
 class OptionDeleteResource extends PollResource{
     
     public function init() {
+        parent::globalInit();
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::DELETE);
         $this->setOptionId(NULL);

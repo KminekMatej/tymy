@@ -89,6 +89,11 @@ abstract class TapiObject {
     
     protected abstract function postProcess();
     
+    protected function globalInit(){
+        $this->requestParameters = [];
+        $this->requestData = NULL;
+    }
+    
     public function __construct(\App\Model\Supplier $supplier,  Nette\Security\User $user = NULL, TapiService $tapiService = NULL, FileStorage $cacheStorage = NULL) {
         if ($cacheStorage) {
             $this->cacheStorage = $cacheStorage;
@@ -103,7 +108,6 @@ abstract class TapiObject {
         $this->dataReady = FALSE;
         $this->tsidRequired = TRUE;
         $this->method = RequestMethod::GET;
-        $this->requestParameters = [];
         $this->options = new \stdClass();
         $this->options->warnings = 0;
         $this->init();

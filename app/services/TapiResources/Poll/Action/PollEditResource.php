@@ -12,6 +12,7 @@ use Tapi\Exception\APIException;
 class PollEditResource extends PollResource {
     
     public function init() {
+        parent::globalInit();
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::PUT);
         $this->setPoll(NULL);

@@ -12,6 +12,7 @@ use Tapi\Exception\APIException;
 class UserEditResource extends UserResource {
     
     public function init() {
+        parent::globalInit();
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::PUT);
         $this->setUserData(NULL);

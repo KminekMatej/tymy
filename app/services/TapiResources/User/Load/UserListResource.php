@@ -11,6 +11,7 @@ namespace Tapi;
 class UserListResource extends UserResource {
     
     public function init() {
+        parent::globalInit();
         $this->setCachingTimeout(TapiObject::CACHE_TIMEOUT_LARGE);
         $this->setUserType(NULL);
         $this->options->byId = null;

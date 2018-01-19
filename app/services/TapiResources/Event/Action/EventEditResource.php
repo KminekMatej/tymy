@@ -12,6 +12,7 @@ use Tapi\Exception\APIException;
 class EventEditResource extends EventResource {
     
     public function init() {
+        parent::globalInit();
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::PUT);
         $this->setEvent(NULL);

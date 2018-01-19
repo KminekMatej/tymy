@@ -11,6 +11,7 @@ namespace Tapi;
 class AvatarUploadResource extends UserResource{
     
     public function init() {
+        parent::globalInit();
         $this->setCacheable(FALSE);
         $this->setAvatar(NULL);
         return $this;

@@ -11,6 +11,7 @@ namespace Tapi;
 class AttendanceConfirmResource extends EventResource {
 
     public function init() {
+        parent::globalInit();
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::POST);
         $this->setPostStatuses(NULL);

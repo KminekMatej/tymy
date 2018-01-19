@@ -12,6 +12,7 @@ use Tapi\Exception\APIException;
 class EventDeleteResource extends EventResource {
     
     public function init() {
+        parent::globalInit();
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::DELETE);
         return $this;

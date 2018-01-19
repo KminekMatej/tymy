@@ -12,6 +12,7 @@ use Tapi\Exception\APIException;
 class EventDetailResource extends EventResource {
     
     public function init() {
+        parent::globalInit();
         //everything inited correctly
         return $this;
     }

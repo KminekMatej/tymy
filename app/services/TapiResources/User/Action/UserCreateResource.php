@@ -11,6 +11,7 @@ namespace Tapi;
 class UserCreateResource extends UserResource {
     
     public function init() {
+        parent::globalInit();
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::POST);
         return $this;

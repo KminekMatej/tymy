@@ -11,6 +11,7 @@ namespace Tapi;
 class DiscussionNewsListResource extends DiscussionResource {
     
     public function init() {
+        parent::globalInit();
         $this->setCacheable(FALSE);
         return $this;
     }

@@ -12,6 +12,7 @@ use Tapi\Exception\APIException;
 class LoginResource extends UserResource  {
     
     public function init() {
+        parent::globalInit();
         $this->setCacheable(FALSE);
         $this->setTsidRequired(FALSE);
         $this->setLogin(NULL);

@@ -11,6 +11,7 @@ namespace Tapi;
 class EventTypeListResource extends EventResource {
     
     public function init() {
+        parent::globalInit();
         $this->setCacheable(TapiObject::CACHE_TIMEOUT_LARGE);
         return $this;
     }

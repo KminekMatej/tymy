@@ -12,6 +12,7 @@ use Tapi\Exception\APIException;
 class DiscussionCreateResource extends DiscussionResource {
 
     public function init() {
+        parent::globalInit();
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::POST);
         $this->setDiscussion(NULL);

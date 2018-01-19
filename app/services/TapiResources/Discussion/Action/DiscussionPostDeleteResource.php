@@ -12,6 +12,7 @@ use Tapi\Exception\APIException;
 class DiscussionPostDeleteResource extends DiscussionResource {
     
     public function init() {
+        parent::globalInit();
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::DELETE);
         $this->setPostId(NULL);

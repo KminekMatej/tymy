@@ -11,6 +11,7 @@ namespace Tapi;
 class UsersLiveResource extends UserResource {
     
     public function init() {
+        parent::globalInit();
         $this->setCacheable(FALSE);
         return $this;
     }

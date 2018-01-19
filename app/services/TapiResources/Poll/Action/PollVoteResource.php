@@ -12,6 +12,7 @@ use Tapi\Exception\APIException;
 class PollVoteResource extends PollResource {
     
     public function init() {
+        parent::globalInit();
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::POST);
         $this->setVotes(NULL);
