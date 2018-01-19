@@ -4,6 +4,57 @@ namespace Test;
 
 use Nette\Application\Request;
 use Tester\Assert;
+use Tester\TestCase;
+use Tester\Environment;
+use Tester\DomQuery;
+use Tapi\AttendanceConfirmResource;
+use Tapi\AttendancePlanResource;
+use Tapi\AvatarUploadResource;
+use Tapi\CachedResult;
+use Tapi\DiscussionCreateResource;
+use Tapi\DiscussionDeleteResource;
+use Tapi\DiscussionDetailResource;
+use Tapi\DiscussionEditResource;
+use Tapi\DiscussionListResource;
+use Tapi\DiscussionNewsListResource;
+use Tapi\DiscussionPageResource;
+use Tapi\DiscussionPostCreateResource;
+use Tapi\DiscussionPostDeleteResource;
+use Tapi\DiscussionPostEditResource;
+use Tapi\EventCreateResource;
+use Tapi\EventDeleteResource;
+use Tapi\EventDetailResource;
+use Tapi\EventEditResource;
+use Tapi\EventListResource;
+use Tapi\EventTypeListResource;
+use Tapi\LoginResource;
+use Tapi\LogoutResource;
+use Tapi\OptionCreateResource;
+use Tapi\OptionDeleteResource;
+use Tapi\OptionEditResource;
+use Tapi\OptionListResource;
+use Tapi\PasswordLostResource;
+use Tapi\PasswordResetResource;
+use Tapi\PollCreateResource;
+use Tapi\PollDeleteResource;
+use Tapi\PollDetailResource;
+use Tapi\PollEditResource;
+use Tapi\PollListResource;
+use Tapi\PollVoteResource;
+use Tapi\RequestMethod;
+use Tapi\ResultStatus;
+use Tapi\TapiObject;
+use Tapi\TapiRequestTimestamp;
+use Tapi\TapiService;
+use Tapi\TracyTapiPanel;
+use Tapi\UserCreateResource;
+use Tapi\UserDeleteResource;
+use Tapi\UserDetailResource;
+use Tapi\UserEditResource;
+use Tapi\UserListResource;
+use Tapi\UserRegisterResource;
+use Tapi\UsersLiveResource;
+
 
 /**
  *
@@ -16,8 +67,13 @@ abstract class IPresenterTest extends \Tester\TestCase {
     
     /** @var \App\Model\TapiAuthenticator */
     protected $tapiAuthenticator;
+    
+    /** @var TapiService */
+    protected $tapiService;
+    
     /** @var \App\Model\TestAuthenticator */
     protected $testAuthenticator;
+    
     /** @var \Nette\Security\User */
     protected $user;
     
@@ -33,12 +89,14 @@ abstract class IPresenterTest extends \Tester\TestCase {
     protected function setUp() {
         $this->supplier = $this->container->getByType('App\Model\Supplier');
         $this->user = $this->container->getByType('Nette\Security\User');
+        $this->tapiService = $this->container->getByType('Tapi\TapiService');
         $tapi_config = $this->supplier->getTapi_config();
         $tapi_config["tym"] = $GLOBALS["testedTeam"]["team"];
         $tapi_config["root"] = $GLOBALS["testedTeam"]["root"];
         
         $this->supplier->setTapi_config($tapi_config);
         $this->tapiAuthenticator = new \App\Model\TapiAuthenticator($this->supplier);
+        $this->tapiAuthenticator->setTapiService($this->tapiService);
         $this->testAuthenticator = new \App\Model\TestAuthenticator($this->supplier);
         
         $this->presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
@@ -77,7 +135,7 @@ abstract class IPresenterTest extends \Tester\TestCase {
         $response = $this->presenter->run($request);
 
         Assert::type('Nette\Application\Responses\RedirectResponse', $response);
-        Assert::equal('http:///sign/in', substr($response->getUrl(), 0, 15));
+        Assert::equal("/sign/in", parse_url($response->getUrl(), PHP_URL_PATH));
         Assert::equal(302, $response->getCode());
     }
 
