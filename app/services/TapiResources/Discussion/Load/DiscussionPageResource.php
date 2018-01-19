@@ -41,7 +41,7 @@ class DiscussionPageResource extends DiscussionResource {
     }
 
     public function setPage($page) {
-        $this->options->page = $page;
+        $this->options->page = is_numeric($page) ? $page : 1 ;
         return $this;
     }
 
