@@ -103,6 +103,7 @@ abstract class TapiObject {
         $this->dataReady = FALSE;
         $this->tsidRequired = TRUE;
         $this->method = RequestMethod::GET;
+        $this->requestParameters = [];
         $this->options = new \stdClass();
         $this->options->warnings = 0;
         $this->init();
@@ -274,6 +275,11 @@ abstract class TapiObject {
 
     public function setOptions($options) {
         $this->options = $options;
+        return $this;
+    }
+    
+    public function setSupplier(\App\Model\Supplier $supplier) {
+        $this->supplier = $supplier;
         return $this;
     }
 

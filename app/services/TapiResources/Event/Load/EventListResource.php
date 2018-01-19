@@ -15,6 +15,7 @@ class EventListResource extends EventResource {
     const EVENT_COUNT_CACHE_KEY = "EVENT_COUNT_CACHE_KEY";
     
     public function init() {
+        parent::init();
         $this->setCachingTimeout(TapiObject::CACHE_TIMEOUT_TINY);
         $this->setWithMyAttendance(TRUE);
         $this->setFrom(NULL);
@@ -25,8 +26,6 @@ class EventListResource extends EventResource {
         $this->options->asArray = NULL;
         $this->options->asMonthArray = NULL;
         $this->options->allEventsCount = NULL;
-        $this->options->withMyAttendance = NULL;
-        $this->requestParameters = NULL;
         return $this;
     }
 
