@@ -43,10 +43,10 @@ class EventPresenter extends SecuredPresenter {
 
     public function renderDefault($date = NULL, $direction = NULL) {
         try {
-            $this->eventList
+            $this->eventList->init()
                     ->setHalfYearFrom($date, $direction)
                     ->getData();
-            $eventTypes = $this->eventTypeList->getData();
+            $eventTypes = $this->eventTypeList->init()->getData();
         } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
@@ -79,11 +79,11 @@ class EventPresenter extends SecuredPresenter {
     public function renderEvent($udalost) {
         
         try {
-            $event = $this->eventDetail
+            $event = $this->eventDetail->init()
                     ->setId($this->parseIdFromWebname($udalost))
                     ->getData();
-            $eventTypes = $this->eventTypeList->getData();
-            $this->userList->getData();
+            $eventTypes = $this->eventTypeList->init()->getData();
+            $this->userList->init()->getData();
             $users = $this->userList->getById();
         } catch (APIException $ex) {
             $this->handleTapiException($ex);
@@ -133,7 +133,7 @@ class EventPresenter extends SecuredPresenter {
 
     public function handleAttendance($id, $code, $desc) {
         try {
-            $this->attendancePlanner
+            $this->attendancePlanner->init()
                     ->setId($id)
                     ->setPreStatus($code)
                     ->setPreDescription($desc)
@@ -150,7 +150,7 @@ class EventPresenter extends SecuredPresenter {
     public function handleAttendanceResult($id) {
         $results = $this->getRequest()->getPost()["resultSet"];
         try {
-            $this->attendanceConfirmer
+            $this->attendanceConfirmer->init()
                     ->setId($id)
                     ->setPostStatuses($results)
                     ->perform();

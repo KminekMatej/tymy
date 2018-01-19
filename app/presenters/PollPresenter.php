@@ -33,10 +33,10 @@ class PollPresenter extends SecuredPresenter {
     
     public function renderPoll($anketa) {
                 try {
-        $poll = $this->poll
+        $poll = $this->poll->init()
                 ->setId($this->parseIdFromWebname($anketa))
                 ->getData();
-        $this->userList->getData();
+        $this->userList->init()->getData();
         $this->template->users = $this->userList->getById();
         } catch (APIException $ex) {
             $this->handleTapiException($ex);
@@ -57,7 +57,7 @@ class PollPresenter extends SecuredPresenter {
         }
         $this->redrawControl("poll-results");
         try {
-            $this->pollVoter->setId($pollId)->setVotes($votes)->perform();
+            $this->pollVoter->init()->setId($pollId)->setVotes($votes)->perform();
         } catch (APIException $ex) {
             $this->handleTapiException($ex, "this");
         }

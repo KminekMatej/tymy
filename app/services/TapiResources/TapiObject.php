@@ -78,7 +78,10 @@ abstract class TapiObject {
     protected $tapiService;
     
     /** @var Nette\Caching\Cache */
-    public $cache;
+    protected $cache;
+    
+    /** @var FileStorage */
+    protected $cacheStorage;
     
     public abstract function init();
     
@@ -87,7 +90,10 @@ abstract class TapiObject {
     protected abstract function postProcess();
     
     public function __construct(\App\Model\Supplier $supplier,  Nette\Security\User $user = NULL, TapiService $tapiService = NULL, FileStorage $cacheStorage = NULL) {
-        if($cacheStorage) $this->cache = new Cache($cacheStorage, TapiObject::CACHE_STORAGE);
+        if ($cacheStorage) {
+            $this->cacheStorage = $cacheStorage;
+            $this->cache = new Cache($cacheStorage, TapiObject::CACHE_STORAGE);
+        }
         $this->supplier = $supplier;
         if($user) $this->user = $user;
         $this->cacheable = TRUE;

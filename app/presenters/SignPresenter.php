@@ -95,7 +95,7 @@ class SignPresenter extends BasePresenter {
         $form = $this->pwdLostFactory->create();
         $form->onSuccess[] = function (Nette\Application\UI\Form $form, \stdClass $values) {
             try {
-                $this->pwdLost
+                $this->pwdLost->init()
                         ->setCallbackUri($this->getHttpRequest()->getUrl()->getBaseUrl() . $this->link('Sign:pwdreset', ["code" => "%s"]))
                         ->setHostname($this->getHttpRequest()->getRemoteHost())
                         ->setMail($values->email)
@@ -128,7 +128,7 @@ class SignPresenter extends BasePresenter {
     
     public function actionOut() {
         if (!is_null($this->getUser()->getIdentity())) {
-            $this->logout->perform();
+            $this->logout->init()->perform();
             $this->getUser()->logout();
         }
         $this->flashMessage('You have been succesfully signed out');
@@ -152,7 +152,7 @@ class SignPresenter extends BasePresenter {
     }
     
     private function resetPwd($code){
-        return $this->pwdReset
+        return $this->pwdReset->init()
                     ->setCode($code)
                     ->getData();
     }

@@ -86,7 +86,7 @@ class SettingsPresenter extends SecuredPresenter {
             $this->setView("discussion");
         } else {
             $this->template->isNew = false;
-            $discussions = $this->discussionList->getData();
+            $discussions = $this->discussionList->init()->getData();
             $this->template->discussions = $discussions;
             $this->template->discussionsCount = count($discussions);
         }
@@ -101,7 +101,7 @@ class SettingsPresenter extends SecuredPresenter {
             $page = is_numeric($page) ? $page : 1;
             $limit = \Tapi\EventListResource::PAGING_EVENTS_PER_PAGE;
             $offset = ($page-1)*$limit;
-            $events = $this->eventList->setLimit($limit)->setOffset($offset)->getData(); // get all events
+            $events = $this->eventList->init()->setLimit($limit)->setOffset($offset)->getData(); // get all events
             $this->template->events = $events;
             $allEventsCount = $this->eventList->getAllEventsCount();
             $this->template->eventsCount = $allEventsCount;
@@ -160,8 +160,8 @@ class SettingsPresenter extends SecuredPresenter {
     
     public function renderDiscussion($discussion) {
         //RENDERING DISCUSSION DETAIL
-        $discussionId = $this->discussionList->getIdFromWebname($discussion, $this->discussionList->getData());
-        $discussionObj = $this->discussionDetail->setId($discussionId)->getData();
+        $discussionId = $this->discussionList->init()->getIdFromWebname($discussion, $this->discussionList->getData());
+        $discussionObj = $this->discussionDetail->init()->setId($discussionId)->getData();
         $this->setLevelCaptions(["3" => ["caption" => $discussionObj->caption, "link" => $this->link("Settings:discussions", $discussionObj->webName)]]);
         $this->template->discussion = $discussionObj;
     }
@@ -184,7 +184,7 @@ class SettingsPresenter extends SecuredPresenter {
             "link" => "",
         ]];
         $this->template->events = $events;
-        $this->template->eventTypes = $this->eventTypeList->getData();
+        $this->template->eventTypes = $this->eventTypeList->init()->getData();
         
         $this->setView("events");
     }
@@ -192,10 +192,10 @@ class SettingsPresenter extends SecuredPresenter {
     public function renderEvent($event) {
         //RENDERING EVENT DETAIL
         $eventId = $this->parseIdFromWebname($event);
-        $event = $this->eventDetail->setId($eventId)->getData();
+        $event = $this->eventDetail->init()->setId($eventId)->getData();
         $this->setLevelCaptions(["3" => ["caption" => $event->caption, "link" => $this->link("Settings:events", $event->webName)]]);
         $this->template->event = $event;
-        $this->template->eventTypes = $this->eventTypeList->getData();
+        $this->template->eventTypes = $this->eventTypeList->init()->getData();
     }
     
     public function renderPoll_new() {
@@ -226,7 +226,7 @@ class SettingsPresenter extends SecuredPresenter {
     public function renderPoll($poll) {
         //RENDERING POLL DETAIL
         $pollId = $this->parseIdFromWebname($poll);
-        $pollObj = $this->pollDetail->setId($pollId)->getData();
+        $pollObj = $this->pollDetail->init()->setId($pollId)->getData();
         
         if(count($pollObj->options) == 0){
             $pollObj->options[] = (object)["id" => -1, "pollId" => $pollId, "caption" => "", "type" => "TEXT"];
@@ -250,7 +250,7 @@ class SettingsPresenter extends SecuredPresenter {
     public function handleEventsCreate(){
         $post = $this->getRequest()->getPost();
         try {
-            $this->eventCreator->setEventsArray($post)->setEventTypesArray($this->eventTypeList->getData())->perform();
+            $this->eventCreator->init()->setEventsArray($post)->setEventTypesArray($this->eventTypeList->getData())->perform();
             $this->redirect('Settings:events');
         } catch (APIException $ex) {
             $this->handleTapiException($ex, 'this');
@@ -265,7 +265,7 @@ class SettingsPresenter extends SecuredPresenter {
     public function handleEventDelete(){
         $bind = $this->getRequest()->getPost();
         try {
-            $this->eventDeleter
+            $this->eventDeleter->init()
                     ->setId($bind["id"])
                     ->perform();
             $this->redirect("Settings:events");
@@ -285,7 +285,7 @@ class SettingsPresenter extends SecuredPresenter {
     public function handleDiscussionCreate(){
         $discussionData = $this->getRequest()->getPost()[1]; // new discussion is always as ID 1
         try {
-            $this->discussionCreator
+            $this->discussionCreator->init()
                     ->setDiscussion($discussionData)
                     ->perform();
         } catch (APIException $ex) {
@@ -302,7 +302,7 @@ class SettingsPresenter extends SecuredPresenter {
     public function handleDiscussionDelete() {
         $bind = $this->getRequest()->getPost();
         try {
-            $this->discussionDeleter
+            $this->discussionDeleter->init()
                     ->setId($bind["id"])
                     ->perform();
             $this->redirect("Settings:discussions");
@@ -322,7 +322,7 @@ class SettingsPresenter extends SecuredPresenter {
     public function handlePollCreate(){
         $pollData = $this->getRequest()->getPost()[1]; // new discussion is always as item 1
         try {
-            $this->pollCreator->setPoll($pollData)->perform();
+            $this->pollCreator->init()->setPoll($pollData)->perform();
         } catch (APIException $ex) {
             $this->handleTapiException($ex, 'this');
         }
@@ -337,7 +337,7 @@ class SettingsPresenter extends SecuredPresenter {
     public function handlePollDelete() {
         $bind = $this->getRequest()->getPost();
         try {
-            $this->pollDeleter->setId($bind["id"])->perform();
+            $this->pollDeleter->init()->setId($bind["id"])->perform();
         } catch (APIException $ex) {
             $this->handleTapiException($ex, 'this');
         }
@@ -357,7 +357,7 @@ class SettingsPresenter extends SecuredPresenter {
         $pollData = $this->getRequest()->getPost()[1]; // new poll option is always as item 1
         $pollId = $this->parseIdFromWebname($poll);
         try {
-            $this->pollOptionCreator
+            $this->pollOptionCreator->init()
                     ->setId($pollId)
                     ->setPollOptions($pollData)
                     ->perform();
@@ -380,7 +380,7 @@ class SettingsPresenter extends SecuredPresenter {
         $bind = $this->getRequest()->getPost();
         $bind["pollId"] = $this->parseIdFromWebname($poll);
         try {
-            $this->pollOptionDeleter
+            $this->pollOptionDeleter->init()
                     ->set($bind["id"])
                     ->recId($bind["pollId"])
                     ->delete();
@@ -399,7 +399,7 @@ class SettingsPresenter extends SecuredPresenter {
         if(array_key_exists("endTime", $bind["changes"])) $bind["changes"]["endTime"] = gmdate("Y-m-d\TH:i:s\Z", strtotime($bind["changes"]["endTime"]));
         if(array_key_exists("closeTime", $bind["changes"])) $bind["changes"]["closeTime"] = gmdate("Y-m-d\TH:i:s\Z", strtotime($bind["changes"]["closeTime"]));
         try {
-            $this->eventEditor
+            $this->eventEditor->init()
                     ->setId($bind["id"])
                     ->setEvent($bind["changes"])
                     ->perform();
@@ -410,7 +410,7 @@ class SettingsPresenter extends SecuredPresenter {
     
     private function editDiscussion($bind) {
         try {
-            $this->discussionEditor
+            $this->discussionEditor->init()
                     ->setId($bind["id"])
                     ->setDiscussion($bind["changes"])
                     ->perform();
@@ -421,7 +421,7 @@ class SettingsPresenter extends SecuredPresenter {
     
     private function editPoll($bind) {
         try {
-            $this->pollEditor
+            $this->pollEditor->init()
                     ->setId($bind["id"])
                     ->setPoll($bind["changes"])
                     ->perform();
@@ -432,11 +432,11 @@ class SettingsPresenter extends SecuredPresenter {
     
     private function editPollOption($bind) {
         if ($bind["id"] == -1) {
-            $this->pollOption
+            $this->pollOption->init()
                     ->recId($bind["pollId"])
                     ->create([$bind["changes"]]);
         } else {
-            $this->pollOption
+            $this->pollOption->init()
                     ->recId($bind["pollId"])
                     ->setOptionId($bind["id"])
                     ->edit($bind["changes"]);

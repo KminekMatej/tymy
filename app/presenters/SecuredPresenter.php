@@ -104,9 +104,12 @@ class SecuredPresenter extends BasePresenter {
         $cache = new Cache($this->cacheStorage, TapiObject::CACHE_STORAGE);
         $allKeys = $cache->load("allkeys");
         $cache_dump = [];
-        foreach ($allKeys as $key) {
-            $val = $cache->load($key);
-            if(!is_null($val)) $cache_dump[$key] = $val;
+        if ($allKeys) {
+            foreach ($allKeys as $key) {
+                $val = $cache->load($key);
+                if (!is_null($val))
+                    $cache_dump[$key] = $val;
+            }
         }
         Debugger::barDump($cache_dump, "Cache contents");
     }

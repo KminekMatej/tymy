@@ -58,7 +58,7 @@ class TeamPresenter extends SecuredPresenter {
     
     public function renderDefault() {
         try {
-            $users = $this->userList->setUserType($this->userType)->getData();
+            $users = $this->userList->init()->setUserType($this->userType)->getData();
             $allMails = [];
             if ($users) {
                 foreach ($users as $u) {
@@ -79,7 +79,7 @@ class TeamPresenter extends SecuredPresenter {
 
     public function renderPlayer($player) {
         try {
-            $user = $this->userDetail
+            $user = $this->userDetail->init()
                     ->setId($this->parseIdFromWebname($player))
                     ->getData();
         } catch (APIException $ex) {
@@ -130,7 +130,7 @@ class TeamPresenter extends SecuredPresenter {
             $bind["changes"]["roles"] = [];
         }
         try {
-            $this->userEditor
+            $this->userEditor->init()
                 ->setId($bind["id"])
                 ->setUserData($bind["changes"])
                 ->perform();
@@ -144,7 +144,7 @@ class TeamPresenter extends SecuredPresenter {
             return;
         $bind = $this->getRequest()->getPost();
         try {
-            $this->userDeleter
+            $this->userDeleter->init()
                     ->setId($bind["id"])
                     ->perform();
         } catch (APIException $ex) {
@@ -161,7 +161,7 @@ class TeamPresenter extends SecuredPresenter {
         if ($file->isImage() && $file->isOk()) {
             $avatarB64 = 'data:' . mime_content_type($file->getTemporaryFile()) . ';base64,' . base64_encode(file_get_contents($file->getTemporaryFile()));
             try {
-                $this->avatarUploader
+                $this->avatarUploader->init()
                         ->setId($bind["id"])
                         ->setAvatar($avatarB64);
             } catch (APIException $ex) {

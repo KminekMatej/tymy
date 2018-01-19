@@ -46,7 +46,7 @@ class DiscussionPresenter extends SecuredPresenter {
 
     public function renderDefault() {
         try{
-            $this->template->discussions = $this->discussionsList->getData();
+            $this->template->discussions = $this->discussionsList->init()->getData();
         } catch (APIException $ex){
             $this->handleTapiException($ex);
         }
@@ -56,7 +56,7 @@ class DiscussionPresenter extends SecuredPresenter {
         $post = $this->getHttpRequest()->getPost("post");
         if (trim($post) != "") {
             try {
-                $this->discussionPostCreate
+                $this->discussionPostCreate->init()
                         ->setId($discussion)
                         ->setPost($post)
                         ->perform();
@@ -72,7 +72,7 @@ class DiscussionPresenter extends SecuredPresenter {
         $text = $this->getHttpRequest()->getPost("post");
         $sticky = $this->getHttpRequest()->getPost("sticky");
         try {
-            $this->discussionPostEdit
+            $this->discussionPostEdit->init()
                         ->setId($discussion)
                         ->setPostId($postId)
                         ->setPost($text)
@@ -87,7 +87,7 @@ class DiscussionPresenter extends SecuredPresenter {
     public function actionDeletePost($discussion) {
         $postId = $this->getHttpRequest()->getPost("postId");
         try {
-            $this->discussionPostDelete
+            $this->discussionPostDelete->init()
                         ->setId($discussion)
                         ->setPostId($postId)
                         ->perform();
@@ -101,7 +101,7 @@ class DiscussionPresenter extends SecuredPresenter {
         $postId = $this->getHttpRequest()->getPost("postId");
         $sticky = $this->getHttpRequest()->getPost("sticky");
         try {
-            $this->discussionPostEdit
+            $this->discussionPostEdit->init()
                         ->setId($discussion)
                         ->setPostId($postId)
                         ->setSticky($sticky)
@@ -113,7 +113,7 @@ class DiscussionPresenter extends SecuredPresenter {
     }
     
     public function renderDiscussion($discussion, $page, $search) {
-        $discussionId = DiscussionResource::getIdFromWebname($discussion, $this->discussionsList->getData());
+        $discussionId = DiscussionResource::getIdFromWebname($discussion, $this->discussionsList->init()->getData());
         
         if (is_null($discussionId) || $discussionId < 1)
             $this->error("Tato diskuze neexistuje");
@@ -129,8 +129,8 @@ class DiscussionPresenter extends SecuredPresenter {
         }
             
         try {
-            $data = $this->discussionPage->getData();
-            $this->template->users = $this->userList->getData();
+            $data = $this->discussionPage->init()->getData();
+            $this->template->users = $this->userList->init()->getData();
         } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
