@@ -157,7 +157,7 @@ class EventListResource extends EventResource {
             $allEventsCount = count($listAllEvents->setWithMyAttendance(FALSE)->getData());
             $this->setAllEventsCount($allEventsCount);
         }
-        return $this->options->allEventsCount;
+        return $allEventsCount;
     }
 
     public function setAllEventsCount($allEventsCount) {
