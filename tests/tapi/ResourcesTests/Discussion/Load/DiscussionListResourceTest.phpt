@@ -31,6 +31,10 @@ class DiscussionListResourceTest extends TapiTest {
         //nothing to set
     }
     
+    public function testToRunAsFirst(){
+        parent::primaryTests();
+    }
+    
     public function testPerformSuccess() {
         $data = parent::getPerformSuccessData();
         

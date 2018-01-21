@@ -41,6 +41,8 @@ abstract class TapiTest extends TestCase {
     /** @var \Tapi\TapiObject */
     protected $tapiObject;
     
+    abstract function testToRunAsFirst(); // this method should be run as a first test in every test scenario - to run method primaryTests as first
+    
     abstract function getMethod();
     
     abstract function getCacheable();
@@ -97,11 +99,16 @@ abstract class TapiTest extends TestCase {
         return $this->tapiObject->getData(TRUE);
     }
     
-    public function testObjectExists(){
+    public function primaryTests(){
+        $this->objectExistsTest();
+        $this->objectConstructedTest();
+        $this->errorNotLoggedInTest();
+    }
+    public function objectExistsTest(){
         Assert::truthy(get_class($this->tapiObject));
     }
     
-    public function testObjectConstructed(){
+    public function objectConstructedTest(){
         Assert::equal(0, $this->tapiObject->getWarnings());
         Assert::count(0, $this->tapiObject->getRequestParameters());
         Assert::equal($this->getMethod(), $this->tapiObject->getMethod());
@@ -110,7 +117,7 @@ abstract class TapiTest extends TestCase {
         Assert::null($this->tapiObject->getRequestData());
     }
 
-    public function testErrorNotLoggedIn(){
+    public function errorNotLoggedInTest(){
         $this->authenticateTest("TESTLOGIN", "TESTPASS");
         $this->setCorrectInputParams();
         Assert::exception(function(){$this->tapiObject->getData(TRUE);} , "\Tapi\Exception\APIException", "Login failed. Wrong username or password.");
