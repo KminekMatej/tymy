@@ -31,13 +31,16 @@ class DiscussionPageResourceTest extends TapiTest {
         $this->tapiObject->setId($GLOBALS["testedTeam"]["testDiscussionId"]);
     }
     
+    public function testToRunAsFirst(){
+        parent::primaryTests();
+    }
+    
     public function testErrorNoId(){
         Assert::exception(function(){$this->tapiObject->init()->getData(TRUE);} , "\Tapi\Exception\APIException", "Discussion ID is missing");
     }
 
     public function testPerformSuccess() {
         $data = parent::getPerformSuccessData();
-        var_dump($data);
         
         Assert::true(is_object($data->discussion));//returned discussion object
         
@@ -105,6 +108,17 @@ class DiscussionPageResourceTest extends TapiTest {
         }
     }
 
+    public function testSearch(){
+        $this->authenticateTapi($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+
+        $discussionId = $GLOBALS["testedTeam"]["searchDiscussionId"];
+        $searchHash = $GLOBALS["testedTeam"]["searchHash"];
+        
+        $data = $this->tapiObject->setId($discussionId)->setSearch($searchHash)->getData(TRUE);
+        
+        Assert::type("array", $data->posts);
+        Assert::count(1, $data->posts);
+    }
 }
 
 $test = new DiscussionPageResourceTest($container);
