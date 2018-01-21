@@ -36,10 +36,7 @@ class DiscussionDetailResourceTest extends TapiTest {
     }
 
     public function testPerformSuccess() {
-        $this->authenticateTapi($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
-        $this->tapiObject->init();
-        $this->setCorrectInputParams();
-        $data = $this->tapiObject->getData(TRUE);
+        $data = parent::getPerformSuccessData();
         
         Assert::true(is_object($data));//returned discussion object        
         Assert::type("int",$data->id);

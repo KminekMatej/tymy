@@ -90,6 +90,13 @@ abstract class TapiTest extends TestCase {
         $this->user->login($username, $password);
     }
     
+    protected function getPerformSuccessData(){
+        $this->authenticateTapi($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->tapiObject->init();
+        $this->setCorrectInputParams();
+        return $this->tapiObject->getData(TRUE);
+    }
+    
     public function testObjectExists(){
         Assert::truthy(get_class($this->tapiObject));
     }
