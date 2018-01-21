@@ -92,6 +92,7 @@ abstract class TapiObject {
     protected function globalInit(){
         $this->requestParameters = [];
         $this->requestData = NULL;
+        $this->dataReady = FALSE;
     }
     
     public function __construct(\App\Model\Supplier $supplier,  Nette\Security\User $user = NULL, TapiService $tapiService = NULL, FileStorage $cacheStorage = NULL) {
@@ -105,7 +106,6 @@ abstract class TapiObject {
         $this->cachingTimeout = TapiObject::CACHE_TIMEOUT_SMALL;
         if($tapiService) $this->tapiService = $tapiService;
         $this->jsonEncoding = TRUE;
-        $this->dataReady = FALSE;
         $this->tsidRequired = TRUE;
         $this->method = RequestMethod::GET;
         $this->options = new \stdClass();
