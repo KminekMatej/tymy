@@ -90,6 +90,7 @@ abstract class TapiObject {
     protected abstract function postProcess();
     
     protected function globalInit(){
+        $this->setId(NULL);
         $this->requestParameters = [];
         $this->requestData = NULL;
         $this->dataReady = FALSE;
