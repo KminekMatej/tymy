@@ -15,6 +15,7 @@ class UserListResource extends UserResource {
         $this->setCachingTimeout(TapiObject::CACHE_TIMEOUT_LARGE);
         $this->setUserType(NULL);
         $this->options->byId = null;
+        $this->options->byTypeAndId = null;
         $this->options->me = null;
         $this->options->counts = null;
         return $this;
@@ -28,6 +29,7 @@ class UserListResource extends UserResource {
     protected function postProcess() {
         $this->options->warnings = 0;
         $this->options->byId = [];
+        $this->options->byTypeAndId = [];
         $myId = $this->user->getId();
 
         $this->options->counts = [
@@ -55,6 +57,7 @@ class UserListResource extends UserResource {
                         $this->options->counts["NEW:PLAYER"] ++;
                 }
                 $this->options->byId[$user->id] = $user;
+                $this->options->byTypeAndId[$user->status][$user->id] = $user;
             }
         }
     }
@@ -74,6 +77,10 @@ class UserListResource extends UserResource {
 
     public function getById() {
         return $this->options->byId;
+    }
+    
+    public function getByTypesAndId() {
+        return $this->options->byTypeAndId;
     }
 
     public function getMe() {

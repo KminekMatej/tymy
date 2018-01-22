@@ -99,6 +99,7 @@ class UserListResourceTest extends TapiTest {
         Assert::contains("DELETED", array_keys($this->tapiObject->getCounts()));
         Assert::contains("INIT", array_keys($this->tapiObject->getCounts()));
         Assert::type("array", $this->tapiObject->getById());
+        Assert::type("array", $this->tapiObject->getByTypesAndId());
         Assert::true(is_object($this->tapiObject->getMe()));
         Assert::truthy($this->tapiObject->getMe());
     }
