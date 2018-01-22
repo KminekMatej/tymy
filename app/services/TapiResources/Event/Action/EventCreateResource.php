@@ -31,7 +31,7 @@ class EventCreateResource extends EventResource {
             if(!array_key_exists("type", $event))
                 throw new APIException('Event type not set');
             if(!array_key_exists($event["type"], $this->getEventTypesArray()))
-                throw new APIException('Unrecognized type!');
+                throw new APIException('Unrecognized type');
             foreach ($event as $key => $value) {
                 if (in_array($key, ["startTime", "endTime", "closeTime"]))
                     $this->timeSave($value);
