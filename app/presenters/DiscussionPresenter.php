@@ -112,25 +112,33 @@ class DiscussionPresenter extends SecuredPresenter {
         $this->setView('discussion');
     }
     
-    public function renderDiscussion($discussion, $page, $search) {
+    public function renderDiscussion($discussion, $page, $search, $suser = "all") {
         $discussionId = DiscussionResource::getIdFromWebname($discussion, $this->discussionsList->init()->getData());
         
         if (is_null($discussionId) || $discussionId < 1)
             $this->error("Tato diskuze neexistuje");
+        $this->discussionPage->init();
         
         $this->discussionPage
                 ->setId($discussionId)
                 ->setPage($page);
         
         $this->template->search = "";
+        $this->template->suser = 0;
         if($search){
             $this->discussionPage->setSearch($search);
             $this->template->search = $search;
         }
-            
+        if ($suser && $suser != "all") {
+            $this->discussionPage->setSearchUser($suser);
+            $this->template->suser = $suser;
+        }
+
+
         try {
-            $data = $this->discussionPage->init()->getData();
-            $this->template->users = $this->userList->init()->getData();
+            $data = $this->discussionPage->getData();
+            $this->userList->init()->getData();
+            $this->template->userList = $this->userList->getById();
         } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
@@ -151,6 +159,7 @@ class DiscussionPresenter extends SecuredPresenter {
     
     protected function createComponentNewPost($discussion) {
         $newpost = new NewPostControl($discussion);
+        $newpost->setUserList($this->userList);
         $newpost->redrawControl();
         return $newpost;
     }

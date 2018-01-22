@@ -12,12 +12,24 @@
         <div class="col-md-10">
             <div class="addPost" data-postId>
                     <form action="{plink Discussion:discussion $discussion->discussion->webName}" method="GET" class="form-inline">
-                        <input class="form-control mr-sm-2" type="text" name="search" placeholder="Zadejte hledaný text...">
-                        <input type="submit" value="Hledat" class="form-control btn btn-outline-success mr-auto">
+                        <div class="input-group">
+                            <input class="form-control" type="text" name="search" placeholder="Zadejte hledaný text..." value="{$search}">
+                            <select class="form-control custom-select mr-sm-2" name="suser">
+                                <option  n:attr="selected => !$suser || $suser == 'all'" value="all">Všichni</option>
+                                {foreach $userList as $key => $type}
+                                    <option disabled style="color: #d14836; font-weight: bold ">*** {$key|czechize} ***</option>
+                                    <option n:foreach="$type as $pickUser" value="{$pickUser->id}" n:attr="selected => $pickUser->id == $suser">{$pickUser->callName}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                        <span class="mr-auto">
+                            <input type="submit" value="Hledat" class="form-control btn btn-outline-success mr-sm-2">
+                            <a n:if="$search || $suser" href="{plink Discussion:discussion $discussion->discussion->webName}" class="btn btn-outline-secondary" title="Obnovit" onclick="$(this).children('i').addClass('fa-spin')"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+                        </span>
                         <button onclick="updatePost({plink Discussion:editpost $discussion->discussion->id})" type="button" class="btn btn-warning mx-1" id="editPost" n:if="$discussion->discussion->canWrite">Upravit</button>    
                         <button onclick="addPost({plink Discussion:newpost $discussion->discussion->id})" type="button" class="btn btn-primary" n:if="$discussion->discussion->canWrite">Vložit</button>    
                     </form>
             </div>
         </div>
     </div>
-</div>
+</div>         

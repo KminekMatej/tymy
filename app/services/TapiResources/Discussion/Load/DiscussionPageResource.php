@@ -23,8 +23,11 @@ class DiscussionPageResource extends DiscussionResource {
         if($this->getId() == null) throw new APIException ("Discussion ID is missing");
         if($this->getPage() == null) $this->setPage(1);
         $this->setUrl("discussion/" . $this->getId() . "/html/" . $this->getPage());
-        if(!empty($this->options->search)){
+        if (!empty($this->options->search)) {
             $this->setRequestParameter("search", $this->options->search);
+        }
+        if (!empty($this->options->searchUser)) {
+            $this->setRequestParameter("suser", $this->options->searchUser);
         }
         return $this;
     }
@@ -51,6 +54,15 @@ class DiscussionPageResource extends DiscussionResource {
 
     public function setSearch($search) {
         $this->options->search = $search;
+        return $this;
+    }
+
+    public function getSearchUser() {
+        return $this->options->searchUser;
+    }
+
+    public function setSearchUser($user) {
+        $this->options->searchUser = $user;
         return $this;
     }
 

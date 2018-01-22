@@ -19,7 +19,7 @@
 {block content}
 
 {block newpost}
-{control newPost $discussion}
+{control newPost $discussion, $search, $suser}
 {/block}
 
 <div class="container discussion" n:snippet="discussion">
@@ -52,7 +52,7 @@
                                 <button n:if="$discussion->discussion->canDelete" class="btn btn-sm btn-light btn-light-bordered delete" onclick="deletePost({$item->id}, {plink Discussion:deletePost $discussion->discussion->id})" title="Smazat"><i class="fa fa-times" aria-hidden="true"></i></button>
                             </div>
                             <span class="float-md-right mx-2">{$item->createdAt|date:'j.n.Y G:i'}</span>
-                            <div class="alert alert-warning float-md-right mx-1" n:ifset="$item->updatedAt" style="margin: 0px; padding: 4px; font-size: 10px;">Upravil(a) {$users[$item->updatedById]->displayName}, {$item->updatedAt|date:'j.n.Y G:i'}</div>
+                            <div class="alert alert-warning float-md-right mx-1" n:ifset="$item->updatedAt" style="margin: 0px; padding: 4px; font-size: 10px;">Upravil(a) {$userList[$item->updatedById]->displayName}, {$item->updatedAt|date:'j.n.Y G:i'}</div>
                         </div>
                         <div class="card-body">
                             <img class="user_pic" src="{$tymyRoot}/{$item->createdBy->pictureUrl}" />
