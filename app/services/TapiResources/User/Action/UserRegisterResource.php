@@ -41,11 +41,11 @@ class UserRegisterResource extends UserResource {
 
     protected function preProcess() {
         if (!$this->getLogin())
-            throw new APIException('Login not set!');
+            throw new APIException('Login not set');
         if (!$this->getPassword())
-            throw new APIException('Password not set!');
+            throw new APIException('Password not set');
         if (!$this->getEmail())
-            throw new APIException('Email not set!');
+            throw new APIException('Email not set');
         
         $this->setUrl("users/register");
         

@@ -22,7 +22,7 @@ class LoginResource extends UserResource  {
     protected function preProcess() {
         $this->sessionKey = NULL;
         if($this->options->login == null)
-            throw new APIException('Login not set!');
+            throw new APIException('Login not set');
         
         $this->setUrl("login/" . $this->options->login . "/" . $this->options->hash);
 

@@ -21,9 +21,9 @@ class DiscussionEditResource extends DiscussionResource {
 
     protected function preProcess() {
         if($this->getDiscussion() == null)
-            throw new APIException('Discussion not set!');
+            throw new APIException('Discussion object not set');
         if($this->getId() == null)
-            throw new APIException('Discussion ID not set!');
+            throw new APIException('Discussion ID not set');
         
         $this->setUrl("discussions");
         $this->options->discussion["id"] = $this->getId();

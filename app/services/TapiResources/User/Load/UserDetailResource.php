@@ -19,7 +19,7 @@ class UserDetailResource extends UserResource {
 
     protected function preProcess() {
         if($this->getId() == null)
-            throw new APIException('ID not set!');
+            throw new APIException('User ID not set');
         
         $this->setUrl("user/" . $this->getId());
 

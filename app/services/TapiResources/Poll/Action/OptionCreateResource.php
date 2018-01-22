@@ -20,16 +20,16 @@ class OptionCreateResource extends PollResource {
 
     protected function preProcess() {
         if (!$this->getId())
-            throw new APIException('Poll ID not set!');
+            throw new APIException('Poll ID not set');
         if (!$this->getPollOptions())
-            throw new APIException('Option to create not set!');
+            throw new APIException('Poll option object not set');
         if (!$this->user->isAllowed("SYS", "ASK.VOTE_UPDATE"))
-            throw new APIException('Permission denied!');
+            throw new APIException('Permission denied');
         foreach ($this->getPollOptions() as $option) {
             if(!array_key_exists("caption", $option))
-                throw new APIException('Caption not set!');
+                throw new APIException('Option caption not set');
             if(!array_key_exists("type", $option))
-                throw new APIException('Type not set!');
+                throw new APIException('Option type not set');
         }
         
         $this->setUrl("polls/" . $this->getId() . "/options");

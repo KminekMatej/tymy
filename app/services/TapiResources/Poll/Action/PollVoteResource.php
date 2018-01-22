@@ -21,10 +21,10 @@ class PollVoteResource extends PollResource {
 
     protected function preProcess() {
         if($this->getId() == null)
-            throw new APIException('Poll ID not set!');
+            throw new APIException('Poll ID not set');
         
         if($this->getVotes() == null)
-            throw new APIException('Poll votes not set!');
+            throw new APIException('Poll votes object not set');
         
         $this->setUrl("polls/" . $this->getId() . "/votes");
         
