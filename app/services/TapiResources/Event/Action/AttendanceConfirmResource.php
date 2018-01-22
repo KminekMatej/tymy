@@ -1,6 +1,7 @@
 <?php
 
 namespace Tapi;
+use Tapi\Exception\APIException;
 
 /**
  * Project: tymy_v2
@@ -19,6 +20,11 @@ class AttendanceConfirmResource extends EventResource {
     }
 
     protected function preProcess() {
+        if($this->getId() == null)
+            throw new APIException('Event ID not set');
+        if($this->getPostStatuses() == null)
+            throw new APIException('Statuses object not set');
+        
         $this->setUrl("attendance");
         
         foreach ($this->options->postStatuses as &$status) {

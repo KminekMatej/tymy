@@ -1,6 +1,7 @@
 <?php
 
 namespace Tapi;
+use Tapi\Exception\APIException;
 
 /**
  * Project: tymy_v2
@@ -20,6 +21,11 @@ class AttendancePlanResource extends EventResource {
     }
 
     protected function preProcess() {
+        if($this->getId() == null)
+            throw new APIException('Event ID not set');
+        if($this->getPreStatus() == null)
+            throw new APIException('Status not set');
+        
         $this->setUrl("attendance");
         
         $data = [
