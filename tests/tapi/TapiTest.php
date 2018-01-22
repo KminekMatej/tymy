@@ -41,8 +41,6 @@ abstract class TapiTest extends TestCase {
     /** @var \Tapi\TapiObject */
     protected $tapiObject;
     
-    abstract function testToRunAsFirst(); // this method should be run as a first test in every test scenario - to run method primaryTests as first
-    
     abstract function getMethod();
     
     abstract function getCacheable();
@@ -71,6 +69,7 @@ abstract class TapiTest extends TestCase {
         
         $this->tapiObject = $this->getTapiObject();
         $this->tapiObject->setSupplier($this->supplier);
+        $this->primaryTests();
     }
     
     protected function getTapiObject(){
@@ -104,6 +103,7 @@ abstract class TapiTest extends TestCase {
         $this->objectConstructedTest();
         $this->errorNotLoggedInTest();
     }
+    
     public function objectExistsTest(){
         Assert::truthy(get_class($this->tapiObject));
     }

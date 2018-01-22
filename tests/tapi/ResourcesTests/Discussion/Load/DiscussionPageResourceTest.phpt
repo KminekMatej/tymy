@@ -31,10 +31,6 @@ class DiscussionPageResourceTest extends TapiTest {
         $this->tapiObject->setId($GLOBALS["testedTeam"]["testDiscussionId"]);
     }
     
-    public function testToRunAsFirst(){
-        parent::primaryTests();
-    }
-    
     public function testErrorNoId(){
         Assert::exception(function(){$this->tapiObject->init()->getData(TRUE);} , "\Tapi\Exception\APIException", "Discussion ID is missing");
     }

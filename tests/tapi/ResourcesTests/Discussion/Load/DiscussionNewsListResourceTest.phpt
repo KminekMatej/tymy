@@ -31,10 +31,6 @@ class DiscussionNewsListResourceTest extends TapiTest {
         //nothing to set
     }
     
-    public function testToRunAsFirst(){
-        parent::primaryTests();
-    }
-    
     public function testPerformSuccess() {
         $data = parent::getPerformSuccessData();
         Assert::type("array",$data);

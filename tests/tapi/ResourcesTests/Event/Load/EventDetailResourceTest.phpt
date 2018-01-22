@@ -31,10 +31,6 @@ class EventDetailResourceTest extends TapiTest {
         $this->tapiObject->setId($GLOBALS["testedTeam"]["testEventId"]);
     }
     
-    public function testToRunAsFirst(){
-        parent::primaryTests();
-    }
-    
     public function testErrorNoId(){
         Assert::exception(function(){$this->tapiObject->init()->getData(TRUE);} , "\Tapi\Exception\APIException", "Event id not set!");
     }
