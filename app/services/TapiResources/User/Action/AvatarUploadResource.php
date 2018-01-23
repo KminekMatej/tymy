@@ -1,6 +1,7 @@
 <?php
 
 namespace Tapi;
+use Tapi\Exception\APIException;
 
 /**
  * Project: tymy_v2
@@ -12,8 +13,10 @@ class AvatarUploadResource extends UserResource{
     
     public function init() {
         parent::globalInit();
+        $this->setMethod(RequestMethod::POST);
         $this->setCacheable(FALSE);
         $this->setAvatar(NULL);
+        $this->setJsonEncoding(FALSE);
         return $this;
     }
 
@@ -21,12 +24,11 @@ class AvatarUploadResource extends UserResource{
         if($this->getId() == null)
             throw new APIException('User ID not set');
         
-        if ($this->getAvatar())
+        if (!$this->getAvatar())
             throw new APIException('Avatar not set');
         
-        $this->setUrl("user/" . $this->getId() . "/avatar");
+        $this->setUrl("users/" . $this->getId() . "/avatar");
         $this->setRequestData($this->getAvatar());
-        $this->setJsonEncoding(FALSE);
         return $this;
     }
     
