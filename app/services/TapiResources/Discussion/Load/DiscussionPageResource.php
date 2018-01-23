@@ -2,6 +2,7 @@
 
 namespace Tapi;
 use Tapi\Exception\APIException;
+use Nette\Utils\DateTime;
 
 /**
  * Project: tymy_v2
@@ -16,6 +17,8 @@ class DiscussionPageResource extends DiscussionResource {
         $this->setCacheable(FALSE);
         $this->setPage(NULL);
         $this->setSearch(NULL);
+        $this->setSearchUser(NULL);
+        $this->setJumpDate(NULL);
         return $this;
     }
     
@@ -28,6 +31,9 @@ class DiscussionPageResource extends DiscussionResource {
         }
         if (!empty($this->options->searchUser)) {
             $this->setRequestParameter("suser", $this->options->searchUser);
+        }
+        if (!empty($this->options->jumpDate)) {
+            $this->setRequestParameter("jump2date", $this->options->jumpDate);
         }
         return $this;
     }
@@ -63,6 +69,17 @@ class DiscussionPageResource extends DiscussionResource {
 
     public function setSearchUser($user) {
         $this->options->searchUser = $user;
+        return $this;
+    }
+
+    public function getJumpDate() {
+        return $this->options->jumpDate;
+    }
+
+    public function setJumpDate($jumpDate) {
+        if($jumpDate != NULL && $date = strtotime($jumpDate) !== FALSE){
+            $this->options->jumpDate = date("Y-m-d", DateTime::createFromFormat('d.m.Y', $jumpDate)->getTimestamp());
+        } else $this->options->jumpDate = NULL;
         return $this;
     }
 

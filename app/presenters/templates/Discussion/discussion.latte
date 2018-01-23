@@ -21,7 +21,6 @@
 {block newpost}
 {control newPost $discussion, $search, $suser}
 {/block}
-
 <div class="container discussion" n:snippet="discussion">
     {foreach $discussion->posts as $item}
             {var $stickyIcon = ''}
@@ -65,13 +64,32 @@
         </div>
 {/foreach}
 </div>
+<div class="container navigation">
+    <div class="row">
+        <div class="col">
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    <li n:class="$currentPage == 1 ? disabled, page-item"><a class="page-link" href="{plink Discussion:discussion $nazevDiskuze, 1}">První</a></li>
+                    <li n:class="$currentPage == 1 ? disabled, page-item"><a class="page-link" href="{if $currentPage==2}{plink Discussion:discussion $nazevDiskuze}{else}{plink Discussion:discussion $nazevDiskuze,$currentPage-1, $search}{/if}">Předchozí</a></li>
+                    <li n:foreach="$pagination as $page" n:class="$currentPage == $page ? active, page-item"><a class="page-link" href="{if $page==1}{plink Discussion:discussion $nazevDiskuze}{else}{plink Discussion:discussion $nazevDiskuze,$page, $search}{/if}">{$page}</a></li>
+                    <li n:class="$currentPage == $lastPage ? disabled, page-item"><a class="page-link" href="{plink Discussion:discussion $nazevDiskuze,$currentPage+1, $search}">Následující</a></li>
+                    <li n:class="$currentPage == $lastPage ? disabled, page-item"><a class="page-link" href="{plink Discussion:discussion $nazevDiskuze, $lastPage}">Poslední</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <form action="{plink this}" method="GET" class="form-inline justify-content-center">
+            <div class="input-group mb-3">
+                    <input type="text" name="jump2date" class="form-control" placeholder="Skok na datum ..." aria-label="Skok na datum ...">
+                    <div class="input-group-append">
+                        <button class="btn btn-light btn-light-bordered" type="submit">Hop</button>
+                    </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
 
-<nav aria-label="Page navigation">
-    <ul class="pagination justify-content-center">
-        <li n:class="$currentPage == 1 ? disabled, page-item"><a class="page-link" href="{if $currentPage==2}{plink Discussion:discussion $nazevDiskuze}{else}{plink Discussion:discussion $nazevDiskuze,$currentPage-1, $search}{/if}">Předchozí</a></li>
-            {foreach $pagination as $page}
-            <li n:class="$currentPage == $page ? active, page-item"><a class="page-link" href="{if $page==1}{plink Discussion:discussion $nazevDiskuze}{else}{plink Discussion:discussion $nazevDiskuze,$page, $search}{/if}">{$page}</a></li>
-            {/foreach}
-        <li n:class="$currentPage == $lastPage ? disabled, page-item"><a class="page-link" href="{plink Discussion:discussion $nazevDiskuze,$currentPage+1, $search}">Následující</a></li>
-    </ul>
-</nav>
+

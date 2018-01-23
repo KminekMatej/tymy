@@ -112,7 +112,7 @@ class DiscussionPresenter extends SecuredPresenter {
         $this->setView('discussion');
     }
     
-    public function renderDiscussion($discussion, $page, $search, $suser = "all") {
+    public function renderDiscussion($discussion, $page, $search, $suser = "all", $jump2date = "") {
         $discussionId = DiscussionResource::getIdFromWebname($discussion, $this->discussionsList->init()->getData());
         
         if (is_null($discussionId) || $discussionId < 1)
@@ -133,6 +133,10 @@ class DiscussionPresenter extends SecuredPresenter {
             $this->discussionPage->setSearchUser($suser);
             $this->template->suser = $suser;
         }
+        if ($jump2date) {
+            $this->discussionPage->setJumpDate($jump2date);
+            $this->template->jump2date = $this->discussionPage->getJumpDate(); // getter returns already formatted value
+        }
 
 
         try {
@@ -148,8 +152,8 @@ class DiscussionPresenter extends SecuredPresenter {
         $this->template->userId = $this->getUser()->getId();
         $this->template->discussion = $data;
         $this->template->nazevDiskuze = $data->discussion->webName;
-        $this->template->currentPage = is_numeric($page) ? $page : 1 ;
-        $currentPage = is_numeric($page) ? $page : 1;
+        $currentPage = is_numeric($data->paging->currentPage) ? $data->paging->currentPage : 1 ;
+        $this->template->currentPage = $currentPage;
         $lastPage = is_numeric($data->paging->numberOfPages) ? $data->paging->numberOfPages : 1 ;
         $this->template->lastPage = $lastPage;
         $this->template->pagination = $this->pagination($lastPage, 1, $currentPage, 5);
