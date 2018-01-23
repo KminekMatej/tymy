@@ -1,6 +1,7 @@
 <?php
 
 namespace Tapi;
+use Tapi\Exception\APIException;
 
 /**
  * Project: tymy_v2
@@ -18,11 +19,26 @@ class OptionEditResource extends PollResource{
     }
 
     protected function preProcess() {
+        if($this->getId() == null)
+            throw new APIException('Poll ID not set');
+        if($this->getOption() == null)
+            throw new APIException('Option object not set');
         
+        $this->setUrl("polls/" . $this->getId() . "/options");
+        $this->setRequestData($this->getOption());
     }
     
     protected function postProcess() {
-        
+        $this->clearCache($this->getId());
+    }
+    
+    public function getOption() {
+        return $this->options->option;
+    }
+
+    public function setOption($option) {
+        $this->options->option = $option;
+        return $this;
     }
     
 }
