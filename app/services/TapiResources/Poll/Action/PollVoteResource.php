@@ -31,7 +31,7 @@ class PollVoteResource extends PollResource {
         foreach ($this->options->votes as &$vote) {
             $vote["userId"] = $this->user->getId();
         }
-        $this->setPostData($this->getVotes());
+        $this->setRequestData($this->getVotes());
     }
 
     protected function postProcess() {}
