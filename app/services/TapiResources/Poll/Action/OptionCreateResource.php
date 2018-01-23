@@ -1,6 +1,7 @@
 <?php
 
 namespace Tapi;
+use Tapi\Exception\APIException;
 
 /**
  * Project: tymy_v2
@@ -23,8 +24,7 @@ class OptionCreateResource extends PollResource {
             throw new APIException('Poll ID not set');
         if (!$this->getPollOptions())
             throw new APIException('Poll option object not set');
-        if (!$this->user->isAllowed("SYS", "ASK.VOTE_UPDATE"))
-            throw new APIException('Permission denied');
+        //TODO check correct rights from authorization API
         foreach ($this->getPollOptions() as $option) {
             if(!array_key_exists("caption", $option))
                 throw new APIException('Option caption not set');
