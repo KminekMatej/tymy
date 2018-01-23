@@ -56,12 +56,12 @@
                         <tr><th title="Viditelná na výchozí stránce bez přihlášení">Veřejná</th>
                             <td><label class="custom-control custom-checkbox">
                               <input type="checkbox" name="publicRead" n:attr="data-value => ($discussion->publicRead ? 'true':'false'), checked => $discussion->publicRead" class="col-6 form-control custom-control-input" />
-                              <span class="custom-control-indicator"></span>
+                              <span class="custom-control-label"></span>
                             </label></td></tr>
                         <tr><th>Povolit úpravy</th>
                             <td><label class="custom-control custom-checkbox">
                               <input type="checkbox" name="editablePosts" n:attr="data-value => ($discussion->editablePosts ? 'true':'false'), checked => $discussion->editablePosts" class="col-6 form-control custom-control-input" />
-                              <span class="custom-control-indicator"></span>
+                              <span class="custom-control-label"></span>
                             </label></td></tr>
                     </table>
                 </div>

@@ -42,9 +42,9 @@
                         <tr><th>Minimální počet vyplněných položek</th><td><input type="number" name="minItems" data-value="{$poll->minItems}" value="{$poll->minItems}" class="col-6 form-control" required /></td></tr>
                         <tr><th>Maximální počet vyplněných položek</th><td><input type="number" name="maxItems" data-value="{$poll->maxItems}" value="{$poll->maxItems}" class="col-6 form-control" required /></td></tr>
                         
-                        <tr><th>Uvést v hlavním menu</th><td><label class="custom-control custom-checkbox"><input type="checkbox" name="mainMenu" n:attr="data-value => $poll->mainMenu ? 'true':'false', checked => $poll->mainMenu" class="col-6 form-control custom-control-input" /><span class="custom-control-indicator"></span></label></td></tr>
-                        <tr><th>Anonymní hlasování</th><td><label class="custom-control custom-checkbox"><input type="checkbox" name="anonymousResults" n:attr="data-value => $poll->anonymousResults ? 'true':'false', checked => $poll->anonymousResults" class="col-6 form-control custom-control-input" /><span class="custom-control-indicator"></span></label></td></tr>
-                        <tr><th>Povolit změnu názoru</th><td><label class="custom-control custom-checkbox"><input type="checkbox" name="changeableVotes" n:attr="data-value => $poll->changeableVotes ? 'true':'false', checked => $poll->changeableVotes" class="col-6 form-control custom-control-input" /><span class="custom-control-indicator"></span></label></td></tr>
+                        <tr><th>Uvést v hlavním menu</th><td><label class="custom-control custom-checkbox"><input type="checkbox" name="mainMenu" n:attr="data-value => $poll->mainMenu ? 'true':'false', checked => $poll->mainMenu" class="col-6 form-control custom-control-input" /><span class="custom-control-label"></span></label></td></tr>
+                        <tr><th>Anonymní hlasování</th><td><label class="custom-control custom-checkbox"><input type="checkbox" name="anonymousResults" n:attr="data-value => $poll->anonymousResults ? 'true':'false', checked => $poll->anonymousResults" class="col-6 form-control custom-control-input" /><span class="custom-control-label"></span></label></td></tr>
+                        <tr><th>Povolit změnu názoru</th><td><label class="custom-control custom-checkbox"><input type="checkbox" name="changeableVotes" n:attr="data-value => $poll->changeableVotes ? 'true':'false', checked => $poll->changeableVotes" class="col-6 form-control custom-control-input" /><span class="custom-control-label"></span></label></td></tr>
 
                         <tr><th>Zobrazit výsledky</th>
                             <td>
@@ -96,15 +96,14 @@
                     <h4>Položky ankety</h4>
                 </div>
                 <div class="card-body">
-                    {dump $poll->options}
                     <div class="row my-1" n:foreach="$poll->options as $opt" data-binder-id="{$opt->id}" data-option>
                         <div class="col-5 input-group">
-                            <span class="input-group-addon form-control-sm">Název:</span>
+                            <div class="input-group-prepend"><span class="input-group-text">Název:</span></div>
                             <input name="caption" class="form-control form-control-sm" type="text" data-value="{$opt->caption}" value="{$opt->caption}" />
                         </div>
                         <div class="col-5 input-group">
-                            <span class="input-group-addon form-control-sm">Typ:</span>
-                            <select name="type" class="form-control form-control-sm" data-value="{$opt->type}">
+                            <div class="input-group-prepend"><span class="input-group-text">Typ:</span></div>
+                            <select name="type" class="form-control" data-value="{$opt->type}">
                                 <option value="TEXT" n:attr="selected => $opt->type == 'TEXT'">Text</option>
                                 <option value="NUMBER" n:attr="selected => $opt->type == 'NUMBER'">Číslo</option>
                                 <option value="BOOLEAN" n:attr="selected => $opt->type == 'BOOLEAN'">Ano / Ne</option>
