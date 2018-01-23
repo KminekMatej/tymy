@@ -81,7 +81,7 @@ class PollPresenterTest extends IPresenterTest {
         if($obj->canSeeResults){
             Assert::true(count($dom->find('div.container.poll div.row div.col.my-3 div.card.sh-box div.card-body div.container div.row div.col-3.py-3.option')) > 0);
             Assert::true($dom->has('div.container.poll div.row#snippet--poll-results div.col.my-3 div.card.sh-box.text-white.bg-dark div.card-header'));
-            Assert::true(count($dom->find('div.container.poll div.row#snippet--poll-results div.col.my-3 div.card.sh-box.text-white.bg-dark div.card-body.p-0 table.table.table-inverse.table-striped.table-hover.mb-0 tr[data-vote]')) > 0);
+            Assert::true(count($dom->find('div.container.poll div.row#snippet--poll-results div.col.my-3 div.card.sh-box.text-white.bg-dark div.card-body.p-0 table.table.table-dark.table-striped.table-hover.mb-0 tr[data-vote]')) > 0);
         }
     }
 }

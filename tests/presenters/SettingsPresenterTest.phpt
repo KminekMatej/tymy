@@ -161,8 +161,8 @@ class SettingsPresenterTest extends IPresenterTest {
         Assert::equal(count($dom->find('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr th')), 11);
         Assert::equal(count($dom->find('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr[data-binder-id] td')), 11);
         
-        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr[data-binder-id] td.input-group button.btn.btn-sm.btn-primary.binder-save-btn'));
-        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr[data-binder-id] td.input-group button.btn.btn-sm.btn-danger'));
+        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr[data-binder-id] td.btn-group button.btn.btn-sm.btn-primary.binder-save-btn'));
+        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr[data-binder-id] td.btn-group button.btn.btn-sm.btn-danger'));
         
         Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body div.text-center button.btn.btn-sm.btn-outline-success i.fa.fa-plus'));
     }
@@ -188,8 +188,8 @@ class SettingsPresenterTest extends IPresenterTest {
         Assert::equal(count($dom->find('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr th')), 10);
         Assert::equal(count($dom->find('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr[data-binder-id] td')), 10);
         
-        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr[data-binder-id] td.input-group button.btn.btn-sm.btn-primary.binder-save-btn'));
-        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr[data-binder-id] td.input-group button.btn.btn-sm.btn-danger'));
+        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr[data-binder-id] td.btn-group button.btn.btn-sm.btn-primary.binder-save-btn'));
+        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr[data-binder-id] td.btn-group button.btn.btn-sm.btn-danger'));
         
         Assert::equal(count($dom->find('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body div.text-center button.btn.btn-sm.btn-outline-success i.fa.fa-plus')), 3);
     }
@@ -215,8 +215,8 @@ class SettingsPresenterTest extends IPresenterTest {
         Assert::equal(count($dom->find('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr th')), 15);
         Assert::equal(count($dom->find('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr[data-binder-id] td')), 15);
         
-        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr[data-binder-id] td.input-group button.btn.btn-sm.btn-primary.binder-save-btn'));
-        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr[data-binder-id] td.input-group button.btn.btn-sm.btn-danger'));
+        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr[data-binder-id] td.btn-group button.btn.btn-sm.btn-primary.binder-save-btn'));
+        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr[data-binder-id] td.btn-group button.btn.btn-sm.btn-danger'));
     }
 
 }
