@@ -11,11 +11,3 @@ DIV.row DIV.card-block DIV.option:hover{
     background-color: rgb(247, 247, 249);
     transition: background-color 500ms linear;
 }
-
-TR[data-vote] A{
-    color: rgb(129, 191, 245);
-}
-
-TR[data-vote] A:hover{
-    color: white;
-}
