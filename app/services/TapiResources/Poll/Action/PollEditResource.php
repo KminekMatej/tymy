@@ -22,6 +22,8 @@ class PollEditResource extends PollResource {
     protected function preProcess() {
         if($this->getId() == null)
             throw new APIException('Poll ID not set');
+        if($this->getPoll() == null)
+            throw new APIException('Poll object not set');
         
         $this->setUrl("polls/" . $this->getId());
         $this->options->poll["id"] = $this->getId();
