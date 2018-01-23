@@ -1,6 +1,7 @@
 <?php
 
 namespace Tapi;
+use Tapi\Exception\APIException;
 
 /**
  * Project: tymy_v2
