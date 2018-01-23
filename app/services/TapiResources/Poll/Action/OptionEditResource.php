@@ -15,6 +15,7 @@ class OptionEditResource extends PollResource{
         parent::globalInit();
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::PUT);
+        $this->setOption(NULL);
         return $this;
     }
 
