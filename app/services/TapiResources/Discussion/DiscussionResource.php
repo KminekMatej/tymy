@@ -20,20 +20,6 @@ abstract class DiscussionResource extends TapiObject {
         }
         return null;
     }
-    
-    public static function mergeListWithNews($discussionList, $discussionNewsList) {
-        $news = [];
-        $discussionList->options->warnings = 0;
-        foreach ($discussionNewsList->getData() as $n) {
-            $news[$n->id] = $n->newPosts;
-        }
-        foreach ($discussionList->getData() as $discussion) {
-            $discussion->newInfo->newsCount = $news[$discussion->id];
-            if ($news[$discussion->id] > 0)
-                $discussionList->options->warnings++;
-        }
-        return $discussionList;
-    }
 
     protected function postProcessDiscussion($discussion) {
         $discussion->webName = Strings::webalize($discussion->caption);

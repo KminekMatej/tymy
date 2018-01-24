@@ -47,7 +47,7 @@ class NavbarControl extends Control {
     public function __construct(\App\Presenters\SecuredPresenter $presenter) {
         parent::__construct();
         $this->presenter = $presenter;
-        $this->discussionList = \Tapi\DiscussionResource::mergeListWithNews($presenter->discussionList, $presenter->discussionNews);
+        $this->discussionList = $presenter->discussionList;
         $this->polls = $this->presenter->polls;
         $this->eventList = $this->presenter->eventList;
         $this->userDetail = $this->presenter->userDetail;

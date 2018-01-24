@@ -218,6 +218,11 @@ abstract class TapiObject {
         return $this->data;
     }
     
+    public function setWarnings($warnings) {
+        $this->options->warnings = $warnings;
+        return $this;
+    }
+    
     public function getWarnings() {
         return $this->options->warnings;
     }
