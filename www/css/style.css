@@ -38,7 +38,7 @@ A.disabled:hover{
     color: white;
 }
 
-BUTTON.btn, A.btn, INPUT.btn{
+BUTTON.btn, BUTTON.dropdown-item, A.btn, INPUT.btn{
     cursor: pointer;
 }
 
