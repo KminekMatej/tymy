@@ -125,7 +125,7 @@ abstract class TapiObject {
     }
     
     public function cleanCache(){
-        $this->cache->clean([Cache::ALL]);
+        $this->cache->clean([Cache::ALL => TRUE]);
         return $this;
     }
     
