@@ -39,6 +39,10 @@ class UserCreateResourceTest extends TapiTest {
         $this->tapiObject->init();
         $this->setCorrectInputParams();
         $data = $this->tapiObject->getData(TRUE);
+        //edit
+        $editor = $this->container->getByType("Tapi\UserEditResource");
+        $editor->init()->setId($data->id)->setUser($this->mockUser())->perform();
+        //delete
         $userDeleter = $this->container->getByType("Tapi\UserDeleteResource");
         $userDeleter->setId($data->id)->perform();
     }
