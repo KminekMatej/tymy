@@ -1,0 +1,16 @@
+{* Latte template *}
+
+{block styles}
+{include parent}
+{var $presenterName = $presenter->request->getPresenterName()}
+{var $view = $presenter->getView()}
+
+{var $presenterStyle = "{$basePath}/css/{$presenterName}/{$presenterName}.css"}
+{var $presenterStylePath = "./{$presenterStyle}"}
+
+{var $viewStyle = "{$basePath}/css/{$presenterName}/{$view}.css"}
+{var $viewStylePath = "./{$viewStyle}"}
+{* Include styles for whole presenter or current view, if they exist *}
+        <link rel="stylesheet" data-a="b" href="{$presenterStyle}" n:if="file_exists($presenterStylePath)" />
+        <link rel="stylesheet" data-c="d" href="{$viewStyle}" n:if="file_exists($viewStylePath)" />
+{/block}

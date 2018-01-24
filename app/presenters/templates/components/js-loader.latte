@@ -1,0 +1,17 @@
+{* Latte template *}
+
+{block scripts}
+{include parent}
+{var $presenterName = $presenter->request->getPresenterName()}
+{var $view = $presenter->getView()}
+
+{var $presenterScript = "{$basePath}/js/{$presenterName}/{$presenterName}.js"}
+{var $presenterScriptPath = "./{$presenterScript}"}
+
+{var $viewScript = "{$basePath}/js/{$presenterName}/{$view}.js"}
+{var $viewScriptPath = "./{$viewScript}"}
+
+{* Include scripts for whole presenter or current view, if they exist *}
+        <script src="{$presenterScript}" n:if="file_exists($presenterScriptPath)"></script>
+        <script src="{$viewScript}" n:if="file_exists($viewScriptPath)"></script>
+{/block}

@@ -16,16 +16,17 @@
         <link rel="stylesheet" href="{$basePath}/resources/fontawesome/css/font-awesome.{$css}" />
         <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet" />
         <link rel="stylesheet" href="{$basePath}/css/style.css" />
-        
         {/block}
 	{block scripts}
+        
         <script src="{$basePath}/resources/popper/umd/popper.{$js}"></script>
         <script src="{$basePath}/resources/fullcalendar/lib/moment.min.js"></script>
-	<script src="{$basePath}/resources/jQuery/jquery-3.2.1.{$js}"></script>
+        <script src="{$basePath}/resources/jQuery/jquery-3.2.1.{$js}"></script>
         <script src="{$basePath}/resources/bootstrap4/js/bootstrap.{$js}"></script>
         <script src="{$basePath}/js/nette.ajax.js"></script>
 	{/block}
-	{block head}{/block}
+	
+        {block head}{/block}
 </head>
 
 <body>
@@ -41,6 +42,6 @@
 
 	{include content}
         
-        {include notes}
+        {block notes}{/block}
 </body>
 </html>

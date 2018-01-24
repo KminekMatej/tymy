@@ -1,9 +1,11 @@
-{block styles}
-{include parent}
-<link rel="stylesheet" href="{$basePath}/css/sign.up.css" />
-{/block}
+{import '../components/unsecured.latte'}
 
 {block content}
-<div class="register">
-    {control signUpForm}
+<div class="container">
+    
+    <div class="row justify-content-md-center">
+        <div class="col-md-6 sh-box bg-light p-5 my-5">
+            {control signUpForm}
+        </div>
+    </div>
 </div>
