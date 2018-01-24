@@ -64,6 +64,7 @@ services:
         - Tapi\OptionEditResource
         - Tapi\OptionDeleteResource
         - Tapi\OptionListResource
+        - Tapi\NoteListResource
 
 
 

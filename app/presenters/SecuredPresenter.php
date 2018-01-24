@@ -24,6 +24,7 @@ use Tapi\DiscussionNewsListResource;
 use Tapi\UserDetailResource;
 use Tapi\UserListResource;
 use Tapi\PollListResource;
+use Tapi\NoteListResource;
 use Tapi\Exception\APIException;
 
 /**
@@ -62,6 +63,9 @@ class SecuredPresenter extends BasePresenter {
     /** @var EventTypeListResource @inject */
     public $eventTypeList;
     
+    /** @var NoteListResource @inject */
+    public $noteList;
+    
     /** @var FileStorage @inject */
     public $cacheStorage;
     
@@ -97,6 +101,7 @@ class SecuredPresenter extends BasePresenter {
         $this->tapiAuthorizator->setUser($this->getUser()->getIdentity()->getData());
         $this->setLevelCaptions(["0" => ["caption" => "Hlavní stránka", "link" => $this->link("Homepage:")]]);
         $this->template->tym = $this->supplier->getTym();
+        $this->template->noteList = $this->noteList->init()->getData();
     }
     
     protected function shutdown($response) {
