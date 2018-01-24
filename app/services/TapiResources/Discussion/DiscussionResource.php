@@ -58,7 +58,7 @@ abstract class DiscussionResource extends TapiObject {
         $this->cache->remove($this->getCacheKey("GET:discussions/accessible/withNew"));
         $this->cache->remove($this->getCacheKey("GET:discussions"));
         if($id != NULL){
-            $$this->cache->remove("GET:discussions/$id");
+            $this->cache->remove("GET:discussions/$id");
         }
     }
 }
