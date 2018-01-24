@@ -36,7 +36,7 @@ class DiscussionDeleteResourceTest extends TapiTest {
     }
 
     public function testPerformSuccess() {
-        //operational tests are performed on mother object (CRUD collaboration)
+        //delete test is performed on create object (CRUD collaboration)
     }
 
 }

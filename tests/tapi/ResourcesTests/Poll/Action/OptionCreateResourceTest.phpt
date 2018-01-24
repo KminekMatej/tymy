@@ -54,7 +54,10 @@ class OptionCreateResourceTest extends TapiTest {
     }
 
     public function testPerformSuccess() {
-        //operational tests are performed on mother object (CRUD collaboration)
+        $data = parent::getPerformSuccessData();
+        
+        $userDeleter = $this->container->getByType("Tapi\OptionDeleteResource");
+        $userDeleter->setId($data->id)->perform();
     }
     
     private function mockPollOptions(){
