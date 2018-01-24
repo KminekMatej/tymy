@@ -58,7 +58,13 @@ class OptionCreateResourceTest extends TapiTest {
         $this->tapiObject->init();
         $this->setCorrectInputParams();
         $data = $this->tapiObject->getData(TRUE);
+        //edit
+        $editor = $this->container->getByType("Tapi\OptionEditResource");
+        foreach ($data as $opt) {
+            $editor->init()->setId($opt->pollId)->setOption(["id" => $opt->id,"caption" => "editedOptionToText", "type" => "TEXT"])->perform();
+        }
         
+        //delete
         $deleter = $this->container->getByType("Tapi\OptionDeleteResource");
         foreach ($data as $opt) {
             $deleter->init()->setId($opt->pollId)->setOptionId($opt->id)->perform();
