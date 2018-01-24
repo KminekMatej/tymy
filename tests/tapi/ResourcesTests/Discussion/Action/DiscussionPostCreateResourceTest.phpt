@@ -45,6 +45,11 @@ class DiscussionPostCreateResourceTest extends TapiTest {
         $this->tapiObject->init();
         $this->setCorrectInputParams();
         $data = $this->tapiObject->getData(TRUE);
+        //edit
+        $editor = $this->container->getByType("Tapi\DiscussionPostEditResource");
+        $editor->init()->setId($data->id)->setPostId($data->id)->setPost("Autotest edited post " . md5(rand(0, 100)))->perform();
+        $editor->init()->setId($data->id)->setPostId($data->id)->setSticky(TRUE)->perform();
+        //delete
         $deleter = $this->container->getByType("Tapi\DiscussionPostDeleteResource");
         $deleter->init()->setId($GLOBALS["testedTeam"]["testDiscussionId"])->setPostId($data->id)->perform();
     }
