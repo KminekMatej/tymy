@@ -41,7 +41,7 @@ class AvatarUploadResourceTest extends TapiTest {
     }
 
     public function testPerformSuccess() {
-        //operational tests are performed on mother object (CRUD collaboration)
+        parent::getPerformSuccessData();
     }
 
 }
