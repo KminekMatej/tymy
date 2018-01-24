@@ -29,7 +29,7 @@ class UserEditResourceTest extends TapiTest {
     }
     
     public function setCorrectInputParams() {
-        $this->tapiObject->setId($GLOBALS["testedTeam"]["testPollId"])->setUser($this->mockUser());
+        $this->tapiObject->setId($GLOBALS["testedTeam"]["testUserId"])->setUser($this->mockUser());
     }
     
     public function testErrors() {
