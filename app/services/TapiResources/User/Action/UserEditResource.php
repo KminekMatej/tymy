@@ -23,7 +23,7 @@ class UserEditResource extends UserResource {
         if($this->getId() == null)
             throw new APIException('User ID not set');
         
-        if (!$this->getUserData())
+        if (!$this->getUser())
             throw new APIException('User object not set');
         
         $this->setUrl("users/" . $this->getId());
