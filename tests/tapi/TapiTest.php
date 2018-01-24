@@ -21,7 +21,7 @@ abstract class TapiTest extends TestCase {
     protected $tapi_config;
     
     /** @var \Tapi\TapiService */
-    private $tapiService;
+    protected $tapiService;
     
     /** @var \App\Model\TapiAuthenticator */
     protected $tapiAuthenticator;
