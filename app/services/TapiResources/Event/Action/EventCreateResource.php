@@ -46,7 +46,11 @@ class EventCreateResource extends EventResource {
 
     protected function postProcess() {
         $this->clearCache();
-        parent::postProcessEvent($this->data);
+        
+        foreach ($this->data as $event) {
+            parent::postProcessEvent($event);
+        }
+        
     }
     
     public function getEventsArray() {
