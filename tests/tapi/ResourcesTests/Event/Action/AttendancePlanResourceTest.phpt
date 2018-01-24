@@ -28,7 +28,7 @@ class AttendancePlanResourceTest extends TapiTest {
     }
 
     public function setCorrectInputParams() {
-        $this->tapiObject->setId($GLOBALS["testedTeam"]["testEventId"])->setPreStatus("YES")->setPreDescription("Autotest descripttion");
+        $this->tapiObject->setId($GLOBALS["testedTeam"]["testEventId"])->setPreStatus("YES")->setPreDescription("Autotest description");
     }
 
     public function testErrorNoId(){
@@ -40,7 +40,10 @@ class AttendancePlanResourceTest extends TapiTest {
     }
 
     public function testPerformSuccess() {
-        //operational tests are performed on mother object (CRUD collaboration)
+        $this->authenticateTapi($GLOBALS["testedTeam"]["user_admin"], $GLOBALS["testedTeam"]["pass_admin"]);
+        $this->tapiObject->init();
+        $this->setCorrectInputParams();
+        $data = $this->tapiObject->getData(TRUE);
     }
 
 }
