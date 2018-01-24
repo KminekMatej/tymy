@@ -110,7 +110,7 @@ class DiscussionPageResourceTest extends TapiTest {
         $discussionId = $GLOBALS["testedTeam"]["searchDiscussionId"];
         $searchHash = $GLOBALS["testedTeam"]["searchHash"];
         
-        $data = $this->tapiObject->setId($discussionId)->setSearch($searchHash)->getData(TRUE);
+        $data = $this->tapiObject->init()->setId($discussionId)->setSearch($searchHash)->getData(TRUE);
         
         Assert::type("array", $data->posts);
         Assert::count(1, $data->posts);
