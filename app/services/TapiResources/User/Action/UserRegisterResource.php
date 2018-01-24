@@ -3,6 +3,7 @@
 namespace Tapi;
 use App\Model\Supplier;
 use Tapi\Exception\APIException;
+use Tapi\TapiService;
 
 /**
  * Project: tymy_v2
@@ -20,8 +21,8 @@ class UserRegisterResource extends UserResource {
     private $lastName;
     private $note;
          
-    public function __construct(Supplier $supplier) {
-        parent::__construct($supplier, NULL, NULL, NULL);
+    public function __construct(Supplier $supplier, TapiService $tapiService) {
+        parent::__construct($supplier, NULL, $tapiService, NULL);
     }
     
     public function init() {
@@ -34,7 +35,7 @@ class UserRegisterResource extends UserResource {
         $this->setFirstName(NULL);
         $this->setLastName(NULL);
         $this->setLogin(NULL);
-        $this->setNote(NULL);
+        $this->setNote("");
         $this->setPassword(NULL);
         return $this;
     }
@@ -77,7 +78,7 @@ class UserRegisterResource extends UserResource {
     }
     
     protected function postProcess() {
-        //returns user object, but its not used anywhere, so no post processing needed
+        parent::postProcessUser($this->data);
     }
     
     private function composeCallName(){
