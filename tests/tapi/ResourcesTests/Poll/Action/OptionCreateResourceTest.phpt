@@ -54,10 +54,16 @@ class OptionCreateResourceTest extends TapiTest {
     }
 
     public function testPerformSuccess() {
-        $data = parent::getPerformSuccessData();
+        $this->authenticateTapi($GLOBALS["testedTeam"]["user_admin"], $GLOBALS["testedTeam"]["pass_admin"]);
+        $this->tapiObject->init();
+        $this->setCorrectInputParams();
+        $data = $this->tapiObject->getData(TRUE);
         
-        $userDeleter = $this->container->getByType("Tapi\OptionDeleteResource");
-        $userDeleter->setId($data->id)->perform();
+        $deleter = $this->container->getByType("Tapi\OptionDeleteResource");
+        foreach ($data as $opt) {
+            $deleter->init()->setId($opt->pollId)->setOptionId($opt->id)->perform();
+        }
+        
     }
     
     private function mockPollOptions(){

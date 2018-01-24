@@ -36,7 +36,12 @@ class DiscussionCreateResourceTest extends TapiTest {
     }
 
     public function testPerformSuccess() {
-        //operational tests are performed on mother object (CRUD collaboration)
+        $this->authenticateTapi($GLOBALS["testedTeam"]["user_admin"], $GLOBALS["testedTeam"]["pass_admin"]);
+        $this->tapiObject->init();
+        $this->setCorrectInputParams();
+        $data = $this->tapiObject->getData(TRUE);
+        $deleter = $this->container->getByType("Tapi\DiscussionDeleteResource");
+        $deleter->init()->setId($data->id)->perform();
     }
 
 }
