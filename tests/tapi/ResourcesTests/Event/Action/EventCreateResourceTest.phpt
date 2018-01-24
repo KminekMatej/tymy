@@ -85,6 +85,13 @@ class EventCreateResourceTest extends TapiTest {
         $this->tapiObject->init();
         $this->setCorrectInputParams();
         $data = $this->tapiObject->getData(TRUE);
+        //edit
+        $editor = $this->container->getByType("Tapi\EventEditResource");
+        $editor->init()->
+                setId($data[0]->id)->
+                setEvent(["caption" => "Autotest edited event"])->
+                perform();
+        //delete
         $deleter = $this->container->getByType("Tapi\EventDeleteResource");
         foreach ($data as $event) {
             $deleter->init()->setId($event->id)->perform();
