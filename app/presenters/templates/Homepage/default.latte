@@ -133,7 +133,7 @@
                                 {var $lastLogin = property_exists($usr, 'lastLogin') ? ($usr->lastLogin|date:'j.n.Y H:i:s') : 'Nikdy'}
                                 {var $caption = property_exists($usr, 'lastLogin') ? ($usr->lastLogin|lastLogin) : 'Nikdy'}
                                 <a href="{plink Team:player $usr->webName}" title="{$lastLogin}">
-                                    <img src="{$tymyRoot}/{$usr->pictureUrl}" class="figure-img img-fluid rounded user_pic" alt="{$usr->fullName}" />
+                                    <img src="{$tymyRoot}/{$usr->pictureUrl}" class="figure-img img-fluid rounded user_pic" n:attr="alt => property_exists($usr, 'fullName' ? $usr->fullName : '')"/>
                                     <figcaption class="figure-caption">{$usr->displayName}</figcaption>
                                     <figcaption class="figure-caption" style="font-size: 70%; display: inline-block">{$caption}</figcaption>
                                 </a>
