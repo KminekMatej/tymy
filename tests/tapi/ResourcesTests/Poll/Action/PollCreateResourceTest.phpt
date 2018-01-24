@@ -42,7 +42,11 @@ class PollCreateResourceTest extends TapiTest {
         $this->tapiObject->init();
         $this->setCorrectInputParams();
         $data = $this->tapiObject->getData(TRUE);
-        $deleter = $this->container->getByType("Tapi\EventDeleteResource");
+        //edit
+        $editor = $this->container->getByType("Tapi\PollEditResource");
+        $editor->init()->setId($data->id)->setPoll(["caption"=>"Autotest " . rand(0, 100)])->perform();
+        //delete
+        $deleter = $this->container->getByType("Tapi\PollDeleteResource");
         $deleter->init()->setId($data->id)->perform();
     }
 
