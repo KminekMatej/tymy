@@ -132,7 +132,7 @@ class TeamPresenter extends SecuredPresenter {
         try {
             $this->userEditor->init()
                 ->setId($bind["id"])
-                ->setUserData($bind["changes"])
+                ->setUser($bind["changes"])
                 ->perform();
         } catch (APIException $ex) {
             $this->handleTapiException($ex, "this");

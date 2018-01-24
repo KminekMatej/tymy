@@ -15,7 +15,7 @@ class UserEditResource extends UserResource {
         parent::globalInit();
         $this->setCacheable(FALSE);
         $this->setMethod(RequestMethod::PUT);
-        $this->setUserData(NULL);
+        $this->setUser(NULL);
         return $this;
     }
 
@@ -27,7 +27,7 @@ class UserEditResource extends UserResource {
             throw new APIException('User object not set');
         
         $this->setUrl("users/" . $this->getId());
-        $this->setRequestData($this->getUserData());
+        $this->setRequestData($this->getUser());
 
         return $this;
     }
@@ -36,12 +36,12 @@ class UserEditResource extends UserResource {
         $this->clearCache($this->getId());
     }
     
-    public function getUserData() {
-        return $this->options->userData;
+    public function getUser() {
+        return $this->options->user;
     }
 
-    public function setUserData($userData) {
-        $this->options->userData = $userData;
+    public function setUser($user) {
+        $this->options->user = $user;
         return $this;
     }
 
