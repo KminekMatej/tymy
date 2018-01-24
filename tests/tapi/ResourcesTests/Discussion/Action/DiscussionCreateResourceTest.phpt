@@ -28,7 +28,7 @@ class DiscussionCreateResourceTest extends TapiTest {
     }
 
     public function setCorrectInputParams() {
-        $this->tapiObject->setDiscussion((object)["caption" => "Autotest created discussion " . md5(rand(0, 100))]);
+        $this->tapiObject->setDiscussion($this->mockDiscussion());
     }
     
     public function testErrorNoObject(){
@@ -40,8 +40,16 @@ class DiscussionCreateResourceTest extends TapiTest {
         $this->tapiObject->init();
         $this->setCorrectInputParams();
         $data = $this->tapiObject->getData(TRUE);
+        //edit
+        $editor = $this->container->getByType("Tapi\DiscussionEditResource");
+        $editor->init()->setId($data->id)->setDiscussion($this->mockDiscussion())->perform();
+        //delete
         $deleter = $this->container->getByType("Tapi\DiscussionDeleteResource");
         $deleter->init()->setId($data->id)->perform();
+    }
+    
+    private function mockDiscussion(){
+        return (object)["caption" => "Autotest created discussion " . md5(rand(0, 100))];
     }
 
 }
