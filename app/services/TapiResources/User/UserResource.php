@@ -70,7 +70,7 @@ abstract class UserResource extends TapiObject{
             $player->errCnt++;
             $player->errFls[] = "jerseyNumber";
         }
-        if ($player->status == "INIT") {
+        if (isset($player->status) && $player->status == "INIT") {
             $player->errCnt++;
             $player->errFls[] = "status";
         }
