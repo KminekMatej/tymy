@@ -25,7 +25,7 @@ class DiscussionListResource extends DiscussionResource {
         $this->options->warnings = 0;
         foreach ($this->data as $discussion) {
             parent::postProcessDiscussion($discussion);
-            if($discussion->newInfo->newsCount > 0) $this->options->warnings++;
+            if(property_exists($discussion, "newInfo") && $discussion->newInfo->newsCount > 0) $this->options->warnings++;
         }
         
     }
