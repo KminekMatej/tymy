@@ -137,9 +137,8 @@ class TapiService {
                 Debugger::barDump($this->url);
                 Debugger::barDump($this->tapiObject->getMethod());
                 Debugger::barDump($this->tapiObject->getRequestData());
-            } else {
-                throw new APIException("Unknown error while procesing tapi request");
             }
+            throw new APIException("Request " . $this->url . " [" . $this->tapiObject->getMethod() . "] failed with error " . $curl_info["http_code"] . ". JSON parsing error: " . $exc->getMessage());
         }
         
         switch ($curl_info["http_code"]) {
@@ -156,7 +155,7 @@ class TapiService {
                 Debugger::barDump($this->url);
                 Debugger::barDump($this->tapiObject->getMethod());
                 Debugger::barDump($this->tapiObject->getRequestData());
-                throw new APIException("Request [" . $this->tapiObject->getMethod() . "] " . $this->url . " failed with error code " . $curl_info["http_code"]);
+                throw new APIException("Request " . $this->url . " [" . $this->tapiObject->getMethod() . "] failed with error " . $curl_info["http_code"] . ": " . $resultStatus->getMessage());
         }
     }
 
