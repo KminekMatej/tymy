@@ -4,6 +4,10 @@
     Author     : kminekmatej
 */
 
+.table-xs{
+    margin: auto;
+}
+
 .table-xs th {
     text-align: center;
 }
@@ -15,3 +19,8 @@
 .table-xs INPUT[type='datetime-local']{
     font-size: 12px;
 }
+
+.table-xs .custom-control-inline{
+    margin-right: auto;
+}
+
