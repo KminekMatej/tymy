@@ -8,6 +8,7 @@ use Tapi\EventListResource;
 use Tapi\UserListResource;
 use Tapi\UserDetailResource;
 use Tapi\PollListResource;
+use Tapi\NoteListResource;
 use Tapi\Exception\APIException;
 
 
@@ -36,6 +37,9 @@ class NavbarControl extends Control {
     /** @var UserListResource */
     private $userList;
 
+    /** @var NoteListResource */
+    private $noteList;
+
     /** @var \App\Model\Supplier */
     private $supplier;
 
@@ -48,6 +52,7 @@ class NavbarControl extends Control {
         parent::__construct();
         $this->presenter = $presenter;
         $this->discussionList = $presenter->discussionList;
+        $this->noteList = $presenter->noteList;
         $this->polls = $this->presenter->polls;
         $this->eventList = $this->presenter->eventList;
         $this->userDetail = $this->presenter->userDetail;
@@ -55,6 +60,15 @@ class NavbarControl extends Control {
         $this->supplier = $this->presenter->supplier;
         $this->presenterUser = $this->presenter->getUser();
         $this->accessibleSettings = $this->presenter->getAccessibleSettings();
+    }
+    
+    private function notes() {
+        try {
+            $this->template->notes = $this->noteList->init()->getData();
+            $this->template->notesWarnings = $this->noteList->getWarnings();
+        } catch (APIException $ex) {
+            $this->handleTapiException($ex);
+        }
     }
 
     private function discussions() {
@@ -126,6 +140,8 @@ class NavbarControl extends Control {
         $this->polls();
         //tapi settings
         $this->settings();
+        //tapi notes
+        $this->notes();
 
         $template->render();
     }

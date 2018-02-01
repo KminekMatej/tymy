@@ -63,6 +63,19 @@
                 </div>
             </li>
             
+            <li class="nav-item dropdown" name="notes">
+                {if $notesWarnings > 0}<span class="badge badge-pill badge-danger badge-new">{$noteWarnings}</span>{/if}
+                <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-pie-chart" aria-hidden="true"></i> Poznámky</a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <button n:if="count($notes) == 0" class="dropdown-item disabled" type="button"> - Žádné - </button>
+                    {foreach $notes as $n}
+                        <a class="dropdown-item" href="{plink Notes:note $n->webName}">
+                            {$n->caption}
+                        </a>
+                    {/foreach}
+                </div>
+            </li>
+            
             <li class="nav-item dropdown" name="settings">
                 <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cogs" aria-hidden="true"></i> Nastavení</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
@@ -75,6 +88,7 @@
                 <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-circle" aria-hidden="true"></i> {$me->displayName}</a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                     <a class="dropdown-item" href="{plink Sign:out}"><i class="fa fa-power-off" aria-hidden="true"></i> Odhlásit</a>
+                    <div class="dropdown-divider"></div>
                 </div>
             </li>
                 

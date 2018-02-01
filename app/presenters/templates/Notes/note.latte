@@ -1,0 +1,24 @@
+{import '../components/secured.latte'}
+
+{block navbar}
+{control navbar}
+{/block}
+
+{block content}
+
+<div class="container note">
+    <div class="row">
+        <div class="col my-3">
+            <div class="card sh-box">
+                <div class="card-header">
+                    <h4 class="card-title">{$note->caption}</h4>
+                </div>
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-2 text-muted">{$note->description}</h6>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
