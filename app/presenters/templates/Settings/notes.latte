@@ -1,0 +1,72 @@
+{import '../components/secured.latte'}
+
+{block scripts}
+{include parent}
+<script src="{$basePath}/js/Binder.js"></script>
+{/block}
+
+{block styles}
+{include parent}
+<link rel='stylesheet' href="{$basePath}/css/table-xs.css" />
+{/block}
+
+{block navbar}
+{control navbar}
+{/block}
+
+{block content}
+<div class="container settings">
+    <div class="row">
+        <div class="col">
+            <div class="card sh-box my-3">
+                <div class="card-header">
+                    <h4>{if $isNew}Nová poznámka{else}Nastavení poznámek{/if}</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table table-xs table-hover table-responsive">
+                        <tr>
+                            <th></th>
+                            <th>Titulek</th>
+                            <th>Popis</th>
+                            <th title="Vyberte kdo má přístup k poznámce: Soukromá (pouze vy), Pro členy, Veřejná (jde zobrazit u bez přihlášení)">Přístup</th>
+                            <th title="Uvést v hlavním menu">Menu</th>
+                            <th title="Vyberte speciální systémový kód poznámky. Více viz O poznámkách">Systémová</th>
+                            <th title="Pořadí v menu">Pořadí</th>
+                            <th></th>
+                        </tr>
+                        <tr n:foreach="$notes as $note" data-binder-id="{$note->id}">
+                            <td>
+                                <a n:if="!$isNew" href="{plink Settings:notes $note->webName}" class="btn btn-sm btn-light btn-light-bordered"  title="Upravit" style="margin-right: 2px">
+                                    <i class="fa fa-external-link" aria-hidden="true"></i>
+                                </a>
+                            </td>
+                            <td><input type="text" name="caption" data-value="{$note->caption}" value="{$note->caption}" class="form-control form-control-sm" required/></td>
+                            <td><input type="text" name="description" data-value="{$note->description}" value="{$note->description}" class="form-control form-control-sm" required/></td>
+                            <td>
+                                <select name="accessType" data-value="{$note->accessType}" class="form-control form-control-sm">
+                                    <option value="PRIVATE" n:attr="selected => $note->accessType == 'PRIVATE'">Soukromá</option>
+                                    <option value="USERS" n:attr="selected => $note->accessType == 'USERS'">Pro členy</option>
+                                    <option value="PUBLIC" n:attr="selected => $note->accessType == 'PUBLIC'">Veřejná</option>
+                                </select>
+                            </td>
+                            <td class="text-center"><label class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" name="menuType" n:attr="data-value => $note->menuType ? 'ON':'OFF', checked => $note->menuType" class="form-control form-control-sm custom-control-input" /><span class="custom-control-label"></span></label></td>
+                            <td><input type="text" name="specialPage" data-value="{$note->specialPage}" value="{$note->specialPage}" class="form-control form-control-sm" required/></td>
+                            <td><input name="menuOrder" data-value="{$note->menuOrder}" type="number" value="{$note->menuOrder}" class="form-control form-control-sm"/></td>
+
+                            <td class="btn-group" role="group" n:inner-if="$note->canWrite || $isNew">
+                                <button class="btn btn-sm btn-primary binder-save-btn" title="Uložit" style="margin-right: 2px"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                <button href="{link pollDelete!}" n:class="btn,btn-sm,btn-danger, !$isNew ? binder-delete-btn" title="Smazat" n:attr="onclick => $isNew ? 'removeRow(this)'"><i class="fa fa-times" aria-hidden="true"></i></button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="card-footer text-right">
+                    <a n:if="!$isNew" class="btn btn-lg btn-success" href="{plink Settings:note_new}" onclick="btnRotate($(this), true)" title="Vytvořit novou poznámku" style="margin-right: 10px">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -64,7 +64,7 @@ class NavbarControl extends Control {
     
     private function notes() {
         try {
-            $this->template->notes = $this->noteList->init()->getData();
+            $this->template->notes = $this->noteList->init()->setMenu(TRUE)->getData();
             $this->template->notesWarnings = $this->noteList->getWarnings();
         } catch (APIException $ex) {
             $this->handleTapiException($ex);

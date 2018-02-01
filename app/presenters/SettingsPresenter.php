@@ -18,6 +18,7 @@ use Tapi\OptionListResource;
 use Tapi\OptionCreateResource;
 use Tapi\OptionEditResource;
 use Tapi\OptionDeleteResource;
+use Tapi\NoteListResource;
 use Tapi\Exception\APIException;
 
 
@@ -122,6 +123,17 @@ class SettingsPresenter extends SecuredPresenter {
         }
     }
 
+    public function actionNotes($note = NULL) {
+        $this->setLevelCaptions(["2" => ["caption" => "Poznámky", "link" => $this->link("Settings:notes")]]);
+        if(!is_null($note)){
+            $this->setView("note");
+        } else {
+            $this->template->isNew = false;
+            $notes = $this->noteList->setMenu(FALSE)->getData();
+            $this->template->notes = $notes;
+        }
+    }
+    
     public function actionReports() {
         //TODO
         $this->setLevelCaptions(["2" => ["caption" => "Reporty", "link" => $this->link("Settings:reports")]]);

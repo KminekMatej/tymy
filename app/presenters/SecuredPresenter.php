@@ -174,6 +174,7 @@ class SecuredPresenter extends BasePresenter {
         if($this->getUser()->isAllowed('settings','team')) $this->accessibleSettings[] = new SettingMenu("team", "Tým", $this->link("Settings:team"), "fa-users", FALSE);
         // TO BE ENABLED WHEN ITS READY
         if($this->getUser()->isAllowed('settings','polls')) $this->accessibleSettings[] = new SettingMenu("polls", "Ankety", $this->link("Settings:polls"), "fa-pie-chart", TRUE);
+        if($this->getUser()->isAllowed('settings','notes')) $this->accessibleSettings[] = new SettingMenu("notes", "Poznámky", $this->link("Settings:notes"), "fa-sticky-note", TRUE);
         // TO BE ENABLED WHEN ITS READY
         if($this->getUser()->isAllowed('settings','reports')) $this->accessibleSettings[] = new SettingMenu("reports", "Reporty", $this->link("Settings:reports"), "fa-bar-chart", FALSE);
         // TO BE ENABLED WHEN ITS READY

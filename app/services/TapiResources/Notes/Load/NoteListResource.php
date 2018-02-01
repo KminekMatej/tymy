@@ -13,13 +13,14 @@ class NoteListResource extends NoteResource {
     public function init() {
         parent::globalInit();
         $this->setCachingTimeout(TapiObject::CACHE_TIMEOUT_LARGE);
+        $this->options->menu = NULL;
         $this->options->bySpecialPage = NULL;
         $this->options->byId = NULL;
         return $this;
     }
     
     protected function preProcess() {
-        $this->setUrl("notes/html");
+        $this->setUrl($this->getMenu() ? "notes/menu" : "notes/html");
         $this->options->bySpecialPage = [];
         $this->options->byId = [];
     }
@@ -40,6 +41,16 @@ class NoteListResource extends NoteResource {
     public function getById(){
         return $this->options->byId;
     }
+    
+    public function getMenu() {
+        return $this->options->menu;
+    }
+
+    public function setMenu($menu) {
+        $this->options->menu = $menu;
+        return $this;
+    }
+
 
 
 }

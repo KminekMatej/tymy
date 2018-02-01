@@ -74,6 +74,8 @@ class TapiAuthorizator implements Nette\Security\IAuthorizator {
                 return in_array($this->role, ["SUPER"]) ? TapiAuthorizator::ALLOW : TapiAuthorizator::DENY;
             case "polls"://TODO check for right PAGE::VOTE and check for right SYS::ASK.VOTE_CREATE or SYS::ASK.VOTE_UPDATE or SYS::ASK.VOTE_DELETE
                 return TapiAuthorizator::ALLOW;
+            case "notes":
+                return TapiAuthorizator::ALLOW;
             case "reports"://TODO check for right PAGE::REPORTS and right SYS::REP_SETUP (or possibly check whether api returns this possibility)
                 return TapiAuthorizator::ALLOW;
             case "permissions"://TODO check for role SUPER and right PAGE::RIGHTS (or possibly check whether api returns this possibility)
