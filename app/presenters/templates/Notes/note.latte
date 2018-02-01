@@ -12,9 +12,12 @@
             <div class="card sh-box">
                 <div class="card-header">
                     <h4 class="card-title">{$note->caption}</h4>
+                    <h6 class="card-subtitle mb-2 text-muted">{$note->description}</h6>
                 </div>
                 <div class="card-body">
-                    <h6 class="card-subtitle mb-2 text-muted">{$note->description}</h6>
+                    <div class="card-text">
+                        {$note->source|noescape}
+                    </div>
                 </div>
             </div>
 

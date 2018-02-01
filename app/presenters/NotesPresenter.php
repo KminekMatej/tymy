@@ -14,6 +14,12 @@ class NotesPresenter extends SecuredPresenter {
     
     public $navbar;
     
+    protected function startup() {
+        parent::startup();
+        $this->setLevelCaptions(["1" => ["caption" => "Poznámky", "link" => $this->link("Notes:")]]);
+    }
+
+    
     public function renderDefault() {
         try {
             $this->template->notes = $this->noteList->init()->getData();
@@ -22,14 +28,16 @@ class NotesPresenter extends SecuredPresenter {
         }
     }
     
-    public function renderNote($note){
-        $id = $this->parseIdFromWebname($note);
+    public function renderNote($poznamka){
+        $id = $this->parseIdFromWebname($poznamka);
         try {
             $this->noteList->init()->getData();
-            $this->template->note = $this->noteList->getById()[$id];
+            $note = $this->noteList->getById()[$id];
+            $this->template->note = $note;
         } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
+        $this->setLevelCaptions(["2" => ["caption" => $note->caption, "link" => $this->link("Notes:note", $note->id . "-" . $note->webName)]]);
     }
     
 }
