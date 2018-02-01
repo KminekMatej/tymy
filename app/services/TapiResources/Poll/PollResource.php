@@ -11,6 +11,7 @@ namespace Tapi;
 abstract class PollResource extends TapiObject{
     
     protected function postProcessPoll($poll){
+        if($poll == null) throw new Exception\APINotFoundException ("Anketa nenalezena");
         $poll->warnings = 0;
         $poll->webName = \Nette\Utils\Strings::webalize($poll->id . "-" . $poll->caption);
         if ($poll->status == "OPENED" && $poll->canVote && !$poll->voted)

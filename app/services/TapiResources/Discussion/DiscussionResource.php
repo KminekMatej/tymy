@@ -22,6 +22,7 @@ abstract class DiscussionResource extends TapiObject {
     }
 
     protected function postProcessDiscussion($discussion) {
+        if($discussion == null) throw new Exception\APINotFoundException ("Diskuze nenalezena");
         $discussion->webName = Strings::webalize($discussion->caption);
         if(!empty($discussion->updatedAt)){
             $this->timeLoad($discussion->updatedAt);

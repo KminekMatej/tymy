@@ -12,6 +12,7 @@ use \Nette\Utils\Strings;
 abstract class EventResource extends TapiObject {
     
     protected function postProcessEvent($event){
+        if($event == null) throw new Exception\APINotFoundException ("Událost nenalezena");
         $event->webName = Strings::webalize($event->id . "-" . $event->caption);
         $event->warning = false;
 

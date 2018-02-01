@@ -11,7 +11,9 @@ namespace Tapi;
 abstract class NoteResource extends TapiObject {
     
     protected function postProcessNote($note){
-        //todo
+        if($note == null) throw new Exception\APINotFoundException ("Poznámka nenalezena");
+        $note->warnings = 0;
+        $note->webName = \Nette\Utils\Strings::webalize($note->id . "-" . $note->caption);
     }
     
     protected function clearCache($id = NULL){
