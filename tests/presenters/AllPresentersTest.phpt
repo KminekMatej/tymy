@@ -42,6 +42,8 @@ class AllPresentersTest extends IPresenterTest {
             ["presenter" => "Poll", "action" => "default", "params" => []],
             ["presenter" => "Poll", "action" => "poll", "params" => ["anketa" => "2-nejaka-anketa"]],
             ["presenter" => "Poll", "action" => "poll", "params" => ["anketa" => "1-klasika"]],
+            ["presenter" => "Notes", "action" => "default", "params" => []],
+            ["presenter" => "Notes", "action" => "note", "params" => ["poznamka" => "4-o-poznamkach"]],
             ["presenter" => "Settings", "action" => "default", "params" => []],
             ["presenter" => "Settings", "action" => "event", "params" => ["event" => $GLOBALS["testedTeam"]["testEventId"]]],
             ["presenter" => "Settings", "action" => "event_new", "params" => []],
