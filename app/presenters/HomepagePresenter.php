@@ -39,20 +39,19 @@ class HomepagePresenter extends SecuredPresenter {
         parent::showNotes();
         try {
             $this->eventList->init()->setHalfYearFrom(NULL, NULL)->getData();
+            $this->template->liveUsers = $this->live->init()->getData();
             $this->template->discussions = $this->discussionList->init()->getData();
             $this->template->users = $this->sortUsersByLastLogin($this->userList->init()->getData());
-            $this->template->today = date('m-d');
-            $this->template->tommorow = date('m-d', strtotime('+ 1 day'));
         } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
-
+        $this->template->today = date('m-d');
+        $this->template->tommorow = date('m-d', strtotime('+ 1 day'));
         $this->template->currY = date("Y");
         $this->template->currM = date("m");
         $this->template->evMonths = $this->eventList->getAsMonthArray();
         $this->template->events = $this->eventList->getAsArray();
         $this->template->eventTypes = $this->eventTypeList;
-        $this->template->liveUsers = $this->live->init()->getData();
     }
 
     private function sortUsersByLastLogin($usersArray){

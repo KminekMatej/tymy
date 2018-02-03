@@ -76,7 +76,7 @@ class NavbarControl extends Control {
             $this->template->discussions = $this->discussionList->init()->getData();
             $this->template->discussionWarnings = $this->discussionList->getWarnings();
         } catch (APIException $ex) {
-            $this->handleTapiException($ex);
+            $this->presenter->handleTapiException($ex);
         }
     }
 
@@ -84,7 +84,7 @@ class NavbarControl extends Control {
         try {
             $this->userList->init()->getData();
         } catch (APIException $ex) {
-            $this->handleTapiException($ex);
+            $this->presenter->handleTapiException($ex);
         }
 
         $this->template->counts = $this->userList->getCounts();
@@ -98,7 +98,7 @@ class NavbarControl extends Control {
             $this->template->voteWarnings = $this->polls->getWarnings();
             
         } catch (APIException $ex) {
-            $this->handleTapiException($ex);
+            $this->presenter->handleTapiException($ex);
         }
     }
 
@@ -112,7 +112,7 @@ class NavbarControl extends Control {
             $this->template->eventWarnings = $this->eventList->getWarnings();
             
         } catch (APIException $ex) {
-            $this->handleTapiException($ex);
+            $this->presenter->handleTapiException($ex);
         }
     }
 

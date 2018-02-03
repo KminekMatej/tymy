@@ -5,6 +5,7 @@ use Nette\Utils\JsonException;
 use Nette\Security\User;
 use Tapi\Exception\APIAuthenticationException;
 use Tapi\Exception\APIException;
+use Tapi\Exception\APINotFoundException;
 use App\Model\TapiAuthenticator;
 use Tracy\Debugger;
 use Nette\Utils\Json;
@@ -69,6 +70,8 @@ class TapiService {
     
     /**
      * @param \Tapi\TapiObject $tapiObject Object to perform request on
+     * @throws APIException
+     * @throws APIAuthenticationException
      * @return ResultStatus or NULL on failure;
      */
     public function requestNoRelogin(TapiObject $tapiObject){
@@ -77,6 +80,11 @@ class TapiService {
         return $this->performRequest(FALSE);
     }
     
+    /**
+     * @param bool $relogin
+     * @return ResultStatus
+     * @throws APIException
+     */
     private function performRequest($relogin = TRUE) {
         if (is_null($this->supplier->getApiRoot()) || is_null($this->tapiObject) || is_null($this->url))
             throw new APIException("Failure: request input data not set correctly.");
@@ -128,6 +136,11 @@ class TapiService {
         return (object) $result;
     }
 
+    /**
+     * @return ResultStatus
+     * @throws APIException
+     * @throws APINotFoundException
+     */
     private function respond($curl_data, $curl_info, $relogin) {
         try {
             $resultStatus = new ResultStatus(Json::decode($curl_data));
@@ -138,7 +151,7 @@ class TapiService {
                 Debugger::barDump($this->tapiObject->getMethod());
                 Debugger::barDump($this->tapiObject->getRequestData());
             }
-            throw new APIException("Request " . $this->url . " [" . $this->tapiObject->getMethod() . "] failed with error " . $curl_info["http_code"] . ". JSON parsing error: " . $exc->getMessage());
+            throw new APINotFoundException("Request " . $this->url . " [" . $this->tapiObject->getMethod() . "] failed with error " . $curl_info["http_code"] . ". JSON parsing error: " . $exc->getMessage());
         }
         
         switch ($curl_info["http_code"]) {

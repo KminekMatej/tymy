@@ -114,7 +114,12 @@ class DiscussionPresenter extends SecuredPresenter {
     }
     
     public function renderDiscussion($discussion, $page, $search, $suser = "all", $jump2date = "") {
-        $discussionId = DiscussionResource::getIdFromWebname($discussion, $this->discussionsList->init()->getData());
+        try {
+            $discussionId = DiscussionResource::getIdFromWebname($discussion, $this->discussionsList->init()->getData());
+        } catch (APIException $ex) {
+            $this->handleTapiException($ex);
+        }
+        
         parent::showNotes($discussionId);
         if (is_null($discussionId) || $discussionId < 1)
             $this->error("Tato diskuze neexistuje");

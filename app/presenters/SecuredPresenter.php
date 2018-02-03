@@ -134,9 +134,9 @@ class SecuredPresenter extends BasePresenter {
             return intval($webName);
     }
     
-    protected function handleTapiException(APIException $ex, $redirect = null, $args = []){
-        $this->flashMessage("Došlo k nečekané chybě: ||" . $ex->getMessage());
-        $this->redirect($redirect == NULL ? $this->getName() . ":default" : $redirect, $args);
+    public function handleTapiException(APIException $ex, $redirect = null, $args = []){
+        $this->flashMessage("Došlo k nečekané chybě: " . $ex->getMessage());
+        $this->error("Došlo k nečekané chybě: " . $ex->getMessage());
     }
     
     /**

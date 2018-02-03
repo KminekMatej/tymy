@@ -139,6 +139,11 @@ abstract class TapiObject {
         }
     }
 
+    /**
+     * @param type $relogin
+     * @return ResultStatus
+     * @throws APIException
+     */
     protected function requestFromApi($relogin = TRUE) {
         $resultStatus = $relogin ? $this->tapiService->request($this) : $this->tapiService->requestNoRelogin($this);
         if ($resultStatus->isValid()) {
@@ -208,6 +213,10 @@ abstract class TapiObject {
         return $this;
     }
     
+    /**
+     * @param bool $forceRequest
+     * @throws APIException
+     */
     public function getData($forceRequest = FALSE) {
         $this->preProcess();
         $this->dataReady = FALSE;
