@@ -18,7 +18,7 @@ Environment::lock('tapi', substr(__DIR__, 0, strpos(__DIR__, "tests/lockdir")));
 class DiscussionListResourceTest extends TapiTest {
     
     public function getCacheable() {
-        return TRUE;
+        return FALSE;
     }
 
     public function getJSONEncoding() {
