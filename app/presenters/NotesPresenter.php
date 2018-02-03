@@ -23,7 +23,7 @@ class NotesPresenter extends SecuredPresenter {
     public function renderDefault() {
         parent::showNotes();
         try {
-            $this->template->notes = $this->noteList->init()->getData();
+            $this->template->notes = $this->noteList->init()->setMenu(TRUE)->getData();
         } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
