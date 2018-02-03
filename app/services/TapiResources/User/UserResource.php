@@ -15,10 +15,51 @@ abstract class UserResource extends TapiObject{
         $user->webName = (string)$user->id;
         if(property_exists($user, "fullName")) $user->webName .= "-" . Strings::webalize($user->displayName);
         if(!property_exists($user, "gender")) $user->gender = "UNKNOWN"; //set default value
+        if(!property_exists($user, "login")) $user->login = ""; //set default value
+        if(!property_exists($user, "callName")) $user->callName = ""; //set default value
     }
+    
+    
+    
+    /*
+     * 
+        if (!isset($user->))
+            $user->lastName = "";
+        if (!isset($user->))
+            $user->login = "";
+        if (!isset($user->))
+            $user->callName = "";
+        if (!isset($user->))
+            $user->jerseyNumber = "";
+        if (!isset($user->))
+            $user->street = "";
+        if (!isset($user->))
+            $user->city = "";
+        if (!isset($user->zipCode))
+            $user-> = "";
+        if (!isset($user->))
+            $user->birthDate = "";
+        if (!isset($user->))
+            $user->phone = "";
+        if (!isset($user->))
+            $user->phone2 = "";
+        if (!isset($user->))
+            $user->email = "";
+     */
+    
     
     protected function postProcessUser($user){
         $this->postProcessSimpleUser($user);
+        if(!property_exists($user, "firstName")) $user->firstName = ""; //set default value
+        if(!property_exists($user, "lastName")) $user->lastName = ""; //set default value
+        if(!property_exists($user, "jerseyNumber")) $user->jerseyNumber = ""; //set default value
+        if(!property_exists($user, "street")) $user->street = ""; //set default value
+        if(!property_exists($user, "city")) $user->city = ""; //set default value
+        if(!property_exists($user, "zipCode")) $user->zipCode = ""; //set default value
+        if(!property_exists($user, "birthDate")) $user->birthDate = ""; //set default value
+        if(!property_exists($user, "phone")) $user->phone = ""; //set default value
+        if(!property_exists($user, "phone2")) $user->phone2 = ""; //set default value
+        if(!property_exists($user, "email")) $user->email = ""; //set default value
         if(!property_exists($user, "language")) $user->language = "CZ"; //set default value
         if(!property_exists($user, "canEditCallName")) $user->canEditCallName = true; //set default value
         if(property_exists($user, "lastLogin")) $this->timeLoad($user->lastLogin);

@@ -90,32 +90,6 @@ class TeamPresenter extends SecuredPresenter {
 
         $this->setLevelCaptions(["2" => ["caption" => $user->displayName, "link" => $this->link("Team:player", $user->webName)]]);
 
-        //set default values to avoid latte exceptions
-        if (!isset($user->firstName))//TODO handle in latte or postProcess
-            $user->firstName = "";
-        if (!isset($user->lastName))
-            $user->lastName = "";
-        if (!isset($user->login))
-            $user->login = "";
-        if (!isset($user->callName))
-            $user->callName = "";
-        if (!isset($user->jerseyNumber))
-            $user->jerseyNumber = "";
-        if (!isset($user->street))
-            $user->street = "";
-        if (!isset($user->city))
-            $user->city = "";
-        if (!isset($user->zipCode))
-            $user->zipCode = "";
-        if (!isset($user->birthDate))
-            $user->birthDate = "";
-        if (!isset($user->phone))
-            $user->phone = "";
-        if (!isset($user->phone2))
-            $user->phone2 = "";
-        if (!isset($user->email))
-            $user->email = "";
-
         $this->template->player = $user;
         $allRoles = [];
         $allRoles[] = (object) ["code" => "SUPER", "caption" => "Administrátor", "class" => $this->supplier->getRoleClass("SUPER")];
