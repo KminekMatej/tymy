@@ -14,6 +14,7 @@ use Tester\Environment;
 use Tester\DomQuery;
 use Tapi\EventListResource;
 use Tapi\PollListResource;
+use Tapi\NoteListResource;
 use Tapi\TapiService;
 
 $container = require __DIR__ . '/../bootstrap.php';
@@ -34,6 +35,9 @@ class NavbarTest extends TestCase {
     
     /** @var PollListResource */
     private $pollList;
+    
+    /** @var NoteListResource */
+    private $noteList;
     
     /** @var EventListResource */
     private $eventList;
@@ -62,6 +66,7 @@ class NavbarTest extends TestCase {
         $this->supplier = $this->container->getByType('App\Model\Supplier');
         $this->discussionList = $this->container->getByType('Tapi\DiscussionListResource');
         $this->pollList = $this->container->getByType('Tapi\PollListResource');
+        $this->noteList = $this->container->getByType('Tapi\NoteListResource');
         $this->eventList = $this->container->getByType('Tapi\EventListResource');
         $this->userList = $this->container->getByType('Tapi\UserListResource');
         $this->tapiService = $this->container->getByType('Tapi\TapiService');
@@ -115,6 +120,7 @@ class NavbarTest extends TestCase {
         
         $dObj = $this->discussionList->getData();
         $pObj = $this->pollList->getData();
+        $nObj = $this->noteList->getData();
         $uObj = $this->userList->getData();
         $uCounts = $this->userList->getCounts();
         $eObj = $this->eventList
@@ -132,8 +138,8 @@ class NavbarTest extends TestCase {
         Assert::true($dom->has("ul.navbar-nav.mr-auto"));
         Assert::equal(count($dom->find("ul.navbar-nav")), 2); //2 navbar menus (left and right)
         
-        Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item")), 5); //5 menu items in the first menu
-        Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")), 5); //5 of them with dropdown
+        Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item")), 6); //5 menu items in the first menu
+        Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")), 6); //5 of them with dropdown
         
         Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown[name='discussions'] div a")), count((array)$dObj)); //check if the discussions are all displayed
         Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown[name='events'] div a")), count((array)$eObj) + 1, "Displayed " . count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown")[1]->div->a) . "events instead of expected " . count((array)$eObj) + 1); //check display all events + 1
@@ -141,10 +147,11 @@ class NavbarTest extends TestCase {
         $teamMenuDropdownCount = ($uCounts["INIT"] > 0 && $this->user->isAllowed('users','canSeeRegisteredUsers')) ? 6 : 5;
         Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown[name='team'] div a")), $teamMenuDropdownCount, $caption);
         Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown[name='polls'] div a")), count((array)$pObj)); //check if the polls are all displayed
+        Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown[name='notes'] div a")), count((array)$nObj)); //check if the polls are all displayed
         $settingsDropdownCount = count($this->presenter->getAccessibleSettings());
         Assert::equal(count($dom->find("ul.navbar-nav.mr-auto li.nav-item.dropdown[name='settings'] div a")), $settingsDropdownCount); //7 settings items are in menu
         
-        Assert::equal(count($dom->find("ul.navbar-nav li.nav-item.dropdown")[5]->div->a), 1); //check if the right menu is displayed
+        Assert::equal(count($dom->find("ul.navbar-nav li.nav-item.dropdown")[6]->div->a), 1); //check if the right menu is displayed
     }
     
 }
