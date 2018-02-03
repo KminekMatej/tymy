@@ -5,4 +5,20 @@
 {/block}
 
 {block content}
-Polls - TODO
+
+<div class="container polls">
+    <div class="row justify-content-md-center">
+        <div class="col-8 my-3">
+            <div class="card sh-box">
+                <div class="card-body">
+                    {foreach $polls as $poll}
+                        <div class="row my-2">
+                            <div class="col-sm-3 name"><a href="{plink Poll:poll $poll->webName}">{$poll->caption}</a></div>
+                            <div class="col-sm-9">{$poll->description}</div>
+                        </div>
+                    {/foreach}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

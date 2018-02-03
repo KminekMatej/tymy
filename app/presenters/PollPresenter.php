@@ -16,6 +16,10 @@ class PollPresenter extends SecuredPresenter {
 
     public $navbar;
     
+    /** @var PollListResource @inject */
+    public $pollList;
+    
+    
     /** @var PollDetailResource @inject */
     public $poll;
     
@@ -29,6 +33,11 @@ class PollPresenter extends SecuredPresenter {
     
     public function renderDefault() {
         parent::showNotes();
+        try {
+            $this->template->polls = $this->pollList->init()->setMenu(TRUE)->getData();
+        } catch (APIException $ex) {
+            $this->handleTapiException($ex);
+        }
     }
     
     public function renderPoll($anketa) {
