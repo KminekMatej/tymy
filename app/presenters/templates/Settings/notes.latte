@@ -49,7 +49,7 @@
                                     <option value="PUBLIC" n:attr="selected => $note->accessType == 'PUBLIC'">Veřejná</option>
                                 </select>
                             </td>
-                            <td class="text-center"><label class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" name="menuType" n:attr="data-value => $note->menuType ? 'ON':'OFF', checked => $note->menuType" class="form-control form-control-sm custom-control-input" /><span class="custom-control-label"></span></label></td>
+                            <td class="text-center"><label class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" name="menuType" n:attr="data-value => $note->menuType == 'APP' ? 'APP':'NO', checked => $note->menuType == 'APP'" class="form-control form-control-sm custom-control-input" /><span class="custom-control-label"></span></label></td>
                             <td><input type="text" name="specialPage" data-value="{$note->specialPage}" value="{$note->specialPage}" class="form-control form-control-sm" required/></td>
                             <td><input name="menuOrder" data-value="{$note->menuOrder}" type="number" value="{$note->menuOrder}" class="form-control form-control-sm"/></td>
 
