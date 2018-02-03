@@ -102,6 +102,7 @@ class SecuredPresenter extends BasePresenter {
         $this->setLevelCaptions(["0" => ["caption" => "Hlavní stránka", "link" => $this->link("Homepage:")]]);
         $this->template->tym = $this->supplier->getTym();
         $this->template->noteList = $this->noteList->init()->getData();
+        $this->showNotes();
     }
     
     protected function shutdown($response) {
@@ -182,6 +183,56 @@ class SecuredPresenter extends BasePresenter {
         if($this->getUser()->isAllowed('settings','app')) $this->accessibleSettings[] = new SettingMenu("app", "Aplikace", $this->link("Settings:app"), "fa-laptop", TRUE);
         return $this;
     }
-
-
+    
+    protected function showNotes($recordId = NULL) {
+        $notesToShow = [];
+        $presenterName = [
+            'WELCOME' => "Homepage",
+            'DISKUZE' => "Discussion",
+            'UDALOST' => "Event",
+            'ANKETA' => "Poll",
+            'TYM' => "Team",
+            'NASTAVENI' => "Settings",
+            'POZNAMKY' => "Notes",
+        ];
+        foreach ($this->template->noteList as $note) {
+            $display = explode(":", $note->specialPage);
+            $displayPresenter = $display[0];
+            $displayRule = NULL;
+            $displayId = NULL;
+            if(count($display) == 2){
+                if(is_numeric($display[1])){
+                    $displayId = $display[1];
+                } else {
+                    $displayRule = $display[1];
+                }
+            } else if (count($display) > 2){
+                $displayId = $display[1];
+                $displayRule = $display[2];
+            }
+            $displayPresenterPassed = array_key_exists($displayPresenter, $presenterName) && $presenterName[$displayPresenter] == $this->getRequest()->presenterName;
+            switch ($displayRule) {
+                case NULL:
+                    $displayRulePassed = !array_key_exists('lastLogin', $this->getUser()->getIdentity()->getData()) && !$note->shown; //when rule is not filled, display only on first login
+                    break;
+                case "ALWAYS":
+                    $displayRulePassed = TRUE;
+                    break;
+                case "NEW":
+                    $displayRulePassed = $this->getUser()->getIdentity()->getData()["isNew"];
+                    break;
+                default:
+                    $displayRulePassed = FALSE;
+                    break;
+            }
+            $displayIdPassed = is_null($displayId) ? TRUE : ($this->getUser()->getId() == $displayId && $displayPresenter=="WELCOME") || $recordId == $displayId;
+            if($displayPresenterPassed && $displayRulePassed && $displayIdPassed){
+                $notesToShow[] = str_replace(":", "_", $note->specialPage);
+                $note->shown = TRUE;
+            }
+        }
+        $this->template->notesToShow = $notesToShow;
+        $this->noteList->saveToCache();
+    }
+    
 }

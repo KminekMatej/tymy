@@ -45,6 +45,7 @@ class DiscussionPresenter extends SecuredPresenter {
     }
 
     public function renderDefault() {
+        parent::showNotes();
         try{
             $this->template->discussions = $this->discussionsList->init()->getData();
         } catch (APIException $ex){
@@ -114,7 +115,7 @@ class DiscussionPresenter extends SecuredPresenter {
     
     public function renderDiscussion($discussion, $page, $search, $suser = "all", $jump2date = "") {
         $discussionId = DiscussionResource::getIdFromWebname($discussion, $this->discussionsList->init()->getData());
-        
+        parent::showNotes($discussionId);
         if (is_null($discussionId) || $discussionId < 1)
             $this->error("Tato diskuze neexistuje");
         $this->discussionPage->init();

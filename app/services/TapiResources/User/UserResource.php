@@ -24,6 +24,7 @@ abstract class UserResource extends TapiObject{
         if(property_exists($user, "lastLogin")) $this->timeLoad($user->lastLogin);
         if(property_exists($user, "createdAt")) $this->timeLoad($user->createdAt);
         if(!property_exists($user, "roles")) $user->roles = [];
+        $user->isNew = strtotime($user->createdAt) > strtotime("- 14 days");
         $this->postProcessUserWarnings($user);
     }
     

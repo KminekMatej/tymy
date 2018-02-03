@@ -28,7 +28,7 @@ class PollPresenter extends SecuredPresenter {
     }
     
     public function renderDefault() {
-        //todo
+        parent::showNotes();
     }
     
     public function renderPoll($anketa) {
@@ -41,7 +41,7 @@ class PollPresenter extends SecuredPresenter {
         } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
-
+        parent::showNotes($poll->id);
         $this->setLevelCaptions(["2" => ["caption" => $poll->caption, "link" => $this->link("Poll:poll", $poll->webName) ] ]);
         
         $this->template->poll = $poll;

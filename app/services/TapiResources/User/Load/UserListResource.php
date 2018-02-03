@@ -51,7 +51,7 @@ class UserListResource extends UserResource {
                     $this->options->warnings = $user->errCnt;
                     $this->options->me = (object) $user;
                 }
-                if ($user->isNew = strtotime($user->createdAt) > strtotime("- 14 days")) {
+                if ($user->isNew) {
                     $this->options->counts["NEW"] ++;
                     if ($user->status == "PLAYER")
                         $this->options->counts["NEW:PLAYER"] ++;

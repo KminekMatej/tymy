@@ -36,6 +36,7 @@ class HomepagePresenter extends SecuredPresenter {
     }
     
     public function renderDefault() {
+        parent::showNotes();
         try {
             $this->eventList->init()->setHalfYearFrom(NULL, NULL)->getData();
             $this->template->discussions = $this->discussionList->init()->getData();

@@ -114,7 +114,7 @@ abstract class TapiObject {
         $this->init();
     }
     
-    private function saveToCache() {
+    public function saveToCache() {
         if (!$this->dataReady || !$this->cacheable)
             return null;
         $key = $this->getCacheKey();
@@ -134,6 +134,7 @@ abstract class TapiObject {
         if($data != null){
             $this->data = $data["data"];
             $this->options = $data["options"];
+            $this->options->isFromCache = TRUE;
             $this->dataReady = TRUE;
         }
     }
@@ -142,6 +143,7 @@ abstract class TapiObject {
         $resultStatus = $relogin ? $this->tapiService->request($this) : $this->tapiService->requestNoRelogin($this);
         if ($resultStatus->isValid()) {
             $this->data = $resultStatus->getData();
+            $this->options->isFromCache = FALSE;
             $this->dataReady = TRUE;
             $this->postProcess();
             $this->saveToCache();

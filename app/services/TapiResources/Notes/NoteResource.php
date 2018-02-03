@@ -14,6 +14,7 @@ abstract class NoteResource extends TapiObject {
         if($note == null) throw new Exception\APINotFoundException ("Poznámka nenalezena");
         $note->warnings = 0;
         $note->webName = \Nette\Utils\Strings::webalize($note->id . "-" . $note->caption);
+        $note->shown = FALSE;
     }
     
     protected function clearCache($id = NULL){

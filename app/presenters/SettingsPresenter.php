@@ -74,6 +74,7 @@ class SettingsPresenter extends SecuredPresenter {
             
     protected function startup() {
         parent::startup();
+        parent::showNotes();
         $this->setLevelCaptions(["1" => ["caption" => "Nastavení", "link" => $this->link("Settings:")]]);
         $this->template->addFilter("typeColor", function ($type) {
             $color = $this->supplier->getEventColors();

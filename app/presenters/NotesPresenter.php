@@ -21,6 +21,7 @@ class NotesPresenter extends SecuredPresenter {
 
     
     public function renderDefault() {
+        parent::showNotes();
         try {
             $this->template->notes = $this->noteList->init()->getData();
         } catch (APIException $ex) {
@@ -30,6 +31,7 @@ class NotesPresenter extends SecuredPresenter {
     
     public function renderNote($poznamka){
         $id = $this->parseIdFromWebname($poznamka);
+        parent::showNotes($id);
         try {
             $this->noteList->init()->getData();
             $note = $this->noteList->getById()[$id];

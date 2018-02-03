@@ -4,7 +4,7 @@
 
         <!-- Modal dialog for note {$noteBlock->specialPage} -->
 
-        <div class="modal fade bd-example-modal-lg" tabindex="-1" id="note_modal_{$noteBlock->specialPage}" role="dialog" aria-labelledby="note_{$noteBlock->id}_{$noteBlock->specialPage}_modal_label" aria-hidden="true">
+        <div class="modal fade bd-example-modal-lg" tabindex="-1" id="note_modal_{str_replace(':', '_', $noteBlock->specialPage)}" role="dialog" aria-labelledby="note_{$noteBlock->id}_{$noteBlock->specialPage}_modal_label" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -22,6 +22,13 @@
                 </div>
             </div>
         </div>
-
     {/foreach}
+    
+    <script n:if="count($notesToShow)">
+        $(document).ready(function () {
+        {foreach $notesToShow as $showNoteItem}
+                    $('#note_modal_{$showNoteItem|noescape}').modal('show');
+        {/foreach}
+        });
+    </script>
 {/ifset}
