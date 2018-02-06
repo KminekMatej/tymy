@@ -13,6 +13,8 @@ if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Environment::skip('Test skipped as set in config file.');
 }
 
+Environment::lock('tapi', substr(__DIR__, 0, strpos(__DIR__, "tests/lockdir"))); //belong to the group of tests which should not run paralelly
+
 class DiscussionCreateResourceTest extends TapiTest {
     
     public function getCacheable() {
