@@ -1,6 +1,7 @@
 <?php
 
 namespace Tapi;
+use Nette\Caching\Cache;
 
 /**
  * Project: tymy_v2

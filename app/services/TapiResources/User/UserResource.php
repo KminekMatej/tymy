@@ -2,6 +2,8 @@
 
 namespace Tapi;
 use Nette\Utils\Strings;
+use Nette\Caching\Cache;
+
 /**
  * Project: tymy_v2
  * Description of UserResource
@@ -18,35 +20,6 @@ abstract class UserResource extends TapiObject{
         if(!property_exists($user, "login")) $user->login = ""; //set default value
         if(!property_exists($user, "callName")) $user->callName = ""; //set default value
     }
-    
-    
-    
-    /*
-     * 
-        if (!isset($user->))
-            $user->lastName = "";
-        if (!isset($user->))
-            $user->login = "";
-        if (!isset($user->))
-            $user->callName = "";
-        if (!isset($user->))
-            $user->jerseyNumber = "";
-        if (!isset($user->))
-            $user->street = "";
-        if (!isset($user->))
-            $user->city = "";
-        if (!isset($user->zipCode))
-            $user-> = "";
-        if (!isset($user->))
-            $user->birthDate = "";
-        if (!isset($user->))
-            $user->phone = "";
-        if (!isset($user->))
-            $user->phone2 = "";
-        if (!isset($user->))
-            $user->email = "";
-     */
-    
     
     protected function postProcessUser($user){
         $this->postProcessSimpleUser($user);
