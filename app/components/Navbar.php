@@ -114,6 +114,7 @@ class NavbarControl extends Control {
         } catch (APIException $ex) {
             $this->presenter->handleTapiException($ex);
         }
+        $this->template->eventColors = $this->supplier->getEventColors();
     }
 
     private function settings() {
