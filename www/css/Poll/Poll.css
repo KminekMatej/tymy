@@ -1,0 +1,13 @@
+/* 
+    Created on : 14.12.2017, 13:49:21
+    Author     : kminekmatej
+*/
+
+DIV.row DIV.card-block DIV.option{
+    text-align: center;
+}
+
+DIV.row DIV.card-block DIV.option:hover{
+    background-color: rgb(247, 247, 249);
+    transition: background-color 500ms linear;
+}
