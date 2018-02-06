@@ -11,7 +11,7 @@ use Nette\Utils\Strings;
 abstract class UserResource extends TapiObject{
     
     protected function postProcessSimpleUser($user){
-        if($user == null) throw new Exception\APINotFoundException ("Uživatel nenalezen");
+        if($user == null) TapiService::throwNotFound();
         $user->webName = (string)$user->id;
         if(property_exists($user, "fullName")) $user->webName .= "-" . Strings::webalize($user->displayName);
         if(!property_exists($user, "gender")) $user->gender = "UNKNOWN"; //set default value

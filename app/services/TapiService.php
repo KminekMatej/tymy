@@ -163,12 +163,14 @@ class TapiService {
                 return $this->loginFailure($relogin);
             case 403: 
                 throw new APIException("Chyba 403: Nedostatečná práva");
+            case 404: 
+                self::notFound();
             default:
                 Debugger::barDump($curl_info);
                 Debugger::barDump($this->url);
                 Debugger::barDump($this->tapiObject->getMethod());
                 Debugger::barDump($this->tapiObject->getRequestData());
-                throw new APIException("Request " . $this->url . " [" . $this->tapiObject->getMethod() . "] failed with error " . $curl_info["http_code"] . ": " . $resultStatus->getMessage());
+                self::throwRequestError ($this->url, $this->tapiObject->getMethod(), $curl_info["http_code"], $resultStatus->getMessage());
         }
     }
 
@@ -197,5 +199,13 @@ class TapiService {
             default:
                 throw new APIException("API request returned abnormal status " . $data->status . " : " . $data->statusMessage);
         }
+    }
+    
+    public static function throwNotFound($msg = NULL) {
+        throw new APINotFoundException(is_null($msg) ? "Záznam nenalezen" : $msg);
+    }
+    
+    public static function throwRequestError($url, $method, $http_code, $message) {
+        throw new APIException("Request $url [$method] failed with error $http_code: $message");
     }
 }

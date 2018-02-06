@@ -7,6 +7,7 @@ use Nette\Caching\Storages\FileStorage;
 use Tapi\RequestMethod;
 use Tracy\Debugger;
 use Tapi\Exception\APIException;
+use Tapi\Exception\APINotFoundException;
 use Tapi\TapiService;
 
 /**
@@ -303,5 +304,5 @@ abstract class TapiObject {
         $this->supplier = $supplier;
         return $this;
     }
-
+    
 }
