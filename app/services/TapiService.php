@@ -164,7 +164,9 @@ class TapiService {
             case 403: 
                 throw new APIException("Chyba 403: Nedostatečná práva");
             case 404: 
-                self::notFound();
+                self::throwNotFound();
+            case 500: 
+                if($resultStatus->getMessage() == "Not found") self::throwNotFound ();
             default:
                 Debugger::barDump($curl_info);
                 Debugger::barDump($this->url);
