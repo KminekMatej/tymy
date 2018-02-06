@@ -34,6 +34,11 @@ class PollDetailResourceTest extends TapiTest {
     public function testErrorNoId(){
         Assert::exception(function(){$this->tapiObject->init()->getData(TRUE);} , "\Tapi\Exception\APIException", "Poll ID not set");
     }
+    
+    public function testItemNotFound(){
+        $this->authenticateTapi($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        Assert::exception(function(){$this->tapiObject->init()->setId(3190)->getData(TRUE);} , "\Tapi\Exception\APINotFoundException", "Záznam nenalezen");
+    }
 
     public function testPerformSuccess() {
         $data = parent::getPerformSuccessData();
