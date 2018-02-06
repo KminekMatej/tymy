@@ -84,9 +84,9 @@ abstract class EventResource extends TapiObject {
     }
     
     protected function clearCache($id = NULL){
-        $this->cache->remove($this->getCacheKey("GET:events"));
+        $this->cache->clean([Cache::TAGS => "GET:events"]);
         if($id != NULL){
-            $this->cache->remove($this->getCacheKey("GET:event/$id"));
+            $this->cache->clean([Cache::TAGS => "GET:event/$id"]);
         }
     }
 }

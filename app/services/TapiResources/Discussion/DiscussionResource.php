@@ -3,6 +3,7 @@
 namespace Tapi;
 use Tapi\TapiObject;
 use Nette\Utils\Strings;
+use Nette\Caching\Cache;
 
 /**
  * Description of AttendanceResource
@@ -42,10 +43,10 @@ abstract class DiscussionResource extends TapiObject {
     }
     
     protected function clearCache($id = NULL){
-        $this->cache->remove($this->getCacheKey("GET:discussions/accessible/withNew"));
-        $this->cache->remove($this->getCacheKey("GET:discussions"));
+        $this->cache->clean([Cache::TAGS => "GET:discussions/accessible/withNew"]);
+        $this->cache->clean([Cache::TAGS => "GET:discussions"]);
         if($id != NULL){
-            $this->cache->remove("GET:discussions/$id");
+            $this->cache->clean([Cache::TAGS => "GET:discussions/$id"]);
         }
     }
 }

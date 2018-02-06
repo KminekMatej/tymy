@@ -18,6 +18,6 @@ abstract class NoteResource extends TapiObject {
     }
     
     protected function clearCache($id = NULL){
-        $this->cache->remove($this->getCacheKey("GET:notes"));
+        $this->cache->clean([Cache::TAGS => "GET:notes"]);
     }
 }

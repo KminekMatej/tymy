@@ -46,9 +46,9 @@ abstract class PollResource extends TapiObject{
     }
     
     protected function clearCache($id = NULL){
-        $this->cache->remove($this->getCacheKey("GET:polls"));
+        $this->cache->clean([Cache::TAGS => "GET:polls"]);
         if($id != NULL){
-            $this->cache->remove($this->getCacheKey("GET:polls/$id"));
+            $this->cache->clean([Cache::TAGS => "GET:polls/$id"]);
         }
     }
     
