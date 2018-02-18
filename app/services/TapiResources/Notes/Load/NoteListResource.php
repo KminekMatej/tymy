@@ -38,8 +38,8 @@ class NoteListResource extends NoteResource {
         return $this->options->bySpecialPage;
     }
     
-    public function getById(){
-        return $this->options->byId;
+    public function getById($id = NULL){
+        return is_null($id) ? $this->options->byId : $this->options->byId[$id];
     }
     
     public function getMenu() {
