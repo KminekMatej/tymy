@@ -20,8 +20,3 @@ $(document).ready(function () {
         }));
     });
 });
-
-var valid = true;
-    switch (name) {
-        
-    }

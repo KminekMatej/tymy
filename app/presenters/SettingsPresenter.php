@@ -19,6 +19,9 @@ use Tapi\OptionCreateResource;
 use Tapi\OptionEditResource;
 use Tapi\OptionDeleteResource;
 use Tapi\NoteListResource;
+use Tapi\NoteCreateResource;
+use Tapi\NoteEditResource;
+use Tapi\NoteDeleteResource;
 use Tapi\Exception\APIException;
 
 
@@ -56,6 +59,15 @@ class SettingsPresenter extends SecuredPresenter {
     
     /** @var PollEditResource @inject */
     public $pollEditor;
+    
+    /** @var NoteCreateResource @inject */
+    public $noteCreator;
+    
+    /** @var NoteEditResource @inject */
+    public $noteEditor;
+    
+    /** @var NoteDeleteResource @inject */
+    public $noteDeleter;
     
     /** @var PollDeleteResource @inject */
     public $pollDeleter;
@@ -175,6 +187,10 @@ class SettingsPresenter extends SecuredPresenter {
         //RENDERING DISCUSSION DETAIL
         $discussionId = $this->discussionList->init()->getIdFromWebname($discussion, $this->discussionList->getData());
         $discussionObj = $this->discussionDetail->init()->setId($discussionId)->getData();
+        if($discussionObj == NULL){
+            $this->flashMessage("Diskuze $discussionId neexistuje.", "danger");
+            $this->redirect('Settings:events');
+        }
         $this->setLevelCaptions(["3" => ["caption" => $discussionObj->caption, "link" => $this->link("Settings:discussions", $discussionObj->webName)]]);
         $this->template->discussion = $discussionObj;
     }
@@ -205,10 +221,53 @@ class SettingsPresenter extends SecuredPresenter {
     public function renderEvent($event) {
         //RENDERING EVENT DETAIL
         $eventId = $this->parseIdFromWebname($event);
-        $event = $this->eventDetail->init()->setId($eventId)->getData();
-        $this->setLevelCaptions(["3" => ["caption" => $event->caption, "link" => $this->link("Settings:events", $event->webName)]]);
-        $this->template->event = $event;
+        $eventObj = $this->eventDetail->init()->setId($eventId)->getData();
+        if($eventObj == NULL){
+            $this->flashMessage("Událost $eventId neexistuje.", "danger");
+            $this->redirect('Settings:events');
+        }
+
+        $this->setLevelCaptions(["3" => ["caption" => $eventObj->caption, "link" => $this->link("Settings:events", $eventObj->webName)]]);
+        $this->template->event = $eventObj;
         $this->template->eventTypes = $this->eventTypeList->init()->getData();
+    }
+    
+    public function renderNote_new() {
+        $this->setLevelCaptions([
+            "2" => ["caption" => "Poznámky", "link" => $this->link("Settings:notes")],
+            "3" => ["caption" => "Nová"]
+            ]);
+        $this->template->isNew = true;
+        
+        $note = (object)[
+            "id" => -1,
+            "caption" => "",
+            "description" => "",
+            "specialPage" => "",
+            "source" => "",
+            "accessType" => "PRIVATE",
+            "menuType" => "APP",
+            "menuOrder" => 0,
+            "canRead" => true,
+            "canWrite" => true,
+        ];
+        $this->template->note = $note;
+        
+        $this->setView("note");
+    }
+    
+    public function renderNote($note) {
+        //RENDERING NOTE DETAIL
+        $noteId = $this->parseIdFromWebname($note);
+        $this->noteList->init()->getData();
+        $noteObj = $this->noteList->getById($noteId);
+        if($noteObj == NULL){
+            $this->flashMessage("Poznámka $noteId neexistuje.", "danger");
+            $this->redirect('Settings:notes');
+        }
+        $this->setLevelCaptions(["3" => ["caption" => $noteObj->caption, "link" => $this->link("Settings:note", $noteObj->webName)]]);
+        $this->template->note = $noteObj;
+        $this->template->isNew = false;
     }
     
     public function renderPoll_new() {
@@ -240,7 +299,10 @@ class SettingsPresenter extends SecuredPresenter {
         //RENDERING POLL DETAIL
         $pollId = $this->parseIdFromWebname($poll);
         $pollObj = $this->pollDetail->init()->setId($pollId)->getData();
-        
+        if($pollObj == NULL){
+            $this->flashMessage("Anketa $pollId neexistuje.", "danger");
+            $this->redirect('Settings:polls');
+        }
         if(count($pollObj->options) == 0){
             $pollObj->options[] = (object)["id" => -1, "pollId" => $pollId, "caption" => "", "type" => "TEXT"];
         }
@@ -355,6 +417,34 @@ class SettingsPresenter extends SecuredPresenter {
             $this->handleTapiException($ex, 'this');
         }
     }
+    
+    public function handleNoteCreate() {
+        $bind = $this->getRequest()->getPost();
+        try {
+            $this->noteCreator->init()
+                    ->setNote($bind["changes"])
+                    ->perform();
+            $this->flashMessage("Poznámka byla úspěšné vytvořena.", "success");
+            $this->redirect("Settings:notes");
+        } catch (APIException $ex) {
+            $this->handleTapiException($ex, 'this');
+        }
+    }
+    
+    public function handleNoteEdit(){
+        $bind = $this->getRequest()->getPost();
+        $this->editNote($bind);
+    }
+    
+    public function handleNoteDelete() {
+        $bind = $this->getRequest()->getPost();
+        try {
+            $this->noteDeleter->init()->setId($bind["id"])->perform();
+            $this->redirect("Settings:notes");
+        } catch (APIException $ex) {
+            $this->handleTapiException($ex, 'this');
+        }
+    }
 
     public function handlePollOptionsEdit($poll){
         $post = $this->getRequest()->getPost();
@@ -415,6 +505,17 @@ class SettingsPresenter extends SecuredPresenter {
             $this->eventEditor->init()
                     ->setId($bind["id"])
                     ->setEvent($bind["changes"])
+                    ->perform();
+        } catch (APIException $ex) {
+            $this->handleTapiException($ex, 'this');
+        }
+    }
+    
+    private function editNote($bind) {
+        try {
+            $this->noteEditor->init()
+                    ->setId($bind["id"])
+                    ->setNote($bind["changes"])
                     ->perform();
         } catch (APIException $ex) {
             $this->handleTapiException($ex, 'this');

@@ -39,7 +39,11 @@ class NoteListResource extends NoteResource {
     }
     
     public function getById($id = NULL){
-        return is_null($id) ? $this->options->byId : $this->options->byId[$id];
+        if(is_null($id)){
+            return $this->options->byId;
+        } else {
+            return array_key_exists($id, $this->options->byId) ? $this->options->byId[$id] : NULL;
+        }
     }
     
     public function getMenu() {

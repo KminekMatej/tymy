@@ -14,11 +14,22 @@ abstract class NoteResource extends TapiObject {
     protected function postProcessNote($note){
         if($note == null) TapiService::throwNotFound();
         $note->warnings = 0;
+        if(!property_exists($note, "description"))
+                $note->description = "";
+        if(!property_exists($note, "caption"))
+                $note->caption = "";
+        if(!property_exists($note, "specialPage"))
+                $note->specialPage = "";
+        if(!property_exists($note, "source"))
+                $note->source = "";
+        
         $note->webName = \Nette\Utils\Strings::webalize($note->id . "-" . $note->caption);
+        $note->menuType = $note->menuType == "APP" ? true : false;
         $note->shown = FALSE;
     }
     
-    protected function clearCache($id = NULL){
+    protected function clearCache(){
         $this->cache->clean([Cache::TAGS => "GET:notes"]);
+        $this->cache->clean([Cache::TAGS => "GET:notes/html"]);
     }
 }
