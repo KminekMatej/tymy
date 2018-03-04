@@ -23,7 +23,7 @@ IMG.user_pic{
     margin: 0px 30px 10px 0px;
 }
 
-DIV.card-block OL{
+DIV.card-body OL{
     display: inline-block;
 }
 
@@ -39,13 +39,13 @@ DIV.card-block OL{
     display: none;
 }
 
-DIV.row DIV.card-block blockquote{
+DIV.row DIV.card-body blockquote{
     margin: 10px;
     border-left: solid 5px #dedede;
     padding: 10px;
     font-style: italic;
 }
 
-DIV.row DIV.card-block blockquote P{
+DIV.row DIV.card-body blockquote P{
     margin: 0px;
 }
