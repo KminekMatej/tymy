@@ -91,6 +91,7 @@ class TeamPresenter extends SecuredPresenter {
         $this->setLevelCaptions(["2" => ["caption" => $user->displayName, "link" => $this->link("Team:player", $user->webName)]]);
 
         $this->template->player = $user;
+        $this->template->canUpdate = $this->getUser()->isAllowed("user", "canUpdate") || $user->id == $this->getUser()->getId();
         $allRoles = [];
         $allRoles[] = (object) ["code" => "SUPER", "caption" => "Administrátor", "class" => $this->supplier->getRoleClass("SUPER")];
         $allRoles[] = (object) ["code" => "USR", "caption" => "Správce uživatelů", "class" => $this->supplier->getRoleClass("USR")];
