@@ -26,6 +26,7 @@ use Tapi\UserListResource;
 use Tapi\PollListResource;
 use Tapi\NoteListResource;
 use Tapi\Exception\APIException;
+use Tapi\AuthDetailResource;
 
 /**
  * Description of SecuredPresenter
@@ -56,9 +57,12 @@ class SecuredPresenter extends BasePresenter {
     
     /** @var UserDetailResource @inject */
     public $userDetail;
-    
+        
     /** @var UserListResource @inject */
     public $userList;
+    
+    /** @var AuthDetailResource @inject */
+    public $apiRights;
     
     /** @var EventTypeListResource @inject */
     public $eventTypeList;
@@ -96,9 +100,14 @@ class SecuredPresenter extends BasePresenter {
             $this->redirect('Sign:in');
         }
         //$this->cacheService->dropCache();
-        $this->setAccessibleSettings();
+        
         $this->supplier->setTapi_config($this->getUser()->getIdentity()->getData()["tapi_config"]);
+        $this->apiRights->setId($this->getUser()->getId());
+        $this->apiRights->getData();
         $this->tapiAuthorizator->setUser($this->getUser()->getIdentity()->getData());
+        $this->tapiAuthorizator->setApiRights($this->apiRights);
+        
+        $this->setAccessibleSettings();
         $this->setLevelCaptions(["0" => ["caption" => "Hlavní stránka", "link" => $this->link("Homepage:")]]);
         $this->template->tym = $this->supplier->getTym();
         $this->template->noteList = $this->noteList->init()->getData();
@@ -169,18 +178,18 @@ class SecuredPresenter extends BasePresenter {
     }
 
     private function setAccessibleSettings() {
-        if($this->getUser()->isAllowed('settings','discussions')) $this->accessibleSettings[] = new SettingMenu("discussions", "Diskuze", $this->link("Settings:discussions"), "fa-comments", TRUE);
-        if($this->getUser()->isAllowed('settings','events')) $this->accessibleSettings[] = new SettingMenu("events", "Události", $this->link("Settings:events"), "fa-calendar-o", TRUE);
+        if($this->getUser()->isAllowed('discussion','setup')) $this->accessibleSettings[] = new SettingMenu("discussions", "Diskuze", $this->link("Settings:discussions"), "fa-comments", TRUE);
+        if($this->getUser()->isAllowed('event','canUpdate')) $this->accessibleSettings[] = new SettingMenu("events", "Události", $this->link("Settings:events"), "fa-calendar-o", TRUE);
         //TO BE ENABLED WHEN ITS READY
-        if($this->getUser()->isAllowed('settings','team')) $this->accessibleSettings[] = new SettingMenu("team", "Tým", $this->link("Settings:team"), "fa-users", FALSE);
+        if($this->getUser()->isAllowed('team','canSetup')) $this->accessibleSettings[] = new SettingMenu("team", "Tým", $this->link("Settings:team"), "fa-users", FALSE);
         // TO BE ENABLED WHEN ITS READY
-        if($this->getUser()->isAllowed('settings','polls')) $this->accessibleSettings[] = new SettingMenu("polls", "Ankety", $this->link("Settings:polls"), "fa-pie-chart", TRUE);
-        if($this->getUser()->isAllowed('settings','notes')) $this->accessibleSettings[] = new SettingMenu("notes", "Poznámky", $this->link("Settings:notes"), "fa-sticky-note", TRUE);
+        if($this->getUser()->isAllowed('poll','canUpdatePoll')) $this->accessibleSettings[] = new SettingMenu("polls", "Ankety", $this->link("Settings:polls"), "fa-pie-chart", TRUE);
+        $this->accessibleSettings[] = new SettingMenu("notes", "Poznámky", $this->link("Settings:notes"), "fa-sticky-note", TRUE); //user can always manage at least his own notes
         // TO BE ENABLED WHEN ITS READY
-        if($this->getUser()->isAllowed('settings','reports')) $this->accessibleSettings[] = new SettingMenu("reports", "Reporty", $this->link("Settings:reports"), "fa-bar-chart", FALSE);
+        if($this->getUser()->isAllowed('reports','canSetup')) $this->accessibleSettings[] = new SettingMenu("reports", "Reporty", $this->link("Settings:reports"), "fa-bar-chart", FALSE);
         // TO BE ENABLED WHEN ITS READY
-        if($this->getUser()->isAllowed('settings','permissions')) $this->accessibleSettings[] = new SettingMenu("permissions", "Oprávnění", $this->link("Settings:permissions"), "fa-gavel", FALSE);
-        if($this->getUser()->isAllowed('settings','app')) $this->accessibleSettings[] = new SettingMenu("app", "Aplikace", $this->link("Settings:app"), "fa-laptop", TRUE);
+        if($this->getUser()->isAllowed('permissions','canSetup')) $this->accessibleSettings[] = new SettingMenu("permissions", "Oprávnění", $this->link("Settings:permissions"), "fa-gavel", FALSE);
+        $this->accessibleSettings[] = new SettingMenu("app", "Aplikace", $this->link("Settings:app"), "fa-laptop", TRUE); //user can always look into app settings to setup his own properties
         return $this;
     }
     

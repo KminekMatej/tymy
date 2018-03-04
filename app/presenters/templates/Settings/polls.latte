@@ -88,14 +88,14 @@
                             <td><input name="order" data-value="{$poll->orderFlag}" type="number" value="{$poll->orderFlag}" class="form-control form-control-sm" style="max-width: 70px;"/></td>
 
                             <td class="btn-group" role="group">
-                                <button n:if="$user->isAllowed('SYS','ASK.VOTE_UPDATE') || $isNew" href="{link pollEdit!}" class="btn btn-sm btn-primary binder-save-btn" title="Uložit" style="margin-right: 2px"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
-                                <button n:if="$user->isAllowed('SYS','ASK.VOTE_DELETE') || $isNew" href="{link pollDelete!}" n:class="btn,btn-sm,btn-danger, !$isNew ? binder-delete-btn" title="Smazat" n:attr="onclick => $isNew ? 'removeRow(this)'"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                <button n:if="$user->isAllowed('poll','canUpdatePoll') || $isNew" href="{link pollEdit!}" class="btn btn-sm btn-primary binder-save-btn" title="Uložit" style="margin-right: 2px"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                <button n:if="$user->isAllowed('poll','canDeletePoll') || $isNew" href="{link pollDelete!}" n:class="btn,btn-sm,btn-danger, !$isNew ? binder-delete-btn" title="Smazat" n:attr="onclick => $isNew ? 'removeRow(this)'"><i class="fa fa-times" aria-hidden="true"></i></button>
                             </td>
                         </tr>
                     </table>
                 </div>
                 <div class="card-footer text-right">
-                    <a n:if="!$isNew && $user->isAllowed('SYS','ASK.VOTE_CREATE')" class="btn btn-lg btn-success" href="{plink Settings:poll_new}" onclick="btnRotate($(this), true)" title="Vytvořit novou anketu" style="margin-right: 10px">
+                    <a n:if="!$isNew && $user->isAllowed('poll','canCreatePoll')" class="btn btn-lg btn-success" href="{plink Settings:poll_new}" onclick="btnRotate($(this), true)" title="Vytvořit novou anketu" style="margin-right: 10px">
                         <i class="fa fa-plus" aria-hidden="true"></i>
                     </a>
                 </div>

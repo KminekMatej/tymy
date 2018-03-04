@@ -65,7 +65,7 @@
                             </label></td></tr>
                     </table>
                 </div>
-                <div class="card-footer text-right" n:if="$user->isAllowed('SYS','DSSETUP')">
+                <div class="card-footer text-right" n:if="$user->isAllowed('discussion','setup')">
                     <button href="{link discussionDelete!}" class="btn btn-danger mx-2 binder-delete-btn" title="Smazat"><i class="fa fa-times" aria-hidden="true"></i></button>
                     <button href="{link discussionEdit!}" class="btn btn-lg btn-primary binder-save-btn" title="Uložit"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                 </div>

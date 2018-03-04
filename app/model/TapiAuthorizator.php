@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use Nette;
+use Tapi\AuthDetailResource;
 
 /**
  * User privileges management
@@ -15,7 +16,54 @@ class TapiAuthorizator implements Nette\Security\IAuthorizator {
     private $resource;
     private $user;
     
+    /** @var AuthDetailResource */
+    private $apiRights;
+    
     public function isAllowed($role, $resource, $privilege) {
+        $rights = $this->apiRights->getData();
+        $rs = $resource . "Rights";
+        if(property_exists($rights, $rs) && property_exists($rights->$rs, $privilege) ){
+            return $rights->$rs->$privilege;
+        } else {
+            //TODO maybe handle application specific permissions based on roles instead of denying
+            return TapiAuthorizator::DENY;
+        }
+        
+        /* RIGHTS EXAMPLE:
+         * {
+    "notesRights" : {
+      "manageSharedNotes" : true
+    },
+    "discussionRights" : {
+      "setup" : true
+    },
+    "eventRights" : {
+      "canCreate" : true,
+      "canDelete" : true,
+      "canUpdate" : true,
+      "canResult" : true,
+      "canPlanOthers" : true
+    },
+    "pollRights" : {
+      "canCreatePoll" : true,
+      "canUpdatePoll" : true,
+      "canDeletePoll" : true,
+      "canResetVotes" : true
+    },
+    "reportsRights" : {
+      "canSetup" : true
+    },
+    "teamRights" : {
+      "canSetup" : true
+    },
+    "userRights" : {
+      "canCreate" : true,
+      "canUpdate" : true,
+      "canDelete" : true
+    }
+}
+         */
+        
         $this->role = $role;
         $this->resource = $resource;
         switch ($this->resource) {
@@ -30,6 +78,16 @@ class TapiAuthorizator implements Nette\Security\IAuthorizator {
         }
     }
     
+    public function getApiRights() {
+        return $this->apiRights;
+    }
+
+    public function setApiRights($apiRights) {
+        $this->apiRights = $apiRights;
+        return $this;
+    }
+
+        
     private function sysPrivileges($privilege){
         switch ($privilege) {
             case "EVE_UPDATE":

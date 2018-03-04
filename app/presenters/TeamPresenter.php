@@ -115,7 +115,7 @@ class TeamPresenter extends SecuredPresenter {
     }
     
     public function handleDelete() {
-        if (!$this->getUser()->isAllowed("users", "canDelete"))
+        if (!$this->getUser()->isAllowed("user", "canDelete"))
             return;
         $bind = $this->getRequest()->getPost();
         try {

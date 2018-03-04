@@ -198,7 +198,7 @@
                     </div>
                 </div>
                 <div class="card-footer text-right">
-                    <button n:if="$user->isAllowed('users','canDelete')" href="{link delete!}" class="btn btn-danger btn-lg mx-2 binder-delete-btn"><i class="fa fa-times" aria-hidden="true"></i></button>
+                    <button n:if="$user->isAllowed('user','canDelete')" href="{link delete!}" class="btn btn-danger btn-lg mx-2 binder-delete-btn"><i class="fa fa-times" aria-hidden="true"></i></button>
                     <button href="{link edit!}" class="btn btn-lg btn-primary binder-save-btn"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                 </div>
             </div>
