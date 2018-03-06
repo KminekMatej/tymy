@@ -100,6 +100,28 @@ class TeamPresenter extends SecuredPresenter {
         $this->template->allRoles = $allRoles;
     }
 
+    public function renderJerseys(){
+        $allPlayers = $this->userList->init()->getData();
+        $min = 0;
+        $max = 0;
+        $jerseyList = [];
+        foreach ($allPlayers as $player) {
+            if ($player->jerseyNumber != "") {
+                if($player->jerseyNumber < $min) $min = $player->jerseyNumber;
+                if($player->jerseyNumber > $max) $max = $player->jerseyNumber;
+                $jerseyList[$player->jerseyNumber][] = $player;
+            }
+        }
+        for ($i = $min; $i <=$max+10; $i++){
+            if(!array_key_exists($i, $jerseyList)) $jerseyList[$i] = null;
+        }
+        ksort($jerseyList);
+        \Tracy\Debugger::barDump($jerseyList);
+        $this->template->jerseyList = $jerseyList;
+        $this->template->me = $this->userList->getMe();
+        $this->setLevelCaptions(["2" => ["caption" => "Dresy", "link" => $this->link("Team:jerseys")]]);
+    }
+    
     public function handleEdit(){
         $bind = $this->getRequest()->getPost();
         if(array_key_exists("roles", $bind["changes"]) && $bind["changes"]["roles"] === ""){

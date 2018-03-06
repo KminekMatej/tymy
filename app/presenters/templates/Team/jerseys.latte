@@ -1,0 +1,27 @@
+{import '../components/secured.latte'}
+
+{block navbar}
+{control navbar}
+{/block}
+
+{block content}
+<div class="container jerseys">
+    <div class="row my-3" n:foreach="$jerseyList as $number => $players">
+        <div class="col">
+            <div class="input-group input-group-lg">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-lg">{$number}</span>
+                </div>
+                <div class="input-group-append">
+                    {if is_null($players)}
+                        <button type="button" class="btn btn-outline-light"><i class="far fa-hand-point-left"></i></button>
+                    {else}
+                        <button n:foreach="$players as $player" href="{plink Team:player $player->webName}" type="button" class="btn btn-light">{$player->callName}</button>
+                    {/if}
+                    
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
