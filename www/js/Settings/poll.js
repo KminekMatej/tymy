@@ -4,6 +4,13 @@ $(document).ready(function () {
             area: this,
             isValid: function (name, value1, value2) {
                 switch (name) {
+                    case "caption":
+                        return value1.trim() != "";
+                    case "minItems":
+                        return value1 <= value2;
+                    case "maxItems":
+                        return value1 >= value2;
+
                     case "email":
                         var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                         return re.test(value1);

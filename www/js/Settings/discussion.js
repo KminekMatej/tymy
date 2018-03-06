@@ -5,7 +5,7 @@ $(document).ready(function () {
             isValid: function (name, value1, value2) {
                 switch (name) {
                     case "caption":
-                        return trim(value1) == "";
+                        return value1.trim() != "";
                 }
                 return true;
             }
