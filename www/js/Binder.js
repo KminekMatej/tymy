@@ -400,12 +400,12 @@ Binder.prototype.disableBtn = function (btn, disable, spin = false) {
     if (btn.length > 0) {
         if (disable) {
             if(spin){
-                btn.find("i.fa").addClass(this.SPINNER_CLASS);
+                btn.find("svg[data-fa-i2svg]").addClass(this.SPINNER_CLASS);
             }
             btn.prop("disabled", true);
             btn.attr("disabled", "disabled");
         } else {
-            btn.find("i.fa").removeClass(this.SPINNER_CLASS);
+            btn.find("svg[data-fa-i2svg]").removeClass(this.SPINNER_CLASS);
             btn.prop("disabled", false);
             btn.removeAttr("disabled");
         }

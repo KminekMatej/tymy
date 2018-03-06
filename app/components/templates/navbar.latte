@@ -24,7 +24,7 @@
             
             <li class="nav-item dropdown" name="events">
                 {if $eventWarnings > 0}<span class="badge badge-pill badge-danger badge-new">{$eventWarnings}</span>{/if}
-                <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-calendar-o" aria-hidden="true"></i> Události</a>
+                <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-calendar" aria-hidden="true"></i> Události</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <a class="dropdown-item" href="{plink Event:}">Všechny</a>
                     {ifset $events}
@@ -46,12 +46,14 @@
                     <a class="dropdown-item" href="{plink Team:members}">Členové ({$counts['MEMBER']})</a>
                     <a class="dropdown-item" href="{plink Team:sicks}">Marodi ({$counts['SICK']})</a>
                     <a class="dropdown-item" href="{plink Team:}">Všichni ({$counts['ALL']}) <span class="badge badge-success" n:if="$counts['NEW'] > 0">Nový</span></a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{plink Team:jerseys}">Seznam dresů</a>
                 </div>
             </li>
             
             <li class="nav-item dropdown" name="polls">
                 {if $voteWarnings > 0}<span class="badge badge-pill badge-danger badge-new">{$voteWarnings}</span>{/if}
-                <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-pie-chart" aria-hidden="true"></i> Ankety</a>
+                <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-chart-pie" aria-hidden="true"></i> Ankety</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <button n:if="count($polls) == 0" class="dropdown-item disabled" type="button"> - Žádná anketa - </button>
                     {foreach $polls as $p}

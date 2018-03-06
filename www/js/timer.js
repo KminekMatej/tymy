@@ -5,16 +5,16 @@ $(function () {
 });
 
 function refresh(timer) {
-    if($(".fa-refresh").length>0){
-        $(".fa-refresh").addClass("fa-spin");
+    if($(".fa-sync").length>0){
+        $(".fa-sync").addClass("fa-spin");
     }
      
     $.nette.ajax({
         url: "/?do=navbar-refresh",
         complete: function (payload) {
             reTitle();
-            if ($(".fa-refresh").length > 0) {
-                $(".fa-refresh").removeClass("fa-spin");
+            if ($(".fa-sync").length > 0) {
+                $(".fa-sync").removeClass("fa-spin");
             }
             if (timer > 0) {
                 setTimeout(function(){refresh(timer);}, timer);

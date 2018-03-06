@@ -24,7 +24,7 @@
                         </div>
                         <span class="mr-auto">
                             <input type="submit" value="Hledat" class="form-control btn btn-outline-success mr-sm-2">
-                            <a n:if="$search || $suser" href="{plink Discussion:discussion $discussion->discussion->webName}" class="btn btn-outline-secondary" title="Obnovit" onclick="$(this).children('i').addClass('fa-spin')"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+                            <a n:if="$search || $suser" href="{plink Discussion:discussion $discussion->discussion->webName}" class="btn btn-outline-secondary" title="Obnovit" onclick="$(this).children('i').addClass('fa-spin')"><i class="fa fa-sync" aria-hidden="true"></i></a>
                         </span>
                         <button onclick="updatePost({plink Discussion:editpost $discussion->discussion->id})" type="button" class="btn btn-warning mx-1" id="editPost" n:if="$discussion->discussion->canWrite">Upravit</button>    
                         <button onclick="addPost({plink Discussion:newpost $discussion->discussion->id})" type="button" class="btn btn-primary" n:if="$discussion->discussion->canWrite">Vložit</button>    

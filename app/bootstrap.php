@@ -4,7 +4,7 @@ require __DIR__ . '/../vendor/autoload.php';
 
 $configurator = new Nette\Configurator;
 
-$configurator->setDebugMode(['78.45.216.186','90.182.181.138', '89.24.40.1', '192.168.16.1', '46.135.80.252']);
+$configurator->setDebugMode(['78.45.216.186','90.182.181.138', '89.24.40.1', '192.168.16.1', '80.188.249.250']);
 $configurator->enableTracy(__DIR__ . '/../log');
 
 $configurator->setTimeZone('Europe/Prague');

@@ -17,11 +17,11 @@ function reTitle() {
 function btnRotate(btn, disable){
     if (btn.length > 0) {
         if (disable) {
-            btn.find("i.fa").addClass("fa-spin");
+            btn.find("svg[data-fa-i2svg]").addClass("fa-spin");
             btn.prop("disabled", true);
             btn.attr("disabled", "disabled");
         } else {
-            btn.find("i.fa").removeClass("fa-spin");
+            btn.find("svg[data-fa-i2svg]").removeClass("fa-spin");
             btn.prop("disabled", false);
             btn.removeAttr("disabled");
         }
