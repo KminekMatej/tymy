@@ -6,17 +6,16 @@
 
 {block content}
 <div class="container jerseys">
-    <table class="table table-striped table-dark">
-        <tbody>
-            <tr n:foreach="$jerseyList as $number => $players">
-                <th scope="row"><h4><span class="badge badge-primary badge-pill">{$number}</span></h4></th>
+    <div class="row my-2" n:foreach="$jerseyList as $number => $players">
+        <div class="col px-5">
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <button type="button" n:class="btn, btn-lg, btn-light, !is_null($players) ? disabled">{$number}</button>
                 {if is_null($players)}
-                    <td><button type="button" class="btn btn-outline-light"><i class="far fa-hand-point-left"></i></button></td>
-                {else}
-                    <td><button n:foreach="$players as $player" href="{plink Team:player $player->webName}" type="button" class="btn btn-light">{$player->callName}</button></td>
+                    <button type="button" class="btn btn-lg btn-outline-light"><i class="far fa-hand-point-left"></i></button>
+                    {else}{dump $me->id}
+                    <a n:foreach="$players as $player" href="{plink Team:player $player->webName}" n:class="btn, btn-lg, $player->id == $me->id ? btn-success, $player->id != $me->id ? ($iterator->isEven() ? btn-secondary : btn-light)" href='{plink Team:player $player->webName}'>{$player->callName}</a>
                 {/if}
-            </tr>
-        </tbody>
-    </table>
-    
+            </div>
+        </div>
+    </div>
 </div>

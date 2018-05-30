@@ -116,7 +116,7 @@ class TeamPresenter extends SecuredPresenter {
             if(!array_key_exists($i, $jerseyList)) $jerseyList[$i] = null;
         }
         ksort($jerseyList);
-        \Tracy\Debugger::barDump($jerseyList);
+        
         $this->template->jerseyList = $jerseyList;
         $this->template->me = $this->userList->getMe();
         $this->setLevelCaptions(["2" => ["caption" => "Dresy", "link" => $this->link("Team:jerseys")]]);
