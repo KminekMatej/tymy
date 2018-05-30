@@ -494,6 +494,7 @@ class SettingsPresenter extends SecuredPresenter {
 
     public function handleCacheDrop() {
         $this->discussionDetail->cleanCache(); //can use any tapi object
+        $this->flashMessage("Cache vymazána", "success");
         $this->redirect('this');
     }
     
