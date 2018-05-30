@@ -20,10 +20,14 @@ class Supplier {
     private $statusClasses;
     private $eventColors;
     private $versions;
+    private $wwwDir;
+    private $appDir;
     
 
-    public function __construct($tapi_config) {
+    public function __construct($tapi_config, $wwwDir, $appDir) {
         $this->setTapi_config($tapi_config);
+        $this->setWwwDir($wwwDir);
+        $this->setAppDir($appDir);
         $this->setVersion();
     }
 
@@ -39,6 +43,24 @@ class Supplier {
         $this->setRoleClasses($tapi_config['roles_classes']);
         $this->setStatusClasses($tapi_config['status_classes']);
         $this->setEventColors($tapi_config['event_colors']);
+        return $this;
+    }
+
+    public function getWwwDir() {
+        return $this->wwwDir;
+    }
+
+    public function getAppDir() {
+        return $this->appDir;
+    }
+
+    public function setWwwDir($wwwDir) {
+        $this->wwwDir = $wwwDir;
+        return $this;
+    }
+
+    public function setAppDir($appDir) {
+        $this->appDir = $appDir;
         return $this;
     }
 

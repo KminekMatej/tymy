@@ -14,7 +14,7 @@ session:
 
 services:
         - App\Model\TapiAuthenticator
-        - App\Model\Supplier(%tapi%)
+        - App\Model\Supplier(%tapi%, %wwwDir%, %appDir%)
         - App\Forms\FormFactory
         - App\Forms\SignInFormFactory
         - App\Forms\SignUpFormFactory

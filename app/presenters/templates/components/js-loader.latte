@@ -6,12 +6,12 @@
 {var $view = $presenter->getView()}
 
 {var $presenterScript = "{$basePath}/js/{$presenterName}/{$presenterName}.js"}
-{var $presenterScriptPath = "./{$presenterScript}"}
+{var $presenterScriptPath = "{$wwwDir}/js/{$presenterName}/{$presenterName}.js"}
 
 {var $viewScript = "{$basePath}/js/{$presenterName}/{$view}.js"}
-{var $viewScriptPath = "./{$viewScript}"}
+{var $viewScriptPath = "{$wwwDir}/js/{$presenterName}/{$view}.js"}
 
 {* Include scripts for whole presenter or current view, if they exist *}
-        <script src="{$presenterScript}" n:if="file_exists($presenterScriptPath)"></script>
-        <script src="{$viewScript}" n:if="file_exists($viewScriptPath)"></script>
+        <script src="{$presenterScript}" n:if="file_exists($presenterScriptPath)" ></script>
+        <script src="{$viewScript}" n:if="file_exists($viewScriptPath)" ></script>
 {/block}

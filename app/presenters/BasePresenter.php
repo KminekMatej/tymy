@@ -26,6 +26,9 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
         $this->template->tymyRoot = $this->supplier->getTymyRoot();
         $this->template->apiRoot = $this->supplier->getApiRoot();
         
+        $this->template->wwwDir = $this->supplier->getWwwDir();
+        $this->template->appDir = $this->supplier->getAppDir();
+        
         $this->template->addFilter('monthName', function ($number) {
             switch ($number) {
                 case 1: return 'Leden';
