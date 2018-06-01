@@ -69,17 +69,19 @@ function saveAttendanceResults(btn, purl){
             resultSet.push(playerData);
         }
     });
-    if(resultSet.length > 0){
+    if (resultSet.length > 0) {
         btnRotate(btn, true);
+        $.nette.ajax({
+            url: purl,
+            type: "POST",
+            data: {resultSet},
+            complete: function (payload) {
+                btnRotate(btn, false);
+            }
+        });
+    } else {
+        resultsToggle(false);
     }
-    $.nette.ajax({
-        url: purl,
-        type: "POST",
-        data: {resultSet},
-        complete: function (payload) {
-            btnRotate(btn, false);
-        }
-    });
 }
 
 function resultsToggle(show){
