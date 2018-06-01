@@ -34,7 +34,7 @@
                         <tr><th>Přístup</th>
                             <td>
                                 <select name="accessType" value="{$note->accessType}" data-value="{$note->accessType}" class="col-6 form-control">
-                                    <option>Vyberte typ...</option>
+                                    <option value="">Vyberte typ...</option>
                                     <option value="PRIVATE" n:attr="selected => $note->accessType == 'PRIVATE'">Soukromá</option>
                                     <option value="USERS" n:attr="selected => $note->accessType == 'USERS'">Pro členy</option>
                                     <option value="PUBLIC" n:attr="selected => $note->accessType == 'PUBLIC'">Veřejná</option>

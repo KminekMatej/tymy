@@ -6,6 +6,8 @@ $(document).ready(function () {
                 switch (name) {
                     case "caption":
                         return value1.trim() != "";
+                    case "order":
+                        return !isNaN(value1);
                 }
                 return true;
             }
