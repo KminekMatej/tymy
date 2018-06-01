@@ -7,17 +7,16 @@
 {block content}
 <div class="container jerseys table-responsive">
     <table class="table table-default table-hover my-4">
-        <tr></tr>
         <tr n:foreach="$jerseyList as $number => $players">
             <td>
                 <div class="btn-group" role="group" aria-label="Basic example">
-                <button type="button" n:class="btn, btn-dark, !is_null($players) ? disabled" style="cursor: initial">{$number}</button>
-                {if is_null($players)}
-                    <button type="button" class="btn btn-outline-light" style="cursor: initial">Volné</button>
-                {else}
-                    <a n:foreach="$players as $player" href="{plink Team:player $player->webName}" n:class="btn, $player->id == $me->id ? btn-success, $player->id != $me->id ? ($iterator->isEven() ? btn-secondary : btn-light)" href='{plink Team:player $player->webName}'>{$player->callName}</a>
-                {/if}
-            </div>
+                    <button type="button" n:class="btn, btn-dark, !is_null($players) ? disabled" style="cursor: initial">{$number}</button>
+                    {if is_null($players)}
+                        <button type="button" class="btn btn-outline-light" style="cursor: initial">Volné</button>
+                    {else}
+                        <a n:foreach="$players as $player" href="{plink Team:player $player->webName}" n:class="btn, $player->id == $me->id ? btn-success, $player->id != $me->id ? ($iterator->isEven() ? btn-secondary : btn-light)" href='{plink Team:player $player->webName}'>{$player->callName}</a>
+                    {/if}
+                </div>
             </td>
         </tr>
     </table>
