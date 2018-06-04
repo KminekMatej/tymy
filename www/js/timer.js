@@ -8,9 +8,10 @@ function refresh(timer) {
     if($(".fa-sync").length>0){
         $(".fa-sync").addClass("fa-spin");
     }
+    var url = $("BUTTON.refresh").attr("data-href");
      
     $.nette.ajax({
-        url: "/?do=navbar-refresh",
+        url: url,
         complete: function (payload) {
             reTitle();
             if ($(".fa-sync").length > 0) {
