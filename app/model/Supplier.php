@@ -145,6 +145,10 @@ class Supplier {
         }
     }
     
+    public function isHttps(){
+        return $this->getTapi_config()["protocol"] == "https";
+    }
+    
 
 
 
