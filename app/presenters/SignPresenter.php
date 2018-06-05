@@ -70,6 +70,7 @@ class SignPresenter extends BasePresenter {
                         break;
                 }
             }
+            \Tracy\Debugger::log($values->name . " logged in");
             $this->redirect('Homepage:');
         });
 
