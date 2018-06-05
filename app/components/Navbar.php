@@ -104,12 +104,16 @@ class NavbarControl extends Control {
 
     private function events() {
         try {
+            
             $this->template->events = $this->eventList->init()
                     ->setFrom(date("Ymd"))
                     ->setTo(date("Ymd", strtotime(" + 1 month")))
                     ->setOrder("startTime")
                     ->getData();
-            $this->template->eventWarnings = $this->eventList->getWarnings();
+            $this->template->eventWarnings = 0;
+            foreach ($this->template->events as $ev) {
+                if($ev->warning) $this->template->eventWarnings++;
+            }
             
         } catch (APIException $ex) {
             $this->presenter->handleTapiException($ex);

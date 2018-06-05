@@ -41,7 +41,6 @@ abstract class EventResource extends TapiObject {
             
             if ($event->myAttendance->preStatus == "UNKNOWN") {
                 $event->warning = true;
-                $this->options->warnings += 1;
             }
         }
     }

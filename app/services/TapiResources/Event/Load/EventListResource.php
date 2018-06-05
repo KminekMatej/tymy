@@ -76,6 +76,7 @@ class EventListResource extends EventResource {
                 "end" => $event->endTime,
                 "webName" => $event->webName
             ];
+            if($event->warning) $this->options->warnings++;
             $this->options->asArray[] = (object)array_merge($eventProps, $eventColors);
             $month = date("Y-m", strtotime($event->startTime));
             $this->options->asMonthArray[$month][] = $event;
