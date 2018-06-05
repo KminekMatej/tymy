@@ -21,6 +21,7 @@ abstract class EventResource extends TapiObject {
         $this->timeLoad($event->startTime);
         $this->timeLoad($event->endTime);
         $event->resultsClosed = false;
+        $event->isPast = $event->endTime < new \Nette\Utils\DateTime();
         
         
         $myAttendance = new \stdClass();
