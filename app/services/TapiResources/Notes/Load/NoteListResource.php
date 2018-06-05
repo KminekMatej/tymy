@@ -26,6 +26,9 @@ class NoteListResource extends NoteResource {
     }
 
     protected function postProcess() {
+        if($this->data == null)
+            return null;
+        
         foreach ($this->data as $note) {
             parent::postProcessNote($note);
             $this->options->bySpecialPage[$note->specialPage] = $note;

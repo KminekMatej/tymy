@@ -204,6 +204,8 @@ class SecuredPresenter extends BasePresenter {
             'NASTAVENI' => "Settings",
             'POZNAMKY' => "Notes",
         ];
+        if($this->template->noteList == null)
+            return;
         foreach ($this->template->noteList as $note) {
             $display = explode(":", $note->specialPage);
             $displayPresenter = $display[0];

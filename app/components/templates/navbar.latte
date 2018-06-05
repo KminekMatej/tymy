@@ -70,11 +70,9 @@
                 <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-sticky-note" aria-hidden="true"></i> Poznámky</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <button n:if="count($notes) == 0" class="dropdown-item disabled" type="button"> - Žádné - </button>
-                    {foreach $notes as $n}
-                        <a class="dropdown-item" href="{plink Notes:note $n->webName}">
-                            {$n->caption}
-                        </a>
-                    {/foreach}
+                    {if count($notes)}
+                        <a n:foreach="$notes as $n" class="dropdown-item" href="{plink Notes:note $n->webName}">{$n->caption}</a>
+                    {/if}
                 </div>
             </li>
             
