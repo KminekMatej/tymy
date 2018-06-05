@@ -34,30 +34,32 @@
                             <th title="Pořadí v menu">Pořadí</th>
                             <th></th>
                         </tr>
-                        <tr n:foreach="$notes as $note" data-binder-id="{$note->id}">
-                            <td>
-                                <a href="{plink Settings:notes $note->webName}" class="btn btn-sm btn-light btn-light-bordered"  title="Upravit" style="margin-right: 2px">
-                                    <i class="fa fa-external-link-alt" aria-hidden="true"></i>
-                                </a>
-                            </td>
-                            <td><input type="text" name="caption" data-value="{$note->caption}" value="{$note->caption}" class="form-control form-control-sm" required/></td>
-                            <td><input type="text" name="description" data-value="{$note->description}" value="{$note->description}" class="form-control form-control-sm" required/></td>
-                            <td>
-                                <select name="accessType" data-value="{$note->accessType}" class="form-control form-control-sm">
-                                    <option value="PRIVATE" n:attr="selected => $note->accessType == 'PRIVATE'">Soukromá</option>
-                                    <option value="USERS" n:attr="selected => $note->accessType == 'USERS'">Pro členy</option>
-                                    <option value="PUBLIC" n:attr="selected => $note->accessType == 'PUBLIC'">Veřejná</option>
-                                </select>
-                            </td>
-                            <td class="text-center"><label class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" name="menuType" n:attr="data-value => $note->menuType ? 'true':'false', checked => $note->menuType" class="form-control form-control-sm custom-control-input" /><span class="custom-control-label"></span></label></td>
-                            <td><input type="text" name="specialPage" data-value="{$note->specialPage}" value="{$note->specialPage}" class="form-control form-control-sm" required/></td>
-                            <td><input name="menuOrder" data-value="{$note->menuOrder}" type="number" value="{$note->menuOrder}" class="form-control form-control-sm"/></td>
+                        {if count($notes)}
+                            <tr n:foreach="$notes as $note" data-binder-id="{$note->id}">
+                                <td>
+                                    <a href="{plink Settings:notes $note->webName}" class="btn btn-sm btn-light btn-light-bordered"  title="Upravit" style="margin-right: 2px">
+                                        <i class="fa fa-external-link-alt" aria-hidden="true"></i>
+                                    </a>
+                                </td>
+                                <td><input type="text" name="caption" data-value="{$note->caption}" value="{$note->caption}" class="form-control form-control-sm" required/></td>
+                                <td><input type="text" name="description" data-value="{$note->description}" value="{$note->description}" class="form-control form-control-sm" required/></td>
+                                <td>
+                                    <select name="accessType" data-value="{$note->accessType}" class="form-control form-control-sm">
+                                        <option value="PRIVATE" n:attr="selected => $note->accessType == 'PRIVATE'">Soukromá</option>
+                                        <option value="USERS" n:attr="selected => $note->accessType == 'USERS'">Pro členy</option>
+                                        <option value="PUBLIC" n:attr="selected => $note->accessType == 'PUBLIC'">Veřejná</option>
+                                    </select>
+                                </td>
+                                <td class="text-center"><label class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" name="menuType" n:attr="data-value => $note->menuType ? 'true':'false', checked => $note->menuType" class="form-control form-control-sm custom-control-input" /><span class="custom-control-label"></span></label></td>
+                                <td><input type="text" name="specialPage" data-value="{$note->specialPage}" value="{$note->specialPage}" class="form-control form-control-sm" required/></td>
+                                <td><input name="menuOrder" data-value="{$note->menuOrder}" type="number" value="{$note->menuOrder}" class="form-control form-control-sm"/></td>
 
-                            <td class="btn-group" role="group" n:inner-if="$note->canWrite">
-                                <button href="{link noteEdit!}" class="btn btn-sm btn-primary binder-save-btn" title="Uložit" style="margin-right: 2px"><i class="fa fa-save" aria-hidden="true"></i></button>
-                                <button href="{link noteDelete!}" class="btn btn-sm btn-danger binder-delete-btn" title="Smazat"><i class="fa fa-times" aria-hidden="true"></i></button>
-                            </td>
-                        </tr>
+                                <td class="btn-group" role="group" n:inner-if="$note->canWrite">
+                                    <button href="{link noteEdit!}" class="btn btn-sm btn-primary binder-save-btn" title="Uložit" style="margin-right: 2px"><i class="fa fa-save" aria-hidden="true"></i></button>
+                                    <button href="{link noteDelete!}" class="btn btn-sm btn-danger binder-delete-btn" title="Smazat"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                </td>
+                            </tr>
+                        {/if}
                     </table>
                 </div>
                 <div class="card-footer text-right">

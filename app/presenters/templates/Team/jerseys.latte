@@ -9,14 +9,13 @@
     <table class="table table-default table-hover my-4">
         <tr n:foreach="$jerseyList as $number => $players">
             <td>
-                
-                    <button type="button" n:class="btn, btn-dark, !is_null($players) ? disabled" style="cursor: initial">{$number}</button>
-                    {if is_null($players)}
-                        <button type="button" class="btn btn-outline-light" style="cursor: initial">Volné</button>
-                    {else}
-                        <a n:foreach="$players as $player" href="{plink Team:player $player->webName}" n:class="btn, $player->id == $me->id ? btn-primary, $player->id != $me->id ? ($player->status == 'PLAYER' ? btn-light : btn-outline-dark)" title="{$player->fullName} {if $player->status != 'PLAYER'}(Neaktivní){/if}" href='{plink Team:player $player->webName}'>{$player->callName}</a>
-                    {/if}
-                
+                <button type="button" n:class="btn, btn-dark, !is_null($players) ? disabled" style="cursor: initial">{$number}</button>
+                {if is_null($players)}
+                    <button type="button" class="btn btn-outline-light" style="cursor: initial">Volné</button>
+                {else}
+                    <a n:foreach="$players as $player" href="{plink Team:player $player->webName}" n:class="btn, $player->id == $me->id ? btn-primary, $player->id != $me->id ? ($player->status == 'PLAYER' ? btn-light : btn-outline-dark)" title="{$player->fullName} {if $player->status != 'PLAYER'}(Neaktivní){/if}" href='{plink Team:player $player->webName}'>{$player->callName}</a>
+                {/if}
+
             </td>
         </tr>
     </table>
