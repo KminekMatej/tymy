@@ -111,10 +111,12 @@ class NavbarControl extends Control {
                     ->setOrder("startTime")
                     ->getData();
             $this->template->eventWarnings = 0;
-            foreach ($this->template->events as $ev) {
-                if($ev->warning) $this->template->eventWarnings++;
+            if (count($this->template->events)) {
+                foreach ($this->template->events as $ev) {
+                    if ($ev->warning)
+                        $this->template->eventWarnings++;
+                }
             }
-            
         } catch (APIException $ex) {
             $this->presenter->handleTapiException($ex);
         }
