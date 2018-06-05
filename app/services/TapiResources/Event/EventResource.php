@@ -29,19 +29,21 @@ abstract class EventResource extends TapiObject {
             $event->link = ""; //set default value
         
         $this->addMyAttendance($event);
-        if(property_exists($event, "myAttendance") && property_exists($event->myAttendance, "preStatus")){
-                $eventClassMap = [
-                    "YES" => "success",
-                    "LAT" => "warning",
-                    "NO" => "danger",
-                    "DKY" => "danger",
-                    "UNKNOWN" => "secondary",
-                ];
-                $event->preClass = $eventClassMap[$event->myAttendance->preStatus];
-            } else {
+        if (property_exists($event, "myAttendance") && property_exists($event->myAttendance, "preStatus")) {
+            $eventClassMap = [
+                "YES" => "success",
+                "LAT" => "warning",
+                "NO" => "danger",
+                "DKY" => "danger",
+                "UNKNOWN" => "secondary",
+            ];
+            $event->preClass = $eventClassMap[$event->myAttendance->preStatus];
+            
+            if ($event->myAttendance->preStatus == "UNKNOWN") {
                 $event->warning = true;
-                $this->getResult()->menuWarningCount++;
+                $this->options->warnings += 1;
             }
+        }
     }
     
     protected function getEventColors($event) {
