@@ -13,12 +13,12 @@
                 <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-comments" aria-hidden="true"></i> Diskuze</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <button n:if="count($discussions) == 0" class="dropdown-item disabled" type="button"> - Žádná diskuze - </button>
-                    {foreach $discussions as $d}
-                        <a class="dropdown-item" href="{plink Discussion:discussion $d->webName}" id="discussion-{$d->id}">
+                    {if count(discussions)}
+                        <a n:foreach="$discussions as $d" class="dropdown-item" href="{plink Discussion:discussion $d->webName}" id="discussion-{$d->id}">
                             {if $discussionWarnings > 0}<span class="badge badge-primary" {if $d->newPosts == 0}style="visibility: hidden"{/if}>{$d->newPosts}</span>{/if}
                             {$d->caption}
                         </a>
-                    {/foreach}
+                    {/if}
                 </div>
             </li>
             
@@ -56,12 +56,12 @@
                 <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-chart-pie" aria-hidden="true"></i> Ankety</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <button n:if="count($polls) == 0" class="dropdown-item disabled" type="button"> - Žádná anketa - </button>
-                    {foreach $polls as $p}
-                        <a class="dropdown-item" href="{plink Poll:poll $p->webName}">
+                    {if count($polls)}
+                        <a n:foreach="$polls as $p" class="dropdown-item" href="{plink Poll:poll $p->webName}">
                             {if !$p->voted && $p->canVote}<span class="badge badge-danger"><i class="fa fa-info" aria-hidden="true"></i></span>{/if}
                             {$p->caption}
                         </a>
-                    {/foreach}
+                    {/if}
                 </div>
             </li>
 
