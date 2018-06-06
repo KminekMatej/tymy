@@ -2,16 +2,27 @@
 
 {block scripts}
 {include parent}
-{var $presenterName = $presenter->request->getPresenterName()}
-{var $view = $presenter->getView()}
+{var $presenterName = strtolower($presenter->request->getPresenterName())}
+{var $presenterUcName = ucFirst($presenterName)}
 
-{var $presenterScript = "{$basePath}/js/{$presenterName}/{$presenterName}.js"}
-{var $presenterScriptPath = "{$wwwDir}/js/{$presenterName}/{$presenterName}.js"}
+{var $presenterScriptPath = "{$wwwDir}/js/{$presenterUcName}/{$presenterName}.js"}
+{var $presenterScriptUcPath = "{$wwwDir}/js/{$presenterUcName}/{$presenterUcName}.js"}
 
-{var $viewScript = "{$basePath}/js/{$presenterName}/{$view}.js"}
-{var $viewScriptPath = "{$wwwDir}/js/{$presenterName}/{$view}.js"}
+{var $presenterScript = "{$basePath}/js/{$presenterUcName}/{$presenterName}.js"}
+{var $presenterScriptUc = "{$basePath}/js/{$presenterUcName}/{$presenterUcName}.js"}
+
+{var $viewName = strtolower($presenter->getView())}
+{var $viewUcName = ucFirst($viewName)}
+
+{var $viewScriptPath = "{$wwwDir}/js/{$presenterUcName}/{$viewName}.js"}
+{var $viewScriptUcPath = "{$wwwDir}/js/{$presenterUcName}/{$viewUcName}.js"}
+
+{var $viewScript = "{$basePath}/js/{$presenterUcName}/{$viewName}.js"}
+{var $viewScriptUc = "{$basePath}/js/{$presenterUcName}/{$viewUcName}.js"}
 
 {* Include scripts for whole presenter or current view, if they exist *}
-        <script src="{$presenterScript}" n:if="file_exists($presenterScriptPath)" ></script>
-        <script src="{$viewScript}" n:if="file_exists($viewScriptPath)" ></script>
+        <script src="{$presenterScript}" n:if="file_exists($presenterScriptPath)"></script>
+        <script src="{$presenterScriptUc}" n:if="file_exists($presenterScriptUcPath)"></script>
+        <script src="{$viewScript}" n:if="file_exists($viewScriptPath)"></script>
+        <script src="{$viewScriptUc}" n:if="file_exists($viewScriptUcPath)"></script>
 {/block}
