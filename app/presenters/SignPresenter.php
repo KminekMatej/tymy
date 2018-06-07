@@ -59,7 +59,7 @@ class SignPresenter extends BasePresenter {
             try {
                 $this->tapiAuthenticator->setTapiService($this->tapiService);
                 $this->user->setExpiration('20 minutes');
-                $this->user->login($values->name, $values->password);
+                $r = $this->user->login($values->name, $values->password);
             } catch (APIException $exc) {
                 switch ($exc->getMessage()) {
                     case "Login not approved":
@@ -70,7 +70,8 @@ class SignPresenter extends BasePresenter {
                         break;
                 }
             }
-            \Tracy\Debugger::log($values->name . " logged in");
+            if(!is_null($this->user->getIdentity()))
+                \Tracy\Debugger::log($this->user->getIdentity()->data["callName"] . " logged in");
             $this->redirect('Homepage:');
         });
 
