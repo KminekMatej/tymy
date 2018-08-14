@@ -30,7 +30,8 @@
                     {ifset $events}
                         <a n:foreach="$events as $ev" class="dropdown-item" href="{plink Event:event $ev->webName}">
                             {if $ev->warning}<span class="badge badge-danger"><i class="fa fa-info" aria-hidden="true"></i></span>{/if}
-                            <span style="color: {$eventColors[$ev->type]|noescape}">{$ev->startTime|date:'j.n.'} - {$ev->caption}</span>
+                            <span style="color: {$eventColors[$ev->type]|noescape}" n:if="array_key_exists($ev->type, $eventColors)">{$ev->startTime|date:'j.n.'} - {$ev->caption}</span>
+                            <span n:if="!array_key_exists($ev->type, $eventColors)">{$ev->startTime|date:'j.n.'} - {$ev->caption}</span>
                         </a>
                     {/ifset}
                 </div>

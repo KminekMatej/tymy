@@ -49,6 +49,7 @@ abstract class EventResource extends TapiObject {
         $colorList = $this->supplier->getEventColors();
         $eventColor = [];
         $invertColors = !property_exists($event, 'myAttendance') || !property_exists($event->myAttendance, 'preStatus');
+        if(!array_key_exists($event->type, $colorList)) return ["borderColor" => 'blue',"backgroundColor" => 'blue',"textColor" => 'white'];
         $eventColor["borderColor"] = $colorList[$event->type];
         $eventColor["backgroundColor"] = $invertColors ? 'white' : $colorList[$event->type];
         $eventColor["textColor"] = $invertColors ? $colorList[$event->type] : '';
