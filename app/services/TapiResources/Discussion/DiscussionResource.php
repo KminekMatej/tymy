@@ -31,6 +31,9 @@ abstract class DiscussionResource extends TapiObject {
         if(!empty($discussion->newInfo->lastVisit)){
             $this->timeLoad($discussion->newInfo->lastVisit);
         }
+        if(!property_exists($discussion, "canStick")) $discussion->canStick = FALSE;
+        if(!property_exists($discussion, "canDelete")) $discussion->canDelete = FALSE;
+        if(!property_exists($discussion, "canWrite")) $discussion->canWrite = FALSE;
     }
     
     protected function postProcessDiscussionPost($post) {
