@@ -101,7 +101,7 @@ class Supplier {
     }
     
     public function getStatusClass($status) {
-        return $this->statusClasses[$status];
+        return array_key_exists($status, $this->statusClasses) ? $this->statusClasses[$status] : "primary";
     }
 
     public function setStatusClasses($statusClasses) {
