@@ -37,7 +37,7 @@ abstract class EventResource extends TapiObject {
                 "DKY" => "danger",
                 "UNKNOWN" => "secondary",
             ];
-            $event->preClass = $eventClassMap[$event->myAttendance->preStatus];
+            $event->preClass = array_key_exists($event->myAttendance->preStatus, $eventClassMap) ? $eventClassMap[$event->myAttendance->preStatus] : "primary";
             
             if ($event->myAttendance->preStatus == "UNKNOWN") {
                 $event->warning = true;
