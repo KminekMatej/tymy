@@ -29,7 +29,7 @@ class UserDeleteResource extends UserResource {
     }
     
     protected function postProcess() {
-        
+        $this->clearCache($this->getId());
     }
     
 }
