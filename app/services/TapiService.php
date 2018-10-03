@@ -167,7 +167,7 @@ class TapiService {
             case 401: // unauthorized, try to refresh
                 return $this->loginFailure($relogin);
             case 403: 
-                throw new APIException("Chyba 403: Nedostatečná práva");
+                throw new APIException($resultStatus->getMessage() ? $resultStatus->getMessage() : "Chyba 403: Nedostatečná práva)");
             case 404: 
                 self::throwNotFound();
             case 500: 

@@ -66,7 +66,7 @@ class SignPresenter extends BasePresenter {
                         $this->flashMessage('Tento uživatel zatím nemá povolené přihlášení', "danger");
                         break;
                     default:
-                        $this->flashMessage('Přihlášení bylo neúspěšné', "danger");
+                        $this->flashMessage('Přihlášení bylo neúspěšné (' . $exc->getMessage() . ")", "danger");
                         break;
                 }
             }
