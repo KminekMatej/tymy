@@ -17,7 +17,7 @@ abstract class AuthorizationResource extends TapiObject{
     }
     
     protected function clearCache($id){
-        $this->cache->clean([Cache::TAGS => "GET:authorization/$id"]);
+        $this->cache->clean([Cache::TAGS => $this->supplier->getTym() . "@GET:authorization/$id"]);
     }
     
 }

@@ -49,9 +49,9 @@ abstract class UserResource extends TapiObject{
     }
     
     protected function clearCache($id = NULL){
-        $this->cache->clean([Cache::TAGS => "GET:users"]);
+        $this->cache->clean([Cache::TAGS => $this->supplier->getTym() . "@GET:users"]);
         if($id != NULL){
-            $this->cache->clean([Cache::TAGS => "GET:user/$id"]);
+            $this->cache->clean([Cache::TAGS => $this->supplier->getTym() . "@GET:user/$id"]);
         }
     }
     

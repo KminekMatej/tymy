@@ -119,14 +119,14 @@ abstract class TapiObject {
         if (!$this->dataReady || !$this->cacheable)
             return null;
         $key = $this->getCacheKey();
-        $this->cache->save($key, ["data" => $this->data, "options" => $this->options], [Cache::EXPIRE => $this->cachingTimeout . ' seconds', Cache::TAGS => [$this->getCacheTag(), $this->user->getId()]]);
+        $this->cache->save($key, ["data" => $this->data, "options" => $this->options], [Cache::EXPIRE => $this->cachingTimeout . ' seconds', Cache::TAGS => [$this->getCacheTag(), $this->supplier->getTym() . "@" . $this->user->getId()]]);
         $allKeys = $this->cache->load("allkeys");
         $allKeys[$key] = $key;
         $this->cache->save("allkeys", $allKeys, [Cache::EXPIRE => '30 minutes']);
     }
     
     public function cleanCache(){
-        $this->cache->clean([Cache::TAGS => $this->user->getId()]);
+        $this->cache->clean([Cache::TAGS => $this->supplier->getTym() . "@" . $this->user->getId()]);
         return $this;
     }
     
@@ -256,7 +256,7 @@ abstract class TapiObject {
     }
     
     protected function getCacheTag(){
-        return $this->getMethod() . ":" . $this->getUrl();
+        return $this->supplier->getTym() . "@" . $this->getMethod() . ":" . $this->getUrl();
     }
     
     protected function getCacheKey($key_override = NULL){

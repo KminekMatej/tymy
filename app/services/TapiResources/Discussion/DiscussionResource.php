@@ -46,10 +46,10 @@ abstract class DiscussionResource extends TapiObject {
     }
     
     protected function clearCache($id = NULL){
-        $this->cache->clean([Cache::TAGS => "GET:discussions/accessible/withNew"]);
-        $this->cache->clean([Cache::TAGS => "GET:discussions"]);
+        $this->cache->clean([Cache::TAGS => $this->supplier->getTym() . "@GET:discussions/accessible/withNew"]);
+        $this->cache->clean([Cache::TAGS => $this->supplier->getTym() . "@GET:discussions"]);
         if($id != NULL){
-            $this->cache->clean([Cache::TAGS => "GET:discussions/$id"]);
+            $this->cache->clean([Cache::TAGS => $this->supplier->getTym() . "@GET:discussions/$id"]);
         }
     }
 }

@@ -29,7 +29,7 @@ abstract class NoteResource extends TapiObject {
     }
     
     protected function clearCache(){
-        $this->cache->clean([Cache::TAGS => "GET:notes"]);
-        $this->cache->clean([Cache::TAGS => "GET:notes/html"]);
+        $this->cache->clean([Cache::TAGS => $this->supplier->getTym() . "@GET:notes"]);
+        $this->cache->clean([Cache::TAGS => $this->supplier->getTym() . "@GET:notes/html"]);
     }
 }
