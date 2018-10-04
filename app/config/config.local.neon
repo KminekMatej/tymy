@@ -1,7 +1,7 @@
 parameters:
     tapi:
         tym: _autodetect                                                        # Can be set to _autodetect to automatically be detected from url
-        protocol: http                                                          # Used to compose address of api
+        protocol: https                                                         # Used to compose address of api
         root: tymy.cz                                                           # Used to compose address of api
         tapi_api_root: api                                                      # Used to compose address of api
         multiple_team: false                                                    # if changed to true, user can pick which team he wants to login to. If selected, picked value overwrites the tym property
