@@ -31,6 +31,7 @@ class UserCreateResource extends UserResource {
     
     protected function postProcess() {
         parent::postProcessUser($this->data);
+        $this->clearCache();
     }
     
     public function getUser() {
