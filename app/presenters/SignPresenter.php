@@ -71,7 +71,7 @@ class SignPresenter extends BasePresenter {
                 }
             }
             if(!is_null($this->user->getIdentity()))
-                \Tracy\Debugger::log($this->user->getIdentity()->data["callName"] . " logged in");
+                \Tracy\Debugger::log($this->user->getIdentity()->data["callName"] . "@" . $this->supplier->getTym () . " logged in");
             $this->redirect('Homepage:');
         });
 
