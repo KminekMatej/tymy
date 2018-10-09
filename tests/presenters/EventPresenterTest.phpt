@@ -88,7 +88,7 @@ class EventPresenterTest extends IPresenterTest {
         
         //test body
         Assert::true($dom->has('div.container.event div.row div.col div.card.sh-box.my-3 div.card-header div.row div.col h4.card-title'));
-        $pencilBtn = 'div.container.event div.row div.col div.card.sh-box.my-3 div.card-header div.row div.col.col-md-auto a.btn.btn-sm.btn-light.btn-light-bordered i.fa.fa-pencil-square-o';
+        $pencilBtn = 'div.container.event div.row div.col div.card.sh-box.my-3 div.card-header div.row div.col.col-md-auto a.btn.btn-sm.btn-light.btn-light-bordered i.fa.fa-edit';
         if($inputs["adminMode"]){
             Assert::true($dom->has($pencilBtn));
         } else {
