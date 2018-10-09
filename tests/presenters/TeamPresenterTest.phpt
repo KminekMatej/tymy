@@ -124,7 +124,9 @@ class TeamPresenterTest extends IPresenterTest {
         if($this->user->isAllowed('users','canDelete')){
             Assert::true($dom->has('div.container.user div.row div.col.my-3 div.card.sh-box div.card-footer.text-right button.btn.btn-lg.btn-danger.mx-2 i.fa.fa-times'));
         }
-        Assert::true($dom->has('div.container.user div.row div.col.my-3 div.card.sh-box div.card-footer.text-right button.btn.btn-lg.btn-primary i.fa.fa-floppy-o'));
+        if($this->user->isAllowed('users','canUpdate')){
+            Assert::true($dom->has('div.container.user div.row div.col.my-3 div.card.sh-box div.card-footer.text-right button.btn.btn-lg.btn-primary i.fa.fa-save'));
+        }
     }
 
 }
