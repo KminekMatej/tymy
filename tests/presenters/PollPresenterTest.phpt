@@ -78,8 +78,15 @@ class PollPresenterTest extends IPresenterTest {
         //check shown items
         Assert::equal(count($dom->find('div.container.poll div.row div.col.my-3 div.card.sh-box div.card-body h4.card-title')), 1);
         Assert::equal(count($dom->find('div.container.poll div.row div.col.my-3 div.card.sh-box div.card-body h6.card-subtitle')), 1);
-        if($obj->canSeeResults){
+        
+        //check vote options
+        if($obj->canVote){
             Assert::true(count($dom->find('div.container.poll div.row div.col.my-3 div.card.sh-box div.card-body div.container div.row div.col-3.py-3.option')) > 0);
+        } else {
+            Assert::true(count($dom->find('div.container.poll div.row div.col.my-3 div.card.sh-box div.card-body p.font-italic')) > 0);
+        }
+        
+        if($obj->canSeeResults){
             Assert::true($dom->has('div.container.poll div.row#snippet--poll-results div.col.my-3 div.card.sh-box.text-white.bg-dark div.card-header'));
             Assert::true(count($dom->find('div.container.poll div.row#snippet--poll-results div.col.my-3 div.card.sh-box.text-white.bg-dark div.card-body.p-0 table.table.table-dark.table-striped.table-hover.mb-0 tr[data-vote]')) > 0);
         }
