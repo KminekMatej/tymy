@@ -44,7 +44,7 @@
                                 {/foreach}
                             </div>
                             {snippet attendanceWarning}
-                                <div class="alert alert-danger" n:if="$myPreStatusCaption == 'not-set'"><i class="fa fa-arrow-down" aria-hidden="true"></i> Nemáš vyplněnou docházku ! <i class="fa fa-arrow-down" aria-hidden="true"></i></div>
+                                <div class="alert alert-danger" n:if="$myPreStatusCaption == 'not-set'"><i n:if="$event->warning" class="fa fa-arrow-down" aria-hidden="true"></i> Nemáš vyplněnou docházku ! <i n:if="$event->warning" class="fa fa-arrow-down" aria-hidden="true"></i></div>
                             {/snippet}
                         </div>
                     </div>

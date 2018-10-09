@@ -22,6 +22,7 @@ abstract class EventResource extends TapiObject {
         $this->timeLoad($event->endTime);
         $event->resultsClosed = false;
         $event->isPast = $event->endTime < new \Nette\Utils\DateTime();
+        $attendanceStillOpen = $event->closeTime > new \Nette\Utils\DateTime();
         
         if (!property_exists($event, "place"))
             $event->place = ""; //set default value
@@ -39,7 +40,8 @@ abstract class EventResource extends TapiObject {
             ];
             $event->preClass = array_key_exists($event->myAttendance->preStatus, $eventClassMap) ? $eventClassMap[$event->myAttendance->preStatus] : "primary";
             
-            if ($event->myAttendance->preStatus == "UNKNOWN") {
+            if ($event->myAttendance->preStatus == "UNKNOWN" && $attendanceStillOpen) {
+                \Tracy\Debugger::barDump($event, "Attendance stil open");
                 $event->warning = true;
             }
         }
