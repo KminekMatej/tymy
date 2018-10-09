@@ -8,3 +8,4 @@
 /tests/test.json
 /tests/setup_DEV_LOCAL.php
 /release.bat
+/tests/SETUP_XDEV.php
