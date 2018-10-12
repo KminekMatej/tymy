@@ -21,9 +21,9 @@ class AttendanceConfirmResource extends EventResource {
 
     protected function preProcess() {
         if($this->getId() == null)
-            throw new APIException('Event ID not set');
+            throw new APIException('Event ID not set', self::BAD_REQUEST);
         if($this->getPostStatuses() == null)
-            throw new APIException('Statuses object not set');
+            throw new APIException('Statuses object not set', self::BAD_REQUEST);
         
         $this->setUrl("attendance");
         

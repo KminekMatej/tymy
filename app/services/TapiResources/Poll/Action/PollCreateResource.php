@@ -21,7 +21,7 @@ class PollCreateResource extends PollResource {
 
     protected function preProcess() {
         if($this->getPoll() == null)
-            throw new APIException('Poll object not set');
+            throw new APIException('Poll object not set', self::BAD_REQUEST);
         
         $this->setUrl("polls");
         $this->setRequestData($this->getPoll());

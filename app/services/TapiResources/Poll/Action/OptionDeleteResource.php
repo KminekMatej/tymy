@@ -21,9 +21,9 @@ class OptionDeleteResource extends PollResource{
 
     protected function preProcess() {
         if($this->getId() == null)
-            throw new APIException('Poll ID not set');
+            throw new APIException('Poll ID not set', self::BAD_REQUEST);
         if($this->getOptionId() == null)
-            throw new APIException('Option ID not set');
+            throw new APIException('Option ID not set', self::BAD_REQUEST);
         
         $this->setUrl("polls/" . $this->getId() . "/options");
         $this->setRequestData(["id" => $this->getOptionId()]);

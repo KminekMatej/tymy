@@ -22,8 +22,8 @@ class DiscussionPostEditResource extends DiscussionResource {
     }
     
     public function preProcess() {
-        if($this->getId() == null) throw new APIException ("Discussion ID not set");
-        if($this->getPostId() == null) throw new APIException ("Post ID not set");
+        if($this->getId() == null) throw new APIException('"Discussion ID not set"', self::BAD_REQUEST);
+        if($this->getPostId() == null) throw new APIException('"Post ID not set"', self::BAD_REQUEST);
         if($this->options->post == NULL && $this->options->sticky == NULL)
              throw new APIException ("Nothing to update");
         $this->setUrl("discussion/" . $this->getId() . "/post");

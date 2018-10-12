@@ -24,6 +24,8 @@ abstract class TapiObject {
     const CACHE_TIMEOUT_MEDIUM = 300; // 5 minutes - medium timeout
     const CACHE_TIMEOUT_LARGE = 600; // 10 minutes - timeout larger than user usually stays on site
     
+    const BAD_REQUEST = 400;
+    
     /** @var Nette\Security\User */
     protected $user;
     

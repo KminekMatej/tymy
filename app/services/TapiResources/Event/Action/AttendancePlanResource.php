@@ -22,9 +22,9 @@ class AttendancePlanResource extends EventResource {
 
     protected function preProcess() {
         if($this->getId() == null)
-            throw new APIException('Event ID not set');
+            throw new APIException('Event ID not set', self::BAD_REQUEST);
         if($this->getPreStatus() == null)
-            throw new APIException('Status not set');
+            throw new APIException('Status not set', self::BAD_REQUEST);
         
         $this->setUrl("attendance");
         

@@ -19,7 +19,7 @@ class AuthDetailResource extends AuthorizationResource {
 
     protected function preProcess() {
         if($this->getId() == null)
-            throw new APIException('User ID not set');
+            throw new APIException('User ID not set', self::BAD_REQUEST);
         
         $this->setUrl("authorization/" . $this->getId());
 

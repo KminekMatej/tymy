@@ -42,11 +42,11 @@ class UserRegisterResource extends UserResource {
 
     protected function preProcess() {
         if (!$this->getLogin())
-            throw new APIException('Login not set');
+            throw new APIException('Login not set', self::BAD_REQUEST);
         if (!$this->getPassword())
-            throw new APIException('Password not set');
+            throw new APIException('Password not set', self::BAD_REQUEST);
         if (!$this->getEmail())
-            throw new APIException('Email not set');
+            throw new APIException('Email not set', self::BAD_REQUEST);
         
         $this->setUrl("users/register");
         
@@ -62,13 +62,13 @@ class UserRegisterResource extends UserResource {
         
         if($this->getFirstName()){
             if (count($this->getFirstName()) > 20)
-                throw new APIException('First name too long!');
+                throw new APIException('First name too long!', self::BAD_REQUEST);
             $data["firstName"] = $this->getFirstName();
         }
             
         if($this->getLastName()){
             if (count($this->getLastName()) > 20)
-                throw new APIException('Last name too long!');
+                throw new APIException('Last name too long!', self::BAD_REQUEST);
             $data["lastName"] = $this->getLastName();
         }
         

@@ -21,10 +21,10 @@ class UserEditResource extends UserResource {
 
     protected function preProcess() {
         if($this->getId() == null)
-            throw new APIException('User ID not set');
+            throw new APIException('User ID not set', self::BAD_REQUEST);
         
         if (!$this->getUser())
-            throw new APIException('User object not set');
+            throw new APIException('User object not set', self::BAD_REQUEST);
         
         $this->setUrl("users/" . $this->getId());
         $this->setRequestData($this->getUser());

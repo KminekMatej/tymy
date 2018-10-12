@@ -20,7 +20,7 @@ class NoteDeleteResource extends NoteResource{
 
     protected function preProcess() {
         if($this->getId() == null)
-            throw new APIException('Note ID not set');
+            throw new APIException('Note ID not set', self::BAD_REQUEST);
         
         $this->setUrl("notes/" . $this->getId());
         

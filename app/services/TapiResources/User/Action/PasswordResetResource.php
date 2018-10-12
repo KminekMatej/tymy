@@ -21,7 +21,7 @@ class PasswordResetResource extends UserResource {
 
     protected function preProcess() {
         if($this->getCode() == null)
-            throw new APIException('Code not set');
+            throw new APIException('Code not set', self::BAD_REQUEST);
         
         $this->setUrl("pwdreset/" . $this->getCode());
 

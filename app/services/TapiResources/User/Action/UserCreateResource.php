@@ -21,7 +21,7 @@ class UserCreateResource extends UserResource {
 
     protected function preProcess() {
         if (!$this->getUser())
-            throw new APIException('User object not set');
+            throw new APIException('User object not set', self::BAD_REQUEST);
         
         $this->setUrl("users");
         $this->setRequestData($this->getUser());

@@ -23,7 +23,7 @@ class DiscussionPageResource extends DiscussionResource {
     }
     
     public function preProcess() {
-        if($this->getId() == null) throw new APIException ("Discussion ID is missing");
+        if($this->getId() == null) throw new APIException('"Discussion ID is missing"', self::BAD_REQUEST);
         if($this->getPage() == null) $this->setPage(1);
         $this->setUrl("discussion/" . $this->getId() . "/html/" . $this->getPage());
         if (!empty($this->options->search)) {

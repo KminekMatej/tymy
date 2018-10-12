@@ -163,11 +163,11 @@ class TapiService {
             case 200: //everything ok
                 return $this->success($resultStatus, $relogin);
             case 400: 
-                throw new APIException("Chyba 400: Neznámý dotaz");
+                throw new APIException("Chyba 400: Neznámý dotaz", $curl_info["http_code"]);
             case 401: // unauthorized, try to refresh
                 return $this->loginFailure($relogin);
             case 403: 
-                throw new APIException($resultStatus->getMessage() ? $resultStatus->getMessage() : "Chyba 403: Nedostatečná práva)");
+                throw new APIException(($resultStatus->getMessage() ? $resultStatus->getMessage() : "Chyba 403: Nedostatečná práva)"), $curl_info["http_code"]);
             case 404: 
                 self::throwNotFound();
             case 500: 
@@ -204,15 +204,15 @@ class TapiService {
             case "OK":
                 return $resultStatus;
             default:
-                throw new APIException("API request returned abnormal status " . $data->status . " : " . $data->statusMessage);
+                throw new APIException("API request returned abnormal status " . $data->status . " : " . $data->statusMessage, 501);
         }
     }
     
     public static function throwNotFound($msg = NULL) {
-        throw new APINotFoundException(is_null($msg) ? "Záznam nenalezen" : $msg);
+        throw new APINotFoundException(is_null($msg) ? "Záznam nenalezen" : $msg, 404);
     }
     
     public static function throwRequestError($url, $method, $http_code, $message) {
-        throw new APIException("Request $url [$method] failed with error $http_code: $message");
+        throw new APIException("Request $url [$method] failed with error $http_code: $message", $http_code);
     }
 }
