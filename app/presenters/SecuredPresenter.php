@@ -144,9 +144,11 @@ class SecuredPresenter extends BasePresenter {
     }
     
     public function handleTapiException(APIException $ex, $redirect = null, $args = []){
-        Debugger::barDump($ex);
-        $this->flashMessage("Došlo k nečekané chybě: " . $ex->getMessage());
-        $this->error("Došlo k nečekané chybě: " . $ex->getMessage());
+        $this->flashMessage("Došlo k nečekané chybě: " . $ex->getMessage(), "danger");
+        if($redirect)
+            $this->redirect ($redirect);
+        else
+            $this->error("Došlo k nečekané chybě: " . $ex->getMessage(), $ex->getCode());
     }
     
     /**
