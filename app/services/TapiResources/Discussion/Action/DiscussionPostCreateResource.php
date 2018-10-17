@@ -20,8 +20,8 @@ class DiscussionPostCreateResource extends DiscussionResource {
     }
     
     public function preProcess() {
-        if($this->getId() == null) throw new APIException('"Discussion ID is missing"', self::BAD_REQUEST);
-        if($this->getPost() == null) throw new APIException('"Post is missing"', self::BAD_REQUEST);
+        if($this->getId() == null) throw new APIException('Discussion ID is missing', self::BAD_REQUEST);
+        if($this->getPost() == null) throw new APIException('Post is missing', self::BAD_REQUEST);
         $this->setUrl("discussion/" . $this->getId() . "/post");
         $this->setRequestData((object)[
             "post" => $this->getPost(),

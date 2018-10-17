@@ -34,7 +34,7 @@ class PollCreateResourceTest extends TapiTest {
     public function testErrors() {
         Assert::exception(function() {
             $this->tapiObject->init()->getData(TRUE);
-        }, "\Tapi\Exception\APIException", "Poll object not set");
+        }, "\Tapi\Exception\APIException", "Poll object is missing");
     }
 
     public function testPerformSuccess() {

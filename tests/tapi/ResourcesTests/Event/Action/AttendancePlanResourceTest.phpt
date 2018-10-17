@@ -32,11 +32,11 @@ class AttendancePlanResourceTest extends TapiTest {
     }
 
     public function testErrorNoId(){
-        Assert::exception(function(){$this->tapiObject->init()->getData(TRUE);} , "\Tapi\Exception\APIException", "Event ID not set");
+        Assert::exception(function(){$this->tapiObject->init()->getData(TRUE);} , "\Tapi\Exception\APIException", "Event ID is missing");
     }
 
     public function testErrorNoObject(){
-        Assert::exception(function(){$this->tapiObject->init()->setId($GLOBALS["testedTeam"]["testEventId"])->getData(TRUE);} , "\Tapi\Exception\APIException", "Status not set");
+        Assert::exception(function(){$this->tapiObject->init()->setId($GLOBALS["testedTeam"]["testEventId"])->getData(TRUE);} , "\Tapi\Exception\APIException", "Status is missing");
     }
 
     public function testPerformSuccess() {

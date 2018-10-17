@@ -34,13 +34,13 @@ class UserRegisterResourceTest extends TapiTest {
     public function testErrors() {
         Assert::exception(function() {
             $this->tapiObject->init()->getData(TRUE);
-        }, "\Tapi\Exception\APIException", "Login not set");
+        }, "\Tapi\Exception\APIException", "Login is missing");
         Assert::exception(function() {
             $this->tapiObject->init()->setLogin($this->mockLogin())->getData(TRUE);
-        }, "\Tapi\Exception\APIException", "Password not set");
+        }, "\Tapi\Exception\APIException", "Password is missing");
         Assert::exception(function() {
             $this->tapiObject->init()->setLogin($this->mockLogin())->setPassword($this->mockPwd())->getData(TRUE);
-        }, "\Tapi\Exception\APIException", "Email not set");
+        }, "\Tapi\Exception\APIException", "Email is missing");
     }
 
     public function testPerformSuccess() {

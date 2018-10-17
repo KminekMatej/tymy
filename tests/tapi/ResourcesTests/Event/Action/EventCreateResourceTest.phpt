@@ -34,11 +34,11 @@ class EventCreateResourceTest extends TapiTest {
     public function testErrors() {
         Assert::exception(function() {
             $this->tapiObject->init()->getData(TRUE);
-        }, "\Tapi\Exception\APIException", "Events array not set");
+        }, "\Tapi\Exception\APIException", "Events array is missing");
         Assert::exception(function() {
             $eventMock = $this->mockEvents();
             $this->tapiObject->init()->setEventsArray($eventMock)->getData(TRUE);
-        }, "\Tapi\Exception\APIException", "Event types array not set");
+        }, "\Tapi\Exception\APIException", "Event types array is missing");
 
         Assert::exception(function() {
             $eventMock = [[
@@ -51,7 +51,7 @@ class EventCreateResourceTest extends TapiTest {
             "link" => "http://www.tymy.cz",
             ]];
             $this->tapiObject->init()->setEventsArray($eventMock)->setEventTypesArray($this->mockEventTypes())->getData(TRUE);
-        }, "\Tapi\Exception\APIException", "Event start time not set");
+        }, "\Tapi\Exception\APIException", "Event start time is missing");
 
         Assert::exception(function() {
             $eventMock = [[
@@ -64,7 +64,7 @@ class EventCreateResourceTest extends TapiTest {
             "link" => "http://www.tymy.cz",
             ]];
             $this->tapiObject->init()->setEventsArray($eventMock)->setEventTypesArray($this->mockEventTypes())->getData(TRUE);
-        }, "\Tapi\Exception\APIException", "Event type not set");
+        }, "\Tapi\Exception\APIException", "Event type is missing");
         Assert::exception(function() {
             $eventMock = [[
             "type" => "XXX",

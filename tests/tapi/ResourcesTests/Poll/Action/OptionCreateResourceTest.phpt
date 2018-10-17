@@ -34,22 +34,22 @@ class OptionCreateResourceTest extends TapiTest {
     public function testErrors() {
         Assert::exception(function() {
             $this->tapiObject->init()->getData(TRUE);
-        }, "\Tapi\Exception\APIException", "Poll ID not set");
+        }, "\Tapi\Exception\APIException", "Poll ID is missing");
         Assert::exception(function() {
             $this->tapiObject->init()->setId($GLOBALS["testedTeam"]["testPollId"])->getData(TRUE);
-        }, "\Tapi\Exception\APIException", "Poll option object not set");
+        }, "\Tapi\Exception\APIException", "Poll option object is missing");
         Assert::exception(function() {
             $mockOptions = [
                 ["caption" => "optionText"]
             ];
             $this->tapiObject->init()->setId($GLOBALS["testedTeam"]["testPollId"])->setPollOptions($mockOptions)->getData(TRUE);
-        }, "\Tapi\Exception\APIException", "Option type not set");
+        }, "\Tapi\Exception\APIException", "Option type is missing");
         Assert::exception(function() {
             $mockOptions = [
                 ["type" => "BOOLEAN"]
             ];
             $this->tapiObject->init()->setId($GLOBALS["testedTeam"]["testPollId"])->setPollOptions($mockOptions)->getData(TRUE);
-        }, "\Tapi\Exception\APIException", "Option caption not set");
+        }, "\Tapi\Exception\APIException", "Option caption is missing");
         
     }
 

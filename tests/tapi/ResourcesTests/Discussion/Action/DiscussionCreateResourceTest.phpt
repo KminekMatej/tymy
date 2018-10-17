@@ -34,7 +34,7 @@ class DiscussionCreateResourceTest extends TapiTest {
     }
     
     public function testErrorNoObject(){
-        Assert::exception(function(){$this->tapiObject->init()->getData(TRUE);} , "\Tapi\Exception\APIException", "Discussion object not set");
+        Assert::exception(function(){$this->tapiObject->init()->getData(TRUE);} , "\Tapi\Exception\APIException", "Discussion object is missing");
     }
 
     public function testPerformSuccess() {

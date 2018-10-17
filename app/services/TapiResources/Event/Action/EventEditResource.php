@@ -21,9 +21,9 @@ class EventEditResource extends EventResource {
 
     protected function preProcess() {
         if($this->getId() == null)
-            throw new APIException('Event ID not set', self::BAD_REQUEST);
+            throw new APIException('Event ID is missing', self::BAD_REQUEST);
         if($this->getEvent() == null)
-            throw new APIException('Event object not set', self::BAD_REQUEST);
+            throw new APIException('Event object is missing', self::BAD_REQUEST);
         
         $this->setUrl("event/" . $this->getId());
         

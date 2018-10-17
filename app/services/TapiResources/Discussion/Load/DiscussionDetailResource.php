@@ -18,7 +18,7 @@ class DiscussionDetailResource extends DiscussionResource {
     }
     
     public function preProcess() {
-        if($this->getId() == null) throw new APIException('"Discussion ID is missing"', self::BAD_REQUEST);
+        if($this->getId() == null) throw new APIException('Discussion ID is missing', self::BAD_REQUEST);
         $this->setUrl("discussion/" . $this->getId());
         return $this;
     }

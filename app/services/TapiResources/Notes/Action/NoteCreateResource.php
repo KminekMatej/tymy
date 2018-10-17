@@ -20,7 +20,7 @@ class NoteCreateResource extends NoteResource {
     
     protected function preProcess() {
         if ($this->getNote() == null)
-            throw new APIException('Note object not set', self::BAD_REQUEST);
+            throw new APIException('Note object is missing', self::BAD_REQUEST);
         $note = $this->getNote();
         if(array_key_exists("menuType", $note))
             $note["menuType"] = $note["menuType"] ? "APP" : "NO";

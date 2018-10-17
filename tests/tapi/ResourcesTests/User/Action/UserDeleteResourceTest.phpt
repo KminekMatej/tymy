@@ -35,7 +35,7 @@ class UserDeleteResourceTest extends TapiTest {
     public function testErrors() {
         Assert::exception(function() {
             $this->tapiObject->init()->getData(TRUE);
-        }, "\Tapi\Exception\APIException", "User ID not set");
+        }, "\Tapi\Exception\APIException", "User ID is missing");
     }
 
     public function testPerformSuccess() {

@@ -19,7 +19,7 @@ class EventDetailResource extends EventResource {
 
     protected function preProcess() {
         if($this->getId() == null)
-            throw new APIException('Event ID not set', self::BAD_REQUEST);
+            throw new APIException('Event ID is missing', self::BAD_REQUEST);
         $this->setUrl("event/" . $this->getId());
     }
     

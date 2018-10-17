@@ -34,11 +34,11 @@ class DiscussionPostEditResourceTest extends TapiTest {
     }
     
     public function testErrorNoId(){
-        Assert::exception(function(){$this->tapiObject->init()->getData(TRUE);} , "\Tapi\Exception\APIException", "Discussion ID not set");
+        Assert::exception(function(){$this->tapiObject->init()->getData(TRUE);} , "\Tapi\Exception\APIException", "Discussion ID is missing");
     }
 
     public function testErrorNoPostId(){
-        Assert::exception(function(){$this->tapiObject->init()->setId($GLOBALS["testedTeam"]["testDiscussionId"])->getData(TRUE);} , "\Tapi\Exception\APIException", "Post ID not set");
+        Assert::exception(function(){$this->tapiObject->init()->setId($GLOBALS["testedTeam"]["testDiscussionId"])->getData(TRUE);} , "\Tapi\Exception\APIException", "Post ID is missing");
     }
 
     public function testErrorNothingSet(){

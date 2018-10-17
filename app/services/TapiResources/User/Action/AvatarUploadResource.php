@@ -22,10 +22,10 @@ class AvatarUploadResource extends UserResource{
 
     protected function preProcess() {
         if($this->getId() == null)
-            throw new APIException('User ID not set', self::BAD_REQUEST);
+            throw new APIException('User ID is missing', self::BAD_REQUEST);
         
         if (!$this->getAvatar())
-            throw new APIException('Avatar not set', self::BAD_REQUEST);
+            throw new APIException('Avatar is missing', self::BAD_REQUEST);
         
         $this->setUrl("users/" . $this->getId() . "/avatar");
         $this->setRequestData($this->getAvatar());

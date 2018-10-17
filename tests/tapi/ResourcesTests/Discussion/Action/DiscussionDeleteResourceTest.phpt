@@ -32,7 +32,7 @@ class DiscussionDeleteResourceTest extends TapiTest {
     }
     
     public function testErrorNoId(){
-        Assert::exception(function(){$this->tapiObject->init()->getData(TRUE);} , "\Tapi\Exception\APIException", "Discussion ID not set");
+        Assert::exception(function(){$this->tapiObject->init()->getData(TRUE);} , "\Tapi\Exception\APIException", "Discussion ID is missing");
     }
 
     public function testPerformSuccess() {

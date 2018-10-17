@@ -42,11 +42,11 @@ class UserRegisterResource extends UserResource {
 
     protected function preProcess() {
         if (!$this->getLogin())
-            throw new APIException('Login not set', self::BAD_REQUEST);
+            throw new APIException('Login is missing', self::BAD_REQUEST);
         if (!$this->getPassword())
-            throw new APIException('Password not set', self::BAD_REQUEST);
+            throw new APIException('Password is missing', self::BAD_REQUEST);
         if (!$this->getEmail())
-            throw new APIException('Email not set', self::BAD_REQUEST);
+            throw new APIException('Email is missing', self::BAD_REQUEST);
         
         $this->setUrl("users/register");
         

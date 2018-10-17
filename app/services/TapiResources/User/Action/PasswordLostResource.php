@@ -25,11 +25,11 @@ class PasswordLostResource extends UserResource {
 
     protected function preProcess() {
         if (!$this->getMail())
-            throw new APIException('E-mail not set', self::BAD_REQUEST);
+            throw new APIException('E-mail is missing', self::BAD_REQUEST);
         if (!$this->getHostname())
-            throw new APIException('Hostname not set', self::BAD_REQUEST);
+            throw new APIException('Hostname is missing', self::BAD_REQUEST);
         if (!$this->getCallbackUri())
-            throw new APIException('Callback not set', self::BAD_REQUEST);
+            throw new APIException('Callback is missing', self::BAD_REQUEST);
         
         $this->setUrl("pwdlost");
         

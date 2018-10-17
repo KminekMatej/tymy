@@ -20,7 +20,7 @@ class DiscussionDeleteResource extends DiscussionResource {
 
     protected function preProcess() {
         if($this->getId() == null)
-            throw new APIException('Discussion ID not set', self::BAD_REQUEST);
+            throw new APIException('Discussion ID is missing', self::BAD_REQUEST);
         
         $this->setUrl("discussions");
         

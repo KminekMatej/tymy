@@ -37,13 +37,13 @@ class PasswordLostResourceTest extends TapiTest {
     public function testErrors() {
         Assert::exception(function() {
             $this->tapiObject->init()->getData(TRUE);
-        }, "\Tapi\Exception\APIException", "E-mail not set");
+        }, "\Tapi\Exception\APIException", "E-mail is missing");
         Assert::exception(function() {
             $this->tapiObject->init()->setMail($GLOBALS["testedTeam"]["userMail"])->getData(TRUE);
-        }, "\Tapi\Exception\APIException", "Hostname not set");
+        }, "\Tapi\Exception\APIException", "Hostname is missing");
         Assert::exception(function() {
             $this->tapiObject->init()->setMail($GLOBALS["testedTeam"]["userMail"])->setHostname("autotester_host")->getData(TRUE);
-        }, "\Tapi\Exception\APIException", "Callback not set");
+        }, "\Tapi\Exception\APIException", "Callback is missing");
     }
 
     public function testPerformSuccess() {

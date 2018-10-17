@@ -20,8 +20,8 @@ class DiscussionPostDeleteResource extends DiscussionResource {
     }
     
     public function preProcess() {
-        if($this->getId() == null) throw new APIException('"Discussion ID is missing"', self::BAD_REQUEST);
-        if($this->getPostId() == null) throw new APIException('"Post ID is missing"', self::BAD_REQUEST);
+        if($this->getId() == null) throw new APIException('Discussion ID is missing', self::BAD_REQUEST);
+        if($this->getPostId() == null) throw new APIException('Post ID is missing', self::BAD_REQUEST);
         $this->setUrl("discussion/" . $this->getId() . "/post");
         $this->setRequestData((object)[
             "id" => $this->getPostId()

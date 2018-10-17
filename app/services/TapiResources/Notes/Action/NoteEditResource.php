@@ -20,9 +20,9 @@ class NoteEditResource extends NoteResource {
     
     protected function preProcess() {
         if ($this->getId() == null)
-            throw new APIException('Note ID not set', self::BAD_REQUEST);
+            throw new APIException('Note ID is missing', self::BAD_REQUEST);
         if ($this->getNote() == null)
-            throw new APIException('Note object not set', self::BAD_REQUEST);
+            throw new APIException('Note object is missing', self::BAD_REQUEST);
 
         $this->setUrl("notes");
         $note = $this->getNote();

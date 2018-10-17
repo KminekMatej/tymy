@@ -35,7 +35,7 @@ class PasswordResetResourceTest extends TapiTest {
     public function testErrors() {
         Assert::exception(function() {
             $this->tapiObject->init()->getData(TRUE);
-        }, "\Tapi\Exception\APIException", "Code not set");
+        }, "\Tapi\Exception\APIException", "Code is missing");
     }
 
     public function testPerformSuccess() {

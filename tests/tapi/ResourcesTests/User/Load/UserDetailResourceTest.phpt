@@ -32,7 +32,7 @@ class UserDetailResourceTest extends TapiTest {
     }
     
     public function testErrorNoId(){
-        Assert::exception(function(){$this->tapiObject->init()->getData(TRUE);} , "\Tapi\Exception\APIException", "User ID not set");
+        Assert::exception(function(){$this->tapiObject->init()->getData(TRUE);} , "\Tapi\Exception\APIException", "User ID is missing");
     }
 
     public function testItemNotFound(){

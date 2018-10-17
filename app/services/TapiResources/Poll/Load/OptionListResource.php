@@ -19,7 +19,7 @@ class OptionListResource extends PollResource{
 
     protected function preProcess() {
         if (!$this->getId())
-            throw new APIException('Poll ID not set', self::BAD_REQUEST);
+            throw new APIException('Poll ID is missing', self::BAD_REQUEST);
         
         $this->setUrl("polls/" . $this->getId() . "/options");
         

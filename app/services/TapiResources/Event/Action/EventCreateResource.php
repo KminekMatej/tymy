@@ -22,14 +22,14 @@ class EventCreateResource extends EventResource {
     
     protected function preProcess() {
         if($this->getEventsArray() == null)
-            throw new APIException('Events array not set', self::BAD_REQUEST);
+            throw new APIException('Events array is missing', self::BAD_REQUEST);
         if($this->getEventTypesArray() == null)
-            throw new APIException('Event types array not set', self::BAD_REQUEST);
+            throw new APIException('Event types array is missing', self::BAD_REQUEST);
         foreach ($this->options->eventsArray as $event) {
             if(!array_key_exists("startTime", $event))
-                throw new APIException('Event start time not set', self::BAD_REQUEST);
+                throw new APIException('Event start time is missing', self::BAD_REQUEST);
             if(!array_key_exists("type", $event))
-                throw new APIException('Event type not set', self::BAD_REQUEST);
+                throw new APIException('Event type is missing', self::BAD_REQUEST);
             if(!array_key_exists($event["type"], $this->getEventTypesArray()))
                 throw new APIException('Unrecognized type', self::BAD_REQUEST);
             foreach ($event as $key => $value) {

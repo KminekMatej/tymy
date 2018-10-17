@@ -35,8 +35,8 @@ class EventEditResourceTest extends TapiTest {
     }
     
     public function testErrors(){
-        Assert::exception(function(){$this->tapiObject->init()->getData(TRUE);} , "\Tapi\Exception\APIException", "Event ID not set");
-        Assert::exception(function(){$this->tapiObject->init()->setId($GLOBALS["testedTeam"]["testEventId"])->getData(TRUE);} , "\Tapi\Exception\APIException", "Event object not set");
+        Assert::exception(function(){$this->tapiObject->init()->getData(TRUE);} , "\Tapi\Exception\APIException", "Event ID is missing");
+        Assert::exception(function(){$this->tapiObject->init()->setId($GLOBALS["testedTeam"]["testEventId"])->getData(TRUE);} , "\Tapi\Exception\APIException", "Event object is missing");
     }
 
     public function testPerformSuccess() {

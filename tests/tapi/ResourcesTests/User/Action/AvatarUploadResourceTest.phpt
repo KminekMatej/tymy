@@ -34,10 +34,10 @@ class AvatarUploadResourceTest extends TapiTest {
     public function testErrors() {
         Assert::exception(function() {
             $this->tapiObject->init()->getData(TRUE);
-        }, "\Tapi\Exception\APIException", "User ID not set");
+        }, "\Tapi\Exception\APIException", "User ID is missing");
         Assert::exception(function() {
             $this->tapiObject->init()->setId($GLOBALS["testedTeam"]["testPollId"])->getData(TRUE);
-        }, "\Tapi\Exception\APIException", "Avatar not set");
+        }, "\Tapi\Exception\APIException", "Avatar is missing");
     }
 
     public function testPerformSuccess() {

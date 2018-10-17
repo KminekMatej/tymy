@@ -34,10 +34,10 @@ class OptionEditResourceTest extends TapiTest {
     public function testErrors() {
         Assert::exception(function() {
             $this->tapiObject->init()->getData(TRUE);
-        }, "\Tapi\Exception\APIException", "Poll ID not set");
+        }, "\Tapi\Exception\APIException", "Poll ID is missing");
         Assert::exception(function() {
             $this->tapiObject->init()->setId($GLOBALS["testedTeam"]["testPollId"])->getData(TRUE);
-        }, "\Tapi\Exception\APIException", "Option object not set");
+        }, "\Tapi\Exception\APIException", "Option object is missing");
     }
 
     public function testPerformSuccess() {

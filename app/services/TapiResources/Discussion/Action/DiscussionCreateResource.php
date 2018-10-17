@@ -21,7 +21,7 @@ class DiscussionCreateResource extends DiscussionResource {
 
     protected function preProcess() {
         if($this->getDiscussion() == null)
-            throw new APIException('Discussion object not set', self::BAD_REQUEST);
+            throw new APIException('Discussion object is missing', self::BAD_REQUEST);
         
         $this->setUrl("discussions");
         $this->setRequestData($this->getDiscussion());
