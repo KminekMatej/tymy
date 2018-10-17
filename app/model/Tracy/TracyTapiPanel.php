@@ -2,14 +2,16 @@
 
 namespace Tapi;
 
-use Nette;
+use Nette\SmartObject;
 use Tracy;
 /**
  * Description of TracyTapiPanel
  *
  * @author matej
  */
-class TracyTapiPanel extends Nette\Object implements Tracy\IBarPanel{
+class TracyTapiPanel implements Tracy\IBarPanel{
+    
+    use SmartObject;
     
     private $requests = [];
     private $team = "API tymy.cz";
