@@ -31,7 +31,8 @@
 		"nette/utils": "^2.4",
 		"latte/latte": "^2.4",
 		"tracy/tracy": "^2.4",
-		"dg/adminer-custom": "^1.6"
+		"dg/adminer-custom": "^1.6",
+		"vladahejda/livetranslator": "1.0.0-rc"
 	},
 	"require-dev": {
 		"nette/tester": "^1.6"
