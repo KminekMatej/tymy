@@ -71,7 +71,7 @@
                             <td class="text-center"><label class="custom-control custom-checkbox"><input name="editablePosts" type="checkbox" n:attr="data-value => $d->editablePosts ? 'true':'false', checked => $d->editablePosts" class="form-control form-control-sm custom-control-input" /><span class="custom-control-label"></span></label></td>
                             <td><input name="order" data-value="{$d->order}" type="number" value="{$d->order}" class="form-control form-control-sm" style="max-width: 60px;"/></td>
                             <td class="btn-group" role="group" n:if="$user->isAllowed('discussion','setup') || $isNew">
-                                <button class="btn btn-sm btn-primary binder-save-btn" href="{link discussionEdit!}" title="Uložit"><i class="fa fa-save" aria-hidden="true"></i></button>
+                                <button class="btn btn-sm btn-primary binder-save-btn" href="{link discussionCreate!}" title="Uložit"><i class="fa fa-save" aria-hidden="true"></i></button>
                                 <button n:class="btn,btn-sm,btn-danger, !$isNew ? binder-delete-btn" href="{link discussionDelete!}" title="Smazat" n:attr="onclick => $isNew ? 'removeRow(this)'"><i class="fa fa-times" aria-hidden="true"></i></button>
                             </td>
                         </tr>
@@ -84,7 +84,7 @@
                     <a n:if="!$isNew" class="btn btn-lg btn-success" href="{plink Settings:discussion_new}" onclick="btnRotate($(this), true)" title="Vytvořit novou diskuzi" style="margin-right: 10px">
                         <i class="fa fa-plus" aria-hidden="true"></i>
                     </a>
-                    <button class="btn btn-lg btn-primary binder-save-all-btn" href="{link discussionsEdit!}" title="Uložit vše"><i class="fa fa-save" aria-hidden="true"></i></button>
+                    <button n:if="!$isNew" class="btn btn-lg btn-primary binder-save-all-btn" href="{link discussionsEdit!}" title="Uložit vše"><i class="fa fa-save" aria-hidden="true"></i></button>
                 </div>
                 
             </div>

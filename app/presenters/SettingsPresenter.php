@@ -358,7 +358,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function handleDiscussionCreate(){
-        $discussionData = $this->getRequest()->getPost()[1]; // new discussion is always as ID 1
+        $discussionData = (object)$this->getRequest()->getPost()["changes"]; // new discussion is always as ID 1
         try {
             $this->discussionCreator->init()
                     ->setDiscussion($discussionData)
