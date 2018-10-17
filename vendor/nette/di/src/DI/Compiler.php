@@ -40,7 +40,7 @@ class Compiler
 	private static $reserved = ['services' => 1, 'parameters' => 1];
 
 
-	public function __construct(ContainerBuilder $builder = NULL)
+	public function __construct(ContainerBuilder $builder = null)
 	{
 		$this->builder = $builder ?: new ContainerBuilder;
 		$this->dependencies = new DependencyChecker;
@@ -49,12 +49,12 @@ class Compiler
 
 	/**
 	 * Add custom configurator extension.
-	 * @param  string|NULL
+	 * @param  string|null
 	 * @return static
 	 */
 	public function addExtension($name, CompilerExtension $extension)
 	{
-		if ($name === NULL) {
+		if ($name === null) {
 			$name = '_' . count($this->extensions);
 		} elseif (isset($this->extensions[$name]) || isset(self::$reserved[$name])) {
 			throw new Nette\InvalidArgumentException("Name '$name' is already used or reserved.");
@@ -67,7 +67,7 @@ class Compiler
 	/**
 	 * @return array
 	 */
-	public function getExtensions($type = NULL)
+	public function getExtensions($type = null)
 	{
 		return $type
 			? array_filter($this->extensions, function ($item) use ($type) { return $item instanceof $type; })
@@ -185,10 +185,10 @@ class Compiler
 		$params = isset($this->config['parameters']) ? $this->config['parameters'] : [];
 		foreach ($this->dynamicParams as $key) {
 			$params[$key] = array_key_exists($key, $params)
-				? ContainerBuilder::literal('isset($this->parameters[?]) ? $this->parameters[?] : ?', [$key, ContainerBuilder::literal('?'), $key, $params[$key]])
+				? ContainerBuilder::literal('isset($this->parameters[?]) \? $this->parameters[?] : ?', [$key, $key, $params[$key]])
 				: ContainerBuilder::literal('$this->parameters[?]', [$key]);
 		}
-		$this->builder->parameters = Helpers::expand($params, $params, TRUE);
+		$this->builder->parameters = Helpers::expand($params, $params, true);
 	}
 
 
@@ -272,7 +272,7 @@ class Compiler
 	 * Adds service definitions from configuration.
 	 * @return void
 	 */
-	public static function loadDefinitions(ContainerBuilder $builder, array $services, $namespace = NULL)
+	public static function loadDefinitions(ContainerBuilder $builder, array $services, $namespace = null)
 	{
 		$depths = [];
 		foreach ($services as $name => $def) {
@@ -280,23 +280,25 @@ class Compiler
 			while (Config\Helpers::isInheriting($def)) {
 				$path[] = $def;
 				$def = isset($services[$def[Config\Helpers::EXTENDS_KEY]]) ? $services[$def[Config\Helpers::EXTENDS_KEY]] : [];
-				if (in_array($def, $path, TRUE)) {
+				if (in_array($def, $path, true)) {
 					throw new ServiceCreationException("Circular reference detected for service '$name'.");
 				}
 			}
-			$depths[$name] = count($path);
+			$depths[$name] = count($path) + preg_match('#^@[\w\\\\]+\z#', $name);
 		}
-		array_multisort($depths, $services);
+		@array_multisort($depths, $services); // @ may trigger E_NOTICE: Object of class Nette\DI\Statement could not be converted to int
 
 		foreach ($services as $name => $def) {
-			if ((string) (int) $name === (string) $name) {
+			if (is_int($name)) {
 				$postfix = $def instanceof Statement && is_string($def->getEntity()) ? '.' . $def->getEntity() : (is_scalar($def) ? ".$def" : '');
 				$name = (count($builder->getDefinitions()) + 1) . preg_replace('#\W+#', '_', $postfix);
+			} elseif (preg_match('#^@[\w\\\\]+\z#', $name)) {
+				$name = $builder->getByType(substr($name, 1), true);
 			} elseif ($namespace) {
 				$name = $namespace . '.' . $name;
 			}
 
-			if ($def === FALSE) {
+			if ($def === false) {
 				$builder->removeDefinition($name);
 				continue;
 			}
@@ -324,7 +326,7 @@ class Compiler
 				$builder->removeDefinition($name);
 				$definition = $builder->addDefinition(
 					$name,
-					$parent === Config\Helpers::OVERWRITE ? NULL : clone $builder->getDefinition($parent)
+					$parent === Config\Helpers::OVERWRITE ? null : clone $builder->getDefinition($parent)
 				);
 			} elseif ($builder->hasDefinition($name)) {
 				$definition = $builder->getDefinition($name);
@@ -347,26 +349,26 @@ class Compiler
 	 */
 	public static function loadDefinition(ServiceDefinition $definition, $config)
 	{
-		if ($config === NULL) {
+		if ($config === null) {
 			return;
 
 		} elseif (is_string($config) && interface_exists($config)) {
-			$config = ['class' => NULL, 'implement' => $config];
+			$config = ['class' => null, 'implement' => $config];
 
 		} elseif ($config instanceof Statement && is_string($config->getEntity()) && interface_exists($config->getEntity())) {
-			$config = ['class' => NULL, 'implement' => $config->getEntity(), 'factory' => array_shift($config->arguments)];
+			$config = ['class' => null, 'implement' => $config->getEntity(), 'factory' => array_shift($config->arguments)];
 
 		} elseif (!is_array($config) || isset($config[0], $config[1])) {
-			$config = ['class' => NULL, 'factory' => $config];
+			$config = ['class' => null, 'factory' => $config];
 		}
 
 		if (array_key_exists('create', $config)) {
-			trigger_error("Key 'create' is deprecated, use 'factory' or 'class' in configuration.", E_USER_DEPRECATED);
+			trigger_error("Key 'create' is deprecated, use 'factory' or 'type' in configuration.", E_USER_DEPRECATED);
 			$config['factory'] = $config['create'];
 			unset($config['create']);
 		}
 
-		$known = ['class', 'factory', 'arguments', 'setup', 'autowired', 'dynamic', 'inject', 'parameters', 'implement', 'run', 'tags', 'alteration'];
+		$known = ['type', 'class', 'factory', 'arguments', 'setup', 'autowired', 'dynamic', 'inject', 'parameters', 'implement', 'run', 'tags', 'alteration'];
 		if ($error = array_diff(array_keys($config), $known)) {
 			$hints = array_filter(array_map(function ($error) use ($known) {
 				return Nette\Utils\ObjectMixin::getSuggestion($known, $error);
@@ -378,14 +380,22 @@ class Compiler
 		$config = Helpers::filterArguments($config);
 
 		if (array_key_exists('class', $config) || array_key_exists('factory', $config)) {
-			$definition->setClass(NULL);
-			$definition->setFactory(NULL);
+			$definition->setType(null);
+			$definition->setFactory(null);
+		}
+
+		if (array_key_exists('type', $config)) {
+			Validators::assertField($config, 'type', 'string|null');
+			$definition->setType($config['type']);
+			if (array_key_exists('class', $config)) {
+				throw new Nette\InvalidStateException("Unexpected 'class' when 'type' is used.");
+			}
 		}
 
 		if (array_key_exists('class', $config)) {
 			Validators::assertField($config, 'class', 'string|Nette\DI\Statement|null');
 			if (!$config['class'] instanceof Statement) {
-				$definition->setClass($config['class']);
+				$definition->setType($config['class']);
 			}
 			$definition->setFactory($config['class']);
 		}
@@ -426,7 +436,7 @@ class Compiler
 		if (isset($config['implement'])) {
 			Validators::assertField($config, 'implement', 'string');
 			$definition->setImplement($config['implement']);
-			$definition->setAutowired(TRUE);
+			$definition->setAutowired(true);
 		}
 
 		if (isset($config['autowired'])) {
@@ -473,7 +483,7 @@ class Compiler
 
 
 	/** @deprecated */
-	public static function parseServices(ContainerBuilder $builder, array $config, $namespace = NULL)
+	public static function parseServices(ContainerBuilder $builder, array $config, $namespace = null)
 	{
 		self::loadDefinitions($builder, isset($config['services']) ? $config['services'] : [], $namespace);
 	}
@@ -484,5 +494,4 @@ class Compiler
 	{
 		self::loadDefinition($definition, $config);
 	}
-
 }

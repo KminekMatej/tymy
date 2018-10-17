@@ -7,11 +7,12 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  *
  * @param  array $exception
+ * @param  string $messageHtml
+ * @param  array[] $actions
  * @param  array $info
  * @param  string $title
  * @param  string $source
  * @param  bool $sourceIsUrl
- * @param  string $skipError
  * @param  array $lastError
  * @param  callable $dump
  * @return void
@@ -29,9 +30,10 @@ $code = $exception->getCode() ? ' #' . $exception->getCode() : '';
 			<?php if ($exception->getMessage()): ?><p><?= Helpers::escapeHtml($title . $code) ?></p><?php endif ?>
 
 
-			<h1><span><?= Helpers::escapeHtml(trim($exception->getMessage() ?: $title . $code)) ?></span>
-			<a href="https://www.google.com/search?sourceid=tracy&amp;q=<?= urlencode($title . ' ' . preg_replace('#\'.*\'|".*"#Us', '', $exception->getMessage())) ?>" target="_blank" rel="noreferrer noopener">search&#x25ba;</a>
-			<?php if ($skipError): ?><a href="<?= Helpers::escapeHtml($skipError) ?>">skip error&#x25ba;</a><?php endif ?></h1>
+			<h1><span><?= $messageHtml ?: Helpers::escapeHtml($title . $code) ?></span>
+			<?php foreach ($actions as $item): ?>
+			<a href="<?= Helpers::escapeHtml($item['link']) ?>"<?= empty($item['external']) ? '' : ' target="_blank" rel="noreferrer noopener"'?>><?= Helpers::escapeHtml($item['label']) ?>&#x25ba;</a>
+			<?php endforeach ?></h1>
 		</div>
 
 		<?php if ($prev = $exception->getPrevious()): ?>
@@ -67,19 +69,19 @@ $code = $exception->getCode() ? ' #' . $exception->getCode() : '';
 			<?php endforeach ?>
 
 
-			<?php $stack = $ex->getTrace(); $expanded = NULL ?>
-			<?php if ((!$exception instanceof \ErrorException || in_array($exception->getSeverity(), [E_USER_NOTICE, E_USER_WARNING, E_USER_DEPRECATED])) && $this->isCollapsed($ex->getFile())) {
+			<?php $stack = $ex->getTrace(); $expanded = null ?>
+			<?php if ((!$exception instanceof \ErrorException || in_array($exception->getSeverity(), [E_USER_NOTICE, E_USER_WARNING, E_USER_DEPRECATED], true)) && $this->isCollapsed($ex->getFile())) {
 				foreach ($stack as $key => $row) {
 					if (isset($row['file']) && !$this->isCollapsed($row['file'])) { $expanded = $key; break; }
 				}
 			} ?>
 
 			<div class="panel">
-			<h2><a data-tracy-ref="^+" class="tracy-toggle<?= ($collapsed = $expanded !== NULL) ? ' tracy-collapsed' : '' ?>">Source file</a></h2>
+			<h2><a data-tracy-ref="^+" class="tracy-toggle<?= ($collapsed = $expanded !== null) ? ' tracy-collapsed' : '' ?>">Source file</a></h2>
 
 			<div class="<?= $collapsed ? 'tracy-collapsed ' : '' ?>inner">
 				<p><b>File:</b> <?= Helpers::editorLink($ex->getFile(), $ex->getLine()) ?></p>
-				<?php if (is_file($ex->getFile())): ?><?= self::highlightFile($ex->getFile(), $ex->getLine(), 15, $ex instanceof \ErrorException && isset($ex->context) ? $ex->context : NULL) ?><?php endif ?>
+				<?php if (is_file($ex->getFile())): ?><?= self::highlightFile($ex->getFile(), $ex->getLine(), 15, $ex instanceof \ErrorException && isset($ex->context) ? $ex->context : null) ?><?php endif ?>
 			</div></div>
 
 
@@ -191,7 +193,7 @@ $code = $exception->getCode() ? ' #' . $exception->getCode() : '';
 
 
 		<?php $bottomPanels = [] ?>
-		<?php foreach ($this->renderPanels(NULL) as $panel): ?>
+		<?php foreach ($this->renderPanels(null) as $panel): ?>
 		<?php if (!empty($panel->bottom)) { $bottomPanels[] = $panel; continue; } ?>
 		<?php $collapsedClass = !isset($panel->collapsed) || $panel->collapsed ? ' tracy-collapsed' : ''; ?>
 		<div class="panel">
@@ -244,7 +246,7 @@ $code = $exception->getCode() ? ' #' . $exception->getCode() : '';
 
 
 			<?php
-			$list = get_defined_constants(TRUE);
+			$list = get_defined_constants(true);
 			if (!empty($list['user'])):?>
 			<h3><a data-tracy-ref="^+" class="tracy-toggle tracy-collapsed">Constants</a></h3>
 			<div class="outer tracy-collapsed">

@@ -13,13 +13,13 @@ namespace Tracy;
  */
 class Logger implements ILogger
 {
-	/** @var string name of the directory where errors should be logged */
+	/** @var string|null name of the directory where errors should be logged */
 	public $directory;
 
-	/** @var string|array email or emails to which send error notifications */
+	/** @var string|array|null email or emails to which send error notifications */
 	public $email;
 
-	/** @var string sender of email notifications */
+	/** @var string|null sender of email notifications */
 	public $fromEmail;
 
 	/** @var mixed interval for sending email is 2 days */
@@ -28,11 +28,15 @@ class Logger implements ILogger
 	/** @var callable handler for sending emails */
 	public $mailer;
 
-	/** @var BlueScreen */
+	/** @var BlueScreen|null */
 	private $blueScreen;
 
 
-	public function __construct($directory, $email = NULL, BlueScreen $blueScreen = NULL)
+	/**
+	 * @param  string|null  $directory
+	 * @param  string|array|null  $email
+	 */
+	public function __construct($directory, $email = null, BlueScreen $blueScreen = null)
 	{
 		$this->directory = $directory;
 		$this->email = $email;
@@ -43,22 +47,22 @@ class Logger implements ILogger
 
 	/**
 	 * Logs message or exception to file and sends email notification.
-	 * @param  string|\Exception|\Throwable
-	 * @param  int   one of constant ILogger::INFO, WARNING, ERROR (sends email), EXCEPTION (sends email), CRITICAL (sends email)
-	 * @return string logged error filename
+	 * @param  mixed  $message
+	 * @param  string  $priority  one of constant ILogger::INFO, WARNING, ERROR (sends email), EXCEPTION (sends email), CRITICAL (sends email)
+	 * @return string|null logged error filename
 	 */
 	public function log($message, $priority = self::INFO)
 	{
 		if (!$this->directory) {
-			throw new \LogicException('Directory is not specified.');
+			throw new \LogicException('Logging directory is not specified.');
 		} elseif (!is_dir($this->directory)) {
-			throw new \RuntimeException("Directory '$this->directory' is not found or is not directory.");
+			throw new \RuntimeException("Logging directory '$this->directory' is not found or is not directory.");
 		}
 
 		$exceptionFile = $message instanceof \Exception || $message instanceof \Throwable
 			? $this->getExceptionFile($message)
-			: NULL;
-		$line = $this->formatLogLine($message, $exceptionFile);
+			: null;
+		$line = static::formatLogLine($message, $exceptionFile);
 		$file = $this->directory . '/' . strtolower($priority ?: self::INFO) . '.log';
 
 		if (!@file_put_contents($file, $line . PHP_EOL, FILE_APPEND | LOCK_EX)) { // @ is escalated to exception
@@ -69,7 +73,7 @@ class Logger implements ILogger
 			$this->logException($message, $exceptionFile);
 		}
 
-		if (in_array($priority, [self::ERROR, self::EXCEPTION, self::CRITICAL], TRUE)) {
+		if (in_array($priority, [self::ERROR, self::EXCEPTION, self::CRITICAL], true)) {
 			$this->sendEmail($message);
 		}
 
@@ -78,10 +82,10 @@ class Logger implements ILogger
 
 
 	/**
-	 * @param  string|\Exception|\Throwable
+	 * @param  mixed  $message
 	 * @return string
 	 */
-	protected function formatMessage($message)
+	public static function formatMessage($message)
 	{
 		if ($message instanceof \Exception || $message instanceof \Throwable) {
 			while ($message) {
@@ -102,29 +106,29 @@ class Logger implements ILogger
 
 
 	/**
-	 * @param  string|\Exception|\Throwable
+	 * @param  mixed  $message
 	 * @return string
 	 */
-	protected function formatLogLine($message, $exceptionFile = NULL)
+	public static function formatLogLine($message, $exceptionFile = null)
 	{
 		return implode(' ', [
 			@date('[Y-m-d H-i-s]'), // @ timezone may not be set
-			preg_replace('#\s*\r?\n\s*#', ' ', $this->formatMessage($message)),
+			preg_replace('#\s*\r?\n\s*#', ' ', static::formatMessage($message)),
 			' @  ' . Helpers::getSource(),
-			$exceptionFile ? ' @@  ' . basename($exceptionFile) : NULL,
+			$exceptionFile ? ' @@  ' . basename($exceptionFile) : null,
 		]);
 	}
 
 
 	/**
-	 * @param  \Exception|\Throwable
+	 * @param  \Exception|\Throwable  $exception
 	 * @return string
 	 */
 	public function getExceptionFile($exception)
 	{
 		while ($exception) {
 			$data[] = [
-				$exception->getMessage(), $exception->getCode(), $exception->getFile(), $exception->getLine(),
+				get_class($exception), $exception->getMessage(), $exception->getCode(), $exception->getFile(), $exception->getLine(),
 				array_map(function ($item) { unset($item['args']); return $item; }, $exception->getTrace()),
 			];
 			$exception = $exception->getPrevious();
@@ -142,10 +146,10 @@ class Logger implements ILogger
 
 	/**
 	 * Logs exception to the file if file doesn't exist.
-	 * @param  \Exception|\Throwable
+	 * @param  \Exception|\Throwable  $exception
 	 * @return string logged error filename
 	 */
-	protected function logException($exception, $file = NULL)
+	protected function logException($exception, $file = null)
 	{
 		$file = $file ?: $this->getExceptionFile($exception);
 		$bs = $this->blueScreen ?: new BlueScreen;
@@ -155,7 +159,7 @@ class Logger implements ILogger
 
 
 	/**
-	 * @param  string|\Exception|\Throwable
+	 * @param  mixed  $message
 	 * @return void
 	 */
 	protected function sendEmail($message)
@@ -164,7 +168,9 @@ class Logger implements ILogger
 			? $this->emailSnooze
 			: @strtotime($this->emailSnooze) - time(); // @ timezone may not be set
 
-		if ($this->email && $this->mailer
+		if (
+			$this->email
+			&& $this->mailer
 			&& @filemtime($this->directory . '/email-sent') + $snooze < time() // @ file may not exist
 			&& @file_put_contents($this->directory . '/email-sent', 'sent') // @ file may not be writable
 		) {
@@ -175,8 +181,8 @@ class Logger implements ILogger
 
 	/**
 	 * Default mailer.
-	 * @param  string|\Exception|\Throwable
-	 * @param  string
+	 * @param  mixed  $message
+	 * @param  string  $email
 	 * @return void
 	 * @internal
 	 */
@@ -194,11 +200,10 @@ class Logger implements ILogger
 					'Content-Transfer-Encoding: 8bit',
 				]) . "\n",
 				'subject' => "PHP: An error occurred on the server $host",
-				'body' => $this->formatMessage($message) . "\n\nsource: " . Helpers::getSource(),
+				'body' => static::formatMessage($message) . "\n\nsource: " . Helpers::getSource(),
 			]
 		);
 
 		mail($email, $parts['subject'], $parts['body'], $parts['headers']);
 	}
-
 }

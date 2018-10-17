@@ -31,8 +31,8 @@
 		"nette/utils": "^2.4",
 		"latte/latte": "^2.4",
 		"tracy/tracy": "^2.4",
-		"dg/adminer-custom": "^1.6",
-		"vladahejda/livetranslator": "1.0.0-rc"
+		"nette/php-generator": "v2.6.4",
+		"nette/nette": "v2.4.0"
 	},
 	"require-dev": {
 		"nette/tester": "^1.6"

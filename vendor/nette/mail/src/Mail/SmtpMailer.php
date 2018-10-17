@@ -44,12 +44,15 @@ class SmtpMailer implements IMailer
 	/** @var bool */
 	private $persistent;
 
+	/** @var string */
+	private $clientHost;
+
 
 	public function __construct(array $options = [])
 	{
 		if (isset($options['host'])) {
 			$this->host = $options['host'];
-			$this->port = isset($options['port']) ? (int) $options['port'] : NULL;
+			$this->port = isset($options['port']) ? (int) $options['port'] : null;
 		} else {
 			$this->host = ini_get('SMTP');
 			$this->port = (int) ini_get('smtp_port');
@@ -63,6 +66,13 @@ class SmtpMailer implements IMailer
 			$this->port = $this->secure === 'ssl' ? 465 : 25;
 		}
 		$this->persistent = !empty($options['persistent']);
+		if (isset($options['clientHost'])) {
+			$this->clientHost = $options['clientHost'];
+		} else {
+			$this->clientHost = isset($_SERVER['HTTP_HOST']) && preg_match('#^[\w.-]+\z#', $_SERVER['HTTP_HOST'])
+				? $_SERVER['HTTP_HOST']
+				: 'localhost';
+		}
 	}
 
 
@@ -73,7 +83,9 @@ class SmtpMailer implements IMailer
 	 */
 	public function send(Message $mail)
 	{
-		$mail = clone $mail;
+		$tmp = clone $mail;
+		$tmp->setHeader('Bcc', null);
+		$data = $tmp->generateMessage();
 
 		try {
 			if (!$this->connection) {
@@ -94,8 +106,6 @@ class SmtpMailer implements IMailer
 				$this->write("RCPT TO:<$email>", [250, 251]);
 			}
 
-			$mail->setHeader('Bcc', NULL);
-			$data = $mail->generateMessage();
 			$this->write('DATA', 354);
 			$data = preg_replace('#^\.#m', '..', $data);
 			$this->write($data);
@@ -120,38 +130,37 @@ class SmtpMailer implements IMailer
 	 */
 	protected function connect()
 	{
-		$this->connection = @stream_socket_client( // @ is escalated to exception
+		$this->connection = @stream_socket_client(// @ is escalated to exception
 			($this->secure === 'ssl' ? 'ssl://' : '') . $this->host . ':' . $this->port,
 			$errno, $error, $this->timeout, STREAM_CLIENT_CONNECT, $this->context
 		);
 		if (!$this->connection) {
-			throw new SmtpException($error, $errno);
+			throw new SmtpException($error ?: error_get_last()['message'], $errno);
 		}
 		stream_set_timeout($this->connection, $this->timeout, 0);
 		$this->read(); // greeting
 
-		$self = isset($_SERVER['HTTP_HOST']) && preg_match('#^[\w.-]+\z#', $_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost';
-		$this->write("EHLO $self");
+		$this->write("EHLO $this->clientHost");
 		$ehloResponse = $this->read();
 		if ((int) $ehloResponse !== 250) {
-			$this->write("HELO $self", 250);
+			$this->write("HELO $this->clientHost", 250);
 		}
 
 		if ($this->secure === 'tls') {
 			$this->write('STARTTLS', 220);
-			if (!stream_socket_enable_crypto($this->connection, TRUE, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
+			if (!stream_socket_enable_crypto($this->connection, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
 				throw new SmtpException('Unable to connect via TLS.');
 			}
-			$this->write("EHLO $self", 250);
+			$this->write("EHLO $this->clientHost", 250);
 		}
 
-		if ($this->username != NULL && $this->password != NULL) {
+		if ($this->username != null && $this->password != null) {
 			$authMechanisms = [];
 			if (preg_match('~^250[ -]AUTH (.*)$~im', $ehloResponse, $matches)) {
 				$authMechanisms = explode(' ', trim($matches[1]));
 			}
 
-			if (in_array('PLAIN', $authMechanisms, TRUE)) {
+			if (in_array('PLAIN', $authMechanisms, true)) {
 				$credentials = $this->username . "\0" . $this->username . "\0" . $this->password;
 				$this->write('AUTH PLAIN ' . base64_encode($credentials), 235, 'PLAIN credentials');
 			} else {
@@ -170,7 +179,7 @@ class SmtpMailer implements IMailer
 	protected function disconnect()
 	{
 		fclose($this->connection);
-		$this->connection = NULL;
+		$this->connection = null;
 	}
 
 
@@ -181,12 +190,12 @@ class SmtpMailer implements IMailer
 	 * @param  string  error message
 	 * @return void
 	 */
-	protected function write($line, $expectedCode = NULL, $message = NULL)
+	protected function write($line, $expectedCode = null, $message = null)
 	{
 		fwrite($this->connection, $line . Message::EOL);
 		if ($expectedCode) {
 			$response = $this->read();
-			if (!in_array((int) $response, (array) $expectedCode, TRUE)) {
+			if (!in_array((int) $response, (array) $expectedCode, true)) {
 				throw new SmtpException('SMTP server did not accept ' . ($message ? $message : $line) . ' with error: ' . trim($response));
 			}
 		}
@@ -200,7 +209,7 @@ class SmtpMailer implements IMailer
 	protected function read()
 	{
 		$s = '';
-		while (($line = fgets($this->connection, 1000)) != NULL) { // intentionally ==
+		while (($line = fgets($this->connection, 1000)) != null) { // intentionally ==
 			$s .= $line;
 			if (substr($line, 3, 1) === ' ') {
 				break;
@@ -208,5 +217,4 @@ class SmtpMailer implements IMailer
 		}
 		return $s;
 	}
-
 }

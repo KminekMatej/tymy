@@ -18,8 +18,8 @@ class Reflection
 	use Nette\StaticClass;
 
 	private static $builtinTypes = [
-		'string' => 1, 'int' => 1, 'float' => 1, 'bool' => 1, 'array' => 1,
-		'callable' => 1, 'iterable' => 1, 'void' => 1
+		'string' => 1, 'int' => 1, 'float' => 1, 'bool' => 1, 'array' => 1, 'object' => 1,
+		'callable' => 1, 'iterable' => 1, 'void' => 1,
 	];
 
 
@@ -34,36 +34,49 @@ class Reflection
 
 
 	/**
-	 * @return string|NULL
+	 * @return string|null
 	 */
 	public static function getReturnType(\ReflectionFunctionAbstract $func)
 	{
-		if (PHP_VERSION_ID >= 70000 && $func->hasReturnType()) {
-			$type = (string) $func->getReturnType();
-			return strtolower($type) === 'self' ? $func->getDeclaringClass()->getName() : $type;
-		}
+		return PHP_VERSION_ID >= 70000 && $func->hasReturnType()
+			? self::normalizeType((string) $func->getReturnType(), $func)
+			: null;
 	}
 
 
 	/**
-	 * @return string|NULL
+	 * @return string|null
 	 */
 	public static function getParameterType(\ReflectionParameter $param)
 	{
 		if (PHP_VERSION_ID >= 70000) {
-			$type = $param->hasType() ? (string) $param->getType() : NULL;
-			return strtolower($type) === 'self' ? $param->getDeclaringClass()->getName() : $type;
+			return $param->hasType()
+				? self::normalizeType((string) $param->getType(), $param)
+				: null;
 		} elseif ($param->isArray() || $param->isCallable()) {
 			return $param->isArray() ? 'array' : 'callable';
 		} else {
 			try {
-				return ($ref = $param->getClass()) ? $ref->getName() : NULL;
+				return ($ref = $param->getClass()) ? $ref->getName() : null;
 			} catch (\ReflectionException $e) {
 				if (preg_match('#Class (.+) does not exist#', $e->getMessage(), $m)) {
 					return $m[1];
 				}
 				throw $e;
 			}
+		}
+	}
+
+
+	private static function normalizeType($type, $reflection)
+	{
+		$lower = strtolower($type);
+		if ($lower === 'self') {
+			return $reflection->getDeclaringClass()->getName();
+		} elseif ($lower === 'parent' && $reflection->getDeclaringClass()->getParentClass()) {
+			return $reflection->getDeclaringClass()->getParentClass()->getName();
+		} else {
+			return $type;
 		}
 	}
 
@@ -78,8 +91,18 @@ class Reflection
 			$const = $orig = $param->getDefaultValueConstantName();
 			$pair = explode('::', $const);
 			if (isset($pair[1]) && strtolower($pair[0]) === 'self') {
-				$const = $param->getDeclaringClass()->getName() . '::' . $pair[1];
+				$pair[0] = $param->getDeclaringClass()->getName();
 			}
+			if (isset($pair[1]) && PHP_VERSION_ID >= 70100) {
+				try {
+					$rcc = new \ReflectionClassConstant($pair[0], $pair[1]);
+				} catch (\ReflectionException $e) {
+					$name = self::toString($param);
+					throw new \ReflectionException("Unable to resolve constant $orig used as default value of $name.", 0, $e);
+				}
+				return $rcc->getValue();
+			}
+			$const = implode('::', $pair);
 			if (!defined($const)) {
 				$const = substr((string) strrchr($const, '\\'), 1);
 				if (isset($pair[1]) || !defined($const)) {
@@ -115,7 +138,7 @@ class Reflection
 	public static function areCommentsAvailable()
 	{
 		static $res;
-		return $res === NULL
+		return $res === null
 			? $res = (bool) (new \ReflectionMethod(__METHOD__))->getDocComment()
 			: $res;
 	}
@@ -202,13 +225,14 @@ class Reflection
 	 * @param  string
 	 * @return array of [class => [alias => class, ...]]
 	 */
-	private static function parseUseStatements($code, $forClass = NULL)
+	private static function parseUseStatements($code, $forClass = null)
 	{
-		$tokens = token_get_all($code);
-		$namespace = $class = $classLevel = $level = NULL;
+		$tokens = PHP_VERSION_ID >= 70000 ? token_get_all($code, TOKEN_PARSE) : token_get_all($code);
+		$namespace = $class = $classLevel = $level = null;
 		$res = $uses = [];
 
-		while (list(, $token) = each($tokens)) {
+		while ($token = current($tokens)) {
+			next($tokens);
 			switch (is_array($token) ? $token[0] : $token) {
 				case T_NAMESPACE:
 					$namespace = ltrim(self::fetch($tokens, [T_STRING, T_NS_SEPARATOR]) . '\\', '\\');
@@ -265,7 +289,7 @@ class Reflection
 
 				case '}':
 					if ($level === $classLevel) {
-						$class = $classLevel = NULL;
+						$class = $classLevel = null;
 					}
 					$level--;
 			}
@@ -277,17 +301,16 @@ class Reflection
 
 	private static function fetch(&$tokens, $take)
 	{
-		$res = NULL;
+		$res = null;
 		while ($token = current($tokens)) {
 			list($token, $s) = is_array($token) ? $token : [$token, $token];
-			if (in_array($token, (array) $take, TRUE)) {
+			if (in_array($token, (array) $take, true)) {
 				$res .= $s;
-			} elseif (!in_array($token, [T_DOC_COMMENT, T_WHITESPACE, T_COMMENT], TRUE)) {
+			} elseif (!in_array($token, [T_DOC_COMMENT, T_WHITESPACE, T_COMMENT], true)) {
 				break;
 			}
 			next($tokens);
 		}
 		return $res;
 	}
-
 }

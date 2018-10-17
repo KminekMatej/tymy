@@ -13,8 +13,13 @@ use Nette;
 /**
  * Class constant.
  */
-class Constant extends Member
+class Constant
 {
+	use Nette\SmartObject;
+	use Traits\NameAware;
+	use Traits\VisibilityAware;
+	use Traits\CommentAware;
+
 	/** @var mixed */
 	private $value;
 
@@ -36,5 +41,4 @@ class Constant extends Member
 	{
 		return $this->value;
 	}
-
 }

@@ -19,6 +19,7 @@ class SimpleRouter implements Application\IRouter
 	use Nette\SmartObject;
 
 	const PRESENTER_KEY = 'presenter';
+
 	const MODULE_KEY = 'module';
 
 	/** @var string */
@@ -63,19 +64,19 @@ class SimpleRouter implements Application\IRouter
 
 	/**
 	 * Maps HTTP request to a Request object.
-	 * @return Nette\Application\Request|NULL
+	 * @return Nette\Application\Request|null
 	 */
 	public function match(Nette\Http\IRequest $httpRequest)
 	{
 		if ($httpRequest->getUrl()->getPathInfo() !== '') {
-			return NULL;
+			return null;
 		}
 		// combine with precedence: get, (post,) defaults
 		$params = $httpRequest->getQuery();
 		$params += $this->defaults;
 
 		if (!isset($params[self::PRESENTER_KEY]) || !is_string($params[self::PRESENTER_KEY])) {
-			return NULL;
+			return null;
 		}
 
 		$presenter = $this->module . $params[self::PRESENTER_KEY];
@@ -94,12 +95,12 @@ class SimpleRouter implements Application\IRouter
 
 	/**
 	 * Constructs absolute URL from Request object.
-	 * @return string|NULL
+	 * @return string|null
 	 */
 	public function constructUrl(Application\Request $appRequest, Nette\Http\Url $refUrl)
 	{
 		if ($this->flags & self::ONE_WAY) {
-			return NULL;
+			return null;
 		}
 		$params = $appRequest->getParameters();
 
@@ -108,10 +109,10 @@ class SimpleRouter implements Application\IRouter
 		if (strncmp($presenter, $this->module, strlen($this->module)) === 0) {
 			$params[self::PRESENTER_KEY] = substr($presenter, strlen($this->module));
 		} else {
-			return NULL;
+			return null;
 		}
 
-		// remove default values; NULL values are retain
+		// remove default values; null values are retain
 		foreach ($this->defaults as $key => $value) {
 			if (isset($params[$key]) && $params[$key] == $value) { // intentionally ==
 				unset($params[$key]);
@@ -146,5 +147,4 @@ class SimpleRouter implements Application\IRouter
 	{
 		return $this->flags;
 	}
-
 }

@@ -16,24 +16,22 @@ use Nette;
 class Parameter
 {
 	use Nette\SmartObject;
-
-	/** @var string */
-	private $name = '';
-
-	/** @var bool */
-	private $reference = FALSE;
-
-	/** @var string|NULL */
-	private $typeHint;
-
-	/** @var bool */
-	private $nullable = FALSE;
-
-	/** @var bool */
-	private $hasDefaultValue = FALSE;
+	use Traits\NameAware;
 
 	/** @var mixed */
 	public $defaultValue;
+
+	/** @var bool */
+	private $reference = false;
+
+	/** @var string|null */
+	private $typeHint;
+
+	/** @var bool */
+	private $nullable = false;
+
+	/** @var bool */
+	private $hasDefaultValue = false;
 
 
 	/**
@@ -42,33 +40,8 @@ class Parameter
 	 */
 	public static function from(\ReflectionParameter $from)
 	{
+		trigger_error(__METHOD__ . '() is deprecated, use Nette\PhpGenerator\Factory.', E_USER_DEPRECATED);
 		return (new Factory)->fromParameterReflection($from);
-	}
-
-
-	/**
-	 * @param  string  without $
-	 */
-	public function __construct($name = '')
-	{
-		$this->setName($name);
-	}
-
-
-	/** @deprecated */
-	public function setName($name)
-	{
-		$this->name = (string) $name;
-		return $this;
-	}
-
-
-	/**
-	 * @return string
-	 */
-	public function getName()
-	{
-		return $this->name;
 	}
 
 
@@ -76,7 +49,7 @@ class Parameter
 	 * @param  bool
 	 * @return static
 	 */
-	public function setReference($state = TRUE)
+	public function setReference($state = true)
 	{
 		$this->reference = (bool) $state;
 		return $this;
@@ -93,18 +66,18 @@ class Parameter
 
 
 	/**
-	 * @param  string|NULL
+	 * @param  string|null
 	 * @return static
 	 */
 	public function setTypeHint($hint)
 	{
-		$this->typeHint = $hint ? (string) $hint : NULL;
+		$this->typeHint = $hint ? (string) $hint : null;
 		return $this;
 	}
 
 
 	/**
-	 * @return string|NULL
+	 * @return string|null
 	 */
 	public function getTypeHint()
 	{
@@ -116,7 +89,7 @@ class Parameter
 	 * @param  bool
 	 * @return static
 	 */
-	public function setOptional($state = TRUE)
+	public function setOptional($state = true)
 	{
 		$this->hasDefaultValue = (bool) $state;
 		return $this;
@@ -137,7 +110,7 @@ class Parameter
 	 * @param  bool
 	 * @return static
 	 */
-	public function setNullable($state = TRUE)
+	public function setNullable($state = true)
 	{
 		$this->nullable = (bool) $state;
 		return $this;
@@ -179,5 +152,4 @@ class Parameter
 	{
 		return $this->hasDefaultValue;
 	}
-
 }

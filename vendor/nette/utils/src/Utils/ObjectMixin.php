@@ -13,6 +13,7 @@ use Nette\MemberAccessException;
 
 /**
  * Nette\Object behaviour mixin.
+ * @deprecated
  */
 class ObjectMixin
 {
@@ -26,61 +27,42 @@ class ObjectMixin
 
 
 	/**
-	 * @throws MemberAccessException
+	 * @deprecated  use ObjectHelpers::strictGet()
 	 */
 	public static function strictGet($class, $name)
 	{
-		$rc = new \ReflectionClass($class);
-		$hint = self::getSuggestion(array_merge(
-			array_filter($rc->getProperties(\ReflectionProperty::IS_PUBLIC), function ($p) { return !$p->isStatic(); }),
-			self::parseFullDoc($rc, '~^[ \t*]*@property(?:-read)?[ \t]+(?:\S+[ \t]+)??\$(\w+)~m')
-		), $name);
-		throw new MemberAccessException("Cannot read an undeclared property $class::\$$name" . ($hint ? ", did you mean \$$hint?" : '.'));
+		trigger_error('Class Nette\Utils\ObjectMixin is deprecated', E_USER_DEPRECATED);
+		ObjectHelpers::strictGet($class, $name);
 	}
 
 
 	/**
-	 * @throws MemberAccessException
+	 * @deprecated  use ObjectHelpers::strictSet()
 	 */
 	public static function strictSet($class, $name)
 	{
-		$rc = new \ReflectionClass($class);
-		$hint = self::getSuggestion(array_merge(
-			array_filter($rc->getProperties(\ReflectionProperty::IS_PUBLIC), function ($p) { return !$p->isStatic(); }),
-			self::parseFullDoc($rc, '~^[ \t*]*@property(?:-write)?[ \t]+(?:\S+[ \t]+)??\$(\w+)~m')
-		), $name);
-		throw new MemberAccessException("Cannot write to an undeclared property $class::\$$name" . ($hint ? ", did you mean \$$hint?" : '.'));
+		trigger_error('Class Nette\Utils\ObjectMixin is deprecated', E_USER_DEPRECATED);
+		ObjectHelpers::strictSet($class, $name);
 	}
 
 
 	/**
-	 * @throws MemberAccessException
+	 * @deprecated  use ObjectHelpers::strictCall()
 	 */
 	public static function strictCall($class, $method, $additionalMethods = [])
 	{
-		$hint = self::getSuggestion(array_merge(
-			get_class_methods($class),
-			self::parseFullDoc(new \ReflectionClass($class), '~^[ \t*]*@method[ \t]+(?:\S+[ \t]+)??(\w+)\(~m'),
-			$additionalMethods
-		), $method);
-
-		if (method_exists($class, $method)) { // called parent::$method()
-			$class = 'parent';
-		}
-		throw new MemberAccessException("Call to undefined method $class::$method()" . ($hint ? ", did you mean $hint()?" : '.'));
+		trigger_error('Class Nette\Utils\ObjectMixin is deprecated', E_USER_DEPRECATED);
+		ObjectHelpers::strictCall($class, $method, $additionalMethods);
 	}
 
 
 	/**
-	 * @throws MemberAccessException
+	 * @deprecated  use ObjectHelpers::strictStaticCall()
 	 */
 	public static function strictStaticCall($class, $method)
 	{
-		$hint = self::getSuggestion(
-			array_filter((new \ReflectionClass($class))->getMethods(\ReflectionMethod::IS_PUBLIC), function ($m) { return $m->isStatic(); }),
-			$method
-		);
-		throw new MemberAccessException("Call to undefined static method $class::$method()" . ($hint ? ", did you mean $hint()?" : '.'));
+		trigger_error('Class Nette\Utils\ObjectMixin is deprecated', E_USER_DEPRECATED);
+		ObjectHelpers::strictStaticCall($class, $method);
 	}
 
 
@@ -97,8 +79,9 @@ class ObjectMixin
 	 */
 	public static function call($_this, $name, $args)
 	{
+		trigger_error('Class Nette\Utils\ObjectMixin is deprecated', E_USER_DEPRECATED);
 		$class = get_class($_this);
-		$isProp = self::hasProperty($class, $name);
+		$isProp = ObjectHelpers::hasProperty($class, $name);
 
 		if ($name === '') {
 			throw new MemberAccessException("Call to class '$class' method without name.");
@@ -108,8 +91,8 @@ class ObjectMixin
 				foreach ($_this->$name as $handler) {
 					Callback::invokeArgs($handler, $args);
 				}
-			} elseif ($_this->$name !== NULL) {
-				throw new Nette\UnexpectedValueException("Property $class::$$name must be array or NULL, " . gettype($_this->$name) . ' given.');
+			} elseif ($_this->$name !== null) {
+				throw new Nette\UnexpectedValueException("Property $class::$$name must be array or null, " . gettype($_this->$name) . ' given.');
 			}
 
 		} elseif ($isProp && $_this->$name instanceof \Closure) { // closure in property
@@ -139,7 +122,7 @@ class ObjectMixin
 			return Callback::invoke($cb, $_this, ...$args);
 
 		} else {
-			self::strictCall($class, $name, array_keys(self::getExtensionMethods($class)));
+			ObjectHelpers::strictCall($class, $name, array_keys(self::getExtensionMethods($class)));
 		}
 	}
 
@@ -154,6 +137,7 @@ class ObjectMixin
 	 */
 	public static function callStatic($class, $method, $args)
 	{
+		trigger_error('Class Nette\Utils\ObjectMixin is deprecated', E_USER_DEPRECATED);
 		self::strictStaticCall($class, $method);
 	}
 
@@ -178,7 +162,7 @@ class ObjectMixin
 			if ($methods[$m] === 0) {
 				$methods[$m] = (new \ReflectionMethod($class, $m))->returnsReference();
 			}
-			if ($methods[$m] === TRUE) {
+			if ($methods[$m] === true) {
 				return $_this->$m();
 			} else {
 				$val = $_this->$m();
@@ -196,7 +180,7 @@ class ObjectMixin
 			throw new MemberAccessException("Cannot read a write-only property $class::\$$name.");
 
 		} else {
-			self::strictGet($class, $name);
+			ObjectHelpers::strictGet($class, $name);
 		}
 	}
 
@@ -211,6 +195,7 @@ class ObjectMixin
 	 */
 	public static function set($_this, $name, $value)
 	{
+		trigger_error('Class Nette\Utils\ObjectMixin is deprecated', E_USER_DEPRECATED);
 		$class = get_class($_this);
 		$uname = ucfirst($name);
 		$methods = &self::getMethods($class);
@@ -218,7 +203,7 @@ class ObjectMixin
 		if ($name === '') {
 			throw new MemberAccessException("Cannot write to a class '$class' property without name.");
 
-		} elseif (self::hasProperty($class, $name)) { // unsetted property
+		} elseif (ObjectHelpers::hasProperty($class, $name)) { // unsetted property
 			$_this->$name = $value;
 
 		} elseif (isset($methods[$m = 'set' . $uname])) { // property setter
@@ -228,7 +213,7 @@ class ObjectMixin
 			throw new MemberAccessException("Cannot write to a read-only property $class::\$$name.");
 
 		} else {
-			self::strictSet($class, $name);
+			ObjectHelpers::strictSet($class, $name);
 		}
 	}
 
@@ -242,8 +227,9 @@ class ObjectMixin
 	 */
 	public static function remove($_this, $name)
 	{
+		trigger_error('Class Nette\Utils\ObjectMixin is deprecated', E_USER_DEPRECATED);
 		$class = get_class($_this);
-		if (!self::hasProperty($class, $name)) {
+		if (!ObjectHelpers::hasProperty($class, $name)) {
 			throw new MemberAccessException("Cannot unset the property $class::\$$name.");
 		}
 	}
@@ -257,6 +243,7 @@ class ObjectMixin
 	 */
 	public static function has($_this, $name)
 	{
+		trigger_error('Class Nette\Utils\ObjectMixin is deprecated', E_USER_DEPRECATED);
 		$name = ucfirst($name);
 		$methods = &self::getMethods(get_class($_this));
 		return $name !== '' && (isset($methods['get' . $name]) || isset($methods['is' . $name]));
@@ -267,54 +254,20 @@ class ObjectMixin
 
 
 	/**
-	 * Returns array of magic properties defined by annotation @property.
-	 * @return array of [name => bit mask]
+	 * @deprecated  use ObjectHelpers::strictStaticCall()
 	 */
 	public static function getMagicProperties($class)
 	{
-		static $cache;
-		$props = &$cache[$class];
-		if ($props !== NULL) {
-			return $props;
-		}
-
-		$rc = new \ReflectionClass($class);
-		preg_match_all(
-			'~^  [ \t*]*  @property(|-read|-write)  [ \t]+  [^\s$]+  [ \t]+  \$  (\w+)  ()~mx',
-			(string) $rc->getDocComment(), $matches, PREG_SET_ORDER
-		);
-
-		$props = [];
-		foreach ($matches as list(, $type, $name)) {
-			$uname = ucfirst($name);
-			$write = $type !== '-read'
-				&& $rc->hasMethod($nm = 'set' . $uname)
-				&& ($rm = $rc->getMethod($nm)) && $rm->getName() === $nm && !$rm->isPrivate() && !$rm->isStatic();
-			$read = $type !== '-write'
-				&& ($rc->hasMethod($nm = 'get' . $uname) || $rc->hasMethod($nm = 'is' . $uname))
-				&& ($rm = $rc->getMethod($nm)) && $rm->getName() === $nm && !$rm->isPrivate() && !$rm->isStatic();
-
-			if ($read || $write) {
-				$props[$name] = $read << 0 | ($nm[0] === 'g') << 1 | $rm->returnsReference() << 2 | $write << 3;
-			}
-		}
-
-		foreach ($rc->getTraits() as $trait) {
-			$props += self::getMagicProperties($trait->getName());
-		}
-
-		if ($parent = get_parent_class($class)) {
-			$props += self::getMagicProperties($parent);
-		}
-		return $props;
+		trigger_error('Class Nette\Utils\ObjectMixin is deprecated', E_USER_DEPRECATED);
+		return ObjectHelpers::getMagicProperties($class);
 	}
 
 
 	/** @internal */
 	public static function getMagicProperty($class, $name)
 	{
-		$props = self::getMagicProperties($class);
-		return isset($props[$name]) ? $props[$name] : NULL;
+		$props = ObjectHelpers::getMagicProperties($class);
+		return isset($props[$name]) ? $props[$name] : null;
 	}
 
 
@@ -327,6 +280,7 @@ class ObjectMixin
 	 */
 	public static function getMagicMethods($class)
 	{
+		trigger_error('Class Nette\Utils\ObjectMixin is deprecated', E_USER_DEPRECATED);
 		$rc = new \ReflectionClass($class);
 		preg_match_all('~^
 			[ \t*]*  @method  [ \t]+
@@ -343,9 +297,9 @@ class ObjectMixin
 			$name = $op . $prop;
 			$prop = strtolower($prop[0]) . substr($prop, 1) . ($op === 'add' ? 's' : '');
 			if ($rc->hasProperty($prop) && ($rp = $rc->getProperty($prop)) && !$rp->isStatic()) {
-				$rp->setAccessible(TRUE);
+				$rp->setAccessible(true);
 				if ($op === 'get' || $op === 'is') {
-					$type = NULL;
+					$type = null;
 					$op = 'get';
 				} elseif (!$type && preg_match('#@var[ \t]+(\S+)' . ($op === 'add' ? '\[\]#' : '#'), (string) $rp->getDocComment(), $m)) {
 					$type = $m[1];
@@ -367,53 +321,54 @@ class ObjectMixin
 	 */
 	public static function checkType(&$val, $type)
 	{
-		if (strpos($type, '|') !== FALSE) {
-			$found = NULL;
+		trigger_error('Class Nette\Utils\ObjectMixin is deprecated', E_USER_DEPRECATED);
+		if (strpos($type, '|') !== false) {
+			$found = null;
 			foreach (explode('|', $type) as $type) {
 				$tmp = $val;
 				if (self::checkType($tmp, $type)) {
 					if ($val === $tmp) {
-						return TRUE;
+						return true;
 					}
 					$found[] = $tmp;
 				}
 			}
 			if ($found) {
 				$val = $found[0];
-				return TRUE;
+				return true;
 			}
-			return FALSE;
+			return false;
 
 		} elseif (substr($type, -2) === '[]') {
 			if (!is_array($val)) {
-				return FALSE;
+				return false;
 			}
 			$type = substr($type, 0, -2);
 			$res = [];
 			foreach ($val as $k => $v) {
 				if (!self::checkType($v, $type)) {
-					return FALSE;
+					return false;
 				}
 				$res[$k] = $v;
 			}
 			$val = $res;
-			return TRUE;
+			return true;
 		}
 
 		switch (strtolower($type)) {
-			case NULL:
+			case null:
 			case 'mixed':
-				return TRUE;
+				return true;
 			case 'bool':
 			case 'boolean':
-				return ($val === NULL || is_scalar($val)) && settype($val, 'bool');
+				return ($val === null || is_scalar($val)) && settype($val, 'bool');
 			case 'string':
-				return ($val === NULL || is_scalar($val) || (is_object($val) && method_exists($val, '__toString'))) && settype($val, 'string');
+				return ($val === null || is_scalar($val) || (is_object($val) && method_exists($val, '__toString'))) && settype($val, 'string');
 			case 'int':
 			case 'integer':
-				return ($val === NULL || is_bool($val) || is_numeric($val)) && ((float) (int) $val === (float) $val) && settype($val, 'int');
+				return ($val === null || is_bool($val) || is_numeric($val)) && ((float) (int) $val === (float) $val) && settype($val, 'int');
 			case 'float':
-				return ($val === NULL || is_bool($val) || is_numeric($val)) && settype($val, 'float');
+				return ($val === null || is_bool($val) || is_numeric($val)) && settype($val, 'float');
 			case 'scalar':
 			case 'array':
 			case 'object':
@@ -441,7 +396,7 @@ class ObjectMixin
 	{
 		$name = strtolower($name);
 		self::$extMethods[$name][$class] = Callback::check($callback);
-		self::$extMethods[$name][''] = NULL;
+		self::$extMethods[$name][''] = null;
 	}
 
 
@@ -464,7 +419,7 @@ class ObjectMixin
 				return $cache = $list[$cl];
 			}
 		}
-		return $cache = FALSE;
+		return $cache = false;
 	}
 
 
@@ -475,6 +430,7 @@ class ObjectMixin
 	 */
 	public static function getExtensionMethods($class)
 	{
+		trigger_error('Class Nette\Utils\ObjectMixin is deprecated', E_USER_DEPRECATED);
 		$res = [];
 		foreach (array_keys(self::$extMethods) as $name) {
 			if ($cb = self::getExtensionMethod($class, $name)) {
@@ -489,63 +445,21 @@ class ObjectMixin
 
 
 	/**
-	 * Finds the best suggestion (for 8-bit encoding).
-	 * @return string|NULL
-	 * @internal
+	 * @deprecated  use ObjectHelpers::getSuggestion()
 	 */
 	public static function getSuggestion(array $possibilities, $value)
 	{
-		$norm = preg_replace($re = '#^(get|set|has|is|add)(?=[A-Z])#', '', $value);
-		$best = NULL;
-		$min = (strlen($value) / 4 + 1) * 10 + .1;
-		foreach (array_unique($possibilities, SORT_REGULAR) as $item) {
-			$item = $item instanceof \Reflector ? $item->getName() : $item;
-			if ($item !== $value && (
-				($len = levenshtein($item, $value, 10, 11, 10)) < $min
-				|| ($len = levenshtein(preg_replace($re, '', $item), $norm, 10, 11, 10) + 20) < $min
-			)) {
-				$min = $len;
-				$best = $item;
-			}
-		}
-		return $best;
-	}
-
-
-	private static function parseFullDoc(\ReflectionClass $rc, $pattern)
-	{
-		do {
-			$doc[] = $rc->getDocComment();
-			$traits = $rc->getTraits();
-			while ($trait = array_pop($traits)) {
-				$doc[] = $trait->getDocComment();
-				$traits += $trait->getTraits();
-			}
-		} while ($rc = $rc->getParentClass());
-		return preg_match_all($pattern, implode($doc), $m) ? $m[1] : [];
+		return ObjectHelpers::getSuggestion($possibilities, $value);
 	}
 
 
 	/**
-	 * Checks if the public non-static property exists.
-	 * @return bool|'event'
-	 * @internal
+	 * @deprecated  use ObjectHelpers::hasProperty()
 	 */
 	public static function hasProperty($class, $name)
 	{
-		static $cache;
-		$prop = &$cache[$class][$name];
-		if ($prop === NULL) {
-			$prop = FALSE;
-			try {
-				$rp = new \ReflectionProperty($class, $name);
-				if ($rp->isPublic() && !$rp->isStatic()) {
-					$prop = $name >= 'onA' && $name < 'on_' ? 'event' : TRUE;
-				}
-			} catch (\ReflectionException $e) {
-			}
-		}
-		return $prop;
+		trigger_error('Class Nette\Utils\ObjectMixin is deprecated', E_USER_DEPRECATED);
+		return ObjectHelpers::hasProperty($class, $name);
 	}
 
 
@@ -558,7 +472,7 @@ class ObjectMixin
 	{
 		static $cache;
 		if (!isset($cache[$class])) {
-			$cache[$class] = array_fill_keys(get_class_methods($class), 0) + self::getMagicMethods($class);
+			$cache[$class] = array_fill_keys(get_class_methods($class), 0) + @self::getMagicMethods($class); // is deprecated
 			if ($parent = get_parent_class($class)) {
 				$cache[$class] += self::getMethods($parent);
 			}
@@ -576,5 +490,4 @@ class ObjectMixin
 			}
 		}
 	}
-
 }

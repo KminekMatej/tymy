@@ -8,6 +8,7 @@
 namespace Nette;
 
 use Nette\Utils\Callback;
+use Nette\Utils\ObjectHelpers;
 use Nette\Utils\ObjectMixin;
 
 
@@ -29,7 +30,7 @@ trait SmartObject
 	public function __call($name, $args)
 	{
 		$class = get_class($this);
-		$isProp = ObjectMixin::hasProperty($class, $name);
+		$isProp = ObjectHelpers::hasProperty($class, $name);
 
 		if ($name === '') {
 			throw new MemberAccessException("Call to class '$class' method without name.");
@@ -39,8 +40,8 @@ trait SmartObject
 				foreach ($this->$name as $handler) {
 					Callback::invokeArgs($handler, $args);
 				}
-			} elseif ($this->$name !== NULL) {
-				throw new UnexpectedValueException("Property $class::$$name must be array or NULL, " . gettype($this->$name) . ' given.');
+			} elseif ($this->$name !== null) {
+				throw new UnexpectedValueException("Property $class::$$name must be array or null, " . gettype($this->$name) . ' given.');
 			}
 
 		} elseif ($isProp && $this->$name instanceof \Closure) { // closure in property
@@ -73,7 +74,7 @@ trait SmartObject
 			return Callback::invoke($cb, $this, ...$args);
 
 		} else {
-			ObjectMixin::strictCall($class, $name);
+			ObjectHelpers::strictCall($class, $name);
 		}
 	}
 
@@ -84,7 +85,7 @@ trait SmartObject
 	 */
 	public static function __callStatic($name, $args)
 	{
-		ObjectMixin::strictStaticCall(get_called_class(), $name);
+		ObjectHelpers::strictStaticCall(get_called_class(), $name);
 	}
 
 
@@ -113,11 +114,11 @@ trait SmartObject
 			throw new MemberAccessException("Cannot read a class '$class' property without name.");
 
 		} elseif (($methods = &ObjectMixin::getMethods($class)) && isset($methods[$m = 'get' . $uname]) || isset($methods[$m = 'is' . $uname])) { // old property getter
-			trigger_error("Add annotation @property for $class::\$$name or use $m()" . ObjectMixin::getSource(), E_USER_DEPRECATED);
+			trigger_error("Use $m() or add annotation @property for $class::\$$name" . ObjectMixin::getSource(), E_USER_DEPRECATED);
 			if ($methods[$m] === 0) {
 				$methods[$m] = (new \ReflectionMethod($class, $m))->returnsReference();
 			}
-			if ($methods[$m] === TRUE) {
+			if ($methods[$m] === true) {
 				return $this->$m();
 			} else {
 				$val = $this->$m();
@@ -125,7 +126,7 @@ trait SmartObject
 			}
 
 		} elseif (isset($methods[$name])) { // public method as closure getter
-			trigger_error("Accessing methods as properties via \$obj->$name is deprecated" . ObjectMixin::getSource(), E_USER_DEPRECATED);
+			trigger_error("Accessing methods as properties via \$obj->$name is deprecated, use PHP callback [\$obj, '$name']" . ObjectMixin::getSource(), E_USER_DEPRECATED);
 			$val = Callback::closure($this, $name);
 			return $val;
 
@@ -133,7 +134,7 @@ trait SmartObject
 			throw new MemberAccessException("Cannot read a write-only property $class::\$$name.");
 
 		} else {
-			ObjectMixin::strictGet($class, $name);
+			ObjectHelpers::strictGet($class, $name);
 		}
 	}
 
@@ -147,7 +148,7 @@ trait SmartObject
 		$class = get_class($this);
 		$uname = ucfirst($name);
 
-		if (ObjectMixin::hasProperty($class, $name)) { // unsetted property
+		if (ObjectHelpers::hasProperty($class, $name)) { // unsetted property
 			$this->$name = $value;
 
 		} elseif ($prop = ObjectMixin::getMagicProperty($class, $name)) { // property setter
@@ -160,14 +161,14 @@ trait SmartObject
 			throw new MemberAccessException("Cannot write to a class '$class' property without name.");
 
 		} elseif (($methods = &ObjectMixin::getMethods($class)) && isset($methods[$m = 'set' . $uname])) { // old property setter
-			trigger_error("Add annotation @property for $class::\$$name or use $m()" . ObjectMixin::getSource(), E_USER_DEPRECATED);
+			trigger_error("Use $m() or add annotation @property for $class::\$$name" . ObjectMixin::getSource(), E_USER_DEPRECATED);
 			$this->$m($value);
 
 		} elseif (isset($methods['get' . $uname]) || isset($methods['is' . $uname])) { // property setter
 			throw new MemberAccessException("Cannot write to a read-only property $class::\$$name.");
 
 		} else {
-			ObjectMixin::strictSet($class, $name);
+			ObjectHelpers::strictSet($class, $name);
 		}
 	}
 
@@ -179,7 +180,7 @@ trait SmartObject
 	public function __unset($name)
 	{
 		$class = get_class($this);
-		if (!ObjectMixin::hasProperty($class, $name)) {
+		if (!ObjectHelpers::hasProperty($class, $name)) {
 			throw new MemberAccessException("Cannot unset the property $class::\$$name.");
 		}
 	}
@@ -212,20 +213,19 @@ trait SmartObject
 	 * @return mixed
 	 * @deprecated use Nette\Utils\ObjectMixin::setExtensionMethod()
 	 */
-	public static function extensionMethod($name, $callback = NULL)
+	public static function extensionMethod($name, $callback = null)
 	{
-		if (strpos($name, '::') === FALSE) {
+		if (strpos($name, '::') === false) {
 			$class = get_called_class();
 		} else {
 			list($class, $name) = explode('::', $name);
 			$class = (new \ReflectionClass($class))->getName();
 		}
 		trigger_error("Extension methods such as $class::$name() are deprecated" . ObjectMixin::getSource(), E_USER_DEPRECATED);
-		if ($callback === NULL) {
+		if ($callback === null) {
 			return ObjectMixin::getExtensionMethod($class, $name);
 		} else {
 			ObjectMixin::setExtensionMethod($class, $name, $callback);
 		}
 	}
-
 }

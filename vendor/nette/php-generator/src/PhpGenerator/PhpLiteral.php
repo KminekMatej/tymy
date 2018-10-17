@@ -17,6 +17,9 @@ class PhpLiteral
 	private $value;
 
 
+	/**
+	 * @param  string
+	 */
 	public function __construct($value)
 	{
 		$this->value = (string) $value;
@@ -30,5 +33,4 @@ class PhpLiteral
 	{
 		return $this->value;
 	}
-
 }

@@ -7,8 +7,6 @@
 
 namespace Tracy;
 
-use Tracy;
-
 
 /**
  * Dumps a variable.
@@ -22,7 +20,8 @@ class Dumper
 		COLLAPSE_COUNT = 'collapsecount', // how big array/object are collapsed? (defaults to 7)
 		LOCATION = 'location', // show location string? (defaults to 0)
 		OBJECT_EXPORTERS = 'exporters', // custom exporters for objects (defaults to Dumper::$objectexporters)
-		LIVE = 'live'; // will be rendered using JavaScript
+		LIVE = 'live', // will be rendered using JavaScript
+		DEBUGINFO = 'debuginfo'; // use magic method __debugInfo if exists (defaults to false)
 
 	const
 		LOCATION_SOURCE = 0b0001, // shows where dump was called
@@ -69,7 +68,7 @@ class Dumper
 	 * Dumps variable to the output.
 	 * @return mixed  variable
 	 */
-	public static function dump($var, array $options = NULL)
+	public static function dump($var, array $options = null)
 	{
 		if (PHP_SAPI !== 'cli' && !preg_match('#^Content-Type: (?!text/html)#im', implode("\n", headers_list()))) {
 			echo self::toHtml($var, $options);
@@ -86,30 +85,31 @@ class Dumper
 	 * Dumps variable to HTML.
 	 * @return string
 	 */
-	public static function toHtml($var, array $options = NULL)
+	public static function toHtml($var, array $options = null)
 	{
 		$options = (array) $options + [
 			self::DEPTH => 4,
 			self::TRUNCATE => 150,
 			self::COLLAPSE => 14,
 			self::COLLAPSE_COUNT => 7,
-			self::OBJECT_EXPORTERS => NULL,
+			self::OBJECT_EXPORTERS => null,
+			self::DEBUGINFO => false,
 		];
 		$loc = &$options[self::LOCATION];
-		$loc = $loc === TRUE ? ~0 : (int) $loc;
+		$loc = $loc === true ? ~0 : (int) $loc;
 
 		$options[self::OBJECT_EXPORTERS] = (array) $options[self::OBJECT_EXPORTERS] + self::$objectExporters;
 		uksort($options[self::OBJECT_EXPORTERS], function ($a, $b) {
-			return $b === '' || (class_exists($a, FALSE) && is_subclass_of($a, $b)) ? -1 : 1;
+			return $b === '' || (class_exists($a, false) && is_subclass_of($a, $b)) ? -1 : 1;
 		});
 
 		$live = !empty($options[self::LIVE]) && $var && (is_array($var) || is_object($var) || is_resource($var));
-		list($file, $line, $code) = $loc ? self::findLocation() : NULL;
+		list($file, $line, $code) = $loc ? self::findLocation() : null;
 		$locAttrs = $file && $loc & self::LOCATION_SOURCE ? Helpers::formatHtml(
 			' title="%in file % on line %" data-tracy-href="%"', "$code\n", $file, $line, Helpers::editorUri($file, $line)
-		) : NULL;
+		) : null;
 
-		return '<pre class="tracy-dump' . ($live && $options[self::COLLAPSE] === TRUE ? ' tracy-collapsed' : '') . '"'
+		return '<pre class="tracy-dump' . ($live && $options[self::COLLAPSE] === true ? ' tracy-collapsed' : '') . '"'
 			. $locAttrs
 			. ($live ? " data-tracy-dump='" . json_encode(self::toJson($var, $options), JSON_HEX_APOS | JSON_HEX_AMP) . "'>" : '>')
 			. ($live ? '' : self::dumpVar($var, $options))
@@ -122,7 +122,7 @@ class Dumper
 	 * Dumps variable to plain text.
 	 * @return string
 	 */
-	public static function toText($var, array $options = NULL)
+	public static function toText($var, array $options = null)
 	{
 		return htmlspecialchars_decode(strip_tags(self::toHtml($var, $options)), ENT_QUOTES);
 	}
@@ -132,7 +132,7 @@ class Dumper
 	 * Dumps variable to x-terminal.
 	 * @return string
 	 */
-	public static function toTerminal($var, array $options = NULL)
+	public static function toTerminal($var, array $options = null)
 	{
 		return htmlspecialchars_decode(strip_tags(preg_replace_callback('#<span class="tracy-dump-(\w+)">|</span>#', function ($m) {
 			return "\033[" . (isset($m[1], self::$terminalColors[$m[1]]) ? self::$terminalColors[$m[1]] : '0') . 'm';
@@ -142,9 +142,9 @@ class Dumper
 
 	/**
 	 * Internal toHtml() dump implementation.
-	 * @param  mixed  variable to dump
-	 * @param  array  options
-	 * @param  int    current recursion level
+	 * @param  mixed  $var
+	 * @param  array  $options
+	 * @param  int  $level  recursion level
 	 * @return string
 	 */
 	private static function dumpVar(&$var, array $options, $level = 0)
@@ -159,13 +159,13 @@ class Dumper
 
 	private static function dumpNull()
 	{
-		return "<span class=\"tracy-dump-null\">NULL</span>\n";
+		return "<span class=\"tracy-dump-null\">null</span>\n";
 	}
 
 
 	private static function dumpBoolean(&$var)
 	{
-		return '<span class="tracy-dump-bool">' . ($var ? 'TRUE' : 'FALSE') . "</span>\n";
+		return '<span class="tracy-dump-bool">' . ($var ? 'true' : 'false') . "</span>\n";
 	}
 
 
@@ -178,8 +178,8 @@ class Dumper
 	private static function dumpDouble(&$var)
 	{
 		$var = is_finite($var)
-			? ($tmp = json_encode($var)) . (strpos($tmp, '.') === FALSE ? '.0' : '')
-			: str_replace('.0', '', var_export($var, TRUE)); // workaround for PHP 7.0.2
+			? ($tmp = json_encode($var)) . (strpos($tmp, '.') === false ? '.0' : '')
+			: str_replace('.0', '', var_export($var, true)); // workaround for PHP 7.0.2
 		return "<span class=\"tracy-dump-number\">$var</span>\n";
 	}
 
@@ -195,8 +195,8 @@ class Dumper
 	private static function dumpArray(&$var, $options, $level)
 	{
 		static $marker;
-		if ($marker === NULL) {
-			$marker = uniqid("\x00", TRUE);
+		if ($marker === null) {
+			$marker = uniqid("\x00", true);
 		}
 
 		$out = '<span class="tracy-dump-array">array</span> (';
@@ -212,7 +212,7 @@ class Dumper
 				: (is_int($options[self::COLLAPSE]) ? count($var) >= $options[self::COLLAPSE] : $options[self::COLLAPSE]);
 			$out = '<span class="tracy-toggle' . ($collapsed ? ' tracy-collapsed' : '') . '">'
 				. $out . count($var) . ")</span>\n<div" . ($collapsed ? ' class="tracy-collapsed"' : '') . '>';
-			$var[$marker] = TRUE;
+			$var[$marker] = true;
 			foreach ($var as $k => &$v) {
 				if ($k !== $marker) {
 					$k = is_int($k) || preg_match('#^\w{1,50}\z#', $k) ? $k : '"' . Helpers::escapeHtml(self::encodeString($k, $options[self::TRUNCATE])) . '"';
@@ -232,24 +232,31 @@ class Dumper
 
 	private static function dumpObject(&$var, $options, $level)
 	{
-		$fields = self::exportObject($var, $options[self::OBJECT_EXPORTERS]);
-		$editor = NULL;
+		$fields = self::exportObject($var, $options[self::OBJECT_EXPORTERS], $options[self::DEBUGINFO]);
+
+		$editorAttributes = '';
 		if ($options[self::LOCATION] & self::LOCATION_CLASS) {
 			$rc = $var instanceof \Closure ? new \ReflectionFunction($var) : new \ReflectionClass($var);
 			$editor = Helpers::editorUri($rc->getFileName(), $rc->getStartLine());
+			if ($editor) {
+				$editorAttributes = Helpers::formatHtml(
+					' title="Declared in file % on line %" data-tracy-href="%"',
+					$rc->getFileName(),
+					$rc->getStartLine(),
+					$editor
+				);
+			}
 		}
-		$out = '<span class="tracy-dump-object"'
-			. ($editor ? Helpers::formatHtml(
-				' title="Declared in file % on line %" data-tracy-href="%"', $rc->getFileName(), $rc->getStartLine(), $editor
-			) : '')
-			. '>' . Helpers::escapeHtml(Helpers::getClass($var)) . '</span> <span class="tracy-dump-hash">#' . substr(md5(spl_object_hash($var)), 0, 4) . '</span>';
+		$out = '<span class="tracy-dump-object"' . $editorAttributes . '>'
+			. Helpers::escapeHtml(Helpers::getClass($var))
+			. '</span> <span class="tracy-dump-hash">#' . substr(md5(spl_object_hash($var)), 0, 4) . '</span>';
 
 		static $list = [];
 
 		if (empty($fields)) {
 			return $out . "\n";
 
-		} elseif (in_array($var, $list, TRUE)) {
+		} elseif (in_array($var, $list, true)) {
 			return $out . " { <i>RECURSION</i> }\n";
 
 		} elseif (!$options[self::DEPTH] || $level < $options[self::DEPTH] || $var instanceof \Closure) {
@@ -282,7 +289,7 @@ class Dumper
 	{
 		$type = get_resource_type($var);
 		$out = '<span class="tracy-dump-resource">' . Helpers::escapeHtml($type) . ' resource</span> '
-			. '<span class="tracy-dump-hash">#' . intval($var) . '</span>';
+			. '<span class="tracy-dump-hash">#' . (int) $var . '</span>';
 		if (isset(self::$resources[$type])) {
 			$out = "<span class=\"tracy-toggle tracy-collapsed\">$out</span>\n<div class=\"tracy-collapsed\">";
 			foreach (call_user_func(self::$resources[$type], $var) as $k => $v) {
@@ -300,7 +307,7 @@ class Dumper
 	 */
 	private static function toJson(&$var, $options, $level = 0)
 	{
-		if (is_bool($var) || is_null($var) || is_int($var)) {
+		if (is_bool($var) || $var === null || is_int($var)) {
 			return $var;
 
 		} elseif (is_float($var)) {
@@ -313,14 +320,14 @@ class Dumper
 
 		} elseif (is_array($var)) {
 			static $marker;
-			if ($marker === NULL) {
-				$marker = uniqid("\x00", TRUE);
+			if ($marker === null) {
+				$marker = uniqid("\x00", true);
 			}
 			if (isset($var[$marker]) || $level >= $options[self::DEPTH]) {
-				return [NULL];
+				return [null];
 			}
 			$res = [];
-			$var[$marker] = TRUE;
+			$var[$marker] = true;
 			foreach ($var as $k => &$v) {
 				if ($k !== $marker) {
 					$k = is_int($k) || preg_match('#^\w{1,50}\z#', $k) ? $k : '"' . self::encodeString($k, $options[self::TRUNCATE]) . '"';
@@ -331,20 +338,22 @@ class Dumper
 			return $res;
 
 		} elseif (is_object($var)) {
-			$obj = & self::$liveStorage[spl_object_hash($var)];
+			$obj = &self::$liveStorage[spl_object_hash($var)];
 			if ($obj && $obj['level'] <= $level) {
 				return ['object' => $obj['id']];
 			}
 
+			$editorInfo = null;
 			if ($options[self::LOCATION] & self::LOCATION_CLASS) {
 				$rc = $var instanceof \Closure ? new \ReflectionFunction($var) : new \ReflectionClass($var);
 				$editor = Helpers::editorUri($rc->getFileName(), $rc->getStartLine());
+				$editorInfo = $editor ? ['file' => $rc->getFileName(), 'line' => $rc->getStartLine(), 'url' => $editor] : null;
 			}
 			static $counter = 1;
 			$obj = $obj ?: [
 				'id' => self::$livePrefix . '0' . $counter++, // differentiate from resources
 				'name' => Helpers::getClass($var),
-				'editor' => empty($editor) ? NULL : ['file' => $rc->getFileName(), 'line' => $rc->getStartLine(), 'url' => $editor],
+				'editor' => $editorInfo,
 				'level' => $level,
 				'object' => $var,
 			];
@@ -353,7 +362,7 @@ class Dumper
 				$obj['level'] = $level;
 				$obj['items'] = [];
 
-				foreach (self::exportObject($var, $options[self::OBJECT_EXPORTERS]) as $k => $v) {
+				foreach (self::exportObject($var, $options[self::OBJECT_EXPORTERS], $options[self::DEBUGINFO]) as $k => $v) {
 					$vis = 0;
 					if (isset($k[0]) && $k[0] === "\x00") {
 						$vis = $k[1] === '*' ? 1 : 2;
@@ -366,7 +375,7 @@ class Dumper
 			return ['object' => $obj['id']];
 
 		} elseif (is_resource($var)) {
-			$obj = & self::$liveStorage[(string) $var];
+			$obj = &self::$liveStorage[(string) $var];
 			if (!$obj) {
 				$type = get_resource_type($var);
 				$obj = ['id' => self::$livePrefix . (int) $var, 'name' => $type . ' resource'];
@@ -402,10 +411,10 @@ class Dumper
 	 * @internal
 	 * @return string UTF-8
 	 */
-	public static function encodeString($s, $maxLength = NULL)
+	public static function encodeString($s, $maxLength = null)
 	{
 		static $table;
-		if ($table === NULL) {
+		if ($table === null) {
 			foreach (array_merge(range("\x00", "\x1F"), range("\x7F", "\xFF")) as $ch) {
 				$table[$ch] = '\x' . str_pad(dechex(ord($ch)), 2, '0', STR_PAD_LEFT);
 			}
@@ -425,7 +434,7 @@ class Dumper
 				do {
 					if (($s[$i] < "\x80" || $s[$i] >= "\xC0") && (++$len > $maxLength) || $i >= $maxI) {
 						$s = substr($s, 0, $i);
-						$shortened = TRUE;
+						$shortened = true;
 						break;
 					}
 				} while (isset($s[++$i]));
@@ -435,7 +444,7 @@ class Dumper
 		if (preg_match('#[^\x09\x0A\x0D\x20-\x7E\xA0-\x{10FFFF}]#u', $s) || preg_last_error()) { // is binary?
 			if ($maxLength && strlen($s) > $maxLength) {
 				$s = substr($s, 0, $maxLength);
-				$shortened = TRUE;
+				$shortened = true;
 			}
 			$s = strtr($s, $table);
 		}
@@ -447,13 +456,18 @@ class Dumper
 	/**
 	 * @return array
 	 */
-	private static function exportObject($obj, array $exporters)
+	private static function exportObject($obj, array $exporters, $useDebugInfo)
 	{
 		foreach ($exporters as $type => $dumper) {
 			if (!$type || $obj instanceof $type) {
 				return call_user_func($dumper, $obj);
 			}
 		}
+
+		if ($useDebugInfo && method_exists($obj, '__debugInfo')) {
+			return $obj->__debugInfo();
+		}
+
 		return (array) $obj;
 	}
 
@@ -504,7 +518,7 @@ class Dumper
 	 */
 	private static function exportPhpIncompleteClass(\__PHP_Incomplete_Class $obj)
 	{
-		$info = ['className' => NULL, 'private' => [], 'protected' => [], 'public' => []];
+		$info = ['className' => null, 'private' => [], 'protected' => [], 'public' => []];
 		foreach ((array) $obj as $name => $value) {
 			if ($name === '__PHP_Incomplete_Class_Name') {
 				$info['className'] = $value;
@@ -522,7 +536,7 @@ class Dumper
 
 	/**
 	 * Finds the location where dump was called.
-	 * @return array [file, line, code]
+	 * @return array|null [file, line, code]
 	 */
 	private static function findLocation()
 	{
@@ -564,9 +578,8 @@ class Dumper
 	{
 		return self::$terminalColors &&
 			(getenv('ConEmuANSI') === 'ON'
-			|| getenv('ANSICON') !== FALSE
+			|| getenv('ANSICON') !== false
 			|| getenv('term') === 'xterm-256color'
 			|| (defined('STDOUT') && function_exists('posix_isatty') && posix_isatty(STDOUT)));
 	}
-
 }

@@ -19,7 +19,7 @@ Debugger::enable();
 function makeBootstrap2(Form $form)
 {
 	$renderer = $form->getRenderer();
-	$renderer->wrappers['controls']['container'] = NULL;
+	$renderer->wrappers['controls']['container'] = null;
 	$renderer->wrappers['pair']['container'] = 'div class=control-group';
 	$renderer->wrappers['pair']['.error'] = 'error';
 	$renderer->wrappers['control']['container'] = 'div class=controls';
@@ -28,23 +28,21 @@ function makeBootstrap2(Form $form)
 	$renderer->wrappers['control']['errorcontainer'] = 'span class=help-inline';
 	$form->getElementPrototype()->class('form-horizontal');
 
-	$form->onRender[] = function ($form) {
-		foreach ($form->getControls() as $control) {
-			$type = $control->getOption('type');
-			if ($type === 'button') {
-				$control->getControlPrototype()->addClass(empty($usedPrimary) ? 'btn btn-primary' : 'btn');
-				$usedPrimary = TRUE;
+	foreach ($form->getControls() as $control) {
+		$type = $control->getOption('type');
+		if ($type === 'button') {
+			$control->getControlPrototype()->addClass(empty($usedPrimary) ? 'btn btn-primary' : 'btn');
+			$usedPrimary = true;
 
-			} elseif (in_array($type, ['checkbox', 'radio'], TRUE)) {
-				$control->getSeparatorPrototype()->setName('div')->addClass($type);
-			}
+		} elseif (in_array($type, ['checkbox', 'radio'], true)) {
+			$control->getSeparatorPrototype()->setName('div')->addClass($type);
 		}
-	};
+	}
 }
 
 
 $form = new Form;
-makeBootstrap2($form);
+$form->onRender[] = 'makeBootstrap2';
 
 $form->addGroup('Personal data');
 $form->addText('name', 'Your name')

@@ -21,15 +21,17 @@ class MyTranslator implements Nette\Localization\ITranslator
 {
 	private $table;
 
-	function __construct(array $table)
+
+	public function __construct(array $table)
 	{
 		$this->table = $table;
 	}
 
+
 	/**
 	 * Translates the given string.
 	 */
-	public function translate($message, $count = NULL)
+	public function translate($message, $count = null)
 	{
 		return isset($this->table[$message]) ? $this->table[$message] : $message;
 	}

@@ -29,38 +29,39 @@ abstract class TextBase extends BaseControl
 
 	/**
 	 * Sets control's value.
-	 * @param  string
 	 * @return static
 	 * @internal
 	 */
 	public function setValue($value)
 	{
-		if ($value === NULL) {
+		if ($value === null) {
 			$value = '';
 		} elseif (!is_scalar($value) && !method_exists($value, '__toString')) {
-			throw new Nette\InvalidArgumentException(sprintf("Value must be scalar or NULL, %s given in field '%s'.", gettype($value), $this->name));
+			throw new Nette\InvalidArgumentException(sprintf("Value must be scalar or null, %s given in field '%s'.", gettype($value), $this->name));
 		}
-		$this->rawValue = $this->value = $value;
+		$this->value = $value;
+		$this->rawValue = (string) $value;
 		return $this;
 	}
 
 
 	/**
 	 * Returns control's value.
-	 * @return string
+	 * @return mixed
 	 */
 	public function getValue()
 	{
-		return $this->nullable && $this->value === '' ? NULL : $this->value;
+		$value = $this->value === Strings::trim($this->translate($this->emptyValue)) ? '' : $this->value;
+		return $this->nullable && $value === '' ? null : $value;
 	}
 
 
 	/**
-	 * Sets whether getValue() returns NULL instead of empty string.
+	 * Sets whether getValue() returns null instead of empty string.
 	 * @param  bool
 	 * @return static
 	 */
-	public function setNullable($value = TRUE)
+	public function setNullable($value = true)
 	{
 		$this->nullable = (bool) $value;
 		return $this;
@@ -127,17 +128,20 @@ abstract class TextBase extends BaseControl
 
 
 	/**
-	 * @return string|NULL
+	 * @return string|null
 	 */
 	protected function getRenderedValue()
 	{
 		return $this->rawValue === ''
-			? ($this->emptyValue === '' ? NULL : $this->translate($this->emptyValue))
+			? ($this->emptyValue === '' ? null : $this->translate($this->emptyValue))
 			: $this->rawValue;
 	}
 
 
-	public function addRule($validator, $message = NULL, $arg = NULL)
+	/**
+	 * @return static
+	 */
+	public function addRule($validator, $errorMessage = null, $arg = null)
 	{
 		if ($validator === Form::LENGTH || $validator === Form::MAX_LENGTH) {
 			$tmp = is_array($arg) ? $arg[1] : $arg;
@@ -145,20 +149,6 @@ abstract class TextBase extends BaseControl
 				$this->control->maxlength = isset($this->control->maxlength) ? min($this->control->maxlength, $tmp) : $tmp;
 			}
 		}
-		return parent::addRule($validator, $message, $arg);
+		return parent::addRule($validator, $errorMessage, $arg);
 	}
-
-
-	/**
-	 * Performs the server side validation.
-	 * @return void
-	 */
-	public function validate()
-	{
-		if ($this->value === Strings::trim($this->translate($this->emptyValue))) {
-			$this->value = '';
-		}
-		parent::validate();
-	}
-
 }

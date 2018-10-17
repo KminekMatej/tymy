@@ -18,13 +18,13 @@ class ContainerLoader
 	use Nette\SmartObject;
 
 	/** @var bool */
-	private $autoRebuild = FALSE;
+	private $autoRebuild = false;
 
 	/** @var string */
 	private $tempDirectory;
 
 
-	public function __construct($tempDirectory, $autoRebuild = FALSE)
+	public function __construct($tempDirectory, $autoRebuild = false)
 	{
 		$this->tempDirectory = $tempDirectory;
 		$this->autoRebuild = $autoRebuild;
@@ -32,18 +32,18 @@ class ContainerLoader
 
 
 	/**
-	 * @param  callable  function (Nette\DI\Compiler $compiler): string|NULL
+	 * @param  callable  function (Nette\DI\Compiler $compiler): string|null
 	 * @param  mixed
 	 * @return string
 	 */
-	public function load($generator, $key = NULL)
+	public function load($generator, $key = null)
 	{
 		if (!is_callable($generator)) { // back compatiblity
 			trigger_error(__METHOD__ . ': order of arguments has been swapped.', E_USER_DEPRECATED);
 			list($generator, $key) = [$key, $generator];
 		}
 		$class = $this->getClassName($key);
-		if (!class_exists($class, FALSE)) {
+		if (!class_exists($class, false)) {
 			$this->loadFile($class, $generator);
 		}
 		return $class;
@@ -65,46 +65,53 @@ class ContainerLoader
 	private function loadFile($class, $generator)
 	{
 		$file = "$this->tempDirectory/$class.php";
-		if (!$this->isExpired($file) && (@include $file) !== FALSE) { // @ file may not exist
+		if (!$this->isExpired($file) && (@include $file) !== false) { // @ file may not exist
 			return;
 		}
 
-		if (!is_dir($this->tempDirectory)) {
-			@mkdir($this->tempDirectory); // @ - directory may already exist
+		Nette\Utils\FileSystem::createDir($this->tempDirectory);
+
+		$handle = @fopen("$file.lock", 'c+'); // @ is escalated to exception
+		if (!$handle) {
+			throw new Nette\IOException("Unable to create file '$file.lock'. " . error_get_last()['message']);
+		} elseif (!@flock($handle, LOCK_EX)) { // @ is escalated to exception
+			throw new Nette\IOException("Unable to acquire exclusive lock on '$file.lock'. " . error_get_last()['message']);
 		}
 
-		$handle = fopen("$file.lock", 'c+');
-		if (!$handle || !flock($handle, LOCK_EX)) {
-			throw new Nette\IOException("Unable to acquire exclusive lock on '$file.lock'.");
-		}
-
-		if (!is_file($file) || $this->isExpired($file)) {
-			list($toWrite[$file], $toWrite["$file.meta"]) = $this->generate($class, $generator);
+		if (!is_file($file) || $this->isExpired($file, $updatedMeta)) {
+			if (isset($updatedMeta)) {
+				$toWrite["$file.meta"] = $updatedMeta;
+			} else {
+				list($toWrite[$file], $toWrite["$file.meta"]) = $this->generate($class, $generator);
+			}
 
 			foreach ($toWrite as $name => $content) {
 				if (file_put_contents("$name.tmp", $content) !== strlen($content) || !rename("$name.tmp", $name)) {
 					@unlink("$name.tmp"); // @ - file may not exist
 					throw new Nette\IOException("Unable to create file '$name'.");
 				} elseif (function_exists('opcache_invalidate')) {
-					@opcache_invalidate($name, TRUE); // @ can be restricted
+					@opcache_invalidate($name, true); // @ can be restricted
 				}
 			}
 		}
 
-		if ((@include $file) === FALSE) { // @ - error escalated to exception
+		if ((@include $file) === false) { // @ - error escalated to exception
 			throw new Nette\IOException("Unable to include '$file'.");
 		}
 		flock($handle, LOCK_UN);
 	}
 
 
-	private function isExpired($file)
+	private function isExpired($file, &$updatedMeta = null)
 	{
 		if ($this->autoRebuild) {
-			$meta = @unserialize(file_get_contents("$file.meta")); // @ - file may not exist
-			return empty($meta[0]) || DependencyChecker::isExpired(...$meta);
+			$meta = @unserialize((string) file_get_contents("$file.meta")); // @ - file may not exist
+			$orig = $meta[2];
+			return empty($meta[0])
+				|| DependencyChecker::isExpired(...$meta)
+				|| ($orig !== $meta[2] && $updatedMeta = serialize($meta));
 		}
-		return FALSE;
+		return false;
 	}
 
 
@@ -118,8 +125,7 @@ class ContainerLoader
 		$code = call_user_func_array($generator, [&$compiler]) ?: $compiler->compile();
 		return [
 			"<?php\n$code",
-			serialize($compiler->exportDependencies())
+			serialize($compiler->exportDependencies()),
 		];
 	}
-
 }

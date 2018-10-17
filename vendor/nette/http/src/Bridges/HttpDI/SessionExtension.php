@@ -16,9 +16,9 @@ use Nette;
 class SessionExtension extends Nette\DI\CompilerExtension
 {
 	public $defaults = [
-		'debugger' => FALSE,
+		'debugger' => false,
 		'autoStart' => 'smart', // true|false|smart
-		'expiration' => NULL,
+		'expiration' => null,
 	];
 
 	/** @var bool */
@@ -28,7 +28,7 @@ class SessionExtension extends Nette\DI\CompilerExtension
 	private $cliMode;
 
 
-	public function __construct($debugMode = FALSE, $cliMode = FALSE)
+	public function __construct($debugMode = false, $cliMode = false)
 	{
 		$this->debugMode = $debugMode;
 		$this->cliMode = $cliMode;
@@ -42,15 +42,21 @@ class SessionExtension extends Nette\DI\CompilerExtension
 		$this->setConfig($config);
 
 		$session = $builder->addDefinition($this->prefix('session'))
-			->setClass(Nette\Http\Session::class);
+			->setFactory(Nette\Http\Session::class);
 
 		if ($config['expiration']) {
 			$session->addSetup('setExpiration', [$config['expiration']]);
 		}
+		if (isset($config['cookieDomain']) && $config['cookieDomain'] === 'domain') {
+			$config['cookieDomain'] = $builder::literal('$this->getByType(Nette\Http\IRequest::class)->getUrl()->getDomain(2)');
+		}
+		if (isset($config['cookieSecure']) && $config['cookieSecure'] === 'auto') {
+			$config['cookieSecure'] = $builder::literal('$this->getByType(Nette\Http\IRequest::class)->isSecured()');
+		}
 
 		if ($this->debugMode && $config['debugger']) {
 			$session->addSetup('@Tracy\Bar::addPanel', [
-				new Nette\DI\Statement(Nette\Bridges\HttpTracy\SessionPanel::class)
+				new Nette\DI\Statement(Nette\Bridges\HttpTracy\SessionPanel::class),
 			]);
 		}
 
@@ -82,5 +88,4 @@ class SessionExtension extends Nette\DI\CompilerExtension
 			$initialize->addBody('$this->getService(?)->start();', [$name]);
 		}
 	}
-
 }

@@ -29,6 +29,8 @@ class Loader
 
 	private $dependencies = [];
 
+	private $loadedFiles = [];
+
 
 	/**
 	 * Reads configuration from file.
@@ -36,11 +38,17 @@ class Loader
 	 * @param  string  optional section to load
 	 * @return array
 	 */
-	public function load($file, $section = NULL)
+	public function load($file, $section = null)
 	{
 		if (!is_file($file) || !is_readable($file)) {
 			throw new Nette\FileNotFoundException("File '$file' is missing or is not readable.");
 		}
+
+		if (isset($this->loadedFiles[$file])) {
+			throw new Nette\InvalidStateException("Recursive included file '$file'");
+		}
+		$this->loadedFiles[$file] = true;
+
 		$this->dependencies[] = $file;
 		$data = $this->getAdapter($file)->load($file);
 
@@ -56,13 +64,14 @@ class Loader
 		if (isset($data[self::INCLUDES_KEY])) {
 			Validators::assert($data[self::INCLUDES_KEY], 'list', "section 'includes' in file '$file'");
 			foreach ($data[self::INCLUDES_KEY] as $include) {
-				if (!preg_match('#([a-z]:)?[/\\\\]#Ai', $include)) {
+				if (!preg_match('#([a-z]+:)?[/\\\\]#Ai', $include)) {
 					$include = dirname($file) . '/' . $include;
 				}
 				$merged = Helpers::merge($this->load($include), $merged);
 			}
 		}
-		unset($data[self::INCLUDES_KEY]);
+		unset($data[self::INCLUDES_KEY], $this->loadedFiles[$file]);
+
 
 		return Helpers::merge($data, $merged);
 	}
@@ -76,7 +85,7 @@ class Loader
 	 */
 	public function save($data, $file)
 	{
-		if (file_put_contents($file, $this->getAdapter($file)->dump($data)) === FALSE) {
+		if (file_put_contents($file, $this->getAdapter($file)->dump($data)) === false) {
 			throw new Nette\IOException("Cannot write file '$file'.");
 		}
 	}
@@ -125,5 +134,4 @@ class Loader
 		}
 		return $item;
 	}
-
 }

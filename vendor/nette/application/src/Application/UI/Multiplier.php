@@ -7,7 +7,6 @@
 
 namespace Nette\Application\UI;
 
-use Nette;
 
 
 /**
@@ -30,5 +29,4 @@ class Multiplier extends Component
 	{
 		return call_user_func($this->factory, $name, $this);
 	}
-
 }

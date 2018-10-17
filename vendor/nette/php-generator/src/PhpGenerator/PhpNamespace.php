@@ -24,11 +24,16 @@ class PhpNamespace
 {
 	use Nette\SmartObject;
 
+	private static $keywords = [
+		'string' => 1, 'int' => 1, 'float' => 1, 'bool' => 1, 'array' => 1,
+		'callable' => 1, 'iterable' => 1, 'void' => 1, 'self' => 1, 'parent' => 1,
+	];
+
 	/** @var string */
 	private $name;
 
 	/** @var bool */
-	private $bracketedSyntax = FALSE;
+	private $bracketedSyntax = false;
 
 	/** @var string[] */
 	private $uses = [];
@@ -37,26 +42,32 @@ class PhpNamespace
 	private $classes = [];
 
 
-	public function __construct($name = NULL)
+	/**
+	 * @param  string|null
+	 */
+	public function __construct($name = null)
 	{
-		$this->setName($name);
+		if ($name && !Helpers::isNamespaceIdentifier($name)) {
+			throw new Nette\InvalidArgumentException("Value '$name' is not valid name.");
+		}
+		$this->name = (string) $name;
 	}
 
 
 	/** @deprecated */
 	public function setName($name)
 	{
-		$this->name = (string) $name;
+		$this->__construct($name);
 		return $this;
 	}
 
 
 	/**
-	 * @return string|NULL
+	 * @return string|null
 	 */
 	public function getName()
 	{
-		return $this->name ?: NULL;
+		return $this->name ?: null;
 	}
 
 
@@ -65,7 +76,7 @@ class PhpNamespace
 	 * @return static
 	 * @internal
 	 */
-	public function setBracketedSyntax($state = TRUE)
+	public function setBracketedSyntax($state = true)
 	{
 		$this->bracketedSyntax = (bool) $state;
 		return $this;
@@ -88,15 +99,15 @@ class PhpNamespace
 	 * @throws InvalidStateException
 	 * @return static
 	 */
-	public function addUse($name, $alias = NULL, &$aliasOut = NULL)
+	public function addUse($name, $alias = null, &$aliasOut = null)
 	{
 		$name = ltrim($name, '\\');
-		if ($alias === NULL && $this->name === Helpers::extractNamespace($name)) {
+		if ($alias === null && $this->name === Helpers::extractNamespace($name)) {
 			$alias = Helpers::extractShortName($name);
 		}
-		if ($alias === NULL) {
+		if ($alias === null) {
 			$path = explode('\\', $name);
-			$counter = NULL;
+			$counter = null;
 			do {
 				if (empty($path)) {
 					$counter++;
@@ -133,11 +144,11 @@ class PhpNamespace
 	 */
 	public function unresolveName($name)
 	{
-		if (in_array(strtolower($name), ['self', 'parent', 'array', 'callable', 'string', 'bool', 'float', 'int', ''], TRUE)) {
+		if (isset(self::$keywords[strtolower($name)]) || $name === '') {
 			return $name;
 		}
 		$name = ltrim($name, '\\');
-		$res = NULL;
+		$res = null;
 		$lower = strtolower($name);
 		foreach ($this->uses as $alias => $for) {
 			if (Strings::startsWith($lower . '\\', strtolower($for) . '\\')) {
@@ -231,5 +242,4 @@ class PhpNamespace
 				. $body;
 		}
 	}
-
 }

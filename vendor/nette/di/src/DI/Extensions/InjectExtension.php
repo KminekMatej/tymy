@@ -23,7 +23,7 @@ class InjectExtension extends DI\CompilerExtension
 	public function beforeCompile()
 	{
 		foreach ($this->getContainerBuilder()->getDefinitions() as $def) {
-			if ($def->getTag(self::TAG_INJECT) && $def->getClass()) {
+			if ($def->getTag(self::TAG_INJECT) && $def->getType()) {
 				$this->updateDefinition($def);
 			}
 		}
@@ -32,7 +32,7 @@ class InjectExtension extends DI\CompilerExtension
 
 	private function updateDefinition(DI\ServiceDefinition $def)
 	{
-		$class = $def->getClass();
+		$class = $def->getType();
 		$setups = $def->getSetup();
 
 		foreach (self::getInjectProperties($class) as $property => $type) {
@@ -41,7 +41,7 @@ class InjectExtension extends DI\CompilerExtension
 			foreach ($setups as $key => $setup) {
 				if ($setup->getEntity() === $inject->getEntity()) {
 					$inject = $setup;
-					$builder = NULL;
+					$builder = null;
 					unset($setups[$key]);
 				}
 			}
@@ -49,7 +49,7 @@ class InjectExtension extends DI\CompilerExtension
 			array_unshift($setups, $inject);
 		}
 
-		foreach (array_reverse(self::getInjectMethods($def->getClass())) as $method) {
+		foreach (array_reverse(self::getInjectMethods($def->getType())) as $method) {
 			$inject = new DI\Statement($method);
 			foreach ($setups as $key => $setup) {
 				if ($setup->getEntity() === $inject->getEntity()) {
@@ -80,7 +80,7 @@ class InjectExtension extends DI\CompilerExtension
 		uksort($res, function ($a, $b) use ($res) {
 			return $res[$a] === $res[$b]
 				? strcmp($a, $b)
-				: (is_a($res[$a], $res[$b], TRUE) ? 1 : -1);
+				: (is_a($res[$a], $res[$b], true) ? 1 : -1);
 		});
 		return array_keys($res);
 	}
@@ -96,7 +96,7 @@ class InjectExtension extends DI\CompilerExtension
 		$res = [];
 		foreach (get_class_vars($class) as $name => $foo) {
 			$rp = new \ReflectionProperty($class, $name);
-			if (DI\Helpers::parseAnnotation($rp, 'inject') !== NULL) {
+			if (DI\Helpers::parseAnnotation($rp, 'inject') !== null) {
 				if ($type = DI\Helpers::parseAnnotation($rp, 'var')) {
 					$type = Reflection::expandClassName($type, Reflection::getPropertyDeclaringClass($rp));
 				}
@@ -130,16 +130,15 @@ class InjectExtension extends DI\CompilerExtension
 
 
 	/** @internal */
-	private static function checkType($class, $name, $type, $container = NULL)
+	private static function checkType($class, $name, $type, $container = null)
 	{
 		$propName = Reflection::toString(new \ReflectionProperty($class, $name));
 		if (!$type) {
 			throw new Nette\InvalidStateException("Property $propName has no @var annotation.");
 		} elseif (!class_exists($type) && !interface_exists($type)) {
 			throw new Nette\InvalidStateException("Class or interface '$type' used in @var annotation at $propName not found. Check annotation and 'use' statements.");
-		} elseif ($container && !$container->getByType($type, FALSE)) {
+		} elseif ($container && !$container->getByType($type, false)) {
 			throw new Nette\InvalidStateException("Service of type $type used in @var annotation at $propName not found. Did you register it in configuration file?");
 		}
 	}
-
 }

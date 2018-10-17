@@ -26,20 +26,19 @@ class SQLiteJournal implements IJournal
 
 
 	/**
-	 * @param  string
+	 * @param  string  $path
 	 */
 	public function __construct($path)
 	{
+		if (!extension_loaded('pdo_sqlite')) {
+			throw new Nette\NotSupportedException('SQLiteJournal requires PHP extension pdo_sqlite which is not loaded.');
+		}
 		$this->path = $path;
 	}
 
 
 	private function open()
 	{
-		if (!extension_loaded('pdo_sqlite')) {
-			throw new Nette\NotSupportedException('SQLiteJournal requires PHP extension pdo_sqlite which is not loaded.');
-		}
-
 		if ($this->path !== ':memory:' && !is_file($this->path)) {
 			touch($this->path); // ensures ordinary file permissions
 		}
@@ -65,12 +64,6 @@ class SQLiteJournal implements IJournal
 	}
 
 
-	/**
-	 * Writes entry information into the journal.
-	 * @param  string
-	 * @param  array
-	 * @return void
-	 */
 	public function write($key, array $dependencies)
 	{
 		if (!$this->pdo) {
@@ -98,11 +91,6 @@ class SQLiteJournal implements IJournal
 	}
 
 
-	/**
-	 * Cleans entries from journal.
-	 * @param  array
-	 * @return array|NULL  removed items or NULL when performing a full cleanup
-	 */
 	public function clean(array $conditions)
 	{
 		if (!$this->pdo) {
@@ -116,7 +104,7 @@ class SQLiteJournal implements IJournal
 				COMMIT;
 			');
 
-			return NULL;
+			return null;
 		}
 
 		$unions = $args = [];
@@ -154,5 +142,4 @@ class SQLiteJournal implements IJournal
 
 		return $keys;
 	}
-
 }

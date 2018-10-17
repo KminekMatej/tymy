@@ -18,10 +18,10 @@ class TextInput extends TextBase
 {
 
 	/**
-	 * @param  string  label
-	 * @param  int  maximum number of characters the user may enter
+	 * @param  string|object
+	 * @param  int
 	 */
-	public function __construct($label = NULL, $maxLength = NULL)
+	public function __construct($label = null, $maxLength = null)
 	{
 		parent::__construct($label);
 		$this->control->maxlength = $maxLength;
@@ -75,19 +75,23 @@ class TextInput extends TextBase
 	}
 
 
-	public function addRule($validator, $message = NULL, $arg = NULL)
+	/**
+	 * @return static
+	 */
+	public function addRule($validator, $errorMessage = null, $arg = null)
 	{
-		if ($this->control->type === NULL && in_array($validator, [Form::EMAIL, Form::URL, Form::INTEGER], TRUE)) {
+		if ($this->control->type === null && in_array($validator, [Form::EMAIL, Form::URL, Form::INTEGER], true)) {
 			static $types = [Form::EMAIL => 'email', Form::URL => 'url', Form::INTEGER => 'number'];
 			$this->control->type = $types[$validator];
 
-		} elseif (in_array($validator, [Form::MIN, Form::MAX, Form::RANGE], TRUE)
-			&& in_array($this->control->type, ['number', 'range', 'datetime-local', 'datetime', 'date', 'month', 'week', 'time'], TRUE)
+		} elseif (
+			in_array($validator, [Form::MIN, Form::MAX, Form::RANGE], true)
+			&& in_array($this->control->type, ['number', 'range', 'datetime-local', 'datetime', 'date', 'month', 'week', 'time'], true)
 		) {
 			if ($validator === Form::MIN) {
-				$range = [$arg, NULL];
+				$range = [$arg, null];
 			} elseif ($validator === Form::MAX) {
-				$range = [NULL, $arg];
+				$range = [null, $arg];
 			} else {
 				$range = $arg;
 			}
@@ -98,13 +102,14 @@ class TextInput extends TextBase
 				$this->control->max = isset($this->control->max) ? min($this->control->max, $range[1]) : $range[1];
 			}
 
-		} elseif ($validator === Form::PATTERN && is_scalar($arg)
-			&& in_array($this->control->type, [NULL, 'text', 'search', 'tel', 'url', 'email', 'password'], TRUE)
+		} elseif (
+			$validator === Form::PATTERN
+			&& is_scalar($arg)
+			&& in_array($this->control->type, [null, 'text', 'search', 'tel', 'url', 'email', 'password'], true)
 		) {
 			$this->control->pattern = $arg;
 		}
 
-		return parent::addRule($validator, $message, $arg);
+		return parent::addRule($validator, $errorMessage, $arg);
 	}
-
 }

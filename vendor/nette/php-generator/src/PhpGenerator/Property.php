@@ -13,13 +13,18 @@ use Nette;
 /**
  * Class property description.
  */
-class Property extends Member
+class Property
 {
+	use Nette\SmartObject;
+	use Traits\NameAware;
+	use Traits\VisibilityAware;
+	use Traits\CommentAware;
+
 	/** @var mixed */
 	public $value;
 
 	/** @var bool */
-	private $static = FALSE;
+	private $static = false;
 
 
 	/**
@@ -28,6 +33,7 @@ class Property extends Member
 	 */
 	public static function from(\ReflectionProperty $from)
 	{
+		trigger_error(__METHOD__ . '() is deprecated, use Nette\PhpGenerator\Factory.', E_USER_DEPRECATED);
 		return (new Factory)->fromPropertyReflection($from);
 	}
 
@@ -55,7 +61,7 @@ class Property extends Member
 	 * @param  bool
 	 * @return static
 	 */
-	public function setStatic($state = TRUE)
+	public function setStatic($state = true)
 	{
 		$this->static = (bool) $state;
 		return $this;
@@ -69,5 +75,4 @@ class Property extends Member
 	{
 		return $this->static;
 	}
-
 }

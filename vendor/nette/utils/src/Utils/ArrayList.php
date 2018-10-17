@@ -42,14 +42,17 @@ class ArrayList implements \ArrayAccess, \Countable, \IteratorAggregate
 
 	/**
 	 * Replaces or appends a item.
-	 * @param  int|NULL
+	 * @param  int|null
 	 * @param  mixed
 	 * @return void
 	 * @throws Nette\OutOfRangeException
 	 */
 	public function offsetSet($index, $value)
 	{
-		if ($index === NULL) {
+		if ($index !== null && !is_int($index)) {
+			trigger_error('Index is not integer.', E_USER_NOTICE);
+		}
+		if ($index === null) {
 			$this->list[] = $value;
 
 		} elseif ($index < 0 || $index >= count($this->list)) {
@@ -69,6 +72,9 @@ class ArrayList implements \ArrayAccess, \Countable, \IteratorAggregate
 	 */
 	public function offsetGet($index)
 	{
+		if (!is_int($index)) {
+			trigger_error('Index is not integer.', E_USER_NOTICE);
+		}
 		if ($index < 0 || $index >= count($this->list)) {
 			throw new Nette\OutOfRangeException('Offset invalid or out of range');
 		}
@@ -95,6 +101,9 @@ class ArrayList implements \ArrayAccess, \Countable, \IteratorAggregate
 	 */
 	public function offsetUnset($index)
 	{
+		if (!is_int($index)) {
+			trigger_error('Index is not integer.', E_USER_NOTICE);
+		}
 		if ($index < 0 || $index >= count($this->list)) {
 			throw new Nette\OutOfRangeException('Offset invalid or out of range');
 		}
@@ -113,5 +122,4 @@ class ArrayList implements \ArrayAccess, \Countable, \IteratorAggregate
 		$this->offsetSet(0, $value);
 		array_splice($this->list, 1, 0, $first);
 	}
-
 }

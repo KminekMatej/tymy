@@ -7,12 +7,12 @@
 
 namespace Nette\Bridges\Framework;
 
+use Latte;
 use Nette;
 use Nette\Framework;
 use Tracy;
-use Tracy\Helpers;
 use Tracy\BlueScreen;
-use Latte;
+use Tracy\Helpers;
 
 
 /**
@@ -30,6 +30,11 @@ class TracyBridge
 			$version = Framework::VERSION . (Framework::REVISION ? ' (' . Framework::REVISION . ')' : '');
 			Tracy\Debugger::getBar()->getPanel('Tracy:info')->data['Nette Framework'] = $version;
 			$blueScreen->info[] = "Nette Framework $version";
+		}
+
+		if (class_exists(Tracy\Bridges\Nette\Bridge::class)) {
+			Tracy\Bridges\Nette\Bridge::initialize();
+			return;
 		}
 
 		$blueScreen->addPanel(function ($e) {
@@ -51,7 +56,9 @@ class TracyBridge
 		});
 
 		$blueScreen->addPanel(function ($e) {
-			if ($e instanceof Nette\Neon\Exception && preg_match('#line (\d+)#', $e->getMessage(), $m)
+			if (
+				$e instanceof Nette\Neon\Exception
+				&& preg_match('#line (\d+)#', $e->getMessage(), $m)
 				&& ($trace = Helpers::findTrace($e->getTrace(), 'Nette\Neon\Decoder::decode'))
 			) {
 				return [
@@ -64,5 +71,4 @@ class TracyBridge
 			}
 		});
 	}
-
 }

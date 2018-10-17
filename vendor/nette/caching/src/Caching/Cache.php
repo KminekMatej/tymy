@@ -8,7 +8,6 @@
 namespace Nette\Caching;
 
 use Nette;
-use Nette\Utils\Callback;
 
 
 /**
@@ -19,7 +18,8 @@ class Cache
 	use Nette\SmartObject;
 
 	/** dependency */
-	const PRIORITY = 'priority',
+	const
+		PRIORITY = 'priority',
 		EXPIRATION = 'expire',
 		EXPIRE = 'expire',
 		SLIDING = 'sliding',
@@ -28,6 +28,7 @@ class Cache
 		ITEMS = 'items',
 		CONSTS = 'consts',
 		CALLBACKS = 'callbacks',
+		NAMESPACES = 'namespaces',
 		ALL = 'all';
 
 	/** @internal */
@@ -40,7 +41,7 @@ class Cache
 	private $namespace;
 
 
-	public function __construct(IStorage $storage, $namespace = NULL)
+	public function __construct(IStorage $storage, $namespace = null)
 	{
 		$this->storage = $storage;
 		$this->namespace = $namespace . self::NAMESPACE_SEPARATOR;
@@ -69,7 +70,7 @@ class Cache
 
 	/**
 	 * Returns new nested cache object.
-	 * @param  string
+	 * @param  string  $namespace
 	 * @return static
 	 */
 	public function derive($namespace)
@@ -81,14 +82,14 @@ class Cache
 
 	/**
 	 * Reads the specified item from the cache or generate it.
-	 * @param  mixed
-	 * @param  callable
+	 * @param  mixed  $key
+	 * @param  callable  $fallback
 	 * @return mixed
 	 */
-	public function load($key, $fallback = NULL)
+	public function load($key, $fallback = null)
 	{
 		$data = $this->storage->read($this->generateKey($key));
-		if ($data === NULL && $fallback) {
+		if ($data === null && $fallback) {
 			return $this->save($key, function (&$dependencies) use ($fallback) {
 				return call_user_func_array($fallback, [&$dependencies]);
 			});
@@ -99,11 +100,10 @@ class Cache
 
 	/**
 	 * Reads multiple items from the cache.
-	 * @param  array
-	 * @param  callable
+	 * @param  callable  $fallback
 	 * @return array
 	 */
-	public function bulkLoad(array $keys, $fallback = NULL)
+	public function bulkLoad(array $keys, $fallback = null)
 	{
 		if (count($keys) === 0) {
 			return [];
@@ -116,9 +116,9 @@ class Cache
 		$storageKeys = array_map([$this, 'generateKey'], $keys);
 		if (!$this->storage instanceof IBulkReader) {
 			$result = array_combine($keys, array_map([$this->storage, 'read'], $storageKeys));
-			if ($fallback !== NULL) {
+			if ($fallback !== null) {
 				foreach ($result as $key => $value) {
-					if ($value === NULL) {
+					if ($value === null) {
 						$result[$key] = $this->save($key, function (&$dependencies) use ($key, $fallback) {
 							return call_user_func_array($fallback, [$key, &$dependencies]);
 						});
@@ -139,7 +139,7 @@ class Cache
 					return call_user_func_array($fallback, [$key, &$dependencies]);
 				});
 			} else {
-				$result[$key] = NULL;
+				$result[$key] = null;
 			}
 		}
 		return $result;
@@ -157,12 +157,11 @@ class Cache
 	 * - Cache::ITEMS => (array|string) cache items
 	 * - Cache::CONSTS => (array|string) cache items
 	 *
-	 * @param  mixed
-	 * @param  mixed
+	 * @param  mixed  $key
+	 * @param  mixed  $data
 	 * @return mixed  value itself
-	 * @throws Nette\InvalidArgumentException
 	 */
-	public function save($key, $data, array $dependencies = NULL)
+	public function save($key, $data, array $dependencies = null)
 	{
 		$key = $this->generateKey($key);
 
@@ -173,20 +172,20 @@ class Cache
 			$this->storage->lock($key);
 			try {
 				$data = call_user_func_array($data, [&$dependencies]);
-			} catch (\Throwable $e) {
+			} catch (\Exception $e) {
 				$this->storage->remove($key);
 				throw $e;
-			} catch (\Exception $e) {
+			} catch (\Throwable $e) {
 				$this->storage->remove($key);
 				throw $e;
 			}
 		}
 
-		if ($data === NULL) {
+		if ($data === null) {
 			$this->storage->remove($key);
 		} else {
 			$dependencies = $this->completeDependencies($dependencies);
-			if (isset($dependencies[Cache::EXPIRATION]) && $dependencies[Cache::EXPIRATION] <= 0) {
+			if (isset($dependencies[self::EXPIRATION]) && $dependencies[self::EXPIRATION] <= 0) {
 				$this->storage->remove($key);
 			} else {
 				$this->storage->write($key, $data, $dependencies);
@@ -208,10 +207,15 @@ class Cache
 			$dp[self::TAGS] = array_values((array) $dp[self::TAGS]);
 		}
 
+		// make list from NAMESPACES
+		if (isset($dp[self::NAMESPACES])) {
+			$dp[self::NAMESPACES] = array_values((array) $dp[self::NAMESPACES]);
+		}
+
 		// convert FILES into CALLBACKS
 		if (isset($dp[self::FILES])) {
 			foreach (array_unique((array) $dp[self::FILES]) as $item) {
-				$dp[self::CALLBACKS][] = [[__CLASS__, 'checkFile'], $item, @filemtime($item) ?: NULL]; // @ - stat may fail
+				$dp[self::CALLBACKS][] = [[__CLASS__, 'checkFile'], $item, @filemtime($item) ?: null]; // @ - stat may fail
 			}
 			unset($dp[self::FILES]);
 		}
@@ -238,12 +242,12 @@ class Cache
 
 	/**
 	 * Removes item from the cache.
-	 * @param  mixed
+	 * @param  mixed  $key
 	 * @return void
 	 */
 	public function remove($key)
 	{
-		$this->save($key, NULL);
+		$this->save($key, null);
 	}
 
 
@@ -252,10 +256,10 @@ class Cache
 	 * Conditions are:
 	 * - Cache::PRIORITY => (int) priority
 	 * - Cache::TAGS => (array) tags
-	 * - Cache::ALL => TRUE
+	 * - Cache::ALL => true
 	 * @return void
 	 */
-	public function clean(array $conditions = NULL)
+	public function clean(array $conditions = null)
 	{
 		$conditions = (array) $conditions;
 		if (isset($conditions[self::TAGS])) {
@@ -267,7 +271,7 @@ class Cache
 
 	/**
 	 * Caches results of function/method calls.
-	 * @param  mixed
+	 * @param  callable  $function
 	 * @return mixed
 	 */
 	public function call($function)
@@ -277,17 +281,17 @@ class Cache
 			$key[0][0] = get_class($function[0]);
 		}
 		return $this->load($key, function () use ($function, $key) {
-			return Callback::invokeArgs($function, array_slice($key, 1));
+			return call_user_func_array($function, array_slice($key, 1));
 		});
 	}
 
 
 	/**
 	 * Caches results of function/method calls.
-	 * @param  mixed
+	 * @param  callable  $function
 	 * @return \Closure
 	 */
-	public function wrap($function, array $dependencies = NULL)
+	public function wrap($function, array $dependencies = null)
 	{
 		return function () use ($function, $dependencies) {
 			$key = [$function, func_get_args()];
@@ -295,8 +299,8 @@ class Cache
 				$key[0][0] = get_class($function[0]);
 			}
 			$data = $this->load($key);
-			if ($data === NULL) {
-				$data = $this->save($key, Callback::invokeArgs($function, $key[1]), $dependencies);
+			if ($data === null) {
+				$data = $this->save($key, call_user_func_array($function, $key[1]), $dependencies);
 			}
 			return $data;
 		};
@@ -305,13 +309,13 @@ class Cache
 
 	/**
 	 * Starts the output cache.
-	 * @param  mixed
-	 * @return OutputHelper|NULL
+	 * @param  mixed  $key
+	 * @return OutputHelper|null
 	 */
 	public function start($key)
 	{
 		$data = $this->load($key);
-		if ($data === NULL) {
+		if ($data === null) {
 			return new OutputHelper($this, $key);
 		}
 		echo $data;
@@ -320,7 +324,7 @@ class Cache
 
 	/**
 	 * Generates internal cache key.
-	 * @param  mixed
+	 * @param  mixed  $key
 	 * @return string
 	 */
 	protected function generateKey($key)
@@ -334,24 +338,23 @@ class Cache
 
 	/**
 	 * Checks CALLBACKS dependencies.
-	 * @param  array
 	 * @return bool
 	 */
-	public static function checkCallbacks($callbacks)
+	public static function checkCallbacks(array $callbacks)
 	{
 		foreach ($callbacks as $callback) {
 			if (!call_user_func_array(array_shift($callback), $callback)) {
-				return FALSE;
+				return false;
 			}
 		}
-		return TRUE;
+		return true;
 	}
 
 
 	/**
 	 * Checks CONSTS dependency.
-	 * @param  string
-	 * @param  mixed
+	 * @param  string  $const
+	 * @param  mixed  $value
 	 * @return bool
 	 */
 	private static function checkConst($const, $value)
@@ -362,13 +365,12 @@ class Cache
 
 	/**
 	 * Checks FILES dependency.
-	 * @param  string
-	 * @param  int|NULL
+	 * @param  string  $file
+	 * @param  int|null  $time
 	 * @return bool
 	 */
 	private static function checkFile($file, $time)
 	{
 		return @filemtime($file) == $time; // @ - stat may fail
 	}
-
 }

@@ -33,18 +33,19 @@ class ComponentReflection extends \ReflectionClass
 
 
 	/**
-	 * @param  string|NULL
+	 * @param  string|null
 	 * @return array of persistent parameters.
 	 */
-	public function getPersistentParams($class = NULL)
+	public function getPersistentParams($class = null)
 	{
-		$class = $class === NULL ? $this->getName() : $class;
-		$params = & self::$ppCache[$class];
-		if ($params !== NULL) {
+		$class = $class === null ? $this->getName() : $class;
+		$params = &self::$ppCache[$class];
+		if ($params !== null) {
 			return $params;
 		}
 		$params = [];
 		if (is_subclass_of($class, Component::class)) {
+			$isPresenter = is_subclass_of($class, Presenter::class);
 			$defaults = get_class_vars($class);
 			foreach ($class::getPersistentParams() as $name => $default) {
 				if (is_int($name)) {
@@ -53,7 +54,7 @@ class ComponentReflection extends \ReflectionClass
 				}
 				$params[$name] = [
 					'def' => $default,
-					'since' => $class,
+					'since' => $isPresenter ? $class : null,
 				];
 			}
 			foreach ($this->getPersistentParams(get_parent_class($class)) as $name => $param) {
@@ -70,14 +71,14 @@ class ComponentReflection extends \ReflectionClass
 
 
 	/**
-	 * @param  string|NULL
+	 * @param  string|null
 	 * @return array of persistent components.
 	 */
-	public function getPersistentComponents($class = NULL)
+	public function getPersistentComponents($class = null)
 	{
-		$class = $class === NULL ? $this->getName() : $class;
-		$components = & self::$pcCache[$class];
-		if ($components !== NULL) {
+		$class = $class === null ? $this->getName() : $class;
+		$components = &self::$pcCache[$class];
+		if ($components !== null) {
 			return $components;
 		}
 		$components = [];
@@ -95,6 +96,44 @@ class ComponentReflection extends \ReflectionClass
 
 
 	/**
+	 * Saves state informations for next request.
+	 */
+	public function saveState(Component $component, array &$params)
+	{
+		foreach ($this->getPersistentParams() as $name => $meta) {
+			if (isset($params[$name])) {
+				// injected value
+
+			} elseif (
+				array_key_exists($name, $params) // nulls are skipped
+				|| (isset($meta['since']) && !$component instanceof $meta['since']) // not related
+				|| !isset($component->$name)
+			) {
+				continue;
+
+			} else {
+				$params[$name] = $component->$name; // object property value
+			}
+
+			$type = gettype($meta['def']);
+			if (!self::convertType($params[$name], $type)) {
+				throw new InvalidLinkException(sprintf(
+					"Value passed to persistent parameter '%s' in %s must be %s, %s given.",
+					$name,
+					$component instanceof Presenter ? 'presenter ' . $component->getName() : "component '{$component->getUniqueId()}'",
+					$type === 'NULL' ? 'scalar' : $type,
+					is_object($params[$name]) ? get_class($params[$name]) : gettype($params[$name])
+				));
+			}
+
+			if ($params[$name] === $meta['def'] || ($meta['def'] === null && $params[$name] === '')) {
+				$params[$name] = null; // value transmit is unnecessary
+			}
+		}
+	}
+
+
+	/**
 	 * Is a method callable? It means class is instantiable and method has
 	 * public visibility, is non-static and non-abstract.
 	 * @param  string  method name
@@ -103,10 +142,10 @@ class ComponentReflection extends \ReflectionClass
 	public function hasCallableMethod($method)
 	{
 		$class = $this->getName();
-		$cache = & self::$mcCache[strtolower($class . ':' . $method)];
-		if ($cache === NULL) {
+		$cache = &self::$mcCache[strtolower($class . ':' . $method)];
+		if ($cache === null) {
 			try {
-				$cache = FALSE;
+				$cache = false;
 				$rm = new \ReflectionMethod($class, $method);
 				$cache = $this->isInstantiable() && $rm->isPublic() && !$rm->isAbstract() && !$rm->isStatic();
 			} catch (\ReflectionException $e) {
@@ -139,7 +178,7 @@ class ComponentReflection extends \ReflectionClass
 			} elseif ($param->isDefaultValueAvailable()) {
 				$res[$i] = $param->getDefaultValue();
 			} elseif ($type === 'NULL' || $param->allowsNull()) {
-				$res[$i] = NULL;
+				$res[$i] = null;
 			} elseif ($type === 'array') {
 				$res[$i] = [];
 			} else {
@@ -160,13 +199,13 @@ class ComponentReflection extends \ReflectionClass
 	 * @param  string
 	 * @return bool
 	 */
-	public static function convertType(&$val, $type, $isClass = FALSE)
+	public static function convertType(&$val, $type, $isClass = false)
 	{
 		if ($isClass) {
 			return $val instanceof $type;
 
 		} elseif ($type === 'callable') {
-			return FALSE;
+			return false;
 
 		} elseif ($type === 'NULL') { // means 'not array'
 			return !is_array($val);
@@ -174,31 +213,31 @@ class ComponentReflection extends \ReflectionClass
 		} elseif ($type === 'array') {
 			return is_array($val);
 
-		} elseif (!is_scalar($val)) { // array, resource, NULL, etc.
-			return FALSE;
+		} elseif (!is_scalar($val)) { // array, resource, null, etc.
+			return false;
 
 		} else {
-			$old = $tmp = ($val === FALSE ? '0' : (string) $val);
+			$old = $tmp = ($val === false ? '0' : (string) $val);
 			settype($tmp, $type);
-			if ($old !== ($tmp === FALSE ? '0' : (string) $tmp)) {
-				return FALSE; // data-loss occurs
+			if ($old !== ($tmp === false ? '0' : (string) $tmp)) {
+				return false; // data-loss occurs
 			}
 			$val = $tmp;
 		}
-		return TRUE;
+		return true;
 	}
 
 
 	/**
 	 * Returns an annotation value.
-	 * @return array|FALSE
+	 * @return array|false
 	 */
 	public static function parseAnnotation(\Reflector $ref, $name)
 	{
 		if (!preg_match_all('#[\\s*]@' . preg_quote($name, '#') . '(?:\(\\s*([^)]*)\\s*\)|\\s|$)#', $ref->getDocComment(), $m)) {
-			return FALSE;
+			return false;
 		}
-		static $tokens = ['true' => TRUE, 'false' => FALSE, 'null' => NULL];
+		static $tokens = ['true' => true, 'false' => false, 'null' => null];
 		$res = [];
 		foreach ($m[1] as $s) {
 			foreach (preg_split('#\s*,\s*#', $s, -1, PREG_SPLIT_NO_EMPTY) ?: ['true'] as $item) {
@@ -210,20 +249,20 @@ class ComponentReflection extends \ReflectionClass
 
 
 	/**
-	 * @return [string, bool]
+	 * @return array [string|null, bool]
 	 */
 	public static function getParameterType(\ReflectionParameter $param)
 	{
-		$def = gettype($param->isDefaultValueAvailable() ? $param->getDefaultValue() : NULL);
+		$def = gettype($param->isDefaultValueAvailable() ? $param->getDefaultValue() : null);
 		if (PHP_VERSION_ID >= 70000) {
 			return $param->hasType()
 				? [PHP_VERSION_ID >= 70100 ? $param->getType()->getName() : (string) $param->getType(), !$param->getType()->isBuiltin()]
-				: [$def, FALSE];
+				: [$def, false];
 		} elseif ($param->isArray() || $param->isCallable()) {
-			return [$param->isArray() ? 'array' : 'callable', FALSE];
+			return [$param->isArray() ? 'array' : 'callable', false];
 		} else {
 			try {
-				return ($ref = $param->getClass()) ? [$ref->getName(), TRUE] : [$def, FALSE];
+				return ($ref = $param->getClass()) ? [$ref->getName(), true] : [$def, false];
 			} catch (\ReflectionException $e) {
 				if (preg_match('#Class (.+) does not exist#', $e->getMessage(), $m)) {
 					throw new \LogicException(sprintf(
@@ -261,7 +300,7 @@ class ComponentReflection extends \ReflectionClass
 	public function getAnnotation($name)
 	{
 		$res = self::parseAnnotation($this, $name);
-		return $res ? end($res) : NULL;
+		return $res ? end($res) : null;
 	}
 
 
@@ -308,5 +347,4 @@ class ComponentReflection extends \ReflectionClass
 		}
 		Nette\Utils\ObjectMixin::strictCall(get_class($this), $name);
 	}
-
 }

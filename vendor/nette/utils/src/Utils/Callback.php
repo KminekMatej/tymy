@@ -22,9 +22,9 @@ class Callback
 	 * @param  string  method
 	 * @return \Closure
 	 */
-	public static function closure($callable, $m = NULL)
+	public static function closure($callable, $m = null)
 	{
-		if ($m !== NULL) {
+		if ($m !== null) {
 			$callable = [$callable, $m];
 
 		} elseif (is_string($callable) && count($tmp = explode('::', $callable)) === 2) {
@@ -55,6 +55,7 @@ class Callback
 	/**
 	 * Invokes callback.
 	 * @return mixed
+	 * @deprecated
 	 */
 	public static function invoke($callable, ...$args)
 	{
@@ -66,6 +67,7 @@ class Callback
 	/**
 	 * Invokes callback with an array of parameters.
 	 * @return mixed
+	 * @deprecated
 	 */
 	public static function invokeArgs($callable, array $args = [])
 	{
@@ -86,16 +88,20 @@ class Callback
 				$file = func_get_arg(5)[1]['file'];
 			}
 			if ($file === __FILE__) {
-				$msg = preg_replace("#^$function\(.*?\): #", '', $message);
-				if ($onError($msg, $severity) !== FALSE) {
+				$msg = $message;
+				if (ini_get('html_errors')) {
+					$msg = html_entity_decode(strip_tags($msg));
+				}
+				$msg = preg_replace("#^$function\(.*?\): #", '', $msg);
+				if ($onError($msg, $severity) !== false) {
 					return;
 				}
 			}
-			return $prev ? $prev(...func_get_args()) : FALSE;
+			return $prev ? $prev(...func_get_args()) : false;
 		});
 
 		try {
-			return $function(...$args);
+			return call_user_func_array($function, $args);
 		} finally {
 			restore_error_handler();
 		}
@@ -105,7 +111,7 @@ class Callback
 	/**
 	 * @return callable
 	 */
-	public static function check($callable, $syntax = FALSE)
+	public static function check($callable, $syntax = false)
 	{
 		if (!is_callable($callable, $syntax)) {
 			throw new Nette\InvalidArgumentException($syntax
@@ -128,7 +134,7 @@ class Callback
 		} elseif (is_string($callable) && $callable[0] === "\0") {
 			return '{lambda}';
 		} else {
-			is_callable($callable, TRUE, $textual);
+			is_callable(is_object($callable) ? [$callable, '__invoke'] : $callable, true, $textual);
 			return $textual;
 		}
 	}
@@ -141,9 +147,6 @@ class Callback
 	{
 		if ($callable instanceof \Closure) {
 			$callable = self::unwrap($callable);
-		} elseif ($callable instanceof Nette\Callback) {
-			trigger_error('Nette\Callback is deprecated.', E_USER_DEPRECATED);
-			$callable = $callable->getNative();
 		}
 
 		$class = class_exists(Nette\Reflection\Method::class) ? Nette\Reflection\Method::class : 'ReflectionMethod';
@@ -191,5 +194,4 @@ class Callback
 			return $r->getName();
 		}
 	}
-
 }

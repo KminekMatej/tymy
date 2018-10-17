@@ -17,20 +17,20 @@ class SessionSection implements \IteratorAggregate, \ArrayAccess
 {
 	use Nette\SmartObject;
 
+	/** @var bool */
+	public $warnOnUndefined = false;
+
 	/** @var Session */
 	private $session;
 
 	/** @var string */
 	private $name;
 
-	/** @var array  session data storage */
+	/** @var array|null  session data storage */
 	private $data;
 
-	/** @var array  session metadata storage */
-	private $meta = FALSE;
-
-	/** @var bool */
-	public $warnOnUndefined = FALSE;
+	/** @var array|bool  session metadata storage */
+	private $meta = false;
 
 
 	/**
@@ -47,12 +47,9 @@ class SessionSection implements \IteratorAggregate, \ArrayAccess
 	}
 
 
-	/**
-	 * Do not call directly. Use Session::getNamespace().
-	 */
 	private function start()
 	{
-		if ($this->meta === FALSE) {
+		if ($this->meta === false) {
 			$this->session->start();
 			$this->data = &$_SESSION['__NF']['DATA'][$this->name];
 			$this->meta = &$_SESSION['__NF']['META'][$this->name];
@@ -62,7 +59,7 @@ class SessionSection implements \IteratorAggregate, \ArrayAccess
 
 	/**
 	 * Returns an iterator over all section variables.
-	 * @return \ArrayIterator
+	 * @return \Iterator
 	 */
 	public function getIterator()
 	{
@@ -181,7 +178,7 @@ class SessionSection implements \IteratorAggregate, \ArrayAccess
 	 * @param  mixed   optional list of variables / single variable to expire
 	 * @return static
 	 */
-	public function setExpiration($time, $variables = NULL)
+	public function setExpiration($time, $variables = null)
 	{
 		$this->start();
 		if ($time) {
@@ -193,7 +190,7 @@ class SessionSection implements \IteratorAggregate, \ArrayAccess
 		}
 
 		foreach (is_array($variables) ? $variables : [$variables] as $variable) {
-			$this->meta[$variable]['T'] = $time ?: NULL;
+			$this->meta[$variable]['T'] = $time ?: null;
 		}
 		return $this;
 	}
@@ -204,7 +201,7 @@ class SessionSection implements \IteratorAggregate, \ArrayAccess
 	 * @param  mixed   optional list of variables / single variable to expire
 	 * @return void
 	 */
-	public function removeExpiration($variables = NULL)
+	public function removeExpiration($variables = null)
 	{
 		$this->start();
 		foreach (is_array($variables) ? $variables : [$variables] as $variable) {
@@ -220,8 +217,7 @@ class SessionSection implements \IteratorAggregate, \ArrayAccess
 	public function remove()
 	{
 		$this->start();
-		$this->data = NULL;
-		$this->meta = NULL;
+		$this->data = null;
+		$this->meta = null;
 	}
-
 }

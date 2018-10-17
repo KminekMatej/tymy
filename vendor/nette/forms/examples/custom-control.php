@@ -10,30 +10,31 @@ if (@!include __DIR__ . '/../vendor/autoload.php') {
 }
 
 use Nette\Forms\Form;
-use Nette\Utils\Html;
 use Nette\Forms\Helpers;
+use Nette\Utils\Html;
 
 
 class DateInput extends Nette\Forms\Controls\BaseControl
 {
 	/** @var string */
-	private
-		$day = '',
-		$month = '',
-		$year = '';
+	private $day = '';
+
+	private $month = '';
+
+	private $year = '';
 
 
-	public function __construct($label = NULL)
+	public function __construct($label = null)
 	{
 		parent::__construct($label);
-		$this->setRequired(FALSE)
+		$this->setRequired(false)
 			->addRule([__CLASS__, 'validateDate'], 'Date is invalid.');
 	}
 
 
 	public function setValue($value)
 	{
-		if ($value === NULL) {
+		if ($value === null) {
 			$this->day = $this->month = $this->year = '';
 		} else {
 			$date = Nette\Utils\DateTime::from($value);
@@ -46,13 +47,13 @@ class DateInput extends Nette\Forms\Controls\BaseControl
 
 
 	/**
-	 * @return DateTimeImmutable|NULL
+	 * @return DateTimeImmutable|null
 	 */
 	public function getValue()
 	{
 		return self::validateDate($this)
-			? (new DateTimeImmutable)->setDate($this->year, $this->month, $this->day)->setTime(0, 0)
-			: NULL;
+			? (new DateTimeImmutable)->setDate((int) $this->year, (int) $this->month, (int) $this->day)->setTime(0, 0)
+			: null;
 	}
 
 
@@ -86,12 +87,13 @@ class DateInput extends Nette\Forms\Controls\BaseControl
 				'type' => 'number',
 				'min' => 1,
 				'max' => 31,
-				'data-nette-rules' => Helpers::exportRules($this->getRules()) ?: NULL,
+				'data-nette-rules' => Helpers::exportRules($this->getRules()) ?: null,
 			])
 
 			. Helpers::createSelectBox(
 					[1 => 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-					['selected?' => $this->month]
+					[],
+					$this->month
 				)->name($name . '[month]')
 
 			. Html::el('input', [
@@ -110,9 +112,8 @@ class DateInput extends Nette\Forms\Controls\BaseControl
 		return ctype_digit($control->day)
 			&& ctype_digit($control->month)
 			&& ctype_digit($control->year)
-			&& checkdate($control->month, $control->day, $control->year);
+			&& checkdate((int) $control->month, (int) $control->day, (int) $control->year);
 	}
-
 }
 
 
