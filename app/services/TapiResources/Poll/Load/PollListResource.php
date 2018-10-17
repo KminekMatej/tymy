@@ -25,6 +25,9 @@ class PollListResource extends PollResource {
 
     protected function postProcess() {
         $this->options->warnings = 0;
+        if($this->data == null)
+            return null;
+        
         foreach ($this->data as $poll) {
             parent::postProcessPoll($poll);
         }
