@@ -35,8 +35,11 @@ function Binder (settings) {
     this.SPINNER_CLASS = !settings.spinClass ? "fa-spin" : settings.spinClass;
     this.SAVE_BTN_CLASS = !settings.saveBtnClass ? "binder-save-btn" : settings.saveBtnClass;
     this.DELETE_BTN_CLASS = !settings.deleteBtnClass ? "binder-delete-btn" : settings.deleteBtnClass;
+    this.DELETE_CONFIRM = !settings.deleteConfirmation ? false : settings.deleteConfirmation;
     this.BUTTON_CHECKED_CLASS = !settings.checkedBtnClass ? "active" : settings.checkedBtnClass;
     this.SAVE_ALL_BTN_CLASS = !settings.saveAllSelector ? "binder-save-all-btn" : settings.saveAllSelector;
+    this.CHECKBOX_CHECKED = !settings.checkboxValueChecked ? "true" : settings.checkboxValueChecked;
+    this.CHECKBOX_UNCHECKED = !settings.checkboxValueUnChecked ? "false" : settings.checkboxValueUnChecked;
     this.saveButtons = this.area.find("." + this.SAVE_BTN_CLASS);
     this.saveAllButtons = $("." + this.SAVE_ALL_BTN_CLASS);
     this.isValid = !settings.isValid ? true : settings.isValid;
@@ -67,31 +70,55 @@ Binder.prototype.bindChangeEvents = function () {
             if ($(this).prop("tagName") === "BUTTON") {
                 $(this).off("click");
                 $(this).click(function(){
-                    binderObj.getChanges();
-                    binderObj.changeSaveButtonClass(binderObj.changed);
-                    binderObj.changeSaveAllButtonClass(binderObj.changed);
+                    binderObj.fireClick();
                 });
             } else {
                 $(this).off("change");
                 $(this).change(function(){
-                    binderObj.getChanges();
-                    binderObj.changeSaveButtonClass(binderObj.changed);
-                    binderObj.changeSaveAllButtonClass(binderObj.changed);
+                    binderObj.fireChange();
                 });
             }
         });
     }
 };
 
+Binder.prototype.fireClick = function () {
+    var binderObj = this;
+    binderObj.getChanges();
+    binderObj.changeSaveButtonClass(binderObj.changed);
+    binderObj.changeSaveAllButtonClass(binderObj.changed);
+}
+
+Binder.prototype.fireChange = function () {
+    var binderObj = this;
+    binderObj.getChanges();
+    binderObj.changeSaveButtonClass(binderObj.changed);
+    binderObj.changeSaveAllButtonClass(binderObj.changed);
+}
+
 Binder.prototype.bindSaveEvent = function () {
     var binderObj = this;
     if (this.saveButtons.length > 0) {
         this.saveButtons.each(function () {
-            $(this).off("click");
-            $(this).click(function () {
-                binderObj.extractBind();
-                binderObj.save($(this));
-            });
+            var tagName = $(this).prop("tagName");
+            if (["INPUT", "SELECT", "TEXTAREA"].indexOf(tagName) > -1){
+                //PERFORM BIND TO BLUR EVENT
+                $(this).off("blur");
+                $(this).blur(function () {
+                    binderObj.extractBind();
+                    binderObj.save($(this));
+                });
+            } else {
+                //PERFORM BIND TO CLICK EVENT
+                $(this).off("click");
+                $(this).click(function () {
+                    binderObj.extractBind();
+                    binderObj.save($(this));
+                });
+            }
+                
+                
+            
         });
     }
 };
@@ -122,6 +149,8 @@ Binder.prototype.bindDeleteEvent = function () {
             $(this).off("click");
             $(this).click(function () {
                 binderObj.extractBind();
+                if(binderObj.DELETE_CONFIRM && window.confirm(binderObj.DELETE_CONFIRM) === false)
+                    return;
                 binderObj.delete($(this));
             });
         });
@@ -137,7 +166,6 @@ Binder.prototype.save = function (caller) {
         alert("Validation failing, saving disabled!");
         return false;
     }
-        
     var binderObj = this;
     if (!($.isEmptyObject(binderObj.bind.changes))) {
         binderObj.disableSaveButtons(true, true);
@@ -249,23 +277,27 @@ Binder.prototype.getButtonClass = function(button){
     return detectedClass;
 }
 
-Binder.prototype.changeSaveButtonClass = function (commitPending){
+Binder.prototype.changeSaveButtonClass = function (commitPending) {
     var binderObj = this;
     var targets = binderObj.saveButtons;
     var cls, newCls;
     if (targets.length > 0) {
         targets.each(function () {
             cls = binderObj.getButtonClass($(this));
-            var isOutlined = cls.indexOf("btn-outline") !== -1;
-            if (commitPending) {
-                if(isOutlined) return;
-                newCls = cls.replace("btn", "btn-outline");
-            } else {
-                if(!isOutlined) return;
-                newCls = cls.replace("btn-outline", "btn");
+            if (cls) {
+                var isOutlined = cls.indexOf("btn-outline") !== -1;
+                if (commitPending) {
+                    if (isOutlined)
+                        return;
+                    newCls = cls.replace("btn", "btn-outline");
+                } else {
+                    if (!isOutlined)
+                        return;
+                    newCls = cls.replace("btn-outline", "btn");
+                }
+                $(this).removeClass(cls);
+                $(this).addClass(newCls);
             }
-            $(this).removeClass(cls);
-            $(this).addClass(newCls);
         });
     }
 };
@@ -348,6 +380,11 @@ Binder.prototype.getValue = function(element){
 
 Binder.prototype.parseNameFromElement = function (element){
     var binderObj = this;
+    
+    if(typeof(element.attr(binderObj.DBFIELD_NAME_ATTRIBUTE)) == "undefined"){
+        throw "Binder error - element monitored by Binder doesn't have attribute " + binderObj.DBFIELD_NAME_ATTRIBUTE + " with the field name!";
+    }
+    
     var bracketBegin = element.attr(binderObj.DBFIELD_NAME_ATTRIBUTE).indexOf("[");
     if(bracketBegin == -1){
         return element.attr(binderObj.DBFIELD_NAME_ATTRIBUTE);
@@ -380,7 +417,7 @@ Binder.prototype.parseValueFromGroupOfElements = function (element) {
 };
 
 Binder.prototype.parseValueFromElement = function(element){
-    if(element.is(":checkbox")) return element.is(":checked") ? "true" : "false";
+    if(element.is(":checkbox")) return element.is(":checked") ? this.CHECKBOX_CHECKED : this.CHECKBOX_UNCHECKED;
     if(element.prop("tagName") == "BUTTON") return element.hasClass(this.BUTTON_CHECKED_CLASS);
     return element.val();
 }
