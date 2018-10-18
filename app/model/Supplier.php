@@ -117,6 +117,10 @@ class Supplier {
         $this->eventColors = $eventColors;
         return $this;
     }
+    
+    public function getVersions() {
+        return $this->versions;
+    }
 
     public function getVersion($index = 0) {
         return $this->versions[$index];

@@ -159,8 +159,17 @@ class SettingsPresenter extends SecuredPresenter {
 
     public function actionApp() {
         $this->setLevelCaptions(["2" => ["caption" => "Aplikace", "link" => $this->link("Settings:app")]]);
-        $this->template->version = $this->supplier->getVersion(0);
-        $this->template->previousVersion = $this->supplier->getVersion(1);
+        $currentVersion = $this->supplier->getVersion(0);
+        $this->template->version = $currentVersion;
+        $previousVersion = NULL;
+        foreach ($this->supplier->getVersions() as $version) {
+            if($currentVersion->major != $version->major || $currentVersion->minor != $version->minor){
+                $previousVersion = $version;
+                break;
+            }
+        }
+        if($previousVersion === NULL) $previousVersion = $this->supplier->getVersion(count($this->supplier->getVersions()));
+        $this->template->previousVersion = $previousVersion;
     }
     
     public function renderDiscussion_new() {
