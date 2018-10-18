@@ -127,17 +127,18 @@ class TapiService {
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, TRUE);
         }
-        
+        $formattedData = NULL;
         if ($this->tapiObject->getMethod() != RequestMethod::GET) {
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->tapiObject->getMethod());
             if ($this->tapiObject->getRequestData()) {
                 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $this->tapiObject->getJsonEncoding() ? json_encode($this->tapiObject->getRequestData()) : $this->tapiObject->getRequestData());
+                $formattedData = $this->tapiObject->getJsonEncoding() ? json_encode($this->tapiObject->getRequestData()) : $this->tapiObject->getRequestData();
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $formattedData);
             }
         }
         $result = ["data" => curl_exec($ch), "info" => curl_getinfo($ch)];
         curl_close($ch);
-        $this->tapiPanel->logAPI("TAPI request", $this->url, Debugger::timer("tapi-request $objectHash"));
+        $this->tapiPanel->logAPI($this->url, $this->tapiObject->getMethod(), $formattedData, Debugger::timer("tapi-request $objectHash"), $result["info"]["http_code"]);
         return (object) $result;
     }
 

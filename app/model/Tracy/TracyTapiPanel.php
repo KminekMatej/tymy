@@ -21,11 +21,12 @@ class TracyTapiPanel implements Tracy\IBarPanel{
     }
 
     public function getPanel(){
-        $ret = "<h1>".$this->team."</h1>";
+        $ret = "<h1>".$this->team."</h1>"
+                . "<div class=\"tracy-inner\"><table class=\"table\">";
         foreach ($this->requests as $req) {
-            $ret .= "<div class=\"tracy-inner\">".$req->write()."</div>";
+            $ret .= $req->write();
         }
-        return $ret;
+        return $ret. "</table></div>";
     }
     
     public function team($teamName){
@@ -33,11 +34,8 @@ class TracyTapiPanel implements Tracy\IBarPanel{
         return $this;
     }
     
-    public function logAPI($name, $desc, $time) {
-        $reqT = new TapiRequestTimestamp();
-        $reqT->name($name)
-                ->desc($desc)
-                ->time($time);
+    public function logAPI($requestURI, $requestMethod, $requestData, $time, $responseCode) {
+        $reqT = new TapiRequestTimestamp($requestURI, $requestMethod, $requestData, $time, $responseCode);
         $this->requests[] = $reqT;
     }
 
