@@ -161,7 +161,8 @@ class TeamPresenter extends SecuredPresenter {
             try {
                 $this->avatarUploader->init()
                         ->setId($bind["id"])
-                        ->setAvatar($avatarB64);
+                        ->setAvatar($avatarB64)
+                        ->perform();
             } catch (APIException $ex) {
                 $this->handleTapiException($ex, "this");
             }
