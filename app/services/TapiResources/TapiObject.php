@@ -23,6 +23,7 @@ abstract class TapiObject {
     const CACHE_TIMEOUT_SMALL = 180; // 3 minutes - smallest allowed timeout
     const CACHE_TIMEOUT_MEDIUM = 300; // 5 minutes - medium timeout
     const CACHE_TIMEOUT_LARGE = 600; // 10 minutes - timeout larger than user usually stays on site
+    const CACHE_TIMEOUT_DAY = 86400; // one day - for abnormal caching purposes
     
     const BAD_REQUEST = 400;
     

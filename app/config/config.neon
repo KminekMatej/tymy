@@ -69,6 +69,7 @@ services:
         - Tapi\NoteEditResource
         - Tapi\NoteDeleteResource
         - Tapi\AuthDetailResource
+        - Tapi\IsResource
 
 
 

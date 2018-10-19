@@ -2,20 +2,22 @@
 
 namespace App\Presenters;
 
-use Nette;
-use App\Forms;
-use Nette\Application\UI\Form;
-use App\Forms\SignInFormFactory;
-use App\Forms\SignUpFormFactory;
 use App\Forms\PwdLostFormFactory;
 use App\Forms\PwdResetFormFactory;
+use App\Forms\SignInFormFactory;
+use App\Forms\SignUpFormFactory;
 use App\Model\Supplier;
+use App\Model\TapiAuthenticator;
+use Nette;
+use Nette\Application\UI\Form;
+use stdClass;
+use Tapi\Exception\APIException;
+use Tapi\IsResource;
 use Tapi\LogoutResource;
 use Tapi\PasswordLostResource;
 use Tapi\PasswordResetResource;
-use App\Model\TapiAuthenticator;
 use Tapi\TapiService;
-use Tapi\Exception\APIException;
+use Tracy\Debugger;
 
 
 class SignPresenter extends BasePresenter {
@@ -50,6 +52,9 @@ class SignPresenter extends BasePresenter {
     /** @var TapiService @inject */
     public $tapiService;
     
+    /** @var IsResource @inject */
+    public $is;
+    
     /**
      * Sign-in form factory.
      * @return Nette\Application\UI\Form
@@ -71,7 +76,7 @@ class SignPresenter extends BasePresenter {
                 }
             }
             if(!is_null($this->user->getIdentity()))
-                \Tracy\Debugger::log($this->user->getIdentity()->data["callName"] . "@" . $this->supplier->getTym () . " logged in");
+                Debugger::log($this->user->getIdentity()->data["callName"] . "@" . $this->supplier->getTym () . " logged in");
             $this->redirect('Homepage:');
         });
 
@@ -95,7 +100,7 @@ class SignPresenter extends BasePresenter {
      */
     protected function createComponentPwdLostForm() {
         $form = $this->pwdLostFactory->create();
-        $form->onSuccess[] = function (Nette\Application\UI\Form $form, \stdClass $values) {
+        $form->onSuccess[] = function (Nette\Application\UI\Form $form, stdClass $values) {
             try {
                 $this->pwdLost->init()
                         ->setCallbackUri($this->getHttpRequest()->getUrl()->getBaseUrl() . $this->link('Sign:pwdreset', ["code" => "%s"]))
@@ -120,7 +125,7 @@ class SignPresenter extends BasePresenter {
      */
     protected function createComponentPwdResetForm() {
         $form = $this->pwdResetFactory->create();
-        $form->onSuccess[] = function (Nette\Application\UI\Form $form, \stdClass $values) {
+        $form->onSuccess[] = function (Nette\Application\UI\Form $form, stdClass $values) {
             $data = $this->resetPwd($values->code);
             $this->flashMessage('Vaše heslo bylo úspěšně resetováno');
             $this->redirect('Sign:pwdnew', ["pwd" => $data]);
@@ -151,6 +156,8 @@ class SignPresenter extends BasePresenter {
     
     public function renderIn(){
         $this->template->multiple = $this->supplier->getTapi_config()["multiple_team"];
+        $is = $this->is->getData();
+        $this->template->teamName = strtoupper($is->teamName);
     }
     
     private function resetPwd($code){
