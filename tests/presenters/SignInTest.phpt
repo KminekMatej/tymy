@@ -32,6 +32,7 @@ class SignInTest extends IPresenterTest {
 
         $dom = DomQuery::fromHtml($html);
 
+        Assert::true($dom->has('h4 pb-3'));
         Assert::true($dom->has('input[name="name"]'));
         Assert::true($dom->has('input[name="password"]'));
         Assert::true($dom->has('input[name="send"]'));
