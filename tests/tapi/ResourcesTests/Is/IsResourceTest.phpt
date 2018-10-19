@@ -12,7 +12,7 @@ if (in_array(basename(__FILE__, '.phpt') , $GLOBALS["testedTeam"]["skips"])) {
     Environment::skip('Test skipped as set in config file.');
 }
 
-class InResourceTest extends TapiTest {
+class IsResourceTest extends TapiTest {
     
     public function getCacheable() {
         return TRUE;
@@ -34,8 +34,7 @@ class InResourceTest extends TapiTest {
         $data = $this->tapiObject->getData(TRUE);
         
         Assert::true(is_object($data));
-        
-        Assert::type("string", $data->sysname);
+        Assert::type("string", $data->sysName);
         Assert::type("string", $data->name);
         Assert::type("string", $data->defaultLangugeCode);
         Assert::type("array", $data->languages);
@@ -43,5 +42,5 @@ class InResourceTest extends TapiTest {
 
 }
 
-$test = new InResourceTest($container);
+$test = new IsResourceTest($container);
 $test->run();
