@@ -9,7 +9,7 @@
         <meta name="author" content="Matej Kminek">
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        <title>{$tym|firstUpper} | Tymy.CZ v2</title>
+        <title>{ifset $title}{$title} | {/ifset}{$tym|firstUpper} | Tymy.CZ v2</title>
 
         {block styles}
         <link rel="shortcut icon" href="{$basePath}/favicon.ico" type="image/x-icon"/>
