@@ -1,0 +1,13 @@
+copyToClipboard: Kopírovat do schránky
+edit: Upravit
+copy: Kopírovat
+delete: Smazat
+edited: "Upravil (a)"
+everyone: Všichni
+refresh: Obnovit
+insert: Vložit
+navigationBlock:
+    first: První
+    previous: Předchozí
+    next: Následující
+    last: Poslední
