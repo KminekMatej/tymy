@@ -11,12 +11,19 @@ use App\Model;
  */
 abstract class BasePresenter extends Nette\Application\UI\Presenter {
     
+    /** @persistent */
+    public $locale;
+
+    /** @var \Kdyby\Translation\Translator @inject */
+    public $translator;
+
     /** @var \App\Model\Supplier @inject */
     public $supplier;
     
     public function beforeRender() {
         parent::beforeRender();
-        
+        $this->translator->setDefaultLocale("EN");
+        $this->template->setTranslator($this->translator);
         date_default_timezone_set('Europe/Prague');
         
         $this->template->js = \Tracy\Debugger::$productionMode ? "min.js" : "js";

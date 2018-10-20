@@ -76,3 +76,5 @@ services:
 
 tracy:
     email: matej.kminek@attendees.eu
+extensions:
+    translation: Kdyby\Translation\DI\TranslationExtension

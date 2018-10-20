@@ -1,0 +1,22 @@
+username: Username
+password: Password
+login: Login
+register: Register
+pwdLost: Lost password
+common:
+    username: Username
+    password: Password
+    login: Login
+    register: Register
+    pwdLost: Lost password
+
+Discussion:
+Error:
+Event:
+Homepage:
+Notes:
+Poll:
+Secured:
+Settings:
+Sign:
+Team:
