@@ -1,3 +1,6 @@
+discussion: Diskuze
+noDiscussion: Žádná diskuze
+
 unpin: Odepnout
 pin: Připnout
 copyToClipboard: Kopírovat do schránky
@@ -7,3 +10,5 @@ jump2date: Skok na datum
 go: Hop
 postBlock:
     enterSearchTerms: Zadejte hledaný text ...
+errors:
+    noDiscussionExists: Tato diskuze neexistuje

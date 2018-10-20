@@ -4,8 +4,13 @@ copy: Kopírovat
 delete: Smazat
 edited: "Upravil (a)"
 everyone: Všichni
+allOfThem: Všechny
 refresh: Obnovit
 insert: Vložit
+mainPage: Hlavní stránka
+search: Hledat
+toogleNavigation: Otevřít navigační menu
+new: Nový
 navigationBlock:
     first: První
     previous: Předchozí

@@ -1,5 +1,6 @@
 username: Uživatelské jméno
 password: Heslo
 login: Login
+logout: Odhlásit
 register: Registrovat
 pwdLost: Ztracené heslo

@@ -41,7 +41,7 @@ class DiscussionPresenter extends SecuredPresenter {
     
     public function startup() {
         parent::startup();
-        $this->setLevelCaptions(["1" => ["caption" => "Diskuze", "link" => $this->link("Discussion:")]]);
+        $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("discussion.discussion"), "link" => $this->link("Discussion:")]]);
     }
 
     public function renderDefault() {
@@ -122,7 +122,7 @@ class DiscussionPresenter extends SecuredPresenter {
         
         parent::showNotes($discussionId);
         if (is_null($discussionId) || $discussionId < 1)
-            $this->error("Tato diskuze neexistuje");
+            $this->error($this->translator->translate("discussion.errors.noDiscussionExists"));
         $this->discussionPage->init();
         
         $this->discussionPage

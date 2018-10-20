@@ -23,7 +23,7 @@
                             </select>
                         </div>
                         <span class="mr-auto">
-                            <input type="submit" value="Hledat" class="form-control btn btn-outline-success mr-sm-2">
+                            <input type="submit" value="{_common.search}" class="form-control btn btn-outline-success mr-sm-2">
                             <a n:if="$search || $suser" href="{plink Discussion:discussion $discussion->discussion->webName}" class="btn btn-outline-secondary" title="{_common.refresh}" onclick="$(this).children('i').addClass('fa-spin')"><i class="fa fa-sync" aria-hidden="true"></i></a>
                         </span>
                         <button onclick="updatePost({plink Discussion:editpost $discussion->discussion->id})" type="button" class="btn btn-warning mx-1" id="editPost" n:if="$discussion->discussion->canWrite">{_common.edit}</button>    

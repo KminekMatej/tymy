@@ -108,7 +108,7 @@ class SecuredPresenter extends BasePresenter {
         $this->tapiAuthorizator->setApiRights($this->apiRights);
         
         $this->setAccessibleSettings();
-        $this->setLevelCaptions(["0" => ["caption" => "Hlavní stránka", "link" => $this->link("Homepage:")]]);
+        $this->setLevelCaptions(["0" => ["caption" => $this->translator->translate("common.mainPage"), "link" => $this->link("Homepage:")]]);
         $this->template->tym = $this->supplier->getTym();
         $this->template->noteList = $this->noteList->init()->getData();
         $this->showNotes();

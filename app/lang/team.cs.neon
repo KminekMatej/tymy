@@ -1,3 +1,6 @@
-PLAYER: 'HRÁČ|HRÁČI'
-MEMBER: 'ČLEN|ČLENOVÉ'
-SICK: 'MAROD|MARODI'
+team: Tým|Týmy
+PLAYER: 'Hráč|Hráči'
+MEMBER: 'Člen|Členové'
+SICK: 'Marod|Marodi'
+INIT: 'Registrován|Registrovaní'
+jerseyList: Seznam dresů
