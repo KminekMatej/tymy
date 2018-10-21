@@ -12,6 +12,8 @@ search: Hledat
 toogleNavigation: Otevřít navigační menu
 new: Nový
 link: Odkaz
+chooseFile: Vyberte soubor
+chooseSex: Vyberte pohlaví
 navigationBlock:
     first: První
     previous: Předchozí

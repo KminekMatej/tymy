@@ -3,4 +3,40 @@ PLAYER: 'Hráč|Hráči'
 MEMBER: 'Člen|Členové'
 SICK: 'Marod|Marodi'
 INIT: 'Registrován|Registrovaní'
+DELETED: 'Smazán|Smazaní'
 jerseyList: Seznam dresů
+newMailToAll: Nový e-mail všem
+newMailTo: Nový email pro
+freeNumber: Volné
+inActive: Neaktivní
+personalData: Osobní údaje
+loginData: Přihlášení
+teamData: Týmové info
+address: Adresa
+roles: Role|Role
+profilePhoto: Profilovka
+male: Muž
+female: Žena
+sex: Pohlaví
+chooseSex: Vyberte pohlaví
+firstname: Jméno
+surname: Příjmení
+phone: Telefon
+email: E-mail
+dateOfBirth: Datum narození
+namedayMonth: Měsíc svátku
+chooseMonth: Vyberte měsíc
+namedayDay: Den svátku
+language: Jazyk
+dateOfRegistration: Registrován
+displayedName: Zobrazované jméno
+displayedNameUserEditable: Editovatelné uživatelem
+username: Uživatelské jméno
+newPassword: Nové heslo
+newPasswordAgain: Nové heslo znovu
+loginEnabled: Přihlášení povoleno
+status: Týmový stav
+jerseyNumber: Číslo dresu
+street: Ulice
+city: Město
+postal: PSČ

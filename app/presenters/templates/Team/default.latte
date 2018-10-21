@@ -9,7 +9,7 @@
 <div class="container users">
     <div class="row mt-2">
         <div class="col text-right">
-            <div class="settings-bar"><a href="mailto:{$allMails}" class="btn btn-outline-light" title="Nový e-mail všem" role="button" aria-pressed="true"><i class="fa fa-envelope" aria-hidden="true"></i></a></div>
+            <div class="settings-bar"><a href="mailto:{$allMails}" class="btn btn-outline-light" title="{_team.newMailToAll}" role="button" aria-pressed="true"><i class="fa fa-envelope" aria-hidden="true"></i></a></div>
         </div>
     </div>
     <div class="row">
@@ -19,7 +19,7 @@
                     <a href="{plink Team:player $u->webName}">
                         <div class="card-header py-1 {$u->gender}">
                             <span class="name">{$u->displayName}{if $u->jerseyNumber != ""} (#{$u->jerseyNumber}){/if}</span>
-                            <span n:if="$u->isNew" class="badge badge-success float-right">Nový</span>
+                            <span n:if="$u->isNew" class="badge badge-success float-right">{_common.new}</span>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -33,7 +33,7 @@
                         </div>
                     </a>
                     <div class="btnbox">
-                        <a href="mailto:{$u->email}" n:if="property_exists($u, 'email')" class="btn btn-sm btn-light btn-light-bordered" title="Nový e-mail na {$u->email}" role="button" aria-pressed="true"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+                        <a href="mailto:{$u->email}" n:if="property_exists($u, 'email')" class="btn btn-sm btn-light btn-light-bordered" title="{_team.newMailTo} {$u->email}" role="button" aria-pressed="true"><i class="fa fa-envelope" aria-hidden="true"></i></a>
                     </div>
                 </div>
             </div>
