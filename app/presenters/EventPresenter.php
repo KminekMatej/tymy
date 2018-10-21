@@ -78,7 +78,9 @@ class EventPresenter extends SecuredPresenter {
     }
 
     public function renderEvent($udalost) {
-        
+        $this->template->cptNotDecidedYet = $this->translator->translate('event.notDecidedYet');
+        $this->template->cptArrived = $this->translator->translate('event.arrived',2);
+        $this->template->cptNotArrived = $this->translator->translate('event.notArrived',2);
         try {
             $event = $this->eventDetail->init()
                     ->setId($this->parseIdFromWebname($udalost))

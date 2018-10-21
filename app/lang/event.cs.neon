@@ -1,1 +1,15 @@
 event: Událost|Události
+noEvent: Žádná událost
+showHidePastEvents: Zobrazit/skrýt již proběhlé akce
+agenda: Agenda
+openMap: Otevřít mapu ....
+start: Začátek
+close: Uzávěrka
+end: Konec
+attendanceNotFilled: Nemáš vyplněnou docházku
+notDecidedYet: Nerozhodnutí
+arrived: Přišel|Přišli
+notArrived: Nepřišel|Nepřišli
+attendanceResult: Výsledná docházka
+setAttendanceResult: Zadat výslednou docházku
+saveAttendanceResult: Uložit výslednou docházku

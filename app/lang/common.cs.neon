@@ -11,6 +11,7 @@ mainPage: Hlavní stránka
 search: Hledat
 toogleNavigation: Otevřít navigační menu
 new: Nový
+link: Odkaz
 navigationBlock:
     first: První
     previous: Předchozí

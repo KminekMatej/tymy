@@ -19,32 +19,32 @@
                     <div class="row">
                         <div class="col"><h4 class="card-title">{$event->caption}</h4></div>
                         <div class="col col-md-auto" n:if="$user->isAllowed('event','canUpdate')">
-                            <a class="btn btn-sm btn-light btn-light-bordered" title="Upravit" href="{plink Settings:events $event->webName}"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                            <a class="btn btn-sm btn-light btn-light-bordered" title="{_common.edit}" href="{plink Settings:events $event->webName}"><i class="fa fa-edit" aria-hidden="true"></i></a>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
                     
                     {var $mapLink = filter_var($event->place, FILTER_VALIDATE_URL) ? $event->place : 'https://www.google.com/maps/search/?api=1&query='.urlencode($event->place)}
-                    <h6 class="card-subtitle mb-2 text-muted">{$event->eventType->caption}<span n:if="$event->place"> - <a href="{$mapLink}" target="blank" title="Otevřít mapu...">{$event->place}</a></span><span n:if="$event->link"> - <a href="{$event->link}" target="_blank">[Odkaz]</a></span></h6>
+                    <h6 class="card-subtitle mb-2 text-muted">{$event->eventType->caption}<span n:if="$event->place"> - <a href="{$mapLink}" target="blank" title="{_event.openMap}">{$event->place}</a></span><span n:if="$event->link"> - <a href="{$event->link}" target="_blank">[{_common.link}]</a></span></h6>
                     <p class="card-text">{$event->description}</p>
                     <div class="row">
                         <div class="col-md-4">
                             <table class="table mb-0">
-                                <tr><th>Začátek:</th><td>{$event->startTime|date:'d.n.Y H:i'}</td></tr>
-                                <tr><th>Konec:</th><td>{$event->endTime|date:'d.n.Y H:i'}</td></tr>
-                                <tr><th>Uzávěrka:</th><td>{$event->closeTime|date:'d.n.Y H:i'}</td></tr>
+                                <tr><th>{_event.start}:</th><td>{$event->startTime|date:'d.n.Y H:i'}</td></tr>
+                                <tr><th>{_event.end}:</th><td>{$event->endTime|date:'d.n.Y H:i'}</td></tr>
+                                <tr><th>{_event.close}:</th><td>{$event->closeTime|date:'d.n.Y H:i'}</td></tr>
                             </table>
                         </div>
                         <div class="col-md-8 d-flex flex-column-reverse align-items-center">
                             <div class=" custom-container btn-group input-group pb-2" role="group" aria-label="Basic example" id="action-{$event->id}">
-                                <input type="text" class="form-control form-control-sm custom-btn-sm" title="Poznámka" name="preStatusDesc" value="{$event->myAttendance->preDescription}" />
+                                <input type="text" class="form-control form-control-sm custom-btn-sm" title="{_note.note,1}" name="preStatusDesc" value="{$event->myAttendance->preDescription}" />
                                 {foreach $eventTypes[$event->type]->preStatusSet as $preStatus}
                                     <button onclick="updateAttendance(this, {link attendance! $event->id, $preStatus->code})" class="btn custom-btn-sm {$myPreStatusCaption,$myPostStatusCaption,$preStatus->code,$event->closeTime|prestatusClass}">{$preStatus->caption}</button>
                                 {/foreach}
                             </div>
                             {snippet attendanceWarning}
-                                <div class="alert alert-danger" n:if="$myPreStatusCaption == 'not-set'"><i n:if="$event->warning" class="fa fa-arrow-down" aria-hidden="true"></i> Nemáš vyplněnou docházku ! <i n:if="$event->warning" class="fa fa-arrow-down" aria-hidden="true"></i></div>
+                                <div class="alert alert-danger" n:if="$myPreStatusCaption == 'not-set'"><i n:if="$event->warning" class="fa fa-arrow-down" aria-hidden="true"></i> {_event.attendanceNotFilled} ! <i n:if="$event->warning" class="fa fa-arrow-down" aria-hidden="true"></i></div>
                             {/snippet}
                         </div>
                     </div>
@@ -60,9 +60,9 @@
                                 {if count($status)}
                                     {var $count = array_sum(array_map('count', $status))}
                                     {if $mainKey == 'PRE'}
-                                        {var $caption = $key == 'UNKNOWN' ? 'Nerozhodnutí' : $eventTypes[$event->eventType->code]->preStatusSet[$key]->caption}
+                                        {var $caption = $key == 'UNKNOWN' ? $cptNotDecidedYet : $eventTypes[$event->eventType->code]->preStatusSet[$key]->caption}
                                     {else}
-                                        {var $caption = $key == 'YES' ? 'Přišli' : 'Nepřišli'}
+                                        {var $caption = $key == 'YES' ? $cptArrived : $cptNotArrived}
                                     {/if}
                                     
                                     <li class="nav-item">
@@ -83,17 +83,17 @@
                         {foreach $event->allUsers[$mainKey] as $key => $status}
                             {if count($status)}
                                     {if $mainKey == 'PRE'}
-                                        {var $caption = $key == 'UNKNOWN' ? 'Nerozhodnutí' : $eventTypes[$event->eventType->code]->preStatusSet[$key]->caption}
+                                        {var $caption = $key == 'UNKNOWN' ? $cptNotDecidedYet : $eventTypes[$event->eventType->code]->preStatusSet[$key]->caption}
                                     {else}
-                                        {var $caption = $key == 'YES' ? 'Přišli' : 'Nepřišli'}
+                                        {var $caption = $key == 'YES' ? $cptArrived : $cptNotArrived}
                                     {/if}
                                 <div n:class="tab-pane, fade, $first ? show, $first ? active, player-list" id="{$caption|webalize}" role="tabpanel">
                                     <div n:if="count($usrs)>0" n:foreach="$status as $gender => $usrs" class="row my-2">
                                         <div class="col-2 player-heading">
                                             <h6 style="font-weight: bold">{$gender|genderTranslate} ({count($usrs)}):</h6>
-                                            <div n:class="btn-group,result,$event->resultsClosed ? d-none" role="group" aria-label="Attendance result ({$gender|genderTranslate})" n:if="$event->canResult && $event->isPast">
-                                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="genderNCame(this)" title="NEPŘIŠLI"><i class="fa fa-window-close" aria-hidden="true"></i></button>
-                                                <button type="button" class="btn btn-sm btn-outline-success" onclick="genderCame(this)" title="PŘIŠLI"><i class="fa fa-check-square" aria-hidden="true"></i></button>
+                                            <div n:class="btn-group,result,$event->resultsClosed ? d-none" role="group" aria-label="{_event.attendanceResult} ({$gender|genderTranslate})" n:if="$event->canResult && $event->isPast">
+                                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="genderNCame(this)" title="{_event.notArrived,2}"><i class="fa fa-window-close" aria-hidden="true"></i></button>
+                                                <button type="button" class="btn btn-sm btn-outline-success" onclick="genderCame(this)" title="{_event.arrived,2}"><i class="fa fa-check-square" aria-hidden="true"></i></button>
                                             </div>
                                         </div>
                                         <div class="col-10">
@@ -103,9 +103,9 @@
                                                     <figcaption class="figure-caption">{$usr->displayName}</figcaption>
                                                     <figcaption n:if="trim($usr->preDescription) != ''" class="figure-caption" style="font-size: 70%; display: inline-block">{$usr->preDescription}</figcaption>
                                                 </a>
-                                                <div n:class="btn-group,result,$event->resultsClosed ? d-none" role="group" aria-label="Attendance result" n:if="$event->canResult && $event->isPast">
-                                                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="ncame(this)" title="NEPŘIŠEL"><i class="fa fa-times" aria-hidden="true"></i></button>
-                                                    <button type="button" class="btn btn-sm btn-outline-success" onclick="came(this)" title="PŘIŠEL"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                                <div n:class="btn-group,result,$event->resultsClosed ? d-none" role="group" aria-label="{_event.attendanceResult}" n:if="$event->canResult && $event->isPast">
+                                                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="ncame(this)" title="{_event.notArrived,1}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                                    <button type="button" class="btn btn-sm btn-outline-success" onclick="came(this)" title="{_event.arrived,1}"><i class="fa fa-check" aria-hidden="true"></i></button>
                                                 </div>
                                             </figure>
                                         </div>
@@ -118,8 +118,8 @@
                     </div>
                 </div>
                 <div class="card-footer text-right" n:if="$event->canResult && $event->isPast">
-                    <button class="btn btn-lg btn-light btn-light-bordered" n:if="$event->resultsClosed" onclick="resultsToggle(true)" title="Zadat výslednou docházku"><i class="fa fa-user-circle" aria-hidden="true"></i></button>
-                    <button n:class="btn,btn-lg,btn-outline-primary,result,update,$event->resultsClosed ? d-none" onclick="saveAttendanceResults(this, {link attendanceResult! $event->id})" title="Uložit výslednou docházku"><i class="fa fa-save" aria-hidden="true"></i></button>
+                    <button class="btn btn-lg btn-light btn-light-bordered" n:if="$event->resultsClosed" onclick="resultsToggle(true)" title="{_event.setAttendanceResult}"><i class="fa fa-user-circle" aria-hidden="true"></i></button>
+                    <button n:class="btn,btn-lg,btn-outline-primary,result,update,$event->resultsClosed ? d-none" onclick="saveAttendanceResults(this, {link attendanceResult! $event->id})" title="{_event.saveAttendanceResult}"><i class="fa fa-save" aria-hidden="true"></i></button>
                 </div>
             </div>
 

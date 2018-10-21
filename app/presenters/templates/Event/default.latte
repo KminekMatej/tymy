@@ -73,8 +73,8 @@
             {while strtotime($actMonth)<=strtotime($agendaTo)}
                 <div class="card sh-box agenda" data-month="{$actMonth}" style="display: none">
                     <div class="card-header">
-                        <span class="mr-auto">Agenda</span>
-                        <button class="btn btn-sm btn-light btn-light-bordered float-right" title="Zobrazit/skrýt již proběhlé akce" onclick="togglePast()"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                        <span class="mr-auto">{_event.agenda}</span>
+                        <button class="btn btn-sm btn-light btn-light-bordered float-right" title="{_event.showHidePastEvents}" onclick="togglePast()"><i class="fa fa-eye" aria-hidden="true"></i></button>
                     </div>
                     <div class="card-body">
                         {if isset($evMonths[$actMonth]) && count($evMonths[$actMonth]) > 0 }
@@ -85,7 +85,7 @@
                                 <div n:class="row, mb-2, $ev->isPast ? evnt-past, $ev->isPast ? collapse">
                                     <div class="col">
                                         <div class="btn-group input-group px-0" role="group" aria-label="Basic example" id="action-{$ev->id}">
-                                            <input type="text" class="form-control form-control-sm" title="Poznámka" name="preStatusDesc" value="{$ev->myAttendance->preDescription}" />
+                                            <input type="text" class="form-control form-control-sm" title="{_note.note,1}" name="preStatusDesc" value="{$ev->myAttendance->preDescription}" />
                                             {foreach $eventTypes[$ev->type]->preStatusSet as $preStatus}
                                                 <button data-test="{$ev->myPreStatusCaption}" onclick="updateAttendance(this, {link attendance! $ev->id, $preStatus->code})" class="btn btn-sm {$ev->myPreStatusCaption,$ev->myPostStatusCaption,$preStatus->code,$ev->closeTime|prestatusClass}">{$preStatus->caption}</button>
                                             {/foreach}
@@ -94,7 +94,7 @@
                                 </div>
                             {/foreach}
                         {else}
-                            Žádná událost
+                            {_event.noEvent}
                         {/if}
                     </div>
                 </div>
