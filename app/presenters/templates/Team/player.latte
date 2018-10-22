@@ -83,8 +83,8 @@
                                         <th>{_team.sex}:</th><td>
                                             <select n:class="col-3, form-control, in_array('gender',$player->errFls) ? is-invalid" style="min-width: 80px" name="gender" data-value="{$player->gender}">
                                                 <option value="UNKNOWN">{_common.chooseSex} ↓</option>
-                                                <option value="MALE" n:attr="selected => $player->gender=='MALE'">{_team.male}</option>
-                                                <option value="FEMALE" n:attr="selected => $player->gender=='FEMALE'">{_team.female}</option>
+                                                <option value="MALE" n:attr="selected => $player->gender=='MALE'">{_team.male, 1}</option>
+                                                <option value="FEMALE" n:attr="selected => $player->gender=='FEMALE'">{_team.female, 1}</option>
                                             </select>
                                         </td>
                                     </tr>

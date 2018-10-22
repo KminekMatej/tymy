@@ -28,7 +28,7 @@ class PollPresenter extends SecuredPresenter {
     
     public function startup() {
         parent::startup();
-        $this->setLevelCaptions(["1" => ["caption" => "Ankety", "link" => $this->link("Poll:")]]);
+        $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("poll.poll", 2), "link" => $this->link("Poll:")]]);
     }
     
     public function renderDefault() {

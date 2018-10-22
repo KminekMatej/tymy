@@ -20,13 +20,13 @@ class EventPresenter extends SecuredPresenter {
 
     public function startup() {
         parent::startup();
-        $this->setLevelCaptions(["1" => ["caption" => "Události", "link" => $this->link("Event:")]]);
+        $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("event.event", 2), "link" => $this->link("Event:")]]);
 
         $this->template->addFilter('genderTranslate', function ($gender) {
             switch ($gender) {
-                case "MALE": return "Muži";
-                case "FEMALE": return "Ženy";
-                case "UNKNOWN": return "Nezadáno";
+                case "MALE": return $this->translator->translate("team.male", 2);
+                case "FEMALE": return $this->translator->translate("team.female", 2);
+                case "UNKNOWN": return $this->translator->translate("team.unknownSex");
             }
         });
 

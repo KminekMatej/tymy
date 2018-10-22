@@ -16,7 +16,7 @@ class NotesPresenter extends SecuredPresenter {
     
     protected function startup() {
         parent::startup();
-        $this->setLevelCaptions(["1" => ["caption" => "Poznámky", "link" => $this->link("Notes:")]]);
+        $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("note.note", 2), "link" => $this->link("Notes:")]]);
     }
 
     

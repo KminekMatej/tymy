@@ -9,7 +9,7 @@ users: Pro členy
 public: Veřejná
 systemPage: Systémová stránka
 content: Obsah
-accessTitle: Vyberte kdo má přístup k poznámce: Soukromá (pouze vy), Pro členy, Veřejná (jde zobrazit u bez přihlášení)
+accessTitle: "Vyberte kdo má přístup k poznámce: Soukromá (pouze vy), Pro členy, Veřejná (jde zobrazit u bez přihlášení)"
 mainMenuTitle: Uvést v hlavním menu
 specialPageTitle: Vyberte speciální systémový kód poznámky. Více viz O poznámkách
 orderTitle: Pořadí v menu

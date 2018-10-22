@@ -52,6 +52,21 @@ alerts:
     loginNotSuccesfull: Přihlášení bylo neúspěšné
     logoutSuccesfull: Byl jste úspěšně odhlášen
     registrationSuccesfull: Registrace byla úspěšná. Nyní vyčkejte na schválení registrace administrátorem.
-    userNotFound: Uživatel nebyl nalezen, je zablokován nebo došlo k chybě. Zkuste to znovu, nebo kontaktujte týmového administrátora.
+    userNotFound: "Uživatel nebyl nalezen, je zablokován nebo došlo k chybě. Zkuste to znovu, nebo kontaktujte týmového administrátora."
     resetCodeSent: Kód k resetování byl zaslán na Vaši e-mailovou adresu
     pwdResetSuccesfull: Vaše heslo bylo úspěšně resetováno
+    inactivityLogout: Byl jste odhlášen z důvodu dlouhé nečinnosti. Prosím přihlašte se znovu.
+    exceptionOccured: Došlo k nečekané chybě
+months:
+    january: Leden
+    february: Únor
+    march: Březen
+    april: Duben
+    may: Květen
+    june: Červen
+    july: Červenec
+    august: Srpen
+    september: Září
+    october: Říjen
+    november: Listopad
+    december: Prosinec

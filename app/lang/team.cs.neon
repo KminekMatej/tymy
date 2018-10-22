@@ -16,8 +16,9 @@ teamData: Týmové info
 address: Adresa
 roles: Role|Role
 profilePhoto: Profilovka
-male: Muž
-female: Žena
+male: Muž|Muži
+female: Žena|Ženy
+unknownSex: Nezadáno
 sex: Pohlaví
 chooseSex: Vyberte pohlaví
 firstname: Jméno

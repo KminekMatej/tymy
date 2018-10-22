@@ -2,8 +2,11 @@
 
 namespace App\Presenters;
 
+use App\Model\Supplier;
+use Kdyby\Translation\Translator;
 use Nette;
-use App\Model;
+use Nette\Utils\DateTime;
+use Tracy\Debugger;
 
 
 /**
@@ -14,10 +17,10 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
     /** @persistent */
     public $locale;
 
-    /** @var \Kdyby\Translation\Translator @inject */
+    /** @var Translator @inject */
     public $translator;
 
-    /** @var \App\Model\Supplier @inject */
+    /** @var Supplier @inject */
     public $supplier;
     
     public function beforeRender() {
@@ -26,8 +29,8 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
         $this->template->setTranslator($this->translator);
         date_default_timezone_set('Europe/Prague');
         
-        $this->template->js = \Tracy\Debugger::$productionMode ? "min.js" : "js";
-        $this->template->css = \Tracy\Debugger::$productionMode ? "min.css" : "css";
+        $this->template->js = Debugger::$productionMode ? "min.js" : "js";
+        $this->template->css = Debugger::$productionMode ? "min.css" : "css";
         
         $this->template->tym = $this->supplier->getTym();
         $this->template->tymyRoot = $this->supplier->getTymyRoot();
@@ -37,20 +40,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
         $this->template->appDir = $this->supplier->getAppDir();
         
         $this->template->addFilter('monthName', function ($number) {
-            switch ($number) {
-                case 1: return 'Leden';
-                case 2: return 'Únor';
-                case 3: return 'Březen';
-                case 4: return 'Duben';
-                case 5: return 'Květen';
-                case 6: return 'Červen';
-                case 7: return 'Červenec';
-                case 8: return 'Srpen';
-                case 9: return 'Září';
-                case 10: return 'Říjen';
-                case 11: return 'Listopad';
-                case 12: return 'Prosinec';
-            }
+            return $this->translator->translate("common.months." . strtolower(DateTime::createFromFormat("!m", $number)->format("F"))) ;
         });
     }
     
