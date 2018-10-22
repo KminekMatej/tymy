@@ -45,3 +45,13 @@ lastLogin:
     hoursAgo: před %n% hodinami
     dayAgo: před 1 dnem
     daysAgo: před %n% dny
+alerts:
+    nobodyFound: Nikdo nenalezen
+    userSuccesfullyDeleted: Uživatel byl úspešně smazán
+    loginNotApproved: Tento uživatel zatím nemá povolené přihlášení
+    loginNotSuccesfull: Přihlášení bylo neúspěšné
+    logoutSuccesfull: Byl jste úspěšně odhlášen
+    registrationSuccesfull: Registrace byla úspěšná. Nyní vyčkejte na schválení registrace administrátorem.
+    userNotFound: Uživatel nebyl nalezen, je zablokován nebo došlo k chybě. Zkuste to znovu, nebo kontaktujte týmového administrátora.
+    resetCodeSent: Kód k resetování byl zaslán na Vaši e-mailovou adresu
+    pwdResetSuccesfull: Vaše heslo bylo úspěšně resetováno

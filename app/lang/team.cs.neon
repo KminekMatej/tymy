@@ -4,6 +4,7 @@ MEMBER: 'Člen|Členové'
 SICK: 'Marod|Marodi'
 INIT: 'Registrován|Registrovaní'
 DELETED: 'Smazán|Smazaní'
+jersey: Dres|Dresy
 jerseyList: Seznam dresů
 newMailToAll: Nový e-mail všem
 newMailTo: Nový email pro
@@ -47,3 +48,6 @@ hasBirthdayTommorow: %name% slaví zítra %year% narozeniny
 currentlyOnline: Právě online
 lastLogin: Poslední přihlášení
 nobodyIsOnline: Nikdo není online
+administrator: Administrátor
+userAdmin: Správce uživatelů
+attendanceAdmin: Správce docházky

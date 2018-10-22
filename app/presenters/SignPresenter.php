@@ -68,10 +68,10 @@ class SignPresenter extends BasePresenter {
             } catch (APIException $exc) {
                 switch ($exc->getMessage()) {
                     case "Login not approved":
-                        $this->flashMessage('Tento uživatel zatím nemá povolené přihlášení', "danger");
+                        $this->flashMessage($this->translator->translate("common.alerts.loginNotApproved"), "danger");
                         break;
                     default:
-                        $this->flashMessage('Přihlášení bylo neúspěšné (' . $exc->getMessage() . ")", "danger");
+                        $this->flashMessage($this->translator->translate("common.alerts.loginNotSuccesfull") . ' (' . $exc->getMessage() . ")", "danger");
                         break;
                 }
             }
@@ -89,7 +89,7 @@ class SignPresenter extends BasePresenter {
      */
     protected function createComponentSignUpForm() {
         return $this->signUpFactory->create(function () {
-                    $this->flashMessage('Succesfully registered. Now you need to wait for administrator approval.', 'success');
+                    $this->flashMessage($this->translator->translate("common.alerts.registrationSuccesfull"), 'success');
                     $this->redirect('Sign:In');
                 });
     }
@@ -108,11 +108,11 @@ class SignPresenter extends BasePresenter {
                         ->setMail($values->email)
                         ->getData();    
             } catch (APIException $ex) {
-                $this->flashMessage('Uživatel nebyl nalezen, je zablokován nebo došlo k chybě. Zkuste to znovu, nebo kontaktujte týmového administrátora.');
+                $this->flashMessage($this->translator->translate("common.alerts.userNotFound"));
                 $this->redirect('Sign:pwdlost');
             }
             
-            $this->flashMessage('Kód k resetování byl zaslán na Vaši e-mailovou adresu');
+            $this->flashMessage($this->translator->translate("common.alerts.resetCodeSent"));
 
             $this->redirect('Sign:pwdreset');
         };
@@ -127,7 +127,7 @@ class SignPresenter extends BasePresenter {
         $form = $this->pwdResetFactory->create();
         $form->onSuccess[] = function (Nette\Application\UI\Form $form, stdClass $values) {
             $data = $this->resetPwd($values->code);
-            $this->flashMessage('Vaše heslo bylo úspěšně resetováno');
+            $this->flashMessage($this->translator->translate("common.alerts.resetCodeSent"));
             $this->redirect('Sign:pwdnew', ["pwd" => $data]);
         };
         return $form;
@@ -138,7 +138,7 @@ class SignPresenter extends BasePresenter {
             $this->logout->init()->perform();
             $this->getUser()->logout();
         }
-        $this->flashMessage('You have been succesfully signed out');
+        $this->flashMessage($this->translator->translate("common.alerts.logoutSuccesfull"));
         $this->redirect('Sign:In');
     }
     
@@ -149,7 +149,7 @@ class SignPresenter extends BasePresenter {
     public function renderPwdReset() {
         if(($resetCode = $this->getRequest()->getParameter("code")) != null){
             $data = $this->resetPwd($resetCode);
-            $this->flashMessage('Vaše heslo bylo úspěšně resetováno');
+            $this->flashMessage($this->translator->translate("common.alerts.pwdResetSuccesfull"));
             $this->redirect('Sign:pwdnew', ["pwd" => $data]);
         }
     }

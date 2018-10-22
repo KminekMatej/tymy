@@ -14,3 +14,6 @@ mainMenuTitle: Uvést v hlavním menu
 specialPageTitle: Vyberte speciální systémový kód poznámky. Více viz O poznámkách
 orderTitle: Pořadí v menu
 system: Systémová
+new: Nová
+errors:
+    noteNotExists: Poznámka %id% neexistuje

@@ -1,5 +1,7 @@
-setting: Nastavení
+application: Aplikace
+setting: Nastavení|Nastavení
 cacheDrop: Vymazat cache
+cacheDropped: Cache vymazána
 appSettings: Nastavení aplikace
 appVersion: Verze aplikace
 released: Vydáno

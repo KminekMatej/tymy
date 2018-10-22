@@ -41,7 +41,7 @@ class DiscussionPresenter extends SecuredPresenter {
     
     public function startup() {
         parent::startup();
-        $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("discussion.discussion"), "link" => $this->link("Discussion:")]]);
+        $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("discussion.discussion", 2), "link" => $this->link("Discussion:")]]);
     }
 
     public function renderDefault() {

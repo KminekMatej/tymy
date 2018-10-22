@@ -5,6 +5,7 @@ settingsEvents: Nastavení událostí
 noEvent: Žádná událost
 showHidePastEvents: Zobrazit/skrýt již proběhlé akce
 agenda: Agenda
+new: Nová
 openMap: Otevřít mapu ....
 start: Začátek
 close: Uzávěrka
@@ -22,3 +23,5 @@ openInNewWindow: Zobrazit v novém okně
 duplicateEventDay: Duplikovat poslední událost a posunout časy o 1 den
 duplicateEventWeek: Duplikovat poslední událost a posunout časy o 1 týden
 duplicateEventMonth: Duplikovat poslední událost a posunout časy o 1 měsíc
+errors:
+    eventNotExists: Událost %id% neexistuje

@@ -1,8 +1,9 @@
-discussion: Diskuze
+discussion: Diskuze|Diskuze
 noDiscussion: Žádná diskuze
 editDiscussion: Úprava diskuze
 unpin: Odepnout
 pin: Připnout
+new: Nová
 copyToClipboard: Kopírovat do schránky
 edit: Upravit
 copy: Kopírovat
@@ -12,6 +13,7 @@ postBlock:
     enterSearchTerms: Zadejte hledaný text ...
 errors:
     noDiscussionExists: Tato diskuze neexistuje
+    discussionNotExists: Diskuze %id% neexistuje
 newDiscussion: Nová diskuze
 newDiscussionTitle: Vytvořit novou diskuzi
 discussionSettings: Nastavení diskuzí

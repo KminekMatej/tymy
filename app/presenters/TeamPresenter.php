@@ -29,29 +29,29 @@ class TeamPresenter extends SecuredPresenter {
     
     public function startup() {
         parent::startup();
-        $this->setLevelCaptions(["1" => ["caption" => "Tým", "link" => $this->link("Team:") ] ]);
+        $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("team.team",1), "link" => $this->link("Team:") ] ]);
     }
     
     public function actionPlayers() {
-        $this->setLevelCaptions(["2" => ["caption" => "Hráči", "link" => $this->link("Team:players") ] ]);
+        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("team.PLAYER",2), "link" => $this->link("Team:players") ] ]);
         $this->userType = "PLAYER";
         $this->setView('default');
     }
     
     public function actionMembers() {
-        $this->setLevelCaptions(["2" => ["caption" => "Členové", "link" => $this->link("Team:members") ] ]);
+        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("team.MEMBER",2), "link" => $this->link("Team:members") ] ]);
         $this->userType = "MEMBER";
         $this->setView('default');
     }
     
     public function actionSicks() {
-        $this->setLevelCaptions(["2" => ["caption" => "Marodi", "link" => $this->link("Team:sicks") ] ]);
+        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("team.SICK",2), "link" => $this->link("Team:sicks") ] ]);
         $this->userType = "SICK";
         $this->setView('default');
     }
     
     public function actionInits() {
-        $this->setLevelCaptions(["2" => ["caption" => "Registrovaní", "link" => $this->link("Team:inits") ] ]);
+        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("team.INIT",2), "link" => $this->link("Team:inits") ] ]);
         $this->userType = "INIT";
         $this->setView('default');
     }
@@ -68,7 +68,7 @@ class TeamPresenter extends SecuredPresenter {
                     }
                 }
             } else {
-                $this->flashMessage("Nikdo nenalezen!");
+                $this->flashMessage($this->translator->translate("common.alerts.nobodyFound") . "!");
             }
 
             $this->template->users = $users;
@@ -93,9 +93,9 @@ class TeamPresenter extends SecuredPresenter {
         $this->template->player = $user;
         $this->template->canUpdate = $this->getUser()->isAllowed("user", "canUpdate") || $user->id == $this->getUser()->getId();
         $allRoles = [];
-        $allRoles[] = (object) ["code" => "SUPER", "caption" => "Administrátor", "class" => $this->supplier->getRoleClass("SUPER")];
-        $allRoles[] = (object) ["code" => "USR", "caption" => "Správce uživatelů", "class" => $this->supplier->getRoleClass("USR")];
-        $allRoles[] = (object) ["code" => "ATT", "caption" => "Správce docházky", "class" => $this->supplier->getRoleClass("ATT")];
+        $allRoles[] = (object) ["code" => "SUPER", "caption" => $this->translator->translate("team.admin"), "class" => $this->supplier->getRoleClass("SUPER")];
+        $allRoles[] = (object) ["code" => "USR", "caption" => $this->translator->translate("team.userAdmin"), "class" => $this->supplier->getRoleClass("USR")];
+        $allRoles[] = (object) ["code" => "ATT", "caption" => $this->translator->translate("team.attendanceAdmin"), "class" => $this->supplier->getRoleClass("ATT")];
 
         $this->template->allRoles = $allRoles;
     }
@@ -119,7 +119,7 @@ class TeamPresenter extends SecuredPresenter {
         
         $this->template->jerseyList = $jerseyList;
         $this->template->me = $this->userList->getMe();
-        $this->setLevelCaptions(["2" => ["caption" => "Dresy", "link" => $this->link("Team:jerseys")]]);
+        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("team.jersey", 2), "link" => $this->link("Team:jerseys")]]);
     }
     
     public function handleEdit(){
@@ -148,7 +148,7 @@ class TeamPresenter extends SecuredPresenter {
         } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
-        $this->flashMessage("Uživatel byl úspešně smazán", "success");
+        $this->flashMessage($this->translator->translate("common.alerts.userSuccesfullyDeleted"), "success");
         $this->redirect('Team:');
     }
 

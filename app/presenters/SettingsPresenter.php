@@ -87,7 +87,7 @@ class SettingsPresenter extends SecuredPresenter {
     protected function startup() {
         parent::startup();
         parent::showNotes();
-        $this->setLevelCaptions(["1" => ["caption" => "Nastavení", "link" => $this->link("Settings:")]]);
+        $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("settings.setting", 2), "link" => $this->link("Settings:")]]);
         $this->template->addFilter("typeColor", function ($type) {
             $color = $this->supplier->getEventColors();
             return $color[$type];
@@ -95,7 +95,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
 
     public function actionDiscussions($discussion = NULL) {
-        $this->setLevelCaptions(["2" => ["caption" => "Diskuze", "link" => $this->link("Settings:discussions")]]);
+        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("discussion.discussion", 2), "link" => $this->link("Settings:discussions")]]);
         if(!is_null($discussion)){
             $this->setView("discussion");
         } else {
@@ -107,7 +107,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
 
     public function actionEvents($event = NULL, $page = 1) {
-        $this->setLevelCaptions(["2" => ["caption" => "Události", "link" => $this->link("Settings:events")]]);
+        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("event.event", 2), "link" => $this->link("Settings:events")]]);
         if(!is_null($event)){
             $this->setView("event");
         } else {
@@ -126,7 +126,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
 
     public function actionPolls($poll = NULL) {
-        $this->setLevelCaptions(["2" => ["caption" => "Ankety", "link" => $this->link("Settings:polls")]]);
+        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("poll.poll", 2), "link" => $this->link("Settings:polls")]]);
         if(!is_null($poll)){
             $this->setView("poll");
         } else {
@@ -137,7 +137,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
 
     public function actionNotes($note = NULL) {
-        $this->setLevelCaptions(["2" => ["caption" => "Poznámky", "link" => $this->link("Settings:notes")]]);
+        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("note.note", 2), "link" => $this->link("Settings:notes")]]);
         if(!is_null($note)){
             $this->setView("note");
         } else {
@@ -149,16 +149,16 @@ class SettingsPresenter extends SecuredPresenter {
     
     public function actionReports() {
         //TODO
-        $this->setLevelCaptions(["2" => ["caption" => "Reporty", "link" => $this->link("Settings:reports")]]);
+        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("report.report", 2), "link" => $this->link("Settings:reports")]]);
     }
 
     public function actionPermissions() {
         //TODO
-        $this->setLevelCaptions(["2" => ["caption" => "Oprávnění", "link" => $this->link("Settings:permissions")]]);
+        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("permission.permission", 2), "link" => $this->link("Settings:permissions")]]);
     }
 
     public function actionApp() {
-        $this->setLevelCaptions(["2" => ["caption" => "Aplikace", "link" => $this->link("Settings:app")]]);
+        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("settings.application"), "link" => $this->link("Settings:app")]]);
         $currentVersion = $this->supplier->getVersion(0);
         $this->template->version = $currentVersion;
         $previousVersion = NULL;
@@ -174,8 +174,8 @@ class SettingsPresenter extends SecuredPresenter {
     
     public function renderDiscussion_new() {
         $this->setLevelCaptions([
-            "2" => ["caption" => "Diskuze", "link" => $this->link("Settings:discussions")],
-            "3" => ["caption" => "Nová"]
+            "2" => ["caption" => $this->translator->translate("discussion.discussion", 2), "link" => $this->link("Settings:discussions")],
+            "3" => ["caption" => $this->translator->translate("discussion.new")]
             ]);
         $this->template->isNew = true;
             
@@ -197,7 +197,7 @@ class SettingsPresenter extends SecuredPresenter {
         $discussionId = $this->discussionList->init()->getIdFromWebname($discussion, $this->discussionList->getData());
         $discussionObj = $this->discussionDetail->init()->setId($discussionId)->getData();
         if($discussionObj == NULL){
-            $this->flashMessage("Diskuze $discussionId neexistuje.", "danger");
+            $this->flashMessage($this->translator->translate("discussion.errors.discussionNotExists", NULL, ['id' => $discussionId]), "danger");
             $this->redirect('Settings:events');
         }
         $this->setLevelCaptions(["3" => ["caption" => $discussionObj->caption, "link" => $this->link("Settings:discussions", $discussionObj->webName)]]);
@@ -206,8 +206,8 @@ class SettingsPresenter extends SecuredPresenter {
     
     public function renderEvent_new() {
         $this->setLevelCaptions([
-            "2" => ["caption" => "Události", "link" => $this->link("Settings:events")],
-            "3" => ["caption" => "Nová"]
+            "2" => ["caption" => $this->translator->translate("event.event", 2), "link" => $this->link("Settings:events")],
+            "3" => ["caption" => $this->translator->translate("event.new", 2)]
             ]);
         $this->template->isNew = true;
         
@@ -232,7 +232,7 @@ class SettingsPresenter extends SecuredPresenter {
         $eventId = $this->parseIdFromWebname($event);
         $eventObj = $this->eventDetail->init()->setId($eventId)->getData();
         if($eventObj == NULL){
-            $this->flashMessage("Událost $eventId neexistuje.", "danger");
+            $this->flashMessage($this->translator->translate("event.errors.eventNotExists", NULL, ['id' => $eventId]), "danger");
             $this->redirect('Settings:events');
         }
 
@@ -243,8 +243,8 @@ class SettingsPresenter extends SecuredPresenter {
     
     public function renderNote_new() {
         $this->setLevelCaptions([
-            "2" => ["caption" => "Poznámky", "link" => $this->link("Settings:notes")],
-            "3" => ["caption" => "Nová"]
+            "2" => ["caption" => $this->translator->translate("note.note", 2), "link" => $this->link("Settings:notes")],
+            "3" => ["caption" => $this->translator->translate("note.new")]
             ]);
         $this->template->isNew = true;
         
@@ -271,7 +271,7 @@ class SettingsPresenter extends SecuredPresenter {
         $this->noteList->init()->getData();
         $noteObj = $this->noteList->getById($noteId);
         if($noteObj == NULL){
-            $this->flashMessage("Poznámka $noteId neexistuje.", "danger");
+            $this->flashMessage($this->translator->translate("note.errors.eventNotExists", NULL, ['id' => $noteId]), "danger");
             $this->redirect('Settings:notes');
         }
         $this->setLevelCaptions(["3" => ["caption" => $noteObj->caption, "link" => $this->link("Settings:note", $noteObj->webName)]]);
@@ -281,8 +281,8 @@ class SettingsPresenter extends SecuredPresenter {
     
     public function renderPoll_new() {
         $this->setLevelCaptions([
-            "2" => ["caption" => "Ankety", "link" => $this->link("Settings:polls")],
-            "3" => ["caption" => "Nová"]
+            "2" => ["caption" => $this->translator->translate("poll.poll", 2), "link" => $this->link("Settings:polls")],
+            "3" => ["caption" => $this->translator->translate("poll.new")]
             ]);
         $this->template->isNew = true;
         
@@ -309,7 +309,7 @@ class SettingsPresenter extends SecuredPresenter {
         $pollId = $this->parseIdFromWebname($poll);
         $pollObj = $this->pollDetail->init()->setId($pollId)->getData();
         if($pollObj == NULL){
-            $this->flashMessage("Anketa $pollId neexistuje.", "danger");
+            $this->flashMessage($this->translator->translate("poll.errors.pollNotExists", NULL, ['id' => $pollId]), "danger");
             $this->redirect('Settings:polls');
         }
         if(count($pollObj->options) == 0){
@@ -433,7 +433,7 @@ class SettingsPresenter extends SecuredPresenter {
             $this->noteCreator->init()
                     ->setNote($bind["changes"])
                     ->perform();
-            $this->flashMessage("Poznámka byla úspěšné vytvořena.", "success");
+            $this->flashMessage($this->translator->translate("poll.alerts.succesfullyCreated"), "success");
             $this->redirect("Settings:notes");
         } catch (APIException $ex) {
             $this->handleTapiException($ex, 'this');
@@ -503,7 +503,7 @@ class SettingsPresenter extends SecuredPresenter {
 
     public function handleCacheDrop() {
         $this->discussionDetail->cleanCache(); //can use any tapi object
-        $this->flashMessage("Cache vymazána", "success");
+        $this->flashMessage($this->translator->translate("settings.cacheDropped"), "success");
         $this->redirect('this');
     }
     
