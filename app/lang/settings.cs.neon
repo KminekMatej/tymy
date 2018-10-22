@@ -14,3 +14,6 @@ canWrite: Psát může
 canDelete: Mazat může
 canTop: Topovat může
 order: Pořadí
+access: Přístup
+status: Stav
+type: Typ

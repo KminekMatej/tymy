@@ -23,10 +23,10 @@
                             <td>
                                 <input type="text" name="caption" value="{$event->caption}" data-value="{$event->caption}" class="col-6 form-control" />
                             </td></tr>
-                        <tr><th>{_event.type}</th>
+                        <tr><th>{_settings.type}</th>
                             <td>
                                 <select name="type" value="{$event->type}" data-value="{$event->type}" class="col-6 form-control disabled" disabled>
-                                    <option>{_event.chooseType}...</option>
+                                    <option>{_common.chooseType}...</option>
                                     <option n:foreach="$eventTypes as $option" value="{$option->code}" n:attr="selected => $event->type == $option->code">{$option->caption}</option>
                                 </select>
                             </td></tr>

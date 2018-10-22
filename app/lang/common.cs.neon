@@ -13,11 +13,14 @@ insert: Vložit
 mainPage: Hlavní stránka
 search: Hledat
 toogleNavigation: Otevřít navigační menu
+menu: Menu
 new: Nový
 link: Odkaz
 never: Nikdy
 chooseFile: Vyberte soubor
 chooseSex: Vyberte pohlaví
+chooseType: Vyberte typ
+chooseState: Vyberte stav
 yes: Ano
 no: Ne
 user: Uživatel

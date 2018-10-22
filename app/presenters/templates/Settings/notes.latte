@@ -20,18 +20,18 @@
         <div class="col">
             <div class="card sh-box my-3">
                 <div class="card-header">
-                    <h4>{_settings.}Nastavení poznámek</h4>
+                    <h4>{_note.settingsNotes}</h4>
                 </div>
                 <div class="card-body">
                     <table class="table table-xs table-hover table-responsive">
                         <tr>
                             <th></th>
-                            <th>{_settings.}Titulek</th>
-                            <th>{_settings.}Popis</th>
-                            <th title="{_settings.}Vyberte kdo má přístup k poznámce: Soukromá (pouze vy), Pro členy, Veřejná (jde zobrazit u bez přihlášení)">{_settings.}Přístup</th>
-                            <th title="{_settings.}Uvést v hlavním menu">{_settings.}Menu</th>
-                            <th title="{_settings.}Vyberte speciální systémový kód poznámky. Více viz O poznámkách">{_settings.}Systémová</th>
-                            <th title="{_settings.}Pořadí v menu">{_settings.}Pořadí</th>
+                            <th>{_settings.title}</th>
+                            <th>{_settings.description}</th>
+                            <th title="{_note.accessTitle}">{_settings.access}Přístup</th>
+                            <th title="{_note.mainMenuTitle}">{_common.menu}Menu</th>
+                            <th title="{_note.specialPageTitle}">{_note.system}Systémová</th>
+                            <th title="{_note.orderTitle}">{_common.order}Pořadí</th>
                             <th></th>
                         </tr>
                         {if count($notes)}
@@ -45,9 +45,9 @@
                                 <td><input type="text" name="description" data-value="{$note->description}" value="{$note->description}" class="form-control form-control-sm" required/></td>
                                 <td>
                                     <select name="accessType" data-value="{$note->accessType}" class="form-control form-control-sm">
-                                        <option value="PRIVATE" n:attr="selected => $note->accessType == 'PRIVATE'">{_settings.}Soukromá</option>
-                                        <option value="USERS" n:attr="selected => $note->accessType == 'USERS'">{_settings.}Pro členy</option>
-                                        <option value="PUBLIC" n:attr="selected => $note->accessType == 'PUBLIC'">{_settings.}Veřejná</option>
+                                        <option value="PRIVATE" n:attr="selected => $note->accessType == 'PRIVATE'">{_note.private}Soukromá</option>
+                                        <option value="USERS" n:attr="selected => $note->accessType == 'USERS'">{_note.users}Pro členy</option>
+                                        <option value="PUBLIC" n:attr="selected => $note->accessType == 'PUBLIC'">{_note.public}Veřejná</option>
                                     </select>
                                 </td>
                                 <td class="text-center"><label class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" name="menuType" n:attr="data-value => $note->menuType ? 'true':'false', checked => $note->menuType" class="form-control form-control-sm custom-control-input" /><span class="custom-control-label"></span></label></td>
@@ -63,7 +63,7 @@
                     </table>
                 </div>
                 <div class="card-footer text-right">
-                    <a class="btn btn-lg btn-success" href="{plink Settings:note_new}" onclick="btnRotate($(this), true)" title="{_settings.}Vytvořit novou poznámku" style="margin-right: 10px">
+                    <a class="btn btn-lg btn-success" href="{plink Settings:note_new}" onclick="btnRotate($(this), true)" title="{_note.createNote}" style="margin-right: 10px">
                         <i class="fa fa-plus" aria-hidden="true"></i>
                     </a>
                 </div>

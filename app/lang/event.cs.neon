@@ -1,6 +1,6 @@
 event: Událost|Události
 newEvents: Nové události
-editEvents: Úprava události
+editEvents: Úprava událostí
 settingsEvents: Nastavení událostí
 noEvent: Žádná událost
 showHidePastEvents: Zobrazit/skrýt již proběhlé akce
@@ -18,8 +18,6 @@ attendanceResult: Výsledná docházka
 setAttendanceResult: Zadat výslednou docházku
 saveAttendanceResult: Uložit výslednou docházku
 goToEvents: Přejít na události
-type: Typ
-chooseType: Vyberte typ
 openInNewWindow: Zobrazit v novém okně
 duplicateEventDay: Duplikovat poslední událost a posunout časy o 1 den
 duplicateEventWeek: Duplikovat poslední událost a posunout časy o 1 týden

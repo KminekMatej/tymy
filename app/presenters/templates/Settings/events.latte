@@ -20,13 +20,13 @@
         <div class="col">
             <div class="card sh-box my-3">
                 <div class="card-header">
-                    <h4>{if $isNew}{_settings.newEvents}{else}{_settings.editEvents}{/if}</h4>
+                    <h4>{if $isNew}{_event.newEvents}{else}{_event.editEvents}{/if}</h4>
                 </div>
                 <div class="card-body">
                     <table class="table table-xs table-hover table-responsive">
                         <tr>
                             <th></th>
-                            <th>{_event.type}</th>
+                            <th>{_settings.type}</th>
                             <th>{_settings.title}</th>
                             <th>{_settings.description}</th>
                             <th>{_event.start}</th>
@@ -83,9 +83,9 @@
 
 <nav aria-label="Page navigation" n:if="!$isNew">
     <ul class="pagination justify-content-center">
-        <li n:class="$currentPage == 1 ? disabled, page-item"><a class="page-link" href="{plink Settings:events null,$currentPage-1}">{_common.previous}</a></li>
+        <li n:class="$currentPage == 1 ? disabled, page-item"><a class="page-link" href="{plink Settings:events null,$currentPage-1}">{_common.navigationBlock.previous}</a></li>
         <li n:foreach="$pagination as $page" n:class="$currentPage == $page ? active, page-item"><a class="page-link" href="{plink Settings:events null,$page}">{$page}</a></li>
-        <li n:class="$currentPage == $lastPage ? disabled, page-item"><a class="page-link" href="{plink Settings:events null,$currentPage+1}">{_common.next}</a></li>
+        <li n:class="$currentPage == $lastPage ? disabled, page-item"><a class="page-link" href="{plink Settings:events null,$currentPage+1}">{_common.navigationBlock.next}</a></li>
     </ul>
 </nav>
 
