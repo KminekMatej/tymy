@@ -20,26 +20,26 @@
         <div class="col">
             <div class="card sh-box my-3">
                 <div class="card-header">
-                    <h4>{if $isNew}Nová událost/i{else}Nastavení událostí{/if}</h4>
+                    <h4>{if $isNew}{_settings.newEvents}{else}{_settings.editEvents}{/if}</h4>
                 </div>
                 <div class="card-body">
                     <table class="table table-xs table-hover table-responsive">
                         <tr>
                             <th></th>
-                            <th>Typ</th>
-                            <th>Titulek</th>
-                            <th>Popis</th>
-                            <th>Začátek</th>
-                            <th>Konec</th>
-                            <th>Uzávěrka</th>
-                            <th>Místo</th>
-                            <th>Odkaz</th>
+                            <th>{_event.type}</th>
+                            <th>{_settings.title}</th>
+                            <th>{_settings.description}</th>
+                            <th>{_event.start}</th>
+                            <th>{_event.end}</th>
+                            <th>{_event.close}</th>
+                            <th>{_event.place}</th>
+                            <th>{_common.link}</th>
                             <th></th>
                         </tr>
                         {if $events}
                         <tr n:foreach="$events as $e" data-binder-id="{$e->id}">
                             <td>
-                                <a n:if="!$isNew" href="{plink Settings:events $e->webName}" class="btn btn-sm btn-light btn-light-bordered"  title="Upravit" style="margin-right: 2px">
+                                <a n:if="!$isNew" href="{plink Settings:events $e->webName}" class="btn btn-sm btn-light btn-light-bordered"  title="{_common.edit}" style="margin-right: 2px">
                                     <i class="fa fa-external-link-alt" aria-hidden="true"></i>
                                 </a>
                             </td>
@@ -57,23 +57,23 @@
                             <td><input type="text" name="place" data-value="{$e->place}" value="{$e->place}" class="form-control form-control-sm"/></td>
                             <td><input type="text" name="link" data-value="{$e->link}" value="{$e->link}" class="form-control form-control-sm"/></td>
                             <td class="btn-group" role="group">
-                                <button n:if="$user->isAllowed('event','canUpdate') || $isNew" href="{link eventEdit!}" class="btn btn-sm btn-primary binder-save-btn" title="Uložit"><i class="fa fa-save" aria-hidden="true"></i></button>
-                                <button n:if="$user->isAllowed('event','canDelete') || $isNew" href="{link eventDelete!}" n:class="btn,btn-sm,btn-danger, !$isNew ? binder-delete-btn" title="Smazat" n:attr="onclick => $isNew ? 'removeRow(this)'"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                <button n:if="$user->isAllowed('event','canUpdate') || $isNew" href="{link eventEdit!}" class="btn btn-sm btn-primary binder-save-btn" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
+                                <button n:if="$user->isAllowed('event','canDelete') || $isNew" href="{link eventDelete!}" n:class="btn,btn-sm,btn-danger, !$isNew ? binder-delete-btn" title="{_common.delete}" n:attr="onclick => $isNew ? 'removeRow(this)'"><i class="fa fa-times" aria-hidden="true"></i></button>
                             </td>
                         </tr>
                         {/if}
                     </table>
                     <div class="text-center" n:if="$isNew">
-                        <button class="btn btn-sm btn-outline-success" title="Duplikovat poslední událost a posunout časy o 1 den" onclick="duplicateEventRow('day')"><i class="fa fa-plus" aria-hidden="true"></i> Den</button>
-                        <button class="btn btn-sm btn-outline-success" title="Duplikovat poslední událost a posunout časy o 1 týden" onclick="duplicateEventRow('week')"><i class="fa fa-plus" aria-hidden="true"></i> Týden</button>
-                        <button class="btn btn-sm btn-outline-success" title="Duplikovat poslední událost a posunout časy o 1 měsíc" onclick="duplicateEventRow('month')"><i class="fa fa-plus" aria-hidden="true"></i> Měsíc</button>
+                        <button class="btn btn-sm btn-outline-success" title="{_event.duplicateEventDay}" onclick="duplicateEventRow('day')"><i class="fa fa-plus" aria-hidden="true"></i> {_common.day}</button>
+                        <button class="btn btn-sm btn-outline-success" title="{_event.duplicateEventWeek}" onclick="duplicateEventRow('week')"><i class="fa fa-plus" aria-hidden="true"></i> {_common.week}</button>
+                        <button class="btn btn-sm btn-outline-success" title="{_settievent.duplicateEventMonth}" onclick="duplicateEventRow('month')"><i class="fa fa-plus" aria-hidden="true"></i> {_common.month}</button>
                     </div>
                 </div>
                 <div class="card-footer text-right">
-                    <a n:if="!$isNew && $user->isAllowed('event','canCreate')" class="btn btn-lg btn-success" href="{plink Settings:event_new}" onclick="btnRotate($(this), true)" title="Vytvořit novou událost" style="margin-right: 10px">
+                    <a n:if="!$isNew && $user->isAllowed('event','canCreate')" class="btn btn-lg btn-success" href="{plink Settings:event_new}" onclick="btnRotate($(this), true)" title="{_common.save}" style="margin-right: 10px">
                         <i class="fa fa-plus" aria-hidden="true"></i>
                     </a>
-                    <button n:if="$user->isAllowed('event','canUpdate')" class="btn btn-lg btn-primary binder-save-all-btn" href="{link eventsEdit!}" title="Uložit vše"><i class="fa fa-save" aria-hidden="true"></i></button>
+                    <button n:if="$user->isAllowed('event','canUpdate')" class="btn btn-lg btn-primary binder-save-all-btn" href="{link eventsEdit!}" title="{_common.saveAll}"><i class="fa fa-save" aria-hidden="true"></i></button>
                 </div>
                 
             </div>
@@ -83,9 +83,9 @@
 
 <nav aria-label="Page navigation" n:if="!$isNew">
     <ul class="pagination justify-content-center">
-        <li n:class="$currentPage == 1 ? disabled, page-item"><a class="page-link" href="{plink Settings:events null,$currentPage-1}">Předchozí</a></li>
+        <li n:class="$currentPage == 1 ? disabled, page-item"><a class="page-link" href="{plink Settings:events null,$currentPage-1}">{_common.previous}</a></li>
         <li n:foreach="$pagination as $page" n:class="$currentPage == $page ? active, page-item"><a class="page-link" href="{plink Settings:events null,$page}">{$page}</a></li>
-        <li n:class="$currentPage == $lastPage ? disabled, page-item"><a class="page-link" href="{plink Settings:events null,$currentPage+1}">Následující</a></li>
+        <li n:class="$currentPage == $lastPage ? disabled, page-item"><a class="page-link" href="{plink Settings:events null,$currentPage+1}">{_common.next}</a></li>
     </ul>
 </nav>
 

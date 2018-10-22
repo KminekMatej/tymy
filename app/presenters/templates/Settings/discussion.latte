@@ -16,49 +16,49 @@
         <div class="col">
             <div class="card sh-box my-3" data-binder-id="{$discussion->id}">
                 <div class="card-header">
-                    <h4>Úprava diskuze {$discussion->id}</h4>
+                    <h4>{_discussion.editDiscussion} {$discussion->id}</h4>
                 </div>
                 <div class="card-body">
                     <table class="table">
-                        <tr><th>Titulek</th>
+                        <tr><th>{_settings.title}Titulek</th>
                             <td>
                                 <input type="text" name="caption" value="{$discussion->caption}" data-value="{$discussion->caption}" class="col-6 form-control" />
                             </td></tr>
-                        <tr><th>Popis</th><td><textarea name="description" data-value="{$discussion->description}" class="form-control col-6">{$discussion->description}</textarea></td></tr>
-                        <tr><th>Číst může</th>
+                        <tr><th>{_settings.description}Popis</th><td><textarea name="description" data-value="{$discussion->description}" class="form-control col-6">{$discussion->description}</textarea></td></tr>
+                        <tr><th>{_settings.canRead}Číst může</th>
                             <td>
                                 <select name="readRightName" class="col-6 form-control disabled" disabled>
-                                    <option value="">-- Všichni --</option>
+                                    <option value="">-- {_common.everyone} --</option>
                                 </select>
                             </td>
                         </tr>
-                        <tr><th>Psát může</th>
+                        <tr><th>{_settings.canWrite}</th>
                             <td>
                                 <select name="writeRightName" class="col-6 form-control disabled" disabled>
-                                    <option value="">-- Všichni --</option>
+                                    <option value="">-- {_common.everyone} --</option>
                                 </select>
                             </td>
                         </tr>
-                        <tr><th>Mazat může</th>
+                        <tr><th>{_settings.canDelete}</th>
                             <td>
                                 <select name="deleteRightName" class="col-6 form-control disabled" disabled>
-                                    <option value="">-- Všichni --</option>
+                                    <option value="">-- {_common.everyone} --</option>
                                 </select>
                             </td>
                         </tr>
-                            <tr><th>Topovat může</th>
+                            <tr><th>{_settings.canTop}</th>
                                 <td>
                                     <select name="stickyRightName" class="col-6 form-control disabled" disabled>
-                                        <option value="">-- Všichni --</option>
+                                        <option value="">-- {_common.everyone} --</option>
                                     </select>
                                 </td>
                             </tr>
-                        <tr><th title="Viditelná na výchozí stránce bez přihlášení">Veřejná</th>
+                        <tr><th title="{_discussion.publicTitle}">{_discussion.public}</th>
                             <td><label class="custom-control custom-checkbox">
                               <input type="checkbox" name="publicRead" n:attr="data-value => ($discussion->publicRead ? 'true':'false'), checked => $discussion->publicRead" class="col-6 form-control custom-control-input" />
                               <span class="custom-control-label"></span>
                             </label></td></tr>
-                        <tr><th>Povolit úpravy</th>
+                        <tr><th>{_discussion.editablePosts}</th>
                             <td><label class="custom-control custom-checkbox">
                               <input type="checkbox" name="editablePosts" n:attr="data-value => ($discussion->editablePosts ? 'true':'false'), checked => $discussion->editablePosts" class="col-6 form-control custom-control-input" />
                               <span class="custom-control-label"></span>
@@ -66,8 +66,8 @@
                     </table>
                 </div>
                 <div class="card-footer text-right" n:if="$user->isAllowed('discussion','setup')">
-                    <button href="{link discussionDelete!}" class="btn btn-danger mx-2 binder-delete-btn" title="Smazat"><i class="fa fa-times" aria-hidden="true"></i></button>
-                    <button href="{link discussionEdit!}" class="btn btn-lg btn-primary binder-save-btn" title="Uložit"><i class="fa fa-save" aria-hidden="true"></i></button>
+                    <button href="{link discussionDelete!}" class="btn btn-danger mx-2 binder-delete-btn" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                    <button href="{link discussionEdit!}" class="btn btn-lg btn-primary binder-save-btn" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
                 </div>
             </div>
         </div>

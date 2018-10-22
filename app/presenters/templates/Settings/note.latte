@@ -22,49 +22,49 @@
         <div class="col">
             <div class="card sh-box my-3" data-binder-id="{$note->id}">
                 <div class="card-header">
-                    <h4>{if $isNew}Nová poznámka{else}Úprava poznámky {$note->id}{/if}</h4>
+                    <h4>{if $isNew}{_settings.}Nová poznámka{else}{_settings.}Úprava poznámky {$note->id}{/if}</h4>
                 </div>
                 <div class="card-body">
                     <table class="table">
-                        <tr><th>Titulek</th>
+                        <tr><th>{_settings.}Titulek</th>
                             <td>
                                 <input type="text" name="caption" value="{$note->caption}" data-value="{$note->caption}" class="col-6 form-control" />
                             </td></tr>
-                        <tr><th>Popis</th><td><input type="text" name="description" value="{$note->description}" class="form-control col-6" data-value="{$note->description}" /></td></tr>
-                        <tr><th>Přístup</th>
+                        <tr><th>{_settings.}Popis</th><td><input type="text" name="description" value="{$note->description}" class="form-control col-6" data-value="{$note->description}" /></td></tr>
+                        <tr><th>{_settings.}Přístup</th>
                             <td>
                                 <select name="accessType" value="{$note->accessType}" data-value="{$note->accessType}" class="col-6 form-control">
-                                    <option value="">Vyberte typ...</option>
-                                    <option value="PRIVATE" n:attr="selected => $note->accessType == 'PRIVATE'">Soukromá</option>
-                                    <option value="USERS" n:attr="selected => $note->accessType == 'USERS'">Pro členy</option>
-                                    <option value="PUBLIC" n:attr="selected => $note->accessType == 'PUBLIC'">Veřejná</option>
+                                    <option value="">{_settings.}Vyberte typ...</option>
+                                    <option value="PRIVATE" n:attr="selected => $note->accessType == 'PRIVATE'">{_settings.}Soukromá</option>
+                                    <option value="USERS" n:attr="selected => $note->accessType == 'USERS'">{_settings.}Pro členy</option>
+                                    <option value="PUBLIC" n:attr="selected => $note->accessType == 'PUBLIC'">{_settings.}Veřejná</option>
                                 </select>
                             </td></tr>
-                        <tr><th>Systémová stránka</th><td>
+                        <tr><th>{_settings.}Systémová stránka</th><td>
                                 <input type="text" name="specialPage" value="{$note->specialPage}" data-value="{$note->specialPage}" class="col-6 form-control" />
                             </td></tr>
-                        <tr><th>Obsah</th><td>
+                        <tr><th>{_settings.}Obsah</th><td>
                                     <textarea style="width:100%;" id="noteSource" name="source" data-value="{$note->source}" class="form-control col-6">
                                     </textarea>
                                     <script>CKEDITOR.replace('noteSource',{
                                             language: 'cs',
                                         });</script>
                             </td></tr>
-                        <tr><th>Menu</th>
+                        <tr><th>{_settings.}Menu</th>
                             <td><label class="custom-control custom-checkbox">
                               <input type="checkbox" name="menuType" n:attr="data-value => ($note->menuType ? 'true':'false'), checked => $note->menuType" class="col-6 form-control custom-control-input" />
                               <span class="custom-control-label"></span>
                             </label></td></tr>
 
-                        <tr><th>Pořadí v menu</th><td>
+                        <tr><th>{_settings.}Pořadí v menu</th><td>
                                 <input type="number" name="menuOrder" value="{$note->menuOrder}" data-value="{$note->menuOrder}" class="col-6 form-control" />
                             </td></tr>
                     </table>
                 </div>
                 <div class="card-footer text-right">
-                    <button n:if="$note->canWrite" href="{link noteDelete!}" class="btn btn-danger mx-2 binder-delete-btn" title="Smazat" ><i class="fa fa-times" aria-hidden="true"></i></button>
-                    <button n:if="$note->canWrite && !$isNew" href="{link noteEdit!}" class="btn btn-lg btn-primary binder-save-btn" title="Uložit" onclick="CKEDITOR.instances.noteSource.updateElement();"><i class="fa fa-save" aria-hidden="true"></i></button>
-                    <button n:if="$note->canWrite && $isNew" href="{link noteCreate!}" class="btn btn-lg btn-primary binder-save-btn" title="Uložit" onclick="CKEDITOR.instances.noteSource.updateElement();"><i class="fa fa-save" aria-hidden="true"></i></button>
+                    <button n:if="$note->canWrite" href="{link noteDelete!}" class="btn btn-danger mx-2 binder-delete-btn" title="{_common.delete}" ><i class="fa fa-times" aria-hidden="true"></i></button>
+                    <button n:if="$note->canWrite && !$isNew" href="{link noteEdit!}" class="btn btn-lg btn-primary binder-save-btn" title="{_common.save}" onclick="CKEDITOR.instances.noteSource.updateElement();"><i class="fa fa-save" aria-hidden="true"></i></button>
+                    <button n:if="$note->canWrite && $isNew" href="{link noteCreate!}" class="btn btn-lg btn-primary binder-save-btn" title="{_settings.}Vytvořit" onclick="CKEDITOR.instances.noteSource.updateElement();"><i class="fa fa-save" aria-hidden="true"></i></button>
                 </div>
             </div>
         </div>

@@ -20,26 +20,26 @@
         <div class="col">
             <div class="card sh-box my-3">
                 <div class="card-header">
-                    <h4>{if $isNew}Nová diskuze/i{else}Nastavení diskuzí{/if}</h4>
+                    <h4>{if $isNew}{_discussion.newDiscussion}{else}{_discussion.discussionSettings}{/if}</h4>
                 </div>
                 <div class="card-body">
                     <table class="table table-xs table-hover table-responsive">
                         <tr>
                             <th></th>
-                            <th>Název</th>
-                            <th>Popis</th>
-                            <th>Číst může</th>
-                            <th>Psát může</th>
-                            <th>Mazat může</th>
-                            <th>Topovat může</th>
-                            <th>Veřejná</th>
-                            <th>Úpravy</th>
-                            <th>Pořadí</th>
+                            <th>{_settings.title}</th>
+                            <th>{_settings.description}</th>
+                            <th>{_settings.canRead}</th>
+                            <th>{_settings.canWrite}</th>
+                            <th>{_settings.canDelete}</th>
+                            <th>{_settings.canTop}</th>
+                            <th>{_discussion.public}</th>
+                            <th>{_discussion.edits}</th>
+                            <th>{_settings.order}</th>
                             <th></th>
                         </tr>
                         <tr n:foreach="$discussions as $d" data-binder-id="{$d->id}">
                             <td>
-                                <a n:if="!$isNew" href="{plink Settings:discussions $d->webName}" class="btn btn-sm btn-light btn-light-bordered"  title="Upravit" style="margin-right: 2px">
+                                <a n:if="!$isNew" href="{plink Settings:discussions $d->webName}" class="btn btn-sm btn-light btn-light-bordered"  title="{_common.edit}" style="margin-right: 2px">
                                     <i class="fa fa-external-link-alt" aria-hidden="true"></i>
                                 </a>
                             </td>
@@ -48,22 +48,22 @@
 
                             <td>
                                 <select name="readRightName" data-value class="form-control form-control-sm">
-                                    <option value="">-- Všichni --</option>
+                                    <option value="">-- {_common.everyone} --</option>
                                 </select>
                             </td>
                             <td>
                                 <select name="writeRightName" data-value class="form-control form-control-sm">
-                                    <option value="">-- Všichni --</option>
+                                    <option value="">-- {_common.everyone} --</option>
                                 </select>
                             </td>
                             <td>
                                 <select name="deleteRightName" data-value class="form-control form-control-sm">
-                                    <option value="">-- Všichni --</option>
+                                    <option value="">-- {_common.everyone} --</option>
                                 </select>
                             </td>
                             <td>
                                 <select name="stickyRightName" data-value class="form-control form-control-sm">
-                                    <option value="">-- Všichni --</option>
+                                    <option value="">-- {_common.everyone} --</option>
                                 </select>
                             </td>
 
@@ -71,20 +71,20 @@
                             <td class="text-center"><label class="custom-control custom-checkbox"><input name="editablePosts" type="checkbox" n:attr="data-value => $d->editablePosts ? 'true':'false', checked => $d->editablePosts" class="form-control form-control-sm custom-control-input" /><span class="custom-control-label"></span></label></td>
                             <td><input name="order" data-value="{$d->order}" type="number" value="{$d->order}" class="form-control form-control-sm" style="max-width: 60px;"/></td>
                             <td class="btn-group" role="group" n:if="$user->isAllowed('discussion','setup') || $isNew">
-                                <button class="btn btn-sm btn-primary binder-save-btn" href="{link discussionCreate!}" title="Uložit"><i class="fa fa-save" aria-hidden="true"></i></button>
-                                <button n:class="btn,btn-sm,btn-danger, !$isNew ? binder-delete-btn" href="{link discussionDelete!}" title="Smazat" n:attr="onclick => $isNew ? 'removeRow(this)'"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                <button class="btn btn-sm btn-primary binder-save-btn" href="{link discussionCreate!}" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
+                                <button n:class="btn,btn-sm,btn-danger, !$isNew ? binder-delete-btn" href="{link discussionDelete!}" title="{_common.delete}" n:attr="onclick => $isNew ? 'removeRow(this)'"><i class="fa fa-times" aria-hidden="true"></i></button>
                             </td>
                         </tr>
                     </table>
                     <div class="text-center" n:if="$isNew">
-                        <button class="btn btn-sm btn-outline-success" title="Duplikovat" onclick="duplicateLastRow()"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                        <button class="btn btn-sm btn-outline-success" title="{_common.duplicate}" onclick="duplicateLastRow()"><i class="fa fa-plus" aria-hidden="true"></i></button>
                     </div>
                 </div>
                 <div class="card-footer text-right" n:if="$user->isAllowed('discussion','setup')">
-                    <a n:if="!$isNew" class="btn btn-lg btn-success" href="{plink Settings:discussion_new}" onclick="btnRotate($(this), true)" title="Vytvořit novou diskuzi" style="margin-right: 10px">
+                    <a n:if="!$isNew" class="btn btn-lg btn-success" href="{plink Settings:discussion_new}" onclick="btnRotate($(this), true)" title="{_discussion.newDiscussionTitle}" style="margin-right: 10px">
                         <i class="fa fa-plus" aria-hidden="true"></i>
                     </a>
-                    <button n:if="!$isNew" class="btn btn-lg btn-primary binder-save-all-btn" href="{link discussionsEdit!}" title="Uložit vše"><i class="fa fa-save" aria-hidden="true"></i></button>
+                    <button n:if="!$isNew" class="btn btn-lg btn-primary binder-save-all-btn" href="{link discussionsEdit!}" title="{_common.saveAll}"><i class="fa fa-save" aria-hidden="true"></i></button>
                 </div>
                 
             </div>

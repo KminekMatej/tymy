@@ -2,6 +2,9 @@ copyToClipboard: Kopírovat do schránky
 edit: Upravit
 copy: Kopírovat
 delete: Smazat
+duplicate: Duplikovat
+save: Uložit
+saveAll: Uložit vše
 edited: "Upravil (a)"
 everyone: Všichni
 allOfThem: Všechny
@@ -19,6 +22,10 @@ yes: Ano
 no: Ne
 user: Uživatel
 error: Chyba
+or: nebo
+day: Den
+week: Týden
+month: Měsíc
 navigationBlock:
     first: První
     previous: Předchozí

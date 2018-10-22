@@ -20,30 +20,30 @@
         <div class="col">
             <div class="card sh-box my-3">
                 <div class="card-header">
-                    <h4>{if $isNew}Nová anketa{else}Nastavení anket{/if}</h4>
+                    <h4>{if $isNew}{_settings.}Nová anketa{else}{_settings.}Nastavení anket{/if}</h4>
                 </div>
                 <div class="card-body">
                     <table class="table table-xs table-hover table-responsive">
                         <tr>
                             <th></th>
-                            <th>Titulek</th>
-                            <th>Popis</th>
-                            <th>Status</th>
-                            <th title="Minimální počet vyplněných položek">Min</th>
-                            <th title="Maximální počet vyplněných položek">Max</th>
-                            <th title="Uvést v hlavním menu">Menu</th>
-                            <th title="Anonymní hlasování">Anonym</th>
-                            <th title="Povolit změnu názoru">Změna názoru</th>
-                            <th>Zobrazit výsledky</th>
-                            <th title="Oprávnění pro hlasování">Může hlasovat</th>
-                            <th title="Oprávnění pro prohlížení výsledků">Může prohlížet</th>
-                            <th title="Oprávnění pro zastoupení v hlasování">Může zastoupit</th>
-                            <th title="Pořadí v menu">Pořadí</th>
+                            <th>{_settings.}Titulek</th>
+                            <th>{_settings.}Popis</th>
+                            <th>{_settings.}Status</th>
+                            <th title="{_settings.}Minimální počet vyplněných položek">{_settings.}Min</th>
+                            <th title="{_settings.}Maximální počet vyplněných položek">{_settings.}Max</th>
+                            <th title="{_settings.}Uvést v hlavním menu">{_settings.}Menu</th>
+                            <th title="{_settings.}Anonymní hlasování">{_settings.}Anonym</th>
+                            <th title="{_settings.}Povolit změnu názoru">{_settings.}Změna názoru</th>
+                            <th>{_settings.}Zobrazit výsledky</th>
+                            <th title="{_settings.}Oprávnění pro hlasování">{_settings.}Může hlasovat</th>
+                            <th title="{_settings.}Oprávnění pro prohlížení výsledků">{_settings.}Může prohlížet</th>
+                            <th title="{_settings.}Oprávnění pro zastoupení v hlasování">{_settings.}Může zastoupit</th>
+                            <th title="{_settings.}Pořadí v menu">{_settings.}Pořadí</th>
                             <th></th>
                         </tr>
                         <tr n:foreach="$polls as $poll" data-binder-id="{$poll->id}">
                             <td>
-                                <a n:if="!$isNew" href="{plink Settings:polls $poll->webName}" class="btn btn-sm btn-light btn-light-bordered"  title="Upravit" style="margin-right: 2px">
+                                <a n:if="!$isNew" href="{plink Settings:polls $poll->webName}" class="btn btn-sm btn-light btn-light-bordered"  title="{_common.edit}" style="margin-right: 2px">
                                     <i class="fa fa-external-link-alt" aria-hidden="true"></i>
                                 </a>
                             </td>
@@ -51,9 +51,9 @@
                             <td><textarea name="description" data-value="{$poll->description}" rows="1" class="form-control form-control-sm">{$poll->description}</textarea></td>
                             <td>
                                 <select name="status" data-value="{$poll->status}" class="form-control form-control-sm">
-                                    <option value="DESIGN" n:attr="selected => $poll->status == 'DESIGN'">Design</option>
-                                    <option value="OPENED" n:attr="selected => $poll->status == 'OPENED'">Aktivní</option>
-                                    <option value="CLOSED" n:attr="selected => $poll->status == 'CLOSED'">Uzavřená</option>
+                                    <option value="DESIGN" n:attr="selected => $poll->status == 'DESIGN'">{_settings.}Design</option>
+                                    <option value="OPENED" n:attr="selected => $poll->status == 'OPENED'">{_settings.}Aktivní</option>
+                                    <option value="CLOSED" n:attr="selected => $poll->status == 'CLOSED'">{_settings.}Uzavřená</option>
                                 </select>
                             </td>
                             <td><input type="number" name="minItems" data-validation-field2="maxItems" min="0" data-value="{$poll->minItems}" value="{$poll->minItems}" class="form-control form-control-sm" style="max-width: 70px;" required/></td>
@@ -64,38 +64,38 @@
                             <td class="text-center"><label class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" name="changeableVotes" n:attr="data-value => $poll->changeableVotes ? 'true':'false', checked => $poll->changeableVotes" class="form-control form-control-sm custom-control-input" /><span class="custom-control-label"></span></label></td>
                             <td>
                                 <select name="showResults" data-value="{$poll->showResults}" class="form-control form-control-sm">
-                                    <option value="NEVER" n:attr="selected => $poll->showResults == 'NEVER'">Nikdy</option>
-                                    <option value="ALWAYS" n:attr="selected => $poll->showResults == 'ALWAYS'">Vždy</option>
-                                    <option value="AFTER_VOTE" n:attr="selected => $poll->showResults == 'AFTER_VOTE'">Hlasujícím</option>
-                                    <option value="WHEN_CLOSED" n:attr="selected => $poll->showResults == 'WHEN_CLOSED'">Po uzavření</option>
+                                    <option value="NEVER" n:attr="selected => $poll->showResults == 'NEVER'">{_settings.}Nikdy</option>
+                                    <option value="ALWAYS" n:attr="selected => $poll->showResults == 'ALWAYS'">{_settings.}Vždy</option>
+                                    <option value="AFTER_VOTE" n:attr="selected => $poll->showResults == 'AFTER_VOTE'">{_settings.}Hlasujícím</option>
+                                    <option value="WHEN_CLOSED" n:attr="selected => $poll->showResults == 'WHEN_CLOSED'">{_settings.}Po uzavření</option>
                                 </select>
                             </td>
                             <td>
                                 <select name="voteRightName" data-value class="form-control form-control-sm">
-                                    <option value="">-- Všichni --</option>
+                                    <option value="">-- {_common.everyone} --</option>
                                 </select>
                             </td>
                             <td>
                                 <select name="resultRightName" data-value class="form-control form-control-sm">
-                                    <option value="">-- Všichni --</option>
+                                    <option value="">-- {_common.everyone} --</option>
                                 </select>
                             </td>
                             <td>
                                 <select name="alienVoteRightName" data-value class="form-control form-control-sm">
-                                    <option value="">-- Všichni --</option>
+                                    <option value="">-- {_common.everyone} --</option>
                                 </select>
                             </td>
                             <td><input name="order" data-value="{$poll->orderFlag}" type="number" value="{$poll->orderFlag}" class="form-control form-control-sm" style="max-width: 70px;"/></td>
 
                             <td class="btn-group" role="group">
-                                <button n:if="$user->isAllowed('poll','canUpdatePoll') || $isNew" href="{link pollEdit!}" class="btn btn-sm btn-primary binder-save-btn" title="Uložit" style="margin-right: 2px"><i class="fa fa-save" aria-hidden="true"></i></button>
-                                <button n:if="$user->isAllowed('poll','canDeletePoll') || $isNew" href="{link pollDelete!}" n:class="btn,btn-sm,btn-danger, !$isNew ? binder-delete-btn" title="Smazat" n:attr="onclick => $isNew ? 'removeRow(this)'"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                <button n:if="$user->isAllowed('poll','canUpdatePoll') || $isNew" href="{link pollEdit!}" class="btn btn-sm btn-primary binder-save-btn" title="{_common.save}" style="margin-right: 2px"><i class="fa fa-save" aria-hidden="true"></i></button>
+                                <button n:if="$user->isAllowed('poll','canDeletePoll') || $isNew" href="{link pollDelete!}" n:class="btn,btn-sm,btn-danger, !$isNew ? binder-delete-btn" title="{_common.delete}" n:attr="onclick => $isNew ? 'removeRow(this)'"><i class="fa fa-times" aria-hidden="true"></i></button>
                             </td>
                         </tr>
                     </table>
                 </div>
                 <div class="card-footer text-right">
-                    <a n:if="!$isNew && $user->isAllowed('poll','canCreatePoll')" class="btn btn-lg btn-success" href="{plink Settings:poll_new}" onclick="btnRotate($(this), true)" title="Vytvořit novou anketu" style="margin-right: 10px">
+                    <a n:if="!$isNew && $user->isAllowed('poll','canCreatePoll')" class="btn btn-lg btn-success" href="{plink Settings:poll_new}" onclick="btnRotate($(this), true)" title="{_settings.}Vytvořit novou anketu" style="margin-right: 10px">
                         <i class="fa fa-plus" aria-hidden="true"></i>
                     </a>
                 </div>
