@@ -28,10 +28,10 @@
                             <th></th>
                             <th>{_settings.title}</th>
                             <th>{_settings.description}</th>
-                            <th title="{_note.accessTitle}">{_settings.access}Přístup</th>
-                            <th title="{_note.mainMenuTitle}">{_common.menu}Menu</th>
-                            <th title="{_note.specialPageTitle}">{_note.system}Systémová</th>
-                            <th title="{_note.orderTitle}">{_common.order}Pořadí</th>
+                            <th title="{_note.accessTitle}">{_settings.access}</th>
+                            <th title="{_note.mainMenuTitle}">{_common.menu}</th>
+                            <th title="{_note.specialPageTitle}">{_note.system}</th>
+                            <th title="{_note.orderTitle}">{_settings.order}</th>
                             <th></th>
                         </tr>
                         {if count($notes)}
@@ -45,9 +45,9 @@
                                 <td><input type="text" name="description" data-value="{$note->description}" value="{$note->description}" class="form-control form-control-sm" required/></td>
                                 <td>
                                     <select name="accessType" data-value="{$note->accessType}" class="form-control form-control-sm">
-                                        <option value="PRIVATE" n:attr="selected => $note->accessType == 'PRIVATE'">{_note.private}Soukromá</option>
-                                        <option value="USERS" n:attr="selected => $note->accessType == 'USERS'">{_note.users}Pro členy</option>
-                                        <option value="PUBLIC" n:attr="selected => $note->accessType == 'PUBLIC'">{_note.public}Veřejná</option>
+                                        <option value="PRIVATE" n:attr="selected => $note->accessType == 'PRIVATE'">{_note.private}</option>
+                                        <option value="USERS" n:attr="selected => $note->accessType == 'USERS'">{_note.users}</option>
+                                        <option value="PUBLIC" n:attr="selected => $note->accessType == 'PUBLIC'">{_note.public}</option>
                                     </select>
                                 </td>
                                 <td class="text-center"><label class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" name="menuType" n:attr="data-value => $note->menuType ? 'true':'false', checked => $note->menuType" class="form-control form-control-sm custom-control-input" /><span class="custom-control-label"></span></label></td>
