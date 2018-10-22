@@ -93,7 +93,7 @@ class TeamPresenter extends SecuredPresenter {
         $this->template->player = $user;
         $this->template->canUpdate = $this->getUser()->isAllowed("user", "canUpdate") || $user->id == $this->getUser()->getId();
         $allRoles = [];
-        $allRoles[] = (object) ["code" => "SUPER", "caption" => $this->translator->translate("team.admin"), "class" => $this->supplier->getRoleClass("SUPER")];
+        $allRoles[] = (object) ["code" => "SUPER", "caption" => $this->translator->translate("team.administrator"), "class" => $this->supplier->getRoleClass("SUPER")];
         $allRoles[] = (object) ["code" => "USR", "caption" => $this->translator->translate("team.userAdmin"), "class" => $this->supplier->getRoleClass("USR")];
         $allRoles[] = (object) ["code" => "ATT", "caption" => $this->translator->translate("team.attendanceAdmin"), "class" => $this->supplier->getRoleClass("ATT")];
 
