@@ -1,2 +1,20 @@
 poll: Anketa|Ankety
 noPoll: Žádná anketa
+minItems: Minimum vyplnéných položek
+maxItems: Maximum vyplnéných položek
+changeableVotes: Hlasování se dá měnit
+unchangeableVotes: Hlasování se nedá měnit
+anonymousResults: Anketa je anonymní
+nonanonymousResults: Anketa není anonymní
+resultsDisplayed: Výsledky jsou zobrazeny
+resultsDisplayedAfterVote: Výsledky budou zobrazeny po odhlasování
+resultsToYouOnly: Výsledky vidíte pouze vy
+resultsAreSecret: Výsledky jsou tajné
+resultsDisplayedWhenClosed: Výsledky budou zobrazeny až po uzavření ankety
+cannotVoteHere: V této anketě nemůžete volit
+vote: Hlasovat
+voted: Hlasováno
+results: Výsledky hlasování
+votesCount: Počet hlasů
+maxItemsOverflow: Překročen maximální počet hlasů
+notEnoughItems: Nedosažen minimální počet hlasů

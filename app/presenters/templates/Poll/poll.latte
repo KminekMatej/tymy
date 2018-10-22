@@ -7,6 +7,12 @@
 {block scripts}
 {include parent}
 <script>
+    var captionVoted = {_poll.voted};
+    var captionVotesCount = {_poll.votesCount};
+    var captionError = {_common.error};
+    var captionMaxItemsOverflow = {_poll.maxItemsOverflow};
+    var captionNotEnoughItems = {_poll.notEnoughItems};
+    
     $(document).ready(function () {
         stats();
     });
@@ -23,36 +29,36 @@
                     <div class="row">
                         <div class="col">
                             <i class="fa fa-info-circle mx-3" aria-hidden="true"></i>
-                            <span n:ifset="$poll->minItems" class="badge badge-info"><strong>Minimum vyplněných položek: {$poll->minItems}</strong></span>
-                            <span n:ifset="$poll->maxItems" class="badge badge-warning"><strong>Maximum vyplněných položek: {$poll->maxItems}</strong></span>
-                            <span n:class="badge,$poll->changeableVotes ? badge-success : badge-danger"><strong>Hlasování se {if $poll->changeableVotes}dá{else}nedá{/if} měnit</strong></span>
-                            <span n:class="badge,$poll->anonymousResults ? badge-success : badge-danger"><strong>Anketa {if $poll->anonymousResults}je{else}není{/if} anonymní</strong></span>
+                            <span n:ifset="$poll->minItems" class="badge badge-info"><strong>{_poll.minItems}: {$poll->minItems}</strong></span>
+                            <span n:ifset="$poll->maxItems" class="badge badge-warning"><strong>{_poll.maxItems}: {$poll->maxItems}</strong></span>
+                            <span n:class="badge,$poll->changeableVotes ? badge-success : badge-danger"><strong>{if $poll->changeableVotes}{_poll.changeableVotes}{else}{_poll.unchangeableVotes}{/if}</strong></span>
+                            <span n:class="badge,$poll->anonymousResults ? badge-success : badge-danger"><strong>{if $poll->anonymousResults}{_poll.anonymousResults}{else}{_poll.nonanonymousResults}{/if}</strong></span>
                             {if $poll->showResults == 'AFTER_VOTE'}
                                 {if $poll->voted}
                                     {var $resultsClass = 'badge-success'}
-                                    {var $resultsDesc = 'Výsledky jsou zobrazeny'}
+                                    {var $resultsDesc = $resultsDisplayed}
                                 {else}
                                     {var $resultsClass = 'badge-info'}
-                                    {var $resultsDesc = 'Výsledky budou zobrazeny po odhlasování'}
+                                    {var $resultsDesc = $resultsDisplayedAfterVote}
                                 {/if}
                             {elseif $poll->showResults == 'NEVER'}
                                 {if $poll->canSeeResults == TRUE && $poll->createdById == $user->id}
                                     {var $resultsClass = 'badge-danger'}
-                                    {var $resultsDesc = 'Výsledky vidíte pouze vy'}
+                                    {var $resultsDesc = $resultsToYouOnly}
                                 {else}
                                     {var $resultsClass = 'badge-danger'}
-                                    {var $resultsDesc = 'Výsledky jsou tajné'}
+                                    {var $resultsDesc = $resultsAreSecret}
                                 {/if}
                             {elseif $poll->showResults == 'ALWAYS'}
                                 {var $resultsClass = 'badge-success'}
-                                {var $resultsDesc = 'Výsledky jsou zobrazeny'}
+                                {var $resultsDesc = $resultsDisplayed}
                             {elseif $poll->showResults == 'WHEN_CLOSED'}
                                 {if $poll->status == 'CLOSED'}
                                     {var $resultsClass = 'badge-success'}
-                                    {var $resultsDesc = 'Výsledky jsou zobrazeny'}
+                                    {var $resultsDesc = $resultsDisplayed}
                                 {else}
                                     {var $resultsClass = 'badge-info'}
-                                    {var $resultsDesc = 'Výsledky budou zobrazeny až po uzavření ankety'}
+                                    {var $resultsDesc = $resultsDisplayedWhenClosed}
                                 {/if}
                             {/if}
                             <span class="badge {$resultsClass}">{$resultsDesc}</span>
@@ -63,7 +69,7 @@
                 <div class="card-body">
                     <h4 class="card-title">{$poll->caption}</h4>
                     <h6 class="card-subtitle mb-2 text-muted">{$poll->description}</h6>
-                    <p n:if="!$poll->canVote" class="font-italic">V této anketě nemůžete volit</p>
+                    <p n:if="!$poll->canVote" class="font-italic">{_poll.cannotVoteHere}</p>
                     <div class="container" n:if="$poll->canVote">
                         <div class="row">
                             <div n:foreach="$poll->options as $opt" class="col-3 py-3 option" id="option-{$opt->id}">
@@ -72,15 +78,15 @@
                                 <input n:if="$opt->type == 'NUMBER'" type="number" value="{ifset $poll->myVotes[$opt->id]}{$poll->myVotes[$opt->id]->numericValue}{/ifset}" class="form-control" />
                                 <div n:if="$opt->type == 'BOOLEAN'" class="btn-group">
                                     <button n:if="$poll->radio" n:class="btn,btn-outline-warning,isset($poll->myVotes[$opt->id]) && $poll->myVotes[$opt->id]->booleanValue ? active" style="min-width:69px" data-value="true" onclick="checkBool(this)">{$opt->caption}</button>
-                                    <button n:if="!$poll->radio" n:class="btn,btn-outline-success,isset($poll->myVotes[$opt->id]) && $poll->myVotes[$opt->id]->booleanValue ? active" style="width:69px" data-value="true" onclick="checkBool(this)">ANO</button>
-                                    <button n:if="!$poll->radio" n:class="btn,btn-outline-danger,isset($poll->myVotes[$opt->id]) && !$poll->myVotes[$opt->id]->booleanValue ? active" style="width:69px" data-value="false" onclick="checkBool(this)">NE</button>
+                                    <button n:if="!$poll->radio" n:class="btn,btn-outline-success,isset($poll->myVotes[$opt->id]) && $poll->myVotes[$opt->id]->booleanValue ? active" style="width:69px" data-value="true" onclick="checkBool(this)">{_common.yes|upper}</button>
+                                    <button n:if="!$poll->radio" n:class="btn,btn-outline-danger,isset($poll->myVotes[$opt->id]) && !$poll->myVotes[$opt->id]->booleanValue ? active" style="width:69px" data-value="false" onclick="checkBool(this)">{_common.no|upper}</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="card-footer text-right" n:if="$poll->canVote">
-                    <button onclick="updatePoll(this, {link vote! $poll->id})" class="btn btn-primary">Hlasovat</button>
+                    <button onclick="updatePoll(this, {link vote! $poll->id})" class="btn btn-primary">{_poll.vote}</button>
                 </div>
             </div>
 
@@ -92,12 +98,12 @@
         <div n:if="$poll->canSeeResults" class="col my-3">
             <div class="card sh-box text-white bg-dark">
                 <div class="card-header border-bottom-0">
-                    <h4 class="card-title">Výsledky hlasování</h4>
+                    <h4 class="card-title">{_poll.results}</h4>
                 </div>
                 <div class="card-body p-0">
                     <table class="table table-dark table-striped table-hover mb-0">
                         <tr>
-                            <th>Uživatel</th>
+                            <th>{_common.user}</th>
                             <th n:foreach="$poll->options as $option">{$option->caption}</th>
                         </tr>
                         <tr n:foreach="$poll->orderedVotes as $userId => $vote" data-vote n:attr="data-gender => !$poll->anonymousResults ? $users[$userId]->gender, data-status => !$poll->anonymousResults ? $users[$userId]->status">
@@ -110,7 +116,7 @@
                                     <td n:ifset="$vote[$option->id]->numericValue" data-option-type="{$option->type}" data-option-id="{$option->id}" data-option-value="{$vote[$option->id]->numericValue}">{$vote[$option->id]->numericValue}</td>
                                     <td n:ifset="$vote[$option->id]->stringValue" data-option-type="{$option->type}" data-option-id="{$option->id}" data-option-value="{$vote[$option->id]->stringValue}">{$vote[$option->id]->stringValue}</td>
                                     <td n:ifset="$vote[$option->id]->booleanValue" n:if="$poll->radio" data-option-type="{$option->type}" data-option-id="{$option->id}" data-option-value="true"><span n:class="badge, badge-warning">{$option->caption}</span></td>
-                                    <td n:ifset="$vote[$option->id]->booleanValue" n:if="!$poll->radio" data-option-type="{$option->type}" data-option-id="{$option->id}" data-option-value="{$vote[$option->id]->booleanValue ? 'true' : 'false'}"><span n:class="badge, $vote[$option->id]->booleanValue ? 'badge-success' : 'badge-danger' ">{if $vote[$option->id]->booleanValue}ANO{else}NE{/if}</span></td>
+                                    <td n:ifset="$vote[$option->id]->booleanValue" n:if="!$poll->radio" data-option-type="{$option->type}" data-option-id="{$option->id}" data-option-value="{$vote[$option->id]->booleanValue ? 'true' : 'false'}"><span n:class="badge, $vote[$option->id]->booleanValue ? 'badge-success' : 'badge-danger' ">{if $vote[$option->id]->booleanValue}{_common.yes|upper}{else}{_common.no|upper}{/if}</span></td>
                                 {else}
                                     <td data-option-type="{$option->type}" data-option-id="{$option->id}" data-option-value></td>
                                 {/ifset}

@@ -15,6 +15,10 @@ link: Odkaz
 never: Nikdy
 chooseFile: Vyberte soubor
 chooseSex: Vyberte pohlaví
+yes: Ano
+no: Ne
+user: Uživatel
+error: Chyba
 navigationBlock:
     first: První
     previous: Předchozí

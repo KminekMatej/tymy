@@ -54,6 +54,13 @@ class PollPresenter extends SecuredPresenter {
         $this->setLevelCaptions(["2" => ["caption" => $poll->caption, "link" => $this->link("Poll:poll", $poll->webName) ] ]);
         
         $this->template->poll = $poll;
+        
+        $this->template->resultsDisplayed = $this->translator->translate("poll.resultsDisplayed");
+        $this->template->resultsDisplayedAfterVote = $this->translator->translate("poll.resultsDisplayedAfterVote");
+        $this->template->resultsToYouOnly = $this->translator->translate("poll.resultsToYouOnly");
+        $this->template->resultsAreSecret = $this->translator->translate("poll.resultsAreSecret");
+        $this->template->resultsDisplayedWhenClosed = $this->translator->translate("poll.resultsDisplayedWhenClosed");
+
     }
     
     public function handleVote($pollId) {
