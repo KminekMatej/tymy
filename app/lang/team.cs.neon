@@ -40,3 +40,10 @@ jerseyNumber: Číslo dresu
 street: Ulice
 city: Město
 postal: PSČ
+hasNamedayToday: %name% slaví dnes svátek
+hasBirthdayToday: %name% slaví dnes %year% narozeniny
+hasNamedayTommorow: %name% slaví zítra svátek
+hasBirthdayTommorow: %name% slaví zítra %year% narozeniny
+currentlyOnline: Právě online
+lastLogin: Poslední přihlášení
+nobodyIsOnline: Nikdo není online

@@ -2,12 +2,8 @@
 
 namespace App\Presenters;
 
-use Nette;
-use Nette\Application\UI\NavbarControl;
-use App\Model; 
-use Nette\Application\UI\Form;
-use Tapi\UsersLiveResource;
 use Tapi\Exception\APIException;
+use Tapi\UsersLiveResource;
 
 class HomepagePresenter extends SecuredPresenter {
 
@@ -20,19 +16,33 @@ class HomepagePresenter extends SecuredPresenter {
         parent::beforeRender();
         $this->template->addFilter('lastLogin', function ($lastLogin) {
             $diff = date("U") - strtotime($lastLogin);
-            if($diff == 1) return "před vteřinou";
-            if($diff < 60) return "před $diff vteřinami";
-            if($diff < 120) return "před minutou";
+            if($diff == 1) return $this->translator->translate("common.lastLogin.secondAgo");
+            if($diff < 60) return $this->translator->translate("common.lastLogin.secondsAgo", NULL, ['n' => $diff]);
+            if($diff < 120) return $this->translator->translate("common.lastLogin.minuteAgo");
             $diffMinutes = round($diff / 60);
-            if($diff < 1800) return "před $diffMinutes minutami";
-            if($diff < 3600) return "před půl hodinou";
-            if($diff < 7200) return "před hodinou";
+            if($diff < 1800) return $this->translator->translate("common.lastLogin.minutesAgo", NULL, ['n' => $diffMinutes]);
+            if($diff < 3600) return $this->translator->translate("common.lastLogin.halfHourAgo");
+            if($diff < 7200) return $this->translator->translate("common.lastLogin.hourAgo");
             $diffHours = round($diff / 3600);
-            if($diff < 86400) return "před $diffHours hodinami";
+            if($diff < 86400) return $this->translator->translate("common.lastLogin.hoursAgo", NULL, ['n' => $diffHours]);
             $diffDays = round($diff / 86400);
-            if($diff < 172800) return "před 1 dnem";
-            return "před $diffDays dny";
+            if($diff < 172800) return $this->translator->translate("common.lastLogin.dayAgo");
+            return $this->translator->translate("common.lastLogin.daysAgo", NULL, ['n' => $diffDays]);;
         });
+        
+        $this->template->addFilter('namedayToday', function ($name, $webname) {
+            return $this->translator->translate("team.hasNamedayToday", NULL, ["name" => '<strong><a href='.$this->link("Team:player", $webname).'>'.$name.'</a></strong>']);
+        });
+        $this->template->addFilter('namedayTommorow', function ($name, $webname) {
+            return $this->translator->translate("team.hasNamedayTommorow", NULL, ["name" => '<strong><a href='.$this->link("Team:player", $webname).'>'.$name.'</a></strong>']);
+        });
+        $this->template->addFilter('birthdayToday', function ($name, $webname, $year) {
+            return $this->translator->translate("team.hasBirthdayToday", NULL, ["name" => '<strong><a href='.$this->link("Team:player", $webname).'>'.$name.'</a></strong>', "year" => '<strong>'.$year.'.</strong>']);
+        });
+        $this->template->addFilter('birthdayTommorow', function ($name, $webname, $year) {
+            return $this->translator->translate("team.hasBirthdayTommorow", NULL, ["name" => '<strong><a href='.$this->link("Team:player", $webname).'>'.$name.'</a></strong>', "year" => '<strong>'.$year.'.</strong>']);
+        });
+        
     }
     
     public function renderDefault() {
@@ -52,6 +62,8 @@ class HomepagePresenter extends SecuredPresenter {
         $this->template->evMonths = $this->eventList->getAsMonthArray();
         $this->template->events = $this->eventList->getAsArray();
         $this->template->eventTypes = $this->eventTypeList;
+        
+        $this->template->neverLogin = $this->translator->translate("common.never");
     }
 
     private function sortUsersByLastLogin($usersArray){

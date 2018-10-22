@@ -65,15 +65,15 @@
     <div class="row">
         <div class="col-md-5 my-3">
             <div class="card sh-box" id='calendar'></div>
-            <a class="btn btn-sm btn-light btn-light-bordered my-1 d-block" href="{plink Event:}">Přejít na události...</a>
+            <a class="btn btn-sm btn-light btn-light-bordered my-1 d-block" href="{plink Event:}">{_event.goToEvents} ...</a>
         </div>
         <div class="col-md-7 my-3">
             <div class="card sh-box">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col"><h4 class="card-title">Diskuze</h4></div>
+                        <div class="col"><h4 class="card-title">{_discussion.discussion}</h4></div>
                         <div class="col col-md-auto">
-                            <button class="btn btn-sm btn-light btn-light-bordered refresh" title="Obnovit" onclick="refresh()" data-href="{link navbar:refresh!}"><i class="fa fa-sync" aria-hidden="true"></i></button>
+                            <button class="btn btn-sm btn-light btn-light-bordered refresh" title="{_common.refresh}" onclick="refresh()" data-href="{link navbar:refresh!}"><i class="fa fa-sync" aria-hidden="true"></i></button>
                         </div>
                     </div>
                 </div>
@@ -97,10 +97,10 @@
             {var $nameDay = date('m-d', strtotime(date('Y').'-'.$usr->nameDayMonth.'-'.$usr->nameDayDay))}
             {var $bDay = property_exists($usr, 'birthDate') ? date('m-d', strtotime($usr->birthDate)) : '0-0'}
             {var $years = property_exists($usr, 'birthDate') ? date('Y') - date('Y', strtotime($usr->birthDate)) : '0'}
-            <div n:if="$usr->nameDayMonth > 0 && $usr->nameDayDay > 0 && $today==$nameDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><a href="{plink Team:player $usr->webName}">{$usr->displayName}</a></strong> slaví dnes svátek!</div>
-            <div n:if="property_exists($usr, 'birthDate') && $today==$bDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><a href="{plink Team:player $usr->webName}">{$usr->displayName}</a></strong> slaví dnes <strong>{$years}.</strong> narozeniny!</div>
-            <div n:if="$usr->nameDayMonth > 0 && $usr->nameDayDay > 0 && $tommorow==$nameDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><a href="{plink Team:player $usr->webName}">{$usr->displayName}</a></strong> slaví zítra svátek!</div>
-            <div n:if="property_exists($usr, 'birthDate') && $tommorow==$bDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><a href="{plink Team:player $usr->webName}">{$usr->displayName}</a></strong> slaví zítra <strong>{$years}.</strong> narozeniny!</div>
+            <div n:if="$usr->nameDayMonth > 0 && $usr->nameDayDay > 0 && $today==$nameDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{$usr->displayName,$usr->webName|namedayToday|noescape}</div>
+            <div n:if="property_exists($usr, 'birthDate') && $today==$bDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{$usr->displayName,$usr->webName,$years|birthdayToday|noescape}</div>
+            <div n:if="$usr->nameDayMonth > 0 && $usr->nameDayDay > 0 && $tommorow==$nameDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{$usr->displayName,$usr->webName|namedayTommorow|noescape}</div>
+            <div n:if="property_exists($usr, 'birthDate') && $tommorow==$bDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{$usr->displayName,$usr->webName,$years|birthdayTommorow|noescape}</div>
         </div>
     </div>
 
@@ -110,10 +110,10 @@
                 <div class="card-header">
                     <ul class="nav nav-tabs flex-column flex-sm-row card-header-tabs">
                         <li class="nav-item">
-                            <a class="flex-sm-fill text-sm-center nav-link active" href="#live" data-toggle="tab" role="tab">Právě online</a>
+                            <a class="flex-sm-fill text-sm-center nav-link active" href="#live" data-toggle="tab" role="tab">{_team.currentlyOnline}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="flex-sm-fill text-sm-center nav-link" href="#lastLogin" data-toggle="tab" role="tab">Poslední přihlášení</a>
+                            <a class="flex-sm-fill text-sm-center nav-link" href="#lastLogin" data-toggle="tab" role="tab">{_team.lastLogin}</a>
                         </li>
                     </ul>
                 </div>
@@ -126,12 +126,12 @@
                                     <figcaption class="figure-caption">{$live->callName}</figcaption>
                                 </a>
                             </figure>
-                            <h6 class="card-subtitle mb-2 text-muted" n:if="count($liveUsers) == 0">Nikdo není online</h6>
+                            <h6 class="card-subtitle mb-2 text-muted" n:if="count($liveUsers) == 0">{_team.nobodyIsOnline}</h6>
                         </div>
                         <div class="tab-pane fade" id="lastLogin" role="tabpanel">
                             <figure class="figure text-center" style="width: 100px" n:foreach="$users as $usr">
-                                {var $lastLogin = property_exists($usr, 'lastLogin') ? ($usr->lastLogin|date:'j.n.Y H:i:s') : 'Nikdy'}
-                                {var $caption = property_exists($usr, 'lastLogin') ? ($usr->lastLogin|lastLogin) : 'Nikdy'}
+                                {var $lastLogin = property_exists($usr, 'lastLogin') ? ($usr->lastLogin|date:'j.n.Y H:i:s') : $neverLogin}
+                                {var $caption = property_exists($usr, 'lastLogin') ? ($usr->lastLogin|lastLogin) : $neverLogin}
                                 <a href="{plink Team:player $usr->webName}" title="{$lastLogin}">
                                     <img src="{$tymyRoot}/{$usr->pictureUrl}" class="figure-img img-fluid rounded user_pic" n:attr="alt => property_exists($usr, 'fullName' ? $usr->fullName : '')"/>
                                     <figcaption class="figure-caption">{$usr->displayName}</figcaption>

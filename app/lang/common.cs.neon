@@ -12,6 +12,7 @@ search: Hledat
 toogleNavigation: Otevřít navigační menu
 new: Nový
 link: Odkaz
+never: Nikdy
 chooseFile: Vyberte soubor
 chooseSex: Vyberte pohlaví
 navigationBlock:
@@ -19,3 +20,13 @@ navigationBlock:
     previous: Předchozí
     next: Následující
     last: Poslední
+lastLogin:
+    secondAgo: před vteřinou
+    secondsAgo: před %n% vteřinami
+    minuteAgo: před minutou
+    minutesAgo: před %n% minutami
+    halfHourAgo: před půl hodinou
+    hourAgo: před hodinou
+    hoursAgo: před %n% hodinami
+    dayAgo: před 1 dnem
+    daysAgo: před %n% dny
