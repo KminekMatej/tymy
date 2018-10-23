@@ -34,11 +34,11 @@ function updatePoll(btn, purl) {
     });
     
     if(voteCount > maxItems){
-        $("DIV.poll DIV.card-body").prepend("<div class='alert alert-danger' role='alert'><strong>"+captionError+"!</strong> "+captionMaxItemsOverflow+" ("+maxItems+")!</div>");
+        $("DIV.poll DIV.card-body").prepend("<div class='alert alert-danger' role='alert'><strong>"+translate.common.error+"!</strong> "+translate.poll.maxItemsOverflow+" ("+maxItems+")!</div>");
         return;
     }
     if(voteCount < minItems){
-        $("DIV.poll DIV.card-body").prepend("<div class='alert alert-danger' role='alert'><strong>"+captionError+"!</strong> "+captionNotEnoughItems+" ("+minItems+")!</div>");
+        $("DIV.poll DIV.card-body").prepend("<div class='alert alert-danger' role='alert'><strong>"+translate.common.error+"!</strong> "+translate.poll.notEnoughItems+" ("+minItems+")!</div>");
         return;
     }
     
@@ -120,23 +120,23 @@ function stats(){
         });
         
     });
-    statsHtml = "<tr id='stats'><td>"+captionVotesCount+":"+votesCount+"</td>";
+    statsHtml = "<tr id='stats'><td>"+translate.poll.votesCount+":"+votesCount+"</td>";
 
     for (option in stats) {
         if (stats.hasOwnProperty(option)) {
             switch (stats[option].type) {
                 case "TEXT":
                     votesSumTxt = "";
-                    statsHtml += "<td data-option-id='"+stats[option].optionId+"'>"+captionVoted+" "+stats[option].votes+"x ("+Math.round((stats[option].votes / votesCount)*100) +"%)</td>";
+                    statsHtml += "<td data-option-id='"+stats[option].optionId+"'>"+translate.poll.voted+" "+stats[option].votes+"x ("+Math.round((stats[option].votes / votesCount)*100) +"%)</td>";
                     break;
                 case "NUMBER":
-                    statsHtml += "<td data-option-id='"+stats[option].optionId+"'>"+captionVoted+" "+stats[option].votes+"x ("+Math.round((stats[option].votes / votesCount)*100) +"%)<br/>Σ = "+Math.round(stats[option].sum * 100) / 100 +"<br/>ϕ = "+ Math.round((stats[option].sum/votesCount) * 100) / 100 +"</td>";
+                    statsHtml += "<td data-option-id='"+stats[option].optionId+"'>"+translate.poll.voted+" "+stats[option].votes+"x ("+Math.round((stats[option].votes / votesCount)*100) +"%)<br/>Σ = "+Math.round(stats[option].sum * 100) / 100 +"<br/>ϕ = "+ Math.round((stats[option].sum/votesCount) * 100) / 100 +"</td>";
                     break;
                 case "BOOLEAN":
                     if(radioLayout)
-                        statsHtml += "<td data-option-id='"+stats[option].optionId+"'>"+captionVoted+" "+stats[option].votes+"x ("+Math.round((stats[option].votes / votesCount)*100) +"%)</td>";
+                        statsHtml += "<td data-option-id='"+stats[option].optionId+"'>"+translate.poll.voted+" "+stats[option].votes+"x ("+Math.round((stats[option].votes / votesCount)*100) +"%)</td>";
                     else 
-                        statsHtml += "<td data-option-id='"+stats[option].optionId+"'>"+captionVoted+" "+stats[option].votes+"x ("+Math.round((stats[option].votes / votesCount)*100) +"%)<br/>"+stats[option].true +"x ANO ("+Math.round((stats[option].true/votesCount)*100)+"%)<br/>"+stats[option].false +"x NE ("+Math.round((stats[option].false/votesCount)*100)+"%)</td>";
+                        statsHtml += "<td data-option-id='"+stats[option].optionId+"'>"+translate.poll.voted+" "+stats[option].votes+"x ("+Math.round((stats[option].votes / votesCount)*100) +"%)<br/>"+stats[option].true +"x ANO ("+Math.round((stats[option].true/votesCount)*100)+"%)<br/>"+stats[option].false +"x NE ("+Math.round((stats[option].false/votesCount)*100)+"%)</td>";
                     break;
             }
         }

@@ -40,7 +40,7 @@ function updatePost(url) {
 }
 
 function deletePost(id, url) {
-    if (!confirm("Smazat? To jako vážně?")) {
+    if (!confirm(translate.dicussion.alerts.confirmDeletePost)) {
         return;
     }
     postElm = $("DIV#row-" + id)

@@ -1,0 +1,23 @@
+{* Latte template *}
+
+{block scripts}
+{include parent}
+<script>
+    var translate = {
+        poll: {
+            voted: {_poll.voted},
+            votesCount: {_poll.votesCount},
+            maxItemsOverflow: {_poll.maxItemsOverflow},
+            notEnoughItems: {_poll.notEnoughItems},
+        },
+        common: {
+            error: {_common.error},
+        },
+        discussion: {
+            alerts:{
+                confirmDeletePost: {_discussion.alerts.confirmDeletePost},
+            },
+        }
+    }
+</script>
+{/block}

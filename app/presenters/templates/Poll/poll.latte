@@ -7,12 +7,6 @@
 {block scripts}
 {include parent}
 <script>
-    var captionVoted = {_poll.voted};
-    var captionVotesCount = {_poll.votesCount};
-    var captionError = {_common.error};
-    var captionMaxItemsOverflow = {_poll.maxItemsOverflow};
-    var captionNotEnoughItems = {_poll.notEnoughItems};
-    
     $(document).ready(function () {
         stats();
     });

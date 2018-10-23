@@ -14,6 +14,8 @@ postBlock:
 errors:
     noDiscussionExists: Tato diskuze neexistuje
     discussionNotExists: Diskuze %id% neexistuje
+alerts:
+    confirmDeletePost: Smazat? To jako vážně?
 newDiscussion: Nová diskuze
 newDiscussionTitle: Vytvořit novou diskuzi
 discussionSettings: Nastavení diskuzí
