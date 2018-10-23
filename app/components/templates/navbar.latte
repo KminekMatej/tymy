@@ -10,7 +10,7 @@
         <ul class="navbar-nav mr-auto">
             <li class="nav-item dropdown" name="discussions">
                 {if $discussionWarnings > 0}<span class="badge badge-pill badge-danger badge-new">{$discussionWarnings}</span>{/if}
-                <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-comments" aria-hidden="true"></i> {_discussion.discussion}</a>
+                <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-comments" aria-hidden="true"></i> {_discussion.discussion, 2}</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <button n:if="count($discussions) == 0" class="dropdown-item disabled" type="button"> - {_discussion.noDiscussion} - </button>
                     {if count(discussions)}
