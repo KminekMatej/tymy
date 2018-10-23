@@ -49,7 +49,7 @@ $(document).ready(function () {
             },
             error: function(xhr, ajaxOptions, thrownError){
                 if(xhr.status == 400){
-                    alert("Soubor není obrázek, nebo je poškozený");
+                    alert(translate.team.errors.imgFileCorrupted);
                 }
                 
             },

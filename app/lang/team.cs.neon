@@ -52,3 +52,5 @@ nobodyIsOnline: Nikdo není online
 administrator: Administrátor
 userAdmin: Správce uživatelů
 attendanceAdmin: Správce docházky
+errors:
+    imgFileCorrupted: "Soubor není obrázek, nebo je poškozený"
