@@ -14,6 +14,8 @@ use Tracy\Debugger;
  */
 abstract class BasePresenter extends Nette\Application\UI\Presenter {
     
+    const LOCALES = ["CZ" => "cs", "EN" => "en", "FR" => "fr", "PL" => "pl"];
+    
     /** @persistent */
     public $locale;
 

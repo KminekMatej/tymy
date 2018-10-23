@@ -100,6 +100,13 @@ class SecuredPresenter extends BasePresenter {
             $this->redirect('Sign:in');
         }
         //$this->cacheService->dropCache();
+        if(array_key_exists("language", $this->getUser()->getIdentity()->getData())){
+            $this->translator->setLocale(self::LOCALES[$this->getUser()->getIdentity()->getData()["language"]]);
+            Debugger::barDump($this->translator);
+            Debugger::barDump(self::LOCALES[$this->getUser()->getIdentity()->getData()["language"]]);
+            
+        }
+        
         
         $this->supplier->setTapi_config($this->getUser()->getIdentity()->getData()["tapi_config"]);
         $this->apiRights->setId($this->getUser()->getId());

@@ -1,0 +1,56 @@
+poll: Anketa|Ankety
+newPoll: Nová anketa
+editPoll: Úprava ankety
+configPolls: Nastavení anket
+noPoll: Žádná anketa
+createPoll: Vytvořit novou anketu
+createItem: Vytvořit novou položku
+minItems: Minimum vyplněných položek
+maxItems: Maximum vyplněných položek
+min: Min
+max: Max
+setChangeableVotes: Povolit změnu názoru
+changeOfVotes: Změna názoru
+changeableVotes: Hlasování se dá měnit
+unchangeableVotes: Hlasování se nedá měnit
+anonymousVotes: Anonymní hlasování
+anonym: Anonym
+anonymousResults: Anketa je anonymní
+nonanonymousResults: Anketa není anonymní
+displayResults: Zobrazit výsledky
+resultsDisplayed: Výsledky jsou zobrazeny
+resultsDisplayedAfterVote: Výsledky budou zobrazeny po odhlasování
+resultsToYouOnly: Výsledky vidíte pouze vy
+resultsAreSecret: Výsledky jsou tajné
+resultsDisplayedWhenClosed: Výsledky budou zobrazeny až po uzavření ankety
+cannotVoteHere: V této anketě nemůžete volit
+vote: Hlasovat
+voted: Hlasováno
+results: Výsledky hlasování
+votesCount: Počet hlasů
+maxItemsOverflow: Překročen maximální počet hlasů
+notEnoughItems: Nedosažen minimální počet hlasů
+design: Design
+opened: Aktivní
+closed: Uzavřená
+displayInMainMenu: Uvést v hlavním menu
+never: Nikdy
+always: Vždy
+afterVote: Hlasujícím
+whenClosed: Po uzavření
+canVote: Může hlasovat
+canDisplayResults: Může prohlížet
+canAlienVote: Může zastoupit
+canVoteRight: Oprávnění pro hlasování
+canDisplayResultsRight: Oprávnění pro prohlížení výsledků
+canAlienVoteRight: Oprávnění pro zastoupení v hlasování
+pollItems: Položky ankety
+itemCaption: Název
+text: Text
+number: Číslo
+bool: Ano / Ne
+new: Nová
+alerts:
+    succesfullyCreated: Poznámka byla úspěšně vytvořena
+errors:
+    pollNotExists: Anketa %id% neexistuje
