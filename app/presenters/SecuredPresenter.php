@@ -102,9 +102,6 @@ class SecuredPresenter extends BasePresenter {
         //$this->cacheService->dropCache();
         if(array_key_exists("language", $this->getUser()->getIdentity()->getData())){
             $this->translator->setLocale(self::LOCALES[$this->getUser()->getIdentity()->getData()["language"]]);
-            Debugger::barDump($this->translator);
-            Debugger::barDump(self::LOCALES[$this->getUser()->getIdentity()->getData()["language"]]);
-            
         }
         
         
