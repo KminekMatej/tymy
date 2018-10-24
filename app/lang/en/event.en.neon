@@ -1,7 +1,7 @@
 event: Event|Events
 attendance: Event|Events
 newEvents: New events
-editEvents: Edit events
+editEvent: Edit event|Edit events
 settingsEvents: Events settings
 noEvent: No event
 showHidePastEvents: Show/hide past events

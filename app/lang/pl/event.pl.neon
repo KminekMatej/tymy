@@ -1,7 +1,7 @@
 event: Událost|Události
 attendance: Docházka|Docházka
 newEvents: Nové události
-editEvents: Úprava událostí
+editEvent: Úprava události|Úprava událostí
 settingsEvents: Nastavení událostí
 noEvent: Žádná událost
 showHidePastEvents: Zobrazit/skrýt již proběhlé akce
