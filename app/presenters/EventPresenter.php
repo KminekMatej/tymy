@@ -64,15 +64,10 @@ class EventPresenter extends SecuredPresenter {
         $this->template->agendaTo = date("Y-m", strtotime($this->eventList->getTo()));
         $this->template->currY = date("Y");
         $this->template->currM = date("m");
-        $this->template->evMonths = $this->eventList->getAsMonthArray();
         $this->template->events = $this->eventList->getAsArray();
+        $this->template->evMonths = $this->eventList->getAsMonthArray();
         $this->template->eventTypes = $eventTypes;
         if ($this->isAjax()) {
-            foreach ($this->eventList->getAsArray() as &$eventJs) {
-                $eventJs->url = $this->link("Event:event", $eventJs->webName);
-                unset($eventJs->webName);
-                $eventJs->stick = true;
-            }
             $this->payload->events = $this->eventList->getAsArray();
         }
     }
