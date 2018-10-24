@@ -29,7 +29,7 @@
             },
             eventRender: function (event, element) {
                 element.find('.fc-title').attr("title", event.description);
-                if (event.end < Date.now())
+                if (event.end && event.end.isBefore())
                     element.addClass("past");
             },
             header: {

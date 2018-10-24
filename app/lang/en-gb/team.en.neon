@@ -1,0 +1,56 @@
+team: Team|Teams
+PLAYER: 'Player|Players'
+MEMBER: 'Member|Members'
+SICK: 'Sick|Sicks'
+INIT: 'Registered|Registered'
+DELETED: 'Deleted|Deleted'
+jersey: Jersey|Jerseys
+jerseyList: Jersey list
+newMailToAll: New e-mail to all
+newMailTo: New mail to
+freeNumber: Free
+inActive: Inactive
+personalData: Personal data
+loginData: Login data
+teamData: Team info
+address: Address
+roles: Role|Roles
+profilePhoto: Avatar
+male: Man|Men
+female: Woman|Women
+unknownSex: Unknown
+sex: Sex
+chooseSex: Choose sex
+firstname: Name
+surname: Surname
+phone: Phone
+email: E-mail
+dateOfBirth: Date of birth
+namedayMonth: Month of nameday
+chooseMonth: Pick month
+namedayDay: Day of nameday
+language: Language
+dateOfRegistration: Registered
+displayedName: Displayed name
+displayedNameUserEditable: User editable
+username: Username
+newPassword: New password
+newPasswordAgain: New password again
+loginEnabled: Login approved
+status: Team state
+jerseyNumber: Jersey number
+street: Street
+city: City
+postal: Postal
+hasNamedayToday: %name% celebrates his nameday today
+hasBirthdayToday: %name% celebrates his %year% birthday today
+hasNamedayTommorow: %name% celebrates his nameday tommorow
+hasBirthdayTommorow: %name% celebrates his %year% birthday tommorow
+currentlyOnline: Online
+lastLogin: Last login
+nobodyIsOnline: Nobody online
+administrator: Administrator
+userAdmin: User manager
+attendanceAdmin: Event manager
+errors:
+    imgFileCorrupted: "File is not a pictute, or is corrupted"

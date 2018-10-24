@@ -1,0 +1,19 @@
+note: Poznámka|Poznámky
+settingsNotes: Nastavení poznámek
+noNote: Žádná poznámka
+newNote: Nová poznámka
+createNote: Vytvořit novou poznámku
+editNote: Úprava poznámky
+private: Soukromá
+users: Pro členy
+public: Veřejná
+systemPage: Systémová stránka
+content: Obsah
+accessTitle: "Vyberte kdo má přístup k poznámce: Soukromá (pouze vy), Pro členy, Veřejná (jde zobrazit u bez přihlášení)"
+mainMenuTitle: Uvést v hlavním menu
+specialPageTitle: Vyberte speciální systémový kód poznámky. Více viz O poznámkách
+orderTitle: Pořadí v menu
+system: Systémová
+new: Nová
+errors:
+    noteNotExists: Poznámka %id% neexistuje

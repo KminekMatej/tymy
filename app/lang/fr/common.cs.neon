@@ -1,0 +1,72 @@
+copyToClipboard: Kopírovat do schránky
+edit: Upravit
+copy: Kopírovat
+delete: Smazat
+duplicate: Duplikovat
+save: Uložit
+saveAll: Uložit vše
+edited: "Upravil (a)"
+everyone: Všichni
+allOfThem: Všechny
+refresh: Obnovit
+insert: Vložit
+mainPage: Hlavní stránka
+search: Hledat
+toogleNavigation: Otevřít navigační menu
+menu: Menu
+new: Nový
+link: Odkaz
+never: Nikdy
+chooseFile: Vyberte soubor
+chooseSex: Vyberte pohlaví
+chooseType: Vyberte typ
+chooseState: Vyberte stav
+ok: Ok
+yes: Ano
+no: Ne
+user: Uživatel
+error: Chyba
+or: nebo
+day: Den
+week: Týden
+month: Měsíc
+navigationBlock:
+    first: První
+    previous: Předchozí
+    next: Následující
+    last: Poslední
+lastLogin:
+    secondAgo: před vteřinou
+    secondsAgo: před %n% vteřinami
+    minuteAgo: před minutou
+    minutesAgo: před %n% minutami
+    halfHourAgo: před půl hodinou
+    hourAgo: před hodinou
+    hoursAgo: před %n% hodinami
+    dayAgo: před 1 dnem
+    daysAgo: před %n% dny
+alerts:
+    nobodyFound: Nikdo nenalezen
+    userSuccesfullyDeleted: Uživatel byl úspešně smazán
+    loginNotApproved: Tento uživatel zatím nemá povolené přihlášení
+    loginNotSuccesfull: Přihlášení bylo neúspěšné
+    logoutSuccesfull: Byl jste úspěšně odhlášen
+    registrationSuccesfull: Registrace byla úspěšná. Nyní vyčkejte na schválení registrace administrátorem.
+    userNotFound: "Uživatel nebyl nalezen, je zablokován nebo došlo k chybě. Zkuste to znovu, nebo kontaktujte týmového administrátora."
+    resetCodeSent: Kód k resetování byl zaslán na Vaši e-mailovou adresu
+    pwdResetSuccesfull: Vaše heslo bylo úspěšně resetováno
+    inactivityLogout: Byl jste odhlášen z důvodu dlouhé nečinnosti. Prosím přihlašte se znovu.
+    exceptionOccured: Došlo k nečekané chybě
+months:
+    january: Leden
+    february: Únor
+    march: Březen
+    april: Duben
+    may: Květen
+    june: Červen
+    july: Červenec
+    august: Srpen
+    september: Září
+    october: Říjen
+    november: Listopad
+    december: Prosinec

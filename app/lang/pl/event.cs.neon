@@ -1,0 +1,27 @@
+event: Událost|Události
+newEvents: Nové události
+editEvents: Úprava událostí
+settingsEvents: Nastavení událostí
+noEvent: Žádná událost
+showHidePastEvents: Zobrazit/skrýt již proběhlé akce
+agenda: Agenda
+new: Nová
+openMap: Otevřít mapu ....
+start: Začátek
+close: Uzávěrka
+end: Konec
+place: Místo
+attendanceNotFilled: Nemáš vyplněnou docházku
+notDecidedYet: Nerozhodnutí
+arrived: Přišel|Přišli
+notArrived: Nepřišel|Nepřišli
+attendanceResult: Výsledná docházka
+setAttendanceResult: Zadat výslednou docházku
+saveAttendanceResult: Uložit výslednou docházku
+goToEvents: Přejít na události
+openInNewWindow: Zobrazit v novém okně
+duplicateEventDay: Duplikovat poslední událost a posunout časy o 1 den
+duplicateEventWeek: Duplikovat poslední událost a posunout časy o 1 týden
+duplicateEventMonth: Duplikovat poslední událost a posunout časy o 1 měsíc
+errors:
+    eventNotExists: Událost %id% neexistuje

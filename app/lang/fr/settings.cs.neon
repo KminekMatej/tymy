@@ -1,0 +1,22 @@
+application: Aplikace
+setting: Nastavení|Nastavení
+cacheDrop: Vymazat cache
+cacheDropped: Cache vymazána
+appSettings: Nastavení aplikace
+appVersion: Verze aplikace
+released: Vydáno
+changeList: Seznam změn
+authors: Autoři
+reportBug: Nahlásit chybu
+fromPreviousVersion: od předchozí verze
+title: Název
+description: Popis
+canRead: Číst může
+canWrite: Psát může
+canDelete: Mazat může
+canTop: Topovat může
+order: Pořadí
+access: Přístup
+status: Stav
+type: Typ
+here: zde
