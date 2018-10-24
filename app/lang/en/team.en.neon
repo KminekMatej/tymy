@@ -1,5 +1,5 @@
 team: Team|Teams
-PLAYER: 'Player|Player'
+PLAYER: 'Player|Players'
 MEMBER: 'Member|Members'
 SICK: 'Sick|Sicks'
 INIT: 'Registered|Registered'
