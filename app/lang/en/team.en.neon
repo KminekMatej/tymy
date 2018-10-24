@@ -50,7 +50,7 @@ currentlyOnline: Online
 lastLogin: Last login
 nobodyIsOnline: Nobody online
 administrator: Administrator
-userAdmin: User administrator
-attendanceAdmin: Event administrator
+userAdmin: User manager
+attendanceAdmin: Event manager
 errors:
     imgFileCorrupted: "File is not a pictute, or is corrupted"

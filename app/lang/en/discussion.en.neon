@@ -10,7 +10,7 @@ copy: Copy
 jump2date: Jump on date
 go: Hop
 postBlock:
-    enterSearchTerms: Type searched text ...
+    enterSearchTerms: Search for ...
 errors:
     noDiscussionExists: This discussion does not exist
     discussionNotExists: Discussion %id% does not exist
