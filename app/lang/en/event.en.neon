@@ -1,4 +1,5 @@
 event: Event|Events
+attendance: Event|Events
 newEvents: New events
 editEvents: Edit events
 settingsEvents: Events settings
