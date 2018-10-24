@@ -135,6 +135,10 @@ class TeamPresenter extends SecuredPresenter {
         } catch (APIException $ex) {
             $this->handleTapiException($ex, "this");
         }
+        if(array_key_exists("language", $bind["changes"])){
+            $this->flashMessage($this->translator->translate("team.alerts.signOffNeeded"), "danger");
+            $this->redirect('this');
+        }
     }
     
     public function handleDelete() {

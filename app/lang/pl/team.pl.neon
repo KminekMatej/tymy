@@ -54,3 +54,5 @@ userAdmin: Správce uživatelů
 attendanceAdmin: Správce docházky
 errors:
     imgFileCorrupted: "Soubor není obrázek, nebo je poškozený"
+alerts:
+    signOffNeeded: Language changed - please logout & login for language to change

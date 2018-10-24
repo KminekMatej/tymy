@@ -54,3 +54,5 @@ userAdmin: User manager
 attendanceAdmin: Event manager
 errors:
     imgFileCorrupted: "File is not a pictute, or is corrupted"
+alerts:
+    signOffNeeded: Language changed - please logout & login for language to change
