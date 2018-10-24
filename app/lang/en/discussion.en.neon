@@ -1,25 +1,25 @@
-discussion: Diskuze|Diskuze
-noDiscussion: Žádná diskuze
-editDiscussion: Úprava diskuze
-unpin: Odepnout
-pin: Připnout
-new: Nová
-copyToClipboard: Kopírovat do schránky
-edit: Upravit
-copy: Kopírovat
-jump2date: Skok na datum
+discussion: Discussion|Discussions
+noDiscussion: No discussion
+editDiscussion: Edit discussion
+unpin: Unpin
+pin: Pin
+new: New
+copyToClipboard: Copy to clipboard
+edit: Edit
+copy: Copy
+jump2date: Jump on date
 go: Hop
 postBlock:
-    enterSearchTerms: Zadejte hledaný text ...
+    enterSearchTerms: Type searched text ...
 errors:
-    noDiscussionExists: Tato diskuze neexistuje
-    discussionNotExists: Diskuze %id% neexistuje
+    noDiscussionExists: This discussion does not exist
+    discussionNotExists: Discussion %id% does not exist
 alerts:
-    confirmDeletePost: Smazat? To jako vážně?
-newDiscussion: Nová diskuze
-newDiscussionTitle: Vytvořit novou diskuzi
-discussionSettings: Nastavení diskuzí
-public: Veřejná
-publicTitle: Viditelná na výchozí stránce bez přihlášení
-edits: Úpravy
-editablePosts: Povolit úpravy
+    confirmDeletePost: Delete? Like really?
+newDiscussion: New discussion
+newDiscussionTitle: Create new discussion
+discussionSettings: Discussions settings
+public: Public
+publicTitle: Visible on main page without login
+edits: Edits
+editablePosts: Allow edits

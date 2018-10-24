@@ -51,6 +51,6 @@ number: Číslo
 bool: Ano / Ne
 new: Nová
 alerts:
-    succesfullyCreated: Poznámka byla úspěšně vytvořena
+    succesfullyCreated: Anketa byla úspěšně vytvořena
 errors:
     pollNotExists: Anketa %id% neexistuje

@@ -1,6 +1,6 @@
-username: Uživatelské jméno
-password: Heslo
-login: Login
-logout: Odhlásit
-register: Registrovat
-pwdLost: Ztracené heslo
+username: Username
+password: Password
+login: Sign in
+logout: Sign off
+register: Register
+pwdLost: Lost password
