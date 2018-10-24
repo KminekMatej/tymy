@@ -136,7 +136,7 @@ class TeamPresenter extends SecuredPresenter {
             $this->handleTapiException($ex, "this");
         }
         if(array_key_exists("language", $bind["changes"])){
-            $this->flashMessage($this->translator->translate("team.alerts.signOffNeeded"), "danger");
+            $this->flashMessage($this->translator->translate("team.alerts.signOffNeeded"), "info");
             $this->redirect('this');
         }
     }
