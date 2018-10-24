@@ -19,8 +19,8 @@ CKEDITOR.editorConfig = function( config ) {
         config.enterMode = CKEDITOR.ENTER_BR;
         config.format_tags = 'p;h1;h2;h3;h4;h5;h6;pre';
         config.extraPlugins = 'font,justify,bbcode';
+        config.removeDialogTabs = 'image:advanced;link:advanced';
         config.language = locale;
-
 };
 
 CKEDITOR.on('dialogDefinition', function( ev ) {
