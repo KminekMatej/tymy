@@ -46,9 +46,7 @@
                         <tr><th>{_note.content}</th><td>
                                     <textarea style="width:100%;" id="noteSource" name="source" data-value="{$note->source}" class="form-control col-6">
                                     </textarea>
-                                    <script>CKEDITOR.replace('noteSource',{
-                                            language: 'cs',
-                                        });</script>
+                                    <script>CKEDITOR.replace('noteSource');</script>
                             </td></tr>
                         <tr><th>{_common.menu}</th>
                             <td><label class="custom-control custom-checkbox">

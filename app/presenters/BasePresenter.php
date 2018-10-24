@@ -31,6 +31,8 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
         $this->template->setTranslator($this->translator);
         date_default_timezone_set('Europe/Prague');
         
+        $this->template->locale = $this->translator->getLocale();
+        
         $this->template->js = Debugger::$productionMode ? "min.js" : "js";
         $this->template->css = Debugger::$productionMode ? "min.css" : "css";
         
