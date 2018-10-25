@@ -7,13 +7,24 @@
 {block content}
 <div class="container discussions">
     <div class="row justify-content-md-center">
-        <div class="col-8 my-3">
-            <div class="card sh-box">
+        <div class="col my-3">
+            <div class="card sh-box discussion-box">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col"><h4 class="card-title">{_discussion.discussion, 2}</h4></div>
+                        <div class="col col-md-auto">
+                            <button class="btn btn-sm btn-light btn-light-bordered refresh" title="{_common.refresh}" onclick="refresh()" data-href="{link navbar:refresh!}"><i class="fa fa-sync" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                </div>
                 <div class="card-body">
                     {foreach $discussions as $item}
                         <div class="row my-2">
-                            <div class="col-sm-3 name"><a href="{plink Discussion:discussion $item->webName}">{$item->caption}</a></div>
-                            <div class="col-sm-9">{$item->description}</div>
+                            <div class="col-sm-4 name" id="discussion-pane-{$item->id}">
+                                <h5><span n:class="badge,badge-pill,badge-danger,$item->newPosts == 0 ? d-none">{$item->newPosts}</span>
+                                <a href="{plink Discussion:discussion $item->webName}">{$item->caption}</a></h5>
+                            </div>
+                            <div class="col-sm-8 dis-description"><h5>{$item->description}</h5></div>
                         </div>
                     {/foreach}
                 </div>

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0cbc7980fb6c00e30ecf32d2733232d0",
+    "content-hash": "335cd0b6acea1e5af3bb1dc53e00f715",
     "packages": [
         {
             "name": "kdyby/strict-objects",
