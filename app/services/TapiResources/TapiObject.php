@@ -1,13 +1,15 @@
 <?php
 
 namespace Tapi;
+
+use App\Model\Supplier;
+use App\Model\TapiAuthenticator;
 use Nette;
 use Nette\Caching\Cache;
-use Nette\Caching\Storages\FileStorage;
-use Tapi\RequestMethod;
-use Tracy\Debugger;
+use Nette\Caching\Storages\NewMemcachedStorage;
+use stdClass;
 use Tapi\Exception\APIException;
-use Tapi\Exception\APINotFoundException;
+use Tapi\RequestMethod;
 use Tapi\TapiService;
 
 /**
@@ -69,10 +71,10 @@ abstract class TapiObject {
     /** @var string Request url */
     private $url;
     
-    /** @var \App\Model\Supplier */
+    /** @var Supplier */
     protected $supplier;
     
-    /** @var \App\Model\TapiAuthenticator */
+    /** @var TapiAuthenticator */
     protected $tapiAuthenticator;
     
     /** @var boolean Should sent data be encoded in JSON */
@@ -84,7 +86,7 @@ abstract class TapiObject {
     /** @var Nette\Caching\Cache */
     protected $cache;
     
-    /** @var FileStorage */
+    /** @var NewMemcachedStorage */
     protected $cacheStorage;
     
     public abstract function init();
@@ -100,7 +102,7 @@ abstract class TapiObject {
         $this->dataReady = FALSE;
     }
     
-    public function __construct(\App\Model\Supplier $supplier,  Nette\Security\User $user = NULL, TapiService $tapiService = NULL, FileStorage $cacheStorage = NULL) {
+    public function __construct(Supplier $supplier,  Nette\Security\User $user = NULL, TapiService $tapiService = NULL, NewMemcachedStorage $cacheStorage = NULL) {
         if ($cacheStorage) {
             $this->cacheStorage = $cacheStorage;
             $this->cache = new Cache($cacheStorage, TapiObject::CACHE_STORAGE);
@@ -113,7 +115,7 @@ abstract class TapiObject {
         $this->jsonEncoding = TRUE;
         $this->tsidRequired = TRUE;
         $this->method = RequestMethod::GET;
-        $this->options = new \stdClass();
+        $this->options = new stdClass();
         $this->options->warnings = 0;
         $this->init();
     }
@@ -122,9 +124,10 @@ abstract class TapiObject {
         if (!$this->dataReady || !$this->cacheable)
             return null;
         $key = $this->getCacheKey();
-        $this->cache->save($key, ["data" => $this->data, "options" => $this->options], [Cache::EXPIRE => $this->cachingTimeout . ' seconds', Cache::TAGS => [$this->getCacheTag(), $this->supplier->getTym() . "@" . $this->user->getId()]]);
+        $save = $this->cache->save($key, ["data" => $this->data, "options" => $this->options], [Cache::EXPIRE => $this->cachingTimeout . ' seconds', Cache::TAGS => [$this->getCacheTag(), $this->supplier->getTym() . "@" . $this->user->getId()]]);
         $allKeys = $this->cache->load("allkeys");
         $allKeys[$key] = $key;
+        
         $this->cache->save("allkeys", $allKeys, [Cache::EXPIRE => '30 minutes']);
     }
     
@@ -307,7 +310,7 @@ abstract class TapiObject {
         return $this;
     }
     
-    public function setSupplier(\App\Model\Supplier $supplier) {
+    public function setSupplier(Supplier $supplier) {
         $this->supplier = $supplier;
         return $this;
     }

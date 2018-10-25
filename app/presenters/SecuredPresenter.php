@@ -8,25 +8,25 @@
 
 namespace App\Presenters;
 
-use Nette;
-use Nette\Caching\Cache;
-use Nette\Caching\Storages\FileStorage;
-use Nette\Application\UI\NavbarControl;
 use App\Model\SettingMenu;
 use App\Model\TapiAuthenticator;
 use App\Model\TapiAuthorizator;
-use Tracy\Debugger;
-use Tapi\TapiObject;
-use Tapi\EventListResource;
-use Tapi\EventTypeListResource;
+use Nette\Application\UI\NavbarControl;
+use Nette\Caching\Cache;
+use Nette\Caching\Storages\NewMemcachedStorage;
+use Nette\Security\IUserStorage;
+use Tapi\AuthDetailResource;
 use Tapi\DiscussionListResource;
 use Tapi\DiscussionNewsListResource;
+use Tapi\EventListResource;
+use Tapi\EventTypeListResource;
+use Tapi\Exception\APIException;
+use Tapi\NoteListResource;
+use Tapi\PollListResource;
+use Tapi\TapiObject;
 use Tapi\UserDetailResource;
 use Tapi\UserListResource;
-use Tapi\PollListResource;
-use Tapi\NoteListResource;
-use Tapi\Exception\APIException;
-use Tapi\AuthDetailResource;
+use Tracy\Debugger;
 
 /**
  * Description of SecuredPresenter
@@ -70,7 +70,7 @@ class SecuredPresenter extends BasePresenter {
     /** @var NoteListResource @inject */
     public $noteList;
     
-    /** @var FileStorage @inject */
+    /** @var NewMemcachedStorage @inject */
     public $cacheStorage;
     
     public $accessibleSettings = [];
@@ -94,7 +94,7 @@ class SecuredPresenter extends BasePresenter {
         parent::startup();
         Debugger::$maxDepth = 7;
         if (!$this->getUser()->isLoggedIn()) {
-            if ($this->getUser()->getLogoutReason() === Nette\Security\IUserStorage::INACTIVITY) {
+            if ($this->getUser()->getLogoutReason() === IUserStorage::INACTIVITY) {
                 $this->flashMessage($this->translator->translate("common.alerts.inactivityLogout"));
             }
             $this->redirect('Sign:in');

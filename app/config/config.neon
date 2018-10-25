@@ -24,7 +24,7 @@ services:
         authorizator:
             class: App\Model\TapiAuthorizator
         cacheStorage:
-            class: Nette\Caching\Storages\FileStorage(%tempDir%)
+            class: Nette\Caching\Storages\NewMemcachedStorage()
         - Tapi\TapiService
         - Tapi\DiscussionNewsListResource
         - Tapi\DiscussionPageResource
