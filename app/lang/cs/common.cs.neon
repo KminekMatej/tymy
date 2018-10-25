@@ -57,6 +57,7 @@ alerts:
     pwdResetSuccesfull: Vaše heslo bylo úspěšně resetováno
     inactivityLogout: Byl jste odhlášen z důvodu dlouhé nečinnosti. Prosím přihlašte se znovu.
     exceptionOccured: Došlo k nečekané chybě
+    confirmDelete: Opravde chcete tento záznam smazat?
 months:
     january: Leden
     february: Únor
