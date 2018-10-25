@@ -4,6 +4,7 @@ $(document).ready(function () {
             area: this,
             checkboxValueChecked: 1,
             checkboxValueUnChecked: 0,
+            deleteConfirmation: translate.common.alerts.confirmDelete,
             isValid: function (name, value1, value2) {
                 switch (name) {
                     case "caption":
