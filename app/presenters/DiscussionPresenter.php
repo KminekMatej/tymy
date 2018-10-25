@@ -3,14 +3,13 @@
 namespace App\Presenters;
 
 use Nette\Application\UI\NewPostControl;
-use Tapi\Exception\APIException;
 use Tapi\DiscussionListResource;
-use Tapi\DiscussionNewsListResource;
 use Tapi\DiscussionPageResource;
 use Tapi\DiscussionPostCreateResource;
 use Tapi\DiscussionPostDeleteResource;
 use Tapi\DiscussionPostEditResource;
 use Tapi\DiscussionResource;
+use Tapi\Exception\APIException;
 
 /**
  * Description of DiscussionPresenter
