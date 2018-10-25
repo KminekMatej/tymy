@@ -29,14 +29,14 @@
                     <h6 class="card-subtitle mb-2 text-muted">{$event->eventType->caption}<span n:if="$event->place"> - <a href="{$mapLink}" target="blank" title="{_event.openMap}">{$event->place}</a></span><span n:if="$event->link"> - <a href="{$event->link}" target="_blank">[{_common.link}]</a></span></h6>
                     <p class="card-text">{$event->description}</p>
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-lg-4">
                             <table class="table mb-0">
                                 <tr><th>{_event.start}:</th><td>{$event->startTime|date:'d.n.Y H:i'}</td></tr>
                                 <tr><th>{_event.end}:</th><td>{$event->endTime|date:'d.n.Y H:i'}</td></tr>
                                 <tr><th>{_event.close}:</th><td>{$event->closeTime|date:'d.n.Y H:i'}</td></tr>
                             </table>
                         </div>
-                        <div class="col-md-8 d-flex flex-column-reverse align-items-center">
+                        <div class="col-lg-8 d-flex flex-column-reverse align-items-center">
                             <div class=" custom-container btn-group input-group pb-2" role="group" aria-label="Basic example" id="action-{$event->id}">
                                 <input type="text" class="form-control form-control-sm custom-btn-sm" title="{_note.note,1}" name="preStatusDesc" value="{$event->myAttendance->preDescription}" />
                                 {foreach $eventTypes[$event->type]->preStatusSet as $preStatus}
