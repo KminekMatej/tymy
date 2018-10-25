@@ -33,7 +33,8 @@
 		"tracy/tracy": "^2.4",
 		"nette/php-generator": "v2.6.4",
 		"nette/nette": "^2.4",
-		"kdyby/translation": "v2.4.0"
+		"kdyby/translation": "v2.4.0",
+		"symfony/filesystem": "^3.4"
 	},
 	"require-dev": {
 		"nette/tester": "^1.6"
