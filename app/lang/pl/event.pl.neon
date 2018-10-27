@@ -1,28 +1,27 @@
-event: Událost|Události
-attendance: Docházka|Docházka
-newEvents: Nové události
-editEvent: Úprava události|Úprava událostí
-settingsEvents: Nastavení událostí
-noEvent: Žádná událost
-showHidePastEvents: Zobrazit/skrýt již proběhlé akce
+event: Wydarzenie|Wydarzenia
+newEvents: Nowe wydarzenia
+editEvents: Edycja wydarzeia
+settingsEvents: Ustawienia wydarzeń
+noEvent: Nie ma wydarzeń
+showHidePastEvents: Pokaż/ukryj przeszłe wydarzenia
 agenda: Agenda
-new: Nová
-openMap: Otevřít mapu ....
-start: Začátek
-close: Uzávěrka
-end: Konec
-place: Místo
-attendanceNotFilled: Nemáš vyplněnou docházku
-notDecidedYet: Nerozhodnutí
-arrived: Přišel|Přišli
-notArrived: Nepřišel|Nepřišli
-attendanceResult: Výsledná docházka
-setAttendanceResult: Zadat výslednou docházku
-saveAttendanceResult: Uložit výslednou docházku
-goToEvents: Přejít na události
-openInNewWindow: Zobrazit v novém okně
-duplicateEventDay: Duplikovat poslední událost a posunout časy o 1 den
-duplicateEventWeek: Duplikovat poslední událost a posunout časy o 1 týden
-duplicateEventMonth: Duplikovat poslední událost a posunout časy o 1 měsíc
+new: Nowe
+openMap: Otwórz mapę...
+start: Początek
+close: Zamknięcie zapisów
+end: Koniec
+place: Miejsce
+attendanceNotFilled: Nie masz wypełnionej deklaracji obecności!
+notDecidedYet: Niezdecydowany
+arrived: Przyszedł/Przyszła|Przyszli
+notArrived: Nie przyszedł/Nie przyszła|Nie przyszli
+attendanceResult: Lista obecności
+setAttendanceResult: Wypełnij listę obecności
+saveAttendanceResult: Zapisz listę obecności
+goToEvents: Przejdź do wydarzeń
+openInNewWindow: Otwórz w nowej karcie
+duplicateEventDay: Skopiuj ostatnie wydarzenie i przesuń datę o 1 dzień
+duplicateEventWeek: Skopiuj ostatnie wydarzenie i przesuń datę o 1 tydzień
+duplicateEventMonth: Skopiuj ostatnie wydarzenie i przesuń datę o 1 miesiąc
 errors:
-    eventNotExists: Událost %id% neexistuje
+    eventNotExists: Wydarzenie %id% nie istnieje

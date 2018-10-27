@@ -1,22 +1,22 @@
-application: Aplikace
-setting: Nastavení|Nastavení
-cacheDrop: Vymazat cache
-cacheDropped: Cache vymazána
-appSettings: Nastavení aplikace
-appVersion: Verze aplikace
-released: Vydáno
-changeList: Seznam změn
-authors: Autoři
-reportBug: Nahlásit chybu
-fromPreviousVersion: od předchozí verze
-title: Název
-description: Popis
-canRead: Číst může
-canWrite: Psát může
-canDelete: Mazat může
-canTop: Topovat může
-order: Pořadí
-access: Přístup
-status: Stav
+application: Program
+setting: Ustawienia
+cacheDrop: Wyczyść cache
+cacheDropped: Cache wyczyszczony
+appSettings: O aplikacji
+appVersion: Wersja aplikacji
+released: Data wydania
+changeList: Lista zmian
+authors: Autorzy
+reportBug: Zgłoś błąd
+fromPreviousVersion: z poprzedniej wersji
+title: Nazwa
+description: Opis
+canRead: Może czytać
+canWrite: Mozep pisać
+canDelete: Może usuwać
+canTop: Może topować
+order: Zamówienie
+access: Dostęp
+status: Status
 type: Typ
-here: zde
+here: tu

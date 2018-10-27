@@ -1,73 +1,72 @@
-copyToClipboard: Kopírovat do schránky
-edit: Upravit
-copy: Kopírovat
-delete: Smazat
-duplicate: Duplikovat
-save: Uložit
-saveAll: Uložit vše
-edited: "Upravil (a)"
-everyone: Všichni
-allOfThem: Všechny
-refresh: Obnovit
-insert: Vložit
-mainPage: Hlavní stránka
-search: Hledat
-toogleNavigation: Otevřít navigační menu
+copyToClipboard: Skopiuj do schowka
+edit: Edytuj
+copy: Skopiuj
+delete: Usuń
+duplicate: Zduplikuj
+save: Zapisz
+saveAll: Zapisz wszystko
+edited: "Poprawił(a)"
+everyone: Wszyscy
+allOfThem: Wszystkie
+refresh: Odśwież
+insert: Wklej
+mainPage: Strona główna
+search: Szukaj
+toogleNavigation: Otwórz menu nawigacyjne
 menu: Menu
-new: Nový
-link: Odkaz
-never: Nikdy
-chooseFile: Vyberte soubor
-chooseSex: Vyberte pohlaví
-chooseType: Vyberte typ
-chooseState: Vyberte stav
+new: Nowy
+link: Link
+never: Nigdy
+chooseFile: Wybierz plik
+chooseSex: Wybierz płeć
+chooseType: Wybierz typ
+chooseState: Wybierz status
 ok: Ok
-yes: Ano
-no: Ne
-user: Uživatel
-error: Chyba
-or: nebo
-day: Den
-week: Týden
-month: Měsíc
+yes: Tak
+no: Nie
+user: Użytkownik
+error: Błąd
+or: albo
+day: Dzień
+week: Tydzień
+month: Miesiąc
 navigationBlock:
-    first: První
-    previous: Předchozí
-    next: Následující
-    last: Poslední
+    first: Pierwsza
+    previous: Poprzednia
+    next: Następna
+    last: Ostatnia
 lastLogin:
-    secondAgo: před vteřinou
-    secondsAgo: před %n% vteřinami
-    minuteAgo: před minutou
-    minutesAgo: před %n% minutami
-    halfHourAgo: před půl hodinou
-    hourAgo: před hodinou
-    hoursAgo: před %n% hodinami
-    dayAgo: před 1 dnem
-    daysAgo: před %n% dny
+    secondAgo: przed sekundą
+    secondsAgo: przed %n% sekundami
+    minuteAgo: przed minutą
+    minutesAgo: przed %n% minutami
+    halfHourAgo: przed pół godziny
+    hourAgo: przed godziną
+    hoursAgo: przed %n% godzinami
+    dayAgo: 1 dzień temu
+    daysAgo: %n% dni temu
 alerts:
-    nobodyFound: Nikdo nenalezen
-    userSuccesfullyDeleted: Uživatel byl úspešně smazán
-    loginNotApproved: Tento uživatel zatím nemá povolené přihlášení
-    loginNotSuccesfull: Přihlášení bylo neúspěšné
-    logoutSuccesfull: Byl jste úspěšně odhlášen
-    registrationSuccesfull: Registrace byla úspěšná. Nyní vyčkejte na schválení registrace administrátorem.
-    userNotFound: "Uživatel nebyl nalezen, je zablokován nebo došlo k chybě. Zkuste to znovu, nebo kontaktujte týmového administrátora."
-    resetCodeSent: Kód k resetování byl zaslán na Vaši e-mailovou adresu
-    pwdResetSuccesfull: Vaše heslo bylo úspěšně resetováno
-    inactivityLogout: Byl jste odhlášen z důvodu dlouhé nečinnosti. Prosím přihlašte se znovu.
-    exceptionOccured: Došlo k nečekané chybě
-    confirmDelete: Are you sure you want to delete this?
+    nobodyFound: Nikogo takiego nie znalazłem
+    userSuccesfullyDeleted: Użytkownik został usunięty
+    loginNotApproved: Ten użytkownik nie został jeszcze zatwierdzony
+    loginNotSuccesfull: Logowanie nieudane
+    logoutSuccesfull: Zostałeś pomyślnie wylogowany
+    registrationSuccesfull: Rejestracja ukończona. Czekaj na zatwierdzenie przez administratora.
+    userNotFound: "Użytkownik nieodnaleziony, wystąpił błąd. Skontaktuj sięz administratorem."
+    resetCodeSent: Kod do zmiany hasła został wysłany na Twój adres e-mail
+    pwdResetSuccesfull: Twoje hasło zostało pomyślnie zmienione
+    inactivityLogout: Zostałeś wylogowany, ze względu na brak czynności. Zaloguj się ponownie.
+    exceptionOccured: Wystąpił nieoczekiwany błąd
 months:
-    january: Leden
-    february: Únor
-    march: Březen
-    april: Duben
-    may: Květen
-    june: Červen
-    july: Červenec
-    august: Srpen
-    september: Září
-    october: Říjen
+    january: Styczeń    
+    february: Luty
+    march: Marzec
+    april: Kwiecień
+    may: Maj
+    june: Czerwiec
+    july: Lipiec
+    august: Sierpień
+    september: Wrzesień
+    october: Październik
     november: Listopad
-    december: Prosinec
+    december: Grudzień
