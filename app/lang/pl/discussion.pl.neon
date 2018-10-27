@@ -1,25 +1,25 @@
-discussion: Diskuze|Diskuze
-noDiscussion: Žádná diskuze
-editDiscussion: Úprava diskuze
-unpin: Odepnout
-pin: Připnout
-new: Nová
-copyToClipboard: Kopírovat do schránky
-edit: Upravit
-copy: Kopírovat
-jump2date: Skok na datum
-go: Hop
+discussion: Kanał|Kanały
+noDiscussion: Brak kanałów
+editDiscussion: Edycja kanału
+unpin: Odepnij
+pin: Przypnij
+new: Nowa
+copyToClipboard: Kopiuj do schowka
+edit: Edytuj
+copy: Kopiuj
+jump2date: Przejdź do daty
+go: Idź
 postBlock:
-    enterSearchTerms: Zadejte hledaný text ...
+    enterSearchTerms: Wpisz, czego szukasz ...
 errors:
-    noDiscussionExists: Tato diskuze neexistuje
-    discussionNotExists: Diskuze %id% neexistuje
+    noDiscussionExists: Ten kanał nie istnieje
+    discussionNotExists: Kanał %id% nie istnieje
 alerts:
-    confirmDeletePost: Smazat? To jako vážně?
-newDiscussion: Nová diskuze
-newDiscussionTitle: Vytvořit novou diskuzi
-discussionSettings: Nastavení diskuzí
-public: Veřejná
-publicTitle: Viditelná na výchozí stránce bez přihlášení
-edits: Úpravy
-editablePosts: Povolit úpravy
+    confirmDeletePost: Usunąć? Na pewno?
+newDiscussion: Nowy kanał
+newDiscussionTitle: Utwórz nowy kanał
+discussionSettings: Ustawienia kanału
+public: Publiczny
+publicTitle: Kanał widoczny bez zalogowania
+edits: Edycja
+editablePosts: Pozwól na edycję
