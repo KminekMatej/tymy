@@ -1,28 +1,28 @@
-event: Událost|Události
-attendance: Docházka|Docházka
-newEvents: Nové události
-editEvent: Úprava události|Úprava událostí
-settingsEvents: Nastavení událostí
-noEvent: Žádná událost
-showHidePastEvents: Zobrazit/skrýt již proběhlé akce
+event: Événement|Événements
+attendance: Présence|Présences
+newEvents: Nouveaux événements
+editEvent: Editer événement|Editer les événements
+settingsEvents: Paramètres des événements
+noEvent: Aucun événements
+showHidePastEvents: Afficher/masquer les événements passés
 agenda: Agenda
-new: Nová
-openMap: Otevřít mapu ....
-start: Začátek
-close: Uzávěrka
-end: Konec
-place: Místo
-attendanceNotFilled: Nemáš vyplněnou docházku
-notDecidedYet: Nerozhodnutí
-arrived: Přišel|Přišli
-notArrived: Nepřišel|Nepřišli
-attendanceResult: Výsledná docházka
-setAttendanceResult: Zadat výslednou docházku
-saveAttendanceResult: Uložit výslednou docházku
-goToEvents: Přejít na události
-openInNewWindow: Zobrazit v novém okně
-duplicateEventDay: Duplikovat poslední událost a posunout časy o 1 den
-duplicateEventWeek: Duplikovat poslední událost a posunout časy o 1 týden
-duplicateEventMonth: Duplikovat poslední událost a posunout časy o 1 měsíc
+new: Nouveau
+openMap: Ouvrir la carte ....
+start: Début
+close: Date limite
+end: Fin
+place: Lieu
+attendanceNotFilled: "Vous n'avez pas complété votre présence"
+notDecidedYet: Pas encore décidé
+arrived: Je viens|Nous venons
+notArrived: Je ne viens pas|Nous ne venons pas
+attendanceResult: Résultats de présence
+setAttendanceResult: Entrer les résultats de présence
+saveAttendanceResult: Enregistrer les résultats de présence
+goToEvents: Voir les événements
+openInNewWindow: Ouvrir dans une nouvelle fenêtre
+duplicateEventDay: Dupliquer le dernier événement et le déplacer de 1 jour
+duplicateEventWeek: Dupliquer le dernier événement et le déplacer de 1 semaine
+duplicateEventMonth: Dupliquer le dernier événement et le déplacer de 1 mois
 errors:
-    eventNotExists: Událost %id% neexistuje
+    eventNotExists: "L'événement %id% n'existe pas"

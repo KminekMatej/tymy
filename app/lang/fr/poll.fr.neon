@@ -1,56 +1,56 @@
-poll: Anketa|Ankety
-newPoll: Nová anketa
-editPoll: Úprava ankety
-configPolls: Nastavení anket
-noPoll: Žádná anketa
-createPoll: Vytvořit novou anketu
-createItem: Vytvořit novou položku
-minItems: Minimum vyplněných položek
-maxItems: Maximum vyplněných položek
+poll: Sondage|Sondages
+newPoll: nouveau sondage
+editPoll: Editer le sondage
+configPolls: Configurer le sondage
+noPoll: aucun sondage
+createPoll: Créer un nouveau sondage
+createItem: Créer un nouvel article
+minItems: Eléments minimum remplis
+maxItems: Eléments maximum remplis
 min: Min
 max: Max
-setChangeableVotes: Povolit změnu názoru
-changeOfVotes: Změna názoru
-changeableVotes: Hlasování se dá měnit
-unchangeableVotes: Hlasování se nedá měnit
-anonymousVotes: Anonymní hlasování
-anonym: Anonym
-anonymousResults: Anketa je anonymní
-nonanonymousResults: Anketa není anonymní
-displayResults: Zobrazit výsledky
-resultsDisplayed: Výsledky jsou zobrazeny
-resultsDisplayedAfterVote: Výsledky budou zobrazeny po odhlasování
-resultsToYouOnly: Výsledky vidíte pouze vy
-resultsAreSecret: Výsledky jsou tajné
-resultsDisplayedWhenClosed: Výsledky budou zobrazeny až po uzavření ankety
-cannotVoteHere: V této anketě nemůžete volit
-vote: Hlasovat
-voted: Hlasováno
-results: Výsledky hlasování
-votesCount: Počet hlasů
-maxItemsOverflow: Překročen maximální počet hlasů
-notEnoughItems: Nedosažen minimální počet hlasů
+setChangeableVotes: Autoriser le changement de vote
+changeOfVotes: Changement de vote
+changeableVotes: Le vote peut être changé
+unchangeableVotes: Le vote ne peut pas être changé
+anonymousVotes: Vote anonyme
+anonym: Anonyme
+anonymousResults: Le sondage est anonyme
+nonanonymousResults: "Le sondage n'est pas anonyme"
+displayResults: Voir les résultats
+resultsDisplayed: Les résultats sont affichés
+resultsDisplayedAfterVote: Les résultats seront affichés après le vote
+resultsToYouOnly: Vous êtes le seul à pouvoir voir le résultat
+resultsAreSecret: Les résultats sont secrets
+resultsDisplayedWhenClosed: Les résultats ne seront affichés que lorsque le sondage sera clotûré
+cannotVoteHere: Vous ne pouvez pas voter pour ce sondage
+vote: Voter
+voted: voté
+results: Résultat du vote
+votesCount: Nombre de voix
+maxItemsOverflow: Nombre maximum de votes dépassé
+notEnoughItems: "Le nombre minimum de votes n'a pas été atteint"
 design: Design
-opened: Aktivní
-closed: Uzavřená
-displayInMainMenu: Uvést v hlavním menu
-never: Nikdy
-always: Vždy
-afterVote: Hlasujícím
-whenClosed: Po uzavření
-canVote: Může hlasovat
-canDisplayResults: Může prohlížet
-canAlienVote: Může zastoupit
-canVoteRight: Oprávnění pro hlasování
-canDisplayResultsRight: Oprávnění pro prohlížení výsledků
-canAlienVoteRight: Oprávnění pro zastoupení v hlasování
-pollItems: Položky ankety
-itemCaption: Název
-text: Text
-number: Číslo
-bool: Ano / Ne
-new: Nová
+opened: Actif
+closed: Clotûré
+displayInMainMenu: Afficher dans le menu principal
+never: Jamais
+always: Toujours
+afterVote: "J'ai voté"
+whenClosed: Après fermeture
+canVote: Peut voter
+canDisplayResults: Peut voir les résultats
+canAlienVote: Peut représenter
+canVoteRight: Droit de vote
+canDisplayResultsRight: Autorisations pour afficher les résultats
+canAlienVoteRight: Autorisation pour représenter au vote
+pollItems: Sondages
+itemCaption: Nom
+text: Texte
+number: Numéro
+bool: Oui/ Non
+new: Nouveau
 alerts:
-    succesfullyCreated: Poznámka byla úspěšně vytvořena
+    succesfullyCreated: Le sondage a été créé avec succès
 errors:
-    pollNotExists: Anketa %id% neexistuje
+    pollNotExists: "Le sondage %id% n'existe pas"

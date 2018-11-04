@@ -1,73 +1,71 @@
-copyToClipboard: Kopírovat do schránky
-edit: Upravit
-copy: Kopírovat
-delete: Smazat
-duplicate: Duplikovat
-save: Uložit
-saveAll: Uložit vše
-edited: "Upravil (a)"
-everyone: Všichni
-allOfThem: Všechny
-refresh: Obnovit
-insert: Vložit
-mainPage: Hlavní stránka
-search: Hledat
-toogleNavigation: Otevřít navigační menu
+copyToClipboard: Copier dans le presse-papier
+edit: Editer
+copy: Copier
+delete: Supprimer
+duplicate: Dupliquer
+save: Sauvegarder
+saveAll: Tout sauvegarder
+edited: "Edité (ée)"
+everyone: Tout le monde
+allOfThem: Tous les autres
+refresh: Rafraîchir
+insert: Insérer
+mainPage: Page principale
+search: Chercher
+toogleNavigation: Ouvrir le menu de navigation
 menu: Menu
-new: Nový
-link: Odkaz
-never: Nikdy
-chooseFile: Vyberte soubor
-chooseSex: Vyberte pohlaví
-chooseType: Vyberte typ
-chooseState: Vyberte stav
+new: Nouveau
+link: Lien
+never: Jamais
+chooseFile: choisir fichier
+chooseSex: choisir sexe
+chooseType: choisir type
+chooseState: choisir état
 ok: Ok
-yes: Ano
-no: Ne
-user: Uživatel
-error: Chyba
-or: nebo
-day: Den
-week: Týden
-month: Měsíc
+yes: oui
+no: Non
+user: utilisateur
+error: erreur
+or: ou
+day: jour
+week: semaine
+month: moi
 navigationBlock:
-    first: První
-    previous: Předchozí
-    next: Následující
-    last: Poslední
+    first: premier
+    previous: précédent
+    next: suivant
+    last: dernier
 lastLogin:
-    secondAgo: před vteřinou
-    secondsAgo: před %n% vteřinami
-    minuteAgo: před minutou
-    minutesAgo: před %n% minutami
-    halfHourAgo: před půl hodinou
-    hourAgo: před hodinou
-    hoursAgo: před %n% hodinami
-    dayAgo: před 1 dnem
-    daysAgo: před %n% dny
+    secondAgo: il y a une seconde
+    secondsAgo: il y a %n% secondes
+    minuteAgo: il y a une minute
+    minutesAgo: il y a %n% minutes
+    halfHourAgo: il y a une demi heure
+    hourAgo: il y a une heure
+    hoursAgo: il y a %n% heures
+    dayAgo: il y a un jour
+    daysAgo: il y a %n% jours
 alerts:
-    nobodyFound: Nikdo nenalezen
-    userSuccesfullyDeleted: Uživatel byl úspešně smazán
-    loginNotApproved: Tento uživatel zatím nemá povolené přihlášení
-    loginNotSuccesfull: Přihlášení bylo neúspěšné
-    logoutSuccesfull: Byl jste úspěšně odhlášen
-    registrationSuccesfull: Registrace byla úspěšná. Nyní vyčkejte na schválení registrace administrátorem.
-    userNotFound: "Uživatel nebyl nalezen, je zablokován nebo došlo k chybě. Zkuste to znovu, nebo kontaktujte týmového administrátora."
-    resetCodeSent: Kód k resetování byl zaslán na Vaši e-mailovou adresu
-    pwdResetSuccesfull: Vaše heslo bylo úspěšně resetováno
-    inactivityLogout: Byl jste odhlášen z důvodu dlouhé nečinnosti. Prosím přihlašte se znovu.
-    exceptionOccured: Došlo k nečekané chybě
-    confirmDelete: Are you sure you want to delete this?
+    nobodyFound: personne trouvé
+    userSuccesfullyDeleted: utilisateur supprimé avec succès
+    loginNotApproved: connexion non validée
+    loginNotSuccesfull: Echec de connexion
+    logoutSuccesfull: Déconnexion réussie
+    registrationSuccesfull: "Inscription validée. Merci de patienter afin que l'administrateur valide votre inscription."
+    userNotFound: "Nom d'utilisateur inconnu. Merci de ré-essayer ou contacter l'administrateur"
+    resetCodeSent: Le code réinitialisé a été envoyé sur votre adresse mail.
+    pwdResetSuccesfull: Votre mot de passe a été mis à jour.
+    inactivityLogout: "Vous avez été déconnecté à la suite d'une longue période d'inactivité. Merci de vous reconnecter."
+    exceptionOccured: "Une erreur s'est produite"
+    confirmDelete: Vraiment supprimer?
 months:
-    january: Leden
-    february: Únor
-    march: Březen
-    april: Duben
-    may: Květen
-    june: Červen
-    july: Červenec
-    august: Srpen
-    september: Září
-    october: Říjen
-    november: Listopad
-    december: Prosinec
+    january: Janvier
+    february: Février
+    march: Mars
+    april: Avril
+    may: Mai
+    june: Juin
+    july: Septembre
+    october: Octobre
+    november: Novembre
+    december: Décembre

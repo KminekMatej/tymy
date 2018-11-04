@@ -1,58 +1,58 @@
-team: Tým|Týmy
-PLAYER: 'Hráč|Hráči'
-MEMBER: 'Člen|Členové'
+team: Equipe|Equipes
+PLAYER: 'Joueur|Joueurs'
+MEMBER: 'Membre|Membres'
 SICK: 'Marod|Marodi'
-INIT: 'Registrován|Registrovaní'
-DELETED: 'Smazán|Smazaní'
-jersey: Dres|Dresy
-jerseyList: Seznam dresů
-newMailToAll: Nový e-mail všem
-newMailTo: Nový email pro
-freeNumber: Volné
-inActive: Neaktivní
-personalData: Osobní údaje
-loginData: Přihlášení
-teamData: Týmové info
-address: Adresa
-roles: Role|Role
-profilePhoto: Profilovka
-male: Muž|Muži
-female: Žena|Ženy
-unknownSex: Nezadáno
-sex: Pohlaví
-chooseSex: Vyberte pohlaví
-firstname: Jméno
-surname: Příjmení
-phone: Telefon
+INIT: 'Enregistré|Enregistrés'
+DELETED: 'Supprimé|Supprimés'
+jersey: Maillot|Maillots
+jerseyList: Liste des maillots
+newMailToAll: Nouveau courriel à tous
+newMailTo: Nouveau courriel pour
+freeNumber: Libre
+inActive: Inactif
+personalData: Informations personnelles
+loginData: Connexion
+teamData: "Info de l'équipe"
+address: Adresse
+roles: Role|Roles
+profilePhoto: Photo de profil
+male: Homme|Hommes
+female: Femme|Femmes
+unknownSex: Inconnu
+sex: Genre
+chooseSex: Choisir le genre
+firstname: Prénom
+surname: Nom de famille
+phone: Téléphone
 email: E-mail
-dateOfBirth: Datum narození
-namedayMonth: Měsíc svátku
-chooseMonth: Vyberte měsíc
-namedayDay: Den svátku
-language: Jazyk
-dateOfRegistration: Registrován
-displayedName: Zobrazované jméno
-displayedNameUserEditable: Editovatelné uživatelem
-username: Uživatelské jméno
-newPassword: Nové heslo
-newPasswordAgain: Nové heslo znovu
-loginEnabled: Přihlášení povoleno
-status: Týmový stav
-jerseyNumber: Číslo dresu
-street: Ulice
-city: Město
-postal: PSČ
-hasNamedayToday: %name% slaví dnes svátek
-hasBirthdayToday: %name% slaví dnes %year% narozeniny
-hasNamedayTommorow: %name% slaví zítra svátek
-hasBirthdayTommorow: %name% slaví zítra %year% narozeniny
-currentlyOnline: Právě online
-lastLogin: Poslední přihlášení
-nobodyIsOnline: Nikdo není online
-administrator: Administrátor
-userAdmin: Správce uživatelů
-attendanceAdmin: Správce docházky
+dateOfBirth: Date de naissance
+namedayMonth: Mois de la fête
+chooseMonth: Choisir le mois
+namedayDay: Jour de la fête
+language: Langue
+dateOfRegistration: "Jour d'enregistrement"
+displayedName: Nom à afficher
+displayedNameUserEditable: "Nom à afficher éditable par l'utilisateur"
+username: "Nom d'utilisateur"
+newPassword: Nouveau mot de passe
+newPasswordAgain: Ressaisissez le nouveau mot de passe
+loginEnabled: Connexion activée
+status: "Statut de l'équipe"
+jerseyNumber: Numéro de maillot
+street: Rue
+city: Ville
+postal: Code postal
+hasNamedayToday: "%nom% a sa fête aujourd'hui"
+hasBirthdayToday: "%nom% fête aujourd'hui ses %age% ans"
+hasNamedayTommorow: %nom% a sa fête demain
+hasBirthdayTommorow: %nom% fête demain ses %age% ans
+currentlyOnline: En ligne maintenant
+lastLogin: Dernière connexion
+nobodyIsOnline: "Personne n'est en ligne"
+administrator: Administrateur
+userAdmin: "Gestionnaire d'utilisateurs"
+attendanceAdmin: Gestionnaire de présence
 errors:
-    imgFileCorrupted: "Soubor není obrázek, nebo je poškozený"
+    imgFileCorrupted: "Le fichier n'est pas une image ou il est endommagé"
 alerts:
     signOffNeeded: Language changed - please logout & login for language to change
