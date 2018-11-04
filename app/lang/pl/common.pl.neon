@@ -55,8 +55,9 @@ alerts:
     userNotFound: "Użytkownik nieodnaleziony, wystąpił błąd. Skontaktuj sięz administratorem."
     resetCodeSent: Kod do zmiany hasła został wysłany na Twój adres e-mail
     pwdResetSuccesfull: Twoje hasło zostało pomyślnie zmienione
-    inactivityLogout: Zostałeś wylogowany, ze względu na brak czynności. Zaloguj się ponownie.
+    inactivityLogout: "Zostałeś wylogowany, ze względu na brak czynności. Zaloguj się ponownie."
     exceptionOccured: Wystąpił nieoczekiwany błąd
+    confirmDelete: Czy na pewno chcesz to usunąć?
 months:
     january: Styczeń    
     february: Luty

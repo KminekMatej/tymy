@@ -54,3 +54,5 @@ userAdmin: Moderator użytkowników
 attendanceAdmin: Moderator obecności
 errors:
     imgFileCorrupted: "Plik nie jest obrazkiem, lub jest uszkodzony"
+alerts:
+    signOffNeeded: Language changed - please logout & login for language to change

@@ -10,7 +10,7 @@ copy: Kopiuj
 jump2date: Przejdź do daty
 go: Idź
 postBlock:
-    enterSearchTerms: Wpisz, czego szukasz ...
+    enterSearchTerms: "Wpisz, czego szukasz ..."
 errors:
     noDiscussionExists: Ten kanał nie istnieje
     discussionNotExists: Kanał %id% nie istnieje

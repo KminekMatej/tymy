@@ -1,6 +1,7 @@
 event: Wydarzenie|Wydarzenia
+attendance: Frekwencja|Frekwencje
 newEvents: Nowe wydarzenia
-editEvents: Edycja wydarzeia
+editEvent: Edycja wydarzenia|Edycja wydarzeń
 settingsEvents: Ustawienia wydarzeń
 noEvent: Nie ma wydarzeń
 showHidePastEvents: Pokaż/ukryj przeszłe wydarzenia
