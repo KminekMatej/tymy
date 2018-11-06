@@ -150,7 +150,7 @@ class SecuredPresenter extends BasePresenter {
     public function handleTapiException(APIException $ex, $redirect = null, $args = []){
         $this->flashMessage($this->translator->translate("common.alerts.exceptionOccured") . ": " . $ex->getMessage(), "danger");
         if($redirect)
-            $this->redirect ($redirect);
+            $this->redirect ($redirect, $args);
         else
             $this->error($this->translator->translate("common.alerts.exceptionOccured") .": " . $ex->getMessage(), $ex->getCode());
     }
