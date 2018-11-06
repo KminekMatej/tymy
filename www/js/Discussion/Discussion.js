@@ -40,7 +40,7 @@ function updatePost(url) {
 }
 
 function deletePost(id, url) {
-    if (!confirm(translate.dicussion.alerts.confirmDeletePost)) {
+    if (!confirm(translate.discussion.alerts.confirmDeletePost)) {
         return;
     }
     postElm = $("DIV#row-" + id)
