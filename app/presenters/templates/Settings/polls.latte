@@ -38,7 +38,7 @@
                             <th title="{_poll.canVoteRight}">{_poll.canVote}</th>
                             <th title="{_poll.canDisplayResultsRight}">{_poll.canDisplayResults}</th>
                             <th title="{_poll.canAlienVoteRight}">{_poll.canAlienVote}</th>
-                            <th title="{_settings.order}">{_settings.order}Pořadí</th>
+                            <th title="{_settings.order}">{_settings.order}</th>
                             <th></th>
                         </tr>
                         <tr n:foreach="$polls as $poll" data-binder-id="{$poll->id}">
@@ -51,9 +51,9 @@
                             <td><textarea name="description" data-value="{$poll->description}" rows="1" class="form-control form-control-sm">{$poll->description}</textarea></td>
                             <td>
                                 <select name="status" data-value="{$poll->status}" class="form-control form-control-sm">
-                                    <option value="DESIGN" n:attr="selected => $poll->status == 'DESIGN'">{_poll.design}Design</option>
-                                    <option value="OPENED" n:attr="selected => $poll->status == 'OPENED'">{_poll.opened}Aktivní</option>
-                                    <option value="CLOSED" n:attr="selected => $poll->status == 'CLOSED'">{_poll.closed}Uzavřená</option>
+                                    <option value="DESIGN" n:attr="selected => $poll->status == 'DESIGN'">{_poll.design}</option>
+                                    <option value="OPENED" n:attr="selected => $poll->status == 'OPENED'">{_poll.opened}</option>
+                                    <option value="CLOSED" n:attr="selected => $poll->status == 'CLOSED'">{_poll.closed}</option>
                                 </select>
                             </td>
                             <td><input type="number" name="minItems" data-validation-field2="maxItems" min="0" data-value="{$poll->minItems}" value="{$poll->minItems}" class="form-control form-control-sm" style="max-width: 70px;" required/></td>
