@@ -92,7 +92,7 @@ class DiscussionPresenter extends SecuredPresenter {
                         ->setPostId($postId)
                         ->perform();
         } catch (APIException $ex) {
-            $this->handleTapiException($ex, 'this');
+            $this->handleTapiException($ex, 'Discussion:discussion', ["discussion" => $discussion]);
         }
         $this->setView('discussion');
     }
