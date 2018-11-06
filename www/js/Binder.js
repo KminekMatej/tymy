@@ -38,8 +38,6 @@ function Binder (settings) {
     this.DELETE_CONFIRM = !settings.deleteConfirmation ? false : settings.deleteConfirmation;
     this.BUTTON_CHECKED_CLASS = !settings.checkedBtnClass ? "active" : settings.checkedBtnClass;
     this.SAVE_ALL_BTN_CLASS = !settings.saveAllSelector ? "binder-save-all-btn" : settings.saveAllSelector;
-    this.CHECKBOX_CHECKED = !settings.checkboxValueChecked ? "true" : settings.checkboxValueChecked;
-    this.CHECKBOX_UNCHECKED = !settings.checkboxValueUnChecked ? "false" : settings.checkboxValueUnChecked;
     this.saveButtons = this.area.find("." + this.SAVE_BTN_CLASS);
     this.saveAllButtons = $("." + this.SAVE_ALL_BTN_CLASS);
     this.isValid = !settings.isValid ? true : settings.isValid;
@@ -417,14 +415,16 @@ Binder.prototype.parseValueFromGroupOfElements = function (element) {
 };
 
 Binder.prototype.parseValueFromElement = function(element){
-    if(element.is(":checkbox")) return element.is(":checked") ? this.CHECKBOX_CHECKED : this.CHECKBOX_UNCHECKED;
+    if(element.is(":checkbox")) return element.is(":checked");
     if(element.prop("tagName") == "BUTTON") return element.hasClass(this.BUTTON_CHECKED_CLASS);
     return element.val();
 }
 
 Binder.prototype.isChanged = function (element) {
     var binderObj = this;
-    var changed = element.attr(binderObj.ORIGINAL_VALUE_ATTRIBUTE) != this.getValue(element);
+    var originalValue = element.attr(binderObj.ORIGINAL_VALUE_ATTRIBUTE);
+    var newValue = this.getValue(element);
+    var changed = originalValue != newValue;
     if (changed) {
         var value2 = element.attr(binderObj.VALIDATION_FIELD2_ATTRIBUTE);
         if (typeof value2 !== typeof undefined && value2 !== false) {

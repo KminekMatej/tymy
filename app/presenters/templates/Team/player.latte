@@ -105,7 +105,7 @@
                                     </tr>
                                     <tr>
                                         <th>{_team.namedayMonth}:</th><td>
-                                            <select n:class="col-3, form-control, in_array('nameDayMonth',$player->errFls) ? is-invalid" style="min-width: 160px" name="nameDayMonth" data-value="{$player->nameDayMonth}">
+                                            <select n:class="col-3, form-control, in_array('nameDayMonth',$player->errFls) ? is-invalid" style="min-width: 160px" name="nameDayMonth" data-value="{$player->nameDayMonth == 0 ? '' : $player->nameDayMonth}">
                                                 <option value="">{_team.chooseMonth} ↓</option>
                                                 <option n:for="$m=1; $m<=12; $m++" value="{$m}" n:attr="selected => $player->nameDayMonth==$m">{$m|monthName}</option>
                                             </select>
