@@ -404,7 +404,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function handlePollCreate(){
-        $pollData = $this->getRequest()->getPost()[1]; // new discussion is always as item 1
+        $pollData = $this->getRequest()->getPost()["changes"];
         try {
             $this->pollCreator->init()->setPoll($pollData)->perform();
         } catch (APIException $ex) {
