@@ -43,12 +43,12 @@
                 <div class="card my-1 {$cc} sh-box">
                     <div class="card-header {$chc} py-1">
                         <span class="name">{$item->createdBy->callName}</span>
-
+{dump $discussion}
                         <div class="btn-group btn-group-sm float-md-right" role="group">
                             <button n:if="$discussion->discussion->canStick" n:class="btn,btn-sm,$item->sticky ? active,$item->sticky ? btn-dark:btn-light,!$item->sticky ? btn-light-bordered" onclick="stickPost({plink Discussion:stickPost $discussion->discussion->id}, {$item->id}, {$item->sticky ? false : true})" title="{if $item->sticky}{_discussion.unpin}{else}{_discussion.pin}{/if}"><i class="fa fa-thumbtack" aria-hidden="true"></i></button>
                             <button class="btn btn-sm btn-light btn-light-bordered clipboard-btn" data-clipboard-target="#post-{$item->id}" title="{_common.copyToClipboard}"><i class="far fa-copy" aria-hidden="true"></i></button>
                             <button class="btn btn-sm btn-light btn-light-bordered" onclick="loadPost({$item->id})" title="{_common.edit} / {_common.copy}"><i class="far fa-edit" aria-hidden="true"></i></button>
-                            <button n:if="$discussion->discussion->canDelete" class="btn btn-sm btn-light btn-light-bordered delete" onclick="deletePost({$item->id}, {plink Discussion:deletePost $discussion->discussion->id})" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                            <button n:if="$discussion->discussion->canDelete || ($discussion->discussion->editablePosts && $item->createdById == $user->getId()) " class="btn btn-sm btn-light btn-light-bordered delete" onclick="deletePost({$item->id}, {plink Discussion:deletePost $discussion->discussion->id})" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></button>
                         </div>
                         <span class="float-md-right mx-2">{$item->createdAt|date:'j.n.Y G:i'}</span>
                         <div class="alert alert-warning float-md-right mx-1" n:ifset="$item->updatedAt" style="margin: 0px; padding: 4px; font-size: 10px;">{_common.edited} {$userList[$item->updatedById]->displayName}, {$item->updatedAt|date:'j.n.Y G:i'}</div>
