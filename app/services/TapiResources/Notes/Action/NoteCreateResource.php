@@ -24,8 +24,13 @@ class NoteCreateResource extends NoteResource {
         $note = $this->getNote();
         if(array_key_exists("menuType", $note))
             $note["menuType"] = $note["menuType"] ? "APP" : "NO";
+        if(!$this->user->isAllowed("notes", "manageSharedNotes")){
+            unset($note["specialPage"]);
+            $note["accessType"] = "PRIVATE";
+        }
         if(array_key_exists("accessType", $note) && $note["accessType"] == "PRIVATE" && array_key_exists("specialPage", $note))
             unset($note["specialPage"]); // private note cannot have specialPage filled, otherwise returns BRE
+        
         $this->setUrl("notes");
         $this->setRequestData($note);
         return $this;

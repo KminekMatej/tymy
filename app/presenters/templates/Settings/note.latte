@@ -33,7 +33,7 @@
                         <tr><th>{_settings.description}</th><td><input type="text" name="description" value="{$note->description}" class="form-control col-6" data-value="{$note->description}" /></td></tr>
                         <tr><th>{_settings.access}</th>
                             <td>
-                                <select name="accessType" value="{$note->accessType}" data-value="{$note->accessType}" class="col-6 form-control">
+                                <select name="accessType" value="{$note->accessType}" data-value="{$note->accessType}" class="col-6 form-control" n:attr="disabled => !$user->isAllowed('notes', 'manageSharedNotes')">
                                     <option value="">{_common.chooseType}...</option>
                                     <option value="PRIVATE" n:attr="selected => $note->accessType == 'PRIVATE'">{_note.private}</option>
                                     <option value="USERS" n:attr="selected => $note->accessType == 'USERS'">{_note.users}</option>
@@ -41,7 +41,7 @@
                                 </select>
                             </td></tr>
                         <tr><th>{_note.systemPage}</th><td>
-                                <input type="text" name="specialPage" value="{$note->specialPage}" data-value="{$note->specialPage}" class="col-6 form-control" />
+                                <input type="text" name="specialPage" value="{$note->specialPage}" data-value="{$note->specialPage}" class="col-6 form-control" n:attr="disabled => !$user->isAllowed('notes', 'manageSharedNotes')"/>
                             </td></tr>
                         <tr><th>{_note.content}</th><td>
                                     <textarea style="width:100%;" id="noteSource" name="source" data-value="{$note->source}" class="form-control col-6">
