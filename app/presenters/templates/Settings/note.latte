@@ -22,7 +22,7 @@
         <div class="col">
             <div class="card sh-box my-3" data-binder-id="{$note->id}">
                 <div class="card-header">
-                    <h4>{if $isNew}{_note.newNote}Nová poznámka{else}{_settings.editNote}Úprava poznámky {$note->id}{/if}</h4>
+                    <h4>{if $isNew}{_note.newNote}{else}{_settings.editNote} {$note->id}{/if}</h4>
                 </div>
                 <div class="card-body">
                     <table class="table">

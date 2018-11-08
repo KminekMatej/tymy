@@ -30,16 +30,16 @@
                                     <option n:foreach="$eventTypes as $option" value="{$option->code}" n:attr="selected => $event->type == $option->code">{$option->caption}</option>
                                 </select>
                             </td></tr>
-                        <tr><th>{_settings.description}Popis</th><td><textarea name="description" data-value="{$event->description}" class="form-control col-6">{$event->description}</textarea></td></tr>
-                        <tr><th>{_event.start}Začátek</th><td><input type="text" name="startTime" value="{$event->startTime|date:'d.m.Y H:i'}" data-value="{$event->startTime|date:'d.m.Y H:i'}" class="col-6 form-control" /></td></tr>
-                        <tr><th>{_event.end}Konec</th><td><input type="text" name="endTime" value="{$event->endTime|date:'d.m.Y H:i'}" data-value="{$event->endTime|date:'d.m.Y H:i'}" class="col-6 form-control" /></td></tr>
-                        <tr><th>{_event.close}Uzávěrka</th><td><input type="text" name="closeTime" value="{$event->closeTime|date:'d.m.Y H:i'}" data-value="{$event->closeTime|date:'d.m.Y H:i'}" class="col-6 form-control" /></td></tr>
-                        <tr><th>{_event.place}Místo</th><td>
+                        <tr><th>{_settings.description}</th><td><textarea name="description" data-value="{$event->description}" class="form-control col-6">{$event->description}</textarea></td></tr>
+                        <tr><th>{_event.start}</th><td><input type="text" name="startTime" value="{$event->startTime|date:'d.m.Y H:i'}" data-value="{$event->startTime|date:'d.m.Y H:i'}" class="col-6 form-control" /></td></tr>
+                        <tr><th>{_event.end}</th><td><input type="text" name="endTime" value="{$event->endTime|date:'d.m.Y H:i'}" data-value="{$event->endTime|date:'d.m.Y H:i'}" class="col-6 form-control" /></td></tr>
+                        <tr><th>{_event.close}</th><td><input type="text" name="closeTime" value="{$event->closeTime|date:'d.m.Y H:i'}" data-value="{$event->closeTime|date:'d.m.Y H:i'}" class="col-6 form-control" /></td></tr>
+                        <tr><th>{_event.place}</th><td>
                                             <div class="input-group">
                                                 <input type="text" name="place" value="{$event->place}" data-value="{$event->place}" class="col-6 form-control" />
                                                 <div class="input-group-append"><button style="min-width: 45px" class='btn btn-light btn-light-bordered' onclick='map()' title="{_event.openMap}"><i class="fa fa-map-marker" aria-hidden="true"></i></button></div>
                                             </div></td></tr>
-                        <tr><th>{_common.link}Odkaz</th><td>
+                        <tr><th>{_common.link}</th><td>
                                             <div class="input-group">
                                                 <input type="text" name="link" value="{$event->link}" data-value="{$event->link}" class="col-6 form-control" />
                                                 <div class="input-group-append"><button style="min-width: 45px" class='btn btn-light btn-light-bordered' onclick='link()' title="{_event.openInNewWindow}"><i class="fa fa-external-link-alt" aria-hidden="true"></i></button></div>
