@@ -44,14 +44,14 @@
                                 <td><input type="text" name="caption" data-value="{$note->caption}" value="{$note->caption}" class="form-control form-control-sm" required/></td>
                                 <td><input type="text" name="description" data-value="{$note->description}" value="{$note->description}" class="form-control form-control-sm" required/></td>
                                 <td>
-                                    <select name="accessType" data-value="{$note->accessType}" class="form-control form-control-sm">
+                                    <select name="accessType" data-value="{$note->accessType}" class="form-control form-control-sm" n:attr="disabled => !$user->isAllowed('notes', 'manageSharedNotes')">
                                         <option value="PRIVATE" n:attr="selected => $note->accessType == 'PRIVATE'">{_note.private}</option>
                                         <option value="USERS" n:attr="selected => $note->accessType == 'USERS'">{_note.users}</option>
                                         <option value="PUBLIC" n:attr="selected => $note->accessType == 'PUBLIC'">{_note.public}</option>
                                     </select>
                                 </td>
                                 <td class="text-center"><label class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" name="menuType" n:attr="data-value => $note->menuType ? 'true':'false', checked => $note->menuType" class="form-control form-control-sm custom-control-input" /><span class="custom-control-label"></span></label></td>
-                                <td><input type="text" name="specialPage" data-value="{$note->specialPage}" value="{$note->specialPage}" class="form-control form-control-sm" required/></td>
+                                <td><input type="text" name="specialPage" data-value="{$note->specialPage}" value="{$note->specialPage}" class="form-control form-control-sm" required n:attr="disabled => !$user->isAllowed('notes', 'manageSharedNotes')"/></td>
                                 <td><input name="menuOrder" data-value="{$note->menuOrder}" type="number" value="{$note->menuOrder}" class="form-control form-control-sm"/></td>
 
                                 <td class="btn-group" role="group" n:inner-if="$note->canWrite">
