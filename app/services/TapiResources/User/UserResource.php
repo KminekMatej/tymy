@@ -25,6 +25,7 @@ abstract class UserResource extends TapiObject{
         $this->postProcessSimpleUser($user);
         if(!property_exists($user, "firstName")) $user->firstName = ""; //set default value
         if(!property_exists($user, "lastName")) $user->lastName = ""; //set default value
+        if(!property_exists($user, "fullName")) $user->fullName = ""; //set default value
         if(!property_exists($user, "jerseyNumber")) $user->jerseyNumber = ""; //set default value
         if(!property_exists($user, "street")) $user->street = ""; //set default value
         if(!property_exists($user, "city")) $user->city = ""; //set default value
