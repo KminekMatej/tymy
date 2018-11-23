@@ -15,6 +15,7 @@ loginData: Login data
 teamData: Team info
 address: Address
 roles: Role|Roles
+profile: Profile
 profilePhoto: Avatar
 male: Man|Men
 female: Woman|Women

@@ -15,6 +15,7 @@ loginData: Connexion
 teamData: "Info de l'équipe"
 address: Adresse
 roles: Role|Roles
+profile: Profil
 profilePhoto: Photo de profil
 male: Homme|Hommes
 female: Femme|Femmes
