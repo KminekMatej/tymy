@@ -5,7 +5,8 @@
         <span class="navbar-toggler-icon"></span>
     </button>
     <a class="navbar-brand" href="{$baseUri}" title="{$tym|firstUpper}.Tymy.CZ">{$tym|firstUpper}</a>
-    
+    {dump $steam}
+    {dump $multiaccounts}
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item dropdown" name="discussions">
@@ -88,6 +89,11 @@
             <li class="nav-item dropdown" name="user">
                 <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-circle" aria-hidden="true"></i> {$me->displayName}</a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item disabled" href="#">{$steam->name}</a>
+                    {foreach $multiaccounts as $maTeam}
+                    <a class="dropdown-item" href="#" n:if="$maTeam->sysName != $steam->sysName"><i class="fa fa-share text-primary" aria-hidden="true"></i> {$maTeam->name}</a>
+                    {/foreach}
+                    <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{plink Sign:out}"><i class="fa fa-power-off" aria-hidden="true"></i> {_sign.logout}</a>
                 </div>
             </li>

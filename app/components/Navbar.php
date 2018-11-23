@@ -2,14 +2,18 @@
 
 namespace Nette\Application\UI;
 
+use App\Model\Supplier;
+use App\Presenters\SecuredPresenter;
 use Nette;
 use Tapi\DiscussionListResource;
 use Tapi\EventListResource;
-use Tapi\UserListResource;
-use Tapi\UserDetailResource;
-use Tapi\PollListResource;
-use Tapi\NoteListResource;
 use Tapi\Exception\APIException;
+use Tapi\IsResource;
+use Tapi\MultiaccountListResource;
+use Tapi\NoteListResource;
+use Tapi\PollListResource;
+use Tapi\UserDetailResource;
+use Tapi\UserListResource;
 
 
 /**
@@ -19,7 +23,7 @@ use Tapi\Exception\APIException;
  */
 class NavbarControl extends Control {
 
-    /** @var \App\Presenters\SecuredPresenter */
+    /** @var SecuredPresenter */
     private $presenter;
 
     /** @var DiscussionListResource */
@@ -40,7 +44,13 @@ class NavbarControl extends Control {
     /** @var NoteListResource */
     private $noteList;
 
-    /** @var \App\Model\Supplier */
+    /** @var MultiaccountListResource */
+    private $maList;
+    
+    /** @var IsResource */
+    private $is;
+    
+    /** @var Supplier */
     private $supplier;
 
     /** @var Nette\Security\User */
@@ -48,7 +58,7 @@ class NavbarControl extends Control {
     
     private $accessibleSettings;
 
-    public function __construct(\App\Presenters\SecuredPresenter $presenter) {
+    public function __construct(SecuredPresenter $presenter) {
         parent::__construct();
         $this->presenter = $presenter;
         $this->discussionList = $presenter->discussionList;
@@ -57,9 +67,19 @@ class NavbarControl extends Control {
         $this->eventList = $this->presenter->eventList;
         $this->userDetail = $this->presenter->userDetail;
         $this->userList = $this->presenter->userList;
+        $this->maList = $this->presenter->maList;
+        $this->is = $this->presenter->is;
         $this->supplier = $this->presenter->supplier;
         $this->presenterUser = $this->presenter->getUser();
         $this->accessibleSettings = $this->presenter->getAccessibleSettings();
+    }
+    
+    private function multiaccounts() {
+        try {
+            $this->template->multiaccounts = $this->maList->init()->getData();
+        } catch (APIException $ex) {
+            $this->presenter->handleTapiException($ex);
+        }
     }
     
     private function notes() {
@@ -136,6 +156,7 @@ class NavbarControl extends Control {
         $this->template->action = $this->presenter->getAction();
         $this->template->tym = $this->supplier->getTym();
         $this->template->userId = $this->presenterUser->getId();
+        $this->template->steam = $this->is->init()->getData();
 
         //tapi discussions
         $this->discussions();
@@ -149,7 +170,9 @@ class NavbarControl extends Control {
         $this->settings();
         //tapi notes
         $this->notes();
-
+        //tapi multiaccounts
+        $this->multiaccounts();
+        
         $template->render();
     }
 

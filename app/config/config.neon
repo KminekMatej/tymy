@@ -70,6 +70,7 @@ services:
         - Tapi\NoteDeleteResource
         - Tapi\AuthDetailResource
         - Tapi\IsResource
+        - Tapi\MultiaccountListResource
 
 
 

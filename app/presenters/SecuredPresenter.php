@@ -21,6 +21,8 @@ use Tapi\DiscussionNewsListResource;
 use Tapi\EventListResource;
 use Tapi\EventTypeListResource;
 use Tapi\Exception\APIException;
+use Tapi\IsResource;
+use Tapi\MultiaccountListResource;
 use Tapi\NoteListResource;
 use Tapi\PollListResource;
 use Tapi\TapiObject;
@@ -49,6 +51,9 @@ class SecuredPresenter extends BasePresenter {
     /** @var DiscussionNewsListResource @inject */
     public $discussionNews;
     
+    /** @var MultiaccountListResource @inject */
+    public $maList;
+    
     /** @var PollListResource @inject */
     public $polls;
     
@@ -69,6 +74,9 @@ class SecuredPresenter extends BasePresenter {
     
     /** @var NoteListResource @inject */
     public $noteList;
+    
+    /** @var IsResource @inject */
+    public $is;
     
     /** @var NewMemcachedStorage @inject */
     public $cacheStorage;
