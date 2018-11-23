@@ -92,7 +92,9 @@
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item disabled" href="#">{$steam->name}</a>
                     {foreach $multiaccounts as $maTeam}
-                    <a class="dropdown-item" href="#" n:if="$maTeam->sysName != $steam->sysName"><i class="fa fa-share text-primary" aria-hidden="true"></i> {$maTeam->name}</a>
+                        {var $caption = empty($maTeam->name) ? $maTeam->sysName : $maTeam->name}
+                        {var $maLink = $maTeam->sysName == \App\Model\Supplier::V2_HOST ? 'https://' . $maTeam->sysName . '.tymy.cz/v2' : 'http://' . $maTeam->sysName . '.tymy.cz/'}
+                        <a class="dropdown-item" href="{$maLink}" n:if="$maTeam->sysName != $steam->sysName"><i class="fa fa-share text-primary" aria-hidden="true"></i> {$caption}</a>
                     {/foreach}
                     {/if}
                     <div class="dropdown-divider"></div>

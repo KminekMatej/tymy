@@ -11,6 +11,7 @@ namespace App\Model;
 class Supplier {
     
     const AUTODETECT = "_autodetect";
+    const V2_HOST = "tymy.cz";
 
     private $tapi_config;
     private $tym;
