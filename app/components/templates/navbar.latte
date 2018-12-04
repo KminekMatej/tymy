@@ -88,18 +88,15 @@
                 <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-circle" aria-hidden="true"></i> {$me->displayName}</a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                     <a class="dropdown-item" href="{plink Team:player $me->webName}"><i class="fa fa-user" aria-hidden="true"></i> {_team.profile}</a>
+                    <a class="dropdown-item" href="{plink Sign:out}"><i class="fa fa-power-off" aria-hidden="true"></i> {_sign.logout}</a>
                     {if !empty($multiaccounts)}
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item disabled" href="#">{$steam->name}</a>
                     {foreach $multiaccounts as $maTeam}
                         {var $caption = empty($maTeam->name) ? $maTeam->sysName : $maTeam->name}
-                        {var $maLink = $maTeam->sysName == \App\Model\Supplier::V2_HOST ? 'https://' . $maTeam->sysName . '.tymy.cz/v2' : 'http://' . $maTeam->sysName . '.tymy.cz/'}
-                        <a class="dropdown-item" href="{$maLink}" n:if="$maTeam->sysName != $steam->sysName"><i class="fa fa-share text-primary" aria-hidden="true"></i> {$caption}</a>
+                        <a n:if="$maTeam->sysName != $steam->sysName" class="dropdown-item" href="{plink Homepage:jump $maTeam->sysName, (property_exists($maTeam, 'v2') && $maTeam->v2)}"><i class="fa fa-angle-double-right" aria-hidden="true"></i> {$caption}</a>
+                        <button n:if="$maTeam->sysName == $steam->sysName" class="dropdown-item disabled" type="button"><i class="fa fa-angle-double-right" aria-hidden="true"></i> {$caption}</button>
                     {/foreach}
                     {/if}
-                    <div class="dropdown-divider"></div>
-                    
-                    <a class="dropdown-item" href="{plink Sign:out}"><i class="fa fa-power-off" aria-hidden="true"></i> {_sign.logout}</a>
                 </div>
             </li>
                 

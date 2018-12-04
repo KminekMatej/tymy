@@ -12,6 +12,9 @@ class HomepagePresenter extends SecuredPresenter {
     /** @var UsersLiveResource @inject */
     public $live;
     
+    /** @var \Tapi\MultiaccountTransferKeyResource @inject */
+    public $tkResource;
+    
     public function beforeRender() {
         parent::beforeRender();
         $this->template->addFilter('lastLogin', function ($lastLogin) {
@@ -66,6 +69,16 @@ class HomepagePresenter extends SecuredPresenter {
         $this->template->neverLogin = $this->translator->translate("common.never");
     }
 
+    public function actionJump($teamSysName, $hasV2){
+        $tk = $this->tkResource->init()->setTeam($teamSysName)->getData();
+        if($hasV2){
+            $url = "https://$teamSysName.tymy.cz/v2/?tk=" . $tk->transferKey;
+        } else {
+            $url = "http://$teamSysName.tymy.cz/?tk=".$tk->transferKey."&uid=".$tk->uid."&page=main";
+        }
+        $this->redirectUrl($url);
+    }
+    
     private function sortUsersByLastLogin($usersArray){
         $notSetValues = [];
         foreach ($usersArray as $key => $value) {
