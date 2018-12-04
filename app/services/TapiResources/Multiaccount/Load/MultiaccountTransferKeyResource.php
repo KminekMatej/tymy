@@ -2,6 +2,8 @@
 
 namespace Tapi;
 
+use Tapi\Exception\APIException;
+
 /**
  * Description of MultiaccountTransferKeyResource
  *
@@ -11,6 +13,9 @@ class MultiaccountTransferKeyResource extends MultiaccountResource {
 
     /** @var String */
     private $transferKey;
+
+    /** @var int */
+    private $uid;
 
     /** @var String */
     private $team;
@@ -22,14 +27,16 @@ class MultiaccountTransferKeyResource extends MultiaccountResource {
     }
 
     protected function preProcess() {
+        if ($this->getTeam() == null)
+            throw new APIException('Team is missing', self::BAD_REQUEST);
         $this->setUrl("multiaccount/" . $this->getTeam());
     }
 
     protected function postProcess() {
         if ($this->data == null)
             return null;
-        \Tracy\Debugger::barDump($this->data->transferKey);
         $this->setTransferKey($this->data->transferKey);
+        $this->setUid($this->data->uid);
     }
 
     public function getTransferKey() {
@@ -47,6 +54,15 @@ class MultiaccountTransferKeyResource extends MultiaccountResource {
 
     public function setTeam(String $team) {
         $this->team = $team;
+        return $this;
+    }
+
+    public function getUid() {
+        return $this->uid;
+    }
+
+    public function setUid($uid) {
+        $this->uid = $uid;
         return $this;
     }
 
