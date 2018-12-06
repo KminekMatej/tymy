@@ -72,7 +72,7 @@ class HomepagePresenter extends SecuredPresenter {
     public function actionJump($teamSysName, $hasV2){
         $tk = $this->tkResource->init()->setTeam($teamSysName)->getData();
         if($hasV2){
-            $url = "https://$teamSysName.tymy.cz/v2/?tk=" . $tk->transferKey;
+            $url = "https://$teamSysName.tymy.cz/v2/sign/in?tk=" . $tk->transferKey;
         } else {
             $url = "http://$teamSysName.tymy.cz/?tk=".$tk->transferKey."&uid=".$tk->uid."&page=main";
         }

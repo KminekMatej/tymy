@@ -58,6 +58,18 @@ class TapiAuthenticator implements Nette\Security\IAuthenticator {
     }
     
     /**
+     * @throws APIException When something goes wrong
+     * @param string $tk Transfer key
+     * @return Identity
+     */
+    public function tkAuthenticate($tk){
+        $loginTkResource = new \Tapi\LoginTkResource($this->supplier, NULL, $this->tapiService);
+        $loginObj = $loginTkResource->setTk($tk)->getData();
+        $loginObj->tapi_config = $this->supplier->getTapi_config();
+        return new Identity($loginObj->id, $loginObj->roles, $loginObj );
+    }
+    
+    /**
      * Adds new user.
      * @param  string
      * @param  string

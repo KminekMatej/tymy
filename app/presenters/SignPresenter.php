@@ -154,12 +154,35 @@ class SignPresenter extends BasePresenter {
         }
     }
     
-    public function renderIn(){
+    public function renderIn() {
         $this->template->multiple = $this->supplier->getTapi_config()["multiple_team"];
         $is = $this->is->getData();
         $this->template->teamName = strtoupper($is->teamName);
         $this->translator->setLocale(self::LOCALES[$is->defaultLangugeCode]);
-        
+
+        if ($tk = $this->getRequest()->getParameter("tk")) {
+            try {
+                $this->tapiAuthenticator->setTapiService($this->tapiService);
+                $this->tkLogin($tk);
+            } catch (APIException $exc) {
+                switch ($exc->getMessage()) {
+                    case "Login not approved":
+                        $this->flashMessage($this->translator->translate("common.alerts.loginNotApproved"), "danger");
+                        break;
+                    default:
+                        $this->flashMessage($this->translator->translate("common.alerts.loginNotSuccesfull") . ' (' . $exc->getMessage() . ")", "danger");
+                        break;
+                }
+            }
+            if (!is_null($this->user->getIdentity()))
+                Debugger::log($this->user->getIdentity()->data["callName"] . "@" . $this->supplier->getTym() . " logged in using transfer key");
+            $this->redirect('Homepage:');
+        }
+    }
+
+    private function tkLogin($tk){
+        $this->user->logout(true);
+        $this->user->login($this->tapiAuthenticator->tkAuthenticate($tk));
     }
     
     private function resetPwd($code){
