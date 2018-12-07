@@ -411,7 +411,7 @@ Binder.prototype.parseValueFromGroupOfElements = function (element) {
                 values.push(value);
         });
     }
-    return values;
+    return values.length > 0 ? values : "";
 };
 
 Binder.prototype.parseValueFromElement = function(element){
