@@ -423,6 +423,8 @@ Binder.prototype.parseValueFromElement = function(element){
 Binder.prototype.isChanged = function (element) {
     var binderObj = this;
     var originalValue = element.attr(binderObj.ORIGINAL_VALUE_ATTRIBUTE);
+    if(originalValue == "true") originalValue = true;
+    if(originalValue == "false") originalValue = false;
     var newValue = this.getValue(element);
     var changed = originalValue != newValue;
     if (changed) {
