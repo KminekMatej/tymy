@@ -178,18 +178,16 @@ class SettingsPresenter extends SecuredPresenter {
             "3" => ["caption" => $this->translator->translate("discussion.new")]
             ]);
         $this->template->isNew = true;
-            
-        $discussions = [(object)[
+        $this->template->discussion = (object)[
             "id" => -1,
             "caption" => "",
             "description" => "",
             "publicRead" => FALSE,
             "editablePosts" => TRUE,
             "order" => 0,
-        ]];
-        $this->template->discussions = $discussions;
+        ];
         
-        $this->setView("discussions");
+        $this->setView("discussion");
     }
     
     public function renderDiscussion($discussion) {
