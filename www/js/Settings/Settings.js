@@ -57,10 +57,13 @@ function duplicateEventRow(timePeriod){
     lastRow.find("INPUT[name=startTime]").val(startTime.format("DD.MM.YYYY HH:mm"));
     lastRow.find("INPUT[name=endTime]").val(endTime.format("DD.MM.YYYY HH:mm"));
     lastRow.find("INPUT[name=closeTime]").val(closeTime.format("DD.MM.YYYY HH:mm"));
+    loadBinders();
 }
 
 function removeRow(elm){
     var row = $(elm).closest("TR");
-    if(!row.is(':nth-child(2)') || row.closest("TABLE").find("TR").length > 2)
+    if(!row.is(':nth-child(2)') || row.closest("TABLE").find("TR").length > 2){
+        row.data("data-binder").destroy();
         row.remove();
+    }
 }

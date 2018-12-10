@@ -7,6 +7,7 @@ use App\Model\TapiAuthenticator;
 use Nette;
 use Nette\Caching\Cache;
 use Nette\Caching\Storages\NewMemcachedStorage;
+use Nette\Utils\DateTime;
 use stdClass;
 use Tapi\Exception\APIException;
 use Tapi\RequestMethod;
@@ -28,6 +29,13 @@ abstract class TapiObject {
     const CACHE_TIMEOUT_DAY = 86400; // one day - for abnormal caching purposes
     
     const BAD_REQUEST = 400;
+    
+    const CZECH_DATETIME = "j.n.Y H:i";
+    const CZECH_DATE = "j.n.Y";
+    const TIME = "H:i:s";
+    const TIME_H_M = "H:i";
+    const MYSQL_DATE = "Y-m-d";
+    const MYSQL_DATETIME = "Y-m-d H:i:s";
     
     /** @var Nette\Security\User */
     protected $user;
@@ -279,7 +287,9 @@ abstract class TapiObject {
     }
     
     protected function timeSave(&$date) {
-        $date = gmdate('c',strtotime("$date"));
+        $dt = DateTime::createFromFormat(TapiObject::MYSQL_DATETIME, $date);
+        if($dt === FALSE) $dt = DateTime::createFromFormat(TapiObject::CZECH_DATETIME, $date);
+        $date = gmdate('c',$dt->format("U"));
         return $date;
     }
     

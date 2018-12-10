@@ -1,5 +1,15 @@
 $(document).ready(function () {
+    loadBinders();
+});
+
+
+function loadBinders() {
     $("[data-binder-id]").each(function () {
+        var activeBinder = $(this).data("data-binder");
+        if(typeof activeBinder != "undefined"){
+            activeBinder.destroy();
+            $(this).removeData("data-binder");
+        }
         $(this).data("data-binder", new Binder({
             area: this,
             checkboxValueChecked: 1,
@@ -22,4 +32,4 @@ $(document).ready(function () {
             }
         }));
     });
-});
+}

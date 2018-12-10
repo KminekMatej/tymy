@@ -25,18 +25,19 @@ class EventCreateResource extends EventResource {
             throw new APIException('Events array is missing', self::BAD_REQUEST);
         if($this->getEventTypesArray() == null)
             throw new APIException('Event types array is missing', self::BAD_REQUEST);
-        foreach ($this->options->eventsArray as $event) {
+        
+        foreach ($this->options->eventsArray as &$event) {
             if(!array_key_exists("startTime", $event))
                 throw new APIException('Event start time is missing', self::BAD_REQUEST);
             if(!array_key_exists("type", $event))
                 throw new APIException('Event type is missing', self::BAD_REQUEST);
             if(!array_key_exists($event["type"], $this->getEventTypesArray()))
                 throw new APIException('Unrecognized type', self::BAD_REQUEST);
-            foreach ($event as $key => $value) {
-                if (in_array($key, ["startTime", "endTime", "closeTime"]))
+            foreach ($event as $key => &$value) {
+                if (in_array($key, ["startTime", "endTime", "closeTime"])){
                     $this->timeSave($value);
+                }
             }
-        }
         
         $this->setUrl("events");
         $this->setRequestData($this->getEventsArray());

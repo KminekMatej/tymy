@@ -332,9 +332,13 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function handleEventsCreate(){
-        $post = $this->getRequest()->getPost();
+        $binders = $this->getRequest()->getPost()["binders"];
+        $events = [];
+        foreach ($binders as $bind) {
+            $events[] = $bind["changes"];
+        }
         try {
-            $this->eventCreator->init()->setEventsArray($post)->setEventTypesArray($this->eventTypeList->getData())->perform();
+            $this->eventCreator->init()->setEventsArray($events)->setEventTypesArray($this->eventTypeList->getData())->perform();
             $this->redirect('Settings:events');
         } catch (APIException $ex) {
             $this->handleTapiException($ex, 'this');
