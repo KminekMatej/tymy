@@ -26,7 +26,7 @@ class DiscussionEditResource extends DiscussionResource {
             throw new APIException('Discussion object is missing', self::BAD_REQUEST);
         
         $this->setUrl("discussions");
-        $this->options->discussion->id = $this->getId();
+        $this->options->discussion["id"] = $this->getId();
         $this->setRequestData($this->getDiscussion());
     }
 
