@@ -21,7 +21,16 @@
                     <table class="table">
                         <tr><th>{_settings.appVersion}:</th><td><a href="https://github.com/KminekMatej/tymy/releases/tag/{$version->version}" target="_blank">{$version->version}</a></td></tr>
                         <tr><th>{_settings.released}:</th><td>{$version->date|date:'j.n.Y G:i'}</td></tr>
-                        <tr><th>{_settings.changeList}:</th><td><a href="https://github.com/KminekMatej/tymy/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aclosed%20updated%3A{$previousVersion->year}-{sprintf('%02d', $previousVersion->month)}-{sprintf('%02d', $previousVersion->day)}T{sprintf('%02d', $previousVersion->hour)}%3A{sprintf('%02d', $previousVersion->minute)}%3A{sprintf('%02d', $previousVersion->second)}Z..{$version->year}-{sprintf('%02d', $version->month)}-{sprintf('%02d', $version->day)}T{sprintf('%02d', $version->hour)}%3A{sprintf('%02d', $version->minute)}%3A{sprintf('%02d', $version->second)}Z" target="_blank">{_settings.here}</a> ({_settings.fromPreviousVersion} {$previousVersion->version})</td></tr>
+                        <tr><th>{_settings.changeList}:</th><td>
+                                <div>
+                                    <a href="https://github.com/KminekMatej/tymy/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aclosed%20updated%3A{$previousPatchVersion->year}-{sprintf('%02d', $previousPatchVersion->month)}-{sprintf('%02d', $previousPatchVersion->day)}T{sprintf('%02d', $previousPatchVersion->hour)}%3A{sprintf('%02d', $previousPatchVersion->minute)}%3A{sprintf('%02d', $previousPatchVersion->second)}Z..{$version->year}-{sprintf('%02d', $version->month)}-{sprintf('%02d', $version->day)}T{sprintf('%02d', $version->hour)}%3A{sprintf('%02d', $version->minute)}%3A{sprintf('%02d', $version->second)}Z" target="_blank">{_settings.here}</a> 
+                                    ({_settings.fromPreviousVersion} {$previousPatchVersion->version})
+                                </div>
+                                <div>
+                                    <a href="https://github.com/KminekMatej/tymy/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aclosed%20updated%3A{$previousPatchVersion->year}-{sprintf('%02d', $firstMinorVersion->month)}-{sprintf('%02d', $firstMinorVersion->day)}T{sprintf('%02d', $firstMinorVersion->hour)}%3A{sprintf('%02d', $firstMinorVersion->minute)}%3A{sprintf('%02d', $firstMinorVersion->second)}Z..{$version->year}-{sprintf('%02d', $version->month)}-{sprintf('%02d', $version->day)}T{sprintf('%02d', $version->hour)}%3A{sprintf('%02d', $version->minute)}%3A{sprintf('%02d', $version->second)}Z" target="_blank">{_settings.here}</a> 
+                                    ({_settings.fromVersion} {$firstMinorVersion->version})
+                                </div>
+                            </td></tr>
                         <tr><th>{_settings.authors}:</th><td><a href="mailto:matej@penzion-rataje.eu">Matěj Kmínek</a> (GUI) & <a href="mailto:admin@tymy.cz">Petr Medek</a> (Tymy app backend)</td></tr>
                         <tr><th>{_settings.reportBug}:</th><td><a href="https://github.com/KminekMatej/tymy/issues/new" target="_blank">GitHub</a> {_common.or} <a href="mailto:matej@penzion-rataje.eu">{_team.email}</a></td></tr>
                     </table>

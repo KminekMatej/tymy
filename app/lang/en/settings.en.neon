@@ -9,6 +9,7 @@ changeList: Change list
 authors: Authors
 reportBug: Report an issue
 fromPreviousVersion: from previous version
+fromVersion: from version
 title: Title
 description: Description
 canRead: Can read

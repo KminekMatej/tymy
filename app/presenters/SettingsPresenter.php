@@ -161,15 +161,21 @@ class SettingsPresenter extends SecuredPresenter {
         $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("settings.application"), "link" => $this->link("Settings:app")]]);
         $currentVersion = $this->supplier->getVersion(0);
         $this->template->version = $currentVersion;
-        $previousVersion = NULL;
+        $previousPatch = NULL;
+        $firstMinor = NULL;
+        \Tracy\Debugger::barDump($this->supplier->getVersions());
+        \Tracy\Debugger::barDump($currentVersion);
         foreach ($this->supplier->getVersions() as $version) {
-            if($currentVersion->major != $version->major || $currentVersion->minor != $version->minor){
-                $previousVersion = $version;
-                break;
+            if(empty($previousPatch) && ($currentVersion->major != $version->major || $currentVersion->minor != $version->minor || $currentVersion->patch != $version->patch)){
+                $previousPatch = $version;
+            }
+            if($currentVersion->major == $version->major && $currentVersion->minor == $version->minor && $version->patch == 0){
+                $firstMinor = $version;
             }
         }
-        if($previousVersion === NULL) $previousVersion = $this->supplier->getVersion(count($this->supplier->getVersions()));
-        $this->template->previousVersion = $previousVersion;
+        if($previousPatch === NULL) $previousPatch = $this->supplier->getVersion(count($this->supplier->getVersions()));
+        $this->template->previousPatchVersion = $previousPatch;
+        $this->template->firstMinorVersion = $firstMinor;
     }
     
     public function renderDiscussion_new() {

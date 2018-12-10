@@ -9,6 +9,7 @@ changeList: Liste des modifications
 authors: Auteurs
 reportBug: Signaler une erreur
 fromPreviousVersion: de la version précédente
+fromVersion: de la version
 title: Titre
 description: Description
 canRead: Peur lite

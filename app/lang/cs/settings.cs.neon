@@ -9,6 +9,7 @@ changeList: Seznam změn
 authors: Autoři
 reportBug: Nahlásit chybu
 fromPreviousVersion: od předchozí verze
+fromVersion: od verze
 title: Název
 description: Popis
 canRead: Číst může
