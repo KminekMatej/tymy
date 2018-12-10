@@ -38,6 +38,7 @@ class EventCreateResource extends EventResource {
                     $this->timeSave($value);
                 }
             }
+        }
         
         $this->setUrl("events");
         $this->setRequestData($this->getEventsArray());
