@@ -92,7 +92,7 @@ class TapiService {
         $curl_response = $this->executeRequest();
         
         if ($curl_response->data === FALSE)
-            throw new APIException("Unknown error while procesing tapi request");
+            throw new APIException("Unknown error while procesing tapi request" . (property_exists ($curl_response, "error") ? ". CURL error " . $curl_response->error : ""));
         return $this->respond($curl_response->data, $curl_response->info, $relogin);
     }
 
@@ -137,6 +137,7 @@ class TapiService {
             }
         }
         $result = ["data" => curl_exec($ch), "info" => curl_getinfo($ch)];
+        if(curl_error($ch)) $result["error"] = curl_errno($ch) . ": " . curl_error($ch);
         curl_close($ch);
         $this->tapiPanel->logAPI($this->url, $this->tapiObject->getMethod(), $formattedData, Debugger::timer("tapi-request $objectHash"), $result["info"]["http_code"]);
         return (object) $result;
