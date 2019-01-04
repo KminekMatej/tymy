@@ -113,10 +113,10 @@ class SettingsPresenterTest extends IPresenterTest {
         Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table'));
         if($this->user->isAllowed('discussion','setup')){
             Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-footer.text-right button.btn.btn-danger.mx-2.binder-delete-btn i.fa.fa-times'), "Chyba v " . $requestParams["discussion"]);
-            Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-footer.text-right button.btn.btn-lg.btn-primary.binder-save-btn i.fa.fa-floppy-o'));
+            Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-footer.text-right button.btn.btn-lg.btn-primary.binder-save-btn i.fa.fa-save'));
         } else {
             Assert::true(!$dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-footer.text-right button.btn.btn-danger.mx-2.binder-delete-btn i.fa.fa-times'), "Chyba v " . $requestParams["discussion"]);
-            Assert::true(!$dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-footer.text-right button.btn.btn-lg.btn-primary.binder-save-btn i.fa.fa-floppy-o'));
+            Assert::true(!$dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-footer.text-right button.btn.btn-lg.btn-primary.binder-save-btn i.fa.fa-save'));
         }
     }
 
