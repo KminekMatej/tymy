@@ -89,8 +89,11 @@ class TeamPresenterTest extends IPresenterTest {
     function allWebNames() {
         $users = $this->userList->getData();
         $inputArray = [];
+        $i = 0;
         foreach ($users as $u) {
             $inputArray[] = [$u];
+            if($i == 5) break; //limit is 5 players, thats enough for testing
+            $i++;
         }
         return $inputArray;
     }
