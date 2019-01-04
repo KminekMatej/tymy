@@ -153,6 +153,14 @@ class SettingsPresenterTest extends IPresenterTest {
         $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', ["action" => "discussion_new"]);
         $response = $this->presenter->run($request);
 
+        Assert::type('Nette\Application\Responses\RedirectResponse', $response);
+    }
+    
+    function testActionDiscussionNewAdmin() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user_admin"], $GLOBALS["testedTeam"]["pass_admin"]);
+        $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', ["action" => "discussion_new"]);
+        $response = $this->presenter->run($request);
+
         Assert::type('Nette\Application\Responses\TextResponse', $response);
         
         $html = (string)$response->getSource();
@@ -164,20 +172,24 @@ class SettingsPresenterTest extends IPresenterTest {
         Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 3);
         Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 4); //last item aint link
         
-        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-header h4'));
-        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table'));
-        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive'));
-        Assert::equal(count($dom->find('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr th')), 11);
-        Assert::equal(count($dom->find('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr[data-binder-id] td')), 11);
+        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3[data-binder-id] div.card-header h4'));
+        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3[data-binder-id] div.card-body table.table'));
+        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3[data-binder-id] div.card-body table.table'));
+        Assert::equal(count($dom->find('div.container.settings div.row div.col div.card.sh-box.my-3[data-binder-id] div.card-body table.table tr')), 8);
         
-        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr[data-binder-id] td.btn-group button.btn.btn-sm.btn-primary.binder-save-btn'));
-        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr[data-binder-id] td.btn-group button.btn.btn-sm.btn-danger'));
-        
-        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body div.text-center button.btn.btn-sm.btn-outline-success i.fa.fa-plus'));
+        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3[data-binder-id] div.card-footer.text-right button.btn.btn-lg.binder-save-btn'));
     }
 
     function testActionEventNew() {
         $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', ["action" => "event_new"]);
+        $response = $this->presenter->run($request);
+
+        Assert::type('Nette\Application\Responses\RedirectResponse', $response);
+    }
+    
+    function testActionEventNewAdmin() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user_admin"], $GLOBALS["testedTeam"]["pass_admin"]);
         $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', ["action" => "event_new"]);
         $response = $this->presenter->run($request);
 
@@ -197,14 +209,21 @@ class SettingsPresenterTest extends IPresenterTest {
         Assert::equal(count($dom->find('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr th')), 10);
         Assert::equal(count($dom->find('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr[data-binder-id] td')), 10);
         
-        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr[data-binder-id] td.btn-group button.btn.btn-sm.btn-primary.binder-save-btn'));
-        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr[data-binder-id] td.btn-group button.btn.btn-sm.btn-danger'));
-        
-        Assert::equal(count($dom->find('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body div.text-center button.btn.btn-sm.btn-outline-success i.fa.fa-plus')), 3);
+        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr[data-binder-id] td.btn-group button.btn.btn-sm.btn-outline-danger')); //delete new event row button
+        Assert::equal(count($dom->find('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body div.text-center button.btn.btn-sm.btn-outline-success i.fa.fa-plus')), 3); //three icons to duplicate event row
+        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-footer.text-right button.btn.btn-lg.binder-save-all-btn')); //save all button
     }
 
     function testActionPollNew() {
         $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', ["action" => "poll_new"]);
+        $response = $this->presenter->run($request);
+
+        Assert::type('Nette\Application\Responses\RedirectResponse', $response);
+    }
+    
+    function testActionPollNewAdmin() {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user_admin"], $GLOBALS["testedTeam"]["pass_admin"]);
         $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', ["action" => "poll_new"]);
         $response = $this->presenter->run($request);
 
@@ -225,7 +244,6 @@ class SettingsPresenterTest extends IPresenterTest {
         Assert::equal(count($dom->find('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr[data-binder-id] td')), 15);
         
         Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr[data-binder-id] td.btn-group button.btn.btn-sm.btn-primary.binder-save-btn'));
-        Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table.table-xs.table-hover.table-responsive tr[data-binder-id] td.btn-group button.btn.btn-sm.btn-danger'));
     }
 
 }
