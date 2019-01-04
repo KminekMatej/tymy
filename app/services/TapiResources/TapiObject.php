@@ -30,6 +30,7 @@ abstract class TapiObject {
     
     const BAD_REQUEST = 400;
     
+    const DATETIME_ISO8601 = "c";
     const CZECH_DATETIME = "j.n.Y H:i";
     const CZECH_DATE = "j.n.Y";
     const TIME = "H:i:s";
@@ -289,8 +290,11 @@ abstract class TapiObject {
     protected function timeSave(&$date) {
         $dt = DateTime::createFromFormat(TapiObject::MYSQL_DATETIME, $date);
         if($dt === FALSE) $dt = DateTime::createFromFormat(TapiObject::CZECH_DATETIME, $date);
-        $date = gmdate('c',$dt->format("U"));
-        return $date;
+        if($dt === FALSE) $dt = new DateTime($date);
+        if($dt){
+            $date = gmdate('c', $dt->format("U"));
+            return $date;
+        }
     }
     
     public function getTsidRequired() {
