@@ -89,6 +89,15 @@ class SettingsPresenterTest extends IPresenterTest {
         $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', $requestParams);
         $response = $this->presenter->run($request);
 
+        Assert::type('Nette\Application\Responses\RedirectResponse', $response);
+    }
+    
+    /** @dataProvider getFormActions */
+    function testActionFormAdmin($requestParams) {
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user_admin"], $GLOBALS["testedTeam"]["pass_admin"]);
+        $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', $requestParams);
+        $response = $this->presenter->run($request);
+
         Assert::type('Nette\Application\Responses\TextResponse', $response);
         
         $html = (string)$response->getSource();
@@ -102,12 +111,12 @@ class SettingsPresenterTest extends IPresenterTest {
         
         Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-header h4'));
         Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-body table.table'));
-        if($this->user->isAllowed('SYS','DSSETUP')){
+        if($this->user->isAllowed('discussion','setup')){
             Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-footer.text-right button.btn.btn-danger.mx-2.binder-delete-btn i.fa.fa-times'), "Chyba v " . $requestParams["discussion"]);
-            Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-footer.text-right button.btn btn-lg.btn-primary.binder-save-btn i.fa.fa-floppy-o'));
+            Assert::true($dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-footer.text-right button.btn.btn-lg.btn-primary.binder-save-btn i.fa.fa-floppy-o'));
         } else {
             Assert::true(!$dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-footer.text-right button.btn.btn-danger.mx-2.binder-delete-btn i.fa.fa-times'), "Chyba v " . $requestParams["discussion"]);
-            Assert::true(!$dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-footer.text-right button.btn btn-lg.btn-primary.binder-save-btn i.fa.fa-floppy-o'));
+            Assert::true(!$dom->has('div.container.settings div.row div.col div.card.sh-box.my-3 div.card-footer.text-right button.btn.btn-lg.btn-primary.binder-save-btn i.fa.fa-floppy-o'));
         }
     }
 
