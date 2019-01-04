@@ -24,7 +24,7 @@ class AllPresentersTest extends IPresenterTest {
     }
     
     function testHopsThroughPresenters(){
-        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user_admin"], $GLOBALS["testedTeam"]["pass_admin"]);
         $hopList = [
             ["presenter" => "Homepage", "action" => "default", "params" => []],
             ["presenter" => "Discussion", "action" => "default", "params" => []],
