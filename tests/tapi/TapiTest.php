@@ -117,7 +117,7 @@ abstract class TapiTest extends TestCase {
             $this->setCorrectInputParams();
             Assert::exception(function() {
                 $this->tapiObject->getData(TRUE);
-            }, "\Tapi\Exception\APIException", "Login failed. Wrong username or password.");
+            }, "\Tapi\Exception\APIAuthenticationException", "Login failed. Wrong username or password.");
         }
     }
 
