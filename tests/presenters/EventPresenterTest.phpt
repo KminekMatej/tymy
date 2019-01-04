@@ -97,12 +97,12 @@ class EventPresenterTest extends IPresenterTest {
         
         Assert::true($dom->has('div.container.event div.row div.col div.card.sh-box.my-3 div.card-body h6.card-subtitle.mb-2.text-muted span a'));
         Assert::true($dom->has('div.container.event div.row div.col div.card.sh-box.my-3 div.card-body p.card-text'));
-        Assert::equal(count($dom->find('div.container.event div.row div.col div.card.sh-box.my-3 div.card-body div.row div.col-md-4 table.table.mb-0 tr th')), 3);
-        Assert::equal(count($dom->find('div.container.event div.row div.col div.card.sh-box.my-3 div.card-body div.row div.col-md-4 table.table.mb-0 tr td')), 3);
+        Assert::equal(count($dom->find('div.container.event div.row div.col div.card.sh-box.my-3 div.card-body div.row div.col-lg-4 table.table.mb-0 tr th')), 3);
+        Assert::equal(count($dom->find('div.container.event div.row div.col div.card.sh-box.my-3 div.card-body div.row div.col-lg-4 table.table.mb-0 tr td')), 3);
         
-        Assert::true($dom->has('div.container.event div.row div.col div.card.sh-box.my-3 div.card-body div.row div.col-md-8.d-flex.flex-column-reverse.align-items-center input.form-control.form-control-sm.custom-btn-sm'));
-        Assert::count(3, $dom->find('div.container.event div.row div.col div.card.sh-box.my-3 div.card-body div.row div.col-md-8.d-flex.flex-column-reverse.align-items-center button.btn.custom-btn-sm'));
-        Assert::true($dom->has('div.container.event div.row div.col div.card.sh-box.my-3 div.card-body div.row div.col-md-8.d-flex.flex-column-reverse.align-items-center div#snippet--attendanceWarning'));
+        Assert::true(        $dom->has('div.container.event div.row div.col div.card.sh-box.my-3 div.card-body div.row div.col-lg-8.d-flex.flex-column-reverse.align-items-center input.form-control.form-control-sm.custom-btn-sm'));
+        Assert::count(3,    $dom->find('div.container.event div.row div.col div.card.sh-box.my-3 div.card-body div.row div.col-lg-8.d-flex.flex-column-reverse.align-items-center button.btn.custom-btn-sm'));
+        Assert::true(        $dom->has('div.container.event div.row div.col div.card.sh-box.my-3 div.card-body div.row div.col-lg-8.d-flex.flex-column-reverse.align-items-center div#snippet--attendanceWarning'));
         
         Assert::true($dom->has('div.container.event div.row div.col div.card.sh-box.my-3#snippet--attendanceTabs div.card-header ul.nav.nav-tabs.flex-column.flex-sm-row.card-header-tabs li.nav-item'));
         Assert::true($dom->has('div.container.event div.row div.col div.card.sh-box.my-3#snippet--attendanceTabs div.card-body div.tab-content div.tab-pane.fade.player-list div.row.my-2'));
