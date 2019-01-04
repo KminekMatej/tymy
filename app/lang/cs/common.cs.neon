@@ -58,6 +58,7 @@ alerts:
     inactivityLogout: Byl jste odhlášen z důvodu dlouhé nečinnosti. Prosím přihlašte se znovu.
     exceptionOccured: Došlo k nečekané chybě
     confirmDelete: Opravde chcete tento záznam smazat?
+    notPermitted: Nemáte dostatečná práva
 months:
     january: Leden
     february: Únor

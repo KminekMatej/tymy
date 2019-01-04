@@ -58,6 +58,7 @@ alerts:
     inactivityLogout: "Vous avez été déconnecté à la suite d'une longue période d'inactivité. Merci de vous reconnecter."
     exceptionOccured: "Une erreur s'est produite"
     confirmDelete: Vraiment supprimer?
+    notPermitted: Permissions insuffisantes
 months:
     january: Janvier
     february: Février

@@ -58,6 +58,7 @@ alerts:
     inactivityLogout: "Zostałeś wylogowany, ze względu na brak czynności. Zaloguj się ponownie."
     exceptionOccured: Wystąpił nieoczekiwany błąd
     confirmDelete: Czy na pewno chcesz to usunąć?
+    notPermitted: Niewystarczające uprawnienia
 months:
     january: Styczeń    
     february: Luty
