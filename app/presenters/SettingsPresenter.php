@@ -205,6 +205,7 @@ class SettingsPresenter extends SecuredPresenter {
             $this->redirect('Settings:events');
         }
         $this->setLevelCaptions(["3" => ["caption" => $discussionObj->caption, "link" => $this->link("Settings:discussions", $discussionObj->webName)]]);
+        $this->template->isNew = FALSE;
         $this->template->discussion = $discussionObj;
     }
     
