@@ -179,6 +179,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function renderDiscussion_new() {
+        if(!$this->getUser()->isAllowed('discussion','setup')) $this->notAllowed();
         $this->setLevelCaptions([
             "2" => ["caption" => $this->translator->translate("discussion.discussion", 2), "link" => $this->link("Settings:discussions")],
             "3" => ["caption" => $this->translator->translate("discussion.new")]
@@ -197,6 +198,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function renderDiscussion($discussion) {
+        if(!$this->getUser()->isAllowed('discussion','setup')) $this->notAllowed();
         //RENDERING DISCUSSION DETAIL
         $discussionId = $this->discussionList->init()->getIdFromWebname($discussion, $this->discussionList->getData());
         $discussionObj = $this->discussionDetail->init()->setId($discussionId)->getData();
@@ -209,6 +211,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function renderEvent_new() {
+        if(!$this->getUser()->isAllowed('event','canCreate')) $this->notAllowed();
         $this->setLevelCaptions([
             "2" => ["caption" => $this->translator->translate("event.event", 2), "link" => $this->link("Settings:events")],
             "3" => ["caption" => $this->translator->translate("event.new", 2)]
@@ -232,6 +235,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function renderEvent($event) {
+        if(!$this->getUser()->isAllowed('event','canUpdate')) $this->notAllowed();
         //RENDERING EVENT DETAIL
         $eventId = $this->parseIdFromWebname($event);
         $eventObj = $this->eventDetail->init()->setId($eventId)->getData();
@@ -284,6 +288,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function renderPoll_new() {
+        if(!$this->getUser()->isAllowed('poll','canCreatePoll')) $this->notAllowed();
         $this->setLevelCaptions([
             "2" => ["caption" => $this->translator->translate("poll.poll", 2), "link" => $this->link("Settings:polls")],
             "3" => ["caption" => $this->translator->translate("poll.new")]
@@ -309,6 +314,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function renderPoll($poll) {
+        if(!$this->getUser()->isAllowed('poll','canUpdatePoll')) $this->notAllowed();
         //RENDERING POLL DETAIL
         $pollId = $this->parseIdFromWebname($poll);
         $pollObj = $this->pollDetail->init()->setId($pollId)->getData();
@@ -328,6 +334,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function handleEventsEdit(){
+        if(!$this->getUser()->isAllowed('event','canUpdate')) $this->notAllowed();
         $post = $this->getRequest()->getPost();
         $binders = $post["binders"];
         foreach ($binders as $bind) {
@@ -336,6 +343,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function handleEventsCreate(){
+        if(!$this->getUser()->isAllowed('event','canCreate')) $this->notAllowed();
         $binders = $this->getRequest()->getPost()["binders"];
         $events = [];
         foreach ($binders as $bind) {
@@ -350,11 +358,13 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function handleEventEdit(){
+        if(!$this->getUser()->isAllowed('event','canUpdate')) $this->notAllowed();
         $bind = $this->getRequest()->getPost();
         $this->editEvent($bind);
     }
     
     public function handleEventDelete(){
+        if(!$this->getUser()->isAllowed('event','canDelete')) $this->notAllowed();
         $bind = $this->getRequest()->getPost();
         try {
             $this->eventDeleter->init()
@@ -367,6 +377,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function handleDiscussionsEdit(){
+        if(!$this->getUser()->isAllowed('discussion','setup')) $this->notAllowed();
         $post = $this->getRequest()->getPost();
         $binders = $post["binders"];
         foreach ($binders as $bind) {
@@ -375,6 +386,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function handleDiscussionCreate(){
+        if(!$this->getUser()->isAllowed('discussion','setup')) $this->notAllowed();
         $discussionData = (object)$this->getRequest()->getPost()["changes"]; // new discussion is always as ID 1
         try {
             $this->discussionCreator->init()
@@ -387,11 +399,13 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function handleDiscussionEdit(){
+        if(!$this->getUser()->isAllowed('discussion','setup')) $this->notAllowed();
         $bind = $this->getRequest()->getPost();
         $this->editDiscussion($bind);
     }
     
     public function handleDiscussionDelete() {
+        if(!$this->getUser()->isAllowed('discussion','setup')) $this->notAllowed();
         $bind = $this->getRequest()->getPost();
         try {
             $this->discussionDeleter->init()
@@ -404,6 +418,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
 
     public function handlePollsEdit(){
+        if(!$this->getUser()->isAllowed('poll','canUpdate')) $this->notAllowed();
         $post = $this->getRequest()->getPost();
         $binders = $post["binders"];
         foreach ($binders as $bind) {
@@ -412,6 +427,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function handlePollCreate(){
+        if(!$this->getUser()->isAllowed('poll','canCreatePoll')) $this->notAllowed();
         $pollData = $this->getRequest()->getPost()["changes"];
         try {
             $this->pollCreator->init()->setPoll($pollData)->perform();
@@ -422,11 +438,13 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function handlePollEdit(){
+        if(!$this->getUser()->isAllowed('poll','canUpdatePoll')) $this->notAllowed();
         $bind = $this->getRequest()->getPost();
         $this->editPoll($bind);
     }
     
     public function handlePollDelete() {
+        if(!$this->getUser()->isAllowed('poll','canDeletePoll')) $this->notAllowed();
         $bind = $this->getRequest()->getPost();
         try {
             $this->pollDeleter->init()->setId($bind["id"])->perform();
@@ -464,6 +482,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
 
     public function handlePollOptionsEdit($poll){
+        if(!$this->getUser()->isAllowed('poll','canUpdatePoll')) $this->notAllowed();
         $post = $this->getRequest()->getPost();
         $binders = $post["binders"];
         $pollId = $this->parseIdFromWebname($poll);
@@ -474,6 +493,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function handlePollOptionCreate($poll){
+        if(!$this->getUser()->isAllowed('poll','canUpdatePoll')) $this->notAllowed();
         $pollData = $this->getRequest()->getPost()[1]; // new poll option is always as item 1
         $pollId = $this->parseIdFromWebname($poll);
         try {
@@ -487,6 +507,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function handlePollOptionEdit($poll) {
+        if(!$this->getUser()->isAllowed('poll','canUpdatePoll')) $this->notAllowed();
         $bind = $this->getRequest()->getPost();
         $bind["pollId"] = $this->parseIdFromWebname($poll);
         try {
@@ -497,6 +518,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
 
     public function handlePollOptionDelete($poll) {
+        if(!$this->getUser()->isAllowed('poll','canDeletePoll')) $this->notAllowed();
         $bind = $this->getRequest()->getPost();
         $bind["pollId"] = $this->parseIdFromWebname($poll);
         try {
@@ -575,4 +597,8 @@ class SettingsPresenter extends SecuredPresenter {
         }
     }
 
+    private function notAllowed(){
+        $this->flashMessage($this->translator->translate("common.alerts.notPermitted"));
+        $this->redirect("Settings:");
+    }
 }
