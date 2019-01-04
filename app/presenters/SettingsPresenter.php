@@ -1,28 +1,28 @@
 <?php
 
 namespace App\Presenters;
-use Nette\Caching\Cache;
-use Tapi\DiscussionDetailResource;
-use Tapi\EventDetailResource;
-use Tapi\EventCreateResource;
-use Tapi\EventEditResource;
-use Tapi\EventDeleteResource;
+
 use Tapi\DiscussionCreateResource;
-use Tapi\DiscussionEditResource;
 use Tapi\DiscussionDeleteResource;
-use Tapi\PollDetailResource;
-use Tapi\PollCreateResource;
-use Tapi\PollEditResource;
-use Tapi\PollDeleteResource;
-use Tapi\OptionListResource;
-use Tapi\OptionCreateResource;
-use Tapi\OptionEditResource;
-use Tapi\OptionDeleteResource;
-use Tapi\NoteListResource;
-use Tapi\NoteCreateResource;
-use Tapi\NoteEditResource;
-use Tapi\NoteDeleteResource;
+use Tapi\DiscussionDetailResource;
+use Tapi\DiscussionEditResource;
+use Tapi\EventCreateResource;
+use Tapi\EventDeleteResource;
+use Tapi\EventDetailResource;
+use Tapi\EventEditResource;
+use Tapi\EventListResource;
 use Tapi\Exception\APIException;
+use Tapi\NoteCreateResource;
+use Tapi\NoteDeleteResource;
+use Tapi\NoteEditResource;
+use Tapi\OptionCreateResource;
+use Tapi\OptionDeleteResource;
+use Tapi\OptionEditResource;
+use Tapi\OptionListResource;
+use Tapi\PollCreateResource;
+use Tapi\PollDeleteResource;
+use Tapi\PollDetailResource;
+use Tapi\PollEditResource;
 
 
 class SettingsPresenter extends SecuredPresenter {
@@ -113,7 +113,7 @@ class SettingsPresenter extends SecuredPresenter {
         } else {
             $this->template->isNew = false;
             $page = is_numeric($page) ? $page : 1;
-            $limit = \Tapi\EventListResource::PAGING_EVENTS_PER_PAGE;
+            $limit = EventListResource::PAGING_EVENTS_PER_PAGE;
             $offset = ($page-1)*$limit;
             $events = $this->eventList->init()->setLimit($limit)->setOffset($offset)->getData(); // get all events
             $this->template->events = $events;
@@ -163,8 +163,6 @@ class SettingsPresenter extends SecuredPresenter {
         $this->template->version = $currentVersion;
         $previousPatch = NULL;
         $firstMinor = NULL;
-        \Tracy\Debugger::barDump($this->supplier->getVersions());
-        \Tracy\Debugger::barDump($currentVersion);
         foreach ($this->supplier->getVersions() as $version) {
             if(empty($previousPatch) && ($currentVersion->major != $version->major || $currentVersion->minor != $version->minor || $currentVersion->patch != $version->patch)){
                 $previousPatch = $version;
