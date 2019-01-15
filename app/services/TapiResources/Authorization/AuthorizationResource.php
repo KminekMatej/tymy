@@ -1,7 +1,7 @@
 <?php
 
 namespace Tapi;
-use Nette\Utils\Strings;
+
 use Nette\Caching\Cache;
 
 /**
