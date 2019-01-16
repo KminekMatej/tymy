@@ -47,23 +47,27 @@
                             <td><textarea name="description" data-value="{$d->description}" rows="1" class="form-control form-control-sm">{$d->description}</textarea></td>
 
                             <td>
-                                <select name="readRightName" data-value class="form-control form-control-sm">
+                                <select name="readRightName" data-value="{$d->readRightName}" class="form-control form-control-sm">
                                     <option value="">-- {_common.everyone} --</option>
+                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $d->readRightName == $key">{$caption}</option>
                                 </select>
                             </td>
                             <td>
-                                <select name="writeRightName" data-value class="form-control form-control-sm">
+                                <select name="writeRightName" data-value="{$d->writeRightName}" class="form-control form-control-sm">
                                     <option value="">-- {_common.everyone} --</option>
+                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $d->writeRightName == $key">{$caption}</option>
                                 </select>
                             </td>
                             <td>
-                                <select name="deleteRightName" data-value class="form-control form-control-sm">
+                                <select name="deleteRightName" data-value="{$d->deleteRightName}" class="form-control form-control-sm">
                                     <option value="">-- {_common.everyone} --</option>
+                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $d->deleteRightName == $key">{$caption}</option>
                                 </select>
                             </td>
                             <td>
-                                <select name="stickyRightName" data-value class="form-control form-control-sm">
+                                <select name="stickyRightName" data-value="{$d->stickyRightName}" class="form-control form-control-sm">
                                     <option value="">-- {_common.everyone} --</option>
+                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $d->stickyRightName == $key">{$caption}</option>
                                 </select>
                             </td>
 

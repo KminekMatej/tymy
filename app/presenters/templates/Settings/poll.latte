@@ -58,24 +58,27 @@
                             </td></tr>
                         <tr><th>{_poll.canVote}</th>
                             <td>
-                                <select name="voteRightName" class="col-6 form-control disabled" disabled>
+                                <select name="voteRightName" data-value="{$poll->voteRightName}" class="col-6 form-control">
                                     <option value="">-- {_common.everyone} --</option>
+                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $poll->voteRightName == $key">{$caption}</option>
                                 </select>
                             </td>
                         </tr>
 
                         <tr><th>{_settings.canDisplayResults}</th>
                             <td>
-                                <select name="resultRightName" class="col-6 form-control disabled" disabled>
+                                <select name="resultRightName" data-value="{$poll->resultRightName}" class="col-6 form-control">
                                     <option value="">-- {_common.everyone} --</option>
+                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $poll->resultRightName == $key">{$caption}</option>
                                 </select>
                             </td>
                         </tr>
 
                         <tr><th>{_settings.canAlienVote}</th>
                             <td>
-                                <select name="alienVoteRightName" class="col-6 form-control disabled" disabled>
+                                <select name="alienVoteRightName" data-value="{$poll->alienVoteRightName}" class="col-6 form-control">
                                     <option value="">-- {_common.everyone} --</option>
+                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $poll->alienVoteRightName == $key">{$caption}</option>
                                 </select>
                             </td>
                         </tr>
