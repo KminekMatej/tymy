@@ -16,7 +16,7 @@ class RightListResource extends PermissionResource{
     }
 
     protected function preProcess() {
-        $this->setUrl("rights/user");
+        $this->setUrl("rights");
     }
 
     protected function postProcess() {
