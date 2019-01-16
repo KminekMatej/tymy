@@ -5,6 +5,11 @@
   }
 }
 
+.dropdown-menu{
+    max-height:450px;
+    overflow-y:auto;
+}
+
 body {
         font-family: 'Noto Sans', sans-serif;
 	font-size: 15px;
@@ -174,4 +179,10 @@ INPUT.form-check{
 NAV.navbar .badge-new{
     position: absolute;
     right: 0px;
+}
+
+.scrollable-menu {
+    height: auto;
+    max-height: 200px;
+    overflow-x: hidden;
 }
