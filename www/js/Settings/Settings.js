@@ -18,14 +18,17 @@ function link() {
 }
 
 function duplicateLastRow(){
-    var table = $("DIV.container.settings TABLE");
+    var table = $("DIV.settings TABLE");
     var lastRow = table.find("TR:last");
     var newRow = lastRow.clone();
+    newRow.find("SELECT[name='viewRightName']").val(lastRow.find("SELECT[name='viewRightName']").val());
+    newRow.find("SELECT[name='planRightName']").val(lastRow.find("SELECT[name='planRightName']").val());
+    newRow.find("SELECT[name='resultRightName']").val(lastRow.find("SELECT[name='resultRightName']").val());
     table.append(newRow);
 }
 
 function duplicateEventRow(timePeriod){
-    var table = $("DIV.container.settings TABLE");
+    var table = $("DIV.settings TABLE");
     var lastRow = table.find("TR:last");
     
     var type = lastRow.find("SELECT[name=type]").val();
