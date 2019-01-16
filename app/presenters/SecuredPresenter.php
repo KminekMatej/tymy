@@ -70,8 +70,8 @@ class SecuredPresenter extends BasePresenter {
     /** @var AuthDetailResource @inject */
     public $apiRights;
     
-    /** @var \Tapi\PermissionListResource @inject */
-    public $permissionList;
+    /** @var RightListResource @inject */
+    public $userRightsList;
     
     /** @var EventTypeListResource @inject */
     public $eventTypeList;
@@ -122,8 +122,8 @@ class SecuredPresenter extends BasePresenter {
         $this->apiRights->getData();
         $this->tapiAuthorizator->setUser($this->getUser()->getIdentity()->getData());
         $this->tapiAuthorizator->setApiRights($this->apiRights);
-        $this->permissionList->init()->getData();
-        $this->template->usrRights = $this->permissionList->getUsrPermissionsAsArray();
+        $this->userRightsList->init()->getData();
+        $this->template->usrRights = $this->userRightsList->getAsArray();
         
         $this->setAccessibleSettings();
         $this->setLevelCaptions(["0" => ["caption" => $this->translator->translate("common.mainPage"), "link" => $this->link("Homepage:")]]);
@@ -209,7 +209,8 @@ class SecuredPresenter extends BasePresenter {
         // TO BE ENABLED WHEN ITS READY
         if($this->getUser()->isAllowed('reports','canSetup')) $this->accessibleSettings[] = new SettingMenu("reports", $this->translator->translate("report.report", 2), $this->link("Settings:reports"), "fa-chart-area", FALSE);
         // TO BE ENABLED WHEN ITS READY
-        if($this->getUser()->isAllowed('permissions','canSetup')) $this->accessibleSettings[] = new SettingMenu("permissions", $this->translator->translate("permission.permission", 2), $this->link("Settings:permissions"), "fa-gavel", FALSE);
+        Debugger::barDump($this->getUser()->isAllowed('permissions','canSetup'));
+        if($this->getUser()->isAllowed('permissions','canSetup')) $this->accessibleSettings[] = new SettingMenu("permissions", $this->translator->translate("permission.permission", 2), $this->link("Settings:permissions"), "fa-gavel", TRUE);
         $this->accessibleSettings[] = new SettingMenu("app", $this->translator->translate("settings.application"), $this->link("Settings:app"), "fa-laptop", TRUE); //user can always look into app settings to setup his own properties
         return $this;
     }
