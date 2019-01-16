@@ -9,3 +9,7 @@
 /tests/setup_DEV_LOCAL.php
 /release.bat
 /tests/SETUP_XDEV.php
+/tests/test_XDEV_TAPI.sh
+/tests/test_XDEV.sh
+/tests/test_XDEV_COMPONENTS.sh
+/tests/test_XDEV_PRESENTERS.sh
