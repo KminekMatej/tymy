@@ -15,15 +15,15 @@
 {/block}
 
 {block content}
-<div class="container settings">
-    <div class="row">
+<div class="container-fluid settings">
+    <div class="row justify-content-center">
         <div class="col">
             <div class="card sh-box my-3">
                 <div class="card-header">
                     <h4>{if $isNew}{_event.newEvents}{else}{_event.editEvent,2}{/if}</h4>
                 </div>
                 <div class="card-body">
-                    <table class="table table-xs table-hover table-responsive">
+                    <table class="table table-xs table-hover">
                         <tr>
                             <th></th>
                             <th>{_settings.type}</th>
@@ -34,6 +34,9 @@
                             <th>{_event.close}</th>
                             <th>{_event.place}</th>
                             <th>{_common.link}</th>
+                            <th>{_event.canView-sm}</th>
+                            <th>{_event.canPlan-sm}</th>
+                            <th>{_event.canResult-sm}</th>
                             <th></th>
                         </tr>
                         {if $events}
@@ -56,6 +59,24 @@
                             <td><input type="text" name="closeTime" data-value="{$isNew ? '' : $e->closeTime|date:'d.m.Y H:i'}" value="{$e->closeTime|date:'d.m.Y H:i'}" class="form-control form-control-sm" style="-webkit-flex-direction:row; max-width: 175px;" required placeholder="dd.mm.rrrr hh:mm"/></td>
                             <td><input type="text" name="place" data-value="{$e->place}" value="{$e->place}" class="form-control form-control-sm"/></td>
                             <td><input type="text" name="link" data-value="{$e->link}" value="{$e->link}" class="form-control form-control-sm"/></td>
+                            <td>
+                                <select name="viewRightName" data-value="{$e->viewRightName}" class="form-control form-control-sm">
+                                    <option value="">-- {_common.everyone} --</option>
+                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $e->viewRightName == $key">{$caption}</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="planRightName" data-value="{$e->planRightName}" class="form-control form-control-sm">
+                                    <option value="">-- {_common.everyone} --</option>
+                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $e->planRightName == $key">{$caption}</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="resultRightName" data-value="{$e->resultRightName}" class="form-control form-control-sm">
+                                    <option value="">-- {_common.everyone} --</option>
+                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $e->resultRightName == $key">{$caption}</option>
+                                </select>
+                            </td>
                             <td class="btn-group" role="group">
                                 <button n:if="!$isNew && $user->isAllowed('event','canUpdate')" href="{link eventEdit!}" class="btn btn-sm btn-primary binder-save-btn" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
                                 <button n:if="!$isNew && $user->isAllowed('event','canDelete')" href="{link eventDelete!}" class="btn btn-sm btn-danger binder-delete-btn" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></button>

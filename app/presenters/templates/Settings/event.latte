@@ -13,6 +13,7 @@
 <div class="container settings">
     <div class="row">
         <div class="col">
+            {dump $event}
             <div class="card sh-box my-3" data-binder-id="{$event->id}">
                 <div class="card-header">
                     <h4>{_event.editEvent,1} {$event->id}</h4>
@@ -44,6 +45,31 @@
                                                 <input type="text" name="link" value="{$event->link}" data-value="{$event->link}" class="col-6 form-control" />
                                                 <div class="input-group-append"><button style="min-width: 45px" class='btn btn-light btn-light-bordered' onclick='link()' title="{_event.openInNewWindow}"><i class="fa fa-external-link-alt" aria-hidden="true"></i></button></div>
                                             </div></td></tr>
+                        <tr><th>{_event.canView}</th>
+                            <td>
+                                <select name="viewRightName" data-value="{$event->viewRightName}" class="col-6 form-control">
+                                    <option value="">-- {_common.everyone} --</option>
+                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $event->viewRightName == $key">{$caption}</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr><th>{_event.canPlan}</th>
+                            <td>
+                                <select name="planRightName" data-value="{$event->planRightName}" class="col-6 form-control">
+                                    <option value="">-- {_common.everyone} --</option>
+                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $event->planRightName == $key">{$caption}</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr><th>{_event.canResult}</th>
+                            <td>
+                                <select name="resultRightName" data-value="{$event->resultRightName}" class="col-6 form-control">
+                                    <option value="">-- {_common.everyone} --</option>
+                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $event->resultRightName == $key">{$caption}</option>
+                                </select>
+                            </td>
+                        </tr>
+
                     </table>
                 </div>
                 <div class="card-footer text-right">
