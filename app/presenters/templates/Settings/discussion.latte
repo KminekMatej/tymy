@@ -27,29 +27,33 @@
                         <tr><th>{_settings.description}</th><td><textarea name="description" data-value="{$discussion->description}" class="form-control col-6">{$discussion->description}</textarea></td></tr>
                         <tr><th>{_settings.canRead}</th>
                             <td>
-                                <select name="readRightName" class="col-6 form-control disabled" disabled>
+                                <select name="readRightName" class="col-6 form-control" data-value="{$discussion->readRightName}">
                                     <option value="">-- {_common.everyone} --</option>
+                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $discussion->readRightName == $key">{$caption}</option>
                                 </select>
                             </td>
                         </tr>
                         <tr><th>{_settings.canWrite}</th>
                             <td>
-                                <select name="writeRightName" class="col-6 form-control disabled" disabled>
+                                <select name="writeRightName" class="col-6 form-control" data-value="{$discussion->writeRightName}">
                                     <option value="">-- {_common.everyone} --</option>
+                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $discussion->writeRightName == $key">{$caption}</option>
                                 </select>
                             </td>
                         </tr>
                         <tr><th>{_settings.canDelete}</th>
                             <td>
-                                <select name="deleteRightName" class="col-6 form-control disabled" disabled>
+                                <select name="deleteRightName" class="col-6 form-control" data-value="{$discussion->deleteRightName}">
                                     <option value="">-- {_common.everyone} --</option>
+                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $discussion->deleteRightName == $key">{$caption}</option>
                                 </select>
                             </td>
                         </tr>
                             <tr><th>{_settings.canTop}</th>
                                 <td>
-                                    <select name="stickyRightName" class="col-6 form-control disabled" disabled>
+                                    <select name="stickyRightName" class="col-6 form-control" data-value="{$discussion->stickyRightName}">
                                         <option value="">-- {_common.everyone} --</option>
+                                        <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $discussion->stickyRightName == $key">{$caption}</option>
                                     </select>
                                 </td>
                             </tr>

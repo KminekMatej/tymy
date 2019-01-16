@@ -43,7 +43,6 @@
                 <div class="card my-1 {$cc} sh-box">
                     <div class="card-header {$chc} py-1">
                         <span class="name">{$item->createdBy->callName}</span>
-{dump $discussion}
                         <div class="btn-group btn-group-sm float-md-right" role="group">
                             <button n:if="$discussion->discussion->canStick" n:class="btn,btn-sm,$item->sticky ? active,$item->sticky ? btn-dark:btn-light,!$item->sticky ? btn-light-bordered" onclick="stickPost({plink Discussion:stickPost $discussion->discussion->id}, {$item->id}, {$item->sticky ? false : true})" title="{if $item->sticky}{_discussion.unpin}{else}{_discussion.pin}{/if}"><i class="fa fa-thumbtack" aria-hidden="true"></i></button>
                             <button class="btn btn-sm btn-light btn-light-bordered clipboard-btn" data-clipboard-target="#post-{$item->id}" title="{_common.copyToClipboard}"><i class="far fa-copy" aria-hidden="true"></i></button>

@@ -74,6 +74,9 @@ services:
         - Tapi\MultiaccountAddResource
         - Tapi\MultiaccountRemoveResource
         - Tapi\MultiaccountTransferKeyResource
+        - Tapi\PermissionDetailResource
+        - Tapi\PermissionListResource
+        - Tapi\RightListResource
 
 
 tracy:
