@@ -24,14 +24,14 @@ $(document).ready(function () {
 });
 
 function duplicateLastRow(){
-    var lastRow = $("DIV.container.settings DIV[data-option]:last");
+    var lastRow = $("DIV.settings DIV[data-option]:last");
     var newRow = lastRow.clone();
     newRow.insertAfter(lastRow);
 }
 
 function createNewRow(){
     duplicateLastRow();
-    var lastRow = $("DIV.container.settings DIV[data-option]:last");
+    var lastRow = $("DIV.settings DIV[data-option]:last");
     lastRow.attr("data-binder-id",-1);
     
     lastRow.data("data-binder", new Binder({
