@@ -24,5 +24,11 @@ openInNewWindow: Zobrazit v novém okně
 duplicateEventDay: Duplikovat poslední událost a posunout časy o 1 den
 duplicateEventWeek: Duplikovat poslední událost a posunout časy o 1 týden
 duplicateEventMonth: Duplikovat poslední událost a posunout časy o 1 měsíc
+canView: Vidět může
+canPlan: Přihlásit se může
+canResult: Zadat výsledky může
+canView-sm: Vidět
+canPlan-sm: Přihlásit
+canResult-sm: Zadat
 errors:
     eventNotExists: Událost %id% neexistuje

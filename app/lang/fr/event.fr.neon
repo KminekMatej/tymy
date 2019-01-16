@@ -24,5 +24,11 @@ openInNewWindow: Ouvrir dans une nouvelle fenêtre
 duplicateEventDay: Dupliquer le dernier événement et le déplacer de 1 jour
 duplicateEventWeek: Dupliquer le dernier événement et le déplacer de 1 semaine
 duplicateEventMonth: Dupliquer le dernier événement et le déplacer de 1 mois
+canView: Can view
+canPlan: Can plan
+canResult: Can enter results
+canView-sm: View
+canPlan-sm: Plan
+canResult-sm: Results
 errors:
     eventNotExists: "L'événement %id% n'existe pas"

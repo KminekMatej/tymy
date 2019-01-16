@@ -24,5 +24,11 @@ openInNewWindow: Otwórz w nowej karcie
 duplicateEventDay: Skopiuj ostatnie wydarzenie i przesuń datę o 1 dzień
 duplicateEventWeek: Skopiuj ostatnie wydarzenie i przesuń datę o 1 tydzień
 duplicateEventMonth: Skopiuj ostatnie wydarzenie i przesuń datę o 1 miesiąc
+canView: Can view
+canPlan: Can plan
+canResult: Can enter results
+canView-sm: View
+canPlan-sm: Plan
+canResult-sm: Results
 errors:
     eventNotExists: Wydarzenie %id% nie istnieje
