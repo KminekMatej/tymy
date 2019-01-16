@@ -70,8 +70,8 @@ class SecuredPresenter extends BasePresenter {
     /** @var AuthDetailResource @inject */
     public $apiRights;
     
-    /** @var RightListResource @inject */
-    public $userRightList;
+    /** @var \Tapi\PermissionListResource @inject */
+    public $permissionList;
     
     /** @var EventTypeListResource @inject */
     public $eventTypeList;
@@ -122,8 +122,8 @@ class SecuredPresenter extends BasePresenter {
         $this->apiRights->getData();
         $this->tapiAuthorizator->setUser($this->getUser()->getIdentity()->getData());
         $this->tapiAuthorizator->setApiRights($this->apiRights);
-        $this->userRightList->init()->getData();
-        $this->template->usrRights = $this->userRightList->getAsArray();
+        $this->permissionList->init()->getData();
+        $this->template->usrRights = $this->permissionList->getUsrPermissionsAsArray();
         
         $this->setAccessibleSettings();
         $this->setLevelCaptions(["0" => ["caption" => $this->translator->translate("common.mainPage"), "link" => $this->link("Homepage:")]]);
