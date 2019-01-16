@@ -60,21 +60,21 @@
                             <td><input type="text" name="place" data-value="{$e->place}" value="{$e->place}" class="form-control form-control-sm"/></td>
                             <td><input type="text" name="link" data-value="{$e->link}" value="{$e->link}" class="form-control form-control-sm"/></td>
                             <td>
-                                <select name="viewRightName" data-value="{$e->viewRightName}" class="form-control form-control-sm">
+                                <select name="viewRightName" data-value="{$isNew ? '' : $e->viewRightName}" class="form-control form-control-sm">
                                     <option value="">-- {_common.everyone} --</option>
-                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $e->viewRightName == $key">{$caption}</option>
+                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => !$isNew && $e->viewRightName == $key">{$caption}</option>
                                 </select>
                             </td>
                             <td>
-                                <select name="planRightName" data-value="{$e->planRightName}" class="form-control form-control-sm">
+                                <select name="planRightName" data-value="{$isNew ? '' : $e->planRightName}" class="form-control form-control-sm">
                                     <option value="">-- {_common.everyone} --</option>
-                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $e->planRightName == $key">{$caption}</option>
+                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => !$isNew && $e->planRightName == $key">{$caption}</option>
                                 </select>
                             </td>
                             <td>
-                                <select name="resultRightName" data-value="{$e->resultRightName}" class="form-control form-control-sm">
+                                <select name="resultRightName" data-value="{$isNew ? '' : $e->resultRightName}" class="form-control form-control-sm">
                                     <option value="">-- {_common.everyone} --</option>
-                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $e->resultRightName == $key">{$caption}</option>
+                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => !$isNew && $e->resultRightName == $key">{$caption}</option>
                                 </select>
                             </td>
                             <td class="btn-group" role="group">
