@@ -34,7 +34,6 @@ class LoginTkResource extends UserResource {
 
     protected function postProcess() {
         $this->data->sessionKey = $this->sessionKey;
-        \Tracy\Debugger::barDump($this->data);
         parent::postProcessUser($this->data);
     }
 

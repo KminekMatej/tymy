@@ -3,6 +3,7 @@
 namespace App\Presenters;
 
 use Tapi\Exception\APIException;
+use Tapi\MultiaccountTransferKeyResource;
 use Tapi\UsersLiveResource;
 
 class HomepagePresenter extends SecuredPresenter {
@@ -12,7 +13,7 @@ class HomepagePresenter extends SecuredPresenter {
     /** @var UsersLiveResource @inject */
     public $live;
     
-    /** @var \Tapi\MultiaccountTransferKeyResource @inject */
+    /** @var MultiaccountTransferKeyResource @inject */
     public $tkResource;
     
     public function beforeRender() {
