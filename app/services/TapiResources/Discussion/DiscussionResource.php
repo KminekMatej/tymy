@@ -51,6 +51,7 @@ abstract class DiscussionResource extends TapiObject {
         $this->cache->clean([Cache::TAGS => $this->supplier->getTym() . "@GET:discussions"]);
         if($id != NULL){
             $this->cache->clean([Cache::TAGS => $this->supplier->getTym() . "@GET:discussions/$id"]);
+            $this->cache->clean([Cache::TAGS => $this->supplier->getTym() . "@GET:discussion/$id"]);
         }
     }
 }
