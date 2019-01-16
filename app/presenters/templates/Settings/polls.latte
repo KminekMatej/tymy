@@ -15,7 +15,7 @@
 {/block}
 
 {block content}
-<div class="container settings">
+<div class="container-fluid settings">
     <div class="row">
         <div class="col">
             <div class="card sh-box my-3">
@@ -23,7 +23,7 @@
                     <h4>{if $isNew}{_poll.newPoll}{else}{_poll.configPolls}{/if}</h4>
                 </div>
                 <div class="card-body">
-                    <table class="table table-xs table-hover table-responsive">
+                    <table class="table table-xs table-hover">
                         <tr>
                             <th></th>
                             <th>{_settings.title}</th>
