@@ -153,7 +153,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
 
     public function actionPermissions() {
-        //TODO
+        if(!$this->getUser()->isAllowed('permissions','canSetup')) $this->notAllowed();
         $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("permission.permission", 2), "link" => $this->link("Settings:permissions")]]);
     }
 
