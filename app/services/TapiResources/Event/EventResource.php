@@ -28,6 +28,12 @@ abstract class EventResource extends TapiObject {
             $event->place = ""; //set default value
         if (!property_exists($event, "link"))
             $event->link = ""; //set default value
+        if (!property_exists($event, "viewRightName"))
+            $event->viewRightName = ""; //set default value
+        if (!property_exists($event, "planRightName"))
+            $event->planRightName = ""; //set default value
+        if (!property_exists($event, "resultRightName"))
+            $event->resultRightName = ""; //set default value
         
         $this->addMyAttendance($event);
         if (property_exists($event, "myAttendance") && property_exists($event->myAttendance, "preStatus")) {
