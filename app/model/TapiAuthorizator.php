@@ -25,8 +25,20 @@ class TapiAuthorizator implements Nette\Security\IAuthorizator {
         if(property_exists($rights, $rs) && property_exists($rights->$rs, $privilege) ){
             return $rights->$rs->$privilege;
         } else {
-            //TODO maybe handle application specific permissions based on roles instead of denying
-            return TapiAuthorizator::DENY;
+            $this->role = $role;
+            $this->resource = $resource;
+            switch ($this->resource) {
+                case "permissions":
+                    return $this->isAdmin();
+                /*case "users": // MAYBE UNCOMMENT IN FUTURE
+                    return $this->usersPrivileges($privilege);
+                case "settings":
+                    return $this->settingsPrivileges($privilege);
+                case "SYS":
+                    return $this->sysPrivileges($privilege);*/
+                default:
+                    return TapiAuthorizator::DENY;
+            }
         }
         
         /* RIGHTS EXAMPLE:
@@ -64,18 +76,7 @@ class TapiAuthorizator implements Nette\Security\IAuthorizator {
 }
          */
         
-        $this->role = $role;
-        $this->resource = $resource;
-        switch ($this->resource) {
-            case "users":
-                return $this->usersPrivileges($privilege);
-            case "settings":
-                return $this->settingsPrivileges($privilege);
-            case "SYS":
-                return $this->sysPrivileges($privilege);
-            default:
-                return TapiAuthorizator::DENY;
-        }
+        
     }
     
     public function getApiRights() {
@@ -97,13 +98,10 @@ class TapiAuthorizator implements Nette\Security\IAuthorizator {
             case "EVE_CREATE":
                 return in_array($this->role, ["ATT"]) ? TapiAuthorizator::ALLOW : TapiAuthorizator::DENY;
             case "DSSETUP":
-                return in_array($this->role, ["SUPER"]) ? TapiAuthorizator::ALLOW : TapiAuthorizator::DENY;
             case "ASK.VOTE_UPDATE":
-                return in_array($this->role, ["SUPER"]) ? TapiAuthorizator::ALLOW : TapiAuthorizator::DENY;
             case "ASK.VOTE_DELETE":
-                return in_array($this->role, ["SUPER"]) ? TapiAuthorizator::ALLOW : TapiAuthorizator::DENY;
             case "ASK.VOTE_CREATE":
-                return in_array($this->role, ["SUPER"]) ? TapiAuthorizator::ALLOW : TapiAuthorizator::DENY;
+                return $this->isAdmin();
             default:
                 return TapiAuthorizator::DENY;
         }
@@ -152,6 +150,10 @@ class TapiAuthorizator implements Nette\Security\IAuthorizator {
     public function setUser($user) {
         $this->user = $user;
         return $this;
+    }
+    
+    private function isAdmin(){
+        return in_array($this->role, ["SUPER"]) ? TapiAuthorizator::ALLOW : TapiAuthorizator::DENY;
     }
 
 
