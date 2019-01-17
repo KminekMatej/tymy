@@ -4,4 +4,6 @@ systemPermissions: Systémová práva
 userPermissions: Uživatelská práva
 permitted: Jsem oprávněn
 not-permitted: Nejsem oprávněn
-createPermission: Vytvořit nové oprávnění
+newPermission: Vytvořit nové oprávnění
+createPermission: Vytvořit oprávnění
+editPermission: Úprava oprávnění

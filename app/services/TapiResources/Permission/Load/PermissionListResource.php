@@ -53,4 +53,11 @@ class PermissionListResource extends PermissionResource {
         return $this->options->sysPermissions;
     }
 
+    public function getPermissionByWebname($permissionName){
+        $allPermissions = $this->getData();
+        foreach ($allPermissions as $p) {
+            if($p->webName == $permissionName) return $p;
+        }
+        return NULL;
+    }
 }

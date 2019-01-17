@@ -267,4 +267,11 @@ class SecuredPresenter extends BasePresenter {
         $this->noteList->saveToCache();
     }
     
+    protected function getAllRoles(){
+        $allRoles = [];
+        $allRoles[] = (object) ["code" => "SUPER", "caption" => $this->translator->translate("team.administrator"), "class" => $this->supplier->getRoleClass("SUPER")];
+        $allRoles[] = (object) ["code" => "USR", "caption" => $this->translator->translate("team.userAdmin"), "class" => $this->supplier->getRoleClass("USR")];
+        $allRoles[] = (object) ["code" => "ATT", "caption" => $this->translator->translate("team.attendanceAdmin"), "class" => $this->supplier->getRoleClass("ATT")];
+        return $allRoles;
+    }
 }

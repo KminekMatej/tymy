@@ -209,6 +209,21 @@ class SettingsPresenter extends SecuredPresenter {
         $this->setView("discussion");
     }
     
+    public function renderPermission($permission){
+        if(!$this->getUser()->isAllowed('permissions','canSetup')) $this->notAllowed();
+        $perm = $this->permissionLister->getPermissionByWebname($permission);
+        $this->setLevelCaptions([
+            "2" => ["caption" => $this->translator->translate("permission.permission", 2), "link" => $this->link("Settings:permissions")],
+            "3" => ["caption" => $perm->name, "link" => $this->link("Settings:permissions", $perm->webName)]
+            ]);
+        $this->template->allowances = ["allowed" => "Povoleno","revoked" => "Zakázáno"];
+        $this->template->statuses = ["PLAYER" => "Hráč","SICK" => "Marod","MEMBER" => "Člen"];
+        $this->template->roles = $this->getAllRoles();
+        $this->template->users = $this->userList->getData();
+        $this->template->perm = $perm;
+        $this->template->isNew = false;
+    }
+    
     public function renderDiscussion($discussion) {
         if(!$this->getUser()->isAllowed('discussion','setup')) $this->notAllowed();
         //RENDERING DISCUSSION DETAIL
@@ -543,7 +558,26 @@ class SettingsPresenter extends SecuredPresenter {
             $this->handleTapiException($ex, 'this');
         }
     }
-
+    
+    public function handlePermissionEdit(){
+        /*if(!$this->getUser()->isAllowed('event','canUpdate')) $this->notAllowed();
+        $bind = $this->getRequest()->getPost();
+        $this->editEvent($bind);*/
+    }
+    
+    public function handlePermissionDelete(){
+        /*if(!$this->getUser()->isAllowed('event','canDelete')) $this->notAllowed();
+        $bind = $this->getRequest()->getPost();
+        try {
+            $this->eventDeleter->init()
+                    ->setId($bind["id"])
+                    ->perform();
+            $this->redirect("Settings:events");
+        } catch (APIException $ex) {
+            $this->handleTapiException($ex, 'this');
+        }*/
+    }
+    
     public function handleCacheDrop() {
         $this->discussionDetail->cleanCache(); //can use any tapi object
         $this->flashMessage($this->translator->translate("settings.cacheDropped"), "success");
