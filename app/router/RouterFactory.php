@@ -43,7 +43,7 @@ class RouterFactory
                 $router[] = new Route('nastaveni/poznamky[/<note>]', 'Settings:notes');
                 $router[] = new Route('nastaveni/tym', 'Settings:team');
                 $router[] = new Route('nastaveni/reporty', 'Settings:reports');
-                $router[] = new Route('nastaveni/opravneni', 'Settings:permissions');
+                $router[] = new Route('nastaveni/opravneni[/<permission>]', 'Settings:permissions');
                 $router[] = new Route('nastaveni/aplikace', 'Settings:app');
 		$router[] = new Route('<presenter>/<action>', 'Homepage:default');
 		return $router;

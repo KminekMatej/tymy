@@ -7,5 +7,51 @@
 {block content}
 
 <div class="container settings">
-    <h4>{_settings.}Nastavení:PERMISSIONS - TODO</h4>
+    <div class="row my-3">
+        <div class="col">
+            <div class="card sh-box">
+                <div class="card-header"><h4>{_permission.systemPermissions}</h4></div>
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <tr n:foreach="$systemPermissions as $perm">
+                            <th>{$perm->name}</th>
+                            <td>{$perm->caption}</td>
+                            <td>
+                                <i n:if="$perm->meAllowed" class="fas fa-check-circle text-success" title="{_permission.permitted}"></i>
+                                <i n:if="!$perm->meAllowed" class="fas fa-times text-danger" title="{_permission.not-permitted}"></i>
+                            </td>
+                            <td><a n:href="Settings:permissions $perm->webName" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></a></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card sh-box">
+                <div class="card-header"><h4>{_permission.userPermissions}</h4></div>
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <tr n:foreach="$userPermissions as $perm">
+                            <th>{$perm->name}</th>
+                            <td>{$perm->caption}</td>
+                            <td>
+                                <i n:if="$perm->meAllowed" class="fas fa-check-circle text-success" title="{_permission.permitted}"></i>
+                                <i n:if="!$perm->meAllowed" class="fas fa-times text-danger" title="{_permission.not-permitted}"></i>
+                            </td>
+                            <td><a n:href="Settings:permissions $perm->webName" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></a></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="card-footer text-right">
+                    <a class="btn btn-lg btn-success" href="#" onclick="btnRotate($(this), true)" title="{_permission.createPermission}">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+</div>
+
+

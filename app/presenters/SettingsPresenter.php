@@ -19,6 +19,7 @@ use Tapi\OptionCreateResource;
 use Tapi\OptionDeleteResource;
 use Tapi\OptionEditResource;
 use Tapi\OptionListResource;
+use Tapi\PermissionListResource;
 use Tapi\PollCreateResource;
 use Tapi\PollDeleteResource;
 use Tapi\PollDetailResource;
@@ -83,6 +84,10 @@ class SettingsPresenter extends SecuredPresenter {
             
     /** @var OptionDeleteResource @inject */
     public $pollOptionDeleter;
+    
+    /** @var PermissionListResource @inject */
+    public $permissionLister;
+    
             
     protected function startup() {
         parent::startup();
@@ -152,9 +157,18 @@ class SettingsPresenter extends SecuredPresenter {
         $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("report.report", 2), "link" => $this->link("Settings:reports")]]);
     }
 
-    public function actionPermissions() {
+    public function actionPermissions($permission = NULL) {
         if(!$this->getUser()->isAllowed('permissions','canSetup')) $this->notAllowed();
-        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("permission.permission", 2), "link" => $this->link("Settings:permissions")]]);
+        if(!is_null($permission)){
+            $this->setView("permission");
+        } else {
+            $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("permission.permission", 2), "link" => $this->link("Settings:permissions")]]);
+            $this->permissionLister->init()->getData();
+            $this->template->userPermissions = $this->permissionLister->getUsrPermissions();
+            $this->template->systemPermissions = $this->permissionLister->getSysPermissions();
+        }
+        
+        
     }
 
     public function actionApp() {

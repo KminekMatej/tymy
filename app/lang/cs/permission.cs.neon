@@ -1,1 +1,7 @@
 permission: Oprávnění|Oprávnění
+settingsPermissions: Nastavení oprávnění
+systemPermissions: Systémová práva
+userPermissions: Uživatelská práva
+permitted: Jsem oprávněn
+not-permitted: Nejsem oprávněn
+createPermission: Vytvořit nové oprávnění
