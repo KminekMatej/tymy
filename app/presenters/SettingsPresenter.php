@@ -216,10 +216,21 @@ class SettingsPresenter extends SecuredPresenter {
             "2" => ["caption" => $this->translator->translate("permission.permission", 2), "link" => $this->link("Settings:permissions")],
             "3" => ["caption" => $perm->name, "link" => $this->link("Settings:permissions", $perm->webName)]
             ]);
+        $this->userList->init()->getData();
+        $users = $this->userList->getById();
+        
+        $this->template->lastEditedUser = $users[$perm->updatedById];
         $this->template->allowances = ["allowed" => "Povoleno","revoked" => "Zakázáno"];
         $this->template->statuses = ["PLAYER" => "Hráč","SICK" => "Marod","MEMBER" => "Člen"];
         $this->template->roles = $this->getAllRoles();
-        $this->template->users = $this->userList->getData();
+        
+        $this->template->rolesRule = empty($perm->allowedRoles) && empty($perm->revokedRoles) ? null : (empty($perm->revokedRoles) ? "allowed" : "revoked");
+        $this->template->statusesRule = empty($perm->allowedStatuses) && empty($perm->revokedStatuses) ? null : (empty($perm->revokedStatuses) ? "allowed" : "revoked");
+        $this->template->usersRule = empty($perm->allowedUsers) && empty($perm->revokedUsers) ? null : (empty($perm->revokedUsers) ? "allowed" : "revoked");
+        
+        
+        
+        $this->template->users = $users;
         $this->template->perm = $perm;
         $this->template->isNew = false;
     }

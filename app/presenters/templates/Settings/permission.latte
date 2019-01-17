@@ -15,8 +15,9 @@
     <div class="row">
         <div class="col">
             <div class="card sh-box my-3" data-binder-id="{$perm->id}">
-                <div class="card-header">
-                    <h4>{if $isNew}{_permission.newPermission}{else}{_permission.editPermission} {$perm->id}{/if}</h4>
+                <div class="card-header row">
+                    <div class="col-8"><h4>{if $isNew}{_permission.newPermission}{else}{_permission.editPermission} {$perm->id}{/if}</h4></div>
+                    <div class="col-4"><div class="alert alert-warning float-md-right mx-1" n:ifset="$perm->updatedAt" style="margin: 0px; padding: 4px; font-size: 10px;">{_common.edited} {$lastEditedUser->displayName}, {$perm->updatedAt|date:'j.n.Y G:i'}</div></div>
                 </div>
                 <div class="card-body">
                     <table class="table">
@@ -35,13 +36,13 @@
                             <td class="row">
                                 <div class="col-3">
                                     <div class="custom-control custom-radio" n:foreach="$allowances as $key => $allowance">
-                                        <input type="radio" id="statusAllowance_{$key}" name="statusAllowance" value="{$key}" class="custom-control-input">
+                                        <input type="radio" id="statusAllowance_{$key}" name="statusAllowance" value="{$key}" class="custom-control-input" n:attr="checked => $key == $statusesRule">
                                         <label class="custom-control-label" for="statusAllowance_{$key}">{$allowance}</label>
                                     </div>
                                 </div>
                                 <div class="col-9">
                                     <div class="btn-group">
-                                        <button class="btn btn-outline-secondary" n:foreach="$statuses as $key => $status">{$status}</button>
+                                        <button n:foreach="$statuses as $key => $status" class="btn btn-outline-secondary {if !empty($statusesRule) && in_array($status, $perm->{$statusesRule.'Statuses'})}active{/if}">{$status}</button>
                                     </div>
                                 </div>
                             </td>
@@ -53,13 +54,13 @@
                             <td class="row">
                                 <div class="col-3">
                                     <div class="custom-control custom-radio" n:foreach="$allowances as $key => $allowance">
-                                        <input type="radio" id="roleAllowance_{$key}" name="roleAllowance" value="{$key}" class="custom-control-input">
+                                        <input type="radio" id="roleAllowance_{$key}" name="roleAllowance" value="{$key}" class="custom-control-input" n:attr="checked => $key == $rolesRule">
                                         <label class="custom-control-label" for="roleAllowance_{$key}">{$allowance}</label>
                                     </div>
                                 </div>
                                 <div class="col-9">
                                     <div class="btn-group">
-                                        <button class="btn btn-outline-secondary" n:foreach="$roles as $role">{$role->caption}</button>
+                                        <button n:foreach="$roles as $role" class="btn btn-outline-secondary {if !empty($rolesRule) && in_array($role->code, $perm->{$rolesRule.'Roles'})}active{/if}">{dump $role}{$role->caption}</button>
                                     </div>
                                 </div>
                             </td>
@@ -71,14 +72,14 @@
                             <td class="row">
                                 <div class="col-3">
                                     <div class="custom-control custom-radio" n:foreach="$allowances as $key => $allowance">
-                                        <input type="radio" id="userAllowance_{$key}" name="userAllowance" value="{$key}" class="custom-control-input">
+                                        <input type="radio" id="userAllowance_{$key}" name="userAllowance" value="{$key}" class="custom-control-input" n:attr="checked => $key == $usersRule">
                                         <label class="custom-control-label" for="userAllowance_{$key}">{$allowance}</label>
                                     </div>
                                 </div>
                                     <div class="col-9 row">
                                         <div class="col-4 p-1" n:foreach="$users as $u">
                                             <div class="custom-control custom-checkbox" title="{$u->fullName}">
-                                                <input type="checkbox" class="custom-control-input" id="userCheck_{$u->id}">
+                                                <input type="checkbox" class="custom-control-input" id="userCheck_{$u->id}" {if !empty($usersRule) && in_array($u->id, $perm->{$usersRule.'Users'})}checked{/if}>
                                                 <label class="custom-control-label" for="userCheck_{$u->id}">{$u->displayName} <img class="usrImg border rounded" src="{$u->pictureUrl}" /></label>
                                             </div>
                                         </div>
