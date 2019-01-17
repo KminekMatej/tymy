@@ -86,6 +86,19 @@
                                 </div>
                             </td>
                         </tr>
+                        <tr>
+                            <th>
+                                {_permission.results}
+                            </th>
+                            <td>
+                                <div class="row" n:foreach="$allowances as $key => $allowance" data-class="{$key}">
+                                    <div class="col-2"><strong>{$allowance}</strong></div>
+                                    <div class="col-10">
+                                        <img n:foreach="$users as $usr" {if $key == 'allowed'}style="display: none"{/if} data-rule="{$allowance}" data-status="{$usr->status}" data-roles="{join(',', $usr->roles)}" class="border rounded" src="{$usr->pictureUrl}" />
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
                     </table>
                 </div>
                 <div class="card-footer text-right">
