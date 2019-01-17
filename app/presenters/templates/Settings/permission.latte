@@ -33,16 +33,16 @@
                             <th>
                                 {_settings.status}
                             </th>
-                            <td class="row">
+                            <td class="row statuses">
                                 <div class="col-3">
                                     <div class="custom-control custom-radio" n:foreach="$allowances as $key => $allowance">
-                                        <input type="radio" id="statusAllowance_{$key}" name="statusAllowance" value="{$key}" class="custom-control-input" n:attr="checked => $key == $statusesRule">
+                                        <input type="radio" id="statusAllowance_{$key}" name="statusAllowance" value="{$key}" class="custom-control-input" n:attr="checked => $key == $statusesRule" onchange="statesChange()">
                                         <label class="custom-control-label" for="statusAllowance_{$key}">{$allowance}</label>
                                     </div>
                                 </div>
                                 <div class="col-9">
                                     <div class="btn-group">
-                                        <button n:foreach="$statuses as $key => $status" class="btn btn-outline-secondary {if !empty($statusesRule) && in_array($status, $perm->{$statusesRule.'Statuses'})}active{/if}">{$status}</button>
+                                        <button n:foreach="$statuses as $key => $status" data-key="{$key}" class="btn btn-outline-secondary {if !empty($statusesRule) && in_array($status, $perm->{$statusesRule.'Statuses'})}active{/if}" onclick="stateCheck(this)">{$status}</button>
                                     </div>
                                 </div>
                             </td>
@@ -51,16 +51,16 @@
                             <th>
                                 {_team.roles, 2}
                             </th>
-                            <td class="row">
+                            <td class="row roles">
                                 <div class="col-3">
                                     <div class="custom-control custom-radio" n:foreach="$allowances as $key => $allowance">
-                                        <input type="radio" id="roleAllowance_{$key}" name="roleAllowance" value="{$key}" class="custom-control-input" n:attr="checked => $key == $rolesRule">
+                                        <input type="radio" id="roleAllowance_{$key}" name="roleAllowance" value="{$key}" class="custom-control-input" n:attr="checked => $key == $rolesRule" onchange="rolesChange()">
                                         <label class="custom-control-label" for="roleAllowance_{$key}">{$allowance}</label>
                                     </div>
                                 </div>
                                 <div class="col-9">
                                     <div class="btn-group">
-                                        <button n:foreach="$roles as $role" class="btn btn-outline-secondary {if !empty($rolesRule) && in_array($role->code, $perm->{$rolesRule.'Roles'})}active{/if}">{dump $role}{$role->caption}</button>
+                                        <button n:foreach="$roles as $role" data-key="{$role->code}" class="btn btn-outline-secondary {if !empty($rolesRule) && in_array($role->code, $perm->{$rolesRule.'Roles'})}active{/if}" onclick="roleCheck(this)">{$role->caption}</button>
                                     </div>
                                 </div>
                             </td>
@@ -69,21 +69,22 @@
                             <th>
                                 {_common.user}
                             </th>
-                            <td class="row">
+                            <td class="row ids">
                                 <div class="col-3">
                                     <div class="custom-control custom-radio" n:foreach="$allowances as $key => $allowance">
-                                        <input type="radio" id="userAllowance_{$key}" name="userAllowance" value="{$key}" class="custom-control-input" n:attr="checked => $key == $usersRule">
+                                        <input type="radio" id="userAllowance_{$key}" name="userAllowance" value="{$key}" class="custom-control-input" n:attr="checked => $key == $usersRule" onchange="usersChange()">
                                         <label class="custom-control-label" for="userAllowance_{$key}">{$allowance}</label>
                                     </div>
                                 </div>
                                     <div class="col-9 row">
                                         <div class="col-4 p-1" n:foreach="$users as $u">
                                             <div class="custom-control custom-checkbox" title="{$u->fullName}">
-                                                <input type="checkbox" class="custom-control-input" id="userCheck_{$u->id}" {if !empty($usersRule) && in_array($u->id, $perm->{$usersRule.'Users'})}checked{/if}>
+                                                <input type="checkbox" class="custom-control-input" id="userCheck_{$u->id}" data-key="{$u->id}" {if !empty($usersRule) && in_array($u->id, $perm->{$usersRule.'Users'})}checked{/if} onclick="usersChange()">
                                                 <label class="custom-control-label" for="userCheck_{$u->id}">{$u->displayName} <img class="usrImg border rounded" src="{$u->pictureUrl}" /></label>
                                             </div>
                                         </div>
                                 </div>
+                                            <button class="btn btn-info" onclick="toggleResults()">Toggle</button>
                             </td>
                         </tr>
                         <tr>
@@ -94,7 +95,7 @@
                                 <div class="row" n:foreach="$allowances as $key => $allowance" data-class="{$key}">
                                     <div class="col-2"><strong>{$allowance}</strong></div>
                                     <div class="col-10">
-                                        <img n:foreach="$users as $usr" {if $key == 'allowed'}style="display: none"{/if} data-rule="{$allowance}" data-status="{$usr->status}" data-roles="{join(',', $usr->roles)}" class="border rounded" src="{$usr->pictureUrl}" />
+                                        <img n:foreach="$users as $usr" {if $key == 'allowed'}style="display: none"{/if} data-rule="{$allowance}" data-status="{$usr->status}" data-roles="{join(',', $usr->roles)}" data-id="{$usr->id}" class="border rounded user" src="{$usr->pictureUrl}" />
                                     </div>
                                 </div>
                             </td>
