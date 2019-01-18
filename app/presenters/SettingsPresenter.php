@@ -221,6 +221,53 @@ class SettingsPresenter extends SecuredPresenter {
         $this->setView("discussion");
     }
     
+    public function renderDiscussion($discussion) {
+        if(!$this->getUser()->isAllowed('discussion','setup')) $this->notAllowed();
+        //RENDERING DISCUSSION DETAIL
+        $discussionId = $this->discussionList->init()->getIdFromWebname($discussion, $this->discussionList->getData());
+        $discussionObj = $this->discussionDetail->init()->setId($discussionId)->getData();
+        if($discussionObj == NULL){
+            $this->flashMessage($this->translator->translate("discussion.errors.discussionNotExists", NULL, ['id' => $discussionId]), "danger");
+            $this->redirect('Settings:events');
+        }
+        $this->setLevelCaptions(["3" => ["caption" => $discussionObj->caption, "link" => $this->link("Settings:discussions", $discussionObj->webName)]]);
+        $this->template->isNew = FALSE;
+        $this->template->discussion = $discussionObj;
+    }
+    
+    public function renderPermission_new() {
+        if(!$this->getUser()->isAllowed('permissions','canSetup')) $this->notAllowed();
+        $this->setLevelCaptions([
+            "2" => ["caption" => $this->translator->translate("permission.permission", 2), "link" => $this->link("Settings:permissions")],
+            "3" => ["caption" => $this->translator->translate("permission.newPermission")]
+            ]);
+        $this->template->isNew = true;
+        $this->userList->init()->getData();
+        $users = $this->userList->getById();
+        
+        $perm = (object)[
+            "id" => -1,
+            "name" => "",
+            "caption" => "",
+            "type" => "USR",
+            "revokedRoles" => [],
+            "revokedStatuses" => [],
+            "revokedUsers" => [],
+        ];
+        
+        $this->template->allowances = ["allowed" => "Povoleno","revoked" => "Zakázáno"];
+        $this->template->statuses = ["PLAYER" => "Hráč","SICK" => "Marod","MEMBER" => "Člen"];
+        $this->template->roles = $this->getAllRoles();
+        $this->template->users = $users;
+        $this->template->perm = $perm;
+        
+        $this->template->rolesRule = "revoked";
+        $this->template->statusesRule = "revoked";
+        $this->template->usersRule = "revoked";
+        
+        $this->setView("permission");
+    }
+    
     public function renderPermission($permission){
         if(!$this->getUser()->isAllowed('permissions','canSetup')) $this->notAllowed();
         $perm = $this->permissionLister->getPermissionByWebname($permission);
@@ -245,20 +292,6 @@ class SettingsPresenter extends SecuredPresenter {
         $this->template->users = $users;
         $this->template->perm = $perm;
         $this->template->isNew = false;
-    }
-    
-    public function renderDiscussion($discussion) {
-        if(!$this->getUser()->isAllowed('discussion','setup')) $this->notAllowed();
-        //RENDERING DISCUSSION DETAIL
-        $discussionId = $this->discussionList->init()->getIdFromWebname($discussion, $this->discussionList->getData());
-        $discussionObj = $this->discussionDetail->init()->setId($discussionId)->getData();
-        if($discussionObj == NULL){
-            $this->flashMessage($this->translator->translate("discussion.errors.discussionNotExists", NULL, ['id' => $discussionId]), "danger");
-            $this->redirect('Settings:events');
-        }
-        $this->setLevelCaptions(["3" => ["caption" => $discussionObj->caption, "link" => $this->link("Settings:discussions", $discussionObj->webName)]]);
-        $this->template->isNew = FALSE;
-        $this->template->discussion = $discussionObj;
     }
     
     public function renderEvent_new() {
@@ -592,6 +625,7 @@ class SettingsPresenter extends SecuredPresenter {
         } catch (APIException $ex) {
             $this->handleTapiException($ex, 'this');
         }
+        $this->redirect ("Settings:permissions", [Strings::webalize ($this->permissionCreator->getName())]);
     }
     
     public function handlePermissionEdit(){
@@ -690,8 +724,7 @@ class SettingsPresenter extends SecuredPresenter {
         try {
             $this->permissionEditor->setId($bind["id"])->perform();
         } catch (APIException $ex) {
-            //$this->handleTapiException($ex, 'this');
-            $this->handleTapiException($ex);
+            $this->handleTapiException($ex, 'this');
         }
     }
     
