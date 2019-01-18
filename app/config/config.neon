@@ -76,6 +76,9 @@ services:
         - Tapi\MultiaccountTransferKeyResource
         - Tapi\PermissionDetailResource
         - Tapi\PermissionListResource
+        - Tapi\PermissionEditResource
+        - Tapi\PermissionCreateResource
+        - Tapi\PermissionDeleteResource
         - Tapi\RightListResource
 
 

@@ -42,7 +42,7 @@
                                 </div>
                                 <div class="col-9">
                                     <div class="btn-group">
-                                        <button name="statuses[{$key}]" data-value="{if !empty($statusesRule)}{implode($perm->{$statusesRule.'Statuses'}, ',')}{/if}" n:foreach="$statuses as $key => $status" data-key="{$key}" class="btn btn-outline-secondary {if !empty($statusesRule) && in_array($status, $perm->{$statusesRule.'Statuses'})}active{/if}" onclick="stateCheck(this)">{$status}</button>
+                                        <button name="statuses[{$key}]" data-value="-1" n:foreach="$statuses as $key => $status" data-key="{$key}" class="btn btn-outline-secondary {if !empty($statusesRule) && in_array($status, $perm->{$statusesRule.'Statuses'})}active{/if}" onclick="stateCheck(this)">{$status}</button>
                                     </div>
                                 </div>
                             </td>
@@ -60,7 +60,7 @@
                                 </div>
                                 <div class="col-9">
                                     <div class="btn-group">
-                                        <button name="roles[{$role->code}]" data-value="{if !empty($rolesRule)}{implode($perm->{$rolesRule.'Roles'}, ',')}{/if}" n:foreach="$roles as $role" data-key="{$role->code}" class="btn btn-outline-secondary {if !empty($rolesRule) && in_array($role->code, $perm->{$rolesRule.'Roles'})}active{/if}" onclick="roleCheck(this)">{$role->caption}</button>
+                                        <button name="roles[{$role->code}]" data-value="-1" n:foreach="$roles as $role" data-key="{$role->code}" class="btn btn-outline-secondary {if !empty($rolesRule) && in_array($role->code, $perm->{$rolesRule.'Roles'})}active{/if}" onclick="roleCheck(this)">{$role->caption}</button>
                                     </div>
                                 </div>
                             </td>
@@ -79,7 +79,7 @@
                                     <div class="col-9 row">
                                         <div class="col-4 p-1" n:foreach="$users as $u">
                                             <div class="custom-control custom-checkbox" title="{$u->fullName}">
-                                                <input type="checkbox" class="custom-control-input" name="userCheck_{$u->id}" data-value="{in_array($u->id,$perm->{$usersRule.'Users'}) ? 1 : 0}" id="userCheck_{$u->id}" data-key="{$u->id}" {if !empty($usersRule) && in_array($u->id, $perm->{$usersRule.'Users'})}checked{/if} onclick="usersChange()">
+                                                <input type="checkbox" class="custom-control-input" name="userCheck_{$u->id}" data-value="{$usersRule && in_array($u->id,$perm->{$usersRule.'Users'}) ? 1 : 0}" id="userCheck_{$u->id}" data-key="{$u->id}" {if $usersRule && in_array($u->id, $perm->{$usersRule.'Users'})}checked{/if} onclick="usersChange()">
                                                 <label class="custom-control-label" for="userCheck_{$u->id}">{$u->displayName} <img class="usrImg border rounded" src="{$u->pictureUrl}" /></label>
                                             </div>
                                         </div>

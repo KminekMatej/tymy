@@ -24,7 +24,9 @@ use Tapi\PollCreateResource;
 use Tapi\PollDeleteResource;
 use Tapi\PollDetailResource;
 use Tapi\PollEditResource;
-
+use Tapi\PermissionCreateResource;
+use Tapi\PermissionEditResource;
+use Tapi\PermissionDeleteResource;
 
 class SettingsPresenter extends SecuredPresenter {
     
@@ -88,6 +90,14 @@ class SettingsPresenter extends SecuredPresenter {
     /** @var PermissionListResource @inject */
     public $permissionLister;
     
+    /** @var PermissionCreateResource @inject */
+    public $permissionCreator;
+
+    /** @var PermissionEditResource @inject */
+    public $permissionEditor;
+
+    /** @var PermissionDeleteResource @inject */
+    public $permissionDeleter;
             
     protected function startup() {
         parent::startup();
@@ -655,12 +665,35 @@ class SettingsPresenter extends SecuredPresenter {
         }
     }
 
-    private function editPermission($bind){
-        //TODO
-        \Tracy\Debugger::barDump($bind, "Editing permission");
+    private function editPermission($bind) {
+        $this->permissionEditor->init();
+        if (array_key_exists("roleAllowance", $bind["changes"])) { //set either allowed or revoked roles
+            $roles = array_key_exists("roles", $bind["changes"]) && is_array($bind["changes"]["roles"]) ? $bind["changes"]["roles"] : [];
+            $bind["changes"]["roleAllowance"] == "allowed" ? $this->permissionEditor->setAllowedRoles($roles) : $this->permissionEditor->setRevokedRoles($roles);
+        }
+
+        if (array_key_exists("statusAllowance", $bind["changes"])) { //set either allowed or revoked statuses
+            $statuses = array_key_exists("statuses", $bind["changes"]) && is_array($bind["changes"]["statuses"]) ? $bind["changes"]["statuses"] : [];
+            $bind["changes"]["statusAllowance"] == "allowed" ? $this->permissionEditor->setAllowedStatuses($statuses) : $this->permissionEditor->setRevokedStatuses($statuses);
+        }
+
+        if (array_key_exists("userAllowance", $bind["changes"])) { //set either allowed or revoked statuses
+            $userList = [];
+            foreach ($bind["changes"] as $key => $value) {
+                if (strpos($key, "userCheck") !== FALSE && $value == "true") {
+                    $userList[] = (int) explode("_", $key)[1];
+                }
+            }
+            $bind["changes"]["userAllowance"] == "allowed" ? $this->permissionEditor->setAllowedUsers($userList) : $this->permissionEditor->setRevokedUsers($userList);
+        }
+        try {
+            $this->permissionEditor->setId($bind["id"])->perform();
+        } catch (APIException $ex) {
+            //$this->handleTapiException($ex, 'this');
+            $this->handleTapiException($ex);
+        }
     }
-    
-    
+
     private function notAllowed(){
         $this->flashMessage($this->translator->translate("common.alerts.notPermitted"));
         $this->redirect("Settings:");

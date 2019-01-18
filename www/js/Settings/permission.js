@@ -11,15 +11,12 @@ $(document).ready(function () {
                 return true;
             },
             postProccess: function(){
-                $("[name='statusAllowance']").each(function(){
-                    $(this).attr("data-value","");
-                });
-                $("[name='roleAllowance']").each(function(){
-                    $(this).attr("data-value","");
-                });
-                $("[name='userAllowance']").each(function(){
-                    $(this).attr("data-value","");
-                });
+                $("[name='statusAllowance']").attr("data-value","-1");
+                $("[name='roleAllowance']").attr("data-value","-1");
+                $("[name='userAllowance']").attr("data-value","-1");
+                $("TD.statuses BUTTON").attr("data-value","-1");
+                $("TD.roles BUTTON").attr("data-value","-1");
+                $("TD.ids INPUT[type='checkbox']").attr("data-value","-1");
             }
         }));
     });
@@ -78,13 +75,13 @@ function colorizeRoleBtns(){
 
 function statesChange(){
     colorizeStateBtns();
-    $("TD.statuses BUTTON").attr("data-value","");
+    $("TD.statuses BUTTON").attr("data-value","-1");
     toggleResults();
 }
 
 function rolesChange(){
     colorizeRoleBtns();
-    $("TD.roles BUTTON").attr("data-value","");
+    $("TD.roles BUTTON").attr("data-value","-1");
     toggleResults();
 }
 
@@ -95,19 +92,20 @@ function usersChange(){
 }
 
 function toggleResults(){
+    var duration = 300;
     $(".row[data-class='allowed'] .user").each(function(){
         var usrAllowedElement = $(this);
         var usrRevokedElement = $(".row[data-class='revoked'] .user[data-id='"+usrAllowedElement.attr('data-id')+"']");
         var allowed = isAllowed( usrAllowedElement.attr("data-roles").split(","), usrAllowedElement.attr("data-status"), usrAllowedElement.attr("data-id"));
         if(allowed){
             if(!usrAllowedElement.is(":visible")){
-                usrRevokedElement.hide("300");
-                usrAllowedElement.show("300");
+                usrRevokedElement.hide(duration);
+                usrAllowedElement.show(duration);
             }
         } else {
             if(!usrRevokedElement.is(":visible")){
-                usrAllowedElement.hide("300");
-                usrRevokedElement.show("300");
+                usrAllowedElement.hide(duration);
+                usrRevokedElement.show(duration);
             }
         }
     });
