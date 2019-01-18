@@ -1,11 +1,7 @@
-const btnRegex = /.* btn-outline-(.*) .*/gm;
-
 $(document).ready(function () {
     $("[data-binder-id]").each(function () {
         $(this).data("data-binder", new Binder({
             area: this,
-            checkboxValueChecked: 1,
-            checkboxValueUnChecked: 0,
             deleteConfirmation: translate.common.alerts.confirmDelete,
             isValid: function (name, value1, value2) {
                 switch (name) {
@@ -13,9 +9,22 @@ $(document).ready(function () {
                         return value1.trim() != "";
                 }
                 return true;
+            },
+            postProccess: function(){
+                $("[name='statusAllowance']").each(function(){
+                    $(this).attr("data-value","");
+                });
+                $("[name='roleAllowance']").each(function(){
+                    $(this).attr("data-value","");
+                });
+                $("[name='userAllowance']").each(function(){
+                    $(this).attr("data-value","");
+                });
             }
         }));
     });
+    colorizeStateBtns();
+    colorizeRoleBtns();
     toggleResults();
 });
 
@@ -39,7 +48,7 @@ function roleCheck(elm){
     rolesChange();
 }
 
-function statesChange(){
+function colorizeStateBtns(){
     var rule = $("[name='statusAllowance']:checked").val();
     var newClass = "btn-outline-secondary";
     if(rule == "allowed") newClass = "btn-outline-success";
@@ -51,10 +60,9 @@ function statesChange(){
         $(this).removeClass("btn-outline-danger");
         $(this).addClass(newClass);
     });
-    toggleResults();
 }
 
-function rolesChange(){
+function colorizeRoleBtns(){
     var rule = $("[name='roleAllowance']:checked").val();
     var newClass = "btn-outline-secondary";
     if(rule == "allowed") newClass = "btn-outline-success";
@@ -66,10 +74,22 @@ function rolesChange(){
         $(this).removeClass("btn-outline-danger");
         $(this).addClass(newClass);
     });
+}
+
+function statesChange(){
+    colorizeStateBtns();
+    $("TD.statuses BUTTON").attr("data-value","");
+    toggleResults();
+}
+
+function rolesChange(){
+    colorizeRoleBtns();
+    $("TD.roles BUTTON").attr("data-value","");
     toggleResults();
 }
 
 function usersChange(){
+    $("TD.ids INPUT[type='checkbox']").attr("data-value","");
     if($("[name='userAllowance']:checked").length == 0) $("[name='userAllowance'][value='allowed']").prop("checked", true);
     toggleResults();
 }

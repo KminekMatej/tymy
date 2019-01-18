@@ -571,9 +571,9 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function handlePermissionEdit(){
-        /*if(!$this->getUser()->isAllowed('event','canUpdate')) $this->notAllowed();
+        if(!$this->getUser()->isAllowed('permissions','canSetup')) $this->notAllowed();
         $bind = $this->getRequest()->getPost();
-        $this->editEvent($bind);*/
+        $this->editPermission($bind);
     }
     
     public function handlePermissionDelete(){
@@ -655,6 +655,12 @@ class SettingsPresenter extends SecuredPresenter {
         }
     }
 
+    private function editPermission($bind){
+        //TODO
+        \Tracy\Debugger::barDump($bind, "Editing permission");
+    }
+    
+    
     private function notAllowed(){
         $this->flashMessage($this->translator->translate("common.alerts.notPermitted"));
         $this->redirect("Settings:");
