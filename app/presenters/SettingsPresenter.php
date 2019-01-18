@@ -637,16 +637,16 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function handlePermissionDelete(){
-        /*if(!$this->getUser()->isAllowed('event','canDelete')) $this->notAllowed();
+        if(!$this->getUser()->isAllowed('permissions','canSetup')) $this->notAllowed();
         $bind = $this->getRequest()->getPost();
         try {
-            $this->eventDeleter->init()
+            $this->permissionDeleter->init()
                     ->setId($bind["id"])
                     ->perform();
-            $this->redirect("Settings:events");
+            $this->redirect("Settings:permissions");
         } catch (APIException $ex) {
             $this->handleTapiException($ex, 'this');
-        }*/
+        }
     }
     
     public function handleCacheDrop() {
