@@ -41,8 +41,7 @@ class PermissionCreateResource extends PermissionResource {
             "name" => $this->getName()
         ];
         if ($this->getCaption())
-            $requestData["caption"] = $this->setCaption($this->getCaption());
-
+            $requestData["caption"] = $this->getCaption();
         if ($this->getRevokedRoles())
             $requestData["revokedRoles"] = $this->getRevokedRoles();
         elseif ($this->getAllowedRoles())
