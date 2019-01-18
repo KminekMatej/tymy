@@ -16,6 +16,7 @@ $(document).ready(function () {
             }
         }));
     });
+    toggleResults();
 });
 
 function stateCheck(elm){
@@ -153,23 +154,25 @@ function allowedByStatuses(status){
 function revokedByUsers(userId){
     var rule = $("[name='userAllowance']:checked").val();
     if(rule != "revoked") return false;
+    var result = false;
     $("TD.ids INPUT[type='checkbox']:checked").each(function () {
         if ($(this).attr("data-key") == userId) {
-            return true;
+            result = true;
+            return false;
         }
     });
-    return false;
+    return result;
 }
 
 function allowedByUsers(userId){
     var rule = $("[name='userAllowance']:checked").val();
     if(rule != "allowed") return false;
-    var allowed = false;
+    var result = false;
     $("TD.ids INPUT[type='checkbox']:checked").each(function () {
         if ($(this).attr("data-key") == userId) {
-            allowed = true;
+            result = true;
             return false;
         }
     });
-    return allowed;
+    return result;
 }
