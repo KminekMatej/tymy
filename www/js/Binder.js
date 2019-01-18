@@ -41,6 +41,7 @@ function Binder (settings) {
     this.saveButtons = this.area.find("." + this.SAVE_BTN_CLASS);
     this.saveAllButtons = $("." + this.SAVE_ALL_BTN_CLASS);
     this.isValid = !settings.isValid ? true : settings.isValid;
+    this.postProccess = !settings.postProccess ? false : settings.postProccess;
     this.isValidated = false;
     this.changed = false;
     this.bindChangeEvents();
@@ -302,6 +303,10 @@ Binder.prototype.commit = function () {
     binderObj.changeSaveButtonClass(false);
     binderObj.disableSaveButtons(false);
     this.changed = false;
+    if(binderObj.postProccess !== false){
+        binderObj.postProccess();
+    }
+    
 };
 
 Binder.prototype.getButtonClass = function(button){
@@ -459,7 +464,8 @@ Binder.prototype.parseValueFromGroupOfElements = function (element) {
 };
 
 Binder.prototype.parseValueFromElement = function(element){
-    if(element.is(":checkbox") || element.is(":radio")) return element.is(":checked");
+    if(element.is(":checkbox")) return element.is(":checked");
+    if(element.is(":radio")) return $("[name='"+$(element).attr('name')+"']:checked").val();
     if(element.prop("tagName") == "BUTTON") return element.hasClass(this.BUTTON_CHECKED_CLASS);
     return element.val();
 }
