@@ -2,6 +2,7 @@
 
 namespace App\Presenters;
 
+use Nette\Utils\Strings;
 use Tapi\DiscussionCreateResource;
 use Tapi\DiscussionDeleteResource;
 use Tapi\DiscussionDetailResource;
@@ -19,14 +20,15 @@ use Tapi\OptionCreateResource;
 use Tapi\OptionDeleteResource;
 use Tapi\OptionEditResource;
 use Tapi\OptionListResource;
+use Tapi\PermissionCreateResource;
+use Tapi\PermissionDeleteResource;
+use Tapi\PermissionEditResource;
 use Tapi\PermissionListResource;
+use Tapi\PermissionResource;
 use Tapi\PollCreateResource;
 use Tapi\PollDeleteResource;
 use Tapi\PollDetailResource;
 use Tapi\PollEditResource;
-use Tapi\PermissionCreateResource;
-use Tapi\PermissionEditResource;
-use Tapi\PermissionDeleteResource;
 
 class SettingsPresenter extends SecuredPresenter {
     
@@ -580,10 +582,24 @@ class SettingsPresenter extends SecuredPresenter {
         }
     }
     
+    public function handlePermissionCreate(){
+        if(!$this->getUser()->isAllowed('permissions','canSetup')) $this->notAllowed();
+        $bind = $this->getRequest()->getPost();
+        try {
+            $this->permissionCreator->init()->setName($bind["changes"]["name"])->setCaption($bind["changes"]["caption"]);
+            $this->permissionObjectLoad($this->permissionCreator, $bind);
+            $this->permissionCreator->perform();
+        } catch (APIException $ex) {
+            $this->handleTapiException($ex, 'this');
+        }
+    }
+    
     public function handlePermissionEdit(){
         if(!$this->getUser()->isAllowed('permissions','canSetup')) $this->notAllowed();
         $bind = $this->getRequest()->getPost();
         $this->editPermission($bind);
+        if(!empty($this->permissionEditor->getName())) //if name has been changed, redirect to a new name is neccessary
+            $this->redirect ("Settings:permissions", [Strings::webalize ($this->permissionEditor->getName())]);
     }
     
     public function handlePermissionDelete(){
@@ -667,14 +683,27 @@ class SettingsPresenter extends SecuredPresenter {
 
     private function editPermission($bind) {
         $this->permissionEditor->init();
+        if(array_key_exists("name", $bind["changes"])) $this->permissionEditor->setName ($bind["changes"]["name"]);
+        if(array_key_exists("caption", $bind["changes"])) $this->permissionEditor->setCaption ($bind["changes"]["caption"]);
+        $this->permissionObjectLoad($this->permissionEditor, $bind);
+        
+        try {
+            $this->permissionEditor->setId($bind["id"])->perform();
+        } catch (APIException $ex) {
+            //$this->handleTapiException($ex, 'this');
+            $this->handleTapiException($ex);
+        }
+    }
+    
+    private function permissionObjectLoad(PermissionResource &$permissionResource, $bind){
         if (array_key_exists("roleAllowance", $bind["changes"])) { //set either allowed or revoked roles
             $roles = array_key_exists("roles", $bind["changes"]) && is_array($bind["changes"]["roles"]) ? $bind["changes"]["roles"] : [];
-            $bind["changes"]["roleAllowance"] == "allowed" ? $this->permissionEditor->setAllowedRoles($roles) : $this->permissionEditor->setRevokedRoles($roles);
+            $bind["changes"]["roleAllowance"] == "allowed" ? $permissionResource->setAllowedRoles($roles) : $permissionResource->setRevokedRoles($roles);
         }
 
         if (array_key_exists("statusAllowance", $bind["changes"])) { //set either allowed or revoked statuses
             $statuses = array_key_exists("statuses", $bind["changes"]) && is_array($bind["changes"]["statuses"]) ? $bind["changes"]["statuses"] : [];
-            $bind["changes"]["statusAllowance"] == "allowed" ? $this->permissionEditor->setAllowedStatuses($statuses) : $this->permissionEditor->setRevokedStatuses($statuses);
+            $bind["changes"]["statusAllowance"] == "allowed" ? $permissionResource->setAllowedStatuses($statuses) : $permissionResource->setRevokedStatuses($statuses);
         }
 
         if (array_key_exists("userAllowance", $bind["changes"])) { //set either allowed or revoked statuses
@@ -684,13 +713,7 @@ class SettingsPresenter extends SecuredPresenter {
                     $userList[] = (int) explode("_", $key)[1];
                 }
             }
-            $bind["changes"]["userAllowance"] == "allowed" ? $this->permissionEditor->setAllowedUsers($userList) : $this->permissionEditor->setRevokedUsers($userList);
-        }
-        try {
-            $this->permissionEditor->setId($bind["id"])->perform();
-        } catch (APIException $ex) {
-            //$this->handleTapiException($ex, 'this');
-            $this->handleTapiException($ex);
+            $bind["changes"]["userAllowance"] == "allowed" ? $permissionResource->setAllowedUsers($userList) : $permissionResource->setRevokedUsers($userList);
         }
     }
 
