@@ -28,6 +28,9 @@ class PermissionEditResource extends PermissionResource {
     }
 
     protected function preProcess() {
+        if($this->getId() == null)
+            throw new APIException('Event ID is missing', self::BAD_REQUEST);
+
         if ($this->getType() != NULL && $this->getType() != "USR")
             throw new APIException('Cannot change type to another type than USR', self::BAD_REQUEST);
 
