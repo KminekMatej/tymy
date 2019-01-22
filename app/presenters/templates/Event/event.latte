@@ -70,9 +70,15 @@
                                         <div class="text-muted">{$history->user->callName}</div>
                                         <div class="text-muted"><small>{$history->updatedAt|date:'j.n.Y H:i'}</small></div>
                                     </td>
-                                    <td class="tymy-status"><h5><span class="badge badge-{$prestatusFrom->code|prestatusColor}">{$prestatusFrom->caption}</span></h5></td>
+                                    <td class="tymy-status">
+                                        <h5><span class="badge badge-{$prestatusFrom->code|prestatusColor}">{$prestatusFrom->caption}</span></h5>
+                                        <div class="text-muted" n:if="$history->preDescFrom"><small>{$history->preDescFrom}</small></div>
+                                    </td>
                                     <td class="tymy-status"><h3><i class="fas fa-long-arrow-alt-right"></i></h3></td>
-                                    <td class="tymy-status"><h5><span class="badge badge-{$prestatusTo->code|prestatusColor}">{$prestatusTo->caption}</span></h5></td>
+                                    <td class="tymy-status">
+                                        <h5><span class="badge badge-{$prestatusTo->code|prestatusColor}">{$prestatusTo->caption}</span></h5>
+                                        <div class="text-muted" n:if="$history->preDescTo"><small>{$history->preDescTo}</small></div>
+                                    </td>
                                 </tr>
                             </table>
                         </div>
