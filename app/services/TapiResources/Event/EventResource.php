@@ -12,6 +12,10 @@ use Nette\Caching\Cache;
  */
 abstract class EventResource extends TapiObject {
     
+    protected function postProccessEventHistory($history){
+        $this->timeLoad($history->updatedAt);
+    }
+    
     protected function postProcessEvent($event){
         if($event == null) TapiService::throwNotFound();
         $event->webName = Strings::webalize($event->id . "-" . $event->caption);
