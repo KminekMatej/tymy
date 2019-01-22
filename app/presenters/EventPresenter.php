@@ -2,15 +2,19 @@
 
 namespace App\Presenters;
 
-use Tapi\EventDetailResource;
 use Tapi\AttendanceConfirmResource;
 use Tapi\AttendancePlanResource;
+use Tapi\EventDetailResource;
+use Tapi\EventHistoryResrouce;
 use Tapi\Exception\APIException;
 
 class EventPresenter extends SecuredPresenter {
 
     /** @var EventDetailResource @inject */
     public $eventDetail;
+
+    /** @var EventHistoryResrouce @inject */
+    public $eventHistorian;
 
     /** @var AttendanceConfirmResource @inject */
     public $attendanceConfirmer;
@@ -38,6 +42,10 @@ class EventPresenter extends SecuredPresenter {
                 return $btn == $myPreStatus && $myPreStatus != "not-set" ? "btn-outline-$color disabled active" : "btn-outline-secondary disabled";
             else
                 return $btn == $myPostStatus && $myPostStatus != "not-set" ? "btn-outline-$color disabled active" : "btn-outline-secondary disabled";
+        });
+        
+        $this->template->addFilter("prestatusColor", function ($btn) {
+            return $this->supplier->getStatusClass($btn);
         });
     }
 
@@ -77,8 +85,9 @@ class EventPresenter extends SecuredPresenter {
         $this->template->cptArrived = $this->translator->translate('event.arrived',2);
         $this->template->cptNotArrived = $this->translator->translate('event.notArrived',2);
         try {
+            $eventId = $this->parseIdFromWebname($udalost);
             $event = $this->eventDetail->init()
-                    ->setId($this->parseIdFromWebname($udalost))
+                    ->setId($eventId)
                     ->getData();
             $eventTypes = $this->eventTypeList->init()->getData();
             $this->userList->init()->getData();
@@ -165,6 +174,14 @@ class EventPresenter extends SecuredPresenter {
         $this->redrawControl("events-agenda");
     }
 
+    public function handleLoadHistory($udalost){
+        $eventId = $this->parseIdFromWebname($udalost);
+        \Tracy\Debugger::barDump($udalost);
+        $this->loadEventHistory($eventId);
+        $this->redrawControl("history");
+        $this->redrawControl("historyBtn");
+    }
+    
     private function getEventCaptions($event, $eventTypes) {
         return [
             "myPreStatusCaption" => $event->myAttendance->preStatus == "UNKNOWN" ? "not-set" : $eventTypes[$event->type]->preStatusSet[$event->myAttendance->preStatus]->code,
@@ -172,4 +189,9 @@ class EventPresenter extends SecuredPresenter {
         ];
     }
 
+    private function loadEventHistory($eventId){
+        $histories = $this->eventHistorian->init()->setId($eventId)->getData();
+        $this->template->emptyStatus = (object)["code" => "", "caption" => "Nezadáno"];
+        $this->template->histories = $histories;
+    }
 }

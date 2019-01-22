@@ -14,6 +14,12 @@ abstract class EventResource extends TapiObject {
     
     protected function postProccessEventHistory($history){
         $this->timeLoad($history->updatedAt);
+        if (!property_exists($history, "preStatusFrom"))
+            $history->preStatusFrom = ""; //set default value
+        if (!property_exists($history, "preDescFrom"))
+            $history->preDescFrom = ""; //set default value
+        
+        $history->user->webName = Strings::webalize($history->user->id . "-" . $history->user->callName);
     }
     
     protected function postProcessEvent($event){

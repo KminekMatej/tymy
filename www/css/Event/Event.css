@@ -12,3 +12,9 @@ DIV.agenda A.event-heading{
     margin-left: 8px;
     font-weight: bold;
 }
+
+TABLE.tymy-event-history TD.tymy-status{
+    vertical-align: middle;
+    text-align: center;
+    width: 15%;
+}

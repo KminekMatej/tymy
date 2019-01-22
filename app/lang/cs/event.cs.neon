@@ -30,5 +30,6 @@ canResult: Zadat výsledky může
 canView-sm: Vidět
 canPlan-sm: Přihlásit
 canResult-sm: Zadat
+displayHistory: Zobrazit historii
 errors:
     eventNotExists: Událost %id% neexistuje

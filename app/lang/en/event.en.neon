@@ -30,5 +30,6 @@ canResult: Can enter results
 canView-sm: View
 canPlan-sm: Plan
 canResult-sm: Results
+displayHistory: Display history
 errors:
     eventNotExists: Event %id% does not exist

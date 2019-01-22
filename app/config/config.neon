@@ -39,6 +39,7 @@ services:
         - Tapi\EventDetailResource
         - Tapi\EventListResource
         - Tapi\EventTypeListResource
+        - Tapi\EventHistoryResrouce
         - Tapi\EventCreateResource
         - Tapi\EventEditResource
         - Tapi\EventDeleteResource

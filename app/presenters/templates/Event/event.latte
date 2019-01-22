@@ -18,8 +18,9 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col"><h4 class="card-title">{$event->caption}</h4></div>
-                        <div class="col col-md-auto" n:if="$user->isAllowed('event','canUpdate')">
-                            <a class="btn btn-sm btn-light btn-light-bordered" title="{_common.edit}" href="{plink Settings:events $event->webName}"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                        <div class="col col-md-auto">
+                            <a n:if="!isset($histories)" class="btn btn-sm btn-outline-dark ajax" n:href="loadHistory!" n:snippet="historyBtn" onclick="btnRotate($(this), true)" title="{_event.displayHistory}"><i class="fas fa-history"></i></a>
+                            <a n:if="$user->isAllowed('event','canUpdate')" class="btn btn-sm btn-light btn-light-bordered" title="{_common.edit}" href="{plink Settings:events $event->webName}"><i class="fa fa-edit" aria-hidden="true"></i></a>
                         </div>
                     </div>
                 </div>
@@ -37,7 +38,7 @@
                             </table>
                         </div>
                         <div class="col-lg-8 d-flex flex-column-reverse align-items-center">
-                            <div class=" custom-container btn-group input-group pb-2" role="group" aria-label="Basic example" id="action-{$event->id}">
+                            <div class="custom-container btn-group input-group pb-2" role="group" aria-label="Attendace setup container" id="action-{$event->id}">
                                 <input type="text" class="form-control form-control-sm custom-btn-sm" title="{_note.note,1}" name="preStatusDesc" value="{$event->myAttendance->preDescription}" />
                                 {foreach $eventTypes[$event->type]->preStatusSet as $preStatus}
                                     <button onclick="updateAttendance(this, {link attendance! $event->id, $preStatus->code})" class="btn custom-btn-sm {$myPreStatusCaption,$myPostStatusCaption,$preStatus->code,$event->closeTime|prestatusClass}">{$preStatus->caption}</button>
@@ -48,6 +49,35 @@
                             {/snippet}
                         </div>
                     </div>
+                    {snippet history}
+                    <div class="row justify-content-center" n:ifset="$histories">
+                        <div class="col-12 mt-5">
+                            <h6 class="mb-2 text-muted">Historie</h6>
+                        </div>
+                        <div class="col-lg-10">
+                            <table class="table table-hover table-sm tymy-event-history">
+                                <tr n:foreach="$histories as $history">
+                                    {var $prestatusFrom = empty($history->preStatusFrom) ? $emptyStatus : $eventTypes[$event->type]->preStatusSet[$history->preStatusFrom]}
+                                    {var $prestatusTo = empty($history->preStatusTo) ? $emptyStatus : $eventTypes[$event->type]->preStatusSet[$history->preStatusTo]}
+                                    <th scope="row">
+                                        <figure class="figure text-center" style="width: 100px; margin-bottom: 0px">
+                                            <a href="{plink Team:player $history->user->webName}">
+                                                <img src="{$tymyRoot}/{$history->user->pictureUrl}" class="figure-img img-fluid rounded user_pic mb-0" />
+                                            </a>
+                                        </figure>
+                                    </th>
+                                    <td>
+                                        <div class="text-muted">{$history->user->callName}</div>
+                                        <div class="text-muted"><small>{$history->updatedAt|date:'j.n.Y H:i'}</small></div>
+                                    </td>
+                                    <td class="tymy-status"><h5><span class="badge badge-{$prestatusFrom->code|prestatusColor}">{$prestatusFrom->caption}</span></h5></td>
+                                    <td class="tymy-status"><h3><i class="fas fa-long-arrow-alt-right"></i></h3></td>
+                                    <td class="tymy-status"><h5><span class="badge badge-{$prestatusTo->code|prestatusColor}">{$prestatusTo->caption}</span></h5></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    {/snippet}
                 </div>
             </div>
   
