@@ -127,7 +127,7 @@ class NavbarControl extends Control {
             
             $this->template->events = $this->eventList->init()
                     ->setFrom(date("Ymd"))
-                    ->setTo(date("Ymd", strtotime(" + 1 month")))
+                    ->setTo(date("Ymd", strtotime(" + 12 months")))
                     ->setOrder("startTime")
                     ->getData();
             $this->template->eventWarnings = 0;
