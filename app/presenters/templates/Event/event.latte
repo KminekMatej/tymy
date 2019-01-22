@@ -19,7 +19,7 @@
                     <div class="row">
                         <div class="col"><h4 class="card-title">{$event->caption}</h4></div>
                         <div class="col col-md-auto">
-                            <a n:if="!isset($histories)" class="btn btn-sm btn-outline-dark ajax" n:href="loadHistory!" n:snippet="historyBtn" onclick="btnRotate($(this), true)" title="{_event.displayHistory}"><i class="fas fa-history"></i></a>
+                            <a class="btn btn-sm btn-outline-dark ajax" n:href="loadHistory!" n:snippet="historyBtn" onclick="btnRotate($(this), true)" title="{_event.displayHistory}"><i class="fas fa-history"></i></a>
                             <a n:if="$user->isAllowed('event','canUpdate')" class="btn btn-sm btn-light btn-light-bordered" title="{_common.edit}" href="{plink Settings:events $event->webName}"><i class="fa fa-edit" aria-hidden="true"></i></a>
                         </div>
                     </div>
