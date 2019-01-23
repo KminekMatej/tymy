@@ -1,0 +1,198 @@
+@media (max-width: 768px) {
+  .container {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.dropdown-menu{
+    max-height:450px;
+    overflow-y:auto;
+}
+
+body {
+        font-family: 'Noto Sans', sans-serif;
+	font-size: 15px;
+	line-height: 1.6;
+	color: #333;
+        padding-top: 56px;
+        
+        
+        
+        
+        background: -webkit-radial-gradient(center, circle, rgba(255,255,255,.35), rgba(255,255,255,0) 20%, rgba(255,255,255,0) 21%), -webkit-radial-gradient(center, circle, rgba(0,0,0,.2), rgba(0,0,0,0) 20%, rgba(0,0,0,0) 21%), -webkit-radial-gradient(center, circle farthest-corner, #f0f0f0, #c0c0c0);
+	background: -moz-radial-gradient(center, circle, rgba(255,255,255,.35), rgba(255,255,255,0) 20%, rgba(255,255,255,0) 21%), -webkit-radial-gradient(center, circle, rgba(0,0,0,.2), rgba(0,0,0,0) 20%, rgba(0,0,0,0) 21%), -webkit-radial-gradient(center, circle farthest-corner, #f0f0f0, #c0c0c0);
+	background: -ms-radial-gradient(center, circle, rgba(255,255,255,.35), rgba(255,255,255,0) 20%, rgba(255,255,255,0) 21%), -webkit-radial-gradient(center, circle, rgba(0,0,0,.2), rgba(0,0,0,0) 20%, rgba(0,0,0,0) 21%), -webkit-radial-gradient(center, circle farthest-corner, #f0f0f0, #c0c0c0);
+	background: -o-radial-gradient(center, circle, rgba(255,255,255,.35), rgba(255,255,255,0) 20%, rgba(255,255,255,0) 21%), -webkit-radial-gradient(center, circle, rgba(0,0,0,.2), rgba(0,0,0,0) 20%, rgba(0,0,0,0) 21%), -webkit-radial-gradient(center, circle farthest-corner, #f0f0f0, #c0c0c0);
+	background: radial-gradient(center, circle, rgba(255,255,255,.35), rgba(255,255,255,0) 20%, rgba(255,255,255,0) 21%), -webkit-radial-gradient(center, circle, rgba(0,0,0,.2), rgba(0,0,0,0) 20%, rgba(0,0,0,0) 21%), -webkit-radial-gradient(center, circle farthest-corner, #f0f0f0, #c0c0c0);
+	background-size: 10px 10px, 10px 10px, 100% 100%;
+	background-position: 1px 1px, 0px 0px, center center;
+}
+
+A {
+    color: #0275d8;
+}
+
+A.disabled{
+    cursor: not-allowed;
+    color: #868e96;
+}
+
+A.disabled:hover{
+    text-decoration: none;
+}
+
+
+.set-box{
+    transition: background-color 0.4s ease;
+}
+
+.set-box A{
+    transition: color 0.7s ease;
+}
+
+.set-box:hover{
+    color: white;
+    background: linear-gradient(to bottom right, #333030, #403b3b);
+}
+
+.set-box:hover A{
+    color: white;
+}
+
+BUTTON.btn, BUTTON.dropdown-item, A.btn, INPUT.btn{
+    cursor: pointer;
+}
+
+#ajax-spinner {
+	margin: 15px 0 0 15px;
+	padding: 13px;
+	background: white url('../images/spinner.gif') no-repeat 50% 50%;
+	font-size: 0;
+	z-index: 123456;
+	display: none;
+}
+
+div.flash {
+	color: black;
+	background: #FFF9D7;
+	border: 1px solid #E2C822;
+	padding: 1em;
+	margin: 1em 0;
+}
+
+div.flash.success{
+    background: #dff0d8;
+    border-color: #d0e9c6;
+    color: #3c763d;
+}
+
+a[href^="#error:"] {
+	background: red;
+	color: white;
+}
+
+div.settings-bar{
+    background-color: rgba(0,0,0,0.3);
+    border-radius: 5px;
+    padding: 8px;
+}
+
+form th, form td {
+	vertical-align: top;
+	font-weight: normal;
+}
+
+form th {
+	text-align: right;
+}
+
+form .required label {
+	font-weight: bold;
+}
+
+form .error {
+	color: #D00;
+	font-weight: bold;
+}
+
+@media (min-width: 979px) {
+    nav .dropdown:hover > .dropdown-menu {
+        margin: 0px;
+        display: block;
+    }
+}
+
+.sh-box{
+    border-radius: 0px;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 3px 3px 0 rgba(0, 0, 0, 0.24);
+}
+
+.card-unread{
+    border: 1px solid green;
+    color: green;
+}
+
+.card-unread .card-header{
+    background-color: green;
+}
+
+IMG.user_pic{
+    min-width: 40px;
+    min-height: 50px;
+}
+
+NAV LI.nav-item SPAN.navbar-text{
+    padding-right: .5rem;
+    padding-left: .5rem;
+}
+
+.breadcrumb{
+    background: linear-gradient(#bcbcbc, white);
+    padding: 0.25rem 1rem;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    margin-bottom: 0px;
+}
+
+body .fc { 
+   font-size: 0.9em;
+}
+
+@media screen and (max-width: 544px) {
+    DIV.custom-container{
+        flex-direction: column;
+    }
+    
+    .custom-btn-sm{
+        width: 100% !important;
+        display: block !important;
+    }
+    INPUT.custom-btn-sm{
+        border-radius: 0.2rem !important;
+        height: 36px !important;
+    }
+    BUTTON.custom-btn-sm{
+        border-radius: 0.25rem !important;
+    }
+}
+
+INPUT.form-check{
+    width: 25px;
+    height: 25px;
+}
+
+.btn-light-bordered{
+    border: 1px solid #c5c5c5;
+}
+
+NAV.navbar .badge-new{
+    position: absolute;
+    right: 0px;
+}
+
+.scrollable-menu {
+    height: auto;
+    max-height: 200px;
+    overflow-x: hidden;
+}
