@@ -27,19 +27,19 @@
                 <div class="card-header">
                     <ul class="nav nav-tabs flex-column flex-sm-row card-header-tabs">
                         <li class="nav-item">
-                            {var $cnt = count(array_intersect($player->errFls,['gender','firstName','lastName','phone','email','birthDate']))}
+                            {var $cnt = ($player,'osobni-udaje'|errorsCount)}
                             <a class="flex-sm-fill text-sm-center nav-link active" data-toggle="tab" href="#osobni-udaje" role="tab">{_team.personalData} <span n:if="$cnt > 0" class="badge badge-pill badge-danger">{$cnt}</span></a>
                         </li>
                         <li class="nav-item">
-                            {var $cnt = count(array_intersect($player->errFls,['callName']))}
+                            {var $cnt = ($player,'prihlaseni'|errorsCount)}
                             <a class="flex-sm-fill text-sm-center nav-link" data-toggle="tab" href="#prihlaseni" role="tab">{_team.loginData} <span n:if="$cnt > 0" class="badge badge-pill badge-danger">{$cnt}</span></a>
                         </li>
                         <li class="nav-item">
-                            {var $cnt = count(array_intersect($player->errFls,['jerseyNumber','status']))}
+                            {var $cnt = ($player,'tymove-info'|errorsCount)}
                             <a class="flex-sm-fill text-sm-center nav-link" data-toggle="tab" href="#tymove-info" role="tab">{_team.teamData} <span n:if="$cnt > 0" class="badge badge-pill badge-danger">{$cnt}</span></a>
                         </li>
                         <li class="nav-item">
-                            {var $cnt = count(array_intersect($player->errFls,['street','city','zipCode']))}
+                            {var $cnt = ($player,'adresa'|errorsCount)}
                             <a class="flex-sm-fill text-sm-center nav-link" data-toggle="tab" href="#adresa" role="tab">{_team.address} <span n:if="$cnt > 0" class="badge badge-pill badge-danger">{$cnt}</span></a>
                         </li>
                         <li class="nav-item">

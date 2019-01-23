@@ -27,6 +27,35 @@ class TeamPresenter extends SecuredPresenter {
         parent::__construct();
     }
     
+    public function beforeRender() {
+        parent::beforeRender();
+        $this->template->addFilter('errorsCount', function ($player, $tabName) {
+            switch ($tabName) {
+                case "osobni-udaje":
+                    $allFields = ["gender","firstName","lastName","phone","email","birthDate","nameDayMonth","nameDayDay","language"];
+                    $errFields = array_intersect($allFields, $this->supplier->getRequiredFields(), $player->errFls);
+                    break;
+                case "prihlaseni":
+                    $allFields = ["callName","canEditCallName","login","password","canLogin"];
+                    $errFields = array_intersect($allFields, $this->supplier->getRequiredFields(), $player->errFls);
+                    break;
+                case "tymove-info":
+                    $allFields = ["status","jerseyNumber"];
+                    $errFields = array_intersect($allFields, $this->supplier->getRequiredFields(), $player->errFls);
+                    break;
+                case "adresa":
+                    $allFields = ["street","city","zipCode"];
+                    $errFields = array_intersect($allFields, $this->supplier->getRequiredFields(), $player->errFls);
+                    break;
+            }
+            $cnt = count($errFields);
+            \Tracy\Debugger::barDump($player->errFls, "Err fields");
+            \Tracy\Debugger::barDump($errFields, $tabName);
+            return $cnt;
+        });
+    }
+
+    
     public function startup() {
         parent::startup();
         $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("team.team",1), "link" => $this->link("Team:") ] ]);

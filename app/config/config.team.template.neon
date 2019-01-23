@@ -1,0 +1,14 @@
+skin: hell-boy
+userRequiredFields:
+    - gender
+    - firstName
+    - lastName
+    - phone
+    - email
+    - birthDate
+    - callName
+    - jerseyNumber
+    - status
+    - street
+    - city
+    - zipCode

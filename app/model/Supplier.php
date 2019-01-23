@@ -8,8 +8,12 @@
 
 namespace App\Model;
 
+use Nette\Neon\Neon;
+use stdClass;
+use Tracy\Debugger;
+
 class Supplier {
-    
+
     const AUTODETECT = "_autodetect";
 
     private $tapi_config;
@@ -23,16 +27,40 @@ class Supplier {
     private $wwwDir;
     private $appDir;
     
+    private $teamNeonDir;
+    private $teamNeon;
+    private $userNeon;
 
     public function __construct($tapi_config, $wwwDir, $appDir) {
         $this->setTapi_config($tapi_config);
         $this->setWwwDir($wwwDir);
         $this->setAppDir($appDir);
         $this->setVersion();
+        
+        $this->setTeamNeonDir($this->getAppDir()  . "/../../../tymy/" . $this->getTym() . "/config");
+        $this->loadTeamNeon();
     }
 
     public function getTapi_config() {
         return $this->tapi_config;
+    }
+    
+    private function loadTeamNeon(){
+        $tmpTeamNeon = $this->getAppDir() . "/config/config.team.template.neon";
+        $teamNeon = $this->getTeamNeonDir() . "/config.team.neon";
+        if(!file_exists($teamNeon) && file_exists($tmpTeamNeon))
+            copy ($tmpTeamNeon, $teamNeon);
+        if(!file_exists($teamNeon)) return NULL;
+        $this->setTeamNeon((object)Neon::decode(file_get_contents($teamNeon)));
+    }
+    
+    public function loadUserNeon($userId){
+        $tmpUserNeon = $this->getAppDir() . "/config/config.user.template.neon";
+        $userNeon = $this->getTeamNeonDir() . "/config.user.$userId.neon";
+        if(!file_exists($userNeon) && file_exists($tmpUserNeon))
+            copy ($tmpUserNeon, $userNeon);
+        if(!file_exists($userNeon)) return NULL;
+        $this->setUserNeon((object)Neon::decode(file_get_contents($userNeon)));
     }
 
     public function setTapi_config($tapi_config) {
@@ -99,7 +127,7 @@ class Supplier {
         $this->roleClasses = $roleClasses;
         return $this;
     }
-    
+
     public function getStatusClass($status) {
         return array_key_exists($status, $this->statusClasses) ? $this->statusClasses[$status] : "primary";
     }
@@ -117,7 +145,7 @@ class Supplier {
         $this->eventColors = $eventColors;
         return $this;
     }
-    
+
     public function getVersions() {
         return $this->versions;
     }
@@ -132,28 +160,61 @@ class Supplier {
             $matches = [];
             preg_match("/([0-9]{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s([0-1][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])\s\+\d{4}\|(\d*)\.(\d*)\.(\d*)/", $log, $matches);
             if (count($matches)) {
-                $version = new \stdClass();
-                $version->year = (int)$matches[1];
-                $version->month = (int)$matches[2];
-                $version->day = (int)$matches[3];
-                $version->hour = (int)$matches[4];
-                $version->minute = (int)$matches[5];
-                $version->second = (int)$matches[6];
-                $version->major = (int)$matches[7];
-                $version->minor = (int)$matches[8];
-                $version->patch = (int)$matches[9];
+                $version = new stdClass();
+                $version->year = (int) $matches[1];
+                $version->month = (int) $matches[2];
+                $version->day = (int) $matches[3];
+                $version->hour = (int) $matches[4];
+                $version->minute = (int) $matches[5];
+                $version->second = (int) $matches[6];
+                $version->major = (int) $matches[7];
+                $version->minor = (int) $matches[8];
+                $version->patch = (int) $matches[9];
                 $version->version = $matches[7] . "." . $matches[8] . "." . $matches[9];
-                $version->date = date("c", strtotime($matches[1] . "-" . $matches[2] . "-" . $matches[3] . " " . $matches[4] . ":" . $matches[5] . ":" . $matches[6]));                
+                $version->date = date("c", strtotime($matches[1] . "-" . $matches[2] . "-" . $matches[3] . " " . $matches[4] . ":" . $matches[5] . ":" . $matches[6]));
                 $this->versions[] = $version;
             }
         }
     }
-    
-    public function isHttps(){
+
+    public function getTeamNeonDir() {
+        return $this->teamNeonDir;
+    }
+
+    public function setTeamNeonDir($teamNeonDir) {
+        $this->teamNeonDir = $teamNeonDir;
+        return $this;
+    }
+
+    public function isHttps() {
         return strtolower($this->getTapi_config()["protocol"]) == "https";
     }
+
+    public function getTeamNeon() {
+        return $this->teamNeon;
+    }
+
+    public function getUserNeon() {
+        return $this->userNeon;
+    }
+
+    public function setTeamNeon($teamNeon) {
+        $this->teamNeon = $teamNeon;
+        return $this;
+    }
+
+    public function setUserNeon($userNeon) {
+        $this->userNeon = $userNeon;
+        return $this;
+    }
     
+    public function getSkin(){
+        if($this->getUserNeon() != NULL) return $this->getUserNeon()->skin;
+        else return $this->getTeamNeon()->skin;
+    }
 
-
+    public function getRequiredFields(){
+        return $this->getTeamNeon()->userRequiredFields;
+    }
 
 }

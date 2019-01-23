@@ -63,34 +63,21 @@ abstract class UserResource extends TapiObject{
     protected function postProcessUserWarnings($player) {
         $player->errCnt = 0;
         $player->errFls = [];
-        if (!isset($player->firstName) || empty($player->firstName)) {
-            $player->errCnt++;
-            $player->errFls[] = "firstName";
+        
+        foreach ($this->supplier->getRequiredFields() as $requiredField) {
+            if (!isset($player->$requiredField) || empty($player->$requiredField)) {
+                $player->errCnt++;
+                $player->errFls[] = $requiredField;
+                continue;
+            }
+            
+            //email validation secondary check
+            if($requiredField == "email" && filter_var($player->email, FILTER_VALIDATE_EMAIL) === FALSE){
+                $player->errCnt++;
+                $player->errFls[] = "email";
+            }
         }
-        if (!isset($player->lastName) || empty($player->lastName)) {
-            $player->errCnt++;
-            $player->errFls[] = "lastName";
-        }
-        if (!isset($player->gender) || empty($player->gender)) {
-            $player->errCnt++;
-            $player->errFls[] = "gender";
-        }
-        if (!isset($player->phone) || empty($player->phone)) {
-            $player->errCnt++;
-            $player->errFls[] = "phone";
-        }
-        if (!isset($player->email) || empty($player->email) || filter_var($player->email, FILTER_VALIDATE_EMAIL) === FALSE) {
-            $player->errCnt++;
-            $player->errFls[] = "email";
-        }
-        if (!isset($player->birthDate) || empty($player->birthDate)) {
-            $player->errCnt++;
-            $player->errFls[] = "birthDate";
-        }
-        if (!isset($player->jerseyNumber) || empty($player->jerseyNumber)) {
-            $player->errCnt++;
-            $player->errFls[] = "jerseyNumber";
-        }
+        
         if (isset($player->status) && $player->status == "INIT") {
             $player->errCnt++;
             $player->errFls[] = "status";
