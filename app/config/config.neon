@@ -14,7 +14,7 @@ session:
 
 services:
         - App\Model\TapiAuthenticator
-        - App\Model\Supplier(%tapi%, %wwwDir%, %appDir%)
+        - App\Model\Supplier(%tapi%, %wwwDir%, %appDir%, %appConfig%)
         - App\Forms\FormFactory
         - App\Forms\SignInFormFactory
         - App\Forms\SignUpFormFactory
@@ -89,3 +89,8 @@ extensions:
     translation: Kdyby\Translation\DI\TranslationExtension
 translation:
     default: cs
+parameters:
+    appConfig:
+        allSkins:
+            hell-boy: 'Hellboy'
+            silver-surfer: 'Silver surfer'

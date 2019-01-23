@@ -19,47 +19,47 @@ class Supplier {
     private $tym;
     private $tymyRoot;
     private $apiRoot;
-    private $roleClasses;
-    private $statusClasses;
-    private $eventColors;
     private $versions;
     private $wwwDir;
     private $appDir;
-    
+    private $allSkins;
     private $teamNeonDir;
     private $teamNeon;
     private $userNeon;
 
-    public function __construct($tapi_config, $wwwDir, $appDir) {
+    public function __construct($tapi_config, $wwwDir, $appDir, $appConfig) {
         $this->setTapi_config($tapi_config);
         $this->setWwwDir($wwwDir);
         $this->setAppDir($appDir);
         $this->setVersion();
-        
-        $this->setTeamNeonDir($this->getAppDir()  . "/../../../tymy/" . $this->getTym() . "/config");
+        $this->setAllSkins($appConfig["allSkins"]);
+
+        $this->setTeamNeonDir($this->getAppDir() . "/../../../tymy/" . $this->getTym() . "/config");
         $this->loadTeamNeon();
     }
 
     public function getTapi_config() {
         return $this->tapi_config;
     }
-    
-    private function loadTeamNeon(){
+
+    private function loadTeamNeon() {
         $tmpTeamNeon = $this->getAppDir() . "/config/config.team.template.neon";
         $teamNeon = $this->getTeamNeonDir() . "/config.team.neon";
-        if(!file_exists($teamNeon) && file_exists($tmpTeamNeon))
-            copy ($tmpTeamNeon, $teamNeon);
-        if(!file_exists($teamNeon)) return NULL;
-        $this->setTeamNeon((object)Neon::decode(file_get_contents($teamNeon)));
+        if (!file_exists($teamNeon) && file_exists($tmpTeamNeon))
+            copy($tmpTeamNeon, $teamNeon);
+        if (!file_exists($teamNeon))
+            return NULL;
+        $this->setTeamNeon((object) Neon::decode(file_get_contents($teamNeon)));
     }
-    
-    public function loadUserNeon($userId){
+
+    public function loadUserNeon($userId) {
         $tmpUserNeon = $this->getAppDir() . "/config/config.user.template.neon";
         $userNeon = $this->getTeamNeonDir() . "/config.user.$userId.neon";
-        if(!file_exists($userNeon) && file_exists($tmpUserNeon))
-            copy ($tmpUserNeon, $userNeon);
-        if(!file_exists($userNeon)) return NULL;
-        $this->setUserNeon((object)Neon::decode(file_get_contents($userNeon)));
+        if (!file_exists($userNeon) && file_exists($tmpUserNeon))
+            copy($tmpUserNeon, $userNeon);
+        if (!file_exists($userNeon))
+            return NULL;
+        $this->setUserNeon((object) Neon::decode(file_get_contents($userNeon)));
     }
 
     public function setTapi_config($tapi_config) {
@@ -67,9 +67,6 @@ class Supplier {
         $this->setTym($tapi_config['tym']);
         $this->setTymyRoot($tapi_config["protocol"] . "://" . $this->getTym() . "." . $tapi_config["root"]);
         $this->setApiRoot($this->getTymyRoot() . DIRECTORY_SEPARATOR . $tapi_config["tapi_api_root"]);
-        $this->setRoleClasses($tapi_config['roles_classes']);
-        $this->setStatusClasses($tapi_config['status_classes']);
-        $this->setEventColors($tapi_config['event_colors']);
         return $this;
     }
 
@@ -119,30 +116,15 @@ class Supplier {
     }
 
     public function getRoleClass($role) {
-        return $this->roleClasses[$role];
-    }
-
-    public function setRoleClasses($roleClasses) {
-        $this->roleClasses = $roleClasses;
-        return $this;
+        return $this->getTeamNeon()->roles_classes[$role];
     }
 
     public function getStatusClass($status) {
-        return array_key_exists($status, $this->statusClasses) ? $this->statusClasses[$status] : "primary";
-    }
-
-    public function setStatusClasses($statusClasses) {
-        $this->statusClasses = $statusClasses;
-        return $this;
+        return array_key_exists($status, $this->getTeamNeon()->status_classes) ? $this->getTeamNeon()->status_classes[$status] : "primary";
     }
 
     public function getEventColors() {
-        return $this->eventColors;
-    }
-
-    public function setEventColors($eventColors) {
-        $this->eventColors = $eventColors;
-        return $this;
+        return $this->getTeamNeon()->event_colors;
     }
 
     public function getVersions() {
@@ -206,14 +188,25 @@ class Supplier {
         $this->userNeon = $userNeon;
         return $this;
     }
-    
-    public function getSkin(){
-        if($this->getUserNeon() != NULL && !empty($this->getUserNeon()->skin)) return $this->getUserNeon()->skin;
-        else return $this->getTeamNeon()->skin;
+
+    public function getSkin() {
+        if ($this->getUserNeon() != NULL && !empty($this->getUserNeon()->skin))
+            return $this->getUserNeon()->skin;
+        else
+            return $this->getTeamNeon()->skin;
     }
 
-    public function getRequiredFields(){
+    public function getRequiredFields() {
         return $this->getTeamNeon()->userRequiredFields;
+    }
+
+    public function getAllSkins() {
+        return $this->allSkins;
+    }
+
+    public function setAllSkins($allSkins) {
+        $this->allSkins = $allSkins;
+        return $this;
     }
 
 }
