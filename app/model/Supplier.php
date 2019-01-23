@@ -10,7 +10,6 @@ namespace App\Model;
 
 use Nette\Neon\Neon;
 use stdClass;
-use Tracy\Debugger;
 
 class Supplier {
 
@@ -209,7 +208,7 @@ class Supplier {
     }
     
     public function getSkin(){
-        if($this->getUserNeon() != NULL) return $this->getUserNeon()->skin;
+        if($this->getUserNeon() != NULL && !empty($this->getUserNeon()->skin)) return $this->getUserNeon()->skin;
         else return $this->getTeamNeon()->skin;
     }
 
