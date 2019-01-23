@@ -5,20 +5,20 @@
 {var $presenterName = strtolower($presenter->request->getPresenterName())}
 {var $presenterUcName = ucFirst($presenterName)}
 
-{var $presenterStylePath = "{$wwwDir}/css/{$presenterUcName}/{$presenterName}.css"}
-{var $presenterStyleUcPath = "{$wwwDir}/css/{$presenterUcName}/{$presenterUcName}.css"}
+{var $presenterStylePath = "{$wwwDir}/skins/{$skin}/css/{$presenterUcName}/{$presenterName}.css"}
+{var $presenterStyleUcPath = "{$wwwDir}/skins/{$skin}/css/{$presenterUcName}/{$presenterUcName}.css"}
 
-{var $presenterStyle = "{$basePath}/css/{$presenterUcName}/{$presenterName}.css"}
-{var $presenterStyleUc = "{$basePath}/css/{$presenterUcName}/{$presenterUcName}.css"}
+{var $presenterStyle = "{$basePath}/skins/{$skin}/css/{$presenterUcName}/{$presenterName}.css"}
+{var $presenterStyleUc = "{$basePath}/skins/{$skin}/css/{$presenterUcName}/{$presenterUcName}.css"}
 
 {var $viewName = strtolower($presenter->getView())}
 {var $viewUcName = ucFirst($viewName)}
 
-{var $viewStylePath = "{$wwwDir}/css/{$presenterUcName}/{$viewName}.css"}
-{var $viewStyleUcPath = "{$wwwDir}/css/{$presenterUcName}/{$viewUcName}.css"}
+{var $viewStylePath = "{$wwwDir}/skins/{$skin}/css/{$presenterUcName}/{$viewName}.css"}
+{var $viewStyleUcPath = "{$wwwDir}/skins/{$skin}/css/{$presenterUcName}/{$viewUcName}.css"}
 
-{var $viewStyle = "{$basePath}/css/{$presenterUcName}/{$viewName}.css"}
-{var $viewStyleUc = "{$basePath}/css/{$presenterUcName}/{$viewUcName}.css"}
+{var $viewStyle = "{$basePath}/skins/{$skin}/css/{$presenterUcName}/{$viewName}.css"}
+{var $viewStyleUc = "{$basePath}/skins/{$skin}/css/{$presenterUcName}/{$viewUcName}.css"}
 
 {* Include styles for whole presenter or current view, if they exist *}
         <link rel="stylesheet" href="{$presenterStyle}" n:if="file_exists($presenterStylePath)" />
