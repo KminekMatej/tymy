@@ -11,14 +11,19 @@
             <div class="settings-bar"><a href="{plink CacheDrop!}" class="btn btn-light ajax"><i class="fa fa-redo" aria-hidden="true"></i> {_settings.cacheDrop}</a></div>
         </div>
     </div>
+     
     <div class="row">
         <div class="col">
             <div class="card sh-box my-2">
+                {form userConfigForm}
                 <div class="card-header">
                     <h4>{_settings.appSettings}</h4>
                 </div>
                 <div class="card-body">
                     <table class="table">
+                        
+                        <tr><th>{label skin}:</th><td>{input skin, class => 'form-control w-25'}</td></tr>
+                        
                         <tr><th>{_settings.appVersion}:</th><td><a href="https://github.com/KminekMatej/tymy/releases/tag/{$version->version}" target="_blank">{$version->version}</a></td></tr>
                         <tr><th>{_settings.released}:</th><td>{$version->date|date:'j.n.Y G:i'}</td></tr>
                         <tr><th>{_settings.changeList}:</th><td>
@@ -36,9 +41,10 @@
                     </table>
                     <div class="text-center mb-4"><a href="http://www.tymy.cz" target="blank"><img src="{$basePath}/images/logo/tymy_logo_white_250.png" alt="" title="Tymy.CZ - Portál pro váš tým" class="mr-2" /></a></div>
                 </div>
-                <div class="card-footer text-center">
-                    
+                <div class="card-footer text-right">
+                    <button n:name="save" class="btn btn-lg btn-outline-primary" title="{_common.save}" onclick="rotateBtn($(this), true)"><i class="fa fa-save" aria-hidden="true"></i></button>
                 </div>
+                {/form}
             </div>
         </div>
     </div>

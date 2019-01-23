@@ -2,7 +2,9 @@
 
 namespace App\Presenters;
 
+use Nette\Application\UI\Form;
 use Nette\Utils\Strings;
+use stdClass;
 use Tapi\DiscussionCreateResource;
 use Tapi\DiscussionDeleteResource;
 use Tapi\DiscussionDetailResource;
@@ -179,8 +181,6 @@ class SettingsPresenter extends SecuredPresenter {
             $this->template->userPermissions = $this->permissionLister->getUsrPermissions();
             $this->template->systemPermissions = $this->permissionLister->getSysPermissions();
         }
-        
-        
     }
 
     public function actionApp() {
@@ -200,6 +200,8 @@ class SettingsPresenter extends SecuredPresenter {
         if($previousPatch === NULL) $previousPatch = $this->supplier->getVersion(count($this->supplier->getVersions()));
         $this->template->previousPatchVersion = $previousPatch;
         $this->template->firstMinorVersion = $firstMinor;
+        
+        $this->template->allSkins = $this->supplier->getAllSkins();
     }
     
     public function renderDiscussion_new() {
@@ -753,5 +755,19 @@ class SettingsPresenter extends SecuredPresenter {
     private function notAllowed(){
         $this->flashMessage($this->translator->translate("common.alerts.notPermitted"));
         $this->redirect("Settings:");
+    }
+    
+    public function createComponentUserConfigForm(){
+        $form = new Form();
+        $form->addSelect("skin", "Skin", $this->supplier->getAllSkins())->setValue($this->supplier->getSkin());
+        $form->addSubmit("save");
+        $form->onSuccess[] = function (Form $form, stdClass $values) {
+            $userNeon = $this->supplier->getUserNeon();
+            $userNeon->skin = $values->skin;
+            $this->supplier->saveUserNeon($this->getUser()->getId(), (array)$userNeon);
+            $this->flashMessage($this->translator->translate("common.alerts.configSaved"));
+            $this->redirect("Settings:app");
+        };
+        return $form;
     }
 }

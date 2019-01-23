@@ -88,15 +88,6 @@ div.settings-bar{
     padding: 8px;
 }
 
-form th, form td {
-	vertical-align: top;
-	font-weight: normal;
-}
-
-form th {
-	text-align: right;
-}
-
 form .required label {
 	font-weight: bold;
 }

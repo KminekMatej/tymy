@@ -58,3 +58,12 @@ DIV.brand{
     font-size: 20pt;
     background: linear-gradient(to bottom right, #333030, #403b3b);
 }
+
+form th, form td {
+	vertical-align: top;
+	font-weight: normal;
+}
+
+form th {
+	text-align: right;
+}

@@ -54,7 +54,7 @@ class Supplier {
 
     public function loadUserNeon($userId) {
         $tmpUserNeon = $this->getAppDir() . "/config/config.user.template.neon";
-        $userNeon = $this->getTeamNeonDir() . "/config.user.$userId.neon";
+        $userNeon = $this->getUserNeonFile($userId);
         if (!file_exists($userNeon) && file_exists($tmpUserNeon))
             copy($tmpUserNeon, $userNeon);
         if (!file_exists($userNeon))
@@ -62,6 +62,11 @@ class Supplier {
         $this->setUserNeon((object) Neon::decode(file_get_contents($userNeon)));
     }
 
+    public function saveUserNeon($userId, $neonArray){
+        $userNeon = $this->getUserNeonFile($userId);
+        file_put_contents($userNeon, Neon::encode($neonArray));
+    }
+    
     public function setTapi_config($tapi_config) {
         $this->tapi_config = $tapi_config;
         $this->setTym($tapi_config['tym']);
@@ -209,4 +214,7 @@ class Supplier {
         return $this;
     }
 
+    private function getUserNeonFile($userId){
+        return $this->getTeamNeonDir() . "/config.user.$userId.neon";
+    }
 }
