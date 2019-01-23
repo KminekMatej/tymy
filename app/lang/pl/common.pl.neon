@@ -59,6 +59,7 @@ alerts:
     exceptionOccured: Wystąpił nieoczekiwany błąd
     confirmDelete: Czy na pewno chcesz to usunąć?
     notPermitted: Niewystarczające uprawnienia
+    configSaved: Ustawienia zapisane
 months:
     january: Styczeń    
     february: Luty

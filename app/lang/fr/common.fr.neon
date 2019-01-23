@@ -59,6 +59,7 @@ alerts:
     exceptionOccured: "Une erreur s'est produite"
     confirmDelete: Vraiment supprimer?
     notPermitted: Permissions insuffisantes
+    configSaved: Paramètres sauvegardés
 months:
     january: Janvier
     february: Février

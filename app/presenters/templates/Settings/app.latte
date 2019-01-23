@@ -42,7 +42,7 @@
                     <div class="text-center mb-4"><a href="http://www.tymy.cz" target="blank"><img src="{$basePath}/images/logo/tymy_logo_white_250.png" alt="" title="Tymy.CZ - Portál pro váš tým" class="mr-2" /></a></div>
                 </div>
                 <div class="card-footer text-right">
-                    <button n:name="save" class="btn btn-lg btn-outline-primary" title="{_common.save}" onclick="rotateBtn($(this), true)"><i class="fa fa-save" aria-hidden="true"></i></button>
+                    <button n:name="save" class="btn btn-lg btn-outline-primary" title="{_common.save}" onclick="return $(this).find('svg[data-fa-i2svg]').addClass('fa-spin')"><i class="fa fa-save" aria-hidden="true"></i></button>
                 </div>
                 {/form}
             </div>

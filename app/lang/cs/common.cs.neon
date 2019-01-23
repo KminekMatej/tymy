@@ -59,6 +59,7 @@ alerts:
     exceptionOccured: Došlo k nečekané chybě
     confirmDelete: Opravde chcete tento záznam smazat?
     notPermitted: Nemáte dostatečná práva
+    configSaved: Nastavení bylo uloženo
 months:
     january: Leden
     february: Únor

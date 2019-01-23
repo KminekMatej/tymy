@@ -26,4 +26,5 @@ function btnRotate(btn, disable){
             btn.removeAttr("disabled");
         }
     }
+    return true;
 }

@@ -59,6 +59,7 @@ alerts:
     exceptionOccured: Unexpected error happened.
     confirmDelete: Are you sure you want to delete this?
     notPermitted: Insufficient permissions
+    configSaved: Settings saved
 months:
     january: January
     february: February
