@@ -1,0 +1,22 @@
+
+/* 
+    Created on : 17.1.2019, 12:49:41
+    Author     : kminekmatej
+*/
+
+.btn-group BUTTON{
+    min-width: 1rem;
+}
+
+IMG.usrImg{
+    max-width: 20px;
+    opacity: 0.3;
+}
+
+.custom-checkbox INPUT:checked ~ LABEL IMG.usrImg{
+    opacity: 1;
+}
+
+.custom-checkbox:hover LABEL IMG.usrImg{
+    opacity: 1;
+}

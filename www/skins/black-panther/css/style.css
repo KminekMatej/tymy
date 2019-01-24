@@ -13,16 +13,18 @@
 body {
         font-family: 'Noto Sans', sans-serif;
 	font-size: 15px;
-	line-height: 1.6;
-	color: #333;
+        line-height: 1.6;
+        color: #333;
+        background:
+            linear-gradient(27deg, #151515 5px, transparent 5px) 0 5px,
+            linear-gradient(207deg, #151515 5px, transparent 5px) 10px 0px,
+            linear-gradient(27deg, #222 5px, transparent 5px) 0px 10px,
+            linear-gradient(207deg, #222 5px, transparent 5px) 10px 5px,
+            linear-gradient(90deg, #1b1b1b 10px, transparent 10px),
+            linear-gradient(#1d1d1d 25%, #1a1a1a 25%, #1a1a1a 50%, transparent 50%, transparent 75%, #242424 75%, #242424);
+        background-color: #131313;
+        background-size: 20px 20px;
         padding-top: 56px;
-        background: -webkit-radial-gradient(center, circle, rgba(255,255,255,.35), rgba(255,255,255,0) 20%, rgba(255,255,255,0) 21%), -webkit-radial-gradient(center, circle, rgba(0,0,0,.2), rgba(0,0,0,0) 20%, rgba(0,0,0,0) 21%), -webkit-radial-gradient(center, circle farthest-corner, #f0f0f0, #c0c0c0);
-	background: -moz-radial-gradient(center, circle, rgba(255,255,255,.35), rgba(255,255,255,0) 20%, rgba(255,255,255,0) 21%), -webkit-radial-gradient(center, circle, rgba(0,0,0,.2), rgba(0,0,0,0) 20%, rgba(0,0,0,0) 21%), -webkit-radial-gradient(center, circle farthest-corner, #f0f0f0, #c0c0c0);
-	background: -ms-radial-gradient(center, circle, rgba(255,255,255,.35), rgba(255,255,255,0) 20%, rgba(255,255,255,0) 21%), -webkit-radial-gradient(center, circle, rgba(0,0,0,.2), rgba(0,0,0,0) 20%, rgba(0,0,0,0) 21%), -webkit-radial-gradient(center, circle farthest-corner, #f0f0f0, #c0c0c0);
-	background: -o-radial-gradient(center, circle, rgba(255,255,255,.35), rgba(255,255,255,0) 20%, rgba(255,255,255,0) 21%), -webkit-radial-gradient(center, circle, rgba(0,0,0,.2), rgba(0,0,0,0) 20%, rgba(0,0,0,0) 21%), -webkit-radial-gradient(center, circle farthest-corner, #f0f0f0, #c0c0c0);
-	background: radial-gradient(center, circle, rgba(255,255,255,.35), rgba(255,255,255,0) 20%, rgba(255,255,255,0) 21%), -webkit-radial-gradient(center, circle, rgba(0,0,0,.2), rgba(0,0,0,0) 20%, rgba(0,0,0,0) 21%), -webkit-radial-gradient(center, circle farthest-corner, #f0f0f0, #c0c0c0);
-	background-size: 10px 10px, 10px 10px, 100% 100%;
-	background-position: 1px 1px, 0px 0px, center center;
 }
 
 A {
@@ -89,7 +91,7 @@ a[href^="#error:"] {
 }
 
 div.settings-bar{
-    background-color: rgba(0,0,0,0.3);
+    background-color: rgba(255, 255, 255, 0.5);
     border-radius: 5px;
     padding: 8px;
 }
@@ -135,10 +137,11 @@ NAV LI.nav-item SPAN.navbar-text{
 }
 
 .breadcrumb{
-    background: #e9ecef;
+    background: linear-gradient(#f8f9fa , rgba(255, 255, 255, 0.6));
     padding: 0.25rem 1rem;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
     margin-bottom: 0px;
-    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 3px 3px 0 rgba(0, 0, 0, 0.24);
 }
 
 body .fc { 
@@ -181,4 +184,58 @@ NAV.navbar .badge-new{
     height: auto;
     max-height: 200px;
     overflow-x: hidden;
+}
+
+/*NAVBAR = NAVBAR-LIGHT + bg-dark combined*/
+
+.navbar {
+    background-color: #f8f9fa !important;
+}
+
+.navbar .navbar-brand {
+  color: rgba(0, 0, 0, 0.9);
+}
+
+.navbar .navbar-brand:hover, .navbar .navbar-brand:focus {
+  color: rgba(0, 0, 0, 0.9);
+}
+
+.navbar .navbar-nav .nav-link {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.navbar .navbar-nav .nav-link:hover, .navbar .navbar-nav .nav-link:focus {
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.navbar .navbar-nav .nav-link.disabled {
+  color: rgba(0, 0, 0, 0.3);
+}
+
+.navbar .navbar-nav .show > .nav-link,
+.navbar .navbar-nav .active > .nav-link,
+.navbar .navbar-nav .nav-link.show,
+.navbar .navbar-nav .nav-link.active {
+  color: rgba(0, 0, 0, 0.9);
+}
+
+.navbar .navbar-toggler {
+  color: rgba(0, 0, 0, 0.5);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.navbar .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(0, 0, 0, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+.navbar .navbar-text {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.navbar .navbar-text a {
+  color: rgba(0, 0, 0, 0.9);
+}
+
+.navbar .navbar-text a:hover, .navbar .navbar-text a:focus {
+  color: rgba(0, 0, 0, 0.9);
 }
