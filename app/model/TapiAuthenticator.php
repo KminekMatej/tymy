@@ -3,11 +3,11 @@
 namespace App\Model;
 
 use Nette;
-use Tapi\LoginResource;
-use Tapi\TapiService;
-use Tapi\Exception\APIException;
 use Nette\Security\Identity;
-use InvalidArgumentException;
+use Tapi\Exception\APIException;
+use Tapi\LoginResource;
+use Tapi\LoginTkResource;
+use Tapi\TapiService;
 
 /**
  * Users management.
@@ -63,34 +63,10 @@ class TapiAuthenticator implements Nette\Security\IAuthenticator {
      * @return Identity
      */
     public function tkAuthenticate($tk){
-        $loginTkResource = new \Tapi\LoginTkResource($this->supplier, NULL, $this->tapiService);
+        $loginTkResource = new LoginTkResource($this->supplier, NULL, $this->tapiService);
         $loginObj = $loginTkResource->setTk($tk)->getData();
         $loginObj->tapi_config = $this->supplier->getTapi_config();
         return new Identity($loginObj->id, $loginObj->roles, $loginObj );
-    }
-    
-    /**
-     * Adds new user.
-     * @param  string
-     * @param  string
-     * @param  string
-     * @param  string
-     * @return void
-     * @throws \Nette\InvalidArgumentException
-     */
-    public function add($login, $password, $email, $firstName = NULL, $lastName = NULL, $adminNote = NULL) {
-        try {
-            $this->registerService
-                    ->setLogin($login)
-                    ->setPassword($password)
-                    ->setEmail($email)
-                    ->setFirstName($firstName)
-                    ->setLastName($lastName)
-                    ->setNote($adminNote)
-                    ->perform();
-        } catch (APIException $exc) {
-            throw new InvalidArgumentException($exc->getMessage(), self::FAILURE);
-        }
     }
 
 }

@@ -16,7 +16,7 @@ table{
     width: 100%;
 }
 
-INPUT, SELECT{
+INPUT, SELECT, TEXTAREA{
     outline: 0;
     background: #f2f2f2;
     width: 100%;

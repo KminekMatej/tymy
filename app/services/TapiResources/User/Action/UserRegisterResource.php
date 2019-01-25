@@ -20,11 +20,7 @@ class UserRegisterResource extends UserResource {
     private $firstName;
     private $lastName;
     private $note;
-         
-    public function __construct(Supplier $supplier, TapiService $tapiService) {
-        parent::__construct($supplier, NULL, $tapiService, NULL);
-    }
-    
+      
     public function init() {
         parent::globalInit();
         $this->setCacheable(FALSE);
