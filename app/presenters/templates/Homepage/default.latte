@@ -62,6 +62,15 @@
 {block content}
 
 <div class="container homepage">
+    <div class="row mt-2" n:ifset="$notices">
+        <div class="col">
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <div n:foreach="$notices as $notice"><div><small>{$notice->created|date:'j.n.Y'} - </small><strong>{$notice->caption}</strong></div>{$notice->description}</div>
+            </div>
+        </div>
+    </div>
+    
     <div class="row">
         <div class="col-md-5 my-3">
             <div class="card sh-box" id='calendar'></div>

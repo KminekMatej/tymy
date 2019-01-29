@@ -4,6 +4,7 @@ namespace App\Presenters;
 
 use Tapi\Exception\APIException;
 use Tapi\MultiaccountTransferKeyResource;
+use Tapi\NewsListResource;
 use Tapi\UsersLiveResource;
 
 class HomepagePresenter extends SecuredPresenter {
@@ -15,6 +16,9 @@ class HomepagePresenter extends SecuredPresenter {
     
     /** @var MultiaccountTransferKeyResource @inject */
     public $tkResource;
+    
+    /** @var NewsListResource @inject */
+    public $newsResource;
     
     public function beforeRender() {
         parent::beforeRender();
@@ -56,6 +60,7 @@ class HomepagePresenter extends SecuredPresenter {
             $this->template->liveUsers = $this->live->init()->getData();
             $this->template->discussions = $this->discussionList->init()->getData();
             $this->template->users = $this->sortUsersByLastLogin($this->userList->init()->getData());
+            $this->template->notices = $this->newsResource->getData();
         } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
