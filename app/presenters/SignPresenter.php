@@ -103,7 +103,7 @@ class SignPresenter extends BasePresenter {
         $form->onSuccess[] = function (Nette\Application\UI\Form $form, stdClass $values) {
             try {
                 $this->pwdLost->init()
-                        ->setCallbackUri($this->getHttpRequest()->getUrl()->getBaseUrl() . $this->link('Sign:pwdreset', ["code" => "%s"]))
+                        ->setCallbackUri($this->link('//Sign:pwdreset') . "?code=%2s")
                         ->setHostname($this->getHttpRequest()->getRemoteHost())
                         ->setMail($values->email)
                         ->getData();    
