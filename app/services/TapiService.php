@@ -38,12 +38,15 @@ class TapiService {
     /** @var string */
     private $url;
     
+    private $curl;
+    
     public function __construct(User $user, TapiAuthenticator $authenticator, Supplier $supplier) {
         $this->user = $user;
         $this->authenticator = $authenticator;
         $this->supplier = $supplier;
         $this->tapiObject = NULL;
         $this->initTapiDebugPanel();
+        $this->initCURL();
     }
     
     private function initTapiDebugPanel(){
@@ -54,6 +57,23 @@ class TapiService {
         } else {
             $this->tapiPanel = Debugger::getBar()->getPanel($panelId);
         }
+    }
+    
+    private function initCURL(){
+        $this->curl = curl_init();
+        curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($this->curl, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($this->curl, CURLOPT_ENCODING, '');
+        curl_setopt($this->curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4 );
+
+        if($this->supplier->isHttps()){
+            curl_setopt($this->curl, CURLOPT_SSL_VERIFYHOST, 2);
+            curl_setopt($this->curl, CURLOPT_SSL_VERIFYPEER, TRUE);
+        }
+    }
+    
+    public function __destruct(){
+        curl_close($this->curl);
     }
     
     /**
@@ -119,26 +139,20 @@ class TapiService {
     private function executeRequest() {
         $objectHash = spl_object_hash($this->tapiObject);
         Debugger::timer("tapi-request $objectHash");
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        if($this->supplier->isHttps()){
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, TRUE);
-        }
+        
+        curl_setopt($this->curl, CURLOPT_URL, $this->url);
+        
         $formattedData = NULL;
         if ($this->tapiObject->getMethod() != RequestMethod::GET) {
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->tapiObject->getMethod());
+            curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, $this->tapiObject->getMethod());
             if ($this->tapiObject->getRequestData()) {
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+                curl_setopt($this->curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
                 $formattedData = $this->tapiObject->getJsonEncoding() ? json_encode($this->tapiObject->getRequestData()) : $this->tapiObject->getRequestData();
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $formattedData);
+                curl_setopt($this->curl, CURLOPT_POSTFIELDS, $formattedData);
             }
         }
-        $result = ["data" => curl_exec($ch), "info" => curl_getinfo($ch)];
-        if(curl_error($ch)) $result["error"] = curl_errno($ch) . ": " . curl_error($ch);
-        curl_close($ch);
+        $result = ["data" => curl_exec($this->curl), "info" => curl_getinfo($this->curl)];
+        if(curl_error($this->curl)) $result["error"] = curl_errno($this->curl) . ": " . curl_error($this->curl);
         $this->tapiPanel->logAPI($this->url, $this->tapiObject->getMethod(), $formattedData, Debugger::timer("tapi-request $objectHash"), $result["info"]["http_code"]);
         return (object) $result;
     }
