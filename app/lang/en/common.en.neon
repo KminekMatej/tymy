@@ -60,6 +60,9 @@ alerts:
     confirmDelete: Are you sure you want to delete this?
     notPermitted: Insufficient permissions
     configSaved: Settings saved
+    newsOnTymy: News on Tymy.CZ
+    newsOnTymyDescription: Portal has been upgraded since your last visit. What are the latest news?
+    newsOnTymyFooter: You can checkout news also on %link%
 months:
     january: January
     february: February

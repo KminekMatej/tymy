@@ -60,6 +60,9 @@ alerts:
     confirmDelete: Czy na pewno chcesz to usunąć?
     notPermitted: Niewystarczające uprawnienia
     configSaved: Ustawienia zapisane
+    newsOnTymy: Aktualności na portalu Tymy.CZ
+    newsOnTymyDescription: Portal został uaktualniony od czasu Twojej ostatniej wizyty. Jakie są najnowsze aktualności?
+    newsOnTymyFooter: Możesz sprawdzić aktualności również na %link%
 months:
     january: Styczeń    
     february: Luty
