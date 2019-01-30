@@ -11,7 +11,6 @@ class NewsListResource extends NewsResource {
 
     public function init() {
         parent::globalInit();
-        $this->setCachingTimeout(TapiObject::CACHE_TIMEOUT_DAY);
         return $this;
     }
 

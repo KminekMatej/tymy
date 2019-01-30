@@ -66,7 +66,9 @@
         <div class="col">
             <div class="alert alert-info alert-dismissible fade show" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <div n:foreach="$notices as $notice"><div><small>{$notice->created|date:'j.n.Y'} - </small><strong>{$notice->caption}</strong></div>{$notice->description}</div>
+                <strong class="text-secondary ml-4">{_common.alerts.newsOnTymy}</strong>
+                <div n:foreach="$notices as $notice"><div class="mt-2"><small>{$notice->created|date:'j.n.Y'} - </small><strong>{$notice->caption}</strong></div>{$notice->description}</div>
+                <small class="text-secondary ml-4">{_common.alerts.newsOnTymyFooter} <a href="https://www.tymy.cz/news" target="blank">www.tymy.cz</a></small>
             </div>
         </div>
     </div>
