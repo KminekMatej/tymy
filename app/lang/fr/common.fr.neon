@@ -62,7 +62,7 @@ alerts:
     configSaved: Paramètres sauvegardés
     newsOnTymy: Nouvelles en application Tymy.CZ
     newsOnTymyDescription: Le portail a été mis à jour depuis votre dernière visite. Quelles sont les dernières nouvelles?
-    newsOnTymyFooter: Vous pouvez commander des nouvelles aussi sur %link%
+    newsOnTymyFooter: Vous pouvez commander des nouvelles aussi sur
 months:
     january: Janvier
     february: Février

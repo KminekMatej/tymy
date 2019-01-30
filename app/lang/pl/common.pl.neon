@@ -62,7 +62,7 @@ alerts:
     configSaved: Ustawienia zapisane
     newsOnTymy: Aktualności na portalu Tymy.CZ
     newsOnTymyDescription: Portal został uaktualniony od czasu Twojej ostatniej wizyty. Jakie są najnowsze aktualności?
-    newsOnTymyFooter: Możesz sprawdzić aktualności również na %link%
+    newsOnTymyFooter: Możesz sprawdzić aktualności również na
 months:
     january: Styczeń    
     february: Luty

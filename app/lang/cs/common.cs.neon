@@ -62,7 +62,7 @@ alerts:
     configSaved: Nastavení bylo uloženo
     newsOnTymy: Novinky v aplikaci Tymy.CZ
     newsOnTymyDescription: Aplikace byla od Vašeho posledního přihlášení upgradována. Co je nového?
-    newsOnTymyFooter: Přehled novinek zároveň naleznete na %link%
+    newsOnTymyFooter: Přehled novinek zároveň naleznete na
 months:
     january: Leden
     february: Únor
