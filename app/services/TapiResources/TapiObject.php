@@ -95,9 +95,6 @@ abstract class TapiObject {
     /** @var Nette\Caching\Cache */
     protected $cache;
     
-    /** @var String */
-    private $cacheUserTag;
-    
     /** @var NewMemcachedStorage */
     protected $cacheStorage;
     
@@ -129,7 +126,6 @@ abstract class TapiObject {
         $this->method = RequestMethod::GET;
         $this->options = new stdClass();
         $this->options->warnings = 0;
-        $this->cacheUserTag = $this->supplier->getTym() . "@" . $this->user->getId();
         $this->init();
     }
     
@@ -160,7 +156,7 @@ abstract class TapiObject {
     }
 
     public function getCacheUserTag() {
-        return $this->cacheUserTag;
+        return $this->supplier->getTym() . "@" . $this->user->getId();
     }
 
         /**
