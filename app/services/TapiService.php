@@ -1,16 +1,17 @@
 <?php
 
 namespace Tapi;
-use Nette\Utils\JsonException;
+
+use App\Model\Supplier;
+use App\Model\TapiAuthenticator;
 use Nette\Security\User;
+use Nette\Utils\Json;
+use Nette\Utils\JsonException;
 use Tapi\Exception\APIAuthenticationException;
 use Tapi\Exception\APIException;
 use Tapi\Exception\APINotFoundException;
-use App\Model\TapiAuthenticator;
-use Tracy\Debugger;
-use Nette\Utils\Json;
 use Tapi\TracyTapiPanel;
-use App\Model\Supplier;
+use Tracy\Debugger;
 
 /**
  * Project: tymy_v2
@@ -77,7 +78,7 @@ class TapiService {
     }
     
     /**
-     * @param \Tapi\TapiObject $tapiObject Object to perform request on
+     * @param TapiObject $tapiObject Object to perform request on
      * @throws APIException
      * @throws APIAuthenticationException
      * @return ResultStatus or NULL on failure;
@@ -89,7 +90,7 @@ class TapiService {
     }
     
     /**
-     * @param \Tapi\TapiObject $tapiObject Object to perform request on
+     * @param TapiObject $tapiObject Object to perform request on
      * @throws APIException
      * @throws APIAuthenticationException
      * @return ResultStatus or NULL on failure;
@@ -141,15 +142,14 @@ class TapiService {
         Debugger::timer("tapi-request $objectHash");
         
         curl_setopt($this->curl, CURLOPT_URL, $this->url);
+        curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, $this->tapiObject->getMethod());
         
         $formattedData = NULL;
-        if ($this->tapiObject->getMethod() != RequestMethod::GET) {
-            curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, $this->tapiObject->getMethod());
-            if ($this->tapiObject->getRequestData()) {
-                curl_setopt($this->curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-                $formattedData = $this->tapiObject->getJsonEncoding() ? json_encode($this->tapiObject->getRequestData()) : $this->tapiObject->getRequestData();
-                curl_setopt($this->curl, CURLOPT_POSTFIELDS, $formattedData);
-            }
+        
+        if ($this->tapiObject->getMethod() != RequestMethod::GET && $this->tapiObject->getRequestData()) {
+            curl_setopt($this->curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+            $formattedData = $this->tapiObject->getJsonEncoding() ? json_encode($this->tapiObject->getRequestData()) : $this->tapiObject->getRequestData();
+            curl_setopt($this->curl, CURLOPT_POSTFIELDS, $formattedData);
         }
         $result = ["data" => curl_exec($this->curl), "info" => curl_getinfo($this->curl)];
         if(curl_error($this->curl)) $result["error"] = curl_errno($this->curl) . ": " . curl_error($this->curl);
@@ -167,10 +167,11 @@ class TapiService {
             $resultStatus = new ResultStatus(Json::decode($curl_data));
         } catch (JsonException $exc) {
             if (!Debugger::$productionMode) {
-                Debugger::barDump($curl_info);
-                Debugger::barDump($this->url);
-                Debugger::barDump($this->tapiObject->getMethod());
-                Debugger::barDump($this->tapiObject->getRequestData());
+                Debugger::barDump($curl_data, "Response");
+                Debugger::barDump($curl_info, "CURL_info");
+                Debugger::barDump($this->url, "Url");
+                Debugger::barDump($this->tapiObject->getMethod(), "Method");
+                Debugger::barDump($this->tapiObject->getRequestData(), "Request data");
             }
             throw new APINotFoundException("Request " . $this->url . " [" . $this->tapiObject->getMethod() . "] failed with error " . $curl_info["http_code"] . ". JSON parsing error: " . $exc->getMessage());
         }
