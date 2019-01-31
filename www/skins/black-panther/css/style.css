@@ -186,6 +186,14 @@ NAV.navbar .badge-new{
     overflow-x: hidden;
 }
 
+IMG.skin-logo{
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    max-width: 250px;
+}
+
+
 /*NAVBAR = NAVBAR-LIGHT + bg-dark combined*/
 
 .navbar {
