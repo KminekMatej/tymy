@@ -198,6 +198,7 @@ IMG.skin-logo{
 
 .navbar {
     background-color: #f8f9fa !important;
+    box-shadow: 0 0 20px 0 rgba(255, 255, 255, 0.2), 0 3px 3px 0 rgba(255, 255, 255, 0.24);
 }
 
 .navbar .navbar-brand {
