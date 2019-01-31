@@ -60,7 +60,7 @@ class HomepagePresenter extends SecuredPresenter {
             $this->template->liveUsers = $this->live->init()->getData();
             $this->template->discussions = $this->discussionList->init()->getData();
             $this->template->users = $this->sortUsersByLastLogin($this->userList->init()->getData());
-            $this->template->notices = $this->newsResource->getData();
+            $this->template->notices = $this->newsResource->init()->getData();
         } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
