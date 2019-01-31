@@ -95,6 +95,9 @@ abstract class TapiObject {
     /** @var Nette\Caching\Cache */
     protected $cache;
     
+    /** @var String */
+    private $cacheUserTag;
+    
     /** @var NewMemcachedStorage */
     protected $cacheStorage;
     
@@ -126,6 +129,7 @@ abstract class TapiObject {
         $this->method = RequestMethod::GET;
         $this->options = new stdClass();
         $this->options->warnings = 0;
+        $this->cacheUserTag = $this->supplier->getTym() . "@" . $this->user->getId();
         $this->init();
     }
     
@@ -133,15 +137,15 @@ abstract class TapiObject {
         if (!$this->dataReady || !$this->cacheable)
             return null;
         $key = $this->getCacheKey();
-        $save = $this->cache->save($key, ["data" => $this->data, "options" => $this->options], [Cache::EXPIRE => $this->cachingTimeout . ' seconds', Cache::TAGS => [$this->getCacheTag(), $this->supplier->getTym() . "@" . $this->user->getId()]]);
+        $save = $this->cache->save($key, ["data" => $this->data, "options" => $this->options], [Cache::EXPIRE => $this->cachingTimeout . ' seconds', Cache::TAGS => [$this->getCacheObjectTag(), $this->getCacheUserTag()]]);
         $allKeys = $this->cache->load("allkeys");
         $allKeys[$key] = $key;
         
-        $this->cache->save("allkeys", $allKeys, [Cache::EXPIRE => '30 minutes']);
+        $this->cache->save("allkeys", $allKeys, [Cache::EXPIRE => self::CACHE_TIMEOUT_DAY . ' seconds']);
     }
     
     public function cleanCache(){
-        $this->cache->clean([Cache::TAGS => $this->supplier->getTym() . "@" . $this->user->getId()]);
+        $this->cache->clean([Cache::TAGS => [$this->getCacheUserTag()]]);
         return $this;
     }
     
@@ -155,7 +159,11 @@ abstract class TapiObject {
         }
     }
 
-    /**
+    public function getCacheUserTag() {
+        return $this->cacheUserTag;
+    }
+
+        /**
      * @param type $relogin
      * @return ResultStatus
      * @throws APIException
@@ -270,7 +278,7 @@ abstract class TapiObject {
         return $this;
     }
     
-    protected function getCacheTag(){
+    protected function getCacheObjectTag(){
         return $this->supplier->getTym() . "@" . $this->getMethod() . ":" . $this->getUrl();
     }
     
@@ -278,7 +286,7 @@ abstract class TapiObject {
         if($this->getUrl() == NULL) throw new APIException("No url to save");
         $key = $this->user->getId() . ":";
         if(!is_null($key_override)) $key .= $key_override;
-        else $key .= $this->getCacheTag() . ($this->requestParameters ? "?" . http_build_query($this->requestParameters) : "");
+        else $key .= $this->getCacheObjectTag() . ($this->requestParameters ? "?" . http_build_query($this->requestParameters) : "");
         return $key;
     }
 
