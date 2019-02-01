@@ -184,7 +184,7 @@ NAV.navbar .badge-new{
 }
 
 IMG.skin-logo{
-    position: absolute;
+    position: fixed;
     bottom: 0px;
     right: 0px;
     max-width: 250px;
