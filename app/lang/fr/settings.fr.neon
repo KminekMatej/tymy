@@ -3,6 +3,7 @@ setting: Paramètres | Paramètres
 cacheDrop: Effacer le cache
 cacheDropped: Cache effacé
 appSettings: "Paramètres de l'application"
+teamSettings: Paramètres de équipe
 appVersion: "Version de l'application"
 released: Délivré
 changeList: Liste des modifications

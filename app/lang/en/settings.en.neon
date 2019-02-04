@@ -3,6 +3,7 @@ setting: Setting|Settings
 cacheDrop: Clear cache
 cacheDropped: Cache cleared
 appSettings: Application settings
+teamSettings: Team settings
 appVersion: Application version
 released: Released
 changeList: Change list
