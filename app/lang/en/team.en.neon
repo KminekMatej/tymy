@@ -53,6 +53,7 @@ nobodyIsOnline: Nobody online
 administrator: Administrator
 userAdmin: User manager
 attendanceAdmin: Event manager
+requiredFields: Required user fields
 errors:
     imgFileCorrupted: "File is not a pictute, or is corrupted"
 alerts:

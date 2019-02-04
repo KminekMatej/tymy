@@ -4,6 +4,16 @@
 {control navbar}
 {/block}
 
+{block styles}
+{include parent}
+<link rel="stylesheet" href="{$basePath}/resources/bootstrap4-multiselect/css/BsMultiSelect.{$css}" />
+{/block}
+
+{block scripts}
+{include parent}
+<script src="{$basePath}/resources/bootstrap4-multiselect/js/BsMultiSelect.{$js}"></script>
+{/block}
+
 {block content}
 <div class="container settings">
      
@@ -17,6 +27,9 @@
                 <div class="card-body">
                     <table class="table">
                         <tr><th>{label skin}:</th><td>{input skin, class => 'form-control w-25'}</td></tr>
+                        <tr><th>{label requiredFields}:</th><td>{input requiredFields, class => 'form-control w-50'}</td></tr>
+                        
+                        
                     </table>
                 </div>
                 <div class="card-footer text-right">

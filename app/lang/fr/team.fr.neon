@@ -53,6 +53,7 @@ nobodyIsOnline: "Personne n'est en ligne"
 administrator: Administrateur
 userAdmin: "Gestionnaire d'utilisateurs"
 attendanceAdmin: Gestionnaire de présence
+requiredFields: Champs obligatoires
 errors:
     imgFileCorrupted: "Le fichier n'est pas une image ou il est endommagé"
 alerts:

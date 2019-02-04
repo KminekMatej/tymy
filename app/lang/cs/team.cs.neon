@@ -53,6 +53,7 @@ nobodyIsOnline: Nikdo není online
 administrator: Administrátor
 userAdmin: Správce uživatelů
 attendanceAdmin: Správce docházky
+requiredFields: Povinná pole u uživatele
 errors:
     imgFileCorrupted: "Soubor není obrázek, nebo je poškozený"
 alerts:

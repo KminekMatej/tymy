@@ -53,6 +53,7 @@ nobodyIsOnline: Nikt nie jest online
 administrator: Administrator
 userAdmin: Moderator użytkowników
 attendanceAdmin: Moderator obecności
+requiredFields: Wymagane pola
 errors:
     imgFileCorrupted: "Plik nie jest obrazkiem, lub jest uszkodzony"
 alerts:

@@ -775,13 +775,15 @@ class SettingsPresenter extends SecuredPresenter {
         $teamNeon = $this->supplier->getTeamNeon();
         $form = new Form();
         $form->addSelect("skin", "Skin", $this->supplier->getAllSkins())->setValue($teamNeon->skin);
+        $form->addMultiSelect("requiredFields", $this->translator->translate("team.requiredFields"), \Tapi\UserResource::getAllFields($this->translator)["ALL"])->setValue($teamNeon->userRequiredFields);
         $form->addSubmit("save");
         $form->onSuccess[] = function (Form $form, stdClass $values) {
             $teamNeon = $this->supplier->getTeamNeon();
             $teamNeon->skin = $values->skin;
+            $teamNeon->userRequiredFields = $values->requiredFields;
             $this->supplier->saveTeamNeon((array)$teamNeon);
             $this->flashMessage($this->translator->translate("common.alerts.configSaved"));
-            $this->redirect("Settings:app");
+            $this->redirect("Settings:team");
         };
         return $form;
     }
