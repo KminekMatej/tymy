@@ -20,29 +20,29 @@ profilePhoto: Zdjęcie
 male: Mężczyzna|Mężczyźni
 female: Kobieta|Kobiety
 unknownSex: Niepodano płci
-sex: Płeć
+gender: Płeć
 chooseSex: Wybierz płeć
 firstname: Imię
-surname: Nazwisko
+lastName: Nazwisko
 phone: Telefon
 email: E-mail
-dateOfBirth: Data urodzenia
-namedayMonth: Miesiąc imienin
+birthDate: Data urodzenia
+nameDayMonth: Miesiąc imienin
 chooseMonth: Wybierz miesiąc
-namedayDay: Dzień imienin
+nameDayDay: Dzień imienin
 language: Język
 dateOfRegistration: Zarejestrowany
-displayedName: Nick
-displayedNameUserEditable: Użytkownik może edytować
-username: Nazwa użytkownika
-newPassword: Nowe hasło
+callName: Nick
+canEditCallName: Użytkownik może edytować
+login: Nazwa użytkownika
+password: Nowe hasło
 newPasswordAgain: Powtórz nowe hasło
-loginEnabled: Użytkownik może się logować
+canLogin: Użytkownik może się logować
 status: Status drużynowy
 jerseyNumber: Numer stroju
 street: Ulica
 city: Miasto
-postal: Kod pocztowy
+zipCode: Kod pocztowy
 hasNamedayToday: %name% obchodzi imieniny
 hasBirthdayToday: %name% obchodzi %year% urodziny
 hasNamedayTommorow: %name% obchodzi jutro imieniny

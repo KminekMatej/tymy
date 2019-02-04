@@ -20,29 +20,29 @@ profilePhoto: Photo de profil
 male: Homme|Hommes
 female: Femme|Femmes
 unknownSex: Inconnu
-sex: Genre
+gender: Genre
 chooseSex: Choisir le genre
-firstname: Prénom
-surname: Nom de famille
+firstName: Prénom
+lastName: Nom de famille
 phone: Téléphone
 email: E-mail
-dateOfBirth: Date de naissance
-namedayMonth: Mois de la fête
+birthDate: Date de naissance
+nameDayMonth: Mois de la fête
 chooseMonth: Choisir le mois
-namedayDay: Jour de la fête
+nameDayDay: Jour de la fête
 language: Langue
 dateOfRegistration: "Jour d'enregistrement"
-displayedName: Nom à afficher
-displayedNameUserEditable: "Nom à afficher éditable par l'utilisateur"
-username: "Nom d'utilisateur"
-newPassword: Nouveau mot de passe
+callName: Nom à afficher
+canEditCallName: "Nom à afficher éditable par l'utilisateur"
+login: "Nom d'utilisateur"
+password: Nouveau mot de passe
 newPasswordAgain: Ressaisissez le nouveau mot de passe
-loginEnabled: Connexion activée
+canLogin: Connexion activée
 status: "Statut de l'équipe"
 jerseyNumber: Numéro de maillot
 street: Rue
 city: Ville
-postal: Code postal
+zipCode: Code postal
 hasNamedayToday: "%nom% a sa fête aujourd'hui"
 hasBirthdayToday: "%nom% fête aujourd'hui ses %age% ans"
 hasNamedayTommorow: %nom% a sa fête demain

@@ -12,6 +12,11 @@ use Nette\Caching\Cache;
  */
 abstract class UserResource extends TapiObject{
     
+    const FIELDS_PERSONAL = ["gender", "firstName", "lastName", "phone", "email", "birthDate", "nameDayMonth", "nameDayDay", "language"];
+    const FIELDS_LOGIN = ["callName", "canEditCallName", "login", "password", "canLogin"];
+    const FIELDS_TEAMINFO = ["status", "jerseyNumber"];
+    const FIELDS_ADDRESS = ["street", "city", "zipCode"];
+
     protected function postProcessSimpleUser($user){
         if($user == null) TapiService::throwNotFound();
         $user->webName = (string)$user->id;
@@ -82,5 +87,14 @@ abstract class UserResource extends TapiObject{
             $player->errCnt++;
             $player->errFls[] = "status";
         }
+    }
+    
+    public static function getAllFields(\Nette\Localization\ITranslator $translator){
+        $ret = [];
+        $allFields = array_merge(self::FIELDS_PERSONAL, self::FIELDS_LOGIN, self::FIELDS_TEAMINFO, self::FIELDS_ADDRESS);
+        foreach ($allFields as $field) {
+            $ret[$field] = $translator->translate("team.".$field);
+        }
+        return $ret;
     }
 }

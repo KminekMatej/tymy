@@ -20,29 +20,29 @@ profilePhoto: Avatar
 male: Man|Men
 female: Woman|Women
 unknownSex: Unknown
-sex: Sex
+gender: Sex
 chooseSex: Choose sex
-firstname: Name
-surname: Surname
+firstName: Name
+lastName: Surname
 phone: Phone
 email: E-mail
-dateOfBirth: Date of birth
-namedayMonth: Month of nameday
+birthDate: Date of birth
+nameDayMonth: Month of nameday
 chooseMonth: Pick month
-namedayDay: Day of nameday
+nameDayDay: Day of nameday
 language: Language
 dateOfRegistration: Registered
-displayedName: Displayed name
-displayedNameUserEditable: User editable
-username: Username
-newPassword: New password
+callName: Displayed name
+canEditCallName: User editable
+login: Username
+password: New password
 newPasswordAgain: New password again
-loginEnabled: Login approved
+canLogin: Login approved
 status: Team state
 jerseyNumber: Jersey number
 street: Street
 city: City
-postal: Postal
+zipCode: Postal
 hasNamedayToday: %name% celebrates his nameday today
 hasBirthdayToday: %name% celebrates his %year% birthday today
 hasNamedayTommorow: %name% celebrates his nameday tommorow

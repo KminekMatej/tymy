@@ -20,29 +20,29 @@ profilePhoto: Profilovka
 male: Muž|Muži
 female: Žena|Ženy
 unknownSex: Nezadáno
-sex: Pohlaví
+gender: Pohlaví
 chooseSex: Vyberte pohlaví
-firstname: Jméno
-surname: Příjmení
+firstName: Jméno
+lastName: Příjmení
 phone: Telefon
 email: E-mail
-dateOfBirth: Datum narození
-namedayMonth: Měsíc svátku
+birthDate: Datum narození
+nameDayMonth: Měsíc svátku
 chooseMonth: Vyberte měsíc
-namedayDay: Den svátku
+nameDayDay: Den svátku
 language: Jazyk
 dateOfRegistration: Registrován
-displayedName: Zobrazované jméno
-displayedNameUserEditable: Editovatelné uživatelem
-username: Uživatelské jméno
-newPassword: Nové heslo
+callName: Zobrazované jméno
+canEditCallName: Editovatelné uživatelem
+login: Uživatelské jméno
+password: Nové heslo
 newPasswordAgain: Nové heslo znovu
-loginEnabled: Přihlášení povoleno
+canLogin: Přihlášení povoleno
 status: Týmový stav
 jerseyNumber: Číslo dresu
 street: Ulice
 city: Město
-postal: PSČ
+zipCode: PSČ
 hasNamedayToday: %name% slaví dnes svátek
 hasBirthdayToday: %name% slaví dnes %year% narozeniny
 hasNamedayTommorow: %name% slaví zítra svátek
