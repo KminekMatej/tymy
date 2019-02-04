@@ -67,6 +67,11 @@ class Supplier {
         file_put_contents($userNeon, Neon::encode($neonArray));
     }
     
+    public function saveTeamNeon($neonArray){
+        $teamNeon = $this->getTeamNeonFile();
+        file_put_contents($teamNeon, Neon::encode($neonArray));
+    }
+    
     public function setTapi_config($tapi_config) {
         $this->tapi_config = $tapi_config;
         $this->setTym($tapi_config['tym']);
@@ -216,5 +221,9 @@ class Supplier {
 
     private function getUserNeonFile($userId){
         return $this->getTeamNeonDir() . "/config.user.$userId.neon";
+    }
+    
+    private function getTeamNeonFile(){
+        return $this->getTeamNeonDir() . "/config.team.neon";
     }
 }
