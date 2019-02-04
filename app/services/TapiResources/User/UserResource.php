@@ -91,10 +91,31 @@ abstract class UserResource extends TapiObject{
     
     public static function getAllFields(\Nette\Localization\ITranslator $translator){
         $ret = [];
-        $allFields = array_merge(self::FIELDS_PERSONAL, self::FIELDS_LOGIN, self::FIELDS_TEAMINFO, self::FIELDS_ADDRESS);
-        foreach ($allFields as $field) {
-            $ret[$field] = $translator->translate("team.".$field);
-        }
+        $ret["PERSONAL"] = [];
+        $ret["LOGIN"] = [];
+        $ret["TEAMINFO"] = [];
+        $ret["ADDRESS"] = [];
+        $ret["ALL"] = [];
+        foreach (self::FIELDS_PERSONAL as $field){
+            $caption = $translator->translate("team.".$field);
+            $ret["PERSONAL"][$field] = $caption;
+            $ret["ALL"][$field] = $caption;
+        } 
+        foreach (self::FIELDS_LOGIN as $field){
+            $caption = $translator->translate("team.".$field);
+            $ret["LOGIN"][$field] = $translator->translate("team.".$field);
+            $ret["ALL"][$field] = $caption;
+        } 
+        foreach (self::FIELDS_TEAMINFO as $field){
+            $caption = $translator->translate("team.".$field);
+            $ret["TEAMINFO"][$field] = $translator->translate("team.".$field);
+            $ret["ALL"][$field] = $caption;
+        } 
+        foreach (self::FIELDS_ADDRESS as $field){
+            $caption = $translator->translate("team.".$field);
+            $ret["ADDRESS"][$field] = $translator->translate("team.".$field);
+            $ret["ALL"][$field] = $caption;
+        } 
         return $ret;
     }
 }
