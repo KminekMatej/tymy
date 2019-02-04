@@ -201,7 +201,7 @@ class SecuredPresenter extends BasePresenter {
         if($this->getUser()->isAllowed('discussion','setup')) $this->accessibleSettings[] = new SettingMenu("discussions", $this->translator->translate("discussion.discussion", 2), $this->link("Settings:discussions"), "fa-comments", TRUE);
         if($this->getUser()->isAllowed('event','canUpdate')) $this->accessibleSettings[] = new SettingMenu("events", $this->translator->translate("event.event", 2), $this->link("Settings:events"), "fa-calendar", TRUE);
         //TO BE ENABLED WHEN ITS READY
-        if($this->getUser()->isAllowed('team','canSetup')) $this->accessibleSettings[] = new SettingMenu("team", $this->translator->translate("team.team", 1), $this->link("Settings:team"), "fa-users", FALSE);
+        if($this->getUser()->isAllowed('team','canSetup')) $this->accessibleSettings[] = new SettingMenu("team", $this->translator->translate("team.team", 1), $this->link("Settings:team"), "fa-users", TRUE);
         // TO BE ENABLED WHEN ITS READY
         if($this->getUser()->isAllowed('poll','canUpdatePoll')) $this->accessibleSettings[] = new SettingMenu("polls", $this->translator->translate("poll.poll", 2), $this->link("Settings:polls"), "fa-chart-pie", TRUE);
         $this->accessibleSettings[] = new SettingMenu("notes", $this->translator->translate("note.note", 2), $this->link("Settings:notes"), "fa-sticky-note", TRUE); //user can always manage at least his own notes

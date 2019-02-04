@@ -5,7 +5,25 @@
 {/block}
 
 {block content}
-
 <div class="container settings">
-    <h4>{_settings.}Nastavení:TÝM - TODO</h4>
+     
+    <div class="row">
+        <div class="col">
+            <div class="card sh-box my-2">
+                {form teamConfigForm}
+                <div class="card-header">
+                    <h4>{_settings.teamSettings}</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <tr><th>{label skin}:</th><td>{input skin, class => 'form-control w-25'}</td></tr>
+                    </table>
+                </div>
+                <div class="card-footer text-right">
+                    <button n:name="save" class="btn btn-lg btn-outline-primary" title="{_common.save}" onclick="return $(this).find('svg[data-fa-i2svg]').addClass('fa-spin')"><i class="fa fa-save" aria-hidden="true"></i></button>
+                </div>
+                {/form}
+            </div>
+        </div>
+    </div>
 </div>

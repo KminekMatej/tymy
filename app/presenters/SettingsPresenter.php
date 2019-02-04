@@ -770,4 +770,19 @@ class SettingsPresenter extends SecuredPresenter {
         };
         return $form;
     }
+    
+    public function createComponentTeamConfigForm(){
+        $teamNeon = $this->supplier->getTeamNeon();
+        $form = new Form();
+        $form->addSelect("skin", "Skin", $this->supplier->getAllSkins())->setValue($teamNeon->skin);
+        $form->addSubmit("save");
+        $form->onSuccess[] = function (Form $form, stdClass $values) {
+            $teamNeon = $this->supplier->getTeamNeon();
+            $teamNeon->skin = $values->skin;
+            $this->supplier->saveTeamNeon((array)$teamNeon);
+            $this->flashMessage($this->translator->translate("common.alerts.configSaved"));
+            $this->redirect("Settings:app");
+        };
+        return $form;
+    }
 }
