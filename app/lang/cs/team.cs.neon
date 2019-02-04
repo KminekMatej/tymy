@@ -54,6 +54,7 @@ administrator: Administrátor
 userAdmin: Správce uživatelů
 attendanceAdmin: Správce docházky
 requiredFields: Povinná pole u uživatele
+defaultSkin: Výchozí skin
 errors:
     imgFileCorrupted: "Soubor není obrázek, nebo je poškozený"
 alerts:

@@ -7,11 +7,13 @@
 {block styles}
 {include parent}
 <link rel="stylesheet" href="{$basePath}/resources/bootstrap4-multiselect/css/BsMultiSelect.{$css}" />
+<link rel="stylesheet" href="{$basePath}/resources/colorpicker/css/colorpicker.{$css}" />
 {/block}
 
 {block scripts}
 {include parent}
 <script src="{$basePath}/resources/bootstrap4-multiselect/js/BsMultiSelect.{$js}"></script>
+<script src="{$basePath}/resources/colorpicker/js/colorpicker.js"></script>
 {/block}
 
 {block content}
@@ -28,8 +30,13 @@
                     <table class="table">
                         <tr><th>{label skin}:</th><td>{input skin, class => 'form-control w-25'}</td></tr>
                         <tr><th>{label requiredFields}:</th><td>{input requiredFields, class => 'form-control w-50'}</td></tr>
-                        
-                        
+                        <tr><th>Barvy událostí:</th>
+                            <td>
+                                {foreach $eventTypes as $eventType}
+                                    {label 'eventColor_' . $eventType->code}{input 'eventColor_' . $eventType->code, class => 'form-control w-50'}
+                                {/foreach}
+                            </td>
+                        </tr>
                     </table>
                 </div>
                 <div class="card-footer text-right">

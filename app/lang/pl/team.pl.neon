@@ -54,6 +54,7 @@ administrator: Administrator
 userAdmin: Moderator użytkowników
 attendanceAdmin: Moderator obecności
 requiredFields: Wymagane pola
+defaultSkin: Domyślny skin
 errors:
     imgFileCorrupted: "Plik nie jest obrazkiem, lub jest uszkodzony"
 alerts:

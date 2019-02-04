@@ -112,8 +112,13 @@ class SettingsPresenter extends SecuredPresenter {
             return $color[$type];
         });
     }
+    
+    public function beforeRender() {
+        parent::beforeRender();
+        $this->template->eventTypes = $this->eventTypeList->init()->getData();
+    }
 
-    public function actionDiscussions($discussion = NULL) {
+        public function actionDiscussions($discussion = NULL) {
         $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("discussion.discussion", 2), "link" => $this->link("Settings:discussions")]]);
         if(!is_null($discussion)){
             $this->setView("discussion");
@@ -315,7 +320,6 @@ class SettingsPresenter extends SecuredPresenter {
             "link" => "",
         ]];
         $this->template->events = $events;
-        $this->template->eventTypes = $this->eventTypeList->init()->getData();
         
         $this->setView("events");
     }
@@ -332,7 +336,6 @@ class SettingsPresenter extends SecuredPresenter {
 
         $this->setLevelCaptions(["3" => ["caption" => $eventObj->caption, "link" => $this->link("Settings:events", $eventObj->webName)]]);
         $this->template->event = $eventObj;
-        $this->template->eventTypes = $this->eventTypeList->init()->getData();
     }
     
     public function renderNote_new() {
@@ -773,17 +776,34 @@ class SettingsPresenter extends SecuredPresenter {
     
     public function createComponentTeamConfigForm(){
         $teamNeon = $this->supplier->getTeamNeon();
+        $eventTypes = $this->eventTypeList->init()->getData();
+        
         $form = new Form();
-        $form->addSelect("skin", "Skin", $this->supplier->getAllSkins())->setValue($teamNeon->skin);
+        $form->addSelect("skin", $this->translator->translate("team.defaultSkin"), $this->supplier->getAllSkins())->setValue($teamNeon->skin);
         $form->addMultiSelect("requiredFields", $this->translator->translate("team.requiredFields"), \Tapi\UserResource::getAllFields($this->translator)["ALL"])->setValue($teamNeon->userRequiredFields);
+        
+        foreach ($eventTypes as $etype) {
+            $color = isset($teamNeon->event_colors[$etype->code]) ? $teamNeon->event_colors[$etype->code] : "#bababa";
+            $form->addText("eventColor_" . $etype->code, $etype->caption)->setAttribute("data-toggle", "colorpicker")->setAttribute("data-color",$color)->setValue($color);
+        }
+        
         $form->addSubmit("save");
         $form->onSuccess[] = function (Form $form, stdClass $values) {
+            \Tracy\Debugger::barDump($values, "vals");
             $teamNeon = $this->supplier->getTeamNeon();
             $teamNeon->skin = $values->skin;
             $teamNeon->userRequiredFields = $values->requiredFields;
+            $eventColors = [];
+            foreach ((array)$values as $name => $value) {
+                $valData = explode("_", $name);
+                if($valData[0] == "eventColor"){
+                    $eventColors[$valData[1]] = $value;
+                }
+            }
+            \Tracy\Debugger::barDump($eventColors, "event colors");
             $this->supplier->saveTeamNeon((array)$teamNeon);
             $this->flashMessage($this->translator->translate("common.alerts.configSaved"));
-            $this->redirect("Settings:team");
+            //$this->redirect("Settings:team");
         };
         return $form;
     }

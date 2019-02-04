@@ -30,7 +30,7 @@
 		"nette/security": "^2.4",
 		"nette/utils": "^2.4",
 		"latte/latte": "^2.4",
-		"tracy/tracy": "2.5.3",
+		"tracy/tracy": "^2.5",
 		"nette/php-generator": "v2.6.4",
 		"nette/nette": "^2.4",
 		"kdyby/translation": "^2.5",

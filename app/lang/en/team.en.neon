@@ -54,6 +54,7 @@ administrator: Administrator
 userAdmin: User manager
 attendanceAdmin: Event manager
 requiredFields: Required user fields
+defaultSkin: Default skin
 errors:
     imgFileCorrupted: "File is not a pictute, or is corrupted"
 alerts:

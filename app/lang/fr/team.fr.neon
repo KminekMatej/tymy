@@ -54,6 +54,7 @@ administrator: Administrateur
 userAdmin: "Gestionnaire d'utilisateurs"
 attendanceAdmin: Gestionnaire de présence
 requiredFields: Champs obligatoires
+defaultSkin: Peau par défaut
 errors:
     imgFileCorrupted: "Le fichier n'est pas une image ou il est endommagé"
 alerts:
