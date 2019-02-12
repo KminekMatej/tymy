@@ -43,6 +43,7 @@ function Binder (settings) {
     this.isValid = !settings.isValid ? true : settings.isValid;
     this.postProccess = !settings.postProccess ? false : settings.postProccess;
     this.isValidated = false;
+    this.invalidFields = [];
     this.changed = false;
     this.bindChangeEvents();
     this.bindSaveEvent();
@@ -206,7 +207,7 @@ Binder.prototype.save = function (caller) {
     if (typeof this.bind == "undefined")
         throw "Binder performig error - undefined binding object!";
     if (!this.isValidated){
-        alert("Validation failing, saving disabled!");
+        alert("Nelze odeslat - chybně vyplněná pole " + this.invalidFields.join(', ').toUpperCase());
         return false;
     }
     var binderObj = this;
@@ -249,7 +250,7 @@ Binder.prototype.saveAll = function (caller) {
             var binderObj = allBinders[index];
             binderObj.extractBind();
             if (!binderObj.isValidated)
-                throw "Validation failing, saving disabled!";
+                throw "Nelze odeslat - chybně vyplněná pole: " + binderObj.invalidFields.join(', ').toUpperCase();
             if (!($.isEmptyObject(binderObj.bind.changes))) {
                 binderObj.disableSaveButtons(true, true);
                 binderObj.changeSaveButtonClass(true);
@@ -397,6 +398,7 @@ Binder.prototype.getChanges = function () {
     var targets = binderObj.area.find("[" + binderObj.ORIGINAL_VALUE_ATTRIBUTE + "]");
     if (targets.length > 0) {
         this.isValidated = true;
+        this.invalidFields = [];
         targets.each(function () {
             var tagName = $(this).prop("tagName");
             var name = binderObj.parseNameFromElement($(this));
@@ -507,10 +509,10 @@ Binder.prototype.disableBtn = function (btn, disable, spin = false) {
 Binder.prototype.validate = function(element, value2 = null) {
     var binderObj = this;
     var valid = true;
+    var name = binderObj.parseNameFromElement(element);
     if(typeof(binderObj.isValid) == "boolean"){
         valid = binderObj.isValid;
     } else {
-        var name = binderObj.parseNameFromElement(element);
         var value = binderObj.getValue(element);
         valid = binderObj.isValid(name, value, value2);
     }
@@ -518,6 +520,7 @@ Binder.prototype.validate = function(element, value2 = null) {
     if (!valid) {
         this.isValidated = false;
         element.addClass("is-invalid");
+        binderObj.invalidFields.push(name);
     } else {
         element.removeClass("is-invalid");
     }
