@@ -60,6 +60,7 @@ alerts:
     confirmDelete: Opravde chcete tento záznam smazat?
     notPermitted: Nemáte dostatečná práva
     configSaved: Nastavení bylo uloženo
+    avatarSaved: Profilová fotka uložena
     newsOnTymy: Novinky v aplikaci Tymy.CZ
     newsOnTymyDescription: Aplikace byla od Vašeho posledního přihlášení upgradována. Co je nového?
     newsOnTymyFooter: Přehled novinek zároveň naleznete na

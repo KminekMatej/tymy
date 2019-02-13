@@ -1,8 +1,10 @@
 <?php
 
 namespace Tapi;
-use Nette\Utils\Strings;
+
 use Nette\Caching\Cache;
+use Nette\Localization\ITranslator;
+use Nette\Utils\Strings;
 
 /**
  * Project: tymy_v2
@@ -89,7 +91,7 @@ abstract class UserResource extends TapiObject{
         }
     }
     
-    public static function getAllFields(\Nette\Localization\ITranslator $translator){
+    public static function getAllFields(ITranslator $translator){
         $ret = [];
         $ret["PERSONAL"] = [];
         $ret["LOGIN"] = [];

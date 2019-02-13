@@ -44,6 +44,7 @@
         {var $skinLogoFile = "{$wwwDir}/skins/{$skin}/img/skin-logo.png"}
         <img src="{$basePath}/skins/{$skin}/img/skin-logo.png" class="skin-logo" n:if="file_exists($skinLogoFile)">
         {block navbar}{/block}
+        {snippet flashes}
         <div n:if="$flashes" class="container">
             <div n:foreach="$flashes as $flash" class="row">
                 <div class="col">
@@ -52,7 +53,7 @@
                 </div>
             </div>
         </div>
-
+        {/snippet}
         {include content}
 
         {block notes}{/block}

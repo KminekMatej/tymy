@@ -60,6 +60,7 @@ alerts:
     confirmDelete: Vraiment supprimer?
     notPermitted: Permissions insuffisantes
     configSaved: Paramètres sauvegardés
+    avatarSaved: Photo sauvegardés
     newsOnTymy: Nouvelles en application Tymy.CZ
     newsOnTymyDescription: Le portail a été mis à jour depuis votre dernière visite. Quelles sont les dernières nouvelles?
     newsOnTymyFooter: Vous pouvez commander des nouvelles aussi sur

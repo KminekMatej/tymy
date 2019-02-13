@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Presenters;
-use Tapi\UserCreateResource;
-use Tapi\UserEditResource;
-use Tapi\UserDeleteResource;
+
 use Tapi\AvatarUploadResource;
 use Tapi\Exception\APIException;
+use Tapi\UserCreateResource;
+use Tapi\UserDeleteResource;
+use Tapi\UserEditResource;
+use Tapi\UserResource;
 
 class TeamPresenter extends SecuredPresenter {
     
@@ -29,7 +31,7 @@ class TeamPresenter extends SecuredPresenter {
     
     public function beforeRender() {
         parent::beforeRender();
-        $allFields = \Tapi\UserResource::getAllFields($this->translator);
+        $allFields = UserResource::getAllFields($this->translator);
         $this->template->addFilter('errorsCount', function ($player, $tabName) use ($allFields) {
             switch ($tabName) {
                 case "osobni-udaje":
@@ -155,6 +157,10 @@ class TeamPresenter extends SecuredPresenter {
         } catch (APIException $ex) {
             $this->handleTapiException($ex, "this");
         }
+        
+        $this->flashMessage($this->translator->translate("common.alerts.configSaved"), "success");
+        $this->redrawControl("flashes");
+        
         if(array_key_exists("language", $bind["changes"])){
             $this->flashMessage($this->translator->translate("team.alerts.signOffNeeded"), "info");
             $this->redirect('this');
@@ -190,6 +196,9 @@ class TeamPresenter extends SecuredPresenter {
             } catch (APIException $ex) {
                 $this->handleTapiException($ex, "this");
             }
+            
+            $this->flashMessage($this->translator->translate("common.alerts.avatarSaved"), "success");
+            $this->redrawControl("flashes");
         } else {
             $response = $this->getHttpResponse();
             $response->setCode(400);
