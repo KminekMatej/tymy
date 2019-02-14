@@ -24,7 +24,7 @@
     <div class="row">
         <div class="col my-3">
             <div class="card sh-box" data-binder-id="{$player->id}">
-                <div class="card-header">
+                <div class="card-header" n:snippet="player-header">
                     <ul class="nav nav-tabs flex-column flex-sm-row card-header-tabs">
                         <li class="nav-item">
                             {var $cnt = ($player,'osobni-udaje'|errorsCount)}
