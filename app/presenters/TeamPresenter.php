@@ -160,6 +160,7 @@ class TeamPresenter extends SecuredPresenter {
         
         $this->flashMessage($this->translator->translate("common.alerts.configSaved"), "success");
         $this->redrawControl("flashes");
+        $this['navbar']->redrawControl("nav");
         
         if(array_key_exists("language", $bind["changes"])){
             $this->flashMessage($this->translator->translate("team.alerts.signOffNeeded"), "info");
@@ -199,6 +200,7 @@ class TeamPresenter extends SecuredPresenter {
             
             $this->flashMessage($this->translator->translate("common.alerts.avatarSaved"), "success");
             $this->redrawControl("flashes");
+            $this['navbar']->redrawControl("nav");
         } else {
             $response = $this->getHttpResponse();
             $response->setCode(400);
