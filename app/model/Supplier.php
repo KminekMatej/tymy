@@ -70,6 +70,7 @@ class Supplier {
     public function saveTeamNeon($neonArray){
         $teamNeon = $this->getTeamNeonFile();
         file_put_contents($teamNeon, Neon::encode($neonArray, Neon::BLOCK));
+        $this->loadTeamNeon();
     }
     
     public function setTapi_config($tapi_config) {

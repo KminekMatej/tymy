@@ -784,12 +784,12 @@ class SettingsPresenter extends SecuredPresenter {
         
         foreach ($eventTypes as $etype) {
             $color = isset($teamNeon->event_colors[$etype->code]) ? $teamNeon->event_colors[$etype->code] : "#bababa";
+            
             $form->addText("eventColor_" . $etype->code, $etype->caption)->setAttribute("data-toggle", "colorpicker")->setAttribute("data-color",$color)->setValue($color);
         }
         
         $form->addSubmit("save");
         $form->onSuccess[] = function (Form $form, stdClass $values) {
-            \Tracy\Debugger::barDump($values, "vals");
             $teamNeon = $this->supplier->getTeamNeon();
             $teamNeon->skin = $values->skin;
             $teamNeon->userRequiredFields = $values->requiredFields;
@@ -800,10 +800,10 @@ class SettingsPresenter extends SecuredPresenter {
                     $eventColors[$valData[1]] = $value;
                 }
             }
-            \Tracy\Debugger::barDump($eventColors, "event colors");
+            $teamNeon->event_colors = $eventColors;
             $this->supplier->saveTeamNeon((array)$teamNeon);
             $this->flashMessage($this->translator->translate("common.alerts.configSaved"));
-            //$this->redirect("Settings:team");
+            $this->redirect("Settings:team");
         };
         return $form;
     }
