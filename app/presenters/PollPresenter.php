@@ -72,6 +72,7 @@ class PollPresenter extends SecuredPresenter {
             }
         }
         $this->redrawControl("poll-results");
+        $this->redrawNavbar();
         try {
             $this->pollVoter->init()->setId($pollId)->setVotes($votes)->perform();
         } catch (APIException $ex) {

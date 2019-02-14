@@ -152,6 +152,7 @@ class EventPresenter extends SecuredPresenter {
         if ($this->isAjax()) {
             $this->redrawControl("attendanceWarning");
             $this->redrawControl("attendanceTabs");
+            $this->redrawNavbar();
         }
     }
     
@@ -167,6 +168,7 @@ class EventPresenter extends SecuredPresenter {
         }
         if ($this->isAjax()) {
             $this->redrawControl("attendanceTabs");
+            $this->redrawNavbar();
         }
     }
 
@@ -176,7 +178,6 @@ class EventPresenter extends SecuredPresenter {
 
     public function handleLoadHistory($udalost){
         $eventId = $this->parseIdFromWebname($udalost);
-        \Tracy\Debugger::barDump($udalost);
         $this->loadEventHistory($eventId);
         $this->redrawControl("history");
         $this->redrawControl("historyBtn");

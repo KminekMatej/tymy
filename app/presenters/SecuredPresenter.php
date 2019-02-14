@@ -273,4 +273,8 @@ class SecuredPresenter extends BasePresenter {
         $allRoles[] = (object) ["code" => "ATT", "caption" => $this->translator->translate("team.attendanceAdmin"), "class" => $this->supplier->getRoleClass("ATT")];
         return $allRoles;
     }
+    
+    protected function redrawNavbar(){
+        $this['navbar']->redrawControl("nav");
+    }
 }
