@@ -1,11 +1,5 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace App\Model;
 
 use Nette\Neon\Neon;
@@ -70,7 +64,6 @@ class Supplier {
     public function saveTeamNeon($neonArray){
         $teamNeon = $this->getTeamNeonFile();
         file_put_contents($teamNeon, Neon::encode($neonArray, Neon::BLOCK));
-        $this->loadTeamNeon();
     }
     
     public function setTapi_config($tapi_config) {
