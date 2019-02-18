@@ -123,8 +123,13 @@ class Supplier {
         return $this->getTeamNeon()->roles_classes[$role];
     }
 
-    public function getStatusClass($status) {
-        return array_key_exists($status, $this->getTeamNeon()->status_classes) ? $this->getTeamNeon()->status_classes[$status] : "primary";
+    public function getStatusClass($code) {
+        return array_key_exists($code, $this->getTeamNeon()->status_classes) ? $this->getTeamNeon()->status_classes[$code] : "primary";
+    }
+    
+    public function getStatusColor($code) {
+        if(!array_key_exists("status_colors", $this->getTeamNeon()) || !array_key_exists($code, $this->getTeamNeon()->status_colors)) return "#0275d8";
+        return $this->getTeamNeon()->status_colors[$code];
     }
 
     public function getEventColors() {
