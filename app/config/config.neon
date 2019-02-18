@@ -83,6 +83,7 @@ services:
         - Tapi\PermissionDeleteResource
         - Tapi\RightListResource
         - Tapi\NewsListResource
+        - Tapi\StatusListResource
 
 tracy:
     email: matej.kminek@attendees.eu

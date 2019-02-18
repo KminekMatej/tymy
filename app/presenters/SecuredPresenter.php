@@ -26,6 +26,7 @@ use Tapi\MultiaccountListResource;
 use Tapi\NoteListResource;
 use Tapi\PollListResource;
 use Tapi\RightListResource;
+use Tapi\StatusListResource;
 use Tapi\TapiObject;
 use Tapi\UserDetailResource;
 use Tapi\UserListResource;
@@ -82,6 +83,9 @@ class SecuredPresenter extends BasePresenter {
     /** @var IsResource @inject */
     public $is;
     
+    /** @var StatusListResource @inject */
+    public $statusList;
+    
     /** @var NewMemcachedStorage @inject */
     public $cacheStorage;
     
@@ -122,6 +126,8 @@ class SecuredPresenter extends BasePresenter {
         $this->tapiAuthorizator->setUser($this->getUser()->getIdentity()->getData());
         $this->tapiAuthorizator->setApiRights($this->apiRights);
         $this->userRightsList->init()->getData();
+        Debugger::barDump($this->statusList->init()->getData());
+        Debugger::barDump($this->statusList->getStatusesByCode(), "All by code");
         $this->template->usrRights = $this->userRightsList->getAsArray();
         
         $this->setAccessibleSettings();
