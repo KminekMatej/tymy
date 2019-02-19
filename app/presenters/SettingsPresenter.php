@@ -815,6 +815,7 @@ class SettingsPresenter extends SecuredPresenter {
             $teamNeon->event_colors = $eventColors;
             $teamNeon->status_colors = $statusColors;
             $this->supplier->saveTeamNeon((array)$teamNeon);
+            $this->statusList->cleanCache();
             $this->flashMessage($this->translator->translate("common.alerts.configSaved"));
             $this->redirect("Settings:team");
         };

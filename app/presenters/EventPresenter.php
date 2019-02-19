@@ -34,21 +34,23 @@ class EventPresenter extends SecuredPresenter {
             }
         });
 
-        $this->template->addFilter("prestatusClass", function ($myPreStatus, $myPostStatus, $btn, $startTime) {
-            $color = $this->supplier->getStatusClass($btn);
+        $this->template->addFilter("prestatusClass", function ($myPreStatus, $myPostStatus, $code, $startTime) {
             if (strtotime($startTime) > strtotime(date("c")))// pokud podminka plati, akce je budouci
-                return $btn == $myPreStatus ? "btn-outline-$color active" : "btn-outline-$color";
+                return $code == $myPreStatus ? "attendance$code active" : "attendance$code";
             else if ($myPostStatus == "not-set") // akce uz byla, post status nevyplnen
-                return $btn == $myPreStatus && $myPreStatus != "not-set" ? "btn-outline-$color disabled active" : "btn-outline-secondary disabled";
+                return $code == $myPreStatus && $myPreStatus != "not-set" ? "attendance$code disabled active" : "btn-outline-secondary disabled";
             else
-                return $btn == $myPostStatus && $myPostStatus != "not-set" ? "btn-outline-$color disabled active" : "btn-outline-secondary disabled";
-        });
-        
-        $this->template->addFilter("prestatusColor", function ($btn) {
-            return $this->supplier->getStatusClass($btn);
+                return $code == $myPostStatus && $myPostStatus != "not-set" ? "attendance$code disabled active" : "btn-outline-secondary disabled";
         });
     }
 
+    public function beforeRender(){
+        parent::beforeRender();
+        $this->statusList->init()->perform();
+        $this->template->statusList = $this->statusList->getStatusesByCode();
+    }
+        
+    
     public function renderDefault($date = NULL, $direction = NULL) {
         parent::showNotes();
         try {
