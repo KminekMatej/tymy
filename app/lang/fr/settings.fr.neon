@@ -22,4 +22,5 @@ access: Accès
 status: statut
 type: Type
 here: Ici
-eventColors: Barvy událostí
+eventColors: Couleurs des événements
+statusColors: "Couleurs d'arrivée"
