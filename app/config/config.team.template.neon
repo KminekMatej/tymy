@@ -16,14 +16,14 @@ roles_classes:
     SUPER: btn-outline-success                                          # Sets css class which will be used for players roles buttons (classes from Bootstrap)
     USR: btn-outline-info                                               # Sets css class which will be used for players roles buttons (classes from Bootstrap)
     ATT: btn-outline-warning                                            # Sets css class which will be used for players roles buttons (classes from Bootstrap)
-status_classes:
-    LAT: warning                                                        # Sets css class which will be used for event statuses (classes from Bootstrap)
-    NO: danger
-    YES: success
-    DKY: warning
 event_colors:
     TRA: '#5cb85c'                                                      # Sets css color which will be used for events in calendar - if you are using different events than standard, simply add them here with code and color
     RUN: '#0275d8'
     MEE: '#795548'
     TOU: '#f0ad4e'
     CMP: '#5bc0de'
+status_colors:
+    LAT: "#615ac4"
+    "NO": "#b33d3d"
+    "YES": "#00b33f"
+    DKY: "#d6d603"
