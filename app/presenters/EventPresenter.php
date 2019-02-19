@@ -107,10 +107,9 @@ class EventPresenter extends SecuredPresenter {
         $attArray["POST"]["YES"] = [];
         $attArray["POST"]["NO"] = [];
         $attArray["PRE"] = [];
-        $attArray["PRE"]["YES"] = [];
-        $attArray["PRE"]["DKY"] = [];
-        $attArray["PRE"]["LAT"] = [];
-        $attArray["PRE"]["NO"] = [];
+        foreach ($this->statusList->getStatusesByCode() as $status) {
+            $attArray["PRE"][$status->code] = [];
+        }
         $attArray["PRE"]["UNKNOWN"] = [];
         
         foreach ($event->attendance as $attendee) {
