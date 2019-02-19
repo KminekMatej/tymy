@@ -36,6 +36,13 @@
                                     <div class="col-2" n:foreach="$eventTypes as $eventType">{label 'eventColor_' . $eventType->code}{input 'eventColor_' . $eventType->code, class => 'form-control'}</div>
                                 </div>
                             </td>
+                        </tr>{dump $statusList}
+                        <tr><th>{_settings.statusColors}</th>
+                            <td>
+                                <div class="row">
+                                    <div class="col-2" n:foreach="$statusList as $status">{label 'statusColor_' . $status->code}{input 'statusColor_' . $status->code, class => 'form-control'}</div>
+                                </div>
+                            </td>
                         </tr>
                     </table>
                 </div>

@@ -116,11 +116,13 @@ class SettingsPresenter extends SecuredPresenter {
     public function beforeRender() {
         parent::beforeRender();
         $this->template->eventTypes = $this->eventTypeList->init()->getData();
+        $this->statusList->init()->getData();
+        $this->template->statusList = $this->statusList->getStatusesByCode();
     }
 
-        public function actionDiscussions($discussion = NULL) {
+    public function actionDiscussions($discussion = NULL) {
         $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("discussion.discussion", 2), "link" => $this->link("Settings:discussions")]]);
-        if(!is_null($discussion)){
+        if (!is_null($discussion)) {
             $this->setView("discussion");
         } else {
             $this->template->isNew = false;
@@ -777,6 +779,7 @@ class SettingsPresenter extends SecuredPresenter {
     public function createComponentTeamConfigForm(){
         $teamNeon = $this->supplier->getTeamNeon();
         $eventTypes = $this->eventTypeList->init()->getData();
+        $statusList = $this->statusList->getStatusesByCode();
         
         $form = new Form();
         $form->addSelect("skin", $this->translator->translate("team.defaultSkin"), $this->supplier->getAllSkins())->setValue($teamNeon->skin);
@@ -788,19 +791,29 @@ class SettingsPresenter extends SecuredPresenter {
             $form->addText("eventColor_" . $etype->code, $etype->caption)->setAttribute("data-toggle", "colorpicker")->setAttribute("data-color",$color)->setValue($color);
         }
         
+        foreach ($statusList as $status) {
+            $color = $this->supplier->getStatusColor($status->code);
+            $form->addText("statusColor_" . $status->code, $status->caption)->setAttribute("data-toggle", "colorpicker")->setAttribute("data-color",$color)->setValue($color);
+        }
+        
         $form->addSubmit("save");
         $form->onSuccess[] = function (Form $form, stdClass $values) {
             $teamNeon = $this->supplier->getTeamNeon();
             $teamNeon->skin = $values->skin;
             $teamNeon->userRequiredFields = $values->requiredFields;
             $eventColors = [];
+            $statusColors = [];
             foreach ((array)$values as $name => $value) {
                 $valData = explode("_", $name);
                 if($valData[0] == "eventColor"){
                     $eventColors[$valData[1]] = $value;
                 }
+                if($valData[0] == "statusColor"){
+                    $statusColors[$valData[1]] = $value;
+                }
             }
             $teamNeon->event_colors = $eventColors;
+            $teamNeon->status_colors = $statusColors;
             $this->supplier->saveTeamNeon((array)$teamNeon);
             $this->flashMessage($this->translator->translate("common.alerts.configSaved"));
             $this->redirect("Settings:team");
