@@ -18,6 +18,8 @@ class IsResource extends TapiObject{
     
     protected function postProcess() {
         $this->data->teamName = property_exists($this->data, "name") && $this->data->name != "" ? $this->data->name : $this->data->sysName;
+        if(!property_exists($this->data, "sport")) $this->data->sport = "";
+        if(!property_exists($this->data, "defaultLanguageCode")) $this->data->defaultLanguageCode = "CZ";
     }
 
     protected function preProcess() {
