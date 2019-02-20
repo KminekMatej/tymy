@@ -145,6 +145,11 @@ abstract class TapiObject {
         return $this;
     }
     
+    public function cleanCompleteCache(){
+        $this->cache->clean([Cache::ALL => TRUE]);
+        return $this;
+    }
+    
     private function loadFromCache(){
         $data = $this->cache->load($this->getCacheKey());
         if($data != null){
