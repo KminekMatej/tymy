@@ -804,6 +804,7 @@ class SettingsPresenter extends SecuredPresenter {
         $form->onSuccess[] = function (Form $form, stdClass $values) use ($maCreator) {
             $maCreator->init()->setTeam($values->sysName)->setUsername($values->username)->setPassword($values->password)->perform();
             $this->flashMessage($this->translator->translate("common.alerts.multiaccountAdded", NULL, ["team" => $values->sysName]));
+            Debugger::log($this->user->getIdentity()->data["callName"] . "@" . $this->supplier->getTym() . " added " . $values->sysName . " into his multiaccounts");
             $this->redirect("Settings:multiaccount");
         };
         return $form;
