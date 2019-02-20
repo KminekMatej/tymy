@@ -2,6 +2,9 @@
 
 namespace Tapi;
 
+use Nette\Caching\Cache;
+use Tapi\Exception\APIException;
+
 /**
  * Description of ConfigResource
  *
@@ -38,7 +41,7 @@ class ConfigResource extends TapiObject {
     }
 
     protected function postProcess() {
-        //nothing to do in here
+        $this->cache->clean([Cache::TAGS => $this->supplier->getTym() . "@GET:is"]);
     }
 
     public function setName($name) {

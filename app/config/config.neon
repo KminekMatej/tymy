@@ -84,6 +84,7 @@ services:
         - Tapi\RightListResource
         - Tapi\NewsListResource
         - Tapi\StatusListResource
+        - Tapi\ConfigResource
 
 tracy:
     email: matej.kminek@attendees.eu

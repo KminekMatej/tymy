@@ -5,6 +5,7 @@ namespace App\Presenters;
 use Nette\Application\UI\Form;
 use Nette\Utils\Strings;
 use stdClass;
+use Tapi\ConfigResource;
 use Tapi\DiscussionCreateResource;
 use Tapi\DiscussionDeleteResource;
 use Tapi\DiscussionDetailResource;
@@ -31,6 +32,7 @@ use Tapi\PollCreateResource;
 use Tapi\PollDeleteResource;
 use Tapi\PollDetailResource;
 use Tapi\PollEditResource;
+use Tapi\UserResource;
 
 class SettingsPresenter extends SecuredPresenter {
     
@@ -102,6 +104,9 @@ class SettingsPresenter extends SecuredPresenter {
 
     /** @var PermissionDeleteResource @inject */
     public $permissionDeleter;
+    
+    /** @var ConfigResource @inject */
+    public $configurator;
             
     protected function startup() {
         parent::startup();
@@ -787,7 +792,7 @@ class SettingsPresenter extends SecuredPresenter {
         $form->addText("sport", $this->translator->translate("team.sport"))->setValue($team->sport);
         $form->addSelect("defaultLanguage", $this->translator->translate("team.defaultLanguage"), ["CZ" => "Česky","EN" => "English","FR" => "Le français","PL" => "Polski"])->setValue($team->defaultLanguageCode);
         $form->addSelect("skin", $this->translator->translate("team.defaultSkin"), $this->supplier->getAllSkins())->setValue($teamNeon->skin);
-        $form->addMultiSelect("requiredFields", $this->translator->translate("team.requiredFields"), \Tapi\UserResource::getAllFields($this->translator)["ALL"])->setValue($teamNeon->userRequiredFields);
+        $form->addMultiSelect("requiredFields", $this->translator->translate("team.requiredFields"), UserResource::getAllFields($this->translator)["ALL"])->setValue($teamNeon->userRequiredFields);
         
         foreach ($eventTypes as $etype) {
             $color = isset($teamNeon->event_colors[$etype->code]) ? $teamNeon->event_colors[$etype->code] : "#bababa";
@@ -801,7 +806,9 @@ class SettingsPresenter extends SecuredPresenter {
         }
         
         $form->addSubmit("save");
-        $form->onSuccess[] = function (Form $form, stdClass $values) {
+        $configurator = $this->configurator;
+        \Tracy\Debugger::barDump($configurator);
+        $form->onSuccess[] = function (Form $form, stdClass $values) use ($configurator) {
             $teamNeon = $this->supplier->getTeamNeon();
             $teamNeon->skin = $values->skin;
             $teamNeon->userRequiredFields = $values->requiredFields;
@@ -820,6 +827,13 @@ class SettingsPresenter extends SecuredPresenter {
             $teamNeon->status_colors = $statusColors;
             $this->supplier->saveTeamNeon((array)$teamNeon);
             $this->statusList->cleanCache();
+            
+            //check if there is some TAPI change to be commited
+            $teamData = $this->is->getData();
+            if($teamData->name != $values->name || $teamData->sport != $values->sport || $teamData->defaultLanguageCode != $values->defaultLanguage){
+                $configurator->init()->setName($values->name)->setSport($values->sport)->setDefaultLanguageCode($values->defaultLanguage)->perform();
+            }
+            
             $this->flashMessage($this->translator->translate("common.alerts.configSaved"));
             $this->redirect("Settings:team");
         };
