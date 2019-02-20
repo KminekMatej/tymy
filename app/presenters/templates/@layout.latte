@@ -41,7 +41,7 @@
     </head>
 
     <body>
-        {var $skinLogoFile = "{$wwwDir}/skins/{$skin}/img/skin-logo.png?ver={$appver}"}
+        {var $skinLogoFile = "{$wwwDir}/skins/{$skin}/img/skin-logo.png"}
         <img src="{$basePath}/skins/{$skin}/img/skin-logo.png?ver={$appver}" class="skin-logo" n:if="file_exists($skinLogoFile)">
         {block navbar}{/block}
         {snippet flashes}
