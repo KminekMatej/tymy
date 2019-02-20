@@ -341,7 +341,7 @@ class SettingsPresenter extends SecuredPresenter {
     
     public function renderMultiaccount() {
         $multiaccounts = $this->maList->init();
-        $this->setLevelCaptions(["3" => ["caption" => $this->translator->translate("settings.multiaccount"), "link" => $this->link("Settings:multiaccounts")]]);
+        $this->setLevelCaptions(["3" => ["caption" => $this->translator->translate("settings.multiaccount", 1), "link" => $this->link("Settings:multiaccounts")]]);
         $this->template->multiaccounts = $multiaccounts->getData();
     }
     
@@ -441,6 +441,12 @@ class SettingsPresenter extends SecuredPresenter {
     
     public function renderDefault(){
         $this->template->accessibleSettings = $this->getAccessibleSettings();
+    }
+    
+    public function handleMultiaccountRemove($team){
+        $this->maDeleter->init()->setTeam($team)->perform();
+        $this->flashMessage($this->translator->translate("common.alerts.multiaccountRemoved", NULL, ['team' => $team]), "success");
+        $this->redirect("Settings:multiaccount");
     }
     
     public function handleEventsEdit(){
@@ -789,9 +795,8 @@ class SettingsPresenter extends SecuredPresenter {
         $form->addSubmit("save");
         $maCreator = $this->maCreator;
         $form->onSuccess[] = function (Form $form, stdClass $values) use ($maCreator) {
-            \Tracy\Debugger::barDump($values);
             $maCreator->init()->setTeam($values->sysName)->setUsername($values->username)->setPassword($values->password)->perform();
-            $this->flashMessage($this->translator->translate("common.alerts.multiaccountAdded", 1, ["team" => $values->sysName]));
+            $this->flashMessage($this->translator->translate("common.alerts.multiaccountAdded", NULL, ["team" => $values->sysName]));
             $this->redirect("Settings:multiaccount");
         };
         return $form;

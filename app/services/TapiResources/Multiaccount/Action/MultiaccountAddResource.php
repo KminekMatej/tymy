@@ -2,6 +2,8 @@
 
 namespace Tapi;
 
+use Tapi\Exception\APIException;
+
 /**
  * Description of MultiaccountAddResource
  *

@@ -24,3 +24,5 @@ type: Typ
 here: zde
 eventColors: Barvy událostí
 statusColors: Barvy účastí
+multiaccount: Multiúčet|Multiúčty
+addAccount: Přidat účet

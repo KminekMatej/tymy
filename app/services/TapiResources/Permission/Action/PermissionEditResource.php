@@ -55,10 +55,6 @@ class PermissionEditResource extends PermissionResource {
             $requestData["revokedUsers"] = $this->getRevokedUsers();
         elseif ($this->getAllowedUsers() !== null)
             $requestData["allowedUsers"] = $this->getAllowedUsers();
-        \Tracy\Debugger::barDump($this);
-        \Tracy\Debugger::barDump($this->getAllowedUsers());
-        \Tracy\Debugger::barDump($this->getRevokedUsers());
-        \Tracy\Debugger::barDump($requestData, "Rq data");
         
         $this->setRequestData((object) $requestData);
     }

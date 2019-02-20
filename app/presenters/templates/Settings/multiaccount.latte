@@ -11,29 +11,37 @@
             <div class="card sh-box my-2">
                 
                 <div class="card-header">
-                    <h4>{_settings.multiaccountSettings}</h4>
+                    <h4>{_settings.multiaccount, 2}</h4>
                 </div>
                 <div class="card-body">
-                    <table class="table">
-                        {if $multiaccounts}
-                        <tr n:foreach="$multiaccounts as $ma"><th>{$ma->name}</th><td>{$ma->sysName}.tymy.cz</td><td><i class="fas fa-times text-danger"></i></tr>
-                        {/if}
+                    <table class="table" n:if="$multiaccounts">
+                        <tr n:foreach="$multiaccounts as $ma">
+                            <th>{$ma->name}</th>
+                            <td>{$ma->sysName}.tymy.cz</td>
+                            <td><a class="btn btn-sm btn-danger binder-delete-btn" n:href="MultiaccountRemove! $ma->sysName" title="Smazat"><i class="fa fa-times" aria-hidden="true"></i></a>
+                        </tr>
                     </table>
-                    <h6 class="mt-5">Přidat tým</h6>
+                    <h6 class="mt-5">{_settings.addAccount}</h6>
                     {form addMaForm}
                     <div class="row">
-                        <div class="col-3"><div class="small" style="font-weight: 600">{_team.team, 1}</div>
-                                    <div class="input-group mb-2 mr-sm-2" style="max-width: 250px">
-                                        {input sysName, class=>'form-control'}
-                                        <div class="input-group-append">
-                                            <div class="input-group-text">.tymy.cz</div>
-                                        </div>
-                                    </div></div>
-                        <div class="col-4"><div class="small" style="font-weight: 600">{_sign.username}</div>
-                                            {input username, class=>'form-control'}</div>
-                        <div class="col-4"><div class="small" style="font-weight: 600">{_sign.password}</div>
-                                            {input password, class=>'form-control'}</div>
-                        <div class="col-1 text-center pt-3"><button type="submit" n:name=save class="btn btn-success"><i class="fas fa-plus"></i></button></div>
+                        <div class="col-3">
+                            <div class="small" style="font-weight: 600">{_team.team, 1}</div>
+                            <div class="input-group mb-2 mr-sm-2" style="max-width: 250px">
+                                {input sysName, class=>'form-control'}
+                                <div class="input-group-append">
+                                    <div class="input-group-text">.tymy.cz</div>
+                                </div>
+                            </div>
+                        </div>
+                            <div class="col-4">
+                                <div class="small" style="font-weight: 600">{_sign.username}</div>
+                                {input username, class=>'form-control'}
+                            </div>
+                            <div class="col-4">
+                                <div class="small" style="font-weight: 600">{_sign.password}</div>
+                                {input password, class=>'form-control'}
+                            </div>
+                        <div class="col-1 text-center d-flex align-items-end mb-2"><button type="submit" n:name=save class="btn btn-success"><i class="fas fa-plus"></i></button></div>
                     </div>
                     {/form}
                 </div>

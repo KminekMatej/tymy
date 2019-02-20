@@ -126,8 +126,6 @@ class SecuredPresenter extends BasePresenter {
         $this->tapiAuthorizator->setUser($this->getUser()->getIdentity()->getData());
         $this->tapiAuthorizator->setApiRights($this->apiRights);
         $this->userRightsList->init()->getData();
-        Debugger::barDump($this->statusList->init()->getData());
-        Debugger::barDump($this->statusList->getStatusesByCode(), "All by code");
         $this->template->usrRights = $this->userRightsList->getAsArray();
         
         $this->setAccessibleSettings();
@@ -215,7 +213,7 @@ class SecuredPresenter extends BasePresenter {
         if($this->getUser()->isAllowed('reports','canSetup')) $this->accessibleSettings[] = new SettingMenu("reports", $this->translator->translate("report.report", 2), $this->link("Settings:reports"), "fa-chart-area", FALSE);
         // TO BE ENABLED WHEN ITS READY
         if($this->getUser()->isAllowed('permissions','canSetup')) $this->accessibleSettings[] = new SettingMenu("permissions", $this->translator->translate("permission.permission", 2), $this->link("Settings:permissions"), "fa-gavel", TRUE);
-        $this->accessibleSettings[] = new SettingMenu("multiaccounts", $this->translator->translate("settings.multiaccount"), $this->link("Settings:multiaccount"), "fa-sitemap", TRUE); //user can always look into multiaccount settings
+        $this->accessibleSettings[] = new SettingMenu("multiaccounts", $this->translator->translate("settings.multiaccount", 1), $this->link("Settings:multiaccount"), "fa-sitemap", TRUE); //user can always look into multiaccount settings
         $this->accessibleSettings[] = new SettingMenu("app", $this->translator->translate("settings.application"), $this->link("Settings:app"), "fa-laptop", TRUE); //user can always look into app settings to setup his own properties
         return $this;
     }
