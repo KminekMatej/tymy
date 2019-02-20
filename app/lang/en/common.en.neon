@@ -64,6 +64,8 @@ alerts:
     newsOnTymy: News on Tymy.CZ
     newsOnTymyDescription: Portal has been upgraded since your last visit. What are the latest news?
     newsOnTymyFooter: You can checkout news also on
+    multiaccountAdded: Team %team% succesfully added
+    multiaccountRemoved: Team %team% succesfully removed
 months:
     january: January
     february: February

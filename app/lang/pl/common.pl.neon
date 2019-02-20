@@ -64,6 +64,8 @@ alerts:
     newsOnTymy: Aktualności na portalu Tymy.CZ
     newsOnTymyDescription: Portal został uaktualniony od czasu Twojej ostatniej wizyty. Jakie są najnowsze aktualności?
     newsOnTymyFooter: Możesz sprawdzić aktualności również na
+    multiaccountAdded: Zespół %team% został dodany
+    multiaccountRemoved: Zespół %team% został usunięty
 months:
     january: Styczeń    
     february: Luty

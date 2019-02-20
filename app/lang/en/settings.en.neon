@@ -24,3 +24,5 @@ type: Type
 here: here
 eventColors: Event colors
 statusColors: Attendance colors
+multiaccount: Multiaccount|Multiaccount
+addAccount: Add multiaccount
