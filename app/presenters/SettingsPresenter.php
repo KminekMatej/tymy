@@ -445,7 +445,12 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function handleMultiaccountRemove($team){
-        $this->maDeleter->init()->setTeam($team)->perform();
+        try {
+            $this->maDeleter->init()->setTeam($team)->perform();
+        } catch (APIException $ex) {
+            $this->handleTapiException($ex, "Settings:multiaccount");
+        }
+
         $this->flashMessage($this->translator->translate("common.alerts.multiaccountRemoved", NULL, ['team' => $team]), "success");
         $this->redirect("Settings:multiaccount");
     }
@@ -802,7 +807,11 @@ class SettingsPresenter extends SecuredPresenter {
         $form->addSubmit("save");
         $maCreator = $this->maCreator;
         $form->onSuccess[] = function (Form $form, stdClass $values) use ($maCreator) {
-            $maCreator->init()->setTeam($values->sysName)->setUsername($values->username)->setPassword($values->password)->perform();
+            try {
+                $maCreator->init()->setTeam($values->sysName)->setUsername($values->username)->setPassword($values->password)->perform();
+            } catch (APIException $ex) {
+                $this->handleTapiException($ex, "Settings:multiaccount");
+            }
             $this->flashMessage($this->translator->translate("common.alerts.multiaccountAdded", NULL, ["team" => $values->sysName]));
             Debugger::log($this->user->getIdentity()->data["callName"] . "@" . $this->supplier->getTym() . " added " . $values->sysName . " into his multiaccounts");
             $this->redirect("Settings:multiaccount");

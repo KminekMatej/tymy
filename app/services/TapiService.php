@@ -180,7 +180,7 @@ class TapiService {
             case 200: //everything ok
                 return $this->success($resultStatus, $relogin);
             case 400: 
-                throw new APIException("Chyba 400: Neznámý dotaz", $curl_info["http_code"]);
+                throw new APIException(($resultStatus->getMessage() ? $resultStatus->getMessage() : "Chyba 400: Neznámý dotaz"), $curl_info["http_code"]);
             case 401: // unauthorized, try to refresh
                 return $this->loginFailure($relogin);
             case 403: 
