@@ -807,7 +807,7 @@ class SettingsPresenter extends SecuredPresenter {
         
         $form->addSubmit("save");
         $configurator = $this->configurator;
-        \Tracy\Debugger::barDump($configurator);
+        
         $form->onSuccess[] = function (Form $form, stdClass $values) use ($configurator) {
             $teamNeon = $this->supplier->getTeamNeon();
             $teamNeon->skin = $values->skin;
