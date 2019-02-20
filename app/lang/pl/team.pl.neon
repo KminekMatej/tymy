@@ -55,6 +55,9 @@ userAdmin: Moderator użytkowników
 attendanceAdmin: Moderator obecności
 requiredFields: Wymagane pola
 defaultSkin: Domyślny skin
+name: Nazwa drużyny
+sport: Sport
+defaultLanguage: Domyślny język
 errors:
     imgFileCorrupted: "Plik nie jest obrazkiem, lub jest uszkodzony"
 alerts:

@@ -55,6 +55,9 @@ userAdmin: Správce uživatelů
 attendanceAdmin: Správce docházky
 requiredFields: Povinná pole u uživatele
 defaultSkin: Výchozí skin
+name: Název týmu
+sport: Sport
+defaultLanguage: Výchozí jazyk
 errors:
     imgFileCorrupted: "Soubor není obrázek, nebo je poškozený"
 alerts:

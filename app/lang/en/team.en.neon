@@ -55,6 +55,9 @@ userAdmin: User manager
 attendanceAdmin: Event manager
 requiredFields: Required user fields
 defaultSkin: Default skin
+name: Name
+sport: Sport
+defaultLanguage: Default language
 errors:
     imgFileCorrupted: "File is not a pictute, or is corrupted"
 alerts:
