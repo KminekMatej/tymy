@@ -38,7 +38,7 @@ class MultiaccountAddResource extends MultiaccountResource {
 
         $this->setUrl("multiaccount/" . $this->getTeam());
         $this->setRequestData((object) [
-                    "username" => $this->getUsername(),
+                    "login" => $this->getUsername(),
                     "password" => $this->getPassword()
         ]);
     }
@@ -59,17 +59,17 @@ class MultiaccountAddResource extends MultiaccountResource {
         return $this->password;
     }
 
-    public function setTeam(String $team) {
+    public function setTeam(String $team = NULL) {
         $this->team = $team;
         return $this;
     }
 
-    public function setUsername(String $username) {
+    public function setUsername(String $username = NULL) {
         $this->username = $username;
         return $this;
     }
 
-    public function setPassword(String $password) {
+    public function setPassword(String $password = NULL) {
         $this->password = $password;
         return $this;
     }

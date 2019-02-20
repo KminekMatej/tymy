@@ -35,7 +35,7 @@ class MultiaccountRemoveResource extends MultiaccountResource {
         return $this->team;
     }
 
-    public function setTeam(String $team) {
+    public function setTeam(String $team = NULL) {
         $this->team = $team;
         return $this;
     }

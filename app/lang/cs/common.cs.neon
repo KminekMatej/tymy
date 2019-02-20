@@ -64,6 +64,8 @@ alerts:
     newsOnTymy: Novinky v aplikaci Tymy.CZ
     newsOnTymyDescription: Aplikace byla od Vašeho posledního přihlášení upgradována. Co je nového?
     newsOnTymyFooter: Přehled novinek zároveň naleznete na
+    multiaccountAdded: Tým %team% byl přiřazen k Vašemu přihlášení
+    multiaccountRemoved: Tým %team% byl odpojen od Vašeho přihlášení
 months:
     january: Leden
     february: Únor

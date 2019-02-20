@@ -16,6 +16,8 @@ use Tapi\EventDetailResource;
 use Tapi\EventEditResource;
 use Tapi\EventListResource;
 use Tapi\Exception\APIException;
+use Tapi\MultiaccountAddResource;
+use Tapi\MultiaccountRemoveResource;
 use Tapi\NoteCreateResource;
 use Tapi\NoteDeleteResource;
 use Tapi\NoteEditResource;
@@ -107,6 +109,12 @@ class SettingsPresenter extends SecuredPresenter {
     
     /** @var ConfigResource @inject */
     public $configurator;
+    
+    /** @var MultiaccountAddResource @inject */
+    public $maCreator;
+    
+    /** @var MultiaccountRemoveResource @inject */
+    public $maDeleter;
             
     protected function startup() {
         parent::startup();
@@ -329,6 +337,12 @@ class SettingsPresenter extends SecuredPresenter {
         $this->template->events = $events;
         
         $this->setView("events");
+    }
+    
+    public function renderMultiaccount() {
+        $multiaccounts = $this->maList->init();
+        $this->setLevelCaptions(["3" => ["caption" => $this->translator->translate("settings.multiaccount"), "link" => $this->link("Settings:multiaccounts")]]);
+        $this->template->multiaccounts = $multiaccounts->getData();
     }
     
     public function renderEvent($event) {
@@ -765,6 +779,22 @@ class SettingsPresenter extends SecuredPresenter {
     private function notAllowed(){
         $this->flashMessage($this->translator->translate("common.alerts.notPermitted"));
         $this->redirect("Settings:");
+    }
+    
+    public function createComponentAddMaForm(){
+        $form = new Form();
+        $form->addText("sysName", $this->translator->translate("team.team", 1));
+        $form->addText("username", $this->translator->translate("sign.username"));
+        $form->addPassword("password", $this->translator->translate("sign.password"));
+        $form->addSubmit("save");
+        $maCreator = $this->maCreator;
+        $form->onSuccess[] = function (Form $form, stdClass $values) use ($maCreator) {
+            \Tracy\Debugger::barDump($values);
+            $maCreator->init()->setTeam($values->sysName)->setUsername($values->username)->setPassword($values->password)->perform();
+            $this->flashMessage($this->translator->translate("common.alerts.multiaccountAdded", 1, ["team" => $values->sysName]));
+            $this->redirect("Settings:multiaccount");
+        };
+        return $form;
     }
     
     public function createComponentUserConfigForm(){

@@ -1,0 +1,43 @@
+{import '../components/secured.latte'}
+
+{block navbar}
+{control navbar}
+{/block}
+
+{block content}
+<div class="container settings">
+    <div class="row">
+        <div class="col">
+            <div class="card sh-box my-2">
+                
+                <div class="card-header">
+                    <h4>{_settings.multiaccountSettings}</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        {if $multiaccounts}
+                        <tr n:foreach="$multiaccounts as $ma"><th>{$ma->name}</th><td>{$ma->sysName}.tymy.cz</td><td><i class="fas fa-times text-danger"></i></tr>
+                        {/if}
+                    </table>
+                    <h6 class="mt-5">Přidat tým</h6>
+                    {form addMaForm}
+                    <div class="row">
+                        <div class="col-3"><div class="small" style="font-weight: 600">{_team.team, 1}</div>
+                                    <div class="input-group mb-2 mr-sm-2" style="max-width: 250px">
+                                        {input sysName, class=>'form-control'}
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">.tymy.cz</div>
+                                        </div>
+                                    </div></div>
+                        <div class="col-4"><div class="small" style="font-weight: 600">{_sign.username}</div>
+                                            {input username, class=>'form-control'}</div>
+                        <div class="col-4"><div class="small" style="font-weight: 600">{_sign.password}</div>
+                                            {input password, class=>'form-control'}</div>
+                        <div class="col-1 text-center pt-3"><button type="submit" n:name=save class="btn btn-success"><i class="fas fa-plus"></i></button></div>
+                    </div>
+                    {/form}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
