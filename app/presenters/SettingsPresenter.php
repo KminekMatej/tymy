@@ -35,6 +35,7 @@ use Tapi\PollDeleteResource;
 use Tapi\PollDetailResource;
 use Tapi\PollEditResource;
 use Tapi\UserResource;
+use Tracy\Debugger;
 
 class SettingsPresenter extends SecuredPresenter {
     
@@ -681,6 +682,12 @@ class SettingsPresenter extends SecuredPresenter {
         }
     }
     
+    public function handleCacheCompleteDrop() {
+        $this->discussionDetail->cleanCompleteCache(); //can use any tapi object
+        $this->flashMessage($this->translator->translate("settings.cacheDropped"), "success");
+        $this->redirect('this');
+    }
+    
     public function handleCacheDrop() {
         $this->discussionDetail->cleanCache(); //can use any tapi object
         $this->flashMessage($this->translator->translate("settings.cacheDropped"), "success");
@@ -819,13 +826,14 @@ class SettingsPresenter extends SecuredPresenter {
     public function createComponentTeamConfigForm(){
         $teamNeon = $this->supplier->getTeamNeon();
         $eventTypes = $this->eventTypeList->init()->getData();
+        $this->statusList->init()->getData();
         $statusList = $this->statusList->getStatusesByCode();
         $team = $this->is->getData();
         
         $form = new Form();
         $form->addText("name", $this->translator->translate("team.name"))->setValue($team->name);
-        $form->addText("sport", $this->translator->translate("team.sport"))->setValue($team->sport);
-        $form->addSelect("defaultLanguage", $this->translator->translate("team.defaultLanguage"), ["CZ" => "Česky","EN" => "English","FR" => "Le français","PL" => "Polski"])->setValue($team->defaultLanguageCode);
+        $form->addText("sport", $this->translator->translate("team.sport"))->setValue(property_exists($team, "sport") ? $team->sport : "");
+        $form->addSelect("defaultLanguage", $this->translator->translate("team.defaultLanguage"), ["CZ" => "Česky","EN" => "English","FR" => "Le français","PL" => "Polski"])->setValue(property_exists($team, "defaultLanguageCode") ? $team->defaultLanguageCode : "CZ");
         $form->addSelect("skin", $this->translator->translate("team.defaultSkin"), $this->supplier->getAllSkins())->setValue($teamNeon->skin);
         $form->addMultiSelect("requiredFields", $this->translator->translate("team.requiredFields"), UserResource::getAllFields($this->translator)["ALL"])->setValue($teamNeon->userRequiredFields);
         
@@ -860,6 +868,8 @@ class SettingsPresenter extends SecuredPresenter {
             }
             $teamNeon->event_colors = $eventColors;
             $teamNeon->status_colors = $statusColors;
+            
+            
             $this->supplier->saveTeamNeon((array)$teamNeon);
             $this->statusList->cleanCache();
             
