@@ -158,7 +158,7 @@ class SignPresenter extends BasePresenter {
         $this->template->multiple = $this->supplier->getTapi_config()["multiple_team"];
         $is = $this->is->getData();
         $this->template->teamName = strtoupper($is->teamName);
-        $this->translator->setLocale(self::LOCALES[$is->defaultLangugeCode]);
+        $this->translator->setLocale(self::LOCALES[$is->defaultLanguageCode]);
 
         if ($tk = $this->getRequest()->getParameter("tk")) {
             try {
