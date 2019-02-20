@@ -780,8 +780,12 @@ class SettingsPresenter extends SecuredPresenter {
         $teamNeon = $this->supplier->getTeamNeon();
         $eventTypes = $this->eventTypeList->init()->getData();
         $statusList = $this->statusList->getStatusesByCode();
+        $team = $this->is->getData();
         
         $form = new Form();
+        $form->addText("name", $this->translator->translate("team.name"))->setValue($team->name);
+        $form->addText("sport", $this->translator->translate("team.sport"))->setValue($team->sport);
+        $form->addSelect("defaultLanguage", $this->translator->translate("team.defaultLanguage"), ["CZ" => "Česky","EN" => "English","FR" => "Le français","PL" => "Polski"])->setValue($team->defaultLanguageCode);
         $form->addSelect("skin", $this->translator->translate("team.defaultSkin"), $this->supplier->getAllSkins())->setValue($teamNeon->skin);
         $form->addMultiSelect("requiredFields", $this->translator->translate("team.requiredFields"), \Tapi\UserResource::getAllFields($this->translator)["ALL"])->setValue($teamNeon->userRequiredFields);
         
