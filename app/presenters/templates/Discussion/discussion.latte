@@ -6,9 +6,9 @@
 
 {block scripts}
 {include parent}
-<script src="{$basePath}/js/scroll_man_scroll.js"></script>
-<script src="{$basePath}/resources/ckeditor/ckeditor.js"></script>
-<script src="{$basePath}/resources/clipboard/dist/clipboard.{$js}"></script>
+<script src="{$basePath}/js/scroll_man_scroll.js?ver={$appver}"></script>
+<script src="{$basePath}/resources/ckeditor/ckeditor.js?ver={$appver}"></script>
+<script src="{$basePath}/resources/clipboard/dist/clipboard.{$js}?ver={$appver}"></script>
 <script>
     $(document).ready(function () {
         new Clipboard('BUTTON.clipboard-btn');

@@ -21,8 +21,8 @@
 {var $viewScriptUc = "{$basePath}/js/{$presenterUcName}/{$viewUcName}.js"}
 
 {* Include scripts for whole presenter or current view, if they exist *}
-        <script src="{$presenterScript}" n:if="file_exists($presenterScriptPath)"></script>
-        <script src="{$presenterScriptUc}" n:if="file_exists($presenterScriptUcPath)"></script>
-        <script src="{$viewScript}" n:if="file_exists($viewScriptPath)"></script>
-        <script src="{$viewScriptUc}" n:if="file_exists($viewScriptUcPath)"></script>
+        <script src="{$presenterScript}?ver={$appver}" n:if="file_exists($presenterScriptPath)"></script>
+        <script src="{$presenterScriptUc}?ver={$appver}" n:if="file_exists($presenterScriptUcPath)"></script>
+        <script src="{$viewScript}?ver={$appver}" n:if="file_exists($viewScriptPath)"></script>
+        <script src="{$viewScriptUc}?ver={$appver}" n:if="file_exists($viewScriptUcPath)"></script>
 {/block}

@@ -21,8 +21,8 @@
 {var $viewStyleUc = "{$basePath}/skins/{$skin}/css/{$presenterUcName}/{$viewUcName}.css"}
 
 {* Include styles for whole presenter or current view, if they exist *}
-        <link rel="stylesheet" href="{$presenterStyle}" n:if="file_exists($presenterStylePath)" />
-        <link rel="stylesheet" href="{$presenterStyleUc}" n:if="file_exists($presenterStyleUcPath)" />
-        <link rel="stylesheet" href="{$viewStyle}" n:if="file_exists($viewStylePath)" />
-        <link rel="stylesheet" href="{$viewStyleUc}" n:if="file_exists($viewStyleUcPath)" />
+        <link rel="stylesheet" href="{$presenterStyle}?ver={$appver}" n:if="file_exists($presenterStylePath)" />
+        <link rel="stylesheet" href="{$presenterStyleUc}?ver={$appver}" n:if="file_exists($presenterStyleUcPath)" />
+        <link rel="stylesheet" href="{$viewStyle}?ver={$appver}" n:if="file_exists($viewStylePath)" />
+        <link rel="stylesheet" href="{$viewStyleUc}?ver={$appver}" n:if="file_exists($viewStyleUcPath)" />
 {/block}

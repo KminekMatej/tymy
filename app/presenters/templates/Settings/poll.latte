@@ -2,12 +2,12 @@
 
 {block scripts}
 {include parent}
-<script src="{$basePath}/js/Binder.js"></script>
+<script src="{$basePath}/js/Binder.js?ver={$appver}"></script>
 {/block}
 
 {block styles}
 {include parent}
-<link rel='stylesheet' href="{$basePath}/skins/{$skin}/css/table-xs.css" />
+<link rel='stylesheet' href="{$basePath}/skins/{$skin}/css/table-xs.css?ver={$appver}" />
 {/block}
 
 {block navbar}

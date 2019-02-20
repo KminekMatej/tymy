@@ -143,6 +143,10 @@ class Supplier {
     public function getVersion($index = 0) {
         return $this->versions[$index];
     }
+    
+    public function getVersionCode(){
+        return $this->getVersion()->version;
+    }
 
     public function setVersion() {
         $taglog = file(__DIR__ . "/../tag.log");

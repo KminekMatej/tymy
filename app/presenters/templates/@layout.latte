@@ -9,40 +9,40 @@
         <meta name="author" content="Matej Kminek">
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        <link rel="apple-touch-icon" sizes="180x180" href="{$basePath}/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="{$basePath}/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="{$basePath}/favicon-16x16.png">
-        <link rel="manifest" href="{$basePath}/site.webmanifest">
-        <link rel="mask-icon" href="{$basePath}/safari-pinned-tab.svg" color="#c21214">
+        <link rel="apple-touch-icon" sizes="180x180" href="{$basePath}/apple-touch-icon.png?ver={$appver}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{$basePath}/favicon-32x32.png?ver={$appver}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{$basePath}/favicon-16x16.png?ver={$appver}">
+        <link rel="manifest" href="{$basePath}/site.webmanifest?ver={$appver}">
+        <link rel="mask-icon" href="{$basePath}/safari-pinned-tab.svg?ver={$appver}" color="#c21214">
         <meta name="msapplication-TileColor" content="#da532c">
-        <meta name="msapplication-config" content="{$basePath}/browserconfig.xml" />
+        <meta name="msapplication-config" content="{$basePath}/browserconfig.xml?ver={$appver}" />
         <meta name="theme-color" content="#ffffff">
 
 
         <title>{ifset $title}{$title} | {/ifset}{$tym|firstUpper} | Tymy.CZ v2</title>
 
         {block styles}
-        <link rel="stylesheet" href="{$basePath}/resources/bootstrap4/css/bootstrap.{$css}" />
-        <link rel="stylesheet" href="{$basePath}/resources/fontawesome/css/fontawesome-all.{$css}" />
+        <link rel="stylesheet" href="{$basePath}/resources/bootstrap4/css/bootstrap.{$css}?ver={$appver}" />
+        <link rel="stylesheet" href="{$basePath}/resources/fontawesome/css/fontawesome-all.{$css}?ver={$appver}" />
         <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet" />
-        <link rel="stylesheet" href="{$basePath}/skins/{$skin}/css/style.css" />
+        <link rel="stylesheet" href="{$basePath}/skins/{$skin}/css/style.css?ver={$appver}" />
         {/block}
         {block scripts}
 
-        <script src="{$basePath}/resources/popper/umd/popper.{$js}"></script>
-        <script src="{$basePath}/resources/fullcalendar/lib/moment.min.js"></script>
-        <script src="{$basePath}/resources/jQuery/jquery-3.2.1.{$js}"></script>
-        <script src="{$basePath}/resources/bootstrap4/js/bootstrap.{$js}"></script>
-        <script src="{$basePath}/js/nette.ajax.js"></script>
-        <script defer src="{$basePath}/resources/fontawesome/js/fontawesome-all.{$js}"></script>
+        <script src="{$basePath}/resources/popper/umd/popper.{$js}?ver={$appver}"></script>
+        <script src="{$basePath}/resources/fullcalendar/lib/moment.min.js?ver={$appver}"></script>
+        <script src="{$basePath}/resources/jQuery/jquery-3.2.1.{$js}?ver={$appver}"></script>
+        <script src="{$basePath}/resources/bootstrap4/js/bootstrap.{$js}?ver={$appver}"></script>
+        <script src="{$basePath}/js/nette.ajax.js?ver={$appver}"></script>
+        <script defer src="{$basePath}/resources/fontawesome/js/fontawesome-all.{$js}?ver={$appver}"></script>
         {/block}
 
         {block head}{/block}
     </head>
 
     <body>
-        {var $skinLogoFile = "{$wwwDir}/skins/{$skin}/img/skin-logo.png"}
-        <img src="{$basePath}/skins/{$skin}/img/skin-logo.png" class="skin-logo" n:if="file_exists($skinLogoFile)">
+        {var $skinLogoFile = "{$wwwDir}/skins/{$skin}/img/skin-logo.png?ver={$appver}"}
+        <img src="{$basePath}/skins/{$skin}/img/skin-logo.png?ver={$appver}" class="skin-logo" n:if="file_exists($skinLogoFile)">
         {block navbar}{/block}
         {snippet flashes}
         <div n:if="$flashes" class="container">

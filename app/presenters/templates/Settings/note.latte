@@ -2,8 +2,8 @@
 
 {block scripts}
 {include parent}
-<script src="{$basePath}/js/Binder.js"></script>
-<script src="{$basePath}/resources/ckeditor/ckeditor.js"></script>
+<script src="{$basePath}/js/Binder.js?ver={$appver}"></script>
+<script src="{$basePath}/resources/ckeditor/ckeditor.js?ver={$appver}"></script>
 <script>
     $(document).ready(function () {
             var text = {$note->source};

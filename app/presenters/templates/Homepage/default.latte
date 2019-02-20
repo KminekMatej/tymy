@@ -5,16 +5,16 @@
 {/block}
 
 {block styles}
-<link rel='stylesheet' href="{$basePath}/resources/fullcalendar/fullcalendar.{$css}" />
-<link rel='stylesheet' href="{$basePath}/skins/{$skin}/css/fullcalendar.css" />
+<link rel='stylesheet' href="{$basePath}/resources/fullcalendar/fullcalendar.{$css}?ver={$appver}" />
+<link rel='stylesheet' href="{$basePath}/skins/{$skin}/css/fullcalendar.css?ver={$appver}" />
 {include parent}
 {/block}
 
 {block scripts}
 {include parent}
-<script src="{$basePath}/js/Event/Event.js"></script>
-<script src="{$basePath}/resources/fullcalendar/fullcalendar.{$js}"></script>
-<script src="{$basePath}/resources/fullcalendar/locale/{$locale}.js"></script>
+<script src="{$basePath}/js/Event/Event.js?ver={$appver}"></script>
+<script src="{$basePath}/resources/fullcalendar/fullcalendar.{$js}?ver={$appver}"></script>
+<script src="{$basePath}/resources/fullcalendar/locale/{$locale}.js?ver={$appver}"></script>
 <script>
     $(document).ready(function () {
         $('#calendar').fullCalendar({
