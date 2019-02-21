@@ -189,3 +189,28 @@ IMG.skin-logo{
     right: 0px;
     max-width: 250px;
 }
+
+.navbar {
+    background-color: #e9ecef !important;
+    box-shadow: 0 0 20px 0 rgba(255, 255, 255, 0.2), 0 3px 3px 0 rgba(255, 255, 255, 0.24);
+}
+
+.navbar .navbar-text {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+@media (min-width: 992px){
+    .navbar-expand-lg {
+        background-color: transparent !important;
+        box-shadow: none;
+    }
+}
+
+.navbar .navbar-toggler {
+    color: rgba(84, 91, 98, 0.5);
+    border-color: rgba(84, 91, 98, 0.5);
+}
+
+.navbar .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(84, 91, 98, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
