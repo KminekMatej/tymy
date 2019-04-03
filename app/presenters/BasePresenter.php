@@ -6,6 +6,7 @@ use App\Model\Supplier;
 use Kdyby\Translation\Translator;
 use Nette;
 use Nette\Utils\DateTime;
+use Tapi\Exception\APIException;
 use Tracy\Debugger;
 
 
@@ -49,6 +50,14 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
         $this->template->addFilter('monthName', function ($number) {
             return $this->translator->translate("common.months." . strtolower(DateTime::createFromFormat("!m", $number)->format("F"))) ;
         });
+    }
+    
+    public function handleTapiException(APIException $ex, $redirect = null, $args = []){
+        $this->flashMessage($this->translator->translate("common.alerts.exceptionOccured") . ": " . $ex->getMessage(), "danger");
+        if($redirect)
+            $this->redirect ($redirect, $args);
+        else
+            $this->error($this->translator->translate("common.alerts.exceptionOccured") .": " . $ex->getMessage(), $ex->getCode());
     }
     
 }

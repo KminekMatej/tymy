@@ -20,7 +20,6 @@ use Tapi\DiscussionListResource;
 use Tapi\DiscussionNewsListResource;
 use Tapi\EventListResource;
 use Tapi\EventTypeListResource;
-use Tapi\Exception\APIException;
 use Tapi\IsResource;
 use Tapi\MultiaccountListResource;
 use Tapi\NoteListResource;
@@ -162,14 +161,6 @@ class SecuredPresenter extends BasePresenter {
         }
         if(intval($webName))
             return intval($webName);
-    }
-    
-    public function handleTapiException(APIException $ex, $redirect = null, $args = []){
-        $this->flashMessage($this->translator->translate("common.alerts.exceptionOccured") . ": " . $ex->getMessage(), "danger");
-        if($redirect)
-            $this->redirect ($redirect, $args);
-        else
-            $this->error($this->translator->translate("common.alerts.exceptionOccured") .": " . $ex->getMessage(), $ex->getCode());
     }
     
     /**
