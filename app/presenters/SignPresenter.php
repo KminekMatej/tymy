@@ -156,7 +156,24 @@ class SignPresenter extends BasePresenter {
     
     public function renderIn() {
         $this->template->multiple = $this->supplier->getTapi_config()["multiple_team"];
-        $is = $this->is->getData();
+        $this->template->forbidden = FALSE;
+        
+        try {
+            $is = $this->is->getData();
+        } catch (APIException $exc) {
+            switch ($exc->getMessage()) {
+                case "API disabled":
+                    $this->template->teamName = strtoupper($this->supplier->getTym());
+                    $this->template->forbidden = TRUE;
+                    break;
+                default:
+                    throw $exc;
+            }
+            return FALSE;
+        }
+        
+        
+                
         $this->template->teamName = strtoupper($is->teamName);
         $this->translator->setLocale(self::LOCALES[$is->defaultLanguageCode]);
 

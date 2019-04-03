@@ -37,7 +37,7 @@ INPUT[type='submit']:hover {
     background: linear-gradient(to bottom right, #ff5f49, #d14836);
 }
 
-A{
+FORM A{
     display: block;
     background: linear-gradient(to bottom right, #d0d0d0, #bbbbbb);
     color: white;
@@ -46,7 +46,7 @@ A{
     font-size: 14px;
 }
 
-A:hover{
+FORM A:hover{
     color: white;
     text-decoration: none;
     background: linear-gradient(to bottom right, #d0d0d0, #616161);
@@ -57,6 +57,19 @@ DIV.brand{
     color: white;
     font-size: 20pt;
     background: linear-gradient(to bottom right, #333030, #403b3b);
+}
+
+INPUT.disabled{
+    cursor: not-allowed;
+    color: #868e96;
+}
+
+INPUT.disabled:hover{
+    text-decoration: none;
+}
+
+.form-box.disabled{
+    opacity: 0.8;
 }
 
 form th, form td {
