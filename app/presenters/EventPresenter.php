@@ -113,6 +113,8 @@ class EventPresenter extends SecuredPresenter {
         $attArray["PRE"]["UNKNOWN"] = [];
         
         foreach ($event->attendance as $attendee) {
+            if(!array_key_exists($attendee->userId, $users))
+                continue;
             $user = $users[$attendee->userId];
             if ($user->status != "PLAYER")
                 continue; // display only players on event detail
