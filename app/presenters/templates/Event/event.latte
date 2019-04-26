@@ -90,7 +90,7 @@
                                     <td class="tymy-status"><h3><i class="fas fa-long-arrow-alt-right"></i></h3></td>
                                     <td class="tymy-status">
                                         <h5><span class="badge attendance{$prestatusTo->code} active">{$prestatusTo->caption}</span></h5>
-                                        <div class="text-muted" n:if="$history->preDescTo"><small>{$history->preDescTo}</small></div>
+                                        <div class="text-muted" n:if="property_exists($history, 'preDescTo')"><small>{$history->preDescTo}</small></div>
                                     </td>
                                 </tr>
                             </table>
