@@ -66,6 +66,7 @@ alerts:
     newsOnTymyFooter: Přehled novinek zároveň naleznete na
     multiaccountAdded: Tým %team% byl přidán
     multiaccountRemoved: Tým %team% byl odebrán
+    userAdded: Uživatel %fullname% byl přidán
 months:
     january: Leden
     february: Únor

@@ -31,6 +31,8 @@ class TeamPresenter extends SecuredPresenter {
     
     public function beforeRender() {
         parent::beforeRender();
+        
+        $this->template->isNew = false;
         $allFields = UserResource::getAllFields($this->translator);
         $this->template->addFilter('errorsCount', function ($player, $tabName) use ($allFields) {
             switch ($tabName) {
@@ -104,6 +106,71 @@ class TeamPresenter extends SecuredPresenter {
         }
     }
 
+    public function renderNew($player = null) {
+        if(! $this->getUser()->isAllowed("user", "canCreate")){
+            $this->flashMessage($this->translator->translate("common.alerts.notPermitted"), "warning");
+            $this->redirect('this');
+        }
+        
+        $this->template->canUpdate = true;
+        
+        $teamData = $this->is->getData();
+        
+        $errFls = array_intersect($this->supplier->getRequiredFields(), array_merge(UserResource::FIELDS_PERSONAL, UserResource::FIELDS_LOGIN, UserResource::FIELDS_TEAMINFO, UserResource::FIELDS_ADDRESS));
+        $newPlayer = (object)[
+            "id" => null,
+            "login" => "",
+            "canLogin" => true,
+            "canEditCallName" => true,
+            "status" => "PLAYER",
+            "firstName" => "",
+            "lastName" => "",
+            "callName" => "",
+            "language" => $teamData->defaultLanguageCode,
+            "email" => "",
+            "jerseyNumber" => "",
+            "gender" => "UNKNOWN",
+            "street" => "",
+            "city" => "",
+            "zipCode" => "",
+            "phone" => "",
+            "phone2" => "",
+            "birthDate" => "",
+            "nameDayMonth" => null,
+            "nameDayDay" => null,
+            "fullName" => "",
+            "pictureUrl" => "",
+            "displayName" => "",
+            "isNew" => true,
+            "errCnt" => count($errFls),
+            "errFls" => $errFls,
+        ];
+        
+        if($player){
+            try {
+                $user = $this->userDetail->init()
+                        ->setId($this->parseIdFromWebname($player))
+                        ->getData();
+            } catch (APIException $ex) {
+                $this->handleTapiException($ex);
+            }
+            
+            //todo rewrite playerMock
+            $newPlayer = $user;
+            $newPlayer->id = null;
+            $newPlayer->status = "PLAYER";
+            $newPlayer->email = "";
+            $newPlayer->pictureUrl = "";
+        }
+
+        parent::showNotes();
+        
+        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("common.new")]]);
+
+        $this->template->player = $newPlayer;
+        $this->template->allRoles = $this->getAllRoles();
+    }
+    
     public function renderPlayer($player) {
         try {
             $user = $this->userDetail->init()
@@ -142,6 +209,25 @@ class TeamPresenter extends SecuredPresenter {
         $this->template->jerseyList = $jerseyList;
         $this->template->me = $this->userList->getMe();
         $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("team.jersey", 2), "link" => $this->link("Team:jerseys")]]);
+    }
+    
+    public function handleCreate(){
+        $bind = $this->getRequest()->getPost();
+        if(array_key_exists("roles", $bind["changes"]) && $bind["changes"]["roles"] === ""){
+            $bind["changes"]["roles"] = [];
+        }
+        /* @todo Finish proper validation on new player, make sure that password and email fields are filled */
+        try {
+            $createdPlayer = $this->userCreator->init()
+                ->setUser($bind["changes"])
+                ->perform();
+        } catch (APIException $ex) {
+            $this->handleTapiException($ex, "this");
+        }
+        
+        $this->flashMessage($this->translator->translate("common.alerts.userAdded", null, ["fullname" => $createdPlayer->displayName]), "success");
+        
+        $this->redirect("Team:player", $createdPlayer->webName);
     }
     
     public function handleEdit(){

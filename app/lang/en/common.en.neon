@@ -66,6 +66,7 @@ alerts:
     newsOnTymyFooter: You can checkout news also on
     multiaccountAdded: Team %team% succesfully added
     multiaccountRemoved: Team %team% succesfully removed
+    userAdded: User %fullname% succesfully added
 months:
     january: January
     february: February

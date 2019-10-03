@@ -26,7 +26,9 @@ class RouterFactory
                 $router[] = new Route('tym/clenove', 'Team:members');
                 $router[] = new Route('tym/marodi', 'Team:sicks');
                 $router[] = new Route('tym/dresy', 'Team:jerseys');
+                $router[] = new Route('tym/novy', 'Team:new');
                 $router[] = new Route('tym/<player>', 'Team:player');
+                $router[] = new Route('tym/<player>/novy', 'Team:new');
                 $router[] = new Route('ankety', 'Poll:default');
                 $router[] = new Route('diskuze/<discussion>[/<page>] ? search=<search>', 'Discussion:discussion');
                 $router[] = new Route('udalosti/<udalost>', 'Event:event');

@@ -66,6 +66,7 @@ alerts:
     newsOnTymyFooter: Możesz sprawdzić aktualności również na
     multiaccountAdded: Zespół %team% został dodany
     multiaccountRemoved: Zespół %team% został usunięty
+    userAdded: Użytkownik %fullname% został pomyślnie dodany
 months:
     january: Styczeń    
     february: Luty
