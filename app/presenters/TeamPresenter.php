@@ -32,7 +32,6 @@ class TeamPresenter extends SecuredPresenter {
     public function beforeRender() {
         parent::beforeRender();
         
-        $this->template->isNew = false;
         $allFields = UserResource::getAllFields($this->translator);
         $this->template->addFilter('errorsCount', function ($player, $tabName) use ($allFields) {
             switch ($tabName) {
