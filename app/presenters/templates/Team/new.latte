@@ -72,7 +72,7 @@
                                         <th>{_team.phone}:</th><td><input name="phone" data-value type="text" value="{$player->phone}" n:class="col-6, form-control, in_array('phone',$player->errFls) ? is-invalid" /></td>
                                     </tr>
                                     <tr>
-                                        <th>{_team.email}:</th><td><div class="input-group"><input name="email" data-value type="text" value="{$player->email}" n:class="col-6, form-control, in_array('email',$player->errFls) ? is-invalid" style="min-width: 200px"/><div class="input-group-append"><span class="input-group-text"><a n:tag-if="$player->email != ''" href="mailto:{$player->email}"><i class="fa fa-envelope" aria-hidden="true"></i></a></span></div></div></td>
+                                        <th>{_team.email}:</th><td><div class="input-group"><input name="email" data-value=" " type="text" value="{$player->email}" n:class="col-6, form-control, in_array('email',$player->errFls) ? is-invalid" style="min-width: 200px"/><div class="input-group-append"><span class="input-group-text"><a n:tag-if="$player->email != ''" href="mailto:{$player->email}"><i class="fa fa-envelope" aria-hidden="true"></i></a></span></div></div></td>
                                     </tr>
                                     <tr>
                                         <th>{_team.birthDate}:</th><td><input name="birthDate" data-value type="date" value="{$player->birthDate}" n:class="col-6, form-control, in_array('birthDate',$player->errFls) ? is-invalid" /></td>
@@ -111,7 +111,7 @@
                                         <th>{_team.canEditCallName}:</th><td><input name="canEditCallName" data-value type="checkbox" n:attr='checked => $player->canEditCallName' class="form-control form-check col-6" /></td>
                                     </tr>
                                     <tr>
-                                        <th>{_team.login}:</th><td><input name="login" data-value type="text" value="{$player->login}" class="col-6 form-control is-invalid" /></td>
+                                        <th>{_team.login}:</th><td><input name="login" data-value type="text" class="col-6 form-control is-invalid" /></td>
                                     </tr>
                                     <tr>
                                         <th>{_team.password}:</th><td><input name="password" data-value=" " type="password" value="" class="form-control col-6 is-invalid" data-validation-field2="password-check"/></td>
