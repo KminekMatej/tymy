@@ -31,7 +31,7 @@
                             <a class="flex-sm-fill text-sm-center nav-link active" data-toggle="tab" href="#osobni-udaje" role="tab">{_team.personalData} <span n:if="$cnt > 0" class="badge badge-pill badge-danger">{$cnt}</span></a>
                         </li>
                         <li class="nav-item">
-                            {var $cnt = ($player,'prihlaseni'|errorsCount)}
+                            {var $cnt = ($player,'prihlaseni'|errorsCount) + 3}
                             <a class="flex-sm-fill text-sm-center nav-link" data-toggle="tab" href="#prihlaseni" role="tab">{_team.loginData} <span n:if="$cnt > 0" class="badge badge-pill badge-danger">{$cnt}</span></a>
                         </li>
                         <li class="nav-item">
@@ -111,13 +111,13 @@
                                         <th>{_team.canEditCallName}:</th><td><input name="canEditCallName" data-value type="checkbox" n:attr='checked => $player->canEditCallName' class="form-control form-check col-6" /></td>
                                     </tr>
                                     <tr>
-                                        <th>{_team.login}:</th><td><input name="login" data-value type="text" value="{$player->login}" n:class="col-6, form-control, in_array('login',$player->errFls) ? is-invalid" /></td>
+                                        <th>{_team.login}:</th><td><input name="login" data-value type="text" value="{$player->login}" class="col-6 form-control is-invalid" /></td>
                                     </tr>
                                     <tr>
-                                        <th>{_team.password}:</th><td><input name="password" data-value=" " type="password" value="" class="form-control col-6" data-validation-field2="password-check"/></td>
+                                        <th>{_team.password}:</th><td><input name="password" data-value=" " type="password" value="" class="form-control col-6 is-invalid" data-validation-field2="password-check"/></td>
                                     </tr>
                                     <tr>
-                                        <th>{_team.newPasswordAgain}:</th><td><input name="password-check" type="password" value="" class="form-control col-6" /></td>
+                                        <th>{_team.newPasswordAgain}:</th><td><input name="password-check" type="password" value="" class="form-control col-6 is-invalid" /></td>
                                     </tr>
                                     <tr>
                                         <th>{_team.canLogin}:</th><td><input name="canLogin" data-value type="checkbox" n:attr='checked => $player->canLogin' class="form-control from-control-lg form-check col-6" /></td>
