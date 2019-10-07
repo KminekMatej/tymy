@@ -44,13 +44,16 @@
                 <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-users" aria-hidden="true"></i> {_team.team,1}</a>    
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <a class="dropdown-item" href="{plink Team:player $me->webName}">{$me->displayName} <span class="badge badge-danger" n:if="$me->errCnt">{$me->errCnt}</span></a>
+                    <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{plink Team:inits}" n:if="$counts['INIT'] > 0 && $user->isAllowed('users','canSeeRegisteredUsers')">{_team.INIT,2} ({$counts['INIT']})</a>
                     <a class="dropdown-item" href="{plink Team:players}">{_team.PLAYER,2} ({$counts['PLAYER']}) <span class="badge badge-success" n:if="$counts['NEW:PLAYER'] > 0">{_common.new}</span></a>
                     <a class="dropdown-item" href="{plink Team:members}">{_team.MEMBER,2} ({$counts['MEMBER']})</a>
                     <a class="dropdown-item" href="{plink Team:sicks}">{_team.SICK,2} ({$counts['SICK']})</a>
                     <a class="dropdown-item" href="{plink Team:}">{_common.everyone} ({$counts['ALL']}) <span class="badge badge-success" n:if="$counts['NEW'] > 0">{_common.new}</span></a>
+                    <a class="dropdown-item" href="{plink Team:new}" n:if="$user->isAllowed('user', 'canCreate')"><i class="fa fa-plus-circle text-success" aria-hidden="true"></i> {_common.new}</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{plink Team:jerseys}">{_team.jerseyList}</a>
+                    
                 </div>
             </li>
             
