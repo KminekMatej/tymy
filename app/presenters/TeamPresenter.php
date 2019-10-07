@@ -116,7 +116,7 @@ class TeamPresenter extends SecuredPresenter {
         $teamData = $this->is->getData();
         
         $errFls = array_intersect($this->supplier->getRequiredFields(), array_merge(UserResource::FIELDS_PERSONAL, UserResource::FIELDS_LOGIN, UserResource::FIELDS_TEAMINFO, UserResource::FIELDS_ADDRESS));
-        \Tracy\Debugger::barDump($errFls);
+        
         $newPlayer = (object)[
             "id" => null,
             "login" => "",
