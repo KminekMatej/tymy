@@ -34,7 +34,9 @@ class EventPresenter extends SecuredPresenter {
             }
         });
 
-        $this->template->addFilter("prestatusClass", function ($myPreStatus, $myPostStatus, $code, $startTime) {
+        $this->template->addFilter("prestatusClass", function ($myPreStatus, $myPostStatus, $code, $canPlan, $startTime) {
+            if(!$canPlan)
+                return $code == $myPostStatus && $myPostStatus != "not-set" ? "attendance$code disabled active" : "btn-outline-secondary disabled";
             if (strtotime($startTime) > strtotime(date("c")))// pokud podminka plati, akce je budouci
                 return $code == $myPreStatus ? "attendance$code active" : "attendance$code";
             else if ($myPostStatus == "not-set") // akce uz byla, post status nevyplnen

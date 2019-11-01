@@ -97,7 +97,7 @@
                                         <div class="btn-group input-group px-0" role="group" aria-label="Basic example" id="action-{$ev->id}">
                                             <input type="text" class="form-control form-control-sm" title="{_note.note,1}" name="preStatusDesc" value="{$ev->myAttendance->preDescription}" />
                                             {foreach $eventTypes[$ev->type]->preStatusSet as $preStatus}
-                                                <button data-test="{$ev->myPreStatusCaption}" onclick="updateAttendance(this, {link attendance! $ev->id, $preStatus->code})" class="btn btn-sm {$ev->myPreStatusCaption,$ev->myPostStatusCaption,$preStatus->code,$ev->closeTime|prestatusClass}">{$preStatus->caption}</button>
+                                                <button onclick="updateAttendance(this, {link attendance! $ev->id, $preStatus->code})" class="btn btn-sm {$ev->myPreStatusCaption,$ev->myPostStatusCaption,$preStatus->code,$ev->canPlan,$ev->closeTime|prestatusClass}">{$preStatus->caption}</button>
                                             {/foreach}
                                         </div>
                                     </div>
