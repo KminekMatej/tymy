@@ -24,8 +24,8 @@ abstract class DebtResource extends TapiObject {
         if(!empty($debt->debtDate)){
             $this->timeLoad($debt->debtDate);
         }
-        if(!property_exists($debt, "paymentSent")) $debt->paymentSent == null;
-        if(!property_exists($debt, "paymentReceived")) $debt->paymentReceived == null;
+        if(!property_exists($debt, "paymentSent")) $debt->paymentSent = null;
+        if(!property_exists($debt, "paymentReceived")) $debt->paymentReceived = null;
     }
     
     protected function clearCache($id = NULL){

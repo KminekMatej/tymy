@@ -16,6 +16,7 @@ use Nette\Caching\Cache;
 use Nette\Caching\Storages\NewMemcachedStorage;
 use Nette\Security\IUserStorage;
 use Tapi\AuthDetailResource;
+use Tapi\DebtListResource;
 use Tapi\DiscussionListResource;
 use Tapi\DiscussionNewsListResource;
 use Tapi\EventListResource;
