@@ -66,6 +66,9 @@ class SecuredPresenter extends BasePresenter {
         
     /** @var UserListResource @inject */
     public $userList;
+        
+    /** @var DebtListResource @inject */
+    public $debtList;
     
     /** @var AuthDetailResource @inject */
     public $apiRights;

@@ -59,6 +59,7 @@ class HomepagePresenter extends SecuredPresenter {
             $this->eventList->init()->setHalfYearFrom(NULL, NULL)->getData();
             $this->template->liveUsers = $this->live->init()->getData();
             $this->template->discussions = $this->discussionList->init()->getData();
+            $this->template->debts = $this->debtList->init()->getData();
             $this->template->users = $this->sortUsersByLastLogin($this->userList->init()->getData());
             $this->template->notices = $this->newsResource->init()->getData();
         } catch (APIException $ex) {
