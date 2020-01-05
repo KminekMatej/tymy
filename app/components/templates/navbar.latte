@@ -70,6 +70,33 @@
                     {/if}
                 </div>
             </li>
+            
+            <li class="nav-item dropdown" name="debts">
+                {if $debtWarnings > 0}<span class="badge badge-pill badge-danger badge-new">{$debtWarnings}</span>{/if}
+                <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-money-bill-alt" aria-hidden="true"></i> {_debt.debt,2}</a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <button n:if="count($debts) == 0" class="dropdown-item disabled" type="button"> - {_debt.noDebt} - </button>
+                    {if count($debts)}
+                        {foreach $debts as $d}
+                        {*<a n:foreach="$debts as $d" class="dropdown-item" href="{plink Debt:debt $d->webName}">*}
+                        <a n:if="empty($d->paymentReceived)" class="dropdown-item" href="#">
+                            <span class="{$d->class}">{$d->caption}</span>
+                            <span class="font-italic">{$d->displayString}</span>
+                            
+                            
+                            {*
+                            echo "<tr class=\"" . (($row_count++ % 2 == 1) ? "light" : "dark") . "\">"
+                            . "<td><a href='{$link}' class='{$italic}'><span class='{$debt->class}'>{$debt->caption}</span></a> <span style='font-style: italic'>{$debt->displayString}</span></td>"
+                            . "<td style='text-align: right'><a href='{$link}' class='{$italic}'><span class='{$debt->class}'>" . money_format('%.2n', $debt->amount) . "</span></a></td>"
+                            . "</tr>";
+                            *}
+                            
+                            
+                        </a>
+                        {/foreach}
+                    {/if}
+                </div>
+            </li>
 
             <li class="nav-item dropdown" name="notes">
                 {if $notesWarnings > 0}<span class="badge badge-pill badge-danger badge-new">{$noteWarnings}</span>{/if}

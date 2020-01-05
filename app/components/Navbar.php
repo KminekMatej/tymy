@@ -5,6 +5,7 @@ namespace Nette\Application\UI;
 use App\Model\Supplier;
 use App\Presenters\SecuredPresenter;
 use Nette;
+use Tapi\DebtListResource;
 use Tapi\DiscussionListResource;
 use Tapi\EventListResource;
 use Tapi\Exception\APIException;
@@ -34,6 +35,9 @@ class NavbarControl extends Control {
 
     /** @var EventListResource */
     private $eventList;
+
+    /** @var DebtListResource */
+    private $debtList;
 
     /** @var UserDetailResource */
     private $userDetail;
@@ -65,6 +69,7 @@ class NavbarControl extends Control {
         $this->noteList = $presenter->noteList;
         $this->polls = $this->presenter->polls;
         $this->eventList = $this->presenter->eventList;
+        $this->debtList = $this->presenter->debtList;
         $this->userDetail = $this->presenter->userDetail;
         $this->userList = $this->presenter->userList;
         $this->maList = $this->presenter->maList;
@@ -95,6 +100,17 @@ class NavbarControl extends Control {
         try {
             $this->template->discussions = $this->discussionList->init()->getData();
             $this->template->discussionWarnings = $this->discussionList->getWarnings();
+        } catch (APIException $ex) {
+            $this->presenter->handleTapiException($ex);
+        }
+    }
+
+    private function debts() {
+        try {
+            $debts = $this->debtList->init()->getData();
+            $this->debtList->postProcessWithUsers($this->userList->getById(), $debts);
+            $this->template->debts = $debts;
+            $this->template->debtWarnings = $this->debtList->getWarnings();
         } catch (APIException $ex) {
             $this->presenter->handleTapiException($ex);
         }
@@ -172,6 +188,8 @@ class NavbarControl extends Control {
         $this->notes();
         //tapi multiaccounts
         $this->multiaccounts();
+        //tapi debts
+        $this->debts();
         
         $template->render();
     }
