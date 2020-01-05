@@ -248,3 +248,20 @@ IMG.skin-logo{
 .navbar .navbar-text a:hover, .navbar .navbar-text a:focus {
   color: rgba(0, 0, 0, 0.9);
 }
+
+.debt.incoming{
+    color: #41df46;
+}
+
+.debt.pending{
+    color: #ff5a5a;
+}
+
+.debt.received{
+    color: #41df46;
+    text-decoration: line-through;
+}
+
+.debt.sent{
+    color: #ffbd00;
+}
