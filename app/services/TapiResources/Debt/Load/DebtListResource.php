@@ -25,11 +25,26 @@ class DebtListResource extends DebtResource {
         usort($this->data, function($a, $b){
             return $a->canSetSentDate ? -1 : 1;
         });
+        $debtsFromMe = [];
+        $debtsFromTeam = [];
+        $debtsToMe = [];
+        $debtsToTeam = [];
         foreach ($this->data as $debt) {
             parent::postProcessDebt($debt);
-            if ($debt->canSetSentDate && empty($debt->paymentSent))
+            if ($debt->canSetSentDate && empty($debt->paymentSent)) {
                 $this->options->warnings += 1;
+            }
+            if ($debt->debtorId == $this->user->id) {
+                $debtsFromMe[] = $debt;
+            } else if ($debt->debtorType == self::TYPE_TEAM) {
+                $debtsFromTeam[] = $debt;
+            } else if ($debt->payeeType == self::TYPE_TEAM) {
+                $debtsToTeam[] = $debt;
+            } else {
+                $debtsToMe[] = $debt;
+            }
         }
+        $this->data = array_merge($debtsFromMe, $debtsFromTeam, $debtsToTeam, $debtsToMe);
     }
     
     
