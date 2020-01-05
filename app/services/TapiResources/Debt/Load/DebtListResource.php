@@ -22,11 +22,16 @@ class DebtListResource extends DebtResource {
 
     protected function postProcess() {
         $this->options->warnings = 0;
+        usort($this->data, function($a, $b){
+            return $a->canSetSentDate ? -1 : 1;
+        });
         foreach ($this->data as $debt) {
             parent::postProcessDebt($debt);
             if ($debt->canSetSentDate && empty($debt->paymentSent))
                 $this->options->warnings += 1;
         }
     }
+    
+    
 
 }
