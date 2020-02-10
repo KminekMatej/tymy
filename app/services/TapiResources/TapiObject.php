@@ -30,6 +30,9 @@ abstract class TapiObject {
     
     const BAD_REQUEST = 400;
     
+    const ENCODING_JSON = "application/json";
+    const ENCODING_URLENCODED = "application/x-www-form-urlencoded";
+    
     const DATETIME_ISO8601 = "c";
     const CZECH_DATETIME = "j.n.Y H:i";
     const CZECH_DATE = "j.n.Y";
@@ -86,8 +89,8 @@ abstract class TapiObject {
     /** @var TapiAuthenticator */
     protected $tapiAuthenticator;
     
-    /** @var boolean Should sent data be encoded in JSON */
-    private $jsonEncoding;
+    /** @var boolean Input data encoding */
+    private $encoding = self::ENCODING_JSON;
     
     /** @var TapiService */
     protected $tapiService;
@@ -121,7 +124,6 @@ abstract class TapiObject {
         $this->cacheable = TRUE;
         $this->cachingTimeout = TapiObject::CACHE_TIMEOUT_SMALL;
         if($tapiService) $this->tapiService = $tapiService;
-        $this->jsonEncoding = TRUE;
         $this->tsidRequired = TRUE;
         $this->method = RequestMethod::GET;
         $this->options = new stdClass();
@@ -315,12 +317,12 @@ abstract class TapiObject {
         return $this;
     }
 
-    public function getJsonEncoding() {
-        return $this->jsonEncoding;
+    public function getEncoding() {
+        return $this->encoding;
     }
 
-    public function setJsonEncoding($jsonEncoding) {
-        $this->jsonEncoding = $jsonEncoding;
+    public function setEncoding($encoding) {
+        $this->encoding = $encoding;
         return $this;
     }
     
