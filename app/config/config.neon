@@ -86,6 +86,7 @@ services:
         - Tapi\StatusListResource
         - Tapi\ConfigResource
         - Tapi\DebtListResource
+        - Tapi\DebtDetailResource
 
 tracy:
     email: matej.kminek@attendees.eu
