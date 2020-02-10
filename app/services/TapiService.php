@@ -147,12 +147,33 @@ class TapiService {
         $formattedData = NULL;
         
         if ($this->tapiObject->getMethod() != RequestMethod::GET && $this->tapiObject->getRequestData()) {
-            curl_setopt($this->curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-            $formattedData = $this->tapiObject->getJsonEncoding() ? json_encode($this->tapiObject->getRequestData()) : $this->tapiObject->getRequestData();
-            curl_setopt($this->curl, CURLOPT_POSTFIELDS, $formattedData);
+            switch ($this->tapiObject->getEncoding()) {
+                case TapiObject::ENCODING_JSON:
+                    curl_setopt($this->curl, CURLOPT_HTTPHEADER, array('Content-Type: ' . TapiObject::ENCODING_JSON));
+                    curl_setopt($this->curl, CURLOPT_POSTFIELDS, json_encode($this->tapiObject->getRequestData()));
+                    break;
+                case TapiObject::ENCODING_URLENCODED:
+                    curl_setopt($this->curl, CURLOPT_HTTPHEADER, array('Content-Type: ' . TapiObject::ENCODING_URLENCODED));
+                    curl_setopt($this->curl, CURLOPT_POSTFIELDS, http_build_query($this->tapiObject->getRequestData()));
+                    break;
+                default:
+                    curl_setopt($this->curl, CURLOPT_POSTFIELDS, $this->tapiObject->getRequestData());
+                    break;
+            }
         }
+        curl_setopt($this->curl, CURLOPT_VERBOSE, true);
+        $verbose = fopen('php://temp', 'w+');
+        curl_setopt($this->curl, CURLOPT_STDERR, $verbose);
+        Debugger::barDump(curl_getinfo($this->curl));
+        Debugger::barDump(curl_error($this->curl));
         $result = ["data" => curl_exec($this->curl), "info" => curl_getinfo($this->curl)];
+
         if(curl_error($this->curl)) $result["error"] = curl_errno($this->curl) . ": " . curl_error($this->curl);
+        
+        rewind($verbose);
+        $verboseLog = stream_get_contents($verbose);
+        //echo $verboseLog;
+        
         $this->tapiPanel->logAPI($this->url, $this->tapiObject->getMethod(), $formattedData, Debugger::timer("tapi-request $objectHash"), $result["info"]["http_code"]);
         return (object) $result;
     }
@@ -201,6 +222,7 @@ class TapiService {
     private function loginFailure($relogin) {
         if ($relogin && !is_null($this->authenticator)) { // relogin only if specified, is authenticator and is class needed logins
             $savedTapiObject = $this->tapiObject;
+            Debugger::barDump($this->user->getIdentity()->data, "loginf");
             $newLogin = $this->authenticator->setTapiService($this)->reAuthenticate([$this->user->getIdentity()->data["login"], $this->user->getIdentity()->data["hash"]]);
             $this->user->getIdentity()->sessionKey = $newLogin->sessionKey;
             return $this->requestNoRelogin($savedTapiObject);
