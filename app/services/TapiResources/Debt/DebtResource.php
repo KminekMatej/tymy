@@ -17,7 +17,7 @@ abstract class DebtResource extends TapiObject {
     
     protected function postProcessDebt($debt) {
         if($debt== null) TapiService::throwNotFound();
-        $debt->webName = Strings::webalize($debt->caption);
+        $debt->webName = Strings::webalize($debt->id . "-" . $debt->caption);
         if(!empty($debt->created)){
             $this->timeLoad($debt->created);
         }
