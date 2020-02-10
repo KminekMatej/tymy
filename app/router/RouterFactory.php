@@ -20,6 +20,7 @@ class RouterFactory
                 $router[] = new Route('diskuze', 'Discussion:default');
                 $router[] = new Route('udalosti', 'Event:default');
                 $router[] = new Route('poznamky', 'Notes:default');
+                $router[] = new Route('dluznicek', 'Debt:default');
                 $router[] = new Route('tym', 'Team:default');
                 $router[] = new Route('tym/registrovani', 'Team:inits');
                 $router[] = new Route('tym/hraci', 'Team:players');
@@ -32,6 +33,7 @@ class RouterFactory
                 $router[] = new Route('ankety', 'Poll:default');
                 $router[] = new Route('diskuze/<discussion>[/<page>] ? search=<search>', 'Discussion:discussion');
                 $router[] = new Route('udalosti/<udalost>', 'Event:event');
+                $router[] = new Route('dluznicek/<dluh>', 'Debt:debt');
                 $router[] = new Route('ankety/<anketa>', 'Poll:poll');
                 $router[] = new Route('poznamky/<poznamka>', 'Notes:note');
                 $router[] = new Route('nastaveni', 'Settings:default');
