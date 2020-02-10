@@ -16,7 +16,7 @@ class AvatarUploadResource extends UserResource{
         $this->setMethod(RequestMethod::POST);
         $this->setCacheable(FALSE);
         $this->setAvatar(NULL);
-        $this->setJsonEncoding(FALSE);
+        $this->setEncoding(null);
         return $this;
     }
 

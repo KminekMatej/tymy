@@ -16,6 +16,8 @@ class LoginResource extends UserResource  {
         $this->setCacheable(FALSE);
         $this->setTsidRequired(FALSE);
         $this->setLogin(NULL);
+        $this->setMethod(RequestMethod::POST);
+        $this->setEncoding(self::ENCODING_URLENCODED);
         return $this;
     }
 
@@ -24,14 +26,21 @@ class LoginResource extends UserResource  {
         if($this->options->login == null)
             throw new APIException('Login is missing', self::BAD_REQUEST);
         
-        $this->setUrl("login/" . $this->options->login . "/" . $this->options->hash);
-
+        $this->setUrl("login");
+        
+        $this->setRequestData([
+            "login" => $this->options->login,
+            "password" => $this->options->hash,
+            "requests" => "news",
+        ]);
+        
         return $this;
     }
     
     protected function postProcess() {
+        \Tracy\Debugger::barDump($this->data, "Response data");
         $this->data->sessionKey = $this->sessionKey;
-        parent::postProcessUser($this->data);
+        parent::postProcessUser($this->data->user);
     }
     
     public function setLogin($login) {

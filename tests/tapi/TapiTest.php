@@ -107,7 +107,7 @@ abstract class TapiTest extends TestCase {
         Assert::count(0, $this->tapiObject->getRequestParameters());
         Assert::equal($this->getMethod(), $this->tapiObject->getMethod());
         Assert::equal($this->getCacheable(), $this->tapiObject->isCacheable());
-        Assert::equal($this->getJSONEncoding(), $this->tapiObject->getJsonEncoding());
+        Assert::equal($this->getJSONEncoding(), $this->tapiObject->getEncoding());
         Assert::null($this->tapiObject->getRequestData());
     }
 
