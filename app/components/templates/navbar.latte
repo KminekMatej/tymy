@@ -77,21 +77,15 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <button n:if="count($debts) == 0" class="dropdown-item disabled" type="button"> - {_debt.noDebt} - </button>
                     {if count($debts)}
+                        {var $divided = false}
                         {foreach $debts as $d}
-                        {*<a n:foreach="$debts as $d" class="dropdown-item" href="{plink Debt:debt $d->webName}">*}
-                        <a n:if="empty($d->paymentReceived)" class="dropdown-item" href="#">
+                            {if $divided == false && !$d->canSetSentDate}
+                                <div class="dropdown-divider"></div>
+                                {var $divided = true}
+                            {/if}
+                        <a n:if="empty($d->paymentReceived)" class="dropdown-item" href="{plink Debt:debt $d->webName}">
                             <span class="{$d->class}">{$d->caption}</span>
                             <span class="font-italic">{$d->displayString}</span>
-                            
-                            
-                            {*
-                            echo "<tr class=\"" . (($row_count++ % 2 == 1) ? "light" : "dark") . "\">"
-                            . "<td><a href='{$link}' class='{$italic}'><span class='{$debt->class}'>{$debt->caption}</span></a> <span style='font-style: italic'>{$debt->displayString}</span></td>"
-                            . "<td style='text-align: right'><a href='{$link}' class='{$italic}'><span class='{$debt->class}'>" . money_format('%.2n', $debt->amount) . "</span></a></td>"
-                            . "</tr>";
-                            *}
-                            
-                            
                         </a>
                         {/foreach}
                     {/if}
