@@ -31,7 +31,7 @@ class TapiRequestTimestamp {
         if($this->requestMethod != "GET") $html .= "</span></span>";
         if($this->requestMethod != "GET"){ //add data to collapse
             $html .= "<div class=\"tracy-collapsed\">";
-            $html .= "<span style='font-weight: normal; font-style: italic'>".$this->requestData."</span>";
+            $html .= "<span style='font-weight: normal; font-style: italic'>".print_r($this->requestData, true)."</span>";
             $html .= "</div>";
         }
         $html .= "</th>";
