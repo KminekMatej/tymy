@@ -1,2 +1,11 @@
 debt: Dluh|Dlužníček
 noDebt: Žádný dluh
+debtorId: Dlužník
+payeeId: Komu
+amount: Částka
+debtDate: Dluh vznikl
+accountNumber: Číslo účtu
+country: Země účtu
+varcode: Variabilní symbol
+paymentReceived: Platba přijata
+paymentSend: Platba odeslána

@@ -1,2 +1,11 @@
 debt: Debt|Debts
 noDebt: No debt
+debtorId: Debtor
+payeeId: Whom
+amount: Amount
+debtDate: Debt created
+accountNumber: Account number
+country: Account country
+varcode: Variable code
+paymentReceived: Payment received
+paymentSend: Payment sent

@@ -1,2 +1,11 @@
 debt: Dług|Długi
 noDebt: Bez długów
+debtorId: Dłużnik
+payeeId: Kogo
+amount: Ilość
+debtDate: Dług utworzony
+accountNumber: Numer konta
+country: Kraj konta
+varcode: Zmienny kod
+paymentReceived: Otrzymano płatność
+paymentSend: Płatność wysłana

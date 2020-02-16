@@ -1,2 +1,11 @@
 debt: Dette|Dettes
 noDebt: Aucune dette ici
+debtorId: Débiteur
+payeeId: Qui
+amount: Montant
+debtDate: Dette créée
+accountNumber: Numéro de compte
+country: Pays du compte
+varcode: Code variable
+paymentReceived: Paiement reçu
+paymentSend: Paiement envoyé
