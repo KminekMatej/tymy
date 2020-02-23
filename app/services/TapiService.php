@@ -164,8 +164,6 @@ class TapiService {
         curl_setopt($this->curl, CURLOPT_VERBOSE, true);
         $verbose = fopen('php://temp', 'w+');
         curl_setopt($this->curl, CURLOPT_STDERR, $verbose);
-        Debugger::barDump(curl_getinfo($this->curl));
-        Debugger::barDump(curl_error($this->curl));
         $result = ["data" => curl_exec($this->curl), "info" => curl_getinfo($this->curl)];
 
         if(curl_error($this->curl)) $result["error"] = curl_errno($this->curl) . ": " . curl_error($this->curl);
@@ -222,7 +220,6 @@ class TapiService {
     private function loginFailure($relogin) {
         if ($relogin && !is_null($this->authenticator)) { // relogin only if specified, is authenticator and is class needed logins
             $savedTapiObject = $this->tapiObject;
-            Debugger::barDump($this->user->getIdentity()->data, "loginf");
             $newLogin = $this->authenticator->setTapiService($this)->reAuthenticate([$this->user->getIdentity()->data["login"], $this->user->getIdentity()->data["hash"]]);
             $this->user->getIdentity()->sessionKey = $newLogin->sessionKey;
             return $this->requestNoRelogin($savedTapiObject);
