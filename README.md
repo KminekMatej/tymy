@@ -7,7 +7,7 @@ Javascript framework jQuery: (https://jquery.com/)
 
 Bootstrap v4 UI: (http://getbootstrap.com/)
 
-![Alt text](/screenshots/scr_login.png?raw=true "Login page")
+![Alt text](/screenshots/scr_login.png?raw=true "Login page" )
 ![Alt text](/screenshots/scr_homepage.png?raw=true "Login page")
 ![Alt text](/screenshots/scr_navbar.png?raw=true "Login page")
 ![Alt text](/screenshots/scr_events.png?raw=true "Login page")
