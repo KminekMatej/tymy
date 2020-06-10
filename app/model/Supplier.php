@@ -27,8 +27,7 @@ class Supplier {
         $this->setAppDir($appDir);
         $this->setVersion();
         $this->setAllSkins($appConfig["allSkins"]);
-
-        $this->setTeamNeonDir($this->getAppDir() . "/../../../tymy/" . $this->getTym() . "/config");
+        $this->setTeamNeonDir(sprintf($tapi_config["src_dir"], $this->getAppDir(), $this->getTym()));
         $this->loadTeamNeon();
     }
 
