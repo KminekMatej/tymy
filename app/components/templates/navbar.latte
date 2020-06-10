@@ -78,8 +78,9 @@
                     <button n:if="count($debts) == 0" class="dropdown-item disabled" type="button"> - {_debt.noDebt} - </button>
                     {if count($debts)}
                         {var $divided = false}
+                        {var $prevD = null}
                         {foreach $debts as $d}
-                            {if $divided == false && !$d->canSetSentDate}
+                            {if !$divided && !$d->canSetSentDate && $prevD && $prevD->canSetSentDate}
                                 <div class="dropdown-divider"></div>
                                 {var $divided = true}
                             {/if}
