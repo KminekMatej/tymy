@@ -2,6 +2,11 @@
 
 namespace Tapi;
 
+use App\Model\Supplier;
+use Kdyby\Translation\Translator;
+use Nette\Caching\Storages\NewMemcachedStorage;
+use Nette\Security\User;
+
 /**
  * Project: tymy_v2
  * Description of UserListResource
@@ -9,6 +14,15 @@ namespace Tapi;
  * @author kminekmatej created on 29.12.2017, 19:57:30
  */
 class UserListResource extends UserResource {
+    
+    /** @var Translator */
+    private $translator;
+    
+    public function __construct(Supplier $supplier, User $user, TapiService $tapiService, NewMemcachedStorage $cacheStorage, Translator $translator) {
+        parent::__construct($supplier, $user, $tapiService, $cacheStorage);
+        $this->translator = $translator;
+    }
+
     
     public function init() {
         parent::globalInit();
@@ -60,6 +74,18 @@ class UserListResource extends UserResource {
                 $this->options->byTypeAndId[$user->status][$user->id] = $user;
             }
         }
+    }
+    
+    private function mockTeamUser(){
+        return (object)[
+            "id" => 0,
+            "displayName" => "*** TEAM ***",
+        ];
+    }
+    
+    public function getByIdWithTeam(){
+        
+        return [$this->mockTeamUser()] + $this->options->byId;
     }
 
     public function getUserType() {
