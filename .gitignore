@@ -13,3 +13,4 @@
 /tests/test_XDEV.sh
 /tests/test_XDEV_COMPONENTS.sh
 /tests/test_XDEV_PRESENTERS.sh
+/vendor/
