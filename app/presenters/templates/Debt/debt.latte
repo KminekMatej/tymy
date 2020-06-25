@@ -14,8 +14,8 @@
     <div class="row">
         <div class="col">
             <div class="card sh-box my-3" data-binder-id="{$debt->id}">
-                <div class="card-header">{dump $userListWithTeam}
-                    <h4 class="card-title">{$userListWithTeam[$debt->debtorId]->displayName}: {$debt->caption}</h4>
+                <div class="card-header">
+                    <h4 class="card-title">{$debt->caption} ({$userListWithTeam[$debt->debtorId]->displayName} -> {$userListWithTeam[$debt->payeeId]->displayName})</h4>
                 </div>
                 <div class="card-body">
                     <div class="row">
