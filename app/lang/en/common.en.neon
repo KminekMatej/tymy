@@ -67,6 +67,7 @@ alerts:
     multiaccountAdded: Team %team% succesfully added
     multiaccountRemoved: Team %team% succesfully removed
     userAdded: User %fullname% succesfully added
+    debtAdded: Debt created
 months:
     january: January
     february: February

@@ -67,6 +67,7 @@ alerts:
     multiaccountAdded: Zespół %team% został dodany
     multiaccountRemoved: Zespół %team% został usunięty
     userAdded: Użytkownik %fullname% został pomyślnie dodany
+    debtAdded: Dług stworzony
 months:
     january: Styczeń    
     february: Luty

@@ -67,6 +67,7 @@ alerts:
     multiaccountAdded: Tým %team% byl přidán
     multiaccountRemoved: Tým %team% byl odebrán
     userAdded: Uživatel %fullname% byl přidán
+    debtAdded: Dluh byl přidán
 months:
     january: Leden
     february: Únor
