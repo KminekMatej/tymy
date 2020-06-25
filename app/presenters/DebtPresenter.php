@@ -2,11 +2,16 @@
 
 namespace App\Presenters;
 
+use Nette\Utils\Strings;
 use QrCode\QRcode;
+use Tapi\DebtCreateResource;
+use Tapi\DebtDeleteResource;
 use Tapi\DebtDetailResource;
+use Tapi\DebtEditResource;
 use Tapi\DebtListResource;
 use Tapi\Exception\APIException;
 use const QR_ECLEVEL_H;
+use function iban_set_checksum;
 
 /**
  * Description of DebtPresenter
@@ -20,6 +25,15 @@ class DebtPresenter extends SecuredPresenter {
 
     /** @var DebtDetailResource @inject */
     public $debtDetail;
+
+    /** @var DebtCreateResource @inject */
+    public $debtCreator;
+
+    /** @var DebtEditResource @inject */
+    public $debtEditor;
+
+    /** @var DebtDeleteResource @inject */
+    public $debtDeleter;
 
     public function startup() {
         parent::startup();
@@ -94,10 +108,10 @@ class DebtPresenter extends SecuredPresenter {
         $payment["ACC"] = substr($iban, 0, 46);
         $payment["AM"] = substr(number_format($amount, 2, ".", ""), 0, 10);
         $payment["CC"] = $currencyISO;
-        $payment["RN"] = substr(strtoupper(\Nette\Utils\Strings::toAscii($payeeCallName)), 0, 35);
+        $payment["RN"] = substr(strtoupper(Strings::toAscii($payeeCallName)), 0, 35);
         $payment["X-VS"] = substr(strtoupper((string) $varcode), 0, 10);
         $payment["DT"] = date("Ymd");
-        $payment["MSG"] = substr(strtoupper(\Nette\Utils\Strings::toAscii($message)), 0, 60);
+        $payment["MSG"] = substr(strtoupper(Strings::toAscii($message)), 0, 60);
         $payment["NT"] = "E";
         $payment["NTA"] = substr($payeeEmail, 0, 320);
 
@@ -128,6 +142,32 @@ class DebtPresenter extends SecuredPresenter {
         $this->template->userList = $this->userList->getByIdWithTeam();
 
         $this->template->countryList = $this->getCountryList();
+    }
+    
+    public function handleDebtEdit(){
+        $bind = $this->getRequest()->getPost();
+        $this->editDebt($bind);
+    }
+    
+    public function handleDebtDelete() {
+        $bind = $this->getRequest()->getPost();
+        try {
+            $this->debtDeleter->init()->setId($bind["id"])->perform();
+            $this->redirect("Homepage:default");
+        } catch (APIException $ex) {
+            $this->handleTapiException($ex, 'this');
+        }
+    }
+    
+    private function editDebt($bind) {
+        try {
+            $this->debtEditor->init()
+                    ->setId($bind["id"])
+                    ->setNote($bind["changes"])
+                    ->perform();
+        } catch (APIException $ex) {
+            $this->handleTapiException($ex, 'this');
+        }
     }
 
     private function getCountryList() {

@@ -75,6 +75,10 @@
                     </div>
 
                 </div>
+                <div class="card-footer text-right" n:if="$debt->canEdit">
+                    <button href="{link debtDelete!}" class="btn btn-danger mx-2 binder-delete-btn" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                    <button href="{link debtEdit!}" class="btn btn-lg btn-primary binder-save-btn" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
+                </div>
             </div>
         </div>
     </div>
