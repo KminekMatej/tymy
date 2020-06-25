@@ -2,6 +2,7 @@
 
 namespace App\Presenters;
 
+use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
 use QrCode\QRcode;
 use Tapi\DebtCreateResource;
@@ -10,6 +11,8 @@ use Tapi\DebtDetailResource;
 use Tapi\DebtEditResource;
 use Tapi\DebtListResource;
 use Tapi\Exception\APIException;
+use Tapi\TapiObject;
+use Tracy\Debugger;
 use const QR_ECLEVEL_H;
 use function iban_set_checksum;
 
@@ -73,6 +76,44 @@ class DebtPresenter extends SecuredPresenter {
         $message = empty($debt->description) ? $debt->caption : $debt->caption . " - " . $debt->description;
         $paymentString = $this->generateQRCodeString($payeeCallName, $payeeMail, $debt->payeeAccountNumber, $debt->amount, $debt->varcode, $message, $debt->currencyIso, $debt->countryIso);
         QRcode::png($paymentString, false, QR_ECLEVEL_H, 4, 4);
+    }
+    
+    public function renderNew() {
+
+        try {
+            $this->userList->init()->getData();
+        } catch (APIException $ex) {
+            $this->handleTapiException($ex);
+        }
+        
+        $me = $this->userList->getMe();
+        Debugger::barDump($me);
+        
+        $newDebt = (object)[
+            "id" => null,
+            "amount" => 1,
+            "currencyIso" => "CZK",
+            "countryIso" => "CZ",
+            "caption" => "",
+            "created" => (new DateTime())->format(TapiObject::MYSQL_DATE),
+            "debtorId" => null,
+            "debtorType" => "user",
+            "payeeId" => $me->id,
+            "payeeType" => "user",
+            "debtDate" => (new DateTime())->format(TapiObject::MYSQL_DATE),
+            "payeeAccountNumber" => "",
+            "varcode" => 123465,
+            "canRead" => true,
+            "canEdit" => true,
+            "canSetSentDate" => false,
+            "paymentSent" => null,
+            "paymentReceived" => null,
+        ];
+        $this->template->debt = $newDebt;
+        
+        $this->template->userListWithTeam = $this->userList->getByIdWithTeam();
+        $this->template->payeeList = $this->getUser()->isAllowed('debt','canManageTeamDebts') ? $this->userList->getMeWithTeam() : $this->userList->getMe();
+        $this->template->countryList = $this->getCountryList();
     }
 
     private function generateQRCodeString($payeeCallName, $payeeEmail, $accountNumber, $amount, $varcode, $message, $currencyISO = "CZK", $countryISO = "CZ") {
@@ -149,6 +190,21 @@ class DebtPresenter extends SecuredPresenter {
         }
         
         $this->template->countryList = $this->getCountryList();
+    }
+    
+    public function handleDebtCreate(){
+        $bind = $this->getRequest()->getPost();
+        try {
+            $createdDebt = $this->debtCreator->init()
+                ->setDebt($bind["changes"])
+                ->perform();
+        } catch (APIException $ex) {
+            $this->handleTapiException($ex, "this");
+        }
+        
+        $this->flashMessage($this->translator->translate("common.alerts.debtAdded"), "success");
+        
+        $this->redirect("Debt:debt", $createdDebt->id);
     }
     
     public function handleDebtEdit(){
