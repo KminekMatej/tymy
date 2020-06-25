@@ -36,7 +36,8 @@
 		"kdyby/translation": "^2.5",
                 "symfony/config": "^3.4",
 		"symfony/filesystem": "^3.4",
-                "symfony/translation": "^3.4"
+                "symfony/translation": "^3.4",
+		"globalcitizen/php-iban": "v2.8.0"
 	},
 	"require-dev": {
 		"nette/tester": "^1.6"
