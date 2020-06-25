@@ -58,7 +58,7 @@ class DebtPresenter extends SecuredPresenter {
 
         $message = empty($debt->description) ? $debt->caption : $debt->caption . " - " . $debt->description;
         $paymentString = $this->generateQRCodeString($payeeCallName, $payeeMail, $debt->payeeAccountNumber, $debt->amount, $debt->varcode, $message, $debt->currencyIso, $debt->countryIso);
-        QRcode::png($paymentString, false, QR_ECLEVEL_H);
+        QRcode::png($paymentString, false, QR_ECLEVEL_H, 4, 4);
     }
 
     private function generateQRCodeString($payeeCallName, $payeeEmail, $accountNumber, $amount, $varcode, $message, $currencyISO = "CZK", $countryISO = "CZ") {
