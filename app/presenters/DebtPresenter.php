@@ -138,9 +138,16 @@ class DebtPresenter extends SecuredPresenter {
             $this->handleTapiException($ex);
         }
 
-        $this->template->debt = $this->debtDetail->getData();
-        $this->template->userList = $this->userList->getByIdWithTeam();
-
+        $debt = $this->debtDetail->getData();
+        $this->template->debt = $debt;
+        $this->template->userListWithTeam = $this->userList->getByIdWithTeam();
+        
+        if($debt->canEdit){
+            $this->template->payeeList = $this->getUser()->isAllowed('debt','canManageTeamDebts') ? $this->userList->getMeWithTeam() : $this->userList->getMe();
+        } else {
+            $this->template->payeeList = $this->userList->getByIdWithTeam();
+        }
+        
         $this->template->countryList = $this->getCountryList();
     }
     

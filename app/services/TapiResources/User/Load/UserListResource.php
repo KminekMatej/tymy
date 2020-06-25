@@ -87,6 +87,11 @@ class UserListResource extends UserResource {
         
         return [$this->mockTeamUser()] + $this->options->byId;
     }
+    
+    public function getMeWithTeam(){
+        
+        return [$this->mockTeamUser(), $this->getMe()];
+    }
 
     public function getUserType() {
         return $this->options->userType;

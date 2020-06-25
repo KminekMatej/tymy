@@ -14,8 +14,8 @@
     <div class="row">
         <div class="col">
             <div class="card sh-box my-3" data-binder-id="{$debt->id}">
-                <div class="card-header">{dump $userList}
-                    <h4 class="card-title">{$userList[$debt->debtorId]->displayName}: {$debt->caption}</h4>
+                <div class="card-header">{dump $userListWithTeam}
+                    <h4 class="card-title">{$userListWithTeam[$debt->debtorId]->displayName}: {$debt->caption}</h4>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -26,15 +26,15 @@
                                 </tr>
                                 <tr>
                                     <th>{_debt.debtorId}:</th><td>
-                                        <select n:class="col-6, form-control"  style="min-width: 120px" name="payeeId" data-value="{$debt->debtorId}" {if !$debt->canEdit}readonly{/if}>
-                                            <option n:foreach="$userList as $debtor" value="{$debtor->id}" n:attr="selected => $debtor->id==$debt->debtorId">{$debtor->displayName}</option>
+                                        <select n:class="col-6, form-control"  style="min-width: 120px" name="debtorId" data-value="{$debt->debtorId}" {if !$debt->canEdit}readonly disabled{/if}>
+                                            <option n:foreach="$userListWithTeam as $debtor" value="{$debtor->id}" n:attr="selected => $debtor->id==$debt->debtorId">{$debtor->displayName}</option>
                                         </select>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>{_debt.payeeId}:</th><td>
-                                        <select n:class="col-6, form-control"  style="min-width: 120px" name="payeeId" data-value="{$debt->payeeId}" {if !$debt->canEdit}readonly{/if}>
-                                            <option n:foreach="$userList as $payee" value="{$payee->id}" n:attr="selected => $payee->id==$debt->payeeId">{$payee->displayName}</option>
+                                        <select n:class="col-6, form-control"  style="min-width: 120px" name="payeeId" data-value="{$debt->payeeId}" {if !$debt->canEdit}readonly disabled{/if}>
+                                            <option n:foreach="$payeeList as $payee" value="{$payee->id}" n:attr="selected => $payee->id==$debt->payeeId">{$payee->displayName}</option>
                                         </select>
                                     </td>
                                 </tr>
@@ -42,7 +42,7 @@
                                     <th>{_debt.amount}:</th><td>
                                         <div class="input-group col-6 px-0">
                                             <input name="amount" data-value="{$debt->amount}" type="number" value="{$debt->amount}" {if !$debt->canEdit}readonly{/if} class="form-control" />
-                                            <select class="form-control" name="currencyIso" data-value="{$debt->currencyIso}" {if !$debt->canEdit}readonly{/if}>
+                                            <select class="form-control" name="currencyIso" data-value="{$debt->currencyIso}" {if !$debt->canEdit}readonly disabled{/if}>
                                                 <option n:foreach="\Tapi\DebtResource::CURRENCIES as $iso => $caption" value="{$iso}" n:attr="selected => $iso==$debt->currencyIso">{$caption}</option>
                                             </select>
                                         </div>
@@ -57,7 +57,7 @@
                                 </tr>
                                 <tr>
                                     <th>{_debt.country}:</th><td>
-                                        <select class="col-6 form-control" name="countryIso" data-value="{$debt->countryIso}" {if !$debt->canEdit}readonly{/if}>
+                                        <select class="col-6 form-control" name="countryIso" data-value="{$debt->countryIso}" {if !$debt->canEdit}readonly disabled{/if}>
                                             <option n:foreach="$countryList as $iso => $caption" value="{$iso}" n:attr="selected => $iso==$debt->countryIso">{$caption}</option>
                                         </select>
                                     </td>
@@ -79,9 +79,9 @@
                     </div>
 
                 </div>
-                <div class="card-footer text-right" n:if="$debt->canEdit">
-                    <button href="{link debtDelete!}" class="btn btn-danger mx-2 binder-delete-btn" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></button>
-                    <button href="{link debtEdit!}" class="btn btn-lg btn-primary binder-save-btn" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
+                <div class="card-footer text-right" n:if="$debt->canEdit || $debt->canSetSentDate">
+                    <button n:if="$debt->canEdit" href="{link debtDelete!}" class="btn btn-danger mx-2 binder-delete-btn" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                    <button n:if="$debt->canEdit || $debt->canSetSentDate" href="{link debtEdit!}" class="btn btn-lg btn-primary binder-save-btn" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
                 </div>
             </div>
         </div>
