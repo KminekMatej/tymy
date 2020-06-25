@@ -1,10 +1,20 @@
 <?php
 
+use Nette\Configurator;
+use Nette\Neon\Neon;
+
 require __DIR__ . '/../vendor/autoload.php';
 
-$configurator = new Nette\Configurator;
+$configurator = new Configurator;
 
-$configurator->setDebugMode(TRUE);
+try {   // debug.local.neon contains either true, to generally enable debug, or array of IP addresses
+    $debugFile = __DIR__ . '/config/debug.local.neon';
+    $debug = file_exists($debugFile) ? Neon::decode(file_get_contents(__DIR__ . '/config/debug.local.neon')) : false;
+} catch (Exception $exc) {
+    $debug = false;
+}
+
+$configurator->setDebugMode($debug ? $debug : false);
 $configurator->enableTracy(__DIR__ . '/../log');
 
 $configurator->setTimeZone('Europe/Prague');
