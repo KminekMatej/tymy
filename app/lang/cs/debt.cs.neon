@@ -1,5 +1,6 @@
 debt: Dluh|Dlužníček
 noDebt: Žádný dluh
+newDebt: Nový dluh
 debtorId: Dlužník
 payeeId: Komu
 amount: Částka

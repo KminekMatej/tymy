@@ -1,5 +1,6 @@
 debt: Dette|Dettes
 noDebt: Aucune dette ici
+newDebt: Nouvelle dette
 debtorId: Débiteur
 payeeId: Qui
 amount: Montant

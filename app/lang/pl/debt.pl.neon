@@ -1,5 +1,6 @@
 debt: Dług|Długi
 noDebt: Bez długów
+newDebt: Nowy dług
 debtorId: Dłużnik
 payeeId: Kogo
 amount: Ilość

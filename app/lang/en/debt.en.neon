@@ -1,5 +1,6 @@
 debt: Debt|Debts
 noDebt: No debt
+newDebt: New debt
 debtorId: Debtor
 payeeId: Whom
 amount: Amount
