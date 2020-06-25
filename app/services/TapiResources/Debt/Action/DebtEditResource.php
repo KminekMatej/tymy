@@ -33,7 +33,7 @@ class DebtEditResource extends DebtResource {
     }
 
     protected function postProcess() {
-        $this->clearCache();
+        $this->clearCache($this->getId());
     }
     
     public function getDebt() {
