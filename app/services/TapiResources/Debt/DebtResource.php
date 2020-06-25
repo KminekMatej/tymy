@@ -52,8 +52,8 @@ abstract class DebtResource extends TapiObject {
             $debt->debtor = $debt->debtorId > 0 ? $userList[$debt->debtorId] : null;
             $debt->author = $debt->createdUserId ? $userList[$debt->createdUserId] : null;
             
-            $debt->debtorCallName = $debt->debtorType == self::TYPE_USER ? $debt->debtor->callName : "TÝMMMMM";
-            $debt->payeeCallName = $debt->payee ? $debt->payee->callName : "TÝMMMMM";
+            $debt->debtorCallName = $debt->debtorType == self::TYPE_USER ? $debt->debtor->callName : "TÝM";
+            $debt->payeeCallName = $debt->payee ? $debt->payee->callName : "TÝM";
 
             if ($debt->canSetSentDate) {
                 $debt->displayString = $debt->debtorType == "team" ? $debt->debtorCallName . " → " . $debt->payeeCallName : "→ " . $debt->payeeCallName;
