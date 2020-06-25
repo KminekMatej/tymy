@@ -68,7 +68,7 @@
                                     <th>{_debt.paymentSend}:</th><td><input name="paymentSent" {if $debt->canSetSentDate}data-value="{$debt->paymentSent|date:\Tapi\TapiObject::MYSQL_DATE}"{/if} type="date" value="{$debt->paymentSent|date:\Tapi\TapiObject::MYSQL_DATE}" n:class="col-6, form-control" {if !$debt->canSetSentDate}readonly{/if} /></td>
                                 </tr>
                             </table>
-                        </div>{*FORM place*}
+                        </div>
                         <div class="col-4">
                             <img src="{plink Debt:debtImg $debt->webName}" class="border" />
                         </div>
