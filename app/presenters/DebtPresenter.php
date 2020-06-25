@@ -2,9 +2,11 @@
 
 namespace App\Presenters;
 
+use QrCode\QRcode;
 use Tapi\DebtDetailResource;
 use Tapi\DebtListResource;
 use Tapi\Exception\APIException;
+use const QR_ECLEVEL_H;
 
 /**
  * Description of DebtPresenter
@@ -15,10 +17,10 @@ class DebtPresenter extends SecuredPresenter {
 
     /** @var DebtListResource @inject */
     public $debtList;
-    
+
     /** @var DebtDetailResource @inject */
     public $debtDetail;
-    
+
     public function startup() {
         parent::startup();
         $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("debt.debt", 2), "link" => $this->link("Debt:")]]);
@@ -31,12 +33,12 @@ class DebtPresenter extends SecuredPresenter {
         } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
-        
+
         $this->template->debts = $this->debtList->getData();
     }
-    
-    public function renderDebtImg($dluh){
-        
+
+    public function renderDebtImg($dluh) {
+
         try {
             $debtId = $this->parseIdFromWebname($dluh);
             $this->debtDetail->init()
@@ -51,38 +53,38 @@ class DebtPresenter extends SecuredPresenter {
         $debt = $this->debtDetail->getData();
         $userList = $this->userList->getByIdWithTeam();
 
-        $payeeCallName = $userList[$debt->payeeId]->displayName;
+        $payeeCallName = $debt->payeeId == 0 ? "TEAM" : $userList[$debt->payeeId]->displayName;
         $payeeMail = $debt->payeeId ? $userList[$debt->payeeId]->email : "";
 
         $message = empty($debt->description) ? $debt->caption : $debt->caption . " - " . $debt->description;
         $paymentString = $this->generateQRCodeString($payeeCallName, $payeeMail, $debt->payeeAccountNumber, $debt->amount, $debt->varcode, $message, $debt->currencyIso, $debt->countryIso);
-        \QrCode\QRcode::png($paymentString, false, QR_ECLEVEL_H);
+        QRcode::png($paymentString, false, QR_ECLEVEL_H);
     }
-    
+
     private function generateQRCodeString($payeeCallName, $payeeEmail, $accountNumber, $amount, $varcode, $message, $currencyISO = "CZK", $countryISO = "CZ") {
         $accPrefix = null;
         $accountNumberBody = $accountNumber;
-        
+
         if (strpos($accountNumber, "/") === FALSE) {
             return null;
         }
-        
-        if(strpos($accountNumber, "-")){
+
+        if (strpos($accountNumber, "-")) {
             $accNumberData = explode("-", $accountNumber);
             $accPrefix = $accNumberData[0];
             $accountNumberBody = $accNumberData[1];
         }
-        
+
         $accNumberBodyData = explode("/", $accountNumberBody);
-        
+
         $accBody = $accNumberBodyData[0];
         $bankCode = $accNumberBodyData[1];
-        
-        if(empty($accBody)){
+
+        if (empty($accBody)) {
             return null;
         }
-        
-        if(empty($bankCode)){
+
+        if (empty($bankCode)) {
             return null;
         }
 
@@ -92,10 +94,10 @@ class DebtPresenter extends SecuredPresenter {
         $payment["ACC"] = substr($iban, 0, 46);
         $payment["AM"] = substr(number_format($amount, 2, ".", ""), 0, 10);
         $payment["CC"] = $currencyISO;
-        $payment["RN"] = substr(strtoupper(HtmlHelper::removeDiacritics($payeeCallName)), 0, 35);
+        $payment["RN"] = substr(strtoupper(\Nette\Utils\Strings::toAscii($payeeCallName)), 0, 35);
         $payment["X-VS"] = substr(strtoupper((string) $varcode), 0, 10);
         $payment["DT"] = date("Ymd");
-        $payment["MSG"] = substr(strtoupper(HtmlHelper::removeDiacritics($message)), 0, 60);
+        $payment["MSG"] = substr(strtoupper(\Nette\Utils\Strings::toAscii($message)), 0, 60);
         $payment["NT"] = "E";
         $payment["NTA"] = substr($payeeEmail, 0, 320);
 
@@ -121,10 +123,10 @@ class DebtPresenter extends SecuredPresenter {
         } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
-        
+
         $this->template->debt = $this->debtDetail->getData();
         $this->template->userList = $this->userList->getByIdWithTeam();
-        
+
         $this->template->countryList = $this->getCountryList();
     }
 

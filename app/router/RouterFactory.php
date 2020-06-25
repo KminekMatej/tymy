@@ -34,6 +34,7 @@ class RouterFactory
                 $router[] = new Route('diskuze/<discussion>[/<page>] ? search=<search>', 'Discussion:discussion');
                 $router[] = new Route('udalosti/<udalost>', 'Event:event');
                 $router[] = new Route('dluznicek/<dluh>', 'Debt:debt');
+                $router[] = new Route('dluznicek/<dluh>/qr', 'Debt:debtImg');
                 $router[] = new Route('ankety/<anketa>', 'Poll:poll');
                 $router[] = new Route('poznamky/<poznamka>', 'Notes:note');
                 $router[] = new Route('nastaveni', 'Settings:default');
