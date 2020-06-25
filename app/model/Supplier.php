@@ -127,8 +127,7 @@ class Supplier {
     }
     
     public function getStatusColor($code) {
-        if(!array_key_exists("status_colors", $this->getTeamNeon()) || !array_key_exists($code, $this->getTeamNeon()->status_colors)) return "#0275d8";
-        return $this->getTeamNeon()->status_colors[$code];
+        return property_exists($this->getTeamNeon(), "status_colors") && array_key_exists($code, $this->getTeamNeon()->status_colors) ? $this->getTeamNeon()->status_colors[$code] : "#0275d8";
     }
 
     public function getEventColors() {
