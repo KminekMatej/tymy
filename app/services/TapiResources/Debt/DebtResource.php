@@ -15,6 +15,8 @@ abstract class DebtResource extends TapiObject {
     const TYPE_USER="user";
     const TYPE_TEAM="team";
     
+    const CURRENCIES = ["CZK" => "Kč", "EUR" => "€"];
+    
     protected function postProcessDebt($debt) {
         if($debt== null) TapiService::throwNotFound();
         $debt->webName = Strings::webalize($debt->id . "-" . $debt->caption);

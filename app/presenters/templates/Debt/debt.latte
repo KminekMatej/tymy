@@ -1,0 +1,80 @@
+{import '../components/secured.latte'}
+
+{block navbar}
+{control navbar}
+{/block}
+
+{block content}
+{dump $debt}
+<div class="container debt">
+    <div class="row">
+        <div class="col">
+            <div class="card sh-box my-3">
+                <div class="card-header">{dump $userList}
+                    <h4 class="card-title">{$userList[$debt->debtorId]->displayName}: {$debt->caption}</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-8">
+                            <table class="table">
+                                <tr>
+                                    <th>{_settings.title}:</th><td><input name="caption" data-value="{$debt->caption}" type="text" value="{$debt->caption}" {if !$debt->canEdit}readonly{/if} n:class="col-6, form-control" /></td>
+                                </tr>
+                                <tr>
+                                    <th>{_debt.debtorId}:</th><td>
+                                        <select n:class="col-6, form-control"  style="min-width: 120px" name="payeeId" data-value="{$debt->debtorId}" {if !$debt->canEdit}readonly{/if}>
+                                            <option n:foreach="$userList as $debtor" value="{$debtor->id}" n:attr="selected => $debtor->id==$debt->debtorId">{$debtor->displayName}</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>{_debt.payeeId}:</th><td>
+                                        <select n:class="col-6, form-control"  style="min-width: 120px" name="payeeId" data-value="{$debt->payeeId}" {if !$debt->canEdit}readonly{/if}>
+                                            <option n:foreach="$userList as $payee" value="{$payee->id}" n:attr="selected => $payee->id==$debt->payeeId">{$payee->displayName}</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>{_debt.amount}:</th><td>
+                                        <div class="input-group col-6 px-0">
+                                            <input name="amount" data-value="{$debt->amount}" type="number" value="{$debt->amount}" {if !$debt->canEdit}readonly{/if} class="form-control" />
+                                            <select class="form-control" name="currencyIso" data-value="{$debt->currencyIso}" {if !$debt->canEdit}readonly{/if}>
+                                                <option n:foreach="\Tapi\DebtResource::CURRENCIES as $iso => $caption" value="{$iso}" n:attr="selected => $iso==$debt->currencyIso">{$caption}</option>
+                                            </select>
+                                        </div>
+                                        
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>{_debt.debtDate}:</th><td><input name="debtDate" data-value="{$debt->debtDate|date:\Tapi\TapiObject::MYSQL_DATE}" type="date" {if !$debt->canEdit}readonly{/if} value="{$debt->debtDate|date:\Tapi\TapiObject::MYSQL_DATE}" n:class="col-6, form-control" /></td>
+                                </tr>
+                                <tr>
+                                    <th>{_debt.accountNumber}:</th><td><input name="payeeAccountNumber" data-value="{$debt->payeeAccountNumber}" type="text" {if !$debt->canEdit}readonly{/if} value="{$debt->payeeAccountNumber}" n:class="col-6, form-control" /></td>
+                                </tr>
+                                <tr>
+                                    <th>{_debt.country}:</th><td>
+                                        <select class="col-6 form-control" name="countryIso" data-value="{$debt->countryIso}" {if !$debt->canEdit}readonly{/if}>
+                                            <option n:foreach="$countryList as $iso => $caption" value="{$iso}" n:attr="selected => $iso==$debt->countryIso">{$caption}</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>{_debt.varcode}:</th><td><input name="varcode" data-value="{$debt->varcode}" type="text" value="{$debt->varcode}" {if !$debt->canEdit}readonly{/if} n:class="col-6, form-control" /></td>
+                                </tr>
+                                <tr>
+                                    <th>{_debt.paymentReceived}:</th><td><input name="paymentReceived" data-value="{$debt->paymentReceived|date:\Tapi\TapiObject::MYSQL_DATE}" type="date" value="{$debt->paymentReceived|date:\Tapi\TapiObject::MYSQL_DATE}" {if !$debt->canEdit}readonly{/if} n:class="col-6, form-control" /></td>
+                                </tr>
+                                <tr>
+                                    <th>{_debt.paymentSend}:</th><td><input name="paymentSent" {if $debt->canSetSentDate}data-value="{$debt->paymentSent|date:\Tapi\TapiObject::MYSQL_DATE}"{/if} type="date" value="{$debt->paymentSent|date:\Tapi\TapiObject::MYSQL_DATE}" n:class="col-6, form-control" {if !$debt->canSetSentDate}readonly{/if} /></td>
+                                </tr>
+                            </table>
+                        </div>{*FORM place*}
+                        <div class="col-4"></div>{*QR code place*}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
