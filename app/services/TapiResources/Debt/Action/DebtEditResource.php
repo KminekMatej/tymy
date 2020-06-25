@@ -24,7 +24,7 @@ class DebtEditResource extends DebtResource {
         if ($this->getDebt() == null)
             throw new APIException('Debt object is missing', self::BAD_REQUEST);
 
-        $this->setUrl("debt");
+        $this->setUrl("debt/{$this->getId()}");
         $debt = $this->getDebt();
         $debt["id"] = $this->getId();
         $this->setDebt($debt);
