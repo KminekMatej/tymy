@@ -163,7 +163,7 @@ class DebtPresenter extends SecuredPresenter {
         try {
             $this->debtEditor->init()
                     ->setId($bind["id"])
-                    ->setNote($bind["changes"])
+                    ->setDebt($bind["changes"])
                     ->perform();
         } catch (APIException $ex) {
             $this->handleTapiException($ex, 'this');

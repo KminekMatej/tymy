@@ -4,12 +4,16 @@
 {control navbar}
 {/block}
 
+{block scripts}
+{include parent}
+<script src="{$basePath}/js/Binder.js?ver={$appver}"></script>
+{/block}
+
 {block content}
-{dump $debt}
 <div class="container debt">
     <div class="row">
         <div class="col">
-            <div class="card sh-box my-3">
+            <div class="card sh-box my-3" data-binder-id="{$debt->id}">
                 <div class="card-header">{dump $userList}
                     <h4 class="card-title">{$userList[$debt->debtorId]->displayName}: {$debt->caption}</h4>
                 </div>
