@@ -87,6 +87,9 @@ services:
         ConfigResource: Tapi\ConfigResource
         DebtListResource: Tapi\DebtListResource
         DebtDetailResource: Tapi\DebtDetailResource
+        DebtCreateResource: Tapi\DebtCreateResource
+        DebtEditResource: Tapi\DebtEditResource
+        DebtDeleteResource: Tapi\DebtDeleteResource
 
 tracy:
     email: matej.kminek@attendees.eu
