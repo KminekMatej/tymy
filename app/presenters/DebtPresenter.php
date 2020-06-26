@@ -102,7 +102,7 @@ class DebtPresenter extends SecuredPresenter {
             "payeeType" => "user",
             "debtDate" => (new DateTime())->format(TapiObject::MYSQL_DATE),
             "payeeAccountNumber" => "",
-            "varcode" => 123465,
+            "varcode" => null,
             "canRead" => true,
             "canEdit" => true,
             "canSetSentDate" => false,

@@ -22,18 +22,18 @@
                         <div class="col-8">
                             <table class="table">
                                 <tr>
-                                    <th>{_settings.title}:</th><td><input name="caption" data-value="{$debt->caption}" type="text" value="{$debt->caption}" {if !$debt->canEdit}readonly{/if} n:class="col-6, form-control" /></td>
+                                    <th>{_settings.title}:</th><td><input name="caption" data-value type="text" value="{$debt->caption}" {if !$debt->canEdit}readonly{/if} n:class="col-6, form-control" /></td>
                                 </tr>
                                 <tr>
                                     <th>{_debt.debtorId}:</th><td>
-                                        <select n:class="col-6, form-control"  style="min-width: 120px" name="debtorId" data-value="{$debt->debtorId}" {if !$debt->canEdit}readonly disabled{/if}>
+                                        <select n:class="col-6, form-control"  style="min-width: 120px" name="debtorId" data-value {if !$debt->canEdit}readonly disabled{/if}>
                                             <option n:foreach="$userListWithTeam as $debtor" value="{$debtor->id}" n:attr="selected => $debtor->id==$debt->debtorId">{$debtor->displayName}</option>
                                         </select>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>{_debt.payeeId}:</th><td>
-                                        <select n:class="col-6, form-control"  style="min-width: 120px" name="payeeId" data-value="{$debt->payeeId}" {if !$debt->canEdit}readonly disabled{/if}>
+                                        <select n:class="col-6, form-control"  style="min-width: 120px" name="payeeId" data-value {if !$debt->canEdit}readonly disabled{/if}>
                                             <option n:foreach="$payeeList as $payee" value="{$payee->id}" n:attr="selected => $payee->id==$debt->payeeId">{$payee->displayName}</option>
                                         </select>
                                     </td>
@@ -41,8 +41,8 @@
                                 <tr>
                                     <th>{_debt.amount}:</th><td>
                                         <div class="input-group col-6 px-0">
-                                            <input name="amount" data-value="{$debt->amount}" type="number" value="{$debt->amount}" {if !$debt->canEdit}readonly{/if} class="form-control" />
-                                            <select class="form-control" name="currencyIso" data-value="{$debt->currencyIso}" {if !$debt->canEdit}readonly disabled{/if}>
+                                            <input name="amount" data-value type="number" value="{$debt->amount}" {if !$debt->canEdit}readonly{/if} class="form-control" />
+                                            <select class="form-control" name="currencyIso" data-value {if !$debt->canEdit}readonly disabled{/if}>
                                                 <option n:foreach="\Tapi\DebtResource::CURRENCIES as $iso => $caption" value="{$iso}" n:attr="selected => $iso==$debt->currencyIso">{$caption}</option>
                                             </select>
                                         </div>
@@ -50,26 +50,26 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>{_debt.debtDate}:</th><td><input name="debtDate" data-value="{$debt->debtDate|date:\Tapi\TapiObject::MYSQL_DATE}" type="date" {if !$debt->canEdit}readonly{/if} value="{$debt->debtDate|date:\Tapi\TapiObject::MYSQL_DATE}" n:class="col-6, form-control" /></td>
+                                    <th>{_debt.debtDate}:</th><td><input name="debtDate" data-value type="date" {if !$debt->canEdit}readonly{/if} value="{$debt->debtDate|date:\Tapi\TapiObject::MYSQL_DATE}" n:class="col-6, form-control" /></td>
                                 </tr>
                                 <tr>
-                                    <th>{_debt.accountNumber}:</th><td><input name="payeeAccountNumber" data-value="{$debt->payeeAccountNumber}" type="text" {if !$debt->canEdit}readonly{/if} value="{$debt->payeeAccountNumber}" n:class="col-6, form-control" /></td>
+                                    <th>{_debt.accountNumber}:</th><td><input name="payeeAccountNumber" data-value type="text" {if !$debt->canEdit}readonly{/if} value="{$debt->payeeAccountNumber}" n:class="col-6, form-control" /></td>
                                 </tr>
                                 <tr>
                                     <th>{_debt.country}:</th><td>
-                                        <select class="col-6 form-control" name="countryIso" data-value="{$debt->countryIso}" {if !$debt->canEdit}readonly disabled{/if}>
+                                        <select class="col-6 form-control" name="countryIso" data-value {if !$debt->canEdit}readonly disabled{/if}>
                                             <option n:foreach="$countryList as $iso => $caption" value="{$iso}" n:attr="selected => $iso==$debt->countryIso">{$caption}</option>
                                         </select>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>{_debt.varcode}:</th><td><input name="varcode" data-value="{$debt->varcode}" type="text" value="{$debt->varcode}" {if !$debt->canEdit}readonly{/if} n:class="col-6, form-control" /></td>
+                                    <th>{_debt.varcode}:</th><td><input name="varcode" data-value type="text" value="{$debt->varcode}" {if !$debt->canEdit}readonly{/if} n:class="col-6, form-control" /></td>
                                 </tr>
                                 <tr>
-                                    <th>{_debt.paymentReceived}:</th><td><input name="paymentReceived" data-value="{$debt->paymentReceived|date:\Tapi\TapiObject::MYSQL_DATE}" type="date" value="{$debt->paymentReceived|date:\Tapi\TapiObject::MYSQL_DATE}" {if !$debt->canEdit}readonly{/if} n:class="col-6, form-control" /></td>
+                                    <th>{_debt.paymentReceived}:</th><td><input name="paymentReceived" data-value type="date" value="{$debt->paymentReceived|date:\Tapi\TapiObject::MYSQL_DATE}" {if !$debt->canEdit}readonly{/if} n:class="col-6, form-control" /></td>
                                 </tr>
                                 <tr>
-                                    <th>{_debt.paymentSend}:</th><td><input name="paymentSent" {if $debt->canSetSentDate}data-value="{$debt->paymentSent|date:\Tapi\TapiObject::MYSQL_DATE}"{/if} type="date" value="{$debt->paymentSent|date:\Tapi\TapiObject::MYSQL_DATE}" n:class="col-6, form-control" {if !$debt->canSetSentDate}readonly{/if} /></td>
+                                    <th>{_debt.paymentSend}:</th><td><input name="paymentSent" {if $debt->canSetSentDate}data-value{/if} type="date" value="{$debt->paymentSent|date:\Tapi\TapiObject::MYSQL_DATE}" n:class="col-6, form-control" {if !$debt->canSetSentDate}readonly{/if} /></td>
                                 </tr>
                             </table>
                         </div>
