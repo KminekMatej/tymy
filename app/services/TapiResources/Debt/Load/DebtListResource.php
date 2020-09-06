@@ -22,9 +22,11 @@ class DebtListResource extends DebtResource {
 
     protected function postProcess() {
         $this->options->warnings = 0;
-        usort($this->data, function($a, $b){
-            return $a->canSetSentDate ? -1 : 1;
-        });
+        if (!is_null($this->data)) {
+            usort($this->data, function($a, $b) {
+                return $a->canSetSentDate ? -1 : 1;
+            });
+        }
         $debtsFromMe = [];
         $debtsFromTeam = [];
         $debtsToMe = [];
