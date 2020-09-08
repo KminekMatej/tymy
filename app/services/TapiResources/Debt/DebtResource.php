@@ -47,6 +47,9 @@ abstract class DebtResource extends TapiObject {
     }
 
     public function postProcessWithUsers(array $userList, array &$debts) {
+        if(empty($debts)){
+            return;
+        }
         foreach ($debts as &$debt) {
             $debt->payee = $debt->payeeId > 0 ? $userList[$debt->payeeId] : null;
             $debt->debtor = $debt->debtorId > 0 ? $userList[$debt->debtorId] : null;
