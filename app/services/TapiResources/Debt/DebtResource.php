@@ -46,7 +46,7 @@ abstract class DebtResource extends TapiObject {
         }
     }
 
-    public function postProcessWithUsers(array $userList, array &$debts) {
+    public function postProcessWithUsers(array $userList, ?array &$debts = null) {
         if(empty($debts)){
             return;
         }
