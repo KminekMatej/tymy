@@ -192,7 +192,7 @@
                                 {foreach $allRoles as $role}
                                     {var $hasRole = property_exists($player, 'roles') && in_array($role->code,$player->roles)}
                                     {var $userRoles = property_exists($player, 'roles') ? $player->roles : []}
-                                    <button name="roles[{$role->code}]" n:class="btn,$role->class,$hasRole ? active" style="min-width:69px" data-role="{$role->code}" data-value="{implode($userRoles, ',')}" onclick="checkRole(this)">{$role->caption}</button>
+                                    <button name="roles[{$role->code}]" n:class="btn,$role->class,$hasRole ? active" style="min-width:69px" data-role="{$role->code}" data-value="{implode(',', $userRoles)}" onclick="checkRole(this)">{$role->caption}</button>
                                 {/foreach}
 
                             </div>
