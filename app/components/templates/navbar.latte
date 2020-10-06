@@ -62,7 +62,7 @@
                 <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-chart-pie" aria-hidden="true"></i> {_poll.poll,2}</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <button n:if="empty($polls)" class="dropdown-item disabled" type="button"> - {_poll.noPoll} - </button>
-                    {if empty($polls)}
+                    {if !empty($polls)}
                         <a n:foreach="$polls as $p" class="dropdown-item" href="{plink Poll:poll $p->webName}">
                             {if !$p->voted && $p->canVote}<span class="badge badge-danger"><i class="fa fa-info" aria-hidden="true"></i></span>{/if}
                             {$p->caption}
