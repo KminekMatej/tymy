@@ -147,7 +147,7 @@ class NavbarControl extends Control {
                     ->setOrder("startTime")
                     ->getData();
             $this->template->eventWarnings = 0;
-            if (count($this->template->events)) {
+            if (!empty($this->template->events)) {
                 foreach ($this->template->events as $ev) {
                     if ($ev->warning)
                         $this->template->eventWarnings++;
