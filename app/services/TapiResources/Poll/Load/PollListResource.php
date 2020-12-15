@@ -30,6 +30,7 @@ class PollListResource extends PollResource {
         
         foreach ($this->data as $poll) {
             parent::postProcessPoll($poll);
+            $this->options->warnings += $poll->warnings;
         }
     }
     
