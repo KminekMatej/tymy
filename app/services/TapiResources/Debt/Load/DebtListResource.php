@@ -34,7 +34,7 @@ class DebtListResource extends DebtResource {
         $debtsToTeam = [];
         foreach ($this->data as $debt) {
             parent::postProcessDebt($debt);
-            if ($debt->canSetSentDate && empty($debt->paymentSent)) {
+            if ($debt->canSetSentDate && empty($debt->paymentSent) && empty($debt->paymentReceived)) {
                 $this->options->warnings += 1;
             }
             if ($debt->debtorId == $this->user->id) {
