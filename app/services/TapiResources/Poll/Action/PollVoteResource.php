@@ -34,7 +34,9 @@ class PollVoteResource extends PollResource {
         $this->setRequestData($this->getVotes());
     }
 
-    protected function postProcess() {}
+    protected function postProcess() {
+        $this->clearCache($this->getId());
+    }
     
     public function getVotes() {
         return $this->options->votes;
