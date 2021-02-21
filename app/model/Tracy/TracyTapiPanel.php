@@ -34,8 +34,8 @@ class TracyTapiPanel implements Tracy\IBarPanel{
         return $this;
     }
     
-    public function logAPI($requestURI, $requestMethod, $requestData, $time, $responseCode) {
-        $reqT = new TapiRequestTimestamp($requestURI, $requestMethod, $requestData, $time, $responseCode);
+    public function logAPI($requestURI, $requestMethod, $time, $responseCode, ?array $requestHeaders = null, $requestData = null, $responseData = null) {
+        $reqT = new TapiRequestTimestamp($requestURI, $requestHeaders, $requestMethod, $responseCode, $time, $requestData, $responseData);
         $this->requests[] = $reqT;
     }
 

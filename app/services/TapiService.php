@@ -143,25 +143,34 @@ class TapiService {
         
         curl_setopt($this->curl, CURLOPT_URL, $this->url);
         curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, $this->tapiObject->getMethod());
-        
-        $formattedData = NULL;
+        $headers = null;
+        $requestData = null;
         
         if ($this->tapiObject->getMethod() != RequestMethod::GET && $this->tapiObject->getRequestData()) {
             switch ($this->tapiObject->getEncoding()) {
                 case TapiObject::ENCODING_JSON:
-                    curl_setopt($this->curl, CURLOPT_HTTPHEADER, array('Content-Type: ' . TapiObject::ENCODING_JSON));
-                    curl_setopt($this->curl, CURLOPT_POSTFIELDS, json_encode($this->tapiObject->getRequestData()));
+                    $headers = ['Content-Type: ' . TapiObject::ENCODING_JSON];
+                    $requestData = json_encode($this->tapiObject->getRequestData());
                     break;
                 case TapiObject::ENCODING_URLENCODED:
-                    curl_setopt($this->curl, CURLOPT_HTTPHEADER, array('Content-Type: ' . TapiObject::ENCODING_URLENCODED));
-                    curl_setopt($this->curl, CURLOPT_POSTFIELDS, http_build_query($this->tapiObject->getRequestData()));
+                    $headers = ['Content-Type: ' . TapiObject::ENCODING_URLENCODED];
+                    $requestData = http_build_query($this->tapiObject->getRequestData());
                     break;
                 default:
-                    curl_setopt($this->curl, CURLOPT_POSTFIELDS, $this->tapiObject->getRequestData());
+                    $requestData = $this->tapiObject->getRequestData();
                     break;
             }
         }
+
+        if ($requestData) {
+            curl_setopt($this->curl, CURLOPT_POSTFIELDS, $requestData);
+        }
+        if ($headers) {
+            curl_setopt($this->curl, CURLOPT_HTTPHEADER, $headers);
+        }
+
         curl_setopt($this->curl, CURLOPT_VERBOSE, true);
+        
         $verbose = fopen('php://temp', 'w+');
         curl_setopt($this->curl, CURLOPT_STDERR, $verbose);
         $result = ["data" => curl_exec($this->curl), "info" => curl_getinfo($this->curl)];
@@ -172,7 +181,16 @@ class TapiService {
         $verboseLog = stream_get_contents($verbose);
         //echo $verboseLog;
         
-        $this->tapiPanel->logAPI($this->url, $this->tapiObject->getMethod(), $formattedData, Debugger::timer("tapi-request $objectHash"), $result["info"]["http_code"]);
+        $this->tapiPanel->logAPI(
+                $this->url, 
+                $this->tapiObject->getMethod(), 
+                Debugger::timer("tapi-request $objectHash"), 
+                $result["info"]["http_code"], 
+                $headers, 
+                (is_array($requestData) ? json_encode($requestData) : $requestData), 
+                $result["data"]
+                );
+
         return (object) $result;
     }
 
