@@ -104,7 +104,7 @@ class DiscussionPresenter extends SecuredPresenter {
             $this->discussionPostEdit->init()
                         ->setId($discussion)
                         ->setPostId($postId)
-                        ->setSticky($sticky)
+                        ->setSticky($sticky ? $sticky == "true" : null) //super cool determining if sticky is true, false or null
                         ->perform();
         } catch (APIException $ex) {
             $this->handleTapiException($ex);
