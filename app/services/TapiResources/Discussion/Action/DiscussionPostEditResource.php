@@ -28,12 +28,18 @@ class DiscussionPostEditResource extends DiscussionResource {
              throw new APIException ("Nothing to update");
         $this->setUrl("discussion/" . $this->getId() . "/post");
         
-        $this->setRequestData((object)[
+        $rqData = [
             "id" => $this->getPostId(),
-            "post" => $this->getPost(),
-            "sticky" => $this->getSticky(),
-        ]);
-        
+        ];
+        if($this->getPost()){
+            $rqData["post"] = $this->getPost();
+        }
+        if ($this->getSticky()) {
+            $rqData["sticky"] = $this->getSticky();
+        }
+
+        $this->setRequestData((object) $rqData);
+
         return $this;
     }
 
