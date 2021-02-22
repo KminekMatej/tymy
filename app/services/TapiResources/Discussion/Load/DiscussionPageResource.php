@@ -77,8 +77,8 @@ class DiscussionPageResource extends DiscussionResource {
     }
 
     public function setJumpDate($jumpDate) {
-        if($jumpDate != NULL && $date = strtotime($jumpDate) !== FALSE){
-            $this->options->jumpDate = date("Y-m-d", $date);
+        if($jumpDate != NULL && $date = (new DateTime($jumpDate))){
+            $this->options->jumpDate = $date->format("Y-m-d");
         } else $this->options->jumpDate = NULL;
         return $this;
     }
