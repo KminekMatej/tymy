@@ -70,13 +70,13 @@ class DiscussionPresenter extends SecuredPresenter {
     public function actionEditPost($discussion) {
         $postId = $this->getHttpRequest()->getPost("postId");
         $text = $this->getHttpRequest()->getPost("post");
-        $sticky = $this->getHttpRequest()->getPost("sticky");
+        $sticky = $this->getHttpRequest()->getPost("sticky") ;
         try {
             $this->discussionPostEdit->init()
                         ->setId($discussion)
                         ->setPostId($postId)
                         ->setPost($text)
-                        ->setSticky($sticky)
+                        ->setSticky($sticky ? $sticky == "true" : null) //super cool determining if sticky is true, false or null
                         ->perform();
         } catch (APIException $ex) {
             $this->handleTapiException($ex, 'this');
