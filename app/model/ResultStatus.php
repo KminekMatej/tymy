@@ -21,7 +21,7 @@ class ResultStatus {
     public function __construct($tapiResponse) {
         $this->status = $tapiResponse->status;
         $this->message = empty($tapiResponse->statusMessage) ? null : $tapiResponse->statusMessage;
-        $this->data = empty($tapiResponse->data) ? null : $tapiResponse->data;
+        $this->data = $tapiResponse->data;
         $this->object = $tapiResponse;
         $this->valid = $this->status == self::OK;
     }
