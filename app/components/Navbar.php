@@ -87,14 +87,14 @@ class NavbarControl extends Control {
         }
     }
     
-    private function notes() {
+    /*private function notes() {
         try {
             $this->template->notes = $this->noteList->init()->setMenu(TRUE)->getData();
             $this->template->notesWarnings = $this->noteList->getWarnings();
         } catch (APIException $ex) {
             $this->presenter->handleTapiException($ex);
         }
-    }
+    }*/
 
     private function discussions() {
         try {
@@ -184,8 +184,8 @@ class NavbarControl extends Control {
         $this->polls();
         //tapi settings
         $this->settings();
-        //tapi notes
-        $this->notes();
+        /*//tapi notes
+        $this->notes();*/
         //tapi multiaccounts
         $this->multiaccounts();
         //tapi debts

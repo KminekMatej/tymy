@@ -134,8 +134,8 @@ class SecuredPresenter extends BasePresenter {
         $this->setAccessibleSettings();
         $this->setLevelCaptions(["0" => ["caption" => $this->translator->translate("common.mainPage"), "link" => $this->link("Homepage:")]]);
         $this->template->tym = $this->supplier->getTym();
-        $this->template->noteList = $this->noteList->init()->getData();
-        $this->showNotes();
+        //$this->template->noteList = $this->noteList->init()->getData();
+        //$this->showNotes();
     }
     
     protected function shutdown($response) {
@@ -213,7 +213,7 @@ class SecuredPresenter extends BasePresenter {
         return $this;
     }
     
-    protected function showNotes($recordId = NULL) {
+    /*protected function showNotes($recordId = NULL) {
         $notesToShow = [];
         $presenterName = [
             'WELCOME' => "Homepage",
@@ -264,7 +264,7 @@ class SecuredPresenter extends BasePresenter {
         }
         $this->template->notesToShow = $notesToShow;
         $this->noteList->saveToCache();
-    }
+    }*/
     
     protected function getAllRoles(){
         $allRoles = [];

@@ -44,7 +44,7 @@ class DiscussionPresenter extends SecuredPresenter {
     }
 
     public function renderDefault() {
-        parent::showNotes();
+        //parent::showNotes();
         try{
             $this->template->discussions = $this->discussionsList->init()->getData();
         } catch (APIException $ex){
@@ -119,7 +119,7 @@ class DiscussionPresenter extends SecuredPresenter {
             $this->handleTapiException($ex);
         }
         
-        parent::showNotes($discussionId);
+        //parent::showNotes($discussionId);
         if (is_null($discussionId) || $discussionId < 1)
             $this->error($this->translator->translate("discussion.errors.noDiscussionExists"));
         $this->discussionPage->init();

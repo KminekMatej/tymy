@@ -84,7 +84,7 @@ class TeamPresenter extends SecuredPresenter {
     }
     
     public function renderDefault() {
-        parent::showNotes();
+        //parent::showNotes();
         try {
             $users = $this->userList->init()->setUserType($this->userType)->getData();
             $allMails = [];
@@ -163,7 +163,7 @@ class TeamPresenter extends SecuredPresenter {
             $newPlayer->pictureUrl = "";
         }
 
-        parent::showNotes();
+        //parent::showNotes();
         
         $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("common.new")]]);
 
@@ -179,7 +179,7 @@ class TeamPresenter extends SecuredPresenter {
         } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
-        parent::showNotes($user->id);
+        //parent::showNotes($user->id);
 
         $this->setLevelCaptions(["2" => ["caption" => $user->displayName, "link" => $this->link("Team:player", $user->webName)]]);
 

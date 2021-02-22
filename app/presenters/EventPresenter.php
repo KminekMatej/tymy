@@ -54,7 +54,7 @@ class EventPresenter extends SecuredPresenter {
         
     
     public function renderDefault($date = NULL, $direction = NULL) {
-        parent::showNotes();
+        //parent::showNotes();
         try {
             $this->eventList->init()
                     ->setHalfYearFrom($date, $direction)
@@ -99,7 +99,7 @@ class EventPresenter extends SecuredPresenter {
         } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
-        parent::showNotes($event->id);
+        //parent::showNotes($event->id);
         
         $this->setLevelCaptions(["2" => ["caption" => $event->caption, "link" => $this->link("Event:event", $event->id . "-" . $event->webName)]]);
 

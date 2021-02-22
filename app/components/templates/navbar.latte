@@ -94,7 +94,7 @@
                 </div>
             </li>
 
-            <li class="nav-item dropdown" name="notes">
+            {*<li class="nav-item dropdown" name="notes">
                 {if $notesWarnings > 0}<span class="badge badge-pill badge-danger badge-new">{$noteWarnings}</span>{/if}
                 <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-sticky-note" aria-hidden="true"></i> {_note.note,2}</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
@@ -103,7 +103,7 @@
                         <a n:foreach="$notes as $n" class="dropdown-item" href="{plink Notes:note $n->webName}">{$n->caption}</a>
                     {/ifset}
                 </div>
-            </li>
+            </li>*}
             
             <li class="nav-item dropdown" name="settings">
                 <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cogs" aria-hidden="true"></i> {_settings.setting,2}</a>

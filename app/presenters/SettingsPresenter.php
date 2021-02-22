@@ -119,7 +119,7 @@ class SettingsPresenter extends SecuredPresenter {
             
     protected function startup() {
         parent::startup();
-        parent::showNotes();
+        //parent::showNotes();
         $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("settings.setting", 2), "link" => $this->link("Settings:")]]);
         $this->template->addFilter("typeColor", function ($type) {
             $color = $this->supplier->getEventColors();

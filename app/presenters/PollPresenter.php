@@ -32,7 +32,7 @@ class PollPresenter extends SecuredPresenter {
     }
     
     public function renderDefault() {
-        parent::showNotes();
+        //parent::showNotes();
         try {
             $this->template->polls = $this->pollList->init()->setMenu(TRUE)->getData();
         } catch (APIException $ex) {
@@ -50,7 +50,7 @@ class PollPresenter extends SecuredPresenter {
         } catch (APIException $ex) {
             $this->handleTapiException($ex);
         }
-        parent::showNotes($poll->id);
+        //parent::showNotes($poll->id);
         $this->setLevelCaptions(["2" => ["caption" => $poll->caption, "link" => $this->link("Poll:poll", $poll->webName) ] ]);
         
         $this->template->poll = $poll;

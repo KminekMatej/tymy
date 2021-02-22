@@ -54,7 +54,7 @@ class HomepagePresenter extends SecuredPresenter {
     }
     
     public function renderDefault() {
-        parent::showNotes();
+        //parent::showNotes();
         try {
             $this->eventList->init()->setHalfYearFrom(NULL, NULL)->getData();
             $this->template->liveUsers = $this->live->init()->getData();
