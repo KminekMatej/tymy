@@ -1,8 +1,12 @@
 <?php
 
-// Uncomment this line if you must temporarily take down your site for maintenance.
-// require __DIR__ . '/.maintenance.php';
+declare(strict_types=1);
 
-$container = require __DIR__ . '/../app/bootstrap.php';
+// absolute filesystem path to the web root
+define('WWW_DIR', dirname(__FILE__));
 
-$container->getByType(Nette\Application\Application::class)->run();
+require __DIR__ . '/../app/bootstrap.php';
+
+\Tymy\Bootstrap::boot()
+	->getByType(Nette\Application\Application::class)
+	->run();
