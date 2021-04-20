@@ -122,7 +122,7 @@ class SecuredPresenter extends BasePresenter {
         if(array_key_exists("language", $this->getUser()->getIdentity()->getData())){
             $this->translator->setLocale(self::LOCALES[$this->getUser()->getIdentity()->getData()["language"]]);
         }
-        $this->supplier->setTapi_config($this->getUser()->getIdentity()->getData()["tapi_config"]);
+        //$this->supplier->setTapi_config($this->getUser()->getIdentity()->getData()["tapi_config"]);   //supplier got tapi_config already set
         $this->supplier->loadUserNeon($this->getUser()->getId());
         $this->apiRights->setId($this->getUser()->getId());
         $this->apiRights->getData();
