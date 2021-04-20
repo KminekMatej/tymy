@@ -22,9 +22,9 @@ services:
         PwdResetFormFactory: App\Forms\PwdResetFormFactory
         router: App\RouterFactory::createRouter
         authorizator:
-            class: App\Model\TapiAuthorizator
+            factory: App\Model\TapiAuthorizator
         cacheStorage:
-            class: Nette\Caching\Storages\NewMemcachedStorage()
+            factory: Nette\Caching\Storages\NewMemcachedStorage()
         TapiService: Tapi\TapiService
         DiscussionNewsListResource: Tapi\DiscussionNewsListResource
         DiscussionPageResource: Tapi\DiscussionPageResource
