@@ -95,8 +95,8 @@ class Bootstrap
                 continue;
             }
 
-            $configFile = self::MODULES_DIR . '/config/config.neon';
-
+            $configFile = self::MODULES_DIR . "/$module/config/config.neon";
+            
             if (file_exists($configFile)) {
                 $configurator->addConfig($configFile);
             }
