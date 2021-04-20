@@ -10,7 +10,7 @@ use Tapi\AuthDetailResource;
  *
  * @author kminekmatej
  */
-class TapiAuthorizator implements Nette\Security\IAuthorizator {
+class TapiAuthorizator implements Nette\Security\Authorizator {
     
     private $role;
     private $resource;
@@ -19,7 +19,7 @@ class TapiAuthorizator implements Nette\Security\IAuthorizator {
     /** @var AuthDetailResource */
     private $apiRights;
     
-    public function isAllowed($role, $resource, $privilege) {
+    public function isAllowed($role, $resource, $privilege): bool {
         $rights = $this->apiRights->getData();
         $rs = $resource . "Rights";
         if(property_exists($rights, $rs) && property_exists($rights->$rs, $privilege) ){
