@@ -11,7 +11,7 @@ require __DIR__ . '/../vendor/autoload.php';
 
 class Bootstrap
 {
-    public const MODULES_DIR = ROOT_DIR . "/modules";
+    public const MODULES_DIR = ROOT_DIR . "/app/modules";
 
     public static function boot(): Container
     {
