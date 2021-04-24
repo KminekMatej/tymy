@@ -1,26 +1,18 @@
 <?php
 
-namespace App\Presenters;
+namespace Tymy\App\Presenters;
 
-use Tapi\AttendanceConfirmResource;
-use Tapi\AttendancePlanResource;
-use Tapi\EventDetailResource;
-use Tapi\EventHistoryResrouce;
 use Tapi\Exception\APIException;
+use Tymy\Module\Event\Manager\EventManager;
 
 class EventPresenter extends SecuredPresenter {
-
-    /** @var EventDetailResource @inject */
     public $eventDetail;
 
-    /** @var EventHistoryResrouce @inject */
     public $eventHistorian;
-
-    /** @var AttendanceConfirmResource @inject */
     public $attendanceConfirmer;
-
-    /** @var AttendancePlanResource @inject */
     public $attendancePlanner;
+    
+    public EventManager $eventManager;
 
     public function startup() {
         parent::startup();
@@ -142,6 +134,12 @@ class EventPresenter extends SecuredPresenter {
         $eventCaptions = $this->getEventCaptions($event, $eventTypes);
         $this->template->myPreStatusCaption = $eventCaptions["myPreStatusCaption"];
         $this->template->myPostStatusCaption = $eventCaptions["myPostStatusCaption"];
+    }
+    
+    public function actionFeed(string $start, string $end)
+    {
+        $events = $this->eventManager->getEventsInterval($this->user->getId(), new \Nette\Utils\DateTime($start), new \Nette\Utils\DateTime($end));
+        \Tracy\Debugger::barDump($events);
     }
 
     public function handleAttendance($id, $code, $desc) {

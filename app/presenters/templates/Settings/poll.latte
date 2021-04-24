@@ -18,17 +18,17 @@
 <div class="container settings">
     <div class="row">
         <div class="col">
-            <div class="card sh-box my-3" data-binder-id="{$poll->id}">
+            <div class="card sh-box my-3" data-binder-id="{$poll->getId()}">
                 <div class="card-header">
-                    <h4>{_poll.editPoll} {$poll->id}</h4>
+                    <h4>{_poll.editPoll} {$poll->getId()}</h4>
                 </div>
                 <div class="card-body">
                     <table class="table">
                         <tr><th>{_settings.title}</th>
                             <td>
-                                <input type="text" name="caption" value="{$poll->caption}" data-value="{$poll->caption}" class="col-6 form-control" />
+                                <input type="text" name="caption" value="{$poll->getCaption()}" data-value="{$poll->getCaption()}" class="col-6 form-control" />
                             </td></tr>
-                        <tr><th>{_settings.description}</th><td><textarea name="description" data-value="{$poll->description}" class="form-control col-6">{$poll->description}</textarea></td></tr>
+                        <tr><th>{_settings.description}</th><td><textarea name="description" data-value="{$poll->getDescription()}" class="form-control col-6">{$poll->getDescription()}</textarea></td></tr>
                         <tr><th>{_settings.status}</th>
                             <td>
                                 <select name="status" value="{$poll->status}" data-value="{$poll->status}" class="col-6 form-control">
@@ -85,8 +85,8 @@
                     </table>
                 </div>
                 <div class="card-footer text-right">
-                    <button n:if="$user->isAllowed('poll','canDeletePoll')" href="{link pollDelete!}" class="btn btn-danger mx-2 binder-delete-btn" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></button>
-                    <button n:if="$user->isAllowed('poll','canUpdatePoll')" href="{link pollEdit!}" class="btn btn-lg btn-primary binder-save-btn" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
+                    <button n:if="$user->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))" href="{link pollDelete!}" class="btn btn-danger mx-2 binder-delete-btn" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                    <button n:if="$user->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))" href="{link pollEdit!}" class="btn btn-lg btn-primary binder-save-btn" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
                 </div>
             </div>
         </div>
@@ -99,10 +99,10 @@
                     <h4>{_poll.pollItems}</h4>
                 </div>
                 <div class="card-body">
-                    <div class="row my-1" n:foreach="$poll->options as $opt" data-binder-id="{$opt->id}" data-option>
+                    <div class="row my-1" n:foreach="$poll->options as $opt" data-binder-id="{$opt->getId()}" data-option>
                         <div class="col-5 input-group">
                             <div class="input-group-prepend"><span class="input-group-text">{_poll.itemCaption}:</span></div>
-                            <input name="caption" class="form-control form-control-sm" type="text" data-value="{$opt->caption}" value="{$opt->caption}" />
+                            <input name="caption" class="form-control form-control-sm" type="text" data-value="{$opt->getCaption()}" value="{$opt->getCaption()}" />
                         </div>
                         <div class="col-5 input-group">
                             <div class="input-group-prepend"><span class="input-group-text">{_settings.type}:</span></div>
@@ -113,13 +113,13 @@
                             </select>
                         </div>
                         <div class="col-2 text-right">
-                            <button n:if="$user->isAllowed('poll','canUpdatePoll')" href="{link pollOptionEdit!}" class="btn btn-sm btn-primary binder-save-btn" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
-                            <button n:if="$user->isAllowed('poll','canDeletePoll') && $opt->id != -1" href="{link pollOptionDelete!}" class="btn btn-sm btn-danger binder-delete-btn" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                            <button n:if="$user->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))" href="{link pollOptionEdit!}" class="btn btn-sm btn-primary binder-save-btn" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
+                            <button n:if="$user->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE')) && $opt->getId() != -1" href="{link pollOptionDelete!}" class="btn btn-sm btn-danger binder-delete-btn" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></button>
                         </div>
                     </div>
                     <div class="row my-3 text-center">
                         <div class="col">
-                            <button n:if="$user->isAllowed('poll','canCreatePoll')" class="btn btn-sm btn-outline-success" onclick="createNewRow()" title="{_poll.createItem}">
+                            <button n:if="$user->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))" class="btn btn-sm btn-outline-success" onclick="createNewRow()" title="{_poll.createItem}">
                                 <i class="fa fa-plus" aria-hidden="true"></i>
                             </button>
                         </div>

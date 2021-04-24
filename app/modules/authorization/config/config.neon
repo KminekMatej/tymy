@@ -1,0 +1,2 @@
+services:
+    AuthorizationManager: Tymy\Module\Authorization\Manager\AuthorizationManager(@database.team.context)

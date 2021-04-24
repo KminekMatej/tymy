@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model;
+namespace Tymy\App\Model;
 
 use Nette;
 use Tapi\AuthDetailResource;
@@ -10,7 +10,7 @@ use Tapi\AuthDetailResource;
  *
  * @author kminekmatej
  */
-class TapiAuthorizator implements Nette\Security\Authorizator {
+class TapiAuthorizator {
     
     private $role;
     private $resource;

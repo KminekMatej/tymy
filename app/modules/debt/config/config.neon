@@ -1,0 +1,2 @@
+services:
+    DebtManager: Tymy\Module\Debt\Manager\DebtManager

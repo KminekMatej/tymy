@@ -35,23 +35,23 @@
                             <th></th>
                         </tr>
                         {if count($notes)}
-                            <tr n:foreach="$notes as $note" data-binder-id="{$note->id}">
+                            <tr n:foreach="$notes as $note" data-binder-id="{$note->getId()}">
                                 <td>
-                                    <a href="{plink Settings:notes $note->webName}" class="btn btn-sm btn-light btn-light-bordered"  title="{_common.edit}" style="margin-right: 2px">
+                                    <a href="{plink Settings:notes $note->getWebName()}" class="btn btn-sm btn-light btn-light-bordered"  title="{_common.edit}" style="margin-right: 2px">
                                         <i class="fa fa-external-link-alt" aria-hidden="true"></i>
                                     </a>
                                 </td>
-                                <td><input type="text" name="caption" data-value="{$note->caption}" value="{$note->caption}" class="form-control form-control-sm" required/></td>
-                                <td><input type="text" name="description" data-value="{$note->description}" value="{$note->description}" class="form-control form-control-sm" required/></td>
+                                <td><input type="text" name="caption" data-value="{$note->getCaption()}" value="{$note->getCaption()}" class="form-control form-control-sm" required/></td>
+                                <td><input type="text" name="description" data-value="{$note->getDescription()}" value="{$note->getDescription()}" class="form-control form-control-sm" required/></td>
                                 <td>
-                                    <select name="accessType" data-value="{$note->accessType}" class="form-control form-control-sm" n:attr="disabled => !$user->isAllowed('notes', 'manageSharedNotes')">
+                                    <select name="accessType" data-value="{$note->accessType}" class="form-control form-control-sm" n:attr="disabled => !$user->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('NOTES'))">
                                         <option value="PRIVATE" n:attr="selected => $note->accessType == 'PRIVATE'">{_note.private}</option>
                                         <option value="USERS" n:attr="selected => $note->accessType == 'USERS'">{_note.users}</option>
                                         <option value="PUBLIC" n:attr="selected => $note->accessType == 'PUBLIC'">{_note.public}</option>
                                     </select>
                                 </td>
                                 <td class="text-center"><label class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" name="menuType" n:attr="data-value => $note->menuType ? 'true':'false', checked => $note->menuType" class="form-control form-control-sm custom-control-input" /><span class="custom-control-label"></span></label></td>
-                                <td><input type="text" name="specialPage" data-value="{$note->specialPage}" value="{$note->specialPage}" class="form-control form-control-sm" required n:attr="disabled => !$user->isAllowed('notes', 'manageSharedNotes')"/></td>
+                                <td><input type="text" name="specialPage" data-value="{$note->specialPage}" value="{$note->specialPage}" class="form-control form-control-sm" required n:attr="disabled => !$user->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('NOTES'))"/></td>
                                 <td><input name="menuOrder" data-value="{$note->menuOrder}" type="number" value="{$note->menuOrder}" class="form-control form-control-sm"/></td>
 
                                 <td class="btn-group" role="group" n:inner-if="$note->canWrite">

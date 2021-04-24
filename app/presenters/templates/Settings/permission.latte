@@ -14,10 +14,10 @@
 <div class="container settings">
     <div class="row">
         <div class="col">
-            <div class="card sh-box my-3" data-binder-id="{$perm->id}">
+            <div class="card sh-box my-3" data-binder-id="{$perm->getId()}">
                 <div class="card-header row">
-                    <div class="col-8"><h4>{if $isNew}{_permission.newPermission}{else}{_permission.editPermission} {$perm->id}{/if}</h4></div>
-                    <div class="col-4"><div class="alert alert-warning float-md-right mx-1" n:ifset="$perm->updatedAt" style="margin: 0px; padding: 4px; font-size: 10px;">{_common.edited} {$lastEditedUser->displayName}, {$perm->updatedAt|date:'j.n.Y G:i'}</div></div>
+                    <div class="col-8"><h4>{if $isNew}{_permission.newPermission}{else}{_permission.editPermission} {$perm->getId()}{/if}</h4></div>
+                    <div class="col-4"><div class="alert alert-warning float-md-right mx-1" n:ifset="$perm->updatedAt" style="margin: 0px; padding: 4px; font-size: 10px;">{_common.edited} {$lastEditedUser->getDisplayName()}, {$perm->updatedAt|date:'j.n.Y G:i'}</div></div>
                 </div>
                 <div class="card-body">
                     <table class="table">
@@ -27,7 +27,7 @@
                         </tr>
                         <tr>
                             <th>{_settings.description}</th>
-                            <td><input type="text" name="caption" value="{$perm->caption}" {if $perm->type=='USR'}data-value="{$perm->caption}"{/if} class="col-6 form-control" {if $perm->type!='USR'}disabled{/if} /></td>
+                            <td><input type="text" name="caption" value="{$perm->getCaption()}" {if $perm->type=='USR'}data-value="{$perm->getCaption()}"{/if} class="col-6 form-control" {if $perm->type!='USR'}disabled{/if} /></td>
                         </tr>
                         <tr>
                             <th>
@@ -60,7 +60,7 @@
                                 </div>
                                 <div class="col-9">
                                     <div class="btn-group">
-                                        <button name="roles[{$role->code}]" data-value="-1" n:foreach="$roles as $role" data-key="{$role->code}" class="btn btn-outline-secondary {if !empty($rolesRule) && in_array($role->code, $perm->{$rolesRule.'Roles'})}active{/if}" onclick="roleCheck(this)">{$role->caption}</button>
+                                        <button name="roles[{$role->code}]" data-value="-1" n:foreach="$roles as $role" data-key="{$role->code}" class="btn btn-outline-secondary {if !empty($rolesRule) && in_array($role->code, $perm->{$rolesRule.'Roles'})}active{/if}" onclick="roleCheck(this)">{$role->getCaption()}</button>
                                     </div>
                                 </div>
                             </td>
@@ -78,9 +78,9 @@
                                 </div>
                                     <div class="col-9 row">
                                         <div class="col-4 p-1" n:foreach="$users as $u">
-                                            <div class="custom-control custom-checkbox" title="{$u->fullName}">
-                                                <input type="checkbox" class="custom-control-input" name="userCheck_{$u->id}" data-value="{$usersRule && in_array($u->id,$perm->{$usersRule.'Users'}) ? 1 : 0}" id="userCheck_{$u->id}" data-key="{$u->id}" {if $usersRule && in_array($u->id, $perm->{$usersRule.'Users'})}checked{/if} onclick="usersChange()">
-                                                <label class="custom-control-label" for="userCheck_{$u->id}">{$u->displayName} <img class="usrImg border rounded" src="{$u->pictureUrl}" /></label>
+                                            <div class="custom-control custom-checkbox" title="{$u->getFullName()}">
+                                                <input type="checkbox" class="custom-control-input" name="userCheck_{$u->getId()}" data-value="{$usersRule && in_array($u->getId(),$perm->{$usersRule.'Users'}) ? 1 : 0}" id="userCheck_{$u->getId()}" data-key="{$u->getId()}" {if $usersRule && in_array($u->getId(), $perm->{$usersRule.'Users'})}checked{/if} onclick="usersChange()">
+                                                <label class="custom-control-label" for="userCheck_{$u->getId()}">{$u->getDisplayName()} <img class="usrImg border rounded" src="{$u->getPictureUrl()}" /></label>
                                             </div>
                                         </div>
                                 </div>
@@ -94,7 +94,7 @@
                                 <div class="row" n:foreach="$allowances as $key => $allowance" data-class="{$key}">
                                     <div class="col-2"><strong>{$allowance}</strong></div>
                                     <div class="col-10">
-                                        <img n:foreach="$users as $usr" {if $key == 'allowed'}style="display: none"{/if} data-rule="{$allowance}" data-status="{$usr->status}" data-roles="{join(',', $usr->roles)}" data-id="{$usr->id}" class="border rounded user" src="{$usr->pictureUrl}" />
+                                        <img n:foreach="$users as $usr" {if $key == 'allowed'}style="display: none"{/if} data-rule="{$allowance}" data-status="{$usr->status}" data-roles="{join(',', $usr->roles)}" data-id="{$usr->getId()}" class="border rounded user" src="{$usr->getPictureUrl()}" />
                                     </div>
                                 </div>
                             </td>

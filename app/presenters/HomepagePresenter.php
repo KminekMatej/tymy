@@ -1,24 +1,38 @@
 <?php
 
-namespace App\Presenters;
+namespace Tymy\App\Presenters;
 
-use Tapi\Exception\APIException;
-use Tapi\MultiaccountTransferKeyResource;
-use Tapi\NewsListResource;
-use Tapi\UsersLiveResource;
+use Tymy\Module\Debt\Manager\DebtManager;
+use Tymy\Module\Discussion\Manager\DiscussionManager;
+use Tymy\Module\Event\Manager\EventManager;
+use Tymy\Module\Event\Manager\EventTypeManager;
+use Tymy\Module\News\Manager\NewsManager;
+use Tymy\Module\User\Manager\UserManager;
 
 class HomepagePresenter extends SecuredPresenter {
 
     public $navbar;
-    
-    /** @var UsersLiveResource @inject */
     public $live;
-    
-    /** @var MultiaccountTransferKeyResource @inject */
     public $tkResource;
-    
-    /** @var NewsListResource @inject */
     public $newsResource;
+    
+    /** @inject */
+    public EventManager $eventManager;
+    
+    /** @inject */
+    public UserManager $userManager;
+    
+    /** @inject */
+    public DebtManager $debtManager;
+    
+    /** @inject */
+    public NewsManager $newsManager;
+    
+    /** @inject */
+    public DiscussionManager $discussionManager;
+    
+    /** @inject */
+    public EventTypeManager $eventTypeManager;
     
     public function beforeRender() {
         parent::beforeRender();
@@ -53,28 +67,22 @@ class HomepagePresenter extends SecuredPresenter {
         
     }
     
-    public function renderDefault() {
-        //parent::showNotes();
-        try {
-            $this->eventList->init()->setHalfYearFrom(NULL, NULL)->getData();
-            $this->template->liveUsers = $this->live->init()->getData();
-            $this->template->discussions = $this->discussionList->init()->getData();
-            $this->template->users = $this->sortUsersByLastLogin($this->userList->init()->getData());;
-            $debts = $this->debtList->init()->getData();
-            $this->debtList->postProcessWithUsers($this->userList->getById(), $debts);
-            $this->template->debts = $debts;
-            $this->template->notices = $this->newsResource->init()->getData();
-        } catch (APIException $ex) {
-            $this->handleTapiException($ex);
-        }
+    public function renderDefault()
+    {
+        $this->template->liveUsers = $this->userManager->getLiveUsers();
+        $this->template->discussions = $this->discussionManager->getListUserAllowed($this->user->getId());
+        $this->template->users = $this->userManager->getListOrder(null, "id", "last_login DESC");
+        
+        //$this->debtList->postProcessWithUsers($this->userList->getById(), $debts);    //@todo
+        $this->template->debts = $this->debtManager->getListUserAllowed();
+        $this->template->notices = $this->newsManager->getListUserAllowed();
+
         $this->template->today = date('m-d');
         $this->template->tommorow = date('m-d', strtotime('+ 1 day'));
         $this->template->currY = date("Y");
         $this->template->currM = date("m");
-        $this->template->evMonths = $this->eventList->getAsMonthArray();
-        $this->template->events = $this->eventList->getAsArray();
-        $this->template->eventTypes = $this->eventTypeList;
-        
+        $this->template->eventTypes = $this->eventTypeManager->getListUserAllowed($this->user->getId());
+
         $this->template->neverLogin = $this->translator->translate("common.never");
     }
 

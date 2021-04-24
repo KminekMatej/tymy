@@ -13,7 +13,7 @@
                 {if is_null($players)}
                     <button type="button" class="btn btn-outline-light" style="cursor: initial">{_team.freeNumber}</button>
                 {else}
-                    <a n:foreach="$players as $player" href="{plink Team:player $player->webName}" n:class="btn, $player->id == $me->id ? btn-primary, $player->id != $me->id ? ($player->status == 'PLAYER' ? btn-light : btn-outline-dark)" title="{$player->fullName} {if $player->status != 'PLAYER'}({_team.inActive}){/if}" href='{plink Team:player $player->webName}'>{$player->callName}</a>
+                    <a n:foreach="$players as $player" href="{plink Team:player $player->getWebName()}" n:class="btn, $player->getId() == $me->getId() ? btn-primary, $player->getId() != $me->getId() ? ($player->status == 'PLAYER' ? btn-light : btn-outline-dark)" title="{$player->getFullName()} {if $player->status != 'PLAYER'}({_team.inActive}){/if}" href='{plink Team:player $player->getWebName()}'>{$player->callName}</a>
                 {/if}
 
             </td>

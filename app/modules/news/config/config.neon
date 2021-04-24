@@ -1,0 +1,3 @@
+services:
+    NewsManager: Tymy\Module\News\Manager\NewsManager
+    routes.news: Tymy\Module\News\Router\Router

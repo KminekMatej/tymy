@@ -1,38 +1,25 @@
 {import '../components/unsecured.latte'}
 {var $title = 'Login'}
 {block content}
-<div class="container" n:if="$forbidden">
-    <div class="row">
-        <div class="col">
-            <div class="alert alert-warning my-1">Tento portál je přístupný pouze týmům s licencí <strong>FULL</strong>. Více viz <a href='https://www.tymy.cz/licence/' target="blank">Licence</a></div>
-        </div>
-    </div>
-</div>
-
-
 <div class="container">
 
     <div class="row justify-content-md-center">
-        <div n:class="col-md-4,sh-box,bg-light,px-5,pb-5,pt-4,my-5,form-box,$forbidden ? disabled">
-            <h4 class="pb-3" style="color: #9f9f9f">{$teamName}</h4>
+        <div n:class="col-md-4,sh-box,bg-light,px-5,pb-5,pt-4,my-5,form-box">
+            <h4 class="pb-3" style="color: #9f9f9f">{$team->getName()}</h4>
             {form signInForm}
-                <fieldset disabled="disabled" n:tag-if="$forbidden">
+                <fieldset>
                 <div class="row">
                     <div class="col">{input name}</div>
                 </div>
                 <div class="row">
                     <div class="col">{input password}</div>
                 </div>
-                <div class="row" n:if="$multiple">
-                    <div class="col">{input team}</div>
+                <div class="row">
+                    <div class="col">{input send}</div>
                 </div>
                 <div class="row">
-                    <div class="col" n:if="!$forbidden">{input send}</div>
-                    <div class="col" n:if="$forbidden">{input send, class => 'disabled'}</div>
-                </div>
-                <div class="row">
-                    <div class="col-6"><a href="{if $forbidden}#{else}{plink Sign:up}{/if}" {if $forbidden}class="disabled"{else}{/if}>{_sign.register}</a></div>
-                    <div class="col-6"><a href="{if $forbidden}#{else}{plink Sign:pwdlost}{/if}" {if $forbidden}class="disabled"{else}{/if}>{_sign.pwdLost}</a></div>
+                    <div class="col-6"><a href="{plink Sign:up}">{_sign.register}</a></div>
+                    <div class="col-6"><a href="{plink Sign:pwdlost}">{_sign.pwdLost}</a></div>
                 </div>
                 </fieldset>
             {/form}

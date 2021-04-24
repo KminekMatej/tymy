@@ -36,7 +36,7 @@
                                     {var $resultsDesc = $resultsDisplayedAfterVote}
                                 {/if}
                             {elseif $poll->showResults == 'NEVER'}
-                                {if $poll->canSeeResults == TRUE && $poll->createdById == $user->id}
+                                {if $poll->canSeeResults == TRUE && $poll->createdById == $user->getId()}
                                     {var $resultsClass = 'badge-danger'}
                                     {var $resultsDesc = $resultsToYouOnly}
                                 {else}
@@ -61,26 +61,26 @@
                 </div>
                 <!-- Tab panes -->
                 <div class="card-body">
-                    <h4 class="card-title">{$poll->caption}</h4>
-                    <h6 class="card-subtitle mb-2 text-muted">{$poll->description}</h6>
+                    <h4 class="card-title">{$poll->getCaption()}</h4>
+                    <h6 class="card-subtitle mb-2 text-muted">{$poll->getDescription()}</h6>
                     <p n:if="!$poll->canVote" class="font-italic">{_poll.cannotVoteHere}</p>
                     <div class="container" n:if="$poll->canVote">
                         <div class="row">
-                            <div n:foreach="$poll->options as $opt" class="col-3 py-3 option" id="option-{$opt->id}">
-                                <h5 n:if="!$poll->radio">{$opt->caption}</h5>
-                                <input n:if="$opt->type == 'TEXT'" type="text" value="{ifset $poll->myVotes[$opt->id]}{$poll->myVotes[$opt->id]->stringValue}{/ifset}" class="form-control" />
-                                <input n:if="$opt->type == 'NUMBER'" type="number" value="{ifset $poll->myVotes[$opt->id]}{$poll->myVotes[$opt->id]->numericValue}{/ifset}" class="form-control" />
+                            <div n:foreach="$poll->options as $opt" class="col-3 py-3 option" id="option-{$opt->getId()}">
+                                <h5 n:if="!$poll->radio">{$opt->getCaption()}</h5>
+                                <input n:if="$opt->type == 'TEXT'" type="text" value="{ifset $poll->myVotes[$opt->getId()]}{$poll->myVotes[$opt->getId()]->stringValue}{/ifset}" class="form-control" />
+                                <input n:if="$opt->type == 'NUMBER'" type="number" value="{ifset $poll->myVotes[$opt->getId()]}{$poll->myVotes[$opt->getId()]->numericValue}{/ifset}" class="form-control" />
                                 <div n:if="$opt->type == 'BOOLEAN'" class="btn-group">
-                                    <button n:if="$poll->radio" n:class="btn,btn-outline-warning,isset($poll->myVotes[$opt->id]) && $poll->myVotes[$opt->id]->booleanValue ? active" style="min-width:69px" data-value="true" onclick="checkBool(this)">{$opt->caption}</button>
-                                    <button n:if="!$poll->radio" n:class="btn,btn-outline-success,isset($poll->myVotes[$opt->id]) && $poll->myVotes[$opt->id]->booleanValue ? active" style="width:69px" data-value="true" onclick="checkBool(this)">{_common.yes|upper}</button>
-                                    <button n:if="!$poll->radio" n:class="btn,btn-outline-danger,isset($poll->myVotes[$opt->id]) && !$poll->myVotes[$opt->id]->booleanValue ? active" style="width:69px" data-value="false" onclick="checkBool(this)">{_common.no|upper}</button>
+                                    <button n:if="$poll->radio" n:class="btn,btn-outline-warning,isset($poll->myVotes[$opt->getId()]) && $poll->myVotes[$opt->getId()]->booleanValue ? active" style="min-width:69px" data-value="true" onclick="checkBool(this)">{$opt->getCaption()}</button>
+                                    <button n:if="!$poll->radio" n:class="btn,btn-outline-success,isset($poll->myVotes[$opt->getId()]) && $poll->myVotes[$opt->getId()]->booleanValue ? active" style="width:69px" data-value="true" onclick="checkBool(this)">{_common.yes|upper}</button>
+                                    <button n:if="!$poll->radio" n:class="btn,btn-outline-danger,isset($poll->myVotes[$opt->getId()]) && !$poll->myVotes[$opt->getId()]->booleanValue ? active" style="width:69px" data-value="false" onclick="checkBool(this)">{_common.no|upper}</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="card-footer text-right" n:if="$poll->canVote">
-                    <button onclick="updatePoll(this, {link vote! $poll->id})" class="btn btn-primary">{_poll.vote}</button>
+                    <button onclick="updatePoll(this, {link vote! $poll->getId()})" class="btn btn-primary">{_poll.vote}</button>
                 </div>
             </div>
 
@@ -98,21 +98,21 @@
                     <table class="table table-dark table-striped table-hover mb-0">
                         <tr>
                             <th>{_common.user}</th>
-                            <th n:foreach="$poll->options as $option">{$option->caption}</th>
+                            <th n:foreach="$poll->options as $option">{$option->getCaption()}</th>
                         </tr>
                         <tr n:foreach="$poll->orderedVotes as $userId => $vote" data-vote n:attr="data-gender => !$poll->anonymousResults ? $users[$userId]->gender, data-status => !$poll->anonymousResults ? $users[$userId]->status">
                             <th>
-                                <a n:if="!$poll->anonymousResults" href="{plink Team:player $users[$userId]->webName}">{$users[$userId]->displayName}</a>
+                                <a n:if="!$poll->anonymousResults" href="{plink Team:player $users[$userId]->getWebName()}">{$users[$userId]->getDisplayName()}</a>
                                 <a n:if="$poll->anonymousResults">Anonym</a>
                             </th>
                                 {foreach $poll->options as $option}
-                                {ifset $vote[$option->id]}
-                                    <td n:ifset="$vote[$option->id]->numericValue" data-option-type="{$option->type}" data-option-id="{$option->id}" data-option-value="{$vote[$option->id]->numericValue}">{$vote[$option->id]->numericValue}</td>
-                                    <td n:ifset="$vote[$option->id]->stringValue" data-option-type="{$option->type}" data-option-id="{$option->id}" data-option-value="{$vote[$option->id]->stringValue}">{$vote[$option->id]->stringValue}</td>
-                                    <td n:ifset="$vote[$option->id]->booleanValue" n:if="$poll->radio" data-option-type="{$option->type}" data-option-id="{$option->id}" data-option-value="true"><span n:class="badge, badge-warning">{$option->caption}</span></td>
-                                    <td n:ifset="$vote[$option->id]->booleanValue" n:if="!$poll->radio" data-option-type="{$option->type}" data-option-id="{$option->id}" data-option-value="{$vote[$option->id]->booleanValue ? 'true' : 'false'}"><span n:class="badge, $vote[$option->id]->booleanValue ? 'badge-success' : 'badge-danger' ">{if $vote[$option->id]->booleanValue}{_common.yes|upper}{else}{_common.no|upper}{/if}</span></td>
+                                {ifset $vote[$option->getId()]}
+                                    <td n:ifset="$vote[$option->getId()]->numericValue" data-option-type="{$option->type}" data-option-id="{$option->getId()}" data-option-value="{$vote[$option->getId()]->numericValue}">{$vote[$option->getId()]->numericValue}</td>
+                                    <td n:ifset="$vote[$option->getId()]->stringValue" data-option-type="{$option->type}" data-option-id="{$option->getId()}" data-option-value="{$vote[$option->getId()]->stringValue}">{$vote[$option->getId()]->stringValue}</td>
+                                    <td n:ifset="$vote[$option->getId()]->booleanValue" n:if="$poll->radio" data-option-type="{$option->type}" data-option-id="{$option->getId()}" data-option-value="true"><span n:class="badge, badge-warning">{$option->getCaption()}</span></td>
+                                    <td n:ifset="$vote[$option->getId()]->booleanValue" n:if="!$poll->radio" data-option-type="{$option->type}" data-option-id="{$option->getId()}" data-option-value="{$vote[$option->getId()]->booleanValue ? 'true' : 'false'}"><span n:class="badge, $vote[$option->getId()]->booleanValue ? 'badge-success' : 'badge-danger' ">{if $vote[$option->getId()]->booleanValue}{_common.yes|upper}{else}{_common.no|upper}{/if}</span></td>
                                 {else}
-                                    <td data-option-type="{$option->type}" data-option-id="{$option->id}" data-option-value></td>
+                                    <td data-option-type="{$option->type}" data-option-id="{$option->getId()}" data-option-value></td>
                                 {/ifset}
                             {/foreach}
                         </tr>

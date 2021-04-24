@@ -1,0 +1,57 @@
+<?php
+
+namespace Tymy\Module\Core\Manager;
+
+use Nette\Database\Explorer;
+use Nette\Localization\ITranslator;
+use Nette\Security\User;
+use Tymy\Module\Team\Manager\TeamManager;
+
+/**
+ * Description of TranslationManager
+ *
+ * @author Matej Kminek <matej.kminek@attendees.eu>, 9. 9. 2020
+ */
+class TranslationManager implements ITranslator
+{
+    public const TABLE = "strings";
+
+    public const LC = ["CZ" => "cs","EN" => "en","FR" => "fr","PL" => "pl"];
+
+    private TeamManager $teamManager;
+    private Explorer $database;
+    private User $user;
+
+    public function __construct(Explorer $mainDatabase, User $user, TeamManager $teamManager)
+    {
+        $this->database = $mainDatabase;
+        $this->user = $user;
+        $this->teamManager = $teamManager;
+    }
+
+    public function translate($message, ...$parameters): string
+    {
+        $parts = explode(".", $message);
+        if (count($parts) != 2) {
+            return $message;
+        }
+
+        $domain = $parts[0];
+        $code = $parts[1];
+
+        return $this->translateBy($domain, $code, $parameters);
+    }
+
+    private function getLc()
+    {
+        $code = $this->user->isLoggedIn() ? $this->user->getIdentity()->getData()["language"] : $this->teamManager->getTeam()->getDefaultLanguageCode();
+        return self::LC[$code];
+    }
+
+    public function translateBy(string $domain, string $code, ...$parameters): string
+    {
+        $value = $this->database->table(self::TABLE)->where("domain", $domain)->where("code", $code)->where("language", $this->getLc())->limit(1)->fetch()->value;
+
+        return sprintf($value, ...$parameters);
+    }
+}

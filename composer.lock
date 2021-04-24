@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c4fbd2f1900f1f138a131a371611972e",
+    "content-hash": "c5e008605f8545d8312c2c17704fa55c",
     "packages": [
         {
             "name": "globalcitizen/php-iban",
@@ -111,16 +111,16 @@
         },
         {
             "name": "kdyby/translation",
-            "version": "v3.0.4",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Kdyby/Translation.git",
-                "reference": "1f04a53f04a554010282cadb0d011a10bdca1472"
+                "reference": "57124c203b3304378d9d68dcfd419373f5e8e801"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Kdyby/Translation/zipball/1f04a53f04a554010282cadb0d011a10bdca1472",
-                "reference": "1f04a53f04a554010282cadb0d011a10bdca1472",
+                "url": "https://api.github.com/repos/Kdyby/Translation/zipball/57124c203b3304378d9d68dcfd419373f5e8e801",
+                "reference": "57124c203b3304378d9d68dcfd419373f5e8e801",
                 "shasum": ""
             },
             "require": {
@@ -192,12 +192,7 @@
                 "nette",
                 "translation"
             ],
-            "support": {
-                "email": "filip@prochazka.su",
-                "issues": "https://github.com/kdyby/translation/issues",
-                "source": "https://github.com/Kdyby/Translation/tree/v3.0.4"
-            },
-            "time": "2020-10-14T14:30:15+00:00"
+            "time": "2021-02-19T19:45:04+00:00"
         },
         {
             "name": "latte/latte",
@@ -798,10 +793,6 @@
                 "iterator",
                 "nette"
             ],
-            "support": {
-                "issues": "https://github.com/nette/finder/issues",
-                "source": "https://github.com/nette/finder/tree/v2.5.2"
-            },
             "time": "2020-01-03T20:35:40+00:00"
         },
         {
@@ -1299,10 +1290,6 @@
                 "nette",
                 "reflection"
             ],
-            "support": {
-                "issues": "https://github.com/nette/reflection/issues",
-                "source": "https://github.com/nette/reflection/tree/master"
-            },
             "abandoned": true,
             "time": "2017-07-11T19:28:57+00:00"
         },
@@ -1492,10 +1479,6 @@
                 "nette",
                 "safe"
             ],
-            "support": {
-                "issues": "https://github.com/nette/safe-stream/issues",
-                "source": "https://github.com/nette/safe-stream/tree/v2.4.1"
-            },
             "time": "2020-03-16T14:26:30+00:00"
         },
         {
@@ -1815,9 +1798,6 @@
                 "psr",
                 "psr-3"
             ],
-            "support": {
-                "source": "https://github.com/php-fig/log/tree/1.1.3"
-            },
             "time": "2020-03-23T09:12:05+00:00"
         },
         {
@@ -2433,12 +2413,14 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "kdyby/translation": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "php": ">=7.4"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "1.1.0"
 }

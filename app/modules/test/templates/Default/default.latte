@@ -1,0 +1,166 @@
+<html>
+    <script>
+        function toggle(elm) {
+            var x = document.getElementById(elm);
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+        }
+    </script>
+    <style>
+
+    A {
+        width: 130px;
+        text-align: center;
+    }
+
+    A.fail {
+        box-shadow:inset 0px 1px 0px 0px #f29c93;
+        background:linear-gradient(to bottom, #fe1a00 5%, #ce0100 100%);
+        background-color:#fe1a00;
+        border-radius:6px;
+        border:1px solid #d83526;
+        display:inline-block;
+        cursor:pointer;
+        color:#ffffff;
+        font-family:Arial;
+        font-size:15px;
+        font-weight:bold;
+        padding:6px 24px;
+        text-decoration:none;
+        text-shadow:0px 1px 0px #b23e35;
+    }
+    A.fail:hover {
+        background:linear-gradient(to bottom, #ce0100 5%, #fe1a00 100%);
+        background-color:#ce0100;
+    }
+    A.fail:active {
+        position:relative;
+        top:1px;
+    }
+    
+    A.success {
+        background:linear-gradient(to bottom, #28A745 5%, #238b3b 100%);
+        background-color:#28A745;
+        border-radius:6px;
+        border:1px solid #28A745;
+        display:inline-block;
+        cursor:pointer;
+        color:#ffffff;
+        font-family:Arial;
+        font-size:15px;
+        font-weight:bold;
+        padding:6px 24px;
+        text-decoration:none;
+    }
+    A.success:hover {
+        background:linear-gradient(to bottom, #238b3b 5%, #28A745 100%);
+        background-color:#238b3b;
+    }
+    A.success:active {
+        position:relative;
+        top:1px;
+    }
+
+    A.void {
+        background:linear-gradient(to bottom, #f9f9f9 5%, #e9e9e9 100%);
+        background-color:#f9f9f9;
+        border-radius:6px;
+        border:1px solid #dcdcdc;
+        display:inline-block;
+        cursor:pointer;
+        color:#666666;
+        font-family:Arial;
+        font-size:15px;
+        font-weight:bold;
+        padding:6px 24px;
+        text-decoration:none;
+    }
+    A.void:hover {
+        background:linear-gradient(to bottom, #e9e9e9 5%, #f9f9f9 100%);
+        background-color:#e9e9e9;
+    }
+    A.void:active {
+        position:relative;
+        top:1px;
+    }
+
+    A.skip {
+        background:linear-gradient(to bottom, #ffc477 5%, #fb9e25 100%);
+        background-color:#ffc477;
+        border-radius:6px;
+        border:1px solid #eeb44f;
+        display:inline-block;
+        cursor:pointer;
+        color:#ffffff;
+        font-family:Arial;
+        font-size:15px;
+        font-weight:bold;
+        padding:6px 24px;
+        text-decoration:none;
+    }
+    A.skip:hover {
+        background:linear-gradient(to bottom, #fb9e25 5%, #ffc477 100%);
+        background-color:#fb9e25;
+    }
+    A.skip:active {
+        position:relative;
+        top:1px;
+    }
+
+    DIV.area {
+        border-collapse: collapse;
+        float: left;
+        margin: 1rem;
+    }
+    DIV.area DIV {
+        padding: 3px 4px;
+    }
+    BR.clearer {
+        clear: both;
+    }
+    
+    A.all{
+        color: #4d4d4d;
+    }
+</style>
+
+{for $i = 0; $i < $cols; $i++}
+    <div class="area">
+        {for $j = 0; $j < $rows; $j++}
+            {var $current = ($i * $rows) + $j}
+            {if $current < count($modules)}
+                {var $mod = $modules[$current]}
+                {var $class = is_array($results) && isset($results[$mod]) ? $results[$mod] : 'void'}
+                {if $class == 'void'}
+                    {var $title = 'Netestováno'}
+                {elseif $class == 'fail'}
+                    {var $title = 'Test selhal - viz výpis níže'}
+                {elseif $class == 'skip'}
+                    {var $title = 'Test byl přeskočen'}
+                {elseif $class == 'success'}
+                    {var $title = 'Test byl úspěšný'}
+                {/if}
+                
+                <div>
+                    <a class="{if $mod == 'all'}{$class} all{else}{$class}{/if}" title="{$title}" href='{$urlroot}/{$mod}'>{if $mod == 'all'}*** Všechny ***{else}{$mod}{/if}</a>
+                </div>
+            {/if}
+        {/for}
+    </div>
+{/for}
+</div><br class='clearer' />
+<p><hr /></p>
+<pre>
+    {$testsOutput}
+</pre>
+
+<div n:if="!empty($requests)">
+    <p><hr /></p>
+    <h2 onclick="toggle('requestList')"><a href="#">► Provedené requesty:</a></h2>
+    <pre id="requestList" style="display: none"><div n:foreach="$requests as $request"><span style="color: #cccccc">{$iterator->counter}:</span> {$request|noescape|colorize}</div></pre>
+</div>
+
+</html>

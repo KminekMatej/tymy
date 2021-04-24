@@ -33,7 +33,7 @@
             events: function(start, end, timezone, callback) {
                 var events = [];
                 {foreach $events as $evnt}
-                    events.push({l}id: {$evnt->id}, title: {$evnt->title},start: {$evnt->start},end: {$evnt->end},backgroundColor: {$evnt->backgroundColor},borderColor: {$evnt->borderColor},textColor: {$evnt->textColor},url: {plink 'Event:event', $evnt->webName}{r});
+                    events.push({l}id: {$evnt->getId()}, title: {$evnt->title},start: {$evnt->start},end: {$evnt->end},backgroundColor: {$evnt->backgroundColor},borderColor: {$evnt->borderColor},textColor: {$evnt->textColor},url: {plink 'Event:event', $evnt->getWebName()}{r});
                 {/foreach}
                 callback(events);
             },
@@ -90,14 +90,14 @@
                         {if isset($evMonths[$actMonth]) && count($evMonths[$actMonth]) > 0 }
                             {foreach $evMonths[$actMonth] as $ev}
                                 <div n:class="row, $ev->isPast ? evnt-past, $ev->isPast ? collapse">
-                                    <div class="col" title=" {$ev->caption} ({$eventTypes[$ev->type]->caption})&#13;{$ev->startTime|date:'j.n. H:i'} -> {$ev->endTime|date:'j.n H:i'}"><a href="{plink Event:event, $ev->webName}}" class="event-heading">{$ev->caption}</a><span class="event-time text-muted float-right">{$ev->startTime|date:'j.n. H:i'}</span></div>
+                                    <div class="col" title=" {$ev->getCaption()} ({$eventTypes[$ev->type]->getCaption()})&#13;{$ev->startTime|date:'j.n. H:i'} -> {$ev->endTime|date:'j.n H:i'}"><a href="{plink Event:event, $ev->getWebName()}}" class="event-heading">{$ev->getCaption()}</a><span class="event-time text-muted float-right">{$ev->startTime|date:'j.n. H:i'}</span></div>
                                 </div>
                                 <div n:class="row, mb-2, $ev->isPast ? evnt-past, $ev->isPast ? collapse">
                                     <div class="col">
-                                        <div class="btn-group input-group px-0" role="group" aria-label="Basic example" id="action-{$ev->id}">
+                                        <div class="btn-group input-group px-0" role="group" aria-label="Basic example" id="action-{$ev->getId()}">
                                             <input type="text" class="form-control form-control-sm" title="{_note.note,1}" name="preStatusDesc" value="{$ev->myAttendance->preDescription}" />
                                             {foreach $eventTypes[$ev->type]->preStatusSet as $preStatus}
-                                                <button onclick="updateAttendance(this, {link attendance! $ev->id, $preStatus->code})" class="btn btn-sm {$ev->myPreStatusCaption,$ev->myPostStatusCaption,$preStatus->code,$ev->canPlan,$ev->closeTime|prestatusClass}">{$preStatus->caption}</button>
+                                                <button onclick="updateAttendance(this, {link attendance! $ev->getId(), $preStatus->code})" class="btn btn-sm {$ev->myPreStatusCaption,$ev->myPostStatusCaption,$preStatus->code,$ev->canPlan,$ev->closeTime|prestatusClass}">{$preStatus->getCaption()}</button>
                                             {/foreach}
                                         </div>
                                     </div>

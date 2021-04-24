@@ -1,0 +1,3 @@
+services:
+    MultiaccountManager: Tymy\Module\Multiaccount\Manager\MultiaccountManager
+    routes.multiaccount: Tymy\Module\Multiaccount\Router\Router

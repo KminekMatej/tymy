@@ -13,7 +13,7 @@
     "require": {
         "php": ">=7.4",
         "nette/nette": "^3.0",
-        "kdyby/translation": "^3.0",
+        "kdyby/translation": "dev-master",
         "globalcitizen/php-iban": "^4.0"
     },
     "require-dev": {

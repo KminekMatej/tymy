@@ -19,7 +19,7 @@
         <meta name="theme-color" content="#ffffff">
 
 
-        <title>{ifset $title}{$title} | {/ifset}{$tym|firstUpper} | Tymy.CZ v2</title>
+        <title>{ifset $title}{$title} | {/ifset}{$team->getName()|firstUpper} | Tymy.CZ v2</title>
 
         {block styles}
         <link rel="stylesheet" href="{$basePath}/resources/bootstrap4/css/bootstrap.{$css}?ver={$appver}" />

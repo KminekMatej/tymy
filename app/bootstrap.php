@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Tymy;
 
+use Exception;
 use Nette\Configurator;
+use Nette\DI\Container;
 use Nette\Neon\Neon;
+use const ROOT_DIR;
 
 require __DIR__ . '/../vendor/autoload.php';
 

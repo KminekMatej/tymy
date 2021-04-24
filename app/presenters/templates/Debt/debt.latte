@@ -13,28 +13,28 @@
 <div class="container debt">
     <div class="row">
         <div class="col">
-            <div class="card sh-box my-3" data-binder-id="{$debt->id}">
+            <div class="card sh-box my-3" data-binder-id="{$debt->getId()}">
                 <div class="card-header">
-                    <h4 class="card-title">{$debt->caption} ({$userListWithTeam[$debt->debtorId]->displayName} -> {$userListWithTeam[$debt->payeeId]->displayName})</h4>
+                    <h4 class="card-title">{$debt->getCaption()} ({$userListWithTeam[$debt->debtorId]->getDisplayName()} -> {$userListWithTeam[$debt->payeeId]->getDisplayName()})</h4>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-8">
                             <table class="table">
                                 <tr>
-                                    <th>{_settings.title}:</th><td><input name="caption" data-value="{$debt->caption}" type="text" value="{$debt->caption}" {if !$debt->canEdit}readonly{/if} n:class="col-6, form-control" /></td>
+                                    <th>{_settings.title}:</th><td><input name="caption" data-value="{$debt->getCaption()}" type="text" value="{$debt->getCaption()}" {if !$debt->canEdit}readonly{/if} n:class="col-6, form-control" /></td>
                                 </tr>
                                 <tr>
                                     <th>{_debt.debtorId}:</th><td>
                                         <select n:class="col-6, form-control"  style="min-width: 120px" name="debtorId" data-value="{$debt->debtorId}" {if !$debt->canEdit}readonly disabled{/if}>
-                                            <option n:foreach="$userListWithTeam as $debtor" value="{$debtor->id}" n:attr="selected => $debtor->id==$debt->debtorId">{$debtor->displayName}</option>
+                                            <option n:foreach="$userListWithTeam as $debtor" value="{$debtor->getId()}" n:attr="selected => $debtor->getId()==$debt->debtorId">{$debtor->getDisplayName()}</option>
                                         </select>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>{_debt.payeeId}:</th><td>
                                         <select n:class="col-6, form-control"  style="min-width: 120px" name="payeeId" data-value="{$debt->payeeId}" {if !$debt->canEdit}readonly disabled{/if}>
-                                            <option n:foreach="$payeeList as $payee" value="{$payee->id}" n:attr="selected => $payee->id==$debt->payeeId">{$payee->displayName}</option>
+                                            <option n:foreach="$payeeList as $payee" value="{$payee->getId()}" n:attr="selected => $payee->getId()==$debt->payeeId">{$payee->getDisplayName()}</option>
                                         </select>
                                     </td>
                                 </tr>
@@ -74,7 +74,7 @@
                             </table>
                         </div>
                         <div class="col-4">
-                            <img src="{plink Debt:debtImg $debt->webName}" class="border" />
+                            <img src="{plink Debt:debtImg $debt->getWebName()}" class="border" />
                         </div>
                     </div>
 

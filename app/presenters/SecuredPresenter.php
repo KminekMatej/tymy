@@ -1,36 +1,19 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+namespace Tymy\App\Presenters;
 
-namespace App\Presenters;
-
-use App\Model\SettingMenu;
-use App\Model\TapiAuthenticator;
-use App\Model\TapiAuthorizator;
 use Nette\Application\UI\NavbarControl;
-use Nette\Caching\Cache;
-use Nette\Caching\Storages\NewMemcachedStorage;
 use Nette\Security\IUserStorage;
-use Tapi\AuthDetailResource;
-use Tapi\DebtListResource;
-use Tapi\DiscussionListResource;
-use Tapi\DiscussionNewsListResource;
-use Tapi\EventListResource;
-use Tapi\EventTypeListResource;
-use Tapi\IsResource;
-use Tapi\MultiaccountListResource;
-use Tapi\NoteListResource;
-use Tapi\PollListResource;
-use Tapi\RightListResource;
-use Tapi\StatusListResource;
-use Tapi\TapiObject;
-use Tapi\UserDetailResource;
-use Tapi\UserListResource;
 use Tracy\Debugger;
+use Tymy\App\Model\SettingMenu;
+use Tymy\Module\Debt\Manager\DebtManager;
+use Tymy\Module\Discussion\Manager\DiscussionManager;
+use Tymy\Module\Event\Manager\EventManager;
+use Tymy\Module\Multiaccount\Manager\MultiaccountManager;
+use Tymy\Module\Permission\Model\Privilege;
+use Tymy\Module\Poll\Manager\PollManager;
+use Tymy\Module\Team\Manager\TeamManager;
+use Tymy\Module\User\Manager\UserManager;
 
 /**
  * Description of SecuredPresenter
@@ -40,56 +23,39 @@ use Tracy\Debugger;
 class SecuredPresenter extends BasePresenter {
     
     protected $levelCaptions;
-    
-    /** @var TapiAuthenticator @inject */
-    public $tapiAuthenticator;
-    
-    /** @var TapiAuthorizator @inject */
-    public $tapiAuthorizator;
-    
-    /** @var DiscussionListResource @inject */
-    public $discussionList;
-    
-    /** @var DiscussionNewsListResource @inject */
+
+    /** @inject */
+    public PollManager $pollManager;
+
+    /** @inject */
+    public DiscussionManager $discussionManager;
+
+    /** @inject */
+    public EventManager $eventManager;
+
+    /** @inject */
+    public DebtManager $debtManager;
+
+    /** @inject */
+    public UserManager $userManager;
+
+    /** @inject */
+    public TeamManager $teamManager;
+
+    /** @inject */
+    public MultiaccountManager $multiaccountManager;
     public $discussionNews;
     
-    /** @var MultiaccountListResource @inject */
-    public $maList;
-    
-    /** @var PollListResource @inject */
-    public $polls;
-    
-    /** @var EventListResource @inject */
-    public $eventList;
-    
-    /** @var UserDetailResource @inject */
-    public $userDetail;
-        
-    /** @var UserListResource @inject */
-    public $userList;
-        
-    /** @var DebtListResource @inject */
-    public $debtList;
-    
-    /** @var AuthDetailResource @inject */
     public $apiRights;
     
-    /** @var RightListResource @inject */
     public $userRightsList;
     
-    /** @var EventTypeListResource @inject */
     public $eventTypeList;
     
-    /** @var NoteListResource @inject */
     public $noteList;
     
-    /** @var IsResource @inject */
-    public $is;
-    
-    /** @var StatusListResource @inject */
     public $statusList;
     
-    /** @var NewMemcachedStorage @inject */
     public $cacheStorage;
     
     public $accessibleSettings = [];
@@ -118,43 +84,17 @@ class SecuredPresenter extends BasePresenter {
             }
             $this->redirect('Sign:in');
         }
-        //$this->cacheService->dropCache();
         if(array_key_exists("language", $this->getUser()->getIdentity()->getData())){
             $this->translator->setLocale(self::LOCALES[$this->getUser()->getIdentity()->getData()["language"]]);
         }
-        //$this->supplier->setTapi_config($this->getUser()->getIdentity()->getData()["tapi_config"]);   //supplier got tapi_config already set
         $this->supplier->loadUserNeon($this->getUser()->getId());
-        $this->apiRights->setId($this->getUser()->getId());
-        $this->apiRights->getData();
-        $this->tapiAuthorizator->setUser($this->getUser()->getIdentity()->getData());
-        $this->tapiAuthorizator->setApiRights($this->apiRights);
-        $this->userRightsList->init()->getData();
-        $this->template->usrRights = $this->userRightsList->getAsArray();
         
         $this->setAccessibleSettings();
         $this->setLevelCaptions(["0" => ["caption" => $this->translator->translate("common.mainPage"), "link" => $this->link("Homepage:")]]);
-        $this->template->tym = $this->supplier->getTym();
-        //$this->template->noteList = $this->noteList->init()->getData();
-        //$this->showNotes();
-    }
-    
-    protected function shutdown($response) {
-        parent::shutdown($response);
-        $cache = new Cache($this->cacheStorage, TapiObject::CACHE_STORAGE);
-        $allKeys = $cache->load("allkeys");
-        $cache_dump = [];
-        if ($allKeys) {
-            foreach ($allKeys as $key) {
-                $val = $cache->load($key);
-                if (!is_null($val))
-                    $cache_dump[$key] = $val;
-            }
-        }
-        Debugger::barDump($cache_dump, "Cache contents");
     }
     
     protected function createComponentNavbar() {
-        $navbar = new NavbarControl($this);
+        $navbar = new NavbarControl($this, $this->pollManager, $this->discussionManager, $this->eventManager, $this->debtManager, $this->userManager, $this->multiaccountManager, $this->user, $this->teamManager);
         $navbar->redrawControl();
         return $navbar;
     }
@@ -197,17 +137,17 @@ class SecuredPresenter extends BasePresenter {
     }
 
     private function setAccessibleSettings() {
-        if($this->getUser()->isAllowed('discussion','setup')) $this->accessibleSettings[] = new SettingMenu("discussions", $this->translator->translate("discussion.discussion", 2), $this->link("Settings:discussions"), "fa-comments", TRUE);
-        if($this->getUser()->isAllowed('event','canUpdate')) $this->accessibleSettings[] = new SettingMenu("events", $this->translator->translate("event.event", 2), $this->link("Settings:events"), "fa-calendar", TRUE);
+        if($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("DSSETUP"))) $this->accessibleSettings[] = new SettingMenu("discussions", $this->translator->translate("discussion.discussion", 2), $this->link("Settings:discussions"), "fa-comments", TRUE);
+        if($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('EVE_UPDATE'))) $this->accessibleSettings[] = new SettingMenu("events", $this->translator->translate("event.event", 2), $this->link("Settings:events"), "fa-calendar", TRUE);
         //TO BE ENABLED WHEN ITS READY
-        if($this->getUser()->isAllowed('team','canSetup')) $this->accessibleSettings[] = new SettingMenu("team", $this->translator->translate("team.team", 1), $this->link("Settings:team"), "fa-users", TRUE);
+        if($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("TEAM_UPDATE"))) $this->accessibleSettings[] = new SettingMenu("team", $this->translator->translate("team.team", 1), $this->link("Settings:team"), "fa-users", TRUE);
         // TO BE ENABLED WHEN ITS READY
-        if($this->getUser()->isAllowed('poll','canUpdatePoll')) $this->accessibleSettings[] = new SettingMenu("polls", $this->translator->translate("poll.poll", 2), $this->link("Settings:polls"), "fa-chart-pie", TRUE);
+        if($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('ASK.VOTE_UPDATE'))) $this->accessibleSettings[] = new SettingMenu("polls", $this->translator->translate("poll.poll", 2), $this->link("Settings:polls"), "fa-chart-pie", TRUE);
         $this->accessibleSettings[] = new SettingMenu("notes", $this->translator->translate("note.note", 2), $this->link("Settings:notes"), "fa-sticky-note", TRUE); //user can always manage at least his own notes
         // TO BE ENABLED WHEN ITS READY
-        if($this->getUser()->isAllowed('reports','canSetup')) $this->accessibleSettings[] = new SettingMenu("reports", $this->translator->translate("report.report", 2), $this->link("Settings:reports"), "fa-chart-area", FALSE);
+        if($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("REP_SETUP"))) $this->accessibleSettings[] = new SettingMenu("reports", $this->translator->translate("report.report", 2), $this->link("Settings:reports"), "fa-chart-area", FALSE);
         // TO BE ENABLED WHEN ITS READY
-        if($this->getUser()->isAllowed('permissions','canSetup')) $this->accessibleSettings[] = new SettingMenu("permissions", $this->translator->translate("permission.permission", 2), $this->link("Settings:permissions"), "fa-gavel", TRUE);
+        if($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('IS_ADMIN'))) $this->accessibleSettings[] = new SettingMenu("permissions", $this->translator->translate("permission.permission", 2), $this->link("Settings:permissions"), "fa-gavel", TRUE);
         $this->accessibleSettings[] = new SettingMenu("multiaccounts", $this->translator->translate("settings.multiaccount", 1), $this->link("Settings:multiaccount"), "fa-sitemap", TRUE); //user can always look into multiaccount settings
         $this->accessibleSettings[] = new SettingMenu("app", $this->translator->translate("settings.application"), $this->link("Settings:app"), "fa-laptop", TRUE); //user can always look into app settings to setup his own properties
         return $this;

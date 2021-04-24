@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Forms;
+namespace Tymy\App\Forms;
 
 use Nette;
 use Nette\Application\UI\Form;
@@ -18,12 +18,10 @@ class SignUpFormFactory {
     /** @var FormFactory */
     private $factory;
 
-    /** @var UserRegisterResource */
     private $registerResource;
 
-    public function __construct(FormFactory $factory, UserRegisterResource $registerResource) {
+    public function __construct(FormFactory $factory) {
         $this->factory = $factory;
-        $this->registerResource = $registerResource;
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Presenters;
+namespace Tymy\App\Presenters;
 
 use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
@@ -22,20 +22,10 @@ use function iban_set_checksum;
  * @author Matej Kminek <matej.kminek@attendees.eu>, 10. 2. 2020
  */
 class DebtPresenter extends SecuredPresenter {
-
-    /** @var DebtListResource @inject */
     public $debtList;
-
-    /** @var DebtDetailResource @inject */
     public $debtDetail;
-
-    /** @var DebtCreateResource @inject */
     public $debtCreator;
-
-    /** @var DebtEditResource @inject */
     public $debtEditor;
-
-    /** @var DebtDeleteResource @inject */
     public $debtDeleter;
 
     public function startup() {
@@ -112,7 +102,7 @@ class DebtPresenter extends SecuredPresenter {
         $this->template->debt = $newDebt;
         
         $this->template->userListWithTeam = $this->userList->getByIdWithTeam();
-        $this->template->payeeList = $this->getUser()->isAllowed('debt','canManageTeamDebts') ? $this->userList->getMeWithTeam() : $this->userList->getMe();
+        $this->template->payeeList = $this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("DEBTS_TEAM")) ? $this->userList->getMeWithTeam() : $this->userList->getMe();
         $this->template->countryList = $this->getCountryList();
     }
 
@@ -184,7 +174,7 @@ class DebtPresenter extends SecuredPresenter {
         $this->template->userListWithTeam = $this->userList->getByIdWithTeam();
         
         if($debt->canEdit){
-            $this->template->payeeList = $this->getUser()->isAllowed('debt','canManageTeamDebts') ? $this->userList->getMeWithTeam() : $this->userList->getMe();
+            $this->template->payeeList = $this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("DEBTS_TEAM")) ? $this->userList->getMeWithTeam() : $this->userList->getMe();
         } else {
             $this->template->payeeList = $this->userList->getByIdWithTeam();
         }

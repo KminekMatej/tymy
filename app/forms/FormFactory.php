@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Forms;
+namespace Tymy\App\Forms;
 
 use Nette;
 use Nette\Application\UI\Form;

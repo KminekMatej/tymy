@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Presenters;
+namespace Tymy\App\Presenters;
 
 use Nette;
 use Nette\Application\UI\NavbarControl;
-use App\Model;
+use Tymy\App\Model;
 use Nette\Application\UI\Form;
 use Nette\Utils\Strings;
 use Tapi\PollDetailResource;
@@ -15,15 +15,8 @@ use Tapi\Exception\APIException;
 class PollPresenter extends SecuredPresenter {
 
     public $navbar;
-    
-    /** @var PollListResource @inject */
     public $pollList;
-    
-    
-    /** @var PollDetailResource @inject */
     public $poll;
-    
-    /** @var PollVoteResource @inject */
     public $pollVoter;
     
     public function startup() {

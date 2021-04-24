@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model;
+namespace Tymy\App\Model;
 
 /**
  * Object setting accessible configuration area

@@ -1,120 +1,40 @@
 <?php
 
-namespace App\Presenters;
+namespace Tymy\App\Presenters;
 
 use Nette\Application\UI\Form;
 use Nette\Utils\Strings;
 use stdClass;
-use Tapi\ConfigResource;
-use Tapi\DiscussionCreateResource;
-use Tapi\DiscussionDeleteResource;
-use Tapi\DiscussionDetailResource;
-use Tapi\DiscussionEditResource;
-use Tapi\EventCreateResource;
-use Tapi\EventDeleteResource;
-use Tapi\EventDetailResource;
-use Tapi\EventEditResource;
-use Tapi\EventListResource;
 use Tapi\Exception\APIException;
-use Tapi\MultiaccountAddResource;
-use Tapi\MultiaccountRemoveResource;
-use Tapi\NoteCreateResource;
-use Tapi\NoteDeleteResource;
-use Tapi\NoteEditResource;
-use Tapi\OptionCreateResource;
-use Tapi\OptionDeleteResource;
-use Tapi\OptionEditResource;
-use Tapi\OptionListResource;
-use Tapi\PermissionCreateResource;
-use Tapi\PermissionDeleteResource;
-use Tapi\PermissionEditResource;
-use Tapi\PermissionListResource;
-use Tapi\PermissionResource;
-use Tapi\PollCreateResource;
-use Tapi\PollDeleteResource;
-use Tapi\PollDetailResource;
-use Tapi\PollEditResource;
-use Tapi\UserResource;
 use Tracy\Debugger;
+use Tymy\Module\Permission\Model\Privilege;
 
 class SettingsPresenter extends SecuredPresenter {
-    
-    /** @var DiscussionDetailResource @inject */
     public $discussionDetail;
-        
-    /** @var DiscussionCreateResource @inject */
     public $discussionCreator;
-        
-    /** @var DiscussionEditResource @inject */
     public $discussionEditor;
-        
-    /** @var DiscussionDeleteResource @inject */
     public $discussionDeleter;
-        
-    /** @var EventDetailResource @inject */
     public $eventDetail;
-        
-    /** @var EventCreateResource @inject */
     public $eventCreator;
-        
-    /** @var EventEditResource @inject */
     public $eventEditor;
-        
-    /** @var EventDeleteResource @inject */
     public $eventDeleter;
-        
-    /** @var PollDetailResource @inject */
     public $pollDetail;
-        
-    /** @var PollCreateResource @inject */
     public $pollCreator;
-    
-    /** @var PollEditResource @inject */
     public $pollEditor;
-    
-    /** @var NoteCreateResource @inject */
     public $noteCreator;
-    
-    /** @var NoteEditResource @inject */
     public $noteEditor;
-    
-    /** @var NoteDeleteResource @inject */
     public $noteDeleter;
-    
-    /** @var PollDeleteResource @inject */
     public $pollDeleter;
-        
-    /** @var OptionListResource @inject */
     public $pollOptionList;
-            
-    /** @var OptionCreateResource @inject */
     public $pollOptionCreator;
-            
-    /** @var OptionEditResource @inject */
     public $pollOptionEditor;
-            
-    /** @var OptionDeleteResource @inject */
     public $pollOptionDeleter;
-    
-    /** @var PermissionListResource @inject */
     public $permissionLister;
-    
-    /** @var PermissionCreateResource @inject */
     public $permissionCreator;
-
-    /** @var PermissionEditResource @inject */
     public $permissionEditor;
-
-    /** @var PermissionDeleteResource @inject */
     public $permissionDeleter;
-    
-    /** @var ConfigResource @inject */
     public $configurator;
-    
-    /** @var MultiaccountAddResource @inject */
     public $maCreator;
-    
-    /** @var MultiaccountRemoveResource @inject */
     public $maDeleter;
             
     protected function startup() {
@@ -193,7 +113,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
 
     public function actionPermissions($permission = NULL) {
-        if(!$this->getUser()->isAllowed('permissions','canSetup')) $this->notAllowed();
+        if(!$this->getUser()->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('IS_ADMIN'))) $this->notAllowed();
         if(!is_null($permission)){
             $this->setView("permission");
         } else {
@@ -226,7 +146,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function renderDiscussion_new() {
-        if(!$this->getUser()->isAllowed('discussion','setup')) $this->notAllowed();
+        if(!$this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("DSSETUP"))) $this->notAllowed();
         $this->setLevelCaptions([
             "2" => ["caption" => $this->translator->translate("discussion.discussion", 2), "link" => $this->link("Settings:discussions")],
             "3" => ["caption" => $this->translator->translate("discussion.new")]
@@ -245,7 +165,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function renderDiscussion($discussion) {
-        if(!$this->getUser()->isAllowed('discussion','setup')) $this->notAllowed();
+        if(!$this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("DSSETUP"))) $this->notAllowed();
         //RENDERING DISCUSSION DETAIL
         $discussionId = $this->discussionList->init()->getIdFromWebname($discussion, $this->discussionList->getData());
         $discussionObj = $this->discussionDetail->init()->setId($discussionId)->getData();
@@ -259,7 +179,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function renderPermission_new() {
-        if(!$this->getUser()->isAllowed('permissions','canSetup')) $this->notAllowed();
+        if(!$this->getUser()->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('IS_ADMIN'))) $this->notAllowed();
         $this->setLevelCaptions([
             "2" => ["caption" => $this->translator->translate("permission.permission", 2), "link" => $this->link("Settings:permissions")],
             "3" => ["caption" => $this->translator->translate("permission.newPermission")]
@@ -292,7 +212,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function renderPermission($permission){
-        if(!$this->getUser()->isAllowed('permissions','canSetup')) $this->notAllowed();
+        if(!$this->getUser()->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('IS_ADMIN'))) $this->notAllowed();
         $perm = $this->permissionLister->getPermissionByWebname($permission);
         $this->setLevelCaptions([
             "2" => ["caption" => $this->translator->translate("permission.permission", 2), "link" => $this->link("Settings:permissions")],
@@ -318,7 +238,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function renderEvent_new() {
-        if(!$this->getUser()->isAllowed('event','canCreate')) $this->notAllowed();
+        if(!$this->getUser()->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_CREATE'))) $this->notAllowed();
         $this->setLevelCaptions([
             "2" => ["caption" => $this->translator->translate("event.event", 2), "link" => $this->link("Settings:events")],
             "3" => ["caption" => $this->translator->translate("event.new", 2)]
@@ -347,7 +267,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function renderEvent($event) {
-        if(!$this->getUser()->isAllowed('event','canUpdate')) $this->notAllowed();
+        if(!$this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('EVE_UPDATE'))) $this->notAllowed();
         //RENDERING EVENT DETAIL
         $eventId = $this->parseIdFromWebname($event);
         $eventObj = $this->eventDetail->init()->setId($eventId)->getData();
@@ -399,7 +319,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function renderPoll_new() {
-        if(!$this->getUser()->isAllowed('poll','canCreatePoll')) $this->notAllowed();
+        if(!$this->getUser()->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))) $this->notAllowed();
         $this->setLevelCaptions([
             "2" => ["caption" => $this->translator->translate("poll.poll", 2), "link" => $this->link("Settings:polls")],
             "3" => ["caption" => $this->translator->translate("poll.new")]
@@ -425,7 +345,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function renderPoll($poll) {
-        if(!$this->getUser()->isAllowed('poll','canUpdatePoll')) $this->notAllowed();
+        if(!$this->getUser()->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))) $this->notAllowed();
         //RENDERING POLL DETAIL
         $pollId = $this->parseIdFromWebname($poll);
         $pollObj = $this->pollDetail->init()->setId($pollId)->getData();
@@ -456,7 +376,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function handleEventsEdit(){
-        if(!$this->getUser()->isAllowed('event','canUpdate')) $this->notAllowed();
+        if(!$this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('EVE_UPDATE'))) $this->notAllowed();
         $post = $this->getRequest()->getPost();
         $binders = $post["binders"];
         foreach ($binders as $bind) {
@@ -465,7 +385,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function handleEventsCreate(){
-        if(!$this->getUser()->isAllowed('event','canCreate')) $this->notAllowed();
+        if(!$this->getUser()->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_CREATE'))) $this->notAllowed();
         $binders = $this->getRequest()->getPost()["binders"];
         $events = [];
         foreach ($binders as $bind) {
@@ -480,13 +400,13 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function handleEventEdit(){
-        if(!$this->getUser()->isAllowed('event','canUpdate')) $this->notAllowed();
+        if(!$this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('EVE_UPDATE'))) $this->notAllowed();
         $bind = $this->getRequest()->getPost();
         $this->editEvent($bind);
     }
     
     public function handleEventDelete(){
-        if(!$this->getUser()->isAllowed('event','canDelete')) $this->notAllowed();
+        if(!$this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('EVE_DELETE'))) $this->notAllowed();
         $bind = $this->getRequest()->getPost();
         try {
             $this->eventDeleter->init()
@@ -499,7 +419,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function handleDiscussionsEdit(){
-        if(!$this->getUser()->isAllowed('discussion','setup')) $this->notAllowed();
+        if(!$this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("DSSETUP"))) $this->notAllowed();
         $post = $this->getRequest()->getPost();
         $binders = $post["binders"];
         foreach ($binders as $bind) {
@@ -508,7 +428,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function handleDiscussionCreate(){
-        if(!$this->getUser()->isAllowed('discussion','setup')) $this->notAllowed();
+        if(!$this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("DSSETUP"))) $this->notAllowed();
         $discussionData = (object)$this->getRequest()->getPost()["changes"]; // new discussion is always as ID 1
         try {
             $this->discussionCreator->init()
@@ -521,13 +441,13 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function handleDiscussionEdit(){
-        if(!$this->getUser()->isAllowed('discussion','setup')) $this->notAllowed();
+        if(!$this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("DSSETUP"))) $this->notAllowed();
         $bind = $this->getRequest()->getPost();
         $this->editDiscussion($bind);
     }
     
     public function handleDiscussionDelete() {
-        if(!$this->getUser()->isAllowed('discussion','setup')) $this->notAllowed();
+        if(!$this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("DSSETUP"))) $this->notAllowed();
         $bind = $this->getRequest()->getPost();
         try {
             $this->discussionDeleter->init()
@@ -540,7 +460,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
 
     public function handlePollsEdit(){
-        if(!$this->getUser()->isAllowed('poll','canUpdate')) $this->notAllowed();
+        if(!$this->getUser()->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))) $this->notAllowed();
         $post = $this->getRequest()->getPost();
         $binders = $post["binders"];
         foreach ($binders as $bind) {
@@ -549,7 +469,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function handlePollCreate(){
-        if(!$this->getUser()->isAllowed('poll','canCreatePoll')) $this->notAllowed();
+        if(!$this->getUser()->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))) $this->notAllowed();
         $pollData = $this->getRequest()->getPost()["changes"];
         try {
             $this->pollCreator->init()->setPoll($pollData)->perform();
@@ -560,13 +480,13 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function handlePollEdit(){
-        if(!$this->getUser()->isAllowed('poll','canUpdatePoll')) $this->notAllowed();
+        if(!$this->getUser()->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))) $this->notAllowed();
         $bind = $this->getRequest()->getPost();
         $this->editPoll($bind);
     }
     
     public function handlePollDelete() {
-        if(!$this->getUser()->isAllowed('poll','canDeletePoll')) $this->notAllowed();
+        if(!$this->getUser()->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))) $this->notAllowed();
         $bind = $this->getRequest()->getPost();
         try {
             $this->pollDeleter->init()->setId($bind["id"])->perform();
@@ -604,7 +524,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
 
     public function handlePollOptionsEdit($poll){
-        if(!$this->getUser()->isAllowed('poll','canUpdatePoll')) $this->notAllowed();
+        if(!$this->getUser()->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))) $this->notAllowed();
         $post = $this->getRequest()->getPost();
         $binders = $post["binders"];
         $pollId = $this->parseIdFromWebname($poll);
@@ -615,7 +535,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function handlePollOptionCreate($poll){
-        if(!$this->getUser()->isAllowed('poll','canUpdatePoll')) $this->notAllowed();
+        if(!$this->getUser()->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))) $this->notAllowed();
         $pollData = $this->getRequest()->getPost()[1]; // new poll option is always as item 1
         $pollId = $this->parseIdFromWebname($poll);
         try {
@@ -629,7 +549,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function handlePollOptionEdit($poll) {
-        if(!$this->getUser()->isAllowed('poll','canUpdatePoll')) $this->notAllowed();
+        if(!$this->getUser()->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))) $this->notAllowed();
         $bind = $this->getRequest()->getPost();
         $bind["pollId"] = $this->parseIdFromWebname($poll);
         try {
@@ -640,7 +560,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
 
     public function handlePollOptionDelete($poll) {
-        if(!$this->getUser()->isAllowed('poll','canDeletePoll')) $this->notAllowed();
+        if(!$this->getUser()->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))) $this->notAllowed();
         $bind = $this->getRequest()->getPost();
         $bind["pollId"] = $this->parseIdFromWebname($poll);
         try {
@@ -654,7 +574,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function handlePermissionCreate(){
-        if(!$this->getUser()->isAllowed('permissions','canSetup')) $this->notAllowed();
+        if(!$this->getUser()->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('IS_ADMIN'))) $this->notAllowed();
         $bind = $this->getRequest()->getPost();
         try {
             $this->permissionCreator->init()->setName($bind["changes"]["name"])->setCaption($bind["changes"]["caption"]);
@@ -667,7 +587,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function handlePermissionEdit(){
-        if(!$this->getUser()->isAllowed('permissions','canSetup')) $this->notAllowed();
+        if(!$this->getUser()->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('IS_ADMIN'))) $this->notAllowed();
         $bind = $this->getRequest()->getPost();
         $this->editPermission($bind);
         if(!empty($this->permissionEditor->getName())) //if name has been changed, redirect to a new name is neccessary
@@ -675,7 +595,7 @@ class SettingsPresenter extends SecuredPresenter {
     }
     
     public function handlePermissionDelete(){
-        if(!$this->getUser()->isAllowed('permissions','canSetup')) $this->notAllowed();
+        if(!$this->getUser()->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('IS_ADMIN'))) $this->notAllowed();
         $bind = $this->getRequest()->getPost();
         try {
             $this->permissionDeleter->init()
@@ -685,18 +605,6 @@ class SettingsPresenter extends SecuredPresenter {
         } catch (APIException $ex) {
             $this->handleTapiException($ex, 'this');
         }
-    }
-    
-    public function handleCacheCompleteDrop() {
-        $this->discussionDetail->cleanCompleteCache(); //can use any tapi object
-        $this->flashMessage($this->translator->translate("settings.cacheDropped"), "success");
-        $this->redirect('this');
-    }
-    
-    public function handleCacheDrop() {
-        $this->discussionDetail->cleanCache(); //can use any tapi object
-        $this->flashMessage($this->translator->translate("settings.cacheDropped"), "success");
-        $this->redirect('this');
     }
     
     private function editEvent($bind) {

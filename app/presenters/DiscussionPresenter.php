@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Presenters;
+namespace Tymy\App\Presenters;
 
 use Nette\Application\UI\NewPostControl;
 use Tapi\DiscussionListResource;
@@ -17,20 +17,10 @@ use Tapi\Exception\APIException;
  * @author matej
  */
 class DiscussionPresenter extends SecuredPresenter {
-    
-    /** @var DiscussionPageResource @inject */
     public $discussionPage;
-
-    /** @var DiscussionListResource @inject */
     public $discussionsList;
-    
-    /** @var DiscussionPostCreateResource @inject */
     public $discussionPostCreate;
-    
-    /** @var DiscussionPostEditResource @inject */
     public $discussionPostEdit;
-    
-    /** @var DiscussionPostDeleteResource @inject */
     public $discussionPostDelete;
     
 

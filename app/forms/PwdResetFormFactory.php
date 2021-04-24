@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Forms;
+namespace Tymy\App\Forms;
 
 use Nette;
 use Nette\Application\UI\Form;
 use Nette\Security\User;
+use Tymy\App\Model\Supplier;
 
 class PwdResetFormFactory {
 
@@ -16,12 +17,12 @@ class PwdResetFormFactory {
     /** @var User */
     private $user;
     
-    /** @var \App\Model\Supplier */
+    /** @var Supplier */
     private $supplier;
     
     private $tapi_config;
         
-    public function __construct(FormFactory $factory, User $user, \App\Model\Supplier $supplier) {
+    public function __construct(FormFactory $factory, User $user, Supplier $supplier) {
         $this->factory = $factory;
         $this->user = $user;
         $this->supplier = $supplier;

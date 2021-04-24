@@ -13,24 +13,24 @@
 <div class="container settings">
     <div class="row">
         <div class="col">
-            <div class="card sh-box my-3" data-binder-id="{$event->id}">
+            <div class="card sh-box my-3" data-binder-id="{$event->getId()}">
                 <div class="card-header">
-                    <h4>{_event.editEvent,1} {$event->id}</h4>
+                    <h4>{_event.editEvent,1} {$event->getId()}</h4>
                 </div>
                 <div class="card-body">
                     <table class="table">
                         <tr><th>{_settings.title}</th>
                             <td>
-                                <input type="text" name="caption" value="{$event->caption}" data-value="{$event->caption}" class="col-6 form-control" />
+                                <input type="text" name="caption" value="{$event->getCaption()}" data-value="{$event->getCaption()}" class="col-6 form-control" />
                             </td></tr>
                         <tr><th>{_settings.type}</th>
                             <td>
                                 <select name="type" value="{$event->type}" data-value="{$event->type}" class="col-6 form-control disabled" disabled>
                                     <option>{_common.chooseType}...</option>
-                                    <option n:foreach="$eventTypes as $option" value="{$option->code}" n:attr="selected => $event->type == $option->code">{$option->caption}</option>
+                                    <option n:foreach="$eventTypes as $option" value="{$option->code}" n:attr="selected => $event->type == $option->code">{$option->getCaption()}</option>
                                 </select>
                             </td></tr>
-                        <tr><th>{_settings.description}</th><td><textarea name="description" data-value="{$event->description}" class="form-control col-6">{$event->description}</textarea></td></tr>
+                        <tr><th>{_settings.description}</th><td><textarea name="description" data-value="{$event->getDescription()}" class="form-control col-6">{$event->getDescription()}</textarea></td></tr>
                         <tr><th>{_event.start}</th><td><input type="text" name="startTime" value="{$event->startTime|date:'d.m.Y H:i'}" data-value="{$event->startTime|date:'d.m.Y H:i'}" class="col-6 form-control" /></td></tr>
                         <tr><th>{_event.end}</th><td><input type="text" name="endTime" value="{$event->endTime|date:'d.m.Y H:i'}" data-value="{$event->endTime|date:'d.m.Y H:i'}" class="col-6 form-control" /></td></tr>
                         <tr><th>{_event.close}</th><td><input type="text" name="closeTime" value="{$event->closeTime|date:'d.m.Y H:i'}" data-value="{$event->closeTime|date:'d.m.Y H:i'}" class="col-6 form-control" /></td></tr>
@@ -72,8 +72,8 @@
                     </table>
                 </div>
                 <div class="card-footer text-right">
-                    <button n:if="$user->isAllowed('event','canDelete')" href="{link eventDelete!}" class="btn btn-danger mx-2 binder-delete-btn" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></button>
-                    <button n:if="$user->isAllowed('event','canUpdate')" href="{link eventEdit!}" class="btn btn-lg btn-primary binder-save-btn" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
+                    <button n:if="$user->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_DELETE'))" href="{link eventDelete!}" class="btn btn-danger mx-2 binder-delete-btn" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                    <button n:if="$user->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_UPDATE'))" href="{link eventEdit!}" class="btn btn-lg btn-primary binder-save-btn" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
                 </div>
             </div>
         </div>

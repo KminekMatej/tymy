@@ -74,18 +74,18 @@
                                         <th>{_team.email}:</th><td><div class="input-group"><input name="email" data-value=" " type="text" value="{$player->email}" n:class="col-6, form-control, in_array('email',$player->errFls) ? is-invalid" style="min-width: 200px"/><div class="input-group-append"><span class="input-group-text"><a n:tag-if="$player->email != ''" href="mailto:{$player->email}"><i class="fa fa-envelope" aria-hidden="true"></i></a></span></div></div></td>
                                     </tr>
                                     <tr>
-                                        <th>{_team.birthDate}:</th><td><input name="birthDate" data-value type="date" value="{$player->birthDate}" n:class="col-6, form-control, in_array('birthDate',$player->errFls) ? is-invalid" /></td>
+                                        <th>{_team.birthDate}:</th><td><input name="birthDate" data-value type="date" value="{$player->getBirthDate()}" n:class="col-6, form-control, in_array('birthDate',$player->errFls) ? is-invalid" /></td>
                                     </tr>
                                     <tr>
                                         <th>{_team.nameDayMonth}:</th><td>
                                             <select n:class="col-3, form-control, in_array('nameDayMonth',$player->errFls) ? is-invalid" style="min-width: 160px" name="nameDayMonth" data-value>
                                                 <option value="">{_team.chooseMonth} ↓</option>
-                                                <option n:for="$m=1; $m<=12; $m++" value="{$m}" n:attr="selected => $player->nameDayMonth==$m">{$m|monthName}</option>
+                                                <option n:for="$m=1; $m<=12; $m++" value="{$m}" n:attr="selected => $player->getNameDayMonth()==$m">{$m|monthName}</option>
                                             </select>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th>{_team.nameDayDay}:</th><td><input name="nameDayDay" data-value type="number" value="{$player->nameDayDay}" min="1" max="31" n:class="col-2, form-control, in_array('nameDayDay',$player->errFls) ? is-invalid" style="min-width: 160px" /></td>
+                                        <th>{_team.nameDayDay}:</th><td><input name="nameDayDay" data-value type="number" value="{$player->getNameDayDay()}" min="1" max="31" n:class="col-2, form-control, in_array('nameDayDay',$player->errFls) ? is-invalid" style="min-width: 160px" /></td>
                                     </tr>
                                     <tr>
                                         <th>{_team.language}:</th>
@@ -163,7 +163,7 @@
                                 {foreach $allRoles as $role}
                                     {var $hasRole = property_exists($player, 'roles') && in_array($role->code,$player->roles)}
                                     {var $userRoles = property_exists($player, 'roles') ? $player->roles : []}
-                                    <button name="roles[{$role->code}]" n:class="btn,$role->class,$hasRole ? active" style="min-width:69px" data-role="{$role->code}" data-value onclick="checkRole(this)">{$role->caption}</button>
+                                    <button name="roles[{$role->code}]" n:class="btn,$role->class,$hasRole ? active" style="min-width:69px" data-role="{$role->code}" data-value onclick="checkRole(this)">{$role->getCaption()}</button>
                                 {/foreach}
 
                             </div>

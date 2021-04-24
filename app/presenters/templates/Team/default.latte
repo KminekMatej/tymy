@@ -16,18 +16,18 @@
         {if $users}
             <div n:foreach="$users as $u" class="col-md-3 my-2">
                 <div class="card sh-box set-box">
-                    <a href="{plink Team:player $u->webName}">
+                    <a href="{plink Team:player $u->getWebName()}">
                         <div class="card-header py-1 {$u->gender}">
-                            <span class="name">{$u->displayName}{if $u->jerseyNumber != ""} (#{$u->jerseyNumber}){/if}</span>
+                            <span class="name">{$u->getDisplayName()}{if $u->jerseyNumber != ""} (#{$u->jerseyNumber}){/if}</span>
                             <span n:if="$u->isNew" class="badge badge-success float-right">{_common.new}</span>
                         </div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-3">
-                                    <img class="user_pic" src="{$tymyRoot}/{$u->pictureUrl}" />
+                                    <img class="user_pic" src="{$tymyRoot}/{$u->getPictureUrl()}" />
                                 </div>
                                 <div class="col-9">
-                                    <p class="card-text"><strong n:if="property_exists($u, 'fullName')">{$u->fullName}</strong></p>
+                                    <p class="card-text"><strong n:if="property_exists($u, 'fullName')">{$u->getFullName()}</strong></p>
                                 </div>
                             </div>
                         </div>

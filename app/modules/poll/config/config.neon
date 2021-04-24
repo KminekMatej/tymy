@@ -1,0 +1,4 @@
+services:
+  PollManager: Tymy\Module\Poll\Manager\PollManager
+  OptionManager: Tymy\Module\Poll\Manager\OptionManager
+  VoteManager: Tymy\Module\Poll\Manager\VoteManager

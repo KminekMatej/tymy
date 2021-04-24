@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Presenters;
+namespace Tymy\App\Presenters;
 
 use Nette;
 

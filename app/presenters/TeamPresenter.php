@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Presenters;
+namespace Tymy\App\Presenters;
 
 use Tapi\AvatarUploadResource;
 use Tapi\Exception\APIException;
@@ -12,17 +12,9 @@ use Tapi\UserResource;
 class TeamPresenter extends SecuredPresenter {
     
     private $userType;
-    
-    /** @var UserCreateResource @inject */
     public $userCreator;
-    
-    /** @var UserEditResource @inject */
     public $userEditor;
-    
-    /** @var UserDeleteResource @inject */
     public $userDeleter;
-    
-    /** @var AvatarUploadResource @inject */
     public $avatarUploader;
     
     public function __construct() {

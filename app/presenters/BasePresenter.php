@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Presenters;
+namespace Tymy\App\Presenters;
 
-use App\Model\Supplier;
 use Kdyby\Translation\Translator;
 use Nette;
 use Nette\Utils\DateTime;
 use Tapi\Exception\APIException;
 use Tracy\Debugger;
+use Tymy\App\Model\Supplier;
+use Tymy\Module\Team\Manager\TeamManager;
 
 
 /**
@@ -26,6 +27,9 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
     /** @var Supplier @inject */
     public $supplier;
     
+    /** @inject */
+    public TeamManager $teamManager;
+    
     public function beforeRender() {
         parent::beforeRender();
         $this->translator->setDefaultLocale("EN");
@@ -37,7 +41,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
         $this->template->js = Debugger::$productionMode ? "min.js" : "js";
         $this->template->css = Debugger::$productionMode ? "min.css" : "css";
         
-        $this->template->tym = $this->supplier->getTym();
+        $this->template->team = $this->teamManager->getTeam();
         $this->template->tymyRoot = $this->supplier->getTymyRoot();
         $this->template->apiRoot = $this->supplier->getApiRoot();
         

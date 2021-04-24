@@ -30,18 +30,18 @@
             <div class="card sh-box my-3">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col"><h4 class="card-title">{$event->caption}</h4></div>
+                        <div class="col"><h4 class="card-title">{$event->getCaption()}</h4></div>
                         <div class="col col-md-auto">
                             <a class="btn btn-sm btn-outline-dark ajax" n:href="loadHistory!" n:snippet="historyBtn" onclick="btnRotate($(this), true)" title="{_event.displayHistory}"><i class="fas fa-history"></i></a>
-                            <a n:if="$user->isAllowed('event','canUpdate')" class="btn btn-sm btn-light btn-light-bordered" title="{_common.edit}" href="{plink Settings:events $event->webName}"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                            <a n:if="$user->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_UPDATE'))" class="btn btn-sm btn-light btn-light-bordered" title="{_common.edit}" href="{plink Settings:events $event->getWebName()}"><i class="fa fa-edit" aria-hidden="true"></i></a>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
                     
                     {var $mapLink = filter_var($event->place, FILTER_VALIDATE_URL) ? $event->place : 'https://www.google.com/maps/search/?api=1&query='.urlencode($event->place)}
-                    <h6 class="card-subtitle mb-2 text-muted">{$event->eventType->caption}<span n:if="$event->place"> - <a href="{$mapLink}" target="blank" title="{_event.openMap}">{$event->place}</a></span><span n:if="$event->link"> - <a href="{$event->link}" target="_blank">[{_common.link}]</a></span></h6>
-                    <p class="card-text">{$event->description}</p>
+                    <h6 class="card-subtitle mb-2 text-muted">{$event->eventType->getCaption()}<span n:if="$event->place"> - <a href="{$mapLink}" target="blank" title="{_event.openMap}">{$event->place}</a></span><span n:if="$event->link"> - <a href="{$event->link}" target="_blank">[{_common.link}]</a></span></h6>
+                    <p class="card-text">{$event->getDescription()}</p>
                     <div class="row">
                         <div class="col-lg-4">
                             <table class="table mb-0">
@@ -51,10 +51,10 @@
                             </table>
                         </div>
                         <div class="col-lg-8 d-flex flex-column-reverse align-items-center">
-                            <div class="custom-container btn-group input-group pb-2" role="group" aria-label="Attendace setup container" id="action-{$event->id}">
+                            <div class="custom-container btn-group input-group pb-2" role="group" aria-label="Attendace setup container" id="action-{$event->getId()}">
                                 <input type="text" class="form-control form-control-sm custom-btn-sm" title="{_note.note,1}" name="preStatusDesc" value="{$event->myAttendance->preDescription}" />
                                 {foreach $eventTypes[$event->type]->preStatusSet as $preStatus}
-                                    <button onclick="updateAttendance(this, {link attendance! $event->id, $preStatus->code})" class="btn custom-btn-sm {$myPreStatusCaption,$myPostStatusCaption,$preStatus->code,$event->canPlan,$event->closeTime|prestatusClass}">{$preStatus->caption}</button>
+                                    <button onclick="updateAttendance(this, {link attendance! $event->getId(), $preStatus->code})" class="btn custom-btn-sm {$myPreStatusCaption,$myPostStatusCaption,$preStatus->code,$event->canPlan,$event->closeTime|prestatusClass}">{$preStatus->getCaption()}</button>
                                 {/foreach}
                             </div>
                             {snippet attendanceWarning}
@@ -74,8 +74,8 @@
                                     {var $prestatusTo = empty($history->preStatusTo) ? $emptyStatus : $eventTypes[$event->type]->preStatusSet[$history->preStatusTo]}
                                     <th scope="row">
                                         <figure class="figure text-center" style="width: 100px; margin-bottom: 0px">
-                                            <a href="{plink Team:player $history->user->webName}">
-                                                <img src="{$tymyRoot}/{$history->user->pictureUrl}" class="figure-img img-fluid rounded user_pic mb-0" />
+                                            <a href="{plink Team:player $history->user->getWebName()}">
+                                                <img src="{$tymyRoot}/{$history->user->getPictureUrl()}" class="figure-img img-fluid rounded user_pic mb-0" />
                                             </a>
                                         </figure>
                                     </th>
@@ -84,12 +84,12 @@
                                         <div class="text-muted"><small>{$history->updatedAt|date:'j.n.Y H:i'}</small></div>
                                     </td>
                                     <td class="tymy-status">
-                                        <h5><span class="badge attendance{$prestatusFrom->code} active">{$prestatusFrom->caption}</span></h5>
+                                        <h5><span class="badge attendance{$prestatusFrom->code} active">{$prestatusFrom->getCaption()}</span></h5>
                                         <div class="text-muted" n:if="$history->preDescFrom"><small>{$history->preDescFrom}</small></div>
                                     </td>
                                     <td class="tymy-status"><h3><i class="fas fa-long-arrow-alt-right"></i></h3></td>
                                     <td class="tymy-status">
-                                        <h5><span class="badge attendance{$prestatusTo->code} active">{$prestatusTo->caption}</span></h5>
+                                        <h5><span class="badge attendance{$prestatusTo->code} active">{$prestatusTo->getCaption()}</span></h5>
                                         <div class="text-muted" n:if="property_exists($history, 'preDescTo')"><small>{$history->preDescTo}</small></div>
                                     </td>
                                 </tr>
@@ -109,7 +109,7 @@
                                 {if count($status)}
                                     {var $count = array_sum(array_map('count', $status))}
                                     {if $mainKey == 'PRE'}
-                                        {var $caption = $key == 'UNKNOWN' ? $cptNotDecidedYet : $eventTypes[$event->eventType->code]->preStatusSet[$key]->caption}
+                                        {var $caption = $key == 'UNKNOWN' ? $cptNotDecidedYet : $eventTypes[$event->eventType->code]->preStatusSet[$key]->getCaption()}
                                     {else}
                                         {var $caption = $key == 'YES' ? $cptArrived : $cptNotArrived}
                                     {/if}
@@ -132,7 +132,7 @@
                         {foreach $event->allUsers[$mainKey] as $key => $status}
                             {if count($status)}
                                     {if $mainKey == 'PRE'}
-                                        {var $caption = $key == 'UNKNOWN' ? $cptNotDecidedYet : $eventTypes[$event->eventType->code]->preStatusSet[$key]->caption}
+                                        {var $caption = $key == 'UNKNOWN' ? $cptNotDecidedYet : $eventTypes[$event->eventType->code]->preStatusSet[$key]->getCaption()}
                                     {else}
                                         {var $caption = $key == 'YES' ? $cptArrived : $cptNotArrived}
                                     {/if}
@@ -146,10 +146,10 @@
                                             </div>
                                         </div>
                                         <div class="col-10">
-                                            <figure n:foreach="$usrs as $usr" id="player-{$usr->id}" class="figure text-center player" style="width: 100px">
-                                                <a href="{plink Team:player $usr->webName}">
-                                                    <img src="{$tymyRoot}/{$usr->pictureUrl}" class="figure-img img-fluid rounded" alt="{$usr->fullName}" />
-                                                    <figcaption class="figure-caption">{$usr->displayName}</figcaption>
+                                            <figure n:foreach="$usrs as $usr" id="player-{$usr->getId()}" class="figure text-center player" style="width: 100px">
+                                                <a href="{plink Team:player $usr->getWebName()}">
+                                                    <img src="{$tymyRoot}/{$usr->getPictureUrl()}" class="figure-img img-fluid rounded" alt="{$usr->getFullName()}" />
+                                                    <figcaption class="figure-caption">{$usr->getDisplayName()}</figcaption>
                                                     <figcaption n:if="trim($usr->preDescription) != ''" class="figure-caption" style="font-size: 70%; display: inline-block">{$usr->preDescription}</figcaption>
                                                 </a>
                                                 <div n:class="btn-group,result,$event->resultsClosed ? d-none" role="group" aria-label="{_event.attendanceResult}" n:if="$event->canResult && $event->isPast">
@@ -168,7 +168,7 @@
                 </div>
                 <div class="card-footer text-right" n:if="$event->canResult && $event->isPast">
                     <button class="btn btn-lg btn-light btn-light-bordered" n:if="$event->resultsClosed" onclick="resultsToggle(true)" title="{_event.setAttendanceResult}"><i class="fa fa-user-circle" aria-hidden="true"></i></button>
-                    <button n:class="btn,btn-lg,btn-outline-primary,result,update,$event->resultsClosed ? d-none" onclick="saveAttendanceResults(this, {link attendanceResult! $event->id})" title="{_event.saveAttendanceResult}"><i class="fa fa-save" aria-hidden="true"></i></button>
+                    <button n:class="btn,btn-lg,btn-outline-primary,result,update,$event->resultsClosed ? d-none" onclick="saveAttendanceResults(this, {link attendanceResult! $event->getId()})" title="{_event.saveAttendanceResult}"><i class="fa fa-save" aria-hidden="true"></i></button>
                 </div>
             </div>
 
