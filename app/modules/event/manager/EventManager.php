@@ -5,6 +5,8 @@ namespace Tymy\Module\Event\Manager;
 use Nette\Database\IRow;
 use Nette\Database\Table\ActiveRow;
 use Nette\Utils\DateTime;
+use Nette\Utils\Strings;
+use Tracy\Debugger;
 use Tymy\Module\Attendance\Manager\AttendanceManager;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
@@ -60,9 +62,11 @@ class EventManager extends BaseManager
 
         if ($row->user_id) {
             $event->setMyAttendance($this->attendanceManager->map($row));
-        } elseif ($event->getCloseTime() > new \Nette\Utils\DateTime()) {   //my attendance doesnt exist and this event is still open
+        } elseif ($event->getCloseTime() > new DateTime()) {   //my attendance doesnt exist and this event is still open
             $event->setAttendancePending(true);
         }
+
+        $event->setWebName(Strings::webalize($event->getId() . "-" . $event->getCaption()));
 
         return $event;
     }
@@ -111,7 +115,7 @@ class EventManager extends BaseManager
         }
 
         $filters = $filter ? $this->filterToArray($filter) : [];
-        \Tracy\Debugger::barDump($filters);
+        Debugger::barDump($filters);
         $orders = $this->orderToArray($order);
 
         if (!empty($filters)) {

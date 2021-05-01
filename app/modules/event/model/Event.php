@@ -28,6 +28,7 @@ class Event extends BaseModel
     private ?string $viewRightName = null;
     private ?string $planRightName = null;
     private ?string $resultRightName = null;
+    private ?string $webName = null;
     private bool $canView = true;
     private bool $canPlan = false;
     private bool $canResult = false;
@@ -89,6 +90,11 @@ class Event extends BaseModel
     public function getResultRightName(): ?string
     {
         return $this->resultRightName;
+    }
+
+    public function getWebName(): ?string
+    {
+        return $this->webName;
     }
 
     public function getCanView(): bool
@@ -189,6 +195,12 @@ class Event extends BaseModel
     public function setResultRightName(?string $resultRightName)
     {
         $this->resultRightName = $resultRightName;
+        return $this;
+    }
+
+    public function setWebName(?string $webName)
+    {
+        $this->webName = $webName;
         return $this;
     }
 
