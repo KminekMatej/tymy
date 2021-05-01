@@ -2,8 +2,12 @@
 
 namespace Tymy\App\Presenters;
 
+use Nette\Application\Responses\JsonResponse;
+use Nette\Utils\DateTime;
 use Tapi\Exception\APIException;
+use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Event\Manager\EventManager;
+use Tymy\Module\Event\Model\Event;
 
 class EventPresenter extends SecuredPresenter {
     public $eventDetail;
@@ -12,6 +16,7 @@ class EventPresenter extends SecuredPresenter {
     public $attendanceConfirmer;
     public $attendancePlanner;
     
+    /** @inject */
     public EventManager $eventManager;
 
     public function startup() {
@@ -138,8 +143,26 @@ class EventPresenter extends SecuredPresenter {
     
     public function actionFeed(string $start, string $end)
     {
-        $events = $this->eventManager->getEventsInterval($this->user->getId(), new \Nette\Utils\DateTime($start), new \Nette\Utils\DateTime($end));
-        \Tracy\Debugger::barDump($events);
+        $events = $this->eventManager->getEventsInterval($this->user->getId(), new DateTime($start), new DateTime($end));
+        
+        $feed = [];
+
+        foreach ($events as $event) {
+            $colors = $this->eventManager->getEventColors($event);
+            /* @var $event Event */
+            $feed[] = [
+                "id" => $event->getId(),
+                "title" => $event->getCaption(),
+                "start" => $event->getStartTime()->format(BaseModel::DATETIME_ISO_FORMAT),
+                "end" => $event->getEndTime()->format(BaseModel::DATETIME_ISO_FORMAT),
+                "backgroundColor" => $colors["backgroundColor"],
+                "borderColor" => $colors["borderColor"],
+                "textColor" => $colors["textColor"],
+                "url" => $this->link("Event:event", $event->getWebName()),
+            ];
+        }
+        
+        $this->sendResponse(new JsonResponse($feed));
     }
 
     public function handleAttendance($id, $code, $desc) {

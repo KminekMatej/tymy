@@ -22,40 +22,33 @@
             contentHeight: 350,
             fixedWeekCount: false,
             displayEventTime: false,
-            events: '/event/feed'
-    {*events: function (start, end, timezone, callback) {
-                var events = [];
-    {foreach $events as $evnt}
-                events.push({l}id: {$evnt->getId()}, title: {$evnt->title}, start: {$evnt->start}, end: {$evnt->end}, backgroundColor: {$evnt->backgroundColor}, borderColor: {$evnt->borderColor}, textColor: {$evnt->textColor}, url: {plink 'Event:event', $evnt->getWebName()}{r});
-    {/foreach}
-                                callback(events);
-                            },*}
-                            eventRender: function (event, element) {
-                                element.find('.fc-title').attr("title", event.description);
-                                if (event.end < Date.now())
-                                    element.addClass("past");
-                            },
-                            header: {
-                                left: 'title',
-                                center: '',
-                                right: 'today prev,next'
-                            },
-                            loading: function (isLoading, view) {
-                                if (isLoading) {
-                                    $('#calendar DIV.fc-header-toolbar BUTTON.fc-prev-button').prop('disabled', true);
-                                    $('#calendar DIV.fc-header-toolbar BUTTON.fc-next-button').prop('disabled', true);
-                                } else {
-                                    $('#calendar DIV.fc-header-toolbar BUTTON.fc-prev-button').prop('disabled', false);
-                                    $('#calendar DIV.fc-header-toolbar BUTTON.fc-next-button').prop('disabled', false);
-                                }
-                            }
-                        });
-                        $('#calendar DIV.fc-header-toolbar').addClass("card-header");
-                        $('#calendar DIV.fc-button-group').addClass("btn-group");
-                        $('#calendar DIV.fc-header-toolbar BUTTON').each(function () {
-                            $(this).addClass("btn btn-light btn-light-bordered");
-                        });
-                    });
+            events: '/event/feed',
+            eventRender: function (event, element) {
+                element.find('.fc-title').attr("title", event.description);
+                if (event.end < Date.now())
+                    element.addClass("past");
+            },
+            header: {
+                left: 'title',
+                center: '',
+                right: 'today prev,next'
+            },
+            loading: function (isLoading, view) {
+                if (isLoading) {
+                    $('#calendar DIV.fc-header-toolbar BUTTON.fc-prev-button').prop('disabled', true);
+                    $('#calendar DIV.fc-header-toolbar BUTTON.fc-next-button').prop('disabled', true);
+                } else {
+                    $('#calendar DIV.fc-header-toolbar BUTTON.fc-prev-button').prop('disabled', false);
+                    $('#calendar DIV.fc-header-toolbar BUTTON.fc-next-button').prop('disabled', false);
+                }
+            }
+        });
+        $('#calendar DIV.fc-header-toolbar').addClass("card-header");
+        $('#calendar DIV.fc-button-group').addClass("btn-group");
+        $('#calendar DIV.fc-header-toolbar BUTTON').each(function () {
+            $(this).addClass("btn btn-light btn-light-bordered");
+        });
+    });
 </script>
 {/block}
 
@@ -73,7 +66,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="row">
         <div class="col-md-5 my-3">
             <div class="card sh-box" id='calendar'></div>
