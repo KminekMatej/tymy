@@ -28,6 +28,36 @@ class SimpleUser implements JsonSerializable
         $this->status = $status;
     }
 
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getLogin(): string
+    {
+        return $this->login;
+    }
+
+    public function getCallName(): ?string
+    {
+        return $this->callName;
+    }
+
+    public function getPictureUrl(): string
+    {
+        return $this->pictureUrl;
+    }
+
+    public function getGender(): ?string
+    {
+        return $this->gender;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
     public function jsonSerialize()
     {
         return [
