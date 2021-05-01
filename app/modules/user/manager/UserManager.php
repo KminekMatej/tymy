@@ -736,4 +736,24 @@ class UserManager extends BaseManager
         
         return $count;
     }
+
+    /**
+     * Return array of all users, categorized by status and id
+     * @return array in the form of [$status][$id] = $user
+     */
+    public function getByStatusAndId(): array
+    {
+        $users = $this->getList();
+        $byTypeAndId = [];
+
+        foreach ($users as $user) {
+            /* @var $user User */
+            if (!array_key_exists($user->getStatus(), $byTypeAndId)) {
+                $byTypeAndId[$user->getStatus()] = [];
+            }
+            $byTypeAndId[$user->getStatus()][$user->getId()] = $user;
+        }
+
+        return $byTypeAndId;
+    }
 }

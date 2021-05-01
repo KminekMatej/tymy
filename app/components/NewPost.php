@@ -2,7 +2,7 @@
 
 namespace Nette\Application\UI;
 
-use Tapi\UserListResource;
+use Tymy\Module\User\Manager\UserManager;
 
 /**
  * Description of Navbar
@@ -11,19 +11,14 @@ use Tapi\UserListResource;
  */
 class NewPostControl extends Control {
 
-    /** @var UserListResource */
-    private $userList;
-
-    public function __construct() {
-        parent::__construct();
+    private UserManager $userManager;
+    
+    public function __construct(UserManager $userManager)
+    {
+        $this->userManager = $userManager;
     }
 
-    public function setUserList(UserListResource $userList) {
-        $this->userList = $userList;
-        return $this;
-    }
-
-    public function render($discussion, $search = NULL, $suser = NULL) {
+        public function render($discussion, $search = NULL, $suser = NULL) {
 
         $this->template->addFilter('czechize', function ($status) {
             return ["PLAYER" => "HRÁČI","MEMBER" => "ČLENOVÉ","SICK" => "MARODI"][$status];
@@ -34,8 +29,7 @@ class NewPostControl extends Control {
         $template->discussion = $discussion;
         $template->search = $search;
         $template->suser = $suser;
-        $this->userList->getData();
-        $userList = $this->userList->getByTypesAndId();
+        $userList = $this->userManager->getByStatusAndId();
         unset($userList["INIT"]);
         unset($userList["DELETED"]);
         $template->userList = $userList;
