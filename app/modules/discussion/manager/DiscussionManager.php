@@ -117,9 +117,9 @@ class DiscussionManager extends BaseManager
      * @param string $webName
      * @return Discussion|null
      */
-    public function getByWebName(string $webName): ?Discussion
+    public function getByWebName(int $userId, string $webName): ?Discussion
     {
-        $discussionList = $this->getList();
+        $discussionList = $this->getListUserAllowed($userId);
 
         foreach ($discussionList as $discussion) {
             /* @var $discussion Discussion */
