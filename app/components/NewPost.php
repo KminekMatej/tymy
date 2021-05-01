@@ -9,19 +9,20 @@ use Tymy\Module\User\Manager\UserManager;
  *
  * @author matej
  */
-class NewPostControl extends Control {
-
+class NewPostControl extends Control
+{
     private UserManager $userManager;
-    
+
     public function __construct(UserManager $userManager)
     {
         $this->userManager = $userManager;
     }
 
-        public function render($discussion, $search = NULL, $suser = NULL) {
+    public function render($discussion, $search = NULL, $suser = NULL)
+    {
 
         $this->template->addFilter('czechize', function ($status) {
-            return ["PLAYER" => "HRÁČI","MEMBER" => "ČLENOVÉ","SICK" => "MARODI"][$status];
+            return ["PLAYER" => "HRÁČI", "MEMBER" => "ČLENOVÉ", "SICK" => "MARODI"][$status];
         });
 
         $template = $this->template;
@@ -35,6 +36,4 @@ class NewPostControl extends Control {
         $template->userList = $userList;
         $template->render();
     }
-    
-
 }
