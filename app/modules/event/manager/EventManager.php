@@ -310,4 +310,25 @@ class EventManager extends BaseManager
 
         return $count;
     }
+    
+    /**
+     * Function to get event colors used for FullCalendar event object colorization
+     * 
+     * @param Event $event
+     * @return array
+     */
+    public function getEventColors(Event $event): array
+    {
+        $colorList = $this->supplier->getEventColors();
+
+        $invertColors = !property_exists($event, 'myAttendance') || !property_exists($event->myAttendance, 'preStatus');
+        if (!array_key_exists($event->getType(), $colorList))
+            return ["borderColor" => 'blue', "backgroundColor" => 'blue', "textColor" => 'white'];
+
+        return [
+            "borderColor" => $colorList[$event->getType()],
+            "backgroundColor" => $invertColors ? 'white' : $colorList[$event->getType()],
+            "textColor" => $invertColors ? $colorList[$event->getType()] : '',
+        ];
+    }
 }
