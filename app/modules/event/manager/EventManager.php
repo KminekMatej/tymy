@@ -321,7 +321,8 @@ class EventManager extends BaseManager
     {
         $colorList = $this->supplier->getEventColors();
 
-        $invertColors = !property_exists($event, 'myAttendance') || !property_exists($event->myAttendance, 'preStatus');
+        $invertColors = empty($event->getMyAttendance()) || empty($event->getMyAttendance()->getPreStatus());
+        
         if (!array_key_exists($event->getType(), $colorList))
             return ["borderColor" => 'blue', "backgroundColor" => 'blue', "textColor" => 'white'];
 
