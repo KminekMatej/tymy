@@ -112,6 +112,26 @@ class DiscussionManager extends BaseManager
     }
 
     /**
+     * Get discussion object using its webname
+     * 
+     * @param string $webName
+     * @return Discussion|null
+     */
+    public function getByWebName(string $webName): ?Discussion
+    {
+        $discussionList = $this->getList();
+
+        foreach ($discussionList as $discussion) {
+            /* @var $discussion Discussion */
+            if ($discussion->getWebName() == $webName) {
+                return $discussion;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Get array of discussion objects which user is allowed to read
      * @param int $userId
      * @return Discussion[]
@@ -221,7 +241,7 @@ class DiscussionManager extends BaseManager
 
         return $this->getById($resourceId);
     }
-    
+
     /**
      * Get sum of all warnings of desired discussions
      * 
@@ -235,7 +255,7 @@ class DiscussionManager extends BaseManager
             /* @var $discussion Discussion */
             $count += $discussion->getNewInfo()->getNewsCount();
         }
-        
+
         return $count;
     }
 }
