@@ -174,10 +174,8 @@ class PostManager extends BaseManager
         if ($jump2Date) {
             $page = $this->getPageNumberFromDate($discussionId, $this->discussion->getNewInfo()->getNewsCount(), new DateTime($jump2Date));
         }
-        \Tracy\Debugger::barDump($jump2Date);
-        \Tracy\Debugger::barDump($page);
-                
-        $posts = $this->getPostsFromDiscussion($this->discussion->getId(), $page, $mode == "bb", $search, $suser);
+
+        $posts = $this->getPostsFromDiscussion($this->discussion->getId(), $page, $mode == "bb", $search, intval($suser));
         return new DiscussionPosts($this->discussion, $page, $this->getNumberOfPages($this->discussion->getId()), $posts);
     }
 

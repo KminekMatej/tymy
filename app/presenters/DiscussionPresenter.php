@@ -3,13 +3,10 @@
 namespace Tymy\App\Presenters;
 
 use Nette\Application\UI\NewPostControl;
-use Tapi\DiscussionListResource;
-use Tapi\DiscussionPageResource;
-use Tapi\DiscussionPostCreateResource;
-use Tapi\DiscussionPostDeleteResource;
-use Tapi\DiscussionPostEditResource;
-use Tapi\DiscussionResource;
 use Tapi\Exception\APIException;
+use Tymy\Module\Discussion\Manager\DiscussionManager;
+use Tymy\Module\Discussion\Manager\PostManager;
+use Tymy\Module\User\Manager\UserManager;
 
 /**
  * Description of DiscussionPresenter
@@ -23,6 +20,14 @@ class DiscussionPresenter extends SecuredPresenter {
     public $discussionPostEdit;
     public $discussionPostDelete;
     
+    /** @inject */
+    public DiscussionManager $discussionManager;
+    
+    /** @inject */
+    public PostManager $postManager;
+    
+    /** @inject */
+    public UserManager $userManager;
 
     public function __construct() {
         parent::__construct();
@@ -33,15 +38,11 @@ class DiscussionPresenter extends SecuredPresenter {
         $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("discussion.discussion", 2), "link" => $this->link("Discussion:")]]);
     }
 
-    public function renderDefault() {
-        //parent::showNotes();
-        try{
-            $this->template->discussions = $this->discussionsList->init()->getData();
-        } catch (APIException $ex){
-            $this->handleTapiException($ex);
-        }
+    public function renderDefault()
+    {
+        $this->template->discussions = $this->discussionManager->getListUserAllowed($this->user->getId());
     }
-    
+
     public function actionNewPost($discussion){
         $post = $this->getHttpRequest()->getPost("post");
         if (trim($post) != "") {
@@ -103,62 +104,39 @@ class DiscussionPresenter extends SecuredPresenter {
     }
     
     public function renderDiscussion($discussion, $page, $search, $suser = "all", $jump2date = "") {
-        try {
-            $discussionId = DiscussionResource::getIdFromWebname($discussion, $this->discussionsList->init()->getData());
-        } catch (APIException $ex) {
-            $this->handleTapiException($ex);
-        }
         
-        //parent::showNotes($discussionId);
-        if (is_null($discussionId) || $discussionId < 1)
+        $d = $this->discussionManager->getByWebName($this->user->getId(), $discussion);
+
+        if (empty($d)){
             $this->error($this->translator->translate("discussion.errors.noDiscussionExists"));
-        $this->discussionPage->init();
+        }  
         
-        $this->discussionPage
-                ->setId($discussionId)
-                ->setPage($page);
+        $this->template->search = $search;
+        $this->template->suser = $suser;
+        $this->template->jump2date = $jump2date;
         
-        $this->template->search = "";
-        $this->template->suser = 0;
-        if($search){
-            $this->discussionPage->setSearch($search);
-            $this->template->search = $search;
-        }
-        if ($suser && $suser != "all") {
-            $this->discussionPage->setSearchUser($suser);
-            $this->template->suser = $suser;
-        }
-        if ($jump2date) {
-            $this->discussionPage->setJumpDate($jump2date);
-            $this->template->jump2date = $this->discussionPage->getJumpDate(); // getter returns already formatted value
-        }
-
-
-        try {
-            $data = $this->discussionPage->getData();
-            $this->userList->init()->getData();
-            $this->template->userList = $this->userList->getById();
-        } catch (APIException $ex) {
-            $this->handleTapiException($ex);
-        }
+        $discussionPosts = $this->postManager->mode($d->getId(), $page, "html", $search, $suser, $jump2date);
         
-        $this->setLevelCaptions(["2" => ["caption" => $data->discussion->caption, "link" => $this->link("Discussion:discussion", [$data->discussion->webName]) ] ]);
+        //set users
+        $this->template->userList = $this->userManager->getList();
+        
+        $this->setLevelCaptions(["2" => ["caption" => $d->getCaption(), "link" => $this->link("Discussion:discussion", [$d->getWebName()]) ] ]);
         
         $this->template->userId = $this->getUser()->getId();
-        $this->template->discussion = $data;
-        $this->template->nazevDiskuze = $data->discussion->webName;
-        $currentPage = is_numeric($data->paging->currentPage) ? $data->paging->currentPage : 1 ;
+        $this->template->discussionPosts = $discussionPosts;
+        $this->template->nazevDiskuze = $discussionPosts->getDiscussion()->getWebName();
+        $currentPage = is_numeric($discussionPosts->getCurrentPage()) ? $discussionPosts->getCurrentPage() : 1 ;
         $this->template->currentPage = $currentPage;
-        $lastPage = is_numeric($data->paging->numberOfPages) ? $data->paging->numberOfPages : 1 ;
+        $lastPage = is_numeric($discussionPosts->getNumberOfPages()) ? $discussionPosts->getNumberOfPages() : 1;
         $this->template->lastPage = $lastPage;
         $this->template->pagination = $this->pagination($lastPage, 1, $currentPage, 5);
-        if($this->isAjax())
+        if ($this->isAjax()) {
             $this->redrawControl("discussion");
+        }
     }
-    
+
     protected function createComponentNewPost($discussion) {
-        $newpost = new NewPostControl($discussion);
-        $newpost->setUserList($this->userList);
+        $newpost = new NewPostControl($this->userManager);
         $newpost->redrawControl();
         return $newpost;
     }
