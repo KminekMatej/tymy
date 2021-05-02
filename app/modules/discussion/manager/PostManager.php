@@ -2,6 +2,7 @@
 
 namespace Tymy\Module\Discussion\Manager;
 
+use Nette\Database\Explorer;
 use Nette\Database\IRow;
 use Nette\Utils\DateTime;
 use Tymy\Module\Core\Factory\ManagerFactory;
@@ -79,7 +80,7 @@ class PostManager extends BaseManager
     protected function allowUpdate(?int $recordId = null, ?array &$data = null): void
     {
         $this->post = $this->loadRecord($recordId);
-        
+
         if (!$this->post) {
             $this->respondNotFound();
         }
@@ -154,7 +155,7 @@ class PostManager extends BaseManager
         $data["updatedById"] = $this->user->getId();
 
         parent::updateByArray($subResourceId, $data);
-        
+
         return $this->getById($subResourceId);
     }
 
@@ -343,7 +344,7 @@ class PostManager extends BaseManager
         $count = $this->countPosts($discussionId, $search, $searchUserId);
         return (int) ($count / self::POSTS_PER_PAGE) + 1;
     }
-    
+
     /**
      * Mark all items in discussion as read for user
      * 
@@ -357,16 +358,44 @@ class PostManager extends BaseManager
                 ->where("ds_id", $discussionId)
                 ->where("user_id", $userId)
                 ->update([
-                    "last_date" => \Nette\Database\Explorer::literal("NOW()")
+            "last_date" => Explorer::literal("NOW()")
         ]);
 
         if (!$updated) { //record does not exist yet, create new one for user and discussion
             $this->database->table(Post::TABLE_READ)
                     ->insert([
-                        "last_date" => \Nette\Database\Explorer::literal("NOW()"),
+                        "last_date" => Explorer::literal("NOW()"),
                         "ds_id" => $discussionId,
                         "user_id" => $userId,
             ]);
         }
+    }
+
+    /**
+     * Stick/unstick a post
+     * 
+     * @param int $postId
+     * @param int $discussionId
+     * @param bool $stick
+     * @return void
+     */
+    public function stickPost(int $postId, int $discussionId, bool $stick = true): void
+    {
+        /* @var $post Post */
+        $post = $this->getById($postId);
+        if ($post->getDiscussionId() !== $discussionId) {
+            $this->respondBadRequest();
+        }
+
+        /* @var $discussion Discussion */
+        $discussion = $this->discussionManager->getById($discussionId);
+
+        if (!$discussion->getCanStick()) {
+            $this->respondForbidden();
+        }
+
+        $this->updateByArray($post->getId(), [
+            "sticky" => $stick
+        ]);
     }
 }

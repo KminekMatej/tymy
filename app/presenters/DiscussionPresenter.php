@@ -88,24 +88,16 @@ class DiscussionPresenter extends SecuredPresenter {
         $this->setView('discussion');
     }
 
-    public function actionStickPost($discussion){
-        $postId = $this->getHttpRequest()->getPost("postId");
-        $sticky = $this->getHttpRequest()->getPost("sticky");
-        try {
-            $this->discussionPostEdit->init()
-                        ->setId($discussion)
-                        ->setPostId($postId)
-                        ->setSticky($sticky ? $sticky == "true" : null) //super cool determining if sticky is true, false or null
-                        ->perform();
-        } catch (APIException $ex) {
-            $this->handleTapiException($ex);
-        }
-        $this->setView('discussion');
+    public function actionStickPost($postId, $discussionId, $currentPage, $sticky)
+    {
+        $this->postManager->stickPost($postId, $discussionId, $sticky ? true : false);
+        
+        $this->redirect("Discussion:discussion", ["discussion" => $discussionId, "page" => 1]);
     }
-    
+
     public function renderDiscussion($discussion, $page, $search, $suser = "all", $jump2date = "") {
         
-        $d = $this->discussionManager->getByWebName($this->user->getId(), $discussion);
+        $d = (is_int($discussion) || is_numeric($discussion)) ? $this->discussionManager->getById(intval($discussion)) : $this->discussionManager->getByWebName($this->user->getId(), $discussion);
 
         if (empty($d)){
             $this->error($this->translator->translate("discussion.errors.noDiscussionExists"));
@@ -135,7 +127,7 @@ class DiscussionPresenter extends SecuredPresenter {
         }
     }
 
-    protected function createComponentNewPost($discussion) {
+    protected function createComponentNewPost() {
         $newpost = new NewPostControl($this->userManager);
         $newpost->redrawControl();
         return $newpost;
