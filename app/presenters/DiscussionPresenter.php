@@ -46,14 +46,11 @@ class DiscussionPresenter extends SecuredPresenter {
     public function actionNewPost($discussion){
         $post = $this->getHttpRequest()->getPost("post");
         if (trim($post) != "") {
-            try {
-                $this->discussionPostCreate->init()
-                        ->setId($discussion)
-                        ->setPost($post)
-                        ->perform();
-            } catch (APIException $ex) {
-                $this->handleTapiException($ex, 'this');
-            }
+            $this->postManager->createByArray([
+                "post" => $post,
+                "discussionId" => $discussion,
+                "createdById" => $this->user->getId(),
+            ]);
         }
         $this->setView('discussion');
     }

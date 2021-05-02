@@ -17,9 +17,9 @@ class PostMapper extends BaseMapper
         return [
             Field::int()->withPropertyAndColumn("id", false, false),
             Field::int()->withColumn("ds_id")->setProperty("discussionId"),
-            Field::string()->withColumn("item")->setProperty("post")->setNonempty(),
+            Field::string()->withColumn("item", true)->setProperty("post")->setNonempty(),
             Field::int()->withColumn("user_id")->setProperty("createdById")->setChangeable(false),
-            Field::datetime()->withColumn("insert_date")->setProperty("createdAt"),
+            Field::datetime()->withColumn("insert_date")->setProperty("createdAt")->setChangeable(false),
             Field::datetime()->withColumn("dat_mod")->setProperty("updatedAt"),
             Field::int()->withColumn("usr_mod")->setProperty("updatedById"),
             Field::int()->withPropertyAndColumn("sticky"),
