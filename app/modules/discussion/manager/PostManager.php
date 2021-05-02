@@ -60,8 +60,17 @@ class PostManager extends BaseManager
     protected function allowDelete(?int $recordId): void
     {
         $this->allowUpdate($recordId);
-
-        if ($this->post->getCreatedById() !== $this->user->getId()) {    //only the creator can delete his post
+        
+        if ($this->discussion->getCanDelete()) {
+            return; //this user is specifically privileged to delete in this discussion
+        }
+        
+        if ($this->discussion->getEditablePosts()) {
+            $this->respondForbidden();
+        }
+        
+        //posts in this discussions are editable, so delete is approved for the post author
+        if ($this->post->getCreatedById() !== $this->user->getId()) {
             $this->respondForbidden();
         }
     }

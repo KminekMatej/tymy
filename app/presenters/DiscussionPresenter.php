@@ -74,21 +74,15 @@ class DiscussionPresenter extends SecuredPresenter {
         }
         $this->setView('discussion');
     }
-    
-    public function actionDeletePost($discussion) {
-        $postId = $this->getHttpRequest()->getPost("postId");
-        try {
-            $this->discussionPostDelete->init()
-                        ->setId($discussion)
-                        ->setPostId($postId)
-                        ->perform();
-        } catch (APIException $ex) {
-            $this->handleTapiException($ex, 'Discussion:discussion', ["discussion" => $discussion]);
-        }
-        $this->setView('discussion');
+
+    public function actionDeletePost($postId, $discussionId, $currentPage)
+    {
+        $this->postManager->delete($discussionId, $postId);
+
+        $this->redirect("Discussion:discussion", ["discussion" => $discussionId, "page" => $currentPage]);
     }
 
-    public function actionStickPost($postId, $discussionId, $currentPage, $sticky)
+    public function actionStickPost($postId, $discussionId, $sticky)
     {
         $this->postManager->stickPost($postId, $discussionId, $sticky ? true : false);
         
