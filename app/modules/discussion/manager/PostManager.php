@@ -154,6 +154,14 @@ class PostManager extends BaseManager
         return $this->getById($subResourceId);
     }
 
+    /**
+     * Update POST with checking permissions
+     * 
+     * @param array $data
+     * @param int $resourceId Id of discussion
+     * @param int|null $subResourceId Id of post
+     * @return Post
+     */
     public function update(array $data, int $resourceId, ?int $subResourceId = null): Post
     {
         unset($data["discussionId"]);   //do not update discussionId
