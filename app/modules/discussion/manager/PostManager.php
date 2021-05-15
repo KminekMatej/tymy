@@ -398,21 +398,8 @@ class PostManager extends BaseManager
      */
     public function stickPost(int $postId, int $discussionId, bool $stick = true): void
     {
-        /* @var $post Post */
-        $post = $this->getById($postId);
-        if ($post->getDiscussionId() !== $discussionId) {
-            $this->respondBadRequest();
-        }
-
-        /* @var $discussion Discussion */
-        $discussion = $this->discussionManager->getById($discussionId);
-
-        if (!$discussion->getCanStick()) {
-            $this->respondForbidden();
-        }
-
-        $this->updateByArray($post->getId(), [
+        $this->update([
             "sticky" => $stick
-        ]);
+                ], $discussionId, $postId);
     }
 }
