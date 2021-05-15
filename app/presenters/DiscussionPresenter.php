@@ -23,11 +23,6 @@ class DiscussionPresenter extends SecuredPresenter
     /** @inject */
     public UserManager $userManager;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     public function startup()
     {
         parent::startup();
