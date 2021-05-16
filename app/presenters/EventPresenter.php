@@ -5,21 +5,31 @@ namespace Tymy\App\Presenters;
 use Nette\Application\Responses\JsonResponse;
 use Nette\Utils\DateTime;
 use Tapi\Exception\APIException;
+use Tymy\Module\Attendance\Manager\StatusManager;
+use Tymy\Module\Attendance\Model\Attendance;
+use Tymy\Module\Attendance\Model\Status;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Event\Manager\EventManager;
+use Tymy\Module\Event\Manager\EventTypeManager;
 use Tymy\Module\Event\Model\Event;
 
 class EventPresenter extends SecuredPresenter {
-    public $eventDetail;
 
-    public $eventHistorian;
-    public $attendanceConfirmer;
-    public $attendancePlanner;
-    
+    private $eventHistorian;
+    private $attendanceConfirmer;
+    private $attendancePlanner;
+
     /** @inject */
     public EventManager $eventManager;
 
-    public function startup() {
+    /** @inject */
+    public EventTypeManager $eventTypeManager;
+
+    /** @inject */
+    public StatusManager $statusManager;
+
+    public function startup()
+    {
         parent::startup();
         $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("event.attendance", 2), "link" => $this->link("Event:")]]);
 
@@ -31,7 +41,12 @@ class EventPresenter extends SecuredPresenter {
             }
         });
 
-        $this->template->addFilter("prestatusClass", function ($myPreStatus, $myPostStatus, $code, $canPlan, $startTime) {
+        $eventTypes = $this->eventTypeManager->getIndexedList();
+        
+        $this->template->addFilter("prestatusClass", function (?Attendance $myAttendance, $eventType, $code, $canPlan, $startTime) use ($eventTypes) {
+            $myPreStatus = empty($myAttendance) || empty($myAttendance->getPreStatus()) || $myAttendance->getPreStatus() == "UNKNOWN" ? "not-set" : $eventTypes[$eventType]->getPreStatusSet()[$myAttendance->getPreStatus()]->getCode();
+            $myPostStatus = empty($myAttendance) || empty($myAttendance->getPostStatus()) || $myAttendance->getPostStatus() == "UNKNOWN" ? "not-set" : $eventTypes[$eventType]->getPostStatusSet()[$myAttendance->getPostStatus()]->getCode();
+
             if(!$canPlan)
                 return $code == $myPostStatus && $myPostStatus != "not-set" ? "attendance$code disabled active" : "btn-outline-secondary disabled";
             if (strtotime($startTime) > strtotime(date("c")))// pokud podminka plati, akce je budouci
@@ -41,43 +56,36 @@ class EventPresenter extends SecuredPresenter {
             else
                 return $code == $myPostStatus && $myPostStatus != "not-set" ? "attendance$code disabled active" : "btn-outline-secondary disabled";
         });
+
+        $this->template->addFilter("statusColor", function (Status $status) {
+            return $this->supplier->getStatusColor($status->getCode());
+        });
     }
 
     public function beforeRender(){
         parent::beforeRender();
-        $this->statusList->init()->perform();
-        $this->template->statusList = $this->statusList->getStatusesByCode();
+        $this->template->statusList = $this->statusManager->getList();
     }
         
     
-    public function renderDefault($date = NULL, $direction = NULL) {
-        //parent::showNotes();
-        try {
-            $this->eventList->init()
-                    ->setHalfYearFrom($date, $direction)
-                    ->getData();
-            $eventTypes = $this->eventTypeList->init()->getData();
-        } catch (APIException $ex) {
-            $this->handleTapiException($ex);
-        }
-
-        $months = $this->eventList->getAsMonthArray();
-        foreach ($months as $eventMonth) {
-            foreach ($eventMonth as $event) {
-                $eventCaptions = $this->getEventCaptions($event, $eventTypes);
-                $event->myPreStatusCaption = $eventCaptions["myPreStatusCaption"];
-                $event->myPostStatusCaption = $eventCaptions["myPostStatusCaption"];
-            }
-        }
-        $this->template->agendaFrom = date("Y-m", strtotime($this->eventList->getFrom()));
-        $this->template->agendaTo = date("Y-m", strtotime($this->eventList->getTo()));
+    public function renderDefault($date = NULL, $direction = NULL)
+    {
+        $dateTimeBase = new DateTime($date);
+        $dateTimeFrom = $dateTimeBase->modifyClone("- 6 months")->setTime(0, 0, 0);
+        $dateTimeUntil = $dateTimeBase->modifyClone("+ 6 months")->setTime(23, 59, 59);
+        $events = $this->eventManager->getEventsInterval($this->user->getId(), $dateTimeFrom, $dateTimeUntil);
+        
+        $this->template->agendaFrom = $dateTimeFrom->format(BaseModel::YEAR_MONTH);
+        $this->template->agendaTo = $dateTimeUntil->format(BaseModel::YEAR_MONTH);
         $this->template->currY = date("Y");
         $this->template->currM = date("m");
-        $this->template->events = $this->eventList->getAsArray();
-        $this->template->evMonths = $this->eventList->getAsMonthArray();
-        $this->template->eventTypes = $eventTypes;
+        $this->template->eventTypes = $this->eventTypeManager->getIndexedList();
+        $this->template->events = $events;
+        
+        $this->template->evMonths = $this->eventManager->getAsMonthArray($events);
+
         if ($this->isAjax()) {
-            $this->payload->events = $this->eventList->getAsArray();
+            $this->payload->events = $events;
         }
     }
 
@@ -85,18 +93,11 @@ class EventPresenter extends SecuredPresenter {
         $this->template->cptNotDecidedYet = $this->translator->translate('event.notDecidedYet');
         $this->template->cptArrived = $this->translator->translate('event.arrived',2);
         $this->template->cptNotArrived = $this->translator->translate('event.notArrived',2);
-        try {
-            $eventId = $this->parseIdFromWebname($udalost);
-            $event = $this->eventDetail->init()
-                    ->setId($eventId)
-                    ->getData();
-            $eventTypes = $this->eventTypeList->init()->getData();
-            $this->userList->init()->getData();
-            $users = $this->userList->getById();
-        } catch (APIException $ex) {
-            $this->handleTapiException($ex);
-        }
-        //parent::showNotes($event->id);
+        
+        $eventId = $this->parseIdFromWebname($udalost);
+        $event = $this->eventManager->getById($eventId);
+        $eventTypes = $this->eventTypeManager->getList();
+        $users = $this->userManager->getList();
         
         $this->setLevelCaptions(["2" => ["caption" => $event->caption, "link" => $this->link("Event:event", $event->id . "-" . $event->webName)]]);
 
@@ -106,6 +107,13 @@ class EventPresenter extends SecuredPresenter {
         $attArray["POST"]["YES"] = [];
         $attArray["POST"]["NO"] = [];
         $attArray["PRE"] = [];
+        
+            $this->options->allCodes = array_merge($this->options->allCodes, $statusSet->statusesByCode);
+            
+            $statusSet->statusesByCode[$status->code] = $status;
+            
+            
+            
         foreach ($this->statusList->getStatusesByCode() as $status) {
             $attArray["PRE"][$status->code] = [];
         }
@@ -148,16 +156,15 @@ class EventPresenter extends SecuredPresenter {
         $feed = [];
 
         foreach ($events as $event) {
-            $colors = $this->eventManager->getEventColors($event);
             /* @var $event Event */
             $feed[] = [
                 "id" => $event->getId(),
                 "title" => $event->getCaption(),
                 "start" => $event->getStartTime()->format(BaseModel::DATETIME_ISO_FORMAT),
                 "end" => $event->getEndTime()->format(BaseModel::DATETIME_ISO_FORMAT),
-                "backgroundColor" => $colors["backgroundColor"],
-                "borderColor" => $colors["borderColor"],
-                "textColor" => $colors["textColor"],
+                "backgroundColor" => $event->getBackgroundColor(),
+                "borderColor" => $event->getBorderColor(),
+                "textColor" => $event->getTextColor(),
                 "url" => $this->link("Event:event", $event->getWebName()),
             ];
         }

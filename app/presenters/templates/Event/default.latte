@@ -10,10 +10,10 @@
 <link rel='stylesheet' href="{$basePath}/skins/{$skin}/css/fullcalendar.css?ver={$appver}" />
 <style type="text/css">
     {foreach $statusList as $status}
-    .attendance{$status->code} { color: {$status->color|noescape}; border-color: {$status->color|noescape}; background-color: transparent; background-image: none; }
-    .attendance{$status->code}.active { color: #fff; border-color: {$status->color|noescape}; background-color: {$status->color|noescape}; }
-    .attendance{$status->code}:hover { color: #fff; border-color: {$status->color|noescape}; background-color: {$status->color|noescape}; }
-    .attendance{$status->code}:not(:disabled):not(.disabled).active { color: #fff; border-color: {$status->color|noescape}; background-color: {$status->color|noescape}; }
+    .attendance{$status->getCode()} { color: {$status|statusColor}; border-color: {$status|statusColor}; background-color: transparent; background-image: none; }
+    .attendance{$status->getCode()}.active { color: #fff; border-color: {$status|statusColor}; background-color: {$status|statusColor}; }
+    .attendance{$status->getCode()}:hover { color: #fff; border-color: {$status|statusColor}; background-color: {$status|statusColor}; }
+    .attendance{$status->getCode()}:not(:disabled):not(.disabled).active { color: #fff; border-color: {$status|statusColor}; background-color: {$status|statusColor}; }
     BUTTON.disabled { cursor: auto }
     {/foreach}
 </style>
@@ -33,7 +33,7 @@
             events: function(start, end, timezone, callback) {
                 var events = [];
                 {foreach $events as $evnt}
-                    events.push({l}id: {$evnt->getId()}, title: {$evnt->title},start: {$evnt->start},end: {$evnt->end},backgroundColor: {$evnt->backgroundColor},borderColor: {$evnt->borderColor},textColor: {$evnt->textColor},url: {plink 'Event:event', $evnt->getWebName()}{r});
+                    events.push({l}id: {$evnt->getId()}, title: {$evnt->getCaption()},start: {$evnt->getStartTime()|date:\Tymy\Module\Core\Model\BaseModel::DATETIME_ISO_FORMAT},end: {$evnt->getEndTime()|date:\Tymy\Module\Core\Model\BaseModel::DATETIME_ISO_FORMAT},backgroundColor: {$evnt->getBackgroundColor()},borderColor: {$evnt->getBorderColor()},textColor: {$evnt->getTextColor()},url: {plink 'Event:event', $evnt->getWebName()}{r});
                 {/foreach}
                 callback(events);
             },
@@ -89,15 +89,16 @@
                     <div class="card-body">
                         {if isset($evMonths[$actMonth]) && count($evMonths[$actMonth]) > 0 }
                             {foreach $evMonths[$actMonth] as $ev}
-                                <div n:class="row, $ev->isPast ? evnt-past, $ev->isPast ? collapse">
-                                    <div class="col" title=" {$ev->getCaption()} ({$eventTypes[$ev->type]->getCaption()})&#13;{$ev->startTime|date:'j.n. H:i'} -> {$ev->endTime|date:'j.n H:i'}"><a href="{plink Event:event, $ev->getWebName()}}" class="event-heading">{$ev->getCaption()}</a><span class="event-time text-muted float-right">{$ev->startTime|date:'j.n. H:i'}</span></div>
+                                <div n:class="row, $ev->getInPast() ? evnt-past, $ev->getInPast() ? collapse">
+                                    <div class="col" title=" {$ev->getCaption()} ({$eventTypes[$ev->getType()]->getCaption()})&#13;{$ev->getStartTime()|date:'j.n. H:i'} -> {$ev->getEndTime()|date:'j.n H:i'}"><a href="{plink Event:event, $ev->getWebName()}}" class="event-heading">{$ev->getCaption()}</a><span class="event-time text-muted float-right">{$ev->getStartTime()|date:'j.n. H:i'}</span></div>
                                 </div>
-                                <div n:class="row, mb-2, $ev->isPast ? evnt-past, $ev->isPast ? collapse">
+                                <div n:class="row, mb-2, $ev->getInPast() ? evnt-past, $ev->getInPast() ? collapse">
                                     <div class="col">
                                         <div class="btn-group input-group px-0" role="group" aria-label="Basic example" id="action-{$ev->getId()}">
-                                            <input type="text" class="form-control form-control-sm" title="{_note.note,1}" name="preStatusDesc" value="{$ev->myAttendance->preDescription}" />
-                                            {foreach $eventTypes[$ev->type]->preStatusSet as $preStatus}
-                                                <button onclick="updateAttendance(this, {link attendance! $ev->getId(), $preStatus->code})" class="btn btn-sm {$ev->myPreStatusCaption,$ev->myPostStatusCaption,$preStatus->code,$ev->canPlan,$ev->closeTime|prestatusClass}">{$preStatus->getCaption()}</button>
+                                            {dump $ev->getMyAttendance()}
+                                            <input type="text" class="form-control form-control-sm" title="{_note.note,1}" name="preStatusDesc" value="{$ev->getMyAttendance() ? $ev->getMyAttendance()->getPreDescription() : null}" />
+                                            {foreach $eventTypes[$ev->getType()]->getPreStatusSet() as $preStatus}
+                                                <button onclick="updateAttendance(this, {link attendance! $ev->getId(), $preStatus->getCode()})" class="btn btn-sm {$ev->getMyAttendance(),$ev->getType(),$preStatus->getCode(),$ev->getCanPlan(),$ev->getCloseTime()|prestatusClass}">{$preStatus->getCaption()}</button>
                                             {/foreach}
                                         </div>
                                     </div>
