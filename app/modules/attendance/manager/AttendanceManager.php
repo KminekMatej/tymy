@@ -52,6 +52,27 @@ class AttendanceManager extends BaseManager
     }
 
     /**
+     * Get array of attendanced related to events
+     * 
+     * @param array $eventIds
+     * @return array
+     */
+    public function getByEvents(array $eventIds): array
+    {
+        $allRows = $this->database->table($this->getTable())->where("event_id", $eventIds)->fetchAll();
+        $byEventId = [];
+        foreach ($allRows as $row) {
+            if (!array_key_exists($row->event_id, $byEventId)) {
+                $byEventId[$row->event_id] = [];
+            }
+
+            $byEventId[$row->event_id][] = $this->map($row);
+        }
+
+        return $byEventId;
+    }
+
+    /**
      * Maps one active row to object
      * @param ActiveRow|false $row
      * @param bool $force True to skip cache
