@@ -13,8 +13,8 @@ use Tymy\Module\Event\Manager\EventManager;
 use Tymy\Module\Event\Manager\EventTypeManager;
 use Tymy\Module\Event\Model\Event;
 
-class EventPresenter extends SecuredPresenter {
-
+class EventPresenter extends SecuredPresenter
+{
     private $eventHistorian;
     private $attendanceConfirmer;
     private $attendancePlanner;
@@ -42,12 +42,12 @@ class EventPresenter extends SecuredPresenter {
         });
 
         $eventTypes = $this->eventTypeManager->getIndexedList();
-        
+
         $this->template->addFilter("prestatusClass", function (?Attendance $myAttendance, $eventType, $code, $canPlan, $startTime) use ($eventTypes) {
             $myPreStatus = empty($myAttendance) || empty($myAttendance->getPreStatus()) || $myAttendance->getPreStatus() == "UNKNOWN" ? "not-set" : $eventTypes[$eventType]->getPreStatusSet()[$myAttendance->getPreStatus()]->getCode();
             $myPostStatus = empty($myAttendance) || empty($myAttendance->getPostStatus()) || $myAttendance->getPostStatus() == "UNKNOWN" ? "not-set" : $eventTypes[$eventType]->getPostStatusSet()[$myAttendance->getPostStatus()]->getCode();
 
-            if(!$canPlan)
+            if (!$canPlan)
                 return $code == $myPostStatus && $myPostStatus != "not-set" ? "attendance$code disabled active" : "btn-outline-secondary disabled";
             if (strtotime($startTime) > strtotime(date("c")))// pokud podminka plati, akce je budouci
                 return $code == $myPreStatus ? "attendance$code active" : "attendance$code";
@@ -62,26 +62,33 @@ class EventPresenter extends SecuredPresenter {
         });
     }
 
-    public function beforeRender(){
+    public function beforeRender()
+    {
         parent::beforeRender();
         $this->template->statusList = $this->statusManager->getList();
     }
-        
-    
+
     public function renderDefault($date = NULL, $direction = NULL)
     {
-        $dateTimeBase = new DateTime($date);
+        $dateTimeBase = new DateTime();
         $dateTimeFrom = $dateTimeBase->modifyClone("- 6 months")->setTime(0, 0, 0);
         $dateTimeUntil = $dateTimeBase->modifyClone("+ 6 months")->setTime(23, 59, 59);
+
+        if ($direction == 1) {
+            $dateTimeUntil = (new DateTime($date))->modify("+ 6 months");
+        } elseif ($direction == -1) {
+            $dateTimeFrom = (new DateTime($date))->modify("- 6 months");
+        }
+
         $events = $this->eventManager->getEventsInterval($this->user->getId(), $dateTimeFrom, $dateTimeUntil);
-        
+
         $this->template->agendaFrom = $dateTimeFrom->format(BaseModel::YEAR_MONTH);
         $this->template->agendaTo = $dateTimeUntil->format(BaseModel::YEAR_MONTH);
         $this->template->currY = date("Y");
         $this->template->currM = date("m");
         $this->template->eventTypes = $this->eventTypeManager->getIndexedList();
         $this->template->events = $events;
-        
+
         $this->template->evMonths = $this->eventManager->getAsMonthArray($events);
 
         if ($this->isAjax()) {
@@ -89,16 +96,17 @@ class EventPresenter extends SecuredPresenter {
         }
     }
 
-    public function renderEvent($udalost) {
+    public function renderEvent($udalost)
+    {
         $this->template->cptNotDecidedYet = $this->translator->translate('event.notDecidedYet');
-        $this->template->cptArrived = $this->translator->translate('event.arrived',2);
-        $this->template->cptNotArrived = $this->translator->translate('event.notArrived',2);
-        
+        $this->template->cptArrived = $this->translator->translate('event.arrived', 2);
+        $this->template->cptNotArrived = $this->translator->translate('event.notArrived', 2);
+
         $eventId = $this->parseIdFromWebname($udalost);
         $event = $this->eventManager->getById($eventId);
         $eventTypes = $this->eventTypeManager->getList();
         $users = $this->userManager->getList();
-        
+
         $this->setLevelCaptions(["2" => ["caption" => $event->caption, "link" => $this->link("Event:event", $event->id . "-" . $event->webName)]]);
 
         //array keys are pre-set for sorting purposes
@@ -107,20 +115,18 @@ class EventPresenter extends SecuredPresenter {
         $attArray["POST"]["YES"] = [];
         $attArray["POST"]["NO"] = [];
         $attArray["PRE"] = [];
-        
-            $this->options->allCodes = array_merge($this->options->allCodes, $statusSet->statusesByCode);
-            
-            $statusSet->statusesByCode[$status->code] = $status;
-            
-            
-            
+
+        $this->options->allCodes = array_merge($this->options->allCodes, $statusSet->statusesByCode);
+
+        $statusSet->statusesByCode[$status->code] = $status;
+
         foreach ($this->statusList->getStatusesByCode() as $status) {
             $attArray["PRE"][$status->code] = [];
         }
         $attArray["PRE"]["UNKNOWN"] = [];
-        
+
         foreach ($event->attendance as $attendee) {
-            if(!array_key_exists($attendee->userId, $users))
+            if (!array_key_exists($attendee->userId, $users))
                 continue;
             $user = $users[$attendee->userId];
             if ($user->status != "PLAYER")
@@ -129,15 +135,15 @@ class EventPresenter extends SecuredPresenter {
             $user->preDescription = $attendee->preDescription;
             $mainKey = "PRE";
             $secondaryKey = $attendee->preStatus;
-            if($attendee->postStatus != "UNKNOWN"){
+            if ($attendee->postStatus != "UNKNOWN") {
                 $mainKey = "POST";
                 $secondaryKey = $attendee->postStatus;
             }
-            if(!array_key_exists($secondaryKey, $attArray[$mainKey]))
-                    $attArray[$mainKey][$secondaryKey] = [];
-            if(!array_key_exists($gender, $attArray[$mainKey][$secondaryKey]))
-                    $attArray[$mainKey][$secondaryKey][$gender] = [];
-            
+            if (!array_key_exists($secondaryKey, $attArray[$mainKey]))
+                $attArray[$mainKey][$secondaryKey] = [];
+            if (!array_key_exists($gender, $attArray[$mainKey][$secondaryKey]))
+                $attArray[$mainKey][$secondaryKey][$gender] = [];
+
             $attArray[$mainKey][$secondaryKey][$gender][$attendee->userId] = $user;
         }
 
@@ -148,11 +154,11 @@ class EventPresenter extends SecuredPresenter {
         $this->template->myPreStatusCaption = $eventCaptions["myPreStatusCaption"];
         $this->template->myPostStatusCaption = $eventCaptions["myPostStatusCaption"];
     }
-    
+
     public function actionFeed(string $start, string $end)
     {
         $events = $this->eventManager->getEventsInterval($this->user->getId(), new DateTime($start), new DateTime($end));
-        
+
         $feed = [];
 
         foreach ($events as $event) {
@@ -168,11 +174,12 @@ class EventPresenter extends SecuredPresenter {
                 "url" => $this->link("Event:event", $event->getWebName()),
             ];
         }
-        
+
         $this->sendResponse(new JsonResponse($feed));
     }
 
-    public function handleAttendance($id, $code, $desc) {
+    public function handleAttendance($id, $code, $desc)
+    {
         try {
             $this->attendancePlanner->init()
                     ->setId($id)
@@ -188,8 +195,9 @@ class EventPresenter extends SecuredPresenter {
             $this->redrawNavbar();
         }
     }
-    
-    public function handleAttendanceResult($id) {
+
+    public function handleAttendanceResult($id)
+    {
         $results = $this->getRequest()->getPost()["resultSet"];
         try {
             $this->attendanceConfirmer->init()
@@ -205,27 +213,31 @@ class EventPresenter extends SecuredPresenter {
         }
     }
 
-    public function handleEventLoad() {
+    public function handleEventLoad()
+    {
         $this->redrawControl("events-agenda");
     }
 
-    public function handleLoadHistory($udalost){
+    public function handleLoadHistory($udalost)
+    {
         $eventId = $this->parseIdFromWebname($udalost);
         $this->loadEventHistory($eventId);
         $this->redrawControl("history");
         $this->redrawControl("historyBtn");
     }
-    
-    private function getEventCaptions($event, $eventTypes) {
+
+    private function getEventCaptions($event, $eventTypes)
+    {
         return [
             "myPreStatusCaption" => empty($event->myAttendance->preStatus) || $event->myAttendance->preStatus == "UNKNOWN" ? "not-set" : $eventTypes[$event->type]->preStatusSet[$event->myAttendance->preStatus]->code,
             "myPostStatusCaption" => empty($event->myAttendance->postStatus) || $event->myAttendance->postStatus == "UNKNOWN" ? "not-set" : $eventTypes[$event->type]->postStatusSet[$event->myAttendance->postStatus]->code,
         ];
     }
 
-    private function loadEventHistory($eventId){
+    private function loadEventHistory($eventId)
+    {
         $histories = $this->eventHistorian->init()->setId($eventId)->getData();
-        $this->template->emptyStatus = (object)["code" => "", "caption" => "Nezadáno"];
+        $this->template->emptyStatus = (object) ["code" => "", "caption" => "Nezadáno"];
         $this->template->histories = $histories;
     }
 }
