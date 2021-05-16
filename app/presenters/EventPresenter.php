@@ -92,7 +92,7 @@ class EventPresenter extends SecuredPresenter
         $this->template->evMonths = $this->eventManager->getAsMonthArray($events);
 
         if ($this->isAjax()) {
-            $this->payload->events = $events;
+            $this->payload->events = $this->toFeed($events);
         }
     }
 
@@ -159,6 +159,17 @@ class EventPresenter extends SecuredPresenter
     {
         $events = $this->eventManager->getEventsInterval($this->user->getId(), new DateTime($start), new DateTime($end));
 
+        $this->sendResponse(new JsonResponse($this->toFeed($events)));
+    }
+
+    /**
+     * Transform array of events into event feed - array in format specified by FullCalendar specifications
+     * 
+     * @param Event[] $events
+     * @return array
+     */
+    private function toFeed(array $events)
+    {
         $feed = [];
 
         foreach ($events as $event) {
@@ -175,7 +186,7 @@ class EventPresenter extends SecuredPresenter
             ];
         }
 
-        $this->sendResponse(new JsonResponse($feed));
+        return $feed;
     }
 
     public function handleAttendance($id, $code, $desc)
