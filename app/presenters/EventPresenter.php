@@ -5,6 +5,7 @@ namespace Tymy\App\Presenters;
 use Nette\Application\Responses\JsonResponse;
 use Nette\Utils\DateTime;
 use Tapi\Exception\APIException;
+use Tracy\Debugger;
 use Tymy\Module\Attendance\Manager\StatusManager;
 use Tymy\Module\Attendance\Model\Attendance;
 use Tymy\Module\Attendance\Model\Status;
@@ -12,6 +13,7 @@ use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Event\Manager\EventManager;
 use Tymy\Module\Event\Manager\EventTypeManager;
 use Tymy\Module\Event\Model\Event;
+use Tymy\Module\User\Model\User;
 
 class EventPresenter extends SecuredPresenter
 {
@@ -103,11 +105,12 @@ class EventPresenter extends SecuredPresenter
         $this->template->cptNotArrived = $this->translator->translate('event.notArrived', 2);
 
         $eventId = $this->parseIdFromWebname($udalost);
+        /* @var $event Event */
         $event = $this->eventManager->getById($eventId);
-        $eventTypes = $this->eventTypeManager->getList();
+        $eventTypes = $this->eventTypeManager->getIndexedList();
         $users = $this->userManager->getList();
 
-        $this->setLevelCaptions(["2" => ["caption" => $event->caption, "link" => $this->link("Event:event", $event->id . "-" . $event->webName)]]);
+        $this->setLevelCaptions(["2" => ["caption" => $event->getCaption(), "link" => $this->link("Event:event", $event->getId() . "-" . $event->getWebName())]]);
 
         //array keys are pre-set for sorting purposes
         $attArray = [];
@@ -115,41 +118,50 @@ class EventPresenter extends SecuredPresenter
         $attArray["POST"]["YES"] = [];
         $attArray["POST"]["NO"] = [];
         $attArray["PRE"] = [];
-
-        $this->options->allCodes = array_merge($this->options->allCodes, $statusSet->statusesByCode);
-
-        $statusSet->statusesByCode[$status->code] = $status;
-
-        foreach ($this->statusList->getStatusesByCode() as $status) {
-            $attArray["PRE"][$status->code] = [];
+        foreach ($this->statusManager->getList() as $status) {
+            /* @var $status Status */
+            $attArray["PRE"][$status->getCode()] = [];
         }
         $attArray["PRE"]["UNKNOWN"] = [];
-
-        foreach ($event->attendance as $attendee) {
-            if (!array_key_exists($attendee->userId, $users))
+        
+        $this->template->resultsClosed = false;
+        foreach ($event->getAttendance() as $attendance) {
+            /* @var $attendance Attendance */
+            if (!array_key_exists($attendance->getUserId(), $users)){
                 continue;
-            $user = $users[$attendee->userId];
-            if ($user->status != "PLAYER")
-                continue; // display only players on event detail
-            $gender = $user->gender;
-            $user->preDescription = $attendee->preDescription;
-            $mainKey = "PRE";
-            $secondaryKey = $attendee->preStatus;
-            if ($attendee->postStatus != "UNKNOWN") {
-                $mainKey = "POST";
-                $secondaryKey = $attendee->postStatus;
             }
-            if (!array_key_exists($secondaryKey, $attArray[$mainKey]))
+            
+            if($attendance->getPostStatus() !== null){  //some attendance result has been aready filled, do not show buttons on default
+                $this->template->resultsClosed = true;
+            }
+            
+            /* @var $user User */
+            $user = $users[$attendance->getUserId()];
+            if ($user->getStatus() != User::STATUS_PLAYER){
+                continue; // display only players on event detail
+            }
+            
+            $gender = $user->getGender();
+            //$user->preDescription = $attendance->preDescription;
+            $mainKey = "PRE";
+            $secondaryKey = $attendance->getPreStatus();
+            if ($attendance->getPostStatus() != "UNKNOWN") {
+                $mainKey = "POST";
+                $secondaryKey = $attendance->getPostStatus();
+            }
+            if (!array_key_exists($secondaryKey, $attArray[$mainKey])) {
                 $attArray[$mainKey][$secondaryKey] = [];
-            if (!array_key_exists($gender, $attArray[$mainKey][$secondaryKey]))
+            }
+            if (!array_key_exists($gender, $attArray[$mainKey][$secondaryKey])) {
                 $attArray[$mainKey][$secondaryKey][$gender] = [];
-
-            $attArray[$mainKey][$secondaryKey][$gender][$attendee->userId] = $user;
+            }
+            $attArray[$mainKey][$secondaryKey][$gender][$attendance->getUserId()] = $user;
         }
 
-        $event->allUsers = $attArray;
+        $this->template->allUsers = $attArray;
         $this->template->event = $event;
         $this->template->eventTypes = $eventTypes;
+        $this->template->eventType = $eventTypes[$event->getType()];
         $eventCaptions = $this->getEventCaptions($event, $eventTypes);
         $this->template->myPreStatusCaption = $eventCaptions["myPreStatusCaption"];
         $this->template->myPostStatusCaption = $eventCaptions["myPostStatusCaption"];
