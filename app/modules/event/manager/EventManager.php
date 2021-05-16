@@ -77,6 +77,15 @@ class EventManager extends BaseManager
         $model->setCanView(empty($model->getViewRightName()) || $this->user->isAllowed($this->user->getId(), Privilege::USR($model->getViewRightName())));
         $model->setCanPlan(empty($model->getPlanRightName()) || $this->user->isAllowed($this->user->getId(), Privilege::USR($model->getPlanRightName())));
         $model->setCanResult(empty($model->getResultRightName()) ? $this->user->isAllowed($this->user->getId(), Privilege::SYS("EVE_ATT_UPDATE")) : $this->user->isAllowed($this->user->getId(), Privilege::USR($model->getResultRightName())));
+
+        $colorList = $this->supplier->getEventColors();
+
+        if (array_key_exists($model->getType(), $colorList)) {
+            $invertColors = empty($model->getMyAttendance()) || empty($model->getMyAttendance()->getPreStatus());
+            $model->setBackgroundColor($invertColors ? 'white' : $colorList[$model->getType()]);
+            $model->setBorderColor($colorList[$model->getType()]);
+            $model->setTextColor($invertColors ? $colorList[$model->getType()] : '');
+        }
     }
 
     public function getById(int $id, bool $force = false): ?BaseModel
@@ -319,7 +328,7 @@ class EventManager extends BaseManager
      * Function to get event colors used for FullCalendar event object colorization
      * 
      * @param Event $event
-     * @return array
+     * @return array ["borderColor" => (string), "backgroundColor" => (string), "textColor" => (string)]
      */
     public function getEventColors(Event $event): array
     {

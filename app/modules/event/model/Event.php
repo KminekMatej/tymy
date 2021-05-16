@@ -36,6 +36,9 @@ class Event extends BaseModel
     private bool $inFuture = false;
     private ?Attendance $myAttendance = null;
     private bool $attendancePending = false;
+    private string $backgroundColor = 'blue';
+    private string $borderColor = 'blue';
+    private string $textColor = 'blue';
 
     public function getCaption(): string
     {
@@ -130,6 +133,21 @@ class Event extends BaseModel
     public function getAttendancePending(): bool
     {
         return $this->attendancePending;
+    }
+
+    public function getBackgroundColor(): string
+    {
+        return $this->backgroundColor;
+    }
+
+    public function getBorderColor(): string
+    {
+        return $this->borderColor;
+    }
+
+    public function getTextColor(): string
+    {
+        return $this->textColor;
     }
 
     public function setCaption(string $caption)
@@ -243,6 +261,21 @@ class Event extends BaseModel
     public function setAttendancePending(bool $attendancePending): void
     {
         $this->attendancePending = $attendancePending;
+    }
+
+    public function setBackgroundColor(string $backgroundColor): void
+    {
+        $this->backgroundColor = $backgroundColor;
+    }
+
+    public function setBorderColor(string $borderColor): void
+    {
+        $this->borderColor = $borderColor;
+    }
+
+    public function setTextColor(string $textColor): void
+    {
+        $this->textColor = $textColor;
     }
 
     public function getModule(): string
