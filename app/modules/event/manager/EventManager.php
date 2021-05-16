@@ -6,7 +6,6 @@ use Nette\Database\IRow;
 use Nette\Database\Table\ActiveRow;
 use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
-use Tracy\Debugger;
 use Tymy\Module\Attendance\Manager\AttendanceManager;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
@@ -91,7 +90,14 @@ class EventManager extends BaseManager
     public function getById(int $id, bool $force = false): ?BaseModel
     {
         $query = "SELECT events.*, IF(events.start_time > NOW(),1,0) AS in_future, IF(events.start_time < NOW(),1,0) AS in_past, attendance.* FROM events LEFT JOIN attendance ON events.id=attendance.event_id AND attendance.user_id=? WHERE events.id=?";
-        return $this->map($this->database->query($query, $this->user->getId(), $id)->fetch());
+
+        $eventRow = $this->database->query($query, $this->user->getId(), $id)->fetch();
+        $event = $this->map($eventRow);
+        $attendances = $this->attendanceManager->getByEvents([$event->getId()]);
+
+        $event->setAttendance($attendances[$event->getId()] ?? []);
+
+        return $event;
     }
 
     /**
@@ -124,7 +130,7 @@ class EventManager extends BaseManager
         }
 
         $filters = $filter ? $this->filterToArray($filter) : [];
-        Debugger::barDump($filters);
+
         $orders = $this->orderToArray($order);
 
         if (!empty($filters)) {
@@ -147,7 +153,19 @@ class EventManager extends BaseManager
 
         $selector = $this->database->query($query, ...$params);
         $allRows = $selector->fetchAll();
-        return $this->mapAll($allRows);
+
+        $eventIds = array_column($allRows, "id");
+        $attendances = $this->attendanceManager->getByEvents($eventIds);
+
+        $events = [];
+        foreach ($allRows as $row) {
+            /* @var $event Event */
+            $event = $this->map($row);
+            $event->setAttendance($attendances[$event->getId()] ?? []);
+            $events[] = $event;
+        }
+
+        return $events;
     }
 
     /**
