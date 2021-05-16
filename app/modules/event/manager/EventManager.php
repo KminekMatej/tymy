@@ -323,26 +323,28 @@ class EventManager extends BaseManager
 
         return $count;
     }
-    
+
     /**
-     * Function to get event colors used for FullCalendar event object colorization
+     * Get list of events, separated in array with year-month as key
      * 
-     * @param Event $event
-     * @return array ["borderColor" => (string), "backgroundColor" => (string), "textColor" => (string)]
+     * @param array $events
+     * @return array in the form of ["2021-01" => [...events...], "2021-02" => [...events...], ...]
      */
-    public function getEventColors(Event $event): array
+    public function getAsMonthArray(array $events)
     {
-        $colorList = $this->supplier->getEventColors();
+        $monthArray = [];
 
-        $invertColors = empty($event->getMyAttendance()) || empty($event->getMyAttendance()->getPreStatus());
-        
-        if (!array_key_exists($event->getType(), $colorList))
-            return ["borderColor" => 'blue', "backgroundColor" => 'blue', "textColor" => 'white'];
+        foreach ($events as $event) {
+            /* @var $event Event */
+            $month = $event->getStartTime()->format(BaseModel::YEAR_MONTH);
 
-        return [
-            "borderColor" => $colorList[$event->getType()],
-            "backgroundColor" => $invertColors ? 'white' : $colorList[$event->getType()],
-            "textColor" => $invertColors ? $colorList[$event->getType()] : '',
-        ];
+            if (!array_key_exists($month, $monthArray)) {
+                $monthArray[$month] = [];
+            }
+
+            $monthArray[$month][] = $event;
+        }
+
+        return $monthArray;
     }
 }
