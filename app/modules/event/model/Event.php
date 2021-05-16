@@ -313,6 +313,7 @@ class Event extends BaseModel
     public function jsonSerialize()
     {
         $json = parent::jsonSerialize() + [
+            "attendance" => $this->arrayToJson($this->getAttendance()),
             "canView" => $this->getCanView(),
             "canPlan" => $this->getCanPlan(),
             "canResult" => $this->getCanResult(),
