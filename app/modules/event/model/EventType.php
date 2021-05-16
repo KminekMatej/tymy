@@ -128,13 +128,13 @@ class EventType extends BaseModel
 
     public function addPreStatusSet(Status $preStatusSet)
     {
-        $this->preStatusSet[] = $preStatusSet;
+        $this->preStatusSet[$preStatusSet->getCode()] = $preStatusSet;
         return $this;
     }
 
     public function addPostStatusSet(Status $postStatusSet)
     {
-        $this->postStatusSet[] = $postStatusSet;
+        $this->postStatusSet[$postStatusSet->getCode()] = $postStatusSet;
         return $this;
     }
 
