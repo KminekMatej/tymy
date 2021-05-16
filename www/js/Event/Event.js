@@ -1,7 +1,8 @@
 function loadAgenda(purl) {
     var date = $("#calendar").fullCalendar('getDate');
 
-    if ($("DIV.agenda[data-month='" + date.format('YYYY-MM') + "']").length == 0) {
+    if ($("DIV.agenda[data-month='" + date.format('YYYY-MM') + "']").length == 0 && purl !== undefined) {
+        
         //this month is not loaded yet - call ajax to load new data
         disableCalendar(true);
         //check previous month exists, if does, the direction is one, if not, direction is -1
