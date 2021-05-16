@@ -66,7 +66,7 @@ class AttendanceManager extends BaseManager
                 $byEventId[$row->event_id] = [];
             }
 
-            $byEventId[$row->event_id][] = $this->map($row);
+            $byEventId[$row->event_id][$row->user_id] = $this->map($row);
         }
 
         return $byEventId;
