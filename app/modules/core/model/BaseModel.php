@@ -20,6 +20,7 @@ abstract class BaseModel implements JsonSerializable
     public const DATETIME_CZECH_NO_SECS_FORMAT = "j.n.Y H:i";
     public const DATE_CZECH_FORMAT = "j.n.Y";
     public const DATE_ENG_FORMAT = "Y-m-d";
+    public const YEAR_MONTH = "Y-m";
     public const DATETIME_ENG_FORMAT = "Y-m-d H:i:s";
     public const DATETIME_ISO_FORMAT = "Y-m-d\TH:i:s";
 
