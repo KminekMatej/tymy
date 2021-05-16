@@ -92,10 +92,27 @@ class EventTypeManager extends BaseManager
         }
     }
 
+    /**
+     * Get list of all event types, with their code as array keys
+     * @return EventType[]
+     */
+    public function getIndexedList()
+    {
+        $types = $this->getList();
+        $typesIndexed = [];
+
+        foreach ($types as $type) {
+            /* @var $type EventType */
+            $typesIndexed[$type->getCode()] = $type;
+        }
+
+        return $typesIndexed;
+    }
+
     public function getListUserAllowed($userId): array
     {
         //reading is not restricted
-        return $this->mapAll($this->database->table($this->getTable())->fetchAll());
+        return $this->getList();
     }
 
     public function create(array $data, ?int $resourceId = null): BaseModel
