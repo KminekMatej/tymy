@@ -52,7 +52,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
         $this->template->appver = $this->supplier->getVersionCode();
         
         $this->template->addFilter('monthName', function ($number) {
-            return $this->translator->translate("common.months." . strtolower(DateTime::createFromFormat("!m", $number)->format("F"))) ;
+            return $this->translator->translate("common.months." . strtolower(DateTime::createFromFormat("!m", strval($number))->format("F"))) ;
         });
     }
     

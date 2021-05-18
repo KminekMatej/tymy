@@ -22,16 +22,16 @@ class TeamPresenter extends SecuredPresenter {
         $this->template->addFilter('errorsCount', function ($player, $tabName) use ($allFields) {
             switch ($tabName) {
                 case "osobni-udaje":
-                    $errFields = array_intersect(array_keys($allFields["PERSONAL"]), $this->supplier->getRequiredFields(), $player->errFls);
+                    $errFields = array_intersect(array_keys($allFields["PERSONAL"]), $this->supplier->getRequiredFields(), $player->getErrFields());
                     break;
                 case "prihlaseni":
-                    $errFields = array_intersect(array_keys($allFields["LOGIN"]), $this->supplier->getRequiredFields(), $player->errFls);
+                    $errFields = array_intersect(array_keys($allFields["LOGIN"]), $this->supplier->getRequiredFields(), $player->getErrFields());
                     break;
                 case "tymove-info":
-                    $errFields = array_intersect(array_keys($allFields["TEAMINFO"]), $this->supplier->getRequiredFields(), $player->errFls);
+                    $errFields = array_intersect(array_keys($allFields["TEAMINFO"]), $this->supplier->getRequiredFields(), $player->getErrFields());
                     break;
                 case "adresa":
-                    $errFields = array_intersect(array_keys($allFields["ADDRESS"]), $this->supplier->getRequiredFields(), $player->errFls);
+                    $errFields = array_intersect(array_keys($allFields["ADDRESS"]), $this->supplier->getRequiredFields(), $player->getErrFields());
                     break;
             }
             $cnt = count($errFields);
@@ -176,10 +176,10 @@ class TeamPresenter extends SecuredPresenter {
         $max = 0;
         $jerseyList = [];
         foreach ($allPlayers as $player) {
-            if ($player->jerseyNumber != "") {
-                if($player->jerseyNumber < $min) $min = $player->jerseyNumber;
-                if($player->jerseyNumber > $max) $max = $player->jerseyNumber;
-                $jerseyList[$player->jerseyNumber][] = $player;
+            if ($player->getJerseyNumber() != "") {
+                if($player->getJerseyNumber() < $min) $min = $player->getJerseyNumber();
+                if($player->getJerseyNumber() > $max) $max = $player->getJerseyNumber();
+                $jerseyList[$player->getJerseyNumber()][] = $player;
             }
         }
         for ($i = $min; $i <=$max+10; $i++){
