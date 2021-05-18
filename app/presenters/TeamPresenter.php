@@ -7,17 +7,18 @@ use Tapi\UserResource;
 use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Model\User;
 
-class TeamPresenter extends SecuredPresenter {
-    
+class TeamPresenter extends SecuredPresenter
+{
     private $userType;
     public $userCreator;
     public $userEditor;
     public $userDeleter;
     public $avatarUploader;
-    
-    public function beforeRender() {
+
+    public function beforeRender()
+    {
         parent::beforeRender();
-        
+
         $allFields = UserResource::getAllFields($this->translator);
         $this->template->addFilter('errorsCount', function ($player, $tabName) use ($allFields) {
             switch ($tabName) {
@@ -39,37 +40,42 @@ class TeamPresenter extends SecuredPresenter {
         });
     }
 
-    
-    public function startup() {
+    public function startup()
+    {
         parent::startup();
-        $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("team.team",1), "link" => $this->link("Team:") ] ]);
+        $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("team.team", 1), "link" => $this->link("Team:")]]);
     }
-    
-    public function actionPlayers() {
-        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("team.PLAYER",2), "link" => $this->link("Team:players") ] ]);
+
+    public function actionPlayers()
+    {
+        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("team.PLAYER", 2), "link" => $this->link("Team:players")]]);
         $this->userType = "PLAYER";
         $this->setView('default');
     }
-    
-    public function actionMembers() {
-        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("team.MEMBER",2), "link" => $this->link("Team:members") ] ]);
+
+    public function actionMembers()
+    {
+        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("team.MEMBER", 2), "link" => $this->link("Team:members")]]);
         $this->userType = "MEMBER";
         $this->setView('default');
     }
-    
-    public function actionSicks() {
-        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("team.SICK",2), "link" => $this->link("Team:sicks") ] ]);
+
+    public function actionSicks()
+    {
+        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("team.SICK", 2), "link" => $this->link("Team:sicks")]]);
         $this->userType = "SICK";
         $this->setView('default');
     }
-    
-    public function actionInits() {
-        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("team.INIT",2), "link" => $this->link("Team:inits") ] ]);
+
+    public function actionInits()
+    {
+        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("team.INIT", 2), "link" => $this->link("Team:inits")]]);
         $this->userType = "INIT";
         $this->setView('default');
     }
-    
-    public function renderDefault() {
+
+    public function renderDefault()
+    {
         //parent::showNotes();
         try {
             $users = $this->userList->init()->setUserType($this->userType)->getData();
@@ -91,48 +97,49 @@ class TeamPresenter extends SecuredPresenter {
         }
     }
 
-    public function renderNew($player = null) {
-        if(! $this->getUser()->isAllowed("user", "canCreate")){
+    public function renderNew($player = null)
+    {
+        if (!$this->getUser()->isAllowed("user", "canCreate")) {
             $this->flashMessage($this->translator->translate("common.alerts.notPermitted"), "warning");
             $this->redirect('this');
         }
-        
+
         $this->template->canUpdate = true;
-        
+
         $teamData = $this->is->getData();
-        
+
         $errFls = array_intersect($this->supplier->getRequiredFields(), array_merge(UserResource::FIELDS_PERSONAL, UserResource::FIELDS_LOGIN, UserResource::FIELDS_TEAMINFO, UserResource::FIELDS_ADDRESS));
-        
-        $newPlayer = (object)[
-            "id" => null,
-            "login" => "",
-            "canLogin" => true,
-            "canEditCallName" => true,
-            "status" => "PLAYER",
-            "firstName" => "",
-            "lastName" => "",
-            "callName" => "",
-            "language" => $teamData->defaultLanguageCode,
-            "email" => "",
-            "jerseyNumber" => "",
-            "gender" => "UNKNOWN",
-            "street" => "",
-            "city" => "",
-            "zipCode" => "",
-            "phone" => "",
-            "phone2" => "",
-            "birthDate" => "",
-            "nameDayMonth" => null,
-            "nameDayDay" => null,
-            "fullName" => "",
-            "pictureUrl" => "",
-            "displayName" => "",
-            "isNew" => true,
-            "errCnt" => count($errFls),
-            "errFls" => $errFls,
+
+        $newPlayer = (object) [
+                    "id" => null,
+                    "login" => "",
+                    "canLogin" => true,
+                    "canEditCallName" => true,
+                    "status" => "PLAYER",
+                    "firstName" => "",
+                    "lastName" => "",
+                    "callName" => "",
+                    "language" => $teamData->defaultLanguageCode,
+                    "email" => "",
+                    "jerseyNumber" => "",
+                    "gender" => "UNKNOWN",
+                    "street" => "",
+                    "city" => "",
+                    "zipCode" => "",
+                    "phone" => "",
+                    "phone2" => "",
+                    "birthDate" => "",
+                    "nameDayMonth" => null,
+                    "nameDayDay" => null,
+                    "fullName" => "",
+                    "pictureUrl" => "",
+                    "displayName" => "",
+                    "isNew" => true,
+                    "errCnt" => count($errFls),
+                    "errFls" => $errFls,
         ];
-        
-        if($player){
+
+        if ($player) {
             try {
                 $user = $this->userDetail->init()
                         ->setId($this->parseIdFromWebname($player))
@@ -140,7 +147,7 @@ class TeamPresenter extends SecuredPresenter {
             } catch (APIException $ex) {
                 $this->handleTapiException($ex);
             }
-            
+
             //todo rewrite playerMock
             $newPlayer = $user;
             $newPlayer->id = null;
@@ -150,7 +157,7 @@ class TeamPresenter extends SecuredPresenter {
         }
 
         //parent::showNotes();
-        
+
         $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("common.new")]]);
 
         $this->template->player = $newPlayer;
@@ -170,74 +177,83 @@ class TeamPresenter extends SecuredPresenter {
         $this->template->allRoles = $this->getAllRoles();
     }
 
-    public function renderJerseys(){
-        $allPlayers = $this->userList->init()->getData();
+    public function renderJerseys()
+    {
+        $allPlayers = $this->userManager->getList();
         $min = 0;
         $max = 0;
         $jerseyList = [];
         foreach ($allPlayers as $player) {
+            /* @var $player User */
             if ($player->getJerseyNumber() != "") {
-                if($player->getJerseyNumber() < $min) $min = $player->getJerseyNumber();
-                if($player->getJerseyNumber() > $max) $max = $player->getJerseyNumber();
+                if ($player->getJerseyNumber() < $min) {
+                    $min = $player->getJerseyNumber();
+                }
+                if ($player->getJerseyNumber() > $max) {
+                    $max = $player->getJerseyNumber();
+                }
                 $jerseyList[$player->getJerseyNumber()][] = $player;
             }
         }
-        for ($i = $min; $i <=$max+10; $i++){
-            if(!array_key_exists($i, $jerseyList)) $jerseyList[$i] = null;
+        for ($i = $min; $i <= $max + 10; $i++) {
+            if (!array_key_exists($i, $jerseyList))
+                $jerseyList[$i] = null;
         }
         ksort($jerseyList);
-        
+
         $this->template->jerseyList = $jerseyList;
-        $this->template->me = $this->userList->getMe();
         $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("team.jersey", 2), "link" => $this->link("Team:jerseys")]]);
     }
-    
-    public function handleCreate(){
+
+    public function handleCreate()
+    {
         $bind = $this->getRequest()->getPost();
-        if(array_key_exists("roles", $bind["changes"]) && $bind["changes"]["roles"] === ""){
+        if (array_key_exists("roles", $bind["changes"]) && $bind["changes"]["roles"] === "") {
             $bind["changes"]["roles"] = [];
         }
         /* @todo Finish proper validation on new player, make sure that password and email fields are filled */
         try {
             $createdPlayer = $this->userCreator->init()
-                ->setUser($bind["changes"])
-                ->perform();
+                    ->setUser($bind["changes"])
+                    ->perform();
         } catch (APIException $ex) {
             $this->handleTapiException($ex, "this");
         }
-        
+
         $this->flashMessage($this->translator->translate("common.alerts.userAdded", null, ["fullname" => $createdPlayer->displayName]), "success");
-        
+
         $this->redirect("Team:player", $createdPlayer->webName);
     }
-    
-    public function handleEdit(){
+
+    public function handleEdit()
+    {
         $bind = $this->getRequest()->getPost();
-        if(array_key_exists("roles", $bind["changes"]) && $bind["changes"]["roles"] === ""){
+        if (array_key_exists("roles", $bind["changes"]) && $bind["changes"]["roles"] === "") {
             $bind["changes"]["roles"] = [];
         }
         try {
             $this->userEditor->init()
-                ->setId($bind["id"])
-                ->setUser($bind["changes"])
-                ->perform();
+                    ->setId($bind["id"])
+                    ->setUser($bind["changes"])
+                    ->perform();
         } catch (APIException $ex) {
             $this->handleTapiException($ex, "this");
         }
-        
+
         $this->flashMessage($this->translator->translate("common.alerts.configSaved"), "success");
         $this->redrawControl("flashes");
         $this->redrawControl("player-header");
-        
+
         $this->redrawNavbar();
-        
-        if(array_key_exists("language", $bind["changes"])){
+
+        if (array_key_exists("language", $bind["changes"])) {
             $this->flashMessage($this->translator->translate("team.alerts.signOffNeeded"), "info");
             $this->redirect('this');
         }
     }
-    
-    public function handleDelete() {
+
+    public function handleDelete()
+    {
         if (!$this->getUser()->isAllowed("user", "canDelete"))
             return;
         $bind = $this->getRequest()->getPost();
@@ -252,7 +268,8 @@ class TeamPresenter extends SecuredPresenter {
         $this->redirect('Team:');
     }
 
-    public function handleUpload() {
+    public function handleUpload()
+    {
         $bind = $this->getRequest()->getPost();
         $files = $this->getRequest()->getFiles();
         $file = $files["files"][0];
@@ -266,7 +283,7 @@ class TeamPresenter extends SecuredPresenter {
             } catch (APIException $ex) {
                 $this->handleTapiException($ex, "this");
             }
-            
+
             $this->flashMessage($this->translator->translate("common.alerts.avatarSaved"), "success");
             $this->redrawControl("flashes");
             $this->redrawControl("player-header");
@@ -276,5 +293,4 @@ class TeamPresenter extends SecuredPresenter {
             $response->setCode(400);
         }
     }
-
 }
