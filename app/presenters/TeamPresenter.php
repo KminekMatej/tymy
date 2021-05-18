@@ -2,12 +2,10 @@
 
 namespace Tymy\App\Presenters;
 
-use Tapi\AvatarUploadResource;
 use Tapi\Exception\APIException;
-use Tapi\UserCreateResource;
-use Tapi\UserDeleteResource;
-use Tapi\UserEditResource;
 use Tapi\UserResource;
+use Tymy\Module\Permission\Model\Privilege;
+use Tymy\Module\User\Model\User;
 
 class TeamPresenter extends SecuredPresenter {
     
@@ -16,10 +14,6 @@ class TeamPresenter extends SecuredPresenter {
     public $userEditor;
     public $userDeleter;
     public $avatarUploader;
-    
-    public function __construct() {
-        parent::__construct();
-    }
     
     public function beforeRender() {
         parent::beforeRender();
@@ -162,22 +156,17 @@ class TeamPresenter extends SecuredPresenter {
         $this->template->player = $newPlayer;
         $this->template->allRoles = $this->getAllRoles();
     }
-    
-    public function renderPlayer($player) {
-        try {
-            $user = $this->userDetail->init()
-                    ->setId($this->parseIdFromWebname($player))
-                    ->getData();
-        } catch (APIException $ex) {
-            $this->handleTapiException($ex);
-        }
-        //parent::showNotes($user->id);
 
-        $this->setLevelCaptions(["2" => ["caption" => $user->displayName, "link" => $this->link("Team:player", $user->webName)]]);
+    public function renderPlayer($player)
+    {
+        /* @var $user User */
+        $user = $this->userManager->getById($this->parseIdFromWebname($player));
+
+        $this->setLevelCaptions(["2" => ["caption" => $user->getDisplayName(), "link" => $this->link("Team:player", $user->getWebName())]]);
 
         $this->template->player = $user;
-        $this->template->canUpdate = $this->getUser()->isAllowed("user", "canUpdate") || $user->id == $this->getUser()->getId();
-        
+        $this->template->canUpdate = $this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("USR_UPDATE")) || $user->getId() == $this->getUser()->getId();
+
         $this->template->allRoles = $this->getAllRoles();
     }
 
