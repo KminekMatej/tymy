@@ -4,8 +4,8 @@ namespace Tymy\App\Presenters;
 
 use Nette\Application\Responses\JsonResponse;
 use Nette\Utils\DateTime;
-use Tapi\Exception\APIException;
-use Tracy\Debugger;
+use Tymy\Module\Attendance\Manager\AttendanceManager;
+use Tymy\Module\Attendance\Manager\HistoryManager;
 use Tymy\Module\Attendance\Manager\StatusManager;
 use Tymy\Module\Attendance\Model\Attendance;
 use Tymy\Module\Attendance\Model\Status;
@@ -17,10 +17,6 @@ use Tymy\Module\User\Model\User;
 
 class EventPresenter extends SecuredPresenter
 {
-    private $eventHistorian;
-    private $attendanceConfirmer;
-    private $attendancePlanner;
-
     /** @inject */
     public EventManager $eventManager;
 
@@ -29,6 +25,12 @@ class EventPresenter extends SecuredPresenter
 
     /** @inject */
     public StatusManager $statusManager;
+
+    /** @inject */
+    public AttendanceManager $attendanceManager;
+
+    /** @inject */
+    public HistoryManager $historyManager;
 
     public function startup()
     {
@@ -123,24 +125,24 @@ class EventPresenter extends SecuredPresenter
             $attArray["PRE"][$status->getCode()] = [];
         }
         $attArray["PRE"]["UNKNOWN"] = [];
-        
+
         $this->template->resultsClosed = false;
         foreach ($event->getAttendance() as $attendance) {
             /* @var $attendance Attendance */
-            if (!array_key_exists($attendance->getUserId(), $users)){
+            if (!array_key_exists($attendance->getUserId(), $users)) {
                 continue;
             }
-            
-            if($attendance->getPostStatus() !== null){  //some attendance result has been aready filled, do not show buttons on default
+
+            if ($attendance->getPostStatus() !== null) {  //some attendance result has been aready filled, do not show buttons on default
                 $this->template->resultsClosed = true;
             }
-            
+
             /* @var $user User */
             $user = $users[$attendance->getUserId()];
-            if ($user->getStatus() != User::STATUS_PLAYER){
+            if ($user->getStatus() != User::STATUS_PLAYER) {
                 continue; // display only players on event detail
             }
-            
+
             $gender = $user->getGender();
             //$user->preDescription = $attendance->preDescription;
             $mainKey = "PRE";
@@ -203,15 +205,13 @@ class EventPresenter extends SecuredPresenter
 
     public function handleAttendance($id, $code, $desc)
     {
-        try {
-            $this->attendancePlanner->init()
-                    ->setId($id)
-                    ->setPreStatus($code)
-                    ->setPreDescription($desc)
-                    ->perform();
-        } catch (APIException $ex) {
-            $this->handleTapiException($ex, "this");
-        }
+        $this->attendanceManager->create([
+            "userId" => $this->user->getId(),
+            "eventId" => $id,
+            "preStatus" => $code,
+            "preDescription" => $desc
+        ]);
+
         if ($this->isAjax()) {
             $this->redrawControl("attendanceWarning");
             $this->redrawControl("attendanceTabs");
@@ -222,13 +222,10 @@ class EventPresenter extends SecuredPresenter
     public function handleAttendanceResult($id)
     {
         $results = $this->getRequest()->getPost()["resultSet"];
-        try {
-            $this->attendanceConfirmer->init()
-                    ->setId($id)
-                    ->setPostStatuses($results)
-                    ->perform();
-        } catch (APIException $ex) {
-            $this->handleTapiException($ex, "this");
+
+        foreach ($results as $postStatusData) {
+            $postStatusData["eventId"] = $id;
+            $this->attendanceManager->create($postStatusData);
         }
         if ($this->isAjax()) {
             $this->redrawControl("attendanceTabs");
@@ -259,8 +256,7 @@ class EventPresenter extends SecuredPresenter
 
     private function loadEventHistory($eventId)
     {
-        $histories = $this->eventHistorian->init()->setId($eventId)->getData();
+        $this->template->histories = $this->historyManager->getEventHistory($eventId);
         $this->template->emptyStatus = (object) ["code" => "", "caption" => "Nezadáno"];
-        $this->template->histories = $histories;
     }
 }
