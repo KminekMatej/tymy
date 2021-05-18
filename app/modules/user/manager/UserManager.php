@@ -691,7 +691,13 @@ class UserManager extends BaseManager
                         ->count("id");
     }
     
-    public function getCounts(array $users)
+    /**
+     * Get counts of supplied users, based on (mostly) status criteria
+     * 
+     * @param User[] $users
+     * @return array in the form of ["ALL" => (int),"NEW" => (int),"PLAYER" => (int),"NEW:PLAYER" => (int),"MEMBER" => (int),"SICK" => (int),"DELETED" => (int),"INIT" => (int)]
+     */
+    public function getCounts(array $users): array
     {
         $counts = [
             "ALL" => 0,
