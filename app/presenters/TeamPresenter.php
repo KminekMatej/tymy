@@ -76,25 +76,20 @@ class TeamPresenter extends SecuredPresenter
 
     public function renderDefault()
     {
-        //parent::showNotes();
-        try {
-            $users = $this->userList->init()->setUserType($this->userType)->getData();
-            $allMails = [];
-            if ($users) {
-                foreach ($users as $u) {
-                    if (property_exists($u, "email")) {
-                        $allMails[] = $u->email;
-                    }
+        $users = $this->userManager->getByStatus($this->userType);
+        $allMails = [];
+        if ($users) {
+            foreach ($users as $u) {
+                if ($u->getEmail()) {
+                    $allMails[] = $u->getEmail();
                 }
-            } else {
-                $this->flashMessage($this->translator->translate("common.alerts.nobodyFound") . "!");
             }
-
-            $this->template->users = $users;
-            $this->template->allMails = join(",", $allMails);
-        } catch (APIException $ex) {
-            $this->handleTapiException($ex);
+        } else {
+            $this->flashMessage($this->translator->translate("common.alerts.nobodyFound") . "!");
         }
+
+        $this->template->users = $users;
+        $this->template->allMails = join(",", $allMails);
     }
 
     public function renderNew($player = null)
