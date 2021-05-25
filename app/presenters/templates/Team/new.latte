@@ -56,22 +56,22 @@
                                         <th>{_team.gender}:</th><td>
                                             <select n:class="col-3, form-control, in_array('gender',$player->errFls) ? is-invalid" style="min-width: 80px" name="gender" data-value>
                                                 <option value="UNKNOWN">{_common.chooseSex} ↓</option>
-                                                <option value="MALE" n:attr="selected => $player->gender=='MALE'">{_team.male, 1}</option>
-                                                <option value="FEMALE" n:attr="selected => $player->gender=='FEMALE'">{_team.female, 1}</option>
+                                                <option value="MALE" n:attr="selected => $player->getGender()=='MALE'">{_team.male, 1}</option>
+                                                <option value="FEMALE" n:attr="selected => $player->getGender()=='FEMALE'">{_team.female, 1}</option>
                                             </select>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th>{_team.firstName}:</th><td><input name="firstName" data-value type="text" value="{$player->firstName}" n:class="col-6, form-control, in_array('firstName',$player->errFls) ? is-invalid" /></td>
+                                        <th>{_team.firstName}:</th><td><input name="firstName" data-value type="text" value="{$player->getFirstName()}" n:class="col-6, form-control, in_array('firstName',$player->errFls) ? is-invalid" /></td>
                                     </tr>
                                     <tr>
-                                        <th>{_team.lastName}:</th><td><input name="lastName" data-value type="text" value="{$player->lastName}" n:class="col-6, form-control, in_array('lastName',$player->errFls) ? is-invalid" /></td>
+                                        <th>{_team.lastName}:</th><td><input name="lastName" data-value type="text" value="{$player->getLastName()}" n:class="col-6, form-control, in_array('lastName',$player->errFls) ? is-invalid" /></td>
                                     </tr>
                                     <tr>
-                                        <th>{_team.phone}:</th><td><input name="phone" data-value type="text" value="{$player->phone}" n:class="col-6, form-control, in_array('phone',$player->errFls) ? is-invalid" /></td>
+                                        <th>{_team.phone}:</th><td><input name="phone" data-value type="text" value="{$player->getPhone()}" n:class="col-6, form-control, in_array('phone',$player->errFls) ? is-invalid" /></td>
                                     </tr>
                                     <tr>
-                                        <th>{_team.email}:</th><td><div class="input-group"><input name="email" data-value=" " type="text" value="{$player->email}" n:class="col-6, form-control, in_array('email',$player->errFls) ? is-invalid" style="min-width: 200px"/><div class="input-group-append"><span class="input-group-text"><a n:tag-if="$player->email != ''" href="mailto:{$player->email}"><i class="fa fa-envelope" aria-hidden="true"></i></a></span></div></div></td>
+                                        <th>{_team.email}:</th><td><div class="input-group"><input name="email" data-value=" " type="text" value="{$player->getEmail()}" n:class="col-6, form-control, in_array('email',$player->errFls) ? is-invalid" style="min-width: 200px"/><div class="input-group-append"><span class="input-group-text"><a n:tag-if="$player->getEmail() != ''" href="mailto:{$player->getEmail()}"><i class="fa fa-envelope" aria-hidden="true"></i></a></span></div></div></td>
                                     </tr>
                                     <tr>
                                         <th>{_team.birthDate}:</th><td><input name="birthDate" data-value type="date" value="{$player->getBirthDate()}" n:class="col-6, form-control, in_array('birthDate',$player->errFls) ? is-invalid" /></td>
@@ -91,10 +91,10 @@
                                         <th>{_team.language}:</th>
                                         <td>
                                             <select n:class="col-3, form-control, in_array('language',$player->errFls) ? is-invalid"  style="min-width: 120px" name="language" data-value>
-                                                <option value="CZ" n:attr="selected => $player->language=='CZ'">Česky</option>
-                                                <option value="EN" n:attr="selected => $player->language=='EN'">English</option>
-                                                <option value="FR" n:attr="selected => $player->language=='FR'">Le français</option>
-                                                <option value="PL" n:attr="selected => $player->language=='PL'">Polski</option>
+                                                <option value="CZ" n:attr="selected => $player->getLanguage()=='CZ'">Česky</option>
+                                                <option value="EN" n:attr="selected => $player->getLanguage()=='EN'">English</option>
+                                                <option value="FR" n:attr="selected => $player->getLanguage()=='FR'">Le français</option>
+                                                <option value="PL" n:attr="selected => $player->getLanguage()=='PL'">Polski</option>
                                             </select>
                                         </td>
                                     </tr>
@@ -104,10 +104,10 @@
                             <div class="tab-pane fade" id="prihlaseni" role="tabpanel">
                                 <table class="table">
                                     <tr>
-                                        <th>{_team.callName}:</th><td><input name="callName" data-value type="text" value="{$player->callName}" n:class="col-6, form-control, in_array('callName',$player->errFls) ? is-invalid" /></td>
+                                        <th>{_team.callName}:</th><td><input name="callName" data-value type="text" value="{$player->getCallname()}" n:class="col-6, form-control, in_array('callName',$player->errFls) ? is-invalid" /></td>
                                     </tr>
                                     <tr>
-                                        <th>{_team.canEditCallName}:</th><td><input name="canEditCallName" data-value type="checkbox" n:attr='checked => $player->canEditCallName' class="form-control form-check col-6" /></td>
+                                        <th>{_team.canEditCallName}:</th><td><input name="canEditCallName" data-value type="checkbox" n:attr='checked => $player->getCanEditCallname()' class="form-control form-check col-6" /></td>
                                     </tr>
                                     <tr>
                                         <th>{_team.login}:</th><td><input name="login" data-value type="text" class="col-6 form-control is-invalid" /></td>
@@ -119,7 +119,7 @@
                                         <th>{_team.newPasswordAgain}:</th><td><input name="password-check" type="password" value="" class="form-control col-6 is-invalid" /></td>
                                     </tr>
                                     <tr>
-                                        <th>{_team.canLogin}:</th><td><input name="canLogin" data-value type="checkbox" n:attr='checked => $player->canLogin' class="form-control from-control-lg form-check col-6" /></td>
+                                        <th>{_team.canLogin}:</th><td><input name="canLogin" data-value type="checkbox" n:attr='checked => $player->getCanLogin()' class="form-control from-control-lg form-check col-6" /></td>
                                     </tr>
                                 </table>
                             </div>
@@ -130,16 +130,16 @@
                                         <th>{_team.status}:</th>
                                         <td>
                                             <select n:class="col-3, form-control, in_array('status',$player->errFls) ? is-invalid" style="min-width: 120px" name="status" data-value>
-                                                <option value="INIT" selected n:if="$player->status=='INIT'">{_team.INIT,1}</option>
-                                                <option value="PLAYER" n:attr="selected => $player->status=='PLAYER'">{_team.PLAYER,1}</option>
-                                                <option value="SICK" n:attr="selected => $player->status=='SICK'">{_team.SICK,1}</option>
-                                                <option value="MEMBER" n:attr="selected => $player->status=='MEMBER'">{_team.MEMBER,1}</option>
-                                                <option value="DELETED" n:attr="selected => $player->status=='DELETED'">{_team.DELETED,1}</option>
+                                                <option value="INIT" selected n:if="$player->getStatus()=='INIT'">{_team.INIT,1}</option>
+                                                <option value="PLAYER" n:attr="selected => $player->getStatus()=='PLAYER'">{_team.PLAYER,1}</option>
+                                                <option value="SICK" n:attr="selected => $player->getStatus()=='SICK'">{_team.SICK,1}</option>
+                                                <option value="MEMBER" n:attr="selected => $player->getStatus()=='MEMBER'">{_team.MEMBER,1}</option>
+                                                <option value="DELETED" n:attr="selected => $player->getStatus()=='DELETED'">{_team.DELETED,1}</option>
                                             </select>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th>{_team.jerseyNumber}:</th><td><input name="jerseyNumber" data-value type="number" value="{$player->jerseyNumber}" n:class="col-3, form-control, in_array('jerseyNumber',$player->errFls) ? is-invalid" /></td>
+                                        <th>{_team.jerseyNumber}:</th><td><input name="jerseyNumber" data-value type="number" value="{$player->getJerseyNumber()}" n:class="col-3, form-control, in_array('jerseyNumber',$player->errFls) ? is-invalid" /></td>
                                     </tr>
                                 </table>
                             </div>
@@ -147,13 +147,13 @@
                             <div class="tab-pane fade" id="adresa" role="tabpanel">
                                 <table class="table">
                                     <tr>
-                                        <th>{_team.street}:</th><td><input name="street" data-value type="text" value="{$player->street}" n:class="col-6, form-control, in_array('street',$player->errFls) ? is-invalid" /></td>
+                                        <th>{_team.street}:</th><td><input name="street" data-value type="text" value="{$player->getStreet()}" n:class="col-6, form-control, in_array('street',$player->errFls) ? is-invalid" /></td>
                                     </tr>
                                     <tr>
-                                        <th>{_team.city}:</th><td><input name="city" data-value type="text" value="{$player->city}" n:class="col-6, form-control, in_array('city',$player->errFls) ? is-invalid" /></td>
+                                        <th>{_team.city}:</th><td><input name="city" data-value type="text" value="{$player->getCity()}" n:class="col-6, form-control, in_array('city',$player->errFls) ? is-invalid" /></td>
                                     </tr>
                                     <tr>
-                                        <th>{_team.zipCode}:</th><td><input name="zipCode" data-value type="text" value="{$player->zipCode}" n:class="col-3, form-control, in_array('zipCode',$player->errFls) ? is-invalid" /></td>
+                                        <th>{_team.zipCode}:</th><td><input name="zipCode" data-value type="text" value="{$player->getZipCode()}" n:class="col-3, form-control, in_array('zipCode',$player->errFls) ? is-invalid" /></td>
                                     </tr>
                                 </table>
 
@@ -161,9 +161,8 @@
 
                             <div class="tab-pane fade" id="role" role="tabpanel">
                                 {foreach $allRoles as $role}
-                                    {var $hasRole = property_exists($player, 'roles') && in_array($role->code,$player->roles)}
-                                    {var $userRoles = property_exists($player, 'roles') ? $player->roles : []}
-                                    <button name="roles[{$role->code}]" n:class="btn,$role->class,$hasRole ? active" style="min-width:69px" data-role="{$role->code}" data-value onclick="checkRole(this)">{$role->getCaption()}</button>
+                                    {var $hasRole = in_array($role->code, $player->getRoles())}
+                                    <button name="roles[{$role->code}]" n:class="btn,$role->class,$hasRole ? active" style="min-width:69px" data-role="{$role->code}" data-value onclick="checkRole(this)">{$role->caption}</button>
                                 {/foreach}
 
                             </div>

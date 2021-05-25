@@ -17,9 +17,9 @@
             <div n:foreach="$users as $u" class="col-md-3 my-2">
                 <div class="card sh-box set-box">
                     <a href="{plink Team:player $u->getWebName()}">
-                        <div class="card-header py-1 {$u->gender}">
-                            <span class="name">{$u->getDisplayName()}{if $u->jerseyNumber != ""} (#{$u->jerseyNumber}){/if}</span>
-                            <span n:if="$u->isNew" class="badge badge-success float-right">{_common.new}</span>
+                        <div class="card-header py-1 {$u->getGender()}">
+                            <span class="name">{$u->getDisplayName()}{if $u->getJerseyNumber() != ""} (#{$u->getJerseyNumber()}){/if}</span>
+                            <span n:if="$u->getIsNew()" class="badge badge-success float-right">{_common.new}</span>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -27,13 +27,13 @@
                                     <img class="user_pic" src="{$tymyRoot}/{$u->getPictureUrl()}" />
                                 </div>
                                 <div class="col-9">
-                                    <p class="card-text"><strong n:if="property_exists($u, 'fullName')">{$u->getFullName()}</strong></p>
+                                    <p class="card-text"><strong n:if="$u->getFullName()">{$u->getFullName()}</strong></p>
                                 </div>
                             </div>
                         </div>
                     </a>
                     <div class="btnbox">
-                        <a href="mailto:{$u->email}" n:if="property_exists($u, 'email')" class="btn btn-sm btn-light btn-light-bordered" title="{_team.newMailTo} {$u->email}" role="button" aria-pressed="true"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+                        <a href="mailto:{$u->getEmail()}" n:if="$u->getEmail()" class="btn btn-sm btn-light btn-light-bordered" title="{_team.newMailTo} {$u->getEmail()}" role="button" aria-pressed="true"><i class="fa fa-envelope" aria-hidden="true"></i></a>
                     </div>
                 </div>
             </div>

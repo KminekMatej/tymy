@@ -60,7 +60,7 @@
                                 </div>
                                 <div class="col-9">
                                     <div class="btn-group">
-                                        <button name="roles[{$role->code}]" data-value="-1" n:foreach="$roles as $role" data-key="{$role->code}" class="btn btn-outline-secondary {if !empty($rolesRule) && in_array($role->code, $perm->{$rolesRule.'Roles'})}active{/if}" onclick="roleCheck(this)">{$role->getCaption()}</button>
+                                        <button name="roles[{$role->code}]" data-value="-1" n:foreach="$roles as $role" data-key="{$role->code}" class="btn btn-outline-secondary {if !empty($rolesRule) && in_array($role->code, $perm->{$rolesRule.'Roles'})}active{/if}" onclick="roleCheck(this)">{$role->caption}</button>
                                     </div>
                                 </div>
                             </td>
