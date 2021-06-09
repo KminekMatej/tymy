@@ -13,6 +13,7 @@ use Tymy\Module\Poll\Mapper\PollMapper;
  */
 class Poll extends BaseModel
 {
+
     public const MODULE = "poll";
     public const TABLE = "ask_quests";
     public const STATUS_DESIGN = "DESIGN";
@@ -49,6 +50,8 @@ class Poll extends BaseModel
 
     /** @var Vote[] */
     private array $votes = [];
+    private array $orderedVotes = [];
+    private array $myVotes = [];
     private bool $canSeeResults = false;
     private bool $canVote = false;
     private bool $canAlienVote = false;
@@ -156,6 +159,7 @@ class Poll extends BaseModel
         return $this->options;
     }
 
+    /** @return Vote[] */
     public function getVotes(): array
     {
         return $this->votes;
@@ -184,6 +188,16 @@ class Poll extends BaseModel
     public function getVotePending(): bool
     {
         return $this->votePending;
+    }
+
+    public function getOrderedVotes(): array
+    {
+        return $this->orderedVotes;
+    }
+
+    public function getMyVotes(): array
+    {
+        return $this->myVotes;
     }
 
     public function setCreatedById(int $createdById)
@@ -341,11 +355,31 @@ class Poll extends BaseModel
         $this->votePending = $votePending;
     }
 
+    public function setOrderedVotes(array $orderedVotes): void
+    {
+        $this->orderedVotes = $orderedVotes;
+    }
+
+    public function setMyVotes(array $myVotes): void
+    {
+        $this->myVotes = $myVotes;
+    }
+
 //adders
 
-    public function addVote(Vote $vote)
+    public function addVote(Vote $vote, int $userId)
     {
         $this->votes[] = $vote;
+
+        if (!array_key_exists($vote->getUserId(), $this->orderedVotes)) {
+            $this->orderedVotes[$vote->getUserId()] = [];
+        }
+        $this->orderedVotes[$vote->getUserId()][$vote->getOptionId()] = $vote;
+
+        if (!$this->getAnonymousResults() && $vote->getUserId() == $userId) {
+            $this->myVotes[$vote->getOptionId()] = $vote;
+        }
+
         return $this;
     }
 
@@ -376,4 +410,5 @@ class Poll extends BaseModel
             "voted" => $this->getVoted(),
         ];
     }
+
 }

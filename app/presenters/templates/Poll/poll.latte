@@ -15,7 +15,7 @@
 
 {block content}
 
-<div class="container poll" n:attr="data-min-items => isset($poll->getMinItems()) ? $poll->getMinItems() : 0, data-max-items=>isset($poll->getMaxItems()) ? $poll->getMaxItems() : 999" data-show-results="{$poll->getShowResults()}" data-radio-layout="{$poll->getRadio() ? 'true' : 'false'}">
+<div class="container poll" n:attr="data-min-items => $poll->getMinItems() ?: 0, data-max-items=> $poll->getMaxItems() ?: 999" data-show-results="{$poll->getShowResults()}" data-radio-layout="{$radioLayout ? 'true' : 'false'}">
     <div class="row">
         <div class="col my-3">
             <div class="card sh-box">
@@ -23,8 +23,8 @@
                     <div class="row">
                         <div class="col">
                             <i class="fa fa-info-circle mx-3" aria-hidden="true"></i>
-                            <span n:ifset="$poll->getMinItems()" class="badge badge-info"><strong>{_poll.minItems}: {$poll->getMinItems()}</strong></span>
-                            <span n:ifset="$poll->getMaxItems()" class="badge badge-warning"><strong>{_poll.maxItems}: {$poll->getMaxItems()}</strong></span>
+                            <span n:if="$poll->getMinItems()" class="badge badge-info"><strong>{_poll.minItems}: {$poll->getMinItems()}</strong></span>
+                            <span n:if="$poll->getMaxItems()" class="badge badge-warning"><strong>{_poll.maxItems}: {$poll->getMaxItems()}</strong></span>
                             <span n:class="badge,$poll->getChangeableVotes() ? badge-success : badge-danger"><strong>{if $poll->getChangeableVotes()}{_poll.changeableVotes}{else}{_poll.unchangeableVotes}{/if}</strong></span>
                             <span n:class="badge,$poll->getAnonymousResults() ? badge-success : badge-danger"><strong>{if $poll->getAnonymousResults()}{_poll.anonymousResults}{else}{_poll.nonanonymousResults}{/if}</strong></span>
                             {if $poll->getShowResults() == 'AFTER_VOTE'}
@@ -67,13 +67,13 @@
                     <div class="container" n:if="$poll->getCanVote()">
                         <div class="row">
                             <div n:foreach="$poll->getOptions() as $opt" class="col-3 py-3 option" id="option-{$opt->getId()}">
-                                <h5 n:if="!$poll->getRadio()">{$opt->getCaption()}</h5>
+                                <h5 n:if="!$radioLayout">{$opt->getCaption()}</h5>
                                 <input n:if="$opt->getType() == 'TEXT'" type="text" value="{ifset $poll->getMyVotes()[$opt->getId()]}{$poll->getMyVotes()[$opt->getId()]->getStringValue()}{/ifset}" class="form-control" />
                                 <input n:if="$opt->getType() == 'NUMBER'" type="number" value="{ifset $poll->getMyVotes()[$opt->getId()]}{$poll->getMyVotes()[$opt->getId()]->getNumericValue()}{/ifset}" class="form-control" />
                                 <div n:if="$opt->getType() == 'BOOLEAN'" class="btn-group">
-                                    <button n:if="$poll->getRadio()" n:class="btn,btn-outline-warning,isset($poll->getMyVotes()[$opt->getId()]) && $poll->getMyVotes()[$opt->getId()]->getBooleanValue() ? active" style="min-width:69px" data-value="true" onclick="checkBool(this)">{$opt->getCaption()}</button>
-                                    <button n:if="!$poll->getRadio()" n:class="btn,btn-outline-success,isset($poll->getMyVotes()[$opt->getId()]) && $poll->getMyVotes()[$opt->getId()]->getBooleanValue() ? active" style="width:69px" data-value="true" onclick="checkBool(this)">{_common.yes|upper}</button>
-                                    <button n:if="!$poll->getRadio()" n:class="btn,btn-outline-danger,isset($poll->getMyVotes()[$opt->getId()]) && !$poll->getMyVotes()[$opt->getId()]->getBooleanValue() ? active" style="width:69px" data-value="false" onclick="checkBool(this)">{_common.no|upper}</button>
+                                    <button n:if="$radioLayout" n:class="btn,btn-outline-warning,isset($poll->getMyVotes()[$opt->getId()]) && $poll->getMyVotes()[$opt->getId()]->getBooleanValue() ? active" style="min-width:69px" data-value="true" onclick="checkBool(this)">{$opt->getCaption()}</button>
+                                    <button n:if="!$radioLayout" n:class="btn,btn-outline-success,isset($poll->getMyVotes()[$opt->getId()]) && $poll->getMyVotes()[$opt->getId()]->getBooleanValue() ? active" style="width:69px" data-value="true" onclick="checkBool(this)">{_common.yes|upper}</button>
+                                    <button n:if="!$radioLayout" n:class="btn,btn-outline-danger,isset($poll->getMyVotes()[$opt->getId()]) && !$poll->getMyVotes()[$opt->getId()]->getBooleanValue() ? active" style="width:69px" data-value="false" onclick="checkBool(this)">{_common.no|upper}</button>
                                 </div>
                             </div>
                         </div>
@@ -107,10 +107,10 @@
                             </th>
                                 {foreach $poll->getOptions() as $option}
                                 {ifset $vote[$option->getId()]}
-                                    <td n:ifset="$vote[$option->getId()]->getNumericValue()" data-option-type="{$option->getType()}" data-option-id="{$option->getId()}" data-option-value="{$vote[$option->getId()]->getNumericValue()}">{$vote[$option->getId()]->getNumericValue()}</td>
-                                    <td n:ifset="$vote[$option->getId()]->getStringValue()" data-option-type="{$option->getType()}" data-option-id="{$option->getId()}" data-option-value="{$vote[$option->getId()]->getStringValue()}">{$vote[$option->getId()]->getStringValue()}</td>
-                                    <td n:ifset="$vote[$option->getId()]->getBooleanValue()" n:if="$poll->getRadio()" data-option-type="{$option->getType()}" data-option-id="{$option->getId()}" data-option-value="true"><span n:class="badge, badge-warning">{$option->getCaption()}</span></td>
-                                    <td n:ifset="$vote[$option->getId()]->getBooleanValue()" n:if="!$poll->getRadio()" data-option-type="{$option->getType()}" data-option-id="{$option->getId()}" data-option-value="{$vote[$option->getId()]->getBooleanValue() ? 'true' : 'false'}"><span n:class="badge, $vote[$option->getId()]->getBooleanValue() ? 'badge-success' : 'badge-danger' ">{if $vote[$option->getId()]->getBooleanValue()}{_common.yes|upper}{else}{_common.no|upper}{/if}</span></td>
+                                    <td n:if="$vote[$option->getId()]->getNumericValue()" data-option-type="{$option->getType()}" data-option-id="{$option->getId()}" data-option-value="{$vote[$option->getId()]->getNumericValue()}">{$vote[$option->getId()]->getNumericValue()}</td>
+                                    <td n:if="$vote[$option->getId()]->getStringValue()" data-option-type="{$option->getType()}" data-option-id="{$option->getId()}" data-option-value="{$vote[$option->getId()]->getStringValue()}">{$vote[$option->getId()]->getStringValue()}</td>
+                                    <td n:if="$vote[$option->getId()]->getBooleanValue() && $radioLayout" data-option-type="{$option->getType()}" data-option-id="{$option->getId()}" data-option-value="true"><span n:class="badge, badge-warning">{$option->getCaption()}</span></td>
+                                    <td n:if="$vote[$option->getId()]->getBooleanValue() && !$radioLayout" data-option-type="{$option->getType()}" data-option-id="{$option->getId()}" data-option-value="{$vote[$option->getId()]->getBooleanValue() ? 'true' : 'false'}"><span n:class="badge, $vote[$option->getId()]->getBooleanValue() ? 'badge-success' : 'badge-danger' ">{if $vote[$option->getId()]->getBooleanValue()}{_common.yes|upper}{else}{_common.no|upper}{/if}</span></td>
                                 {else}
                                     <td data-option-type="{$option->getType()}" data-option-id="{$option->getId()}" data-option-value></td>
                                 {/ifset}

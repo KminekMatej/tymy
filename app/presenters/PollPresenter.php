@@ -33,6 +33,7 @@ class PollPresenter extends SecuredPresenter
         $this->setLevelCaptions(["2" => ["caption" => $poll->getCaption(), "link" => $this->link("Poll:poll", $poll->getWebName())]]);
 
         $this->template->poll = $poll;
+        $this->template->radioLayout = $poll->getMinItems() == 1 && $poll->getMaxItems() == 1;
 
         $this->template->resultsDisplayed = $this->translator->translate("poll.resultsDisplayed");
         $this->template->resultsDisplayedAfterVote = $this->translator->translate("poll.resultsDisplayedAfterVote");
