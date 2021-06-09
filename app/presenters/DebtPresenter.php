@@ -5,14 +5,10 @@ namespace Tymy\App\Presenters;
 use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
 use QrCode\QRcode;
-use Tapi\DebtCreateResource;
-use Tapi\DebtDeleteResource;
-use Tapi\DebtDetailResource;
-use Tapi\DebtEditResource;
-use Tapi\DebtListResource;
-use Tapi\Exception\APIException;
 use Tapi\TapiObject;
-use Tracy\Debugger;
+use Tymy\Module\Debt\Manager\DebtManager;
+use Tymy\Module\Debt\Model\Debt;
+use Tymy\Module\Permission\Model\Privilege;
 use const QR_ECLEVEL_H;
 use function iban_set_checksum;
 
@@ -21,92 +17,83 @@ use function iban_set_checksum;
  *
  * @author Matej Kminek <matej.kminek@attendees.eu>, 10. 2. 2020
  */
-class DebtPresenter extends SecuredPresenter {
-    public $debtList;
-    public $debtDetail;
-    public $debtCreator;
-    public $debtEditor;
-    public $debtDeleter;
+class DebtPresenter extends SecuredPresenter
+{
 
-    public function startup() {
+    /** @inject */
+    public DebtManager $debtManager;
+
+    public function startup()
+    {
         parent::startup();
         $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("debt.debt", 2), "link" => $this->link("Debt:")]]);
     }
 
-    public function renderDefault() {
-        try {
-            $this->debtList->init()
-                    ->getData();
-        } catch (APIException $ex) {
-            $this->handleTapiException($ex);
-        }
-
-        $this->template->debts = $this->debtList->getData();
+    public function renderDefault()
+    {
+        $this->template->debts = $this->debtManager->getListUserAllowed();
     }
 
-    public function renderDebtImg($dluh) {
+    public function renderDebtImg($dluh)
+    {
+        $debtId = $this->parseIdFromWebname($dluh);
 
-        try {
-            $debtId = $this->parseIdFromWebname($dluh);
-            $this->debtDetail->init()
-                    ->setId($debtId)
-                    ->getData();
+        /* @var $debt Debt */
+        $debt = $this->debtManager->getById($debtId);
+        $userList = $this->userManager->getByIdWithTeam();
 
-            $this->userList->init()->getData();
-        } catch (APIException $ex) {
-            $this->handleTapiException($ex);
-        }
+        $payeeCallName = $debt->getPayeeId() == 0 ? "TEAM" : $userList[$debt->getPayeeId()]->getDisplayName();
+        $payeeMail = $debt->getPayeeId() ? $userList[$debt->getPayeeId()]->getEmail() : "";
 
-        $debt = $this->debtDetail->getData();
-        $userList = $this->userList->getByIdWithTeam();
-
-        $payeeCallName = $debt->payeeId == 0 ? "TEAM" : $userList[$debt->payeeId]->displayName;
-        $payeeMail = $debt->payeeId ? $userList[$debt->payeeId]->email : "";
-
-        $message = empty($debt->description) ? $debt->caption : $debt->caption . " - " . $debt->description;
-        $paymentString = $this->generateQRCodeString($payeeCallName, $payeeMail, $debt->payeeAccountNumber, $debt->amount, $debt->varcode, $message, $debt->currencyIso, $debt->countryIso);
+        $paymentString = $this->generateQRCodeString($payeeCallName, $payeeMail, $debt->getPayeeAccountNumber(), $debt->getAmount(), $debt->getVarcode(), $debt->getCaption(), $debt->getCurrencyIso(), $debt->getCountryIso());
         QRcode::png($paymentString, false, QR_ECLEVEL_H, 4, 4);
     }
-    
-    public function renderNew() {
 
-        try {
-            $this->userList->init()->getData();
-        } catch (APIException $ex) {
-            $this->handleTapiException($ex);
-        }
-        
-        $me = $this->userList->getMe();
-        Debugger::barDump($me);
-        
-        $newDebt = (object)[
-            "id" => null,
-            "amount" => 1,
-            "currencyIso" => "CZK",
-            "countryIso" => "CZ",
-            "caption" => "",
-            "created" => (new DateTime())->format(TapiObject::MYSQL_DATE),
-            "debtorId" => null,
-            "debtorType" => "user",
-            "payeeId" => $me->id,
-            "payeeType" => "user",
-            "debtDate" => (new DateTime())->format(TapiObject::MYSQL_DATE),
-            "payeeAccountNumber" => "",
-            "varcode" => null,
-            "canRead" => true,
-            "canEdit" => true,
-            "canSetSentDate" => false,
-            "paymentSent" => null,
-            "paymentReceived" => null,
+    public function renderNew()
+    {
+        $newDebt = (object) [
+                    "id" => null,
+                    "amount" => 1,
+                    "currencyIso" => "CZK",
+                    "countryIso" => "CZ",
+                    "caption" => "",
+                    "created" => (new DateTime())->format(TapiObject::MYSQL_DATE),
+                    "debtorId" => null,
+                    "debtorType" => "user",
+                    "payeeId" => $this->user->getId(),
+                    "payeeType" => "user",
+                    "debtDate" => (new DateTime())->format(TapiObject::MYSQL_DATE),
+                    "payeeAccountNumber" => "",
+                    "varcode" => null,
+                    "canRead" => true,
+                    "canEdit" => true,
+                    "canSetSentDate" => false,
+                    "paymentSent" => null,
+                    "paymentReceived" => null,
         ];
         $this->template->debt = $newDebt;
-        
-        $this->template->userListWithTeam = $this->userList->getByIdWithTeam();
-        $this->template->payeeList = $this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("DEBTS_TEAM")) ? $this->userList->getMeWithTeam() : $this->userList->getMe();
+
+        $this->template->userListWithTeam = $this->userManager->getByIdWithTeam();
+        $this->template->payeeList = $this->getPayeeList();
         $this->template->countryList = $this->getCountryList();
     }
 
-    private function generateQRCodeString($payeeCallName, $payeeEmail, $accountNumber, $amount, $varcode, $message, $currencyISO = "CZK", $countryISO = "CZ") {
+    /**
+     * Get list of possible payees - always Me, but if user is permitted to manage team debts, also TEAM mocked user
+     * 
+     * @return array
+     */
+    private function getPayeeList(): array
+    {
+        $payeeList = [$this->userManager->getById($this->user->getId())];
+        if ($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("DEBTS_TEAM"))) {
+            $payeeList[] = $this->userManager->mockTeamUser();
+        }
+        return $payeeList;
+    }
+
+    private function generateQRCodeString($payeeCallName, $payeeEmail, $accountNumber, $amount, $varcode, $message, $currencyISO = "CZK", $countryISO = "CZ")
+    {
         $accPrefix = null;
         $accountNumberBody = $accountNumber;
 
@@ -157,73 +144,53 @@ class DebtPresenter extends SecuredPresenter {
         return rtrim($paymentString, "*");
     }
 
-    public function renderDebt($dluh) {
-        try {
-            $debtId = $this->parseIdFromWebname($dluh);
-            $this->debtDetail->init()
-                    ->setId($debtId)
-                    ->getData();
+    public function renderDebt($dluh)
+    {
+        $debtId = $this->parseIdFromWebname($dluh);
 
-            $this->userList->init()->getData();
-        } catch (APIException $ex) {
-            $this->handleTapiException($ex);
-        }
-
-        $debt = $this->debtDetail->getData();
+        /* @var $debt Debt */
+        $debt = $this->debtManager->getById($debtId);
         $this->template->debt = $debt;
-        $this->template->userListWithTeam = $this->userList->getByIdWithTeam();
-        
-        if($debt->canEdit){
-            $this->template->payeeList = $this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("DEBTS_TEAM")) ? $this->userList->getMeWithTeam() : $this->userList->getMe();
+        $this->template->userListWithTeam = $this->userManager->getByIdWithTeam();
+
+        if ($debt->getCanEdit()) {
+            $this->template->payeeList = $this->getPayeeList();
         } else {
-            $this->template->payeeList = $this->userList->getByIdWithTeam();
+            $this->template->payeeList = $this->userManager->getByIdWithTeam();
         }
-        
+
         $this->template->countryList = $this->getCountryList();
     }
-    
-    public function handleDebtCreate(){
+
+    public function handleDebtCreate()
+    {
         $bind = $this->getRequest()->getPost();
-        try {
-            $createdDebt = $this->debtCreator->init()
-                ->setDebt($bind["changes"])
-                ->perform();
-        } catch (APIException $ex) {
-            $this->handleTapiException($ex, "this");
-        }
-        
+
+        $createdDebt = $this->debtManager->create($bind["changes"]);
+
         $this->flashMessage($this->translator->translate("common.alerts.debtAdded"), "success");
-        
-        $this->redirect("Debt:debt", $createdDebt->id);
+
+        $this->redirect("Debt:debt", $createdDebt->getId());
     }
-    
-    public function handleDebtEdit(){
+
+    public function handleDebtEdit()
+    {
         $bind = $this->getRequest()->getPost();
         $this->editDebt($bind);
     }
-    
-    public function handleDebtDelete() {
-        $bind = $this->getRequest()->getPost();
-        try {
-            $this->debtDeleter->init()->setId($bind["id"])->perform();
-            $this->redirect("Homepage:default");
-        } catch (APIException $ex) {
-            $this->handleTapiException($ex, 'this');
-        }
-    }
-    
-    private function editDebt($bind) {
-        try {
-            $this->debtEditor->init()
-                    ->setId($bind["id"])
-                    ->setDebt($bind["changes"])
-                    ->perform();
-        } catch (APIException $ex) {
-            $this->handleTapiException($ex, 'this');
-        }
+
+    public function handleDebtDelete()
+    {
+        $this->debtManager->delete($bind["id"]);
     }
 
-    private function getCountryList() {
+    private function editDebt($bind)
+    {
+        $this->debtManager->update($bind["changes"], $bind["id"]);
+    }
+
+    private function getCountryList()
+    {
         return [
             'AF' => 'Afghánistán',
             'AX' => 'Ålandy',
