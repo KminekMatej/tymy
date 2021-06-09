@@ -293,7 +293,7 @@ class UserManager extends BaseManager
     /**
      * Get userId by email
      *
-     * @param string $login
+     * @param string $email
      * @return bool
      */
     public function getIdByEmail(string $email): ?int
