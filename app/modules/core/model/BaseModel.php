@@ -47,6 +47,7 @@ abstract class BaseModel implements JsonSerializable
     public function setId(int $id)
     {
         $this->id = $id;
+        return $this;
     }
 
     public function getHasMeta(): bool
