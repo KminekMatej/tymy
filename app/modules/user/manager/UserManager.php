@@ -780,7 +780,7 @@ class UserManager extends BaseManager
 
     public function mockTeamUser()
     {
-        return (new User())->setId(0)->setDisplayName("*** TEAM ***");
+        return (new User())->setId(0)->setCallName("*** TEAM ***");
     }
 
 }
