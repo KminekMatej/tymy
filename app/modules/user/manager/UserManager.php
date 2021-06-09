@@ -762,4 +762,25 @@ class UserManager extends BaseManager
 
         return $byTypeAndId;
     }
+
+    /**
+     * Return array of all users, categorized by status and id
+     * @return array in the form of [$status][$id] = $user
+     */
+    public function getByIdWithTeam(): array
+    {
+        $userList = [$this->mockTeamUser()];
+
+        foreach ($this->getList() as $user) {
+            $userList[$user->getId()] = $user;
+        }
+
+        return $userList;
+    }
+
+    public function mockTeamUser()
+    {
+        return (new User())->setId(0)->setDisplayName("*** TEAM ***");
+    }
+
 }
