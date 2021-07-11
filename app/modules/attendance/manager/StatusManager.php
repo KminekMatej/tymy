@@ -92,6 +92,15 @@ class StatusManager extends BaseManager
     {
         return $this->teamManager->getTeamFolder() . "/attend_pics/$statusSetId";
     }
+    
+    /**
+     * Get all status unique status codes
+     * @return array
+     */
+    public function getAllStatusCodes(): array
+    {
+        return $this->database->table(Status::TABLE)->select("DISTINCT(code) AS codes")->fetchPairs(null, "codes");
+    }
 
     protected function allowRead(?int $recordId = null): void
     {
