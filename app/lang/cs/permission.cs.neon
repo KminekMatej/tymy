@@ -8,3 +8,6 @@ newPermission: Vytvořit nové oprávnění
 createPermission: Vytvořit oprávnění
 editPermission: Úprava oprávnění
 results: Dopad oprávnění
+errors:
+    noPermissionExists: Toto oprávnění neexistuje
+    permissionNotExists: Oprávnění %id% neexistuje

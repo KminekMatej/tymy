@@ -1,1 +1,4 @@
 permission: Permission|Permissions
+errors:
+    noPermissionExists: This permission does not exist
+    permissionNotExists: Permission %id% not found

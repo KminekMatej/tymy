@@ -1,1 +1,4 @@
 permission: Autorisation|Autorisations
+errors:
+    noPermissionExists: Aucune autorisation
+    permissionNotExists: "Cette autorisation %id% n'existe pas"

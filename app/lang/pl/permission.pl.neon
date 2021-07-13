@@ -1,1 +1,4 @@
 permission: Uprawnienie|Uprawnienia
+errors:
+    noPermissionExists: Ten kanał nie istnieje
+    permissionNotExists: Kanał %id% nie istnieje
