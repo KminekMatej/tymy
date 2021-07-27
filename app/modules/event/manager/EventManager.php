@@ -365,4 +365,14 @@ class EventManager extends BaseManager
 
         return $monthArray;
     }
+
+    /**
+     * Count all events
+     * @return int
+     */
+    public function countAllEvents()
+    {
+        return $this->database->table(Event::TABLE)->count("id");
+    }
+
 }
