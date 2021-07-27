@@ -156,6 +156,22 @@ class DiscussionManager extends BaseManager
         return $this->mapAll($selector->fetchAll());
     }
 
+    public function getList(?array $idList = null, string $idField = "id", ?int $limit = null, ?int $offset = null): array
+    {
+        $query = "
+            SELECT `discussions`.*, `ds_read`.`last_date` AS `lastVisit`, 
+            (
+                SELECT COUNT(`ds_items`.`id`) 
+                FROM `ds_items` 
+                WHERE `ds_items`.`insert_date` > `ds_read`.`last_date` AND `ds_items`.`ds_id` = `discussions`.`id`
+            ) AS `newInfo` 
+            FROM `discussions` 
+            LEFT JOIN `ds_read` ON `discussions`.`id` = `ds_read`.`ds_id` AND
+            (`ds_read`.`ds_id`=`discussions`.`id`) AND (`ds_read`.`user_id` = ?) 
+            WHERE 1";
+        return $this->mapAll($this->database->query($query, $this->user->getId())->fetchAll());
+    }
+
     /**
      * Get array of discussion ids which user is allowed to read
      * @param int $userId
