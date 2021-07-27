@@ -220,11 +220,15 @@ abstract class BaseManager
      *
      * @return BaseModel[]
      */
-    public function getList(?array $idList = null, string $idField = "id"): array
+    public function getList(?array $idList = null, string $idField = "id", ?int $limit = null, ?int $offset = null): array
     {
         $rows = $this->database->table($this->getTable());
         if ($idList !== null) {
             $rows->where($idField, $idList);
+        }
+        
+        if(is_int($limit) && is_int($offset)){
+            $rows->limit($limit, $offset);
         }
 
         return $this->mapAll($rows->fetchAll());
