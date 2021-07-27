@@ -101,6 +101,15 @@ class StatusManager extends BaseManager
     {
         return $this->database->table(Status::TABLE)->select("DISTINCT(code) AS codes")->fetchPairs(null, "codes");
     }
+    
+    /**
+     * Get all status unique status codes
+     * @return array
+     */
+    public function getByStatusCode(): array
+    {
+        return $this->database->table(Status::TABLE)->fetchPairs("codes");
+    }
 
     protected function allowRead(?int $recordId = null): void
     {
