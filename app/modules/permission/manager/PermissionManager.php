@@ -2,7 +2,9 @@
 
 namespace Tymy\Module\Permission\Manager;
 
+use Nette\Database\IRow;
 use Nette\Database\Table\Selection;
+use Nette\Utils\Strings;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Permission\Mapper\PermissionMapper;
@@ -26,6 +28,20 @@ class PermissionManager extends BaseManager
     protected function getScheme(): array
     {
         return PermissionMapper::scheme();
+    }
+
+    public function map(?IRow $row, $force = false): ?BaseModel
+    {
+        if (empty($row)) {
+            return null;
+        }
+
+        /* @var $permission Permission */
+        $permission = parent::map($row, $force);
+
+        $permission->setWebname(Strings::webalize($permission->getName()));
+
+        return $permission;
     }
 
     public function canEdit($entity, $userId): bool
@@ -302,4 +318,19 @@ class PermissionManager extends BaseManager
             unset($data["revokedUsers"]);
         }
     }
+
+    public function getByWebName(string $webname): ?Permission
+    {
+        $permissions = $this->getList();
+
+        foreach ($permissions as $permission) {
+            /* @var $permission Permission */
+            if ($permission->getWebname() == $webname) {
+                return $permission;
+            }
+        }
+
+        return null;
+    }
+
 }
