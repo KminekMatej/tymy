@@ -43,7 +43,7 @@
                         <tr><th>{_settings.statusColors}</th>
                             <td>
                                 <div class="row">
-                                    <div class="col-2" n:foreach="$statusList as $status">{label 'statusColor_' . $status->code}{input 'statusColor_' . $status->code, class => 'form-control'}</div>
+                                    <div class="col-2" n:foreach="$statusList as $statusCode">{label 'statusColor_' . $statusCode}{input 'statusColor_' . $statusCode, class => 'form-control'}</div>
                                 </div>
                             </td>
                         </tr>
