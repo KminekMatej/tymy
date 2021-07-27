@@ -13,15 +13,16 @@ use Tymy\Module\Permission\Mapper\PermissionMapper;
  */
 class Permission extends BaseModel
 {
+
     public const TABLE = "rights";
     public const MODULE = "permission";
-
     public const TYPE_USER = "USR";
     public const TYPE_SYSTEM = "SYS";
 
     private int $id;
     private string $type;
     private string $name;
+    private string $webname;
     private ?string $caption = null;
     private ?array $allowedRoles = null;
     private ?array $revokedRoles = null;
@@ -45,6 +46,11 @@ class Permission extends BaseModel
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getWebname(): string
+    {
+        return $this->webname;
     }
 
     public function getCaption(): ?string
@@ -108,6 +114,11 @@ class Permission extends BaseModel
     {
         $this->name = $name;
         return $this;
+    }
+
+    public function setWebname(string $webname): void
+    {
+        $this->webname = $webname;
     }
 
     public function setCaption(?string $caption)
@@ -178,4 +189,5 @@ class Permission extends BaseModel
     {
         return self::TABLE;
     }
+
 }
