@@ -78,7 +78,7 @@ class DiscussionPresenter extends SecuredPresenter
     public function renderDiscussion($discussion, $page, $search, $suser = "all", $jump2date = "")
     {
 
-        $d = (is_int($discussion) || is_numeric($discussion)) ? $this->discussionManager->getById(intval($discussion)) : $this->discussionManager->getByWebName($this->user->getId(), $discussion);
+        $d = (is_int($discussion) || is_numeric($discussion)) ? $this->discussionManager->getById(intval($discussion)) : $this->discussionManager->getByWebName($discussion, $this->user->getId());
 
         if (empty($d)) {
             $this->error($this->translator->translate("discussion.errors.noDiscussionExists"));
