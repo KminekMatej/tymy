@@ -47,41 +47,41 @@
                             <td><textarea name="description" data-value="{$d->getDescription()}" rows="1" class="form-control form-control-sm">{$d->getDescription()}</textarea></td>
 
                             <td>
-                                <select name="readRightName" data-value="{$d->readRightName}" class="form-control form-control-sm">
+                                <select name="readRightName" data-value="{$d->getReadRightName()}" class="form-control form-control-sm">
                                     <option value="">-- {_common.everyone} --</option>
-                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $d->readRightName == $key">{$caption}</option>
+                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $d->getReadRightName() == $userPermission->getName()">{$userPermission->getCaption()}</option>
                                 </select>
                             </td>
                             <td>
-                                <select name="writeRightName" data-value="{$d->writeRightName}" class="form-control form-control-sm">
+                                <select name="writeRightName" data-value="{$d->getWriteRightName()}" class="form-control form-control-sm">
                                     <option value="">-- {_common.everyone} --</option>
-                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $d->writeRightName == $key">{$caption}</option>
+                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $d->getWriteRightName() == $userPermission->getName()">{$userPermission->getCaption()}</option>
                                 </select>
                             </td>
                             <td>
-                                <select name="deleteRightName" data-value="{$d->deleteRightName}" class="form-control form-control-sm">
+                                <select name="deleteRightName" data-value="{$d->getDeleteRightName()}" class="form-control form-control-sm">
                                     <option value="">-- {_common.everyone} --</option>
-                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $d->deleteRightName == $key">{$caption}</option>
+                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $d->getDeleteRightName() == $userPermission->getName()">{$userPermission->getCaption()}</option>
                                 </select>
                             </td>
                             <td>
-                                <select name="stickyRightName" data-value="{$d->stickyRightName}" class="form-control form-control-sm">
+                                <select name="stickyRightName" data-value="{$d->getStickyRightName()}" class="form-control form-control-sm">
                                     <option value="">-- {_common.everyone} --</option>
-                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $d->stickyRightName == $key">{$caption}</option>
+                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $d->getStickyRightName() == $userPermission->getName()">{$userPermission->getCaption()}</option>
                                 </select>
                             </td>
 
-                            <td class="text-center"><label class="custom-control custom-checkbox"><input name="publicRead" type="checkbox" n:attr="data-value => $d->publicRead ? 'true':'false', checked => $d->publicRead" class="form-control form-control-sm custom-control-input" /><span class="custom-control-label"></span></label></td>
-                            <td class="text-center"><label class="custom-control custom-checkbox"><input name="editablePosts" type="checkbox" n:attr="data-value => $d->editablePosts ? 'true':'false', checked => $d->editablePosts" class="form-control form-control-sm custom-control-input" /><span class="custom-control-label"></span></label></td>
-                            <td><input name="order" data-value="{$d->order}" type="number" value="{$d->order}" class="form-control form-control-sm" style="max-width: 60px;"/></td>
-                            <td class="btn-group" role="group" n:if="$user->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('DSSETUP'))">
+                            <td class="text-center"><label class="custom-control custom-checkbox"><input name="publicRead" type="checkbox" n:attr="data-value => $d->getPublicRead() ? 'true':'false', checked => $d->getPublicRead()" class="form-control form-control-sm custom-control-input" /><span class="custom-control-label"></span></label></td>
+                            <td class="text-center"><label class="custom-control custom-checkbox"><input name="editablePosts" type="checkbox" n:attr="data-value => $d->getEditablePosts() ? 'true':'false', checked => $d->getEditablePosts()" class="form-control form-control-sm custom-control-input" /><span class="custom-control-label"></span></label></td>
+                            <td><input name="order" data-value="{$d->getOrder()}" type="number" value="{$d->getOrder()}" class="form-control form-control-sm" style="max-width: 60px;"/></td>
+                            <td class="btn-group" role="group" n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('DSSETUP'))">
                                 <button class="btn btn-sm btn-primary binder-save-btn" href="{link discussionEdit!}" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
                                 <button class="btn btn-sm btn-danger binder-delete-btn" href="{link discussionDelete!}" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></button>
                             </td>
                         </tr>
                     </table>
                 </div>
-                <div class="card-footer text-right" n:if="$user->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('DSSETUP'))">
+                <div class="card-footer text-right" n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('DSSETUP'))">
                     <a class="btn btn-lg btn-success" href="{plink Settings:discussion_new}" onclick="btnRotate($(this), true)" title="{_discussion.newDiscussionTitle}" style="margin-right: 10px">
                         <i class="fa fa-plus" aria-hidden="true"></i>
                     </a>

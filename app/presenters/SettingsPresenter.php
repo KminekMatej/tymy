@@ -62,6 +62,8 @@ class SettingsPresenter extends SecuredPresenter
         parent::beforeRender();
         $this->template->eventTypes = $this->eventTypeManager->getList();
         $this->template->statusList = $this->statusManager->getAllStatusCodes();
+        $this->template->userPermissions = $this->permissionManager->getByType(Permission::TYPE_USER);
+        $this->template->systemPermissions = $this->permissionManager->getByType(Permission::TYPE_SYSTEM);
     }
 
     public function actionDiscussions($discussion = NULL)
@@ -121,11 +123,6 @@ class SettingsPresenter extends SecuredPresenter
             $this->setView("permission");
         } else {
             $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("permission.permission", 2), "link" => $this->link("Settings:permissions")]]);
-
-            //$this->template->userPermissions = $this->permissionLister->getUsrPermissions();
-            //$this->template->systemPermissions = $this->permissionLister->getSysPermissions();
-            $this->template->userPermissions = $this->permissionManager->getList();
-            $this->template->systemPermissions = $this->permissionManager->getList();
         }
     }
 
