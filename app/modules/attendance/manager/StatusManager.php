@@ -108,7 +108,7 @@ class StatusManager extends BaseManager
      */
     public function getByStatusCode(): array
     {
-        return $this->database->table(Status::TABLE)->fetchPairs("codes");
+        return $this->database->table(Status::TABLE)->fetchPairs("code");
     }
 
     protected function allowRead(?int $recordId = null): void
