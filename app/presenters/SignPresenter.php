@@ -126,7 +126,6 @@ class SignPresenter extends BasePresenter
     public function actionOut()
     {
         if (!is_null($this->getUser()->getIdentity())) {
-            $this->logout->init()->perform();
             $this->getUser()->logout();
         }
         $this->flashMessage($this->translator->translate("common.alerts.logoutSuccesfull"));
