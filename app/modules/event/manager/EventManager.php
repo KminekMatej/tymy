@@ -59,7 +59,7 @@ class EventManager extends BaseManager
         $event->setInPast($row->in_past);
         $event->setInFuture($row->in_future);
 
-        if ($row->user_id) {
+        if (isset($row->user_id)) {
             $event->setMyAttendance($this->attendanceManager->map($row));
         } elseif ($event->getCloseTime() > new DateTime()) {   //my attendance doesnt exist and this event is still open
             $event->setAttendancePending(true);
@@ -121,7 +121,6 @@ class EventManager extends BaseManager
      */
     public function getListUserAllowed(int $userId, ?string $filter = null, ?string $order = null, ?int $limit = null, ?int $offset = null)
     {
-
         $order = $order ?: "startTime__desc";
         $readPerms = $this->permissionManager->getUserAllowedPermissionNames($this->userManager->getById($userId), Permission::TYPE_USER);
         $params = [$userId];
@@ -166,6 +165,22 @@ class EventManager extends BaseManager
         }
 
         return $events;
+    }
+    
+    public function getList(?array $idList = null, string $idField = "id", ?int $limit = null, ?int $offset = null): array
+    {
+        $offset = $offset ?? 0;
+        $limitQuery = $limit ? " LIMIT $offset,$limit" : "";
+
+        $selector = $this->database->query("SELECT events.*, "
+                . "IF(events.start_time > NOW(),1,0) AS in_future, "
+                . "IF(events.start_time < NOW(),1,0) AS in_past "
+                . "FROM events "
+                . "WHERE 1"
+                . " ORDER BY events.start_time DESC "
+                . $limitQuery);
+
+        return $this->mapAll($selector->fetchAll());
     }
 
     /**
