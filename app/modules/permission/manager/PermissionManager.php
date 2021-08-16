@@ -9,6 +9,7 @@ use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Permission\Mapper\PermissionMapper;
 use Tymy\Module\Permission\Model\Permission;
+use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Model\User;
 
 /**
@@ -42,6 +43,12 @@ class PermissionManager extends BaseManager
         $permission->setWebname(Strings::webalize($permission->getName()));
 
         return $permission;
+    }
+
+    protected function metaMap(BaseModel &$model, $userId = null): void
+    {
+        $privilege = $model->getType() == Permission::TYPE_SYSTEM ? Privilege::SYS($model->getName()) : Privilege::USR($model->getName());
+        $model->setMeAllowed($this->user->isAllowed($this->user->getId(), $privilege));
     }
 
     public function canEdit($entity, $userId): bool

@@ -237,7 +237,7 @@ class SettingsPresenter extends SecuredPresenter
 
         $users = $this->userManager->getIdList();
 
-        $this->template->lastEditedUser = $users[$perm->getUpdatedById()];
+        $this->template->lastEditedUser = $users[$perm->getUpdatedById()] ?? null;
         $this->template->allowances = ["allowed" => "Povoleno", "revoked" => "Zakázáno"];
         $this->template->statuses = ["PLAYER" => "Hráč", "SICK" => "Marod", "MEMBER" => "Člen"];
         $this->template->roles = $this->getAllRoles();

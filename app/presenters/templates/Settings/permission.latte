@@ -17,17 +17,17 @@
             <div class="card sh-box my-3" data-binder-id="{$perm->getId()}">
                 <div class="card-header row">
                     <div class="col-8"><h4>{if $isNew}{_permission.newPermission}{else}{_permission.editPermission} {$perm->getId()}{/if}</h4></div>
-                    <div class="col-4"><div class="alert alert-warning float-md-right mx-1" n:ifset="$perm->updatedAt" style="margin: 0px; padding: 4px; font-size: 10px;">{_common.edited} {$lastEditedUser->getDisplayName()}, {$perm->updatedAt|date:'j.n.Y G:i'}</div></div>
+                    <div class="col-4"><div class="alert alert-warning float-md-right mx-1" n:if="$perm->getUpdatedAt() && $lastEditedUser" style="margin: 0px; padding: 4px; font-size: 10px;">{_common.edited} {$lastEditedUser->getDisplayName()}, {$perm->getUpdatedAt()|date:'j.n.Y G:i'}</div></div>
                 </div>
                 <div class="card-body">
                     <table class="table">
                         <tr>
                             <th>{_settings.title}</th>
-                            <td><input type="text" name="name" value="{$perm->name}" {if $perm->type=='USR'}data-value="{$perm->name}"{/if} class="col-6 form-control" {if $perm->type!='USR'}disabled{/if} /></td>
+                            <td><input type="text" name="name" value="{$perm->getName()}" {if $perm->getType()=='USR'}data-value="{$perm->getName()}"{/if} class="col-6 form-control" {if $perm->getType()!='USR'}disabled{/if} /></td>
                         </tr>
                         <tr>
                             <th>{_settings.description}</th>
-                            <td><input type="text" name="caption" value="{$perm->getCaption()}" {if $perm->type=='USR'}data-value="{$perm->getCaption()}"{/if} class="col-6 form-control" {if $perm->type!='USR'}disabled{/if} /></td>
+                            <td><input type="text" name="caption" value="{$perm->getCaption()}" {if $perm->getType()=='USR'}data-value="{$perm->getCaption()}"{/if} class="col-6 form-control" {if $perm->getType()!='USR'}disabled{/if} /></td>
                         </tr>
                         <tr>
                             <th>
@@ -60,7 +60,8 @@
                                 </div>
                                 <div class="col-9">
                                     <div class="btn-group">
-                                        <button name="roles[{$role->code}]" data-value="-1" n:foreach="$roles as $role" data-key="{$role->code}" class="btn btn-outline-secondary {if !empty($rolesRule) && in_array($role->code, $perm->{$rolesRule.'Roles'})}active{/if}" onclick="roleCheck(this)">{$role->caption}</button>
+                                        {var $getRoles = 'get' . ucfirst($rolesRule) . 'Roles'}
+                                        <button name="roles[{$role->code}]" data-value="-1" n:foreach="$roles as $role" data-key="{$role->code}" class="btn btn-outline-secondary {if !empty($rolesRule) && in_array($role->code, $perm->$getRoles())}active{/if}" onclick="roleCheck(this)">{$role->caption}</button>
                                     </div>
                                 </div>
                             </td>
@@ -94,7 +95,7 @@
                                 <div class="row" n:foreach="$allowances as $key => $allowance" data-class="{$key}">
                                     <div class="col-2"><strong>{$allowance}</strong></div>
                                     <div class="col-10">
-                                        <img n:foreach="$users as $usr" {if $key == 'allowed'}style="display: none"{/if} data-rule="{$allowance}" data-status="{$usr->status}" data-roles="{join(',', $usr->roles)}" data-id="{$usr->getId()}" class="border rounded user" src="{$usr->getPictureUrl()}" />
+                                        <img n:foreach="$users as $usr" {if $key == 'allowed'}style="display: none"{/if} data-rule="{$allowance}" data-status="{$usr->getStatus()}" data-roles="{join(',', $usr->getRoles())}" data-id="{$usr->getId()}" class="border rounded user" src="{$usr->getPictureUrl()}" />
                                     </div>
                                 </div>
                             </td>

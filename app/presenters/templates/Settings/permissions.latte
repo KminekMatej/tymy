@@ -14,11 +14,11 @@
                 <div class="card-body">
                     <table class="table table-hover">
                         <tr n:foreach="$systemPermissions as $perm">
-                            <th>{$perm->name}</th>
+                            <th>{$perm->getName()}</th>
                             <td>{$perm->getCaption()}</td>
                             <td>
-                                <i n:if="$perm->meAllowed" class="fas fa-check-circle text-success" title="{_permission.permitted}"></i>
-                                <i n:if="!$perm->meAllowed" class="fas fa-ban text-danger" title="{_permission.not-permitted}"></i>
+                                <i n:if="$perm->getMeAllowed()" class="fas fa-check-circle text-success" title="{_permission.permitted}"></i>
+                                <i n:if="!$perm->getMeAllowed()" class="fas fa-ban text-danger" title="{_permission.not-permitted}"></i>
                             </td>
                             <td><a n:href="Settings:permissions $perm->getWebName()" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></a></td>
                         </tr>
@@ -33,11 +33,11 @@
                 <div class="card-body">
                     <table class="table table-hover">
                         <tr n:foreach="$userPermissions as $perm">
-                            <th>{$perm->name}</th>
+                            <th>{$perm->getName()}</th>
                             <td>{$perm->getCaption()}</td>
                             <td>
-                                <i n:if="$perm->meAllowed" class="fas fa-check-circle text-success" title="{_permission.permitted}"></i>
-                                <i n:if="!$perm->meAllowed" class="fas fa-ban text-danger" title="{_permission.not-permitted}"></i>
+                                <i n:if="$perm->getMeAllowed()" class="fas fa-check-circle text-success" title="{_permission.permitted}"></i>
+                                <i n:if="!$perm->getMeAllowed()" class="fas fa-ban text-danger" title="{_permission.not-permitted}"></i>
                             </td>
                             <td><a n:href="Settings:permissions $perm->getWebName()" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></a></td>
                         </tr>
@@ -51,7 +51,6 @@
             </div>
         </div>
     </div>
-</div>
 </div>
 
 

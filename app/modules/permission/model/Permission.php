@@ -32,6 +32,7 @@ class Permission extends BaseModel
     private ?array $revokedUsers = null;
     private ?DateTime $updatedAt = null;
     private ?int $updatedById = null;
+    private bool $meAllowed = false;
 
     public function getId(): int
     {
@@ -96,6 +97,11 @@ class Permission extends BaseModel
     public function getUpdatedById(): ?int
     {
         return $this->updatedById;
+    }
+
+    public function getMeAllowed(): bool
+    {
+        return $this->meAllowed;
     }
 
     public function setId(int $id)
@@ -173,6 +179,11 @@ class Permission extends BaseModel
     {
         $this->updatedById = $updatedById;
         return $this;
+    }
+
+    public function setMeAllowed(bool $meAllowed): void
+    {
+        $this->meAllowed = $meAllowed;
     }
 
     public function getModule(): string
