@@ -116,7 +116,7 @@ class AuthorizationManager implements IAuthorizator
         }
         
         if ($privilege->getType() == "SYS") {
-            if ($privilege->getName() == "IS_AMDIN") {
+            if ($privilege->getName() == "IS_ADMIN") {
                 return $this->isAdmin($role);
             }
             if ($privilege->getName() == "SEE_INITS") {
