@@ -25,46 +25,46 @@
                             </td></tr>
                         <tr><th>{_settings.type}</th>
                             <td>
-                                <select name="type" value="{$event->type}" data-value="{$event->type}" class="col-6 form-control disabled" disabled>
+                                <select name="type" value="{$event->getType()}" data-value="{$event->getType()}" class="col-6 form-control disabled" disabled>
                                     <option>{_common.chooseType}...</option>
-                                    <option n:foreach="$eventTypes as $option" value="{$option->code}" n:attr="selected => $event->type == $option->code">{$option->getCaption()}</option>
+                                    <option n:foreach="$eventTypes as $option" value="{$option->getCode()}" n:attr="selected => $event->getType() == $option->getCode()">{$option->getCaption()}</option>
                                 </select>
                             </td></tr>
                         <tr><th>{_settings.description}</th><td><textarea name="description" data-value="{$event->getDescription()}" class="form-control col-6">{$event->getDescription()}</textarea></td></tr>
-                        <tr><th>{_event.start}</th><td><input type="text" name="startTime" value="{$event->startTime|date:'d.m.Y H:i'}" data-value="{$event->startTime|date:'d.m.Y H:i'}" class="col-6 form-control" /></td></tr>
-                        <tr><th>{_event.end}</th><td><input type="text" name="endTime" value="{$event->endTime|date:'d.m.Y H:i'}" data-value="{$event->endTime|date:'d.m.Y H:i'}" class="col-6 form-control" /></td></tr>
-                        <tr><th>{_event.close}</th><td><input type="text" name="closeTime" value="{$event->closeTime|date:'d.m.Y H:i'}" data-value="{$event->closeTime|date:'d.m.Y H:i'}" class="col-6 form-control" /></td></tr>
+                        <tr><th>{_event.start}</th><td><input type="text" name="startTime" value="{$event->getStartTime()|date:'d.m.Y H:i'}" data-value="{$event->getStartTime()|date:'d.m.Y H:i'}" class="col-6 form-control" /></td></tr>
+                        <tr><th>{_event.end}</th><td><input type="text" name="endTime" value="{$event->getEndTime()|date:'d.m.Y H:i'}" data-value="{$event->getEndTime()|date:'d.m.Y H:i'}" class="col-6 form-control" /></td></tr>
+                        <tr><th>{_event.close}</th><td><input type="text" name="closeTime" value="{$event->getCloseTime()|date:'d.m.Y H:i'}" data-value="{$event->getCloseTime()|date:'d.m.Y H:i'}" class="col-6 form-control" /></td></tr>
                         <tr><th>{_event.place}</th><td>
                                             <div class="input-group">
-                                                <input type="text" name="place" value="{$event->place}" data-value="{$event->place}" class="col-6 form-control" />
+                                                <input type="text" name="place" value="{$event->getPlace()}" data-value="{$event->getPlace()}" class="col-6 form-control" />
                                                 <div class="input-group-append"><button style="min-width: 45px" class='btn btn-light btn-light-bordered' onclick='map()' title="{_event.openMap}"><i class="fa fa-map-marker" aria-hidden="true"></i></button></div>
                                             </div></td></tr>
                         <tr><th>{_common.link}</th><td>
                                             <div class="input-group">
-                                                <input type="text" name="link" value="{$event->link}" data-value="{$event->link}" class="col-6 form-control" />
+                                                <input type="text" name="link" value="{$event->getLink()}" data-value="{$event->getLink()}" class="col-6 form-control" />
                                                 <div class="input-group-append"><button style="min-width: 45px" class='btn btn-light btn-light-bordered' onclick='link()' title="{_event.openInNewWindow}"><i class="fa fa-external-link-alt" aria-hidden="true"></i></button></div>
                                             </div></td></tr>
                         <tr><th>{_event.canView}</th>
                             <td>
-                                <select name="viewRightName" data-value="{$event->viewRightName}" class="col-6 form-control">
+                                <select name="viewRightName" data-value="{$event->getViewRightName()}" class="col-6 form-control">
                                     <option value="">-- {_common.everyone} --</option>
-                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $event->viewRightName == $key">{$caption}</option>
+                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $event->getViewRightName() == $userPermission->getName()">{$userPermission->getCaption()}</option>
                                 </select>
                             </td>
                         </tr>
                         <tr><th>{_event.canPlan}</th>
                             <td>
-                                <select name="planRightName" data-value="{$event->planRightName}" class="col-6 form-control">
+                                <select name="planRightName" data-value="{$event->getPlanRightName()}" class="col-6 form-control">
                                     <option value="">-- {_common.everyone} --</option>
-                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $event->planRightName == $key">{$caption}</option>
+                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $event->getPlanRightName() == $userPermission->getName()">{$userPermission->getCaption()}</option>
                                 </select>
                             </td>
                         </tr>
                         <tr><th>{_event.canResult}</th>
                             <td>
-                                <select name="resultRightName" data-value="{$event->resultRightName}" class="col-6 form-control">
+                                <select name="resultRightName" data-value="{$event->getResultRightName()}" class="col-6 form-control">
                                     <option value="">-- {_common.everyone} --</option>
-                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $event->resultRightName == $key">{$caption}</option>
+                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $event->getResultRightName() == $userPermission->getName()">{$userPermission->getCaption()}</option>
                                 </select>
                             </td>
                         </tr>
@@ -72,8 +72,8 @@
                     </table>
                 </div>
                 <div class="card-footer text-right">
-                    <button n:if="$user->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_DELETE'))" href="{link eventDelete!}" class="btn btn-danger mx-2 binder-delete-btn" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></button>
-                    <button n:if="$user->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_UPDATE'))" href="{link eventEdit!}" class="btn btn-lg btn-primary binder-save-btn" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
+                    <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_DELETE'))" href="{link eventDelete!}" class="btn btn-danger mx-2 binder-delete-btn" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                    <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_UPDATE'))" href="{link eventEdit!}" class="btn btn-lg btn-primary binder-save-btn" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
                 </div>
             </div>
         </div>

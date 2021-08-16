@@ -73,19 +73,19 @@
                             <td>
                                 <select name="voteRightName" data-value="{$poll->voteRightName}" class="form-control form-control-sm">
                                     <option value="">-- {_common.everyone} --</option>
-                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $poll->voteRightName == $key">{$caption}</option>
+                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $poll->voteRightName == $key">{$caption}</option>
                                 </select>
                             </td>
                             <td>
                                 <select name="resultRightName" data-value="{$poll->voteRightName}" class="form-control form-control-sm">
                                     <option value="">-- {_common.everyone} --</option>
-                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $poll->resultRightName == $key">{$caption}</option>
+                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $poll->resultRightName == $key">{$caption}</option>
                                 </select>
                             </td>
                             <td>
                                 <select name="alienVoteRightName" data-value="{$poll->voteRightName}" class="form-control form-control-sm">
                                     <option value="">-- {_common.everyone} --</option>
-                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $poll->alienVoteRightName == $key">{$caption}</option>
+                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $poll->alienVoteRightName == $key">{$caption}</option>
                                 </select>
                             </td>
                             <td><input name="orderFlag" data-value="{$poll->orderFlag}" type="number" value="{$poll->orderFlag}" class="form-control form-control-sm" style="max-width: 70px;"/></td>

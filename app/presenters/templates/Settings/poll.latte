@@ -60,7 +60,7 @@
                             <td>
                                 <select name="voteRightName" data-value="{$poll->voteRightName}" class="col-6 form-control">
                                     <option value="">-- {_common.everyone} --</option>
-                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $poll->voteRightName == $key">{$caption}</option>
+                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $poll->voteRightName == $key">{$caption}</option>
                                 </select>
                             </td>
                         </tr>
@@ -69,7 +69,7 @@
                             <td>
                                 <select name="resultRightName" data-value="{$poll->resultRightName}" class="col-6 form-control">
                                     <option value="">-- {_common.everyone} --</option>
-                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $poll->resultRightName == $key">{$caption}</option>
+                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $poll->resultRightName == $key">{$caption}</option>
                                 </select>
                             </td>
                         </tr>
@@ -78,7 +78,7 @@
                             <td>
                                 <select name="alienVoteRightName" data-value="{$poll->alienVoteRightName}" class="col-6 form-control">
                                     <option value="">-- {_common.everyone} --</option>
-                                    <option n:foreach="$usrRights as $key => $caption" value="{$key}" n:attr="selected => $poll->alienVoteRightName == $key">{$caption}</option>
+                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $poll->alienVoteRightName == $key">{$caption}</option>
                                 </select>
                             </td>
                         </tr>
