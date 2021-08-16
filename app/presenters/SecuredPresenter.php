@@ -136,23 +136,40 @@ class SecuredPresenter extends BasePresenter {
         return $this->accessibleSettings;
     }
 
-    private function setAccessibleSettings() {
-        if($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("DSSETUP"))) $this->accessibleSettings[] = new SettingMenu("discussions", $this->translator->translate("discussion.discussion", 2), $this->link("Settings:discussions"), "fa-comments", TRUE);
-        if($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('EVE_UPDATE'))) $this->accessibleSettings[] = new SettingMenu("events", $this->translator->translate("event.event", 2), $this->link("Settings:events"), "fa-calendar", TRUE);
-        //TO BE ENABLED WHEN ITS READY
-        if($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("TEAM_UPDATE"))) $this->accessibleSettings[] = new SettingMenu("team", $this->translator->translate("team.team", 1), $this->link("Settings:team"), "fa-users", TRUE);
-        // TO BE ENABLED WHEN ITS READY
-        if($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('ASK.VOTE_UPDATE'))) $this->accessibleSettings[] = new SettingMenu("polls", $this->translator->translate("poll.poll", 2), $this->link("Settings:polls"), "fa-chart-pie", TRUE);
-        $this->accessibleSettings[] = new SettingMenu("notes", $this->translator->translate("note.note", 2), $this->link("Settings:notes"), "fa-sticky-note", TRUE); //user can always manage at least his own notes
-        // TO BE ENABLED WHEN ITS READY
-        if($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("REP_SETUP"))) $this->accessibleSettings[] = new SettingMenu("reports", $this->translator->translate("report.report", 2), $this->link("Settings:reports"), "fa-chart-area", FALSE);
-        // TO BE ENABLED WHEN ITS READY
-        if($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('IS_ADMIN'))) $this->accessibleSettings[] = new SettingMenu("permissions", $this->translator->translate("permission.permission", 2), $this->link("Settings:permissions"), "fa-gavel", TRUE);
+    private function setAccessibleSettings()
+    {
+        if ($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("DSSETUP"))) {
+            $this->accessibleSettings[] = new SettingMenu("discussions", $this->translator->translate("discussion.discussion", 2), $this->link("Settings:discussions"), "fa-comments", TRUE);
+        }
+        if ($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('EVE_UPDATE')) ||
+                $this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('EVE_CREATE')) ||
+                $this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('EVE_DELETE'))
+        ) {
+            $this->accessibleSettings[] = new SettingMenu("events", $this->translator->translate("event.event", 2), $this->link("Settings:events"), "fa-calendar", TRUE);
+        }
+
+        if ($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("TEAM_UPDATE"))) {
+            $this->accessibleSettings[] = new SettingMenu("team", $this->translator->translate("team.team", 1), $this->link("Settings:team"), "fa-users", TRUE);
+        }
+
+        if ($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('ASK.VOTE_UPDATE'))) {
+            $this->accessibleSettings[] = new SettingMenu("polls", $this->translator->translate("poll.poll", 2), $this->link("Settings:polls"), "fa-chart-pie", TRUE);
+        }
+
+        if ($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("REP_SETUP"))) {
+            $this->accessibleSettings[] = new SettingMenu("reports", $this->translator->translate("report.report", 2), $this->link("Settings:reports"), "fa-chart-area", FALSE);
+        }
+
+        if ($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('IS_ADMIN'))) {
+            $this->accessibleSettings[] = new SettingMenu("permissions", $this->translator->translate("permission.permission", 2), $this->link("Settings:permissions"), "fa-gavel", TRUE);
+        }
+
         $this->accessibleSettings[] = new SettingMenu("multiaccounts", $this->translator->translate("settings.multiaccount", 1), $this->link("Settings:multiaccount"), "fa-sitemap", TRUE); //user can always look into multiaccount settings
         $this->accessibleSettings[] = new SettingMenu("app", $this->translator->translate("settings.application"), $this->link("Settings:app"), "fa-laptop", TRUE); //user can always look into app settings to setup his own properties
+
         return $this;
     }
-    
+
     /*protected function showNotes($recordId = NULL) {
         $notesToShow = [];
         $presenterName = [
