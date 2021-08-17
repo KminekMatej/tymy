@@ -638,7 +638,6 @@ class SettingsPresenter extends SecuredPresenter
     {
         $teamNeon = $this->supplier->getTeamNeon();
         $eventTypes = $this->eventTypeManager->getList();
-        $this->statusList->init()->getData();
         $statusList = $this->statusManager->getByStatusCode();
         $team = $this->teamManager->getTeam();
 
@@ -657,9 +656,8 @@ class SettingsPresenter extends SecuredPresenter
         }
 
         foreach ($statusList as $status) {
-            /* @var $status Status */
-            $color = $this->supplier->getStatusColor($status->getCode());
-            $form->addText("statusColor_" . $status->getCode(), $status->getCaption())->setAttribute("data-toggle", "colorpicker")->setAttribute("data-color", $color)->setValue($color);
+            $color = $this->supplier->getStatusColor($status["code"]);
+            $form->addText("statusColor_" . $status["code"], $status["caption"])->setAttribute("data-toggle", "colorpicker")->setAttribute("data-color", $color)->setValue($color);
         }
 
         $form->addSubmit("save");
