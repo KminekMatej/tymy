@@ -61,7 +61,7 @@
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <strong class="text-secondary ml-4">{_common.alerts.newsOnTymy}</strong>
-                <div n:foreach="$notices as $notice"><div class="mt-2"><small>{$notice->created|date:'j.n.Y'} - </small><strong>{$notice->getCaption()|noescape}</strong></div>{$notice->getDescription()|noescape}</div>
+                <div n:foreach="$notices as $notice"><div class="mt-2"><small>{$notice->getCreated()|date:'j.n.Y'} - </small><strong>{$notice->getCaption()|noescape}</strong></div>{$notice->getDescription()|noescape}</div>
                 <small class="text-secondary ml-4">{_common.alerts.newsOnTymyFooter} <a href="https://www.tymy.cz/news" target="blank">www.tymy.cz</a></small>
             </div>
         </div>
@@ -126,9 +126,9 @@
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="live" role="tabpanel">
                             <figure class="figure text-center" style="width: 100px" n:foreach="$liveUsers as $live">
-                                <a href="{plink Team:player $live->getWebName()}" title="{$live->callName}">
-                                    <img src="{$tymyRoot}/{$live->getPictureUrl()}" class="figure-img img-fluid rounded user_pic" alt="{$live->callName}" />
-                                    <figcaption class="figure-caption">{$live->callName}</figcaption>
+                                <a href="{plink Team:player $live->getWebName()}" title="{$live->getCallName()}">
+                                    <img src="{$tymyRoot}/{$live->getPictureUrl()}" class="figure-img img-fluid rounded user_pic" alt="{$live->getCallName()}" />
+                                    <figcaption class="figure-caption">{$live->getCallName()}</figcaption>
                                 </a>
                             </figure>
                             <h6 class="card-subtitle mb-2 text-muted" n:if="count($liveUsers) == 0">{_team.nobodyIsOnline}</h6>
