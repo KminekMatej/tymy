@@ -59,12 +59,12 @@
                             </tr>
                         <tr><th title="{_discussion.publicTitle}">{_discussion.public}</th>
                             <td><label class="custom-control custom-checkbox">
-                              <input type="checkbox" name="publicRead" n:attr="data-value => ($discussion->getPublicRead() ? 'true':'false'), checked => $discussion->getPublicRead()" class="col-6 form-control custom-control-input" />
+                              <input type="checkbox" name="publicRead" n:attr="data-value => $discussion->getPublicRead(), checked => $discussion->getPublicRead()" class="col-6 form-control custom-control-input" />
                               <span class="custom-control-label"></span>
                             </label></td></tr>
                         <tr><th>{_discussion.editablePosts}</th>
                             <td><label class="custom-control custom-checkbox">
-                              <input type="checkbox" name="editablePosts" n:attr="data-value => ($discussion->getEditablePosts() ? 'true':'false'), checked => $discussion->getEditablePosts()" class="col-6 form-control custom-control-input" />
+                              <input type="checkbox" name="editablePosts" n:attr="data-value => $discussion->getEditablePosts(), checked => $discussion->getEditablePosts()" class="col-6 form-control custom-control-input" />
                               <span class="custom-control-label"></span>
                             </label></td></tr>
                     </table>

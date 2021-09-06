@@ -158,14 +158,13 @@ class SettingsPresenter extends SecuredPresenter
             "3" => ["caption" => $this->translator->translate("discussion.new")]
         ]);
         $this->template->isNew = true;
-        $this->template->discussion = (object) [
-                    "id" => -1,
-                    "caption" => "",
-                    "description" => "",
-                    "publicRead" => FALSE,
-                    "editablePosts" => TRUE,
-                    "order" => 0,
-        ];
+        $this->template->discussion = (new \Tymy\Module\Discussion\Model\Discussion())
+                ->setId(-1)
+                ->setCaption("")
+                ->setDescription("")
+                ->setPublicRead("YES")
+                ->setEditablePosts("YES")
+                ->setOrder(0);
 
         $this->setView("discussion");
     }
