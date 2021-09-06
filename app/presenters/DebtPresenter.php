@@ -51,26 +51,24 @@ class DebtPresenter extends SecuredPresenter
 
     public function renderNew()
     {
-        $newDebt = (object) [
-                    "id" => null,
-                    "amount" => 1,
-                    "currencyIso" => "CZK",
-                    "countryIso" => "CZ",
-                    "caption" => "",
-                    "created" => (new DateTime())->format(TapiObject::MYSQL_DATE),
-                    "debtorId" => null,
-                    "debtorType" => "user",
-                    "payeeId" => $this->user->getId(),
-                    "payeeType" => "user",
-                    "debtDate" => (new DateTime())->format(TapiObject::MYSQL_DATE),
-                    "payeeAccountNumber" => "",
-                    "varcode" => null,
-                    "canRead" => true,
-                    "canEdit" => true,
-                    "canSetSentDate" => false,
-                    "paymentSent" => null,
-                    "paymentReceived" => null,
-        ];
+        $newDebt = (new Debt())
+                ->setAmount(1)
+                ->setCurrencyIso("CZK")
+                ->setCountryIso("CZ")
+                ->setCaption("")
+                ->setCreated((new DateTime())->format(TapiObject::MYSQL_DATE))
+                ->setDebtorId(null)
+                ->setDebtorType("user")
+                ->setPayeeId($this->user->getId())
+                ->setPayeeType("user")
+                ->setDebtDate((new DateTime())->format(TapiObject::MYSQL_DATE))
+                ->setPayeeAccountNumber("")
+                ->setVarcode(null)
+                ->setCanRead(true)
+                ->setCanEdit(true)
+                ->setCanSetSentDate(false)
+                ->setPaymentSent(null)
+                ->setPaymentReceived(null);
         $this->template->debt = $newDebt;
 
         $this->template->userListWithTeam = $this->userManager->getByIdWithTeam();

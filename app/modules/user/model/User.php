@@ -423,9 +423,10 @@ class User extends BaseModel
         return $this->isNew;
     }
 
-    public function setIsNew(bool $isNew): void
+    public function setIsNew(bool $isNew): User
     {
         $this->isNew = $isNew;
+        return $this;
     }
 
     public function getGhost(): bool
@@ -439,19 +440,22 @@ class User extends BaseModel
         return $this;
     }
 
-    public function setWarnings(int $warnings): void
+    public function setWarnings(int $warnings): self
     {
         $this->warnings = $warnings;
+        return $this;
     }
 
-    public function setErrFields(array $errFields): void
+    public function setErrFields(array $errFields): self
     {
         $this->errFields = $errFields;
+        return $this;
     }
 
-    public function setWebName(?string $webName): void
+    public function setWebName(?string $webName): self
     {
         $this->webName = $webName;
+        return $this;
     }
 
     public function addErrField(string $fieldName)

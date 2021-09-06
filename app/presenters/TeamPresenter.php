@@ -105,53 +105,41 @@ class TeamPresenter extends SecuredPresenter
 
         $errFls = array_intersect($this->supplier->getRequiredFields(), array_merge(UserResource::FIELDS_PERSONAL, UserResource::FIELDS_LOGIN, UserResource::FIELDS_TEAMINFO, UserResource::FIELDS_ADDRESS));
 
-        $newPlayer = (object) [
-                    "id" => null,
-                    "login" => "",
-                    "canLogin" => true,
-                    "canEditCallName" => true,
-                    "status" => "PLAYER",
-                    "firstName" => "",
-                    "lastName" => "",
-                    "callName" => "",
-                    "language" => $teamData->defaultLanguageCode,
-                    "email" => "",
-                    "jerseyNumber" => "",
-                    "gender" => "UNKNOWN",
-                    "street" => "",
-                    "city" => "",
-                    "zipCode" => "",
-                    "phone" => "",
-                    "phone2" => "",
-                    "birthDate" => "",
-                    "nameDayMonth" => null,
-                    "nameDayDay" => null,
-                    "fullName" => "",
-                    "pictureUrl" => "",
-                    "displayName" => "",
-                    "isNew" => true,
-                    "errCnt" => count($errFls),
-                    "errFls" => $errFls,
-        ];
 
-        if ($player) {
-            try {
-                $user = $this->userDetail->init()
-                        ->setId($this->parseIdFromWebname($player))
-                        ->getData();
-            } catch (APIException $ex) {
-                $this->handleTapiException($ex);
-            }
-
-            //todo rewrite playerMock
-            $newPlayer = $user;
-            $newPlayer->id = null;
-            $newPlayer->status = "PLAYER";
-            $newPlayer->email = "";
-            $newPlayer->pictureUrl = "";
+        if ($player) {  //new player based on another user
+            $user = $this->userManager->getById($this->parseIdFromWebname($player));
+            $newPlayer = $user->setId(null)
+                    ->setStatus("PLAYER")
+                    ->setEmail("")
+                    ->setPictureUrl("");
+        } else {    //brand new player
+            $newPlayer = (new User())
+                    ->setId(null)
+                    ->setLogin("")
+                    ->setCanLogin(true)
+                    ->setCanEditCallName(true)
+                    ->setStatus("PLAYER")
+                    ->setFirstName("")
+                    ->setLastName("")
+                    ->setCallName("")
+                    ->setLanguage($teamData->defaultLanguageCode)
+                    ->setEmail("")
+                    ->setJerseyNumber("")
+                    ->setGender("UNKNOWN")
+                    ->setStreet("")
+                    ->setCity("")
+                    ->setZipCode("")
+                    ->setPhone("")
+                    ->setPhone2("")
+                    ->setBirthDate("")
+                    ->setNameDayMonth(null)
+                    ->setNameDayDay(null)
+                    ->setFullName("")
+                    ->setPictureUrl("")
+                    ->setDisplayName("")
+                    ->setIsNew(true)
+                    ->setErrFields($errFls);
         }
-
-        //parent::showNotes();
 
         $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("common.new")]]);
 
@@ -207,17 +195,13 @@ class TeamPresenter extends SecuredPresenter
             $bind["changes"]["roles"] = [];
         }
         /* @todo Finish proper validation on new player, make sure that password and email fields are filled */
-        try {
-            $createdPlayer = $this->userCreator->init()
-                    ->setUser($bind["changes"])
-                    ->perform();
-        } catch (APIException $ex) {
-            $this->handleTapiException($ex, "this");
-        }
 
-        $this->flashMessage($this->translator->translate("common.alerts.userAdded", null, ["fullname" => $createdPlayer->displayName]), "success");
+        /* @var $createdPlayer User */
+        $createdPlayer = $this->userManager->create($bind["changes"]);
 
-        $this->redirect("Team:player", $createdPlayer->webName);
+        $this->flashMessage($this->translator->translate("common.alerts.userAdded", null, ["fullname" => $createdPlayer->getDisplayName()]), "success");
+
+        $this->redirect("Team:player", $createdPlayer->getWebName());
     }
 
     public function handleEdit()
@@ -226,14 +210,8 @@ class TeamPresenter extends SecuredPresenter
         if (array_key_exists("roles", $bind["changes"]) && $bind["changes"]["roles"] === "") {
             $bind["changes"]["roles"] = [];
         }
-        try {
-            $this->userEditor->init()
-                    ->setId($bind["id"])
-                    ->setUser($bind["changes"])
-                    ->perform();
-        } catch (APIException $ex) {
-            $this->handleTapiException($ex, "this");
-        }
+
+        $this->userManager->update($bind["changes"], $bind["id"]);
 
         $this->flashMessage($this->translator->translate("common.alerts.configSaved"), "success");
         $this->redrawControl("flashes");
@@ -252,13 +230,7 @@ class TeamPresenter extends SecuredPresenter
         if (!$this->getUser()->isAllowed("user", "canDelete"))
             return;
         $bind = $this->getRequest()->getPost();
-        try {
-            $this->userDeleter->init()
-                    ->setId($bind["id"])
-                    ->perform();
-        } catch (APIException $ex) {
-            $this->handleTapiException($ex);
-        }
+        $this->userManager->delete($bind["id"]);
         $this->flashMessage($this->translator->translate("common.alerts.userSuccesfullyDeleted"), "success");
         $this->redirect('Team:');
     }
@@ -270,15 +242,7 @@ class TeamPresenter extends SecuredPresenter
         $file = $files["files"][0];
         if ($file->isImage() && $file->isOk()) {
             $avatarB64 = 'data:' . mime_content_type($file->getTemporaryFile()) . ';base64,' . base64_encode(file_get_contents($file->getTemporaryFile()));
-            try {
-                $this->avatarUploader->init()
-                        ->setId($bind["id"])
-                        ->setAvatar($avatarB64)
-                        ->perform();
-            } catch (APIException $ex) {
-                $this->handleTapiException($ex, "this");
-            }
-
+            $this->userManager->uploadAvatar($bind["id"], $avatarB64);
             $this->flashMessage($this->translator->translate("common.alerts.avatarSaved"), "success");
             $this->redrawControl("flashes");
             $this->redrawControl("player-header");

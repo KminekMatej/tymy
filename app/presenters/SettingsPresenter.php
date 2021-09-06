@@ -196,15 +196,11 @@ class SettingsPresenter extends SecuredPresenter
 
         $users = $this->userManager->getIdList();
 
-        $perm = (object) [
-                    "id" => -1,
-                    "name" => "",
-                    "caption" => "",
-                    "type" => "USR",
-                    "revokedRoles" => [],
-                    "revokedStatuses" => [],
-                    "revokedUsers" => [],
-        ];
+        $perm = (new Permission())
+                ->setId(-1)
+                ->setName("")
+                ->setCaption("")
+                ->setType("USR");
 
         $this->template->allowances = ["allowed" => "Povoleno", "revoked" => "Zakázáno"];
         $this->template->statuses = ["PLAYER" => "Hráč", "SICK" => "Marod", "MEMBER" => "Člen"];
@@ -259,18 +255,17 @@ class SettingsPresenter extends SecuredPresenter
             "3" => ["caption" => $this->translator->translate("event.new", 2)]
         ]);
         $this->template->isNew = true;
-
-        $events = [(object) [
-                "id" => -1,
-                "caption" => "",
-                "description" => "",
-                "startTime" => date("c"),
-                "endTime" => date("c"),
-                "closeTime" => date("c"),
-                "place" => "",
-                "link" => "",
-        ]];
-        $this->template->events = $events;
+        $this->template->events = [
+                    (new Event())
+                    ->setId(-1)
+                    ->setCaption("")
+                    ->setDescription("")
+                    ->setStartTime(new \Nette\Utils\DateTime("+ 24 hours"))
+                    ->setEndTime(new \Nette\Utils\DateTime("+ 25 hours"))
+                    ->setCloseTime(new \Nette\Utils\DateTime("+ 23 hours"))
+                    ->setPlace("")
+                    ->setLink("")
+        ];
 
         $this->setView("events");
     }
@@ -308,20 +303,18 @@ class SettingsPresenter extends SecuredPresenter
         ]);
         $this->template->isNew = true;
 
-        $polls = [(object) [
-                "id" => -1,
-                "caption" => "",
-                "description" => "",
-                "status" => "DESIGN",
-                "minItems" => "",
-                "maxItems" => "",
-                "mainMenu" => FALSE,
-                "anonymousResults" => FALSE,
-                "changeableVotes" => FALSE,
-                "showResults" => "NEVER",
-                "orderFlag" => 0
-        ]];
-        $this->template->polls = $polls;
+        $this->template->polls = [(new Poll())
+                    ->setId(-1)
+                    ->setCaption("")
+                    ->setDescription("")
+                    ->setStatus("DESIGN")
+                    ->setMinItems(1)
+                    ->setMaxItems(99)
+                    ->setMainMenu("")
+                    ->setAnonymousResults("")
+                    ->setChangeableVotes("")
+                    ->setShowResults("NEVER")
+        ];
 
         $this->setView("polls");
     }
