@@ -1,8 +1,8 @@
 <?php
 
-namespace Tymy\Module\Debt\Presenter;
+namespace Tymy\Api\Module\Debt\Presenters;
 
-use Tymy\Module\Core\Presenter\SecuredPresenter;
+use Tymy\Api\Module\Core\Presenters\SecuredPresenter;
 use Tymy\Module\Debt\Manager\DebtManager;
 
 /**

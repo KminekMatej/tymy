@@ -1,10 +1,10 @@
 <?php
 
-namespace Tymy\Module\Event\Presenter;
+namespace Tymy\Api\Module\Event\Presenters;
 
 use Exception;
 use Tymy\Module\Attendance\Manager\HistoryManager;
-use Tymy\Module\Core\Presenter\SecuredPresenter;
+use Tymy\Api\Module\Core\Presenters\SecuredPresenter;
 
 /**
  * Description of HistoryPresenter

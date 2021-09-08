@@ -1,13 +1,13 @@
 <?php
 
-namespace Tymy\Module\Test\Presenter;
+namespace Tymy\Api\Module\Test\Presenters;
 
 use Tymy\Bootstrap;
 use Nette\Http\UrlScript;
 use Nette\Utils\DateTime;
 use SimpleXMLElement;
 use Swoole\MySQL\Exception;
-use Tymy\Module\Core\Presenter\BasePresenter;
+use Tymy\Api\Module\Core\Presenters\BasePresenter;
 use Tymy\Module\Test\Manager\TestsManager;
 use const ROOT_DIR;
 

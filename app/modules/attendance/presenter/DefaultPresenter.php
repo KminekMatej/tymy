@@ -1,11 +1,11 @@
 <?php
 
-namespace Tymy\Module\Attendance\Presenter;
+namespace Tymy\Api\Module\Attendance\Presenters;
 
 use Exception;
 use Tymy\Module\Attendance\Manager\AttendanceManager;
 use Tymy\Module\Attendance\Model\Attendance;
-use Tymy\Module\Core\Presenter\SecuredPresenter;
+use Tymy\Api\Module\Core\Presenters\SecuredPresenter;
 
 /**
  * Description of DefaultPresenter

@@ -1,8 +1,8 @@
 <?php
 
-namespace Tymy\Module\Multiaccount\Presenter;
+namespace Tymy\Api\Module\Multiaccount\Presenters;
 
-use Tymy\Module\Core\Presenter\SecuredPresenter;
+use Tymy\Api\Module\Core\Presenters\SecuredPresenter;
 use Tymy\Module\Multiaccount\Manager\MultiaccountManager;
 
 /**

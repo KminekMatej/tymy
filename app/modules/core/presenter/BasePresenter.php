@@ -1,6 +1,6 @@
 <?php
 
-namespace Tymy\Module\Core\Presenter;
+namespace Tymy\Api\Module\Core\Presenters;
 
 use Nette\Application\AbortException;
 use Nette\Application\UI\Presenter;

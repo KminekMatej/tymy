@@ -1,8 +1,8 @@
 <?php
 
-namespace Tymy\Module\News\Presenter;
+namespace Tymy\Api\Module\News\Presenters;
 
-use Tymy\Module\Core\Presenter\SecuredPresenter;
+use Tymy\Api\Module\Core\Presenters\SecuredPresenter;
 use Tymy\Module\News\Manager\NewsManager;
 
 /**

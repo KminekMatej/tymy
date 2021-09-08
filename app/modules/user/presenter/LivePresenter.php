@@ -1,8 +1,8 @@
 <?php
 
-namespace Tymy\Module\User\Presenter;
+namespace Tymy\Api\Module\User\Presenters;
 
-use Tymy\Module\Core\Presenter\SecuredPresenter;
+use Tymy\Api\Module\Core\Presenters\SecuredPresenter;
 use Tymy\Module\User\Manager\UserManager;
 
 /**

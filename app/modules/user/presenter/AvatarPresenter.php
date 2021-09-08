@@ -1,9 +1,9 @@
 <?php
 
-namespace Tymy\Module\User\Presenter;
+namespace Tymy\Api\Module\User\Presenters;
 
 use Exception;
-use Tymy\Module\Core\Presenter\SecuredPresenter;
+use Tymy\Api\Module\Core\Presenters\SecuredPresenter;
 use Tymy\Module\User\Manager\AvatarManager;
 
 /**

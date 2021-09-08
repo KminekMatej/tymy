@@ -1,9 +1,9 @@
 <?php
 
-namespace Tymy\Module\Authentication\Presenter;
+namespace Tymy\Api\Module\Authentication\Presenters;
 
 use Nette\Security\AuthenticationException;
-use Tymy\Module\Core\Presenter\BasePresenter;
+use Tymy\Api\Module\Core\Presenters\BasePresenter;
 use Tymy\Module\Multiaccount\Manager\MultiaccountManager;
 use Tymy\Module\User\Manager\UserManager;
 

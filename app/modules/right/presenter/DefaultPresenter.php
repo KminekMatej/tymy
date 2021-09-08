@@ -1,8 +1,8 @@
 <?php
 
-namespace Tymy\Module\Right\Presenter;
+namespace Tymy\Api\Module\Right\Presenters;
 
-use Tymy\Module\Core\Presenter\SecuredPresenter;
+use Tymy\Api\Module\Core\Presenters\SecuredPresenter;
 use Tymy\Module\Right\Manager\RightManager;
 
 /**

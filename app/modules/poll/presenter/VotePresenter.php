@@ -1,8 +1,8 @@
 <?php
 
-namespace Tymy\Module\Poll\Presenter;
+namespace Tymy\Api\Module\Poll\Presenters;
 
-use Tymy\Module\Core\Presenter\SecuredPresenter;
+use Tymy\Api\Module\Core\Presenters\SecuredPresenter;
 use Tymy\Module\Poll\Manager\VoteManager;
 
 /**

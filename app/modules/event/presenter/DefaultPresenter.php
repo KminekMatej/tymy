@@ -1,9 +1,9 @@
 <?php
 
-namespace Tymy\Module\Event\Presenter;
+namespace Tymy\Api\Module\Event\Presenters;
 
 use Exception;
-use Tymy\Module\Core\Presenter\SecuredPresenter;
+use Tymy\Api\Module\Core\Presenters\SecuredPresenter;
 use Tymy\Module\Event\Manager\EventManager;
 use Tymy\Module\Event\Model\Event;
 

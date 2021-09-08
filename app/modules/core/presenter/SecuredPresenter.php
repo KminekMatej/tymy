@@ -1,6 +1,6 @@
 <?php
 
-namespace Tymy\Module\Core\Presenter;
+namespace Tymy\Api\Module\Core\Presenters;
 
 use Tymy\Module\User\Model\User;
 
