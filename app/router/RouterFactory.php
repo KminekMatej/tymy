@@ -20,6 +20,24 @@ class RouterFactory
             $router->add($moduleRoute);
         }
 
+        // API routes
+        $router->withPath("api")
+                ->addRoute('<module>[s][/<resourceId \d+>][/<presenter>][s][/<subResourceId \d+>][/<action>]', [
+                    'module' => [
+                        Route::FILTER_IN => function ($module) {
+                            return 'Api:' . ucfirst($module);
+                        },
+                        Route::FILTER_OUT => function ($module) {
+                            list(, $module) = explode(':', $module);
+                            return strtolower($module);
+                        },
+                    ],
+                    'presenter' => 'Default',
+                    'action' => 'default',
+                        ]
+        );
+
+        // APP routes
         $router->addRoute('index.php', 'Homepage:default', Route::ONE_WAY);
         $router->addRoute('diskuze', 'Discussion:default');
         $router->addRoute('udalosti', 'Event:default');
