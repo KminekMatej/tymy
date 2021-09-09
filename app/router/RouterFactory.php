@@ -87,12 +87,13 @@ class RouterFactory
     {
         $router = new RouteList;
 
-        $routers = $this->container->findByType(RouterInterface::class);
+        $routerNames = $this->container->findByType(RouterInterface::class);
 
-        foreach ($routers as $moduleRouter) {
-            /* @var $moduleRouter RouterInterface */
-            $moduleRouter->addRoutes($router);
+        foreach ($routerNames as $routerName) {
+            $this->container->getByName($routerName)->addRoutes($router);
         }
+
+        return $router;
     }
 
     public function addModuleRoutes(array $moduleRoutes): RouterFactory

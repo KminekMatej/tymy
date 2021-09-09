@@ -1,3 +1,3 @@
 services:
     PermissionManager: Tymy\Module\Permission\Manager\PermissionManager
-    routes.permission: Tymy\Module\Permission\Router\Router
+    PermissionRouter: Tymy\Module\Permission\Router\Router

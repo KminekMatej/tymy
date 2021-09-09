@@ -1,4 +1,4 @@
 services:
     DiscussionManager: Tymy\Module\Discussion\Manager\DiscussionManager
     PostManager: Tymy\Module\Discussion\Manager\PostManager
-    routes.discussion: Tymy\Module\Discussion\Router\Router
+    DiscussionRouter: Tymy\Module\Discussion\Router\Router

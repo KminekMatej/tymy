@@ -1,4 +1,4 @@
 services:
     EventManager: Tymy\Module\Event\Manager\EventManager
     EventTypeManager: Tymy\Module\Event\Manager\EventTypeManager
-    routes.event: Tymy\Module\Event\Router\Router
+    EventRouter: Tymy\Module\Event\Router\Router

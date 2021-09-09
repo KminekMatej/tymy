@@ -3,4 +3,4 @@ services:
     HistoryManager: Tymy\Module\Attendance\Manager\HistoryManager
     StatusSetManager: Tymy\Module\Attendance\Manager\StatusSetManager
     StatusManager: Tymy\Module\Attendance\Manager\StatusManager
-    routes.attendance: Tymy\Module\Attendance\Router\Router
+    AttendanceRouter: Tymy\Module\Attendance\Router\Router

@@ -5,5 +5,5 @@
 
 services:  
   TestsManager: Tymy\Module\Test\Manager\TestsManager
-  routes.test: Tymy\Module\Test\Router\Router
+  TestsRouter: Tymy\Module\Test\Router\Router
   

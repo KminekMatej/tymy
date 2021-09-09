@@ -1,4 +1,4 @@
 services:
     UserManager: Tymy\Module\User\Manager\UserManager
     AvatarManager: Tymy\Module\User\Manager\AvatarManager(%userPicFolder%)
-    routes.user: Tymy\Module\User\Router\Router
+    UserRouter: Tymy\Module\User\Router\Router
