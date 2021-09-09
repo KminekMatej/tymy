@@ -2,30 +2,25 @@
 
 namespace Tymy\Module\News\Router;
 
-use Nette\Application\Routers\Route;
+use Nette\Application\Routers\RouteList;
+use Tymy\Module\Core\Interfaces\RouterInterface;
 
 /**
  * Description of Router
  *
  * @author Matej Kminek <matej.kminek@attendees.eu>, 21. 02. 2021
  */
-class Router
+class Router implements RouterInterface
 {
 
-    /**
-     * @return Array
-     */
-    public function createRoutes()
+    public function addRoutes(RouteList &$router): void
     {
-        return [
-            new Route('news[/<resourceId \d+>][/<presenter>][s][/<subResourceId \d+>][/<action>]',
-                    [
-                'module' => 'News',
-                'presenter' => 'Default',
-                'action' => 'default',
-                    ]
-            )
-        ];
+        $router->withPath("api")->addRoute('news[/<resourceId \d+>][/<presenter>][s][/<subResourceId \d+>][/<action>]',
+                [
+                    'module' => 'News',
+                    'presenter' => 'Default',
+                    'action' => 'default',
+                ]
+        );
     }
-
 }

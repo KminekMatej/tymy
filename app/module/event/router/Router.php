@@ -2,31 +2,29 @@
 
 namespace Tymy\Module\Event\Router;
 
-use Nette\Application\Routers\Route;
+use Nette\Application\Routers\RouteList;
+use Tymy\Module\Core\Interfaces\RouterInterface;
 
 /**
  * Description of Router
  *
  * @author Matej Kminek <matej.kminek@attendees.eu>, 13. 9. 2020
  */
-class Router
+class Router implements RouterInterface
 {
-    /**
-     * @return Array
-     */
-    public function createRoutes()
+
+    public function addRoutes(RouteList &$router): void
     {
-        return [
-            new Route('event[s]/withMyAttendance', array(
-                'module' => 'Event',
-                'presenter' => 'Default',
-                'action' => 'default',
-                    )),
-            new Route('eventTypes', array(
-                'module' => 'Event',
-                'presenter' => 'Types',
-                'action' => 'default',
-                    )),
-        ];
+        $router->withPath("api")
+                ->addRoute('event[s]/withMyAttendance', array(
+                    'module' => 'Event',
+                    'presenter' => 'Default',
+                    'action' => 'default',
+                ))
+                ->addRoute('eventTypes', array(
+                    'module' => 'Event',
+                    'presenter' => 'Types',
+                    'action' => 'default',
+        ));
     }
 }

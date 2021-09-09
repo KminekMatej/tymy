@@ -52,11 +52,7 @@ class Bootstrap
 
         self::addModuleConfig($configurator, $modules);
 
-        $container = $configurator->createContainer();
-
-        self::addModuleRoutes($container, $modules);
-
-        return $container;
+        return $configurator->createContainer();
     }
 
     /**
@@ -102,33 +98,6 @@ class Bootstrap
             
             if (file_exists($configFile)) {
                 $configurator->addConfig($configFile);
-            }
-        }
-    }
-
-    /**
-     * Enrich created container with routes from modules
-     * Module routes must be named routes.module (routes.address, routes.calendar etc) - to be taken into account
-     * 
-     * @param Container $container
-     * @param array $modules
-     * @return void
-     */
-    private static function addModuleRoutes(Container &$container, array $modules): void
-    {
-        /* @var $routerFactory RouterFactory */
-        $routerFactory = $container->getByType(RouterFactory::class);
-
-        foreach ($modules as $module) {
-            if ($module == "." || $module == "..") {
-                continue;
-            }
-
-            $serviceName = lcfirst(str_replace('-', '', ucwords($module, '-')));
-
-            if ($container->hasService('routes.' . $serviceName)) {
-                $routesFactory = $container->getService('routes.' . $serviceName);
-                $routerFactory->addModuleRoutes($routesFactory->createRoutes());
             }
         }
     }

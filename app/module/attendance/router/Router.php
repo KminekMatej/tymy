@@ -2,25 +2,22 @@
 
 namespace Tymy\Module\Attendance\Router;
 
-use Nette\Application\Routers\Route;
+use Nette\Application\Routers\RouteList;
+use Tymy\Module\Core\Interfaces\RouterInterface;
 
 /**
  * Description of Router
  *
  * @author Matej Kminek <matej.kminek@attendees.eu>, 03. 11. 2020
  */
-class Router
+class Router implements RouterInterface
 {
-    /**
-     * @return Array
-     */
-    public function createRoutes()
+
+    public function addRoutes(RouteList &$router): void
     {
-        return [
-            new Route('attendance<action Status|StatusSet>[/<resourceId>]', array(
-                'module' => 'Attendance',
-                'presenter' => 'Status',
-                    )),
-        ];
+        $router->withPath("api")->addRoute('attendance<action Status|StatusSet>[/<resourceId>]', array(
+            'module' => 'Attendance',
+            'presenter' => 'Status',
+        ));
     }
 }

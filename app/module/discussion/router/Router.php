@@ -2,36 +2,35 @@
 
 namespace Tymy\Module\Discussion\Router;
 
-use Nette\Application\Routers\Route;
+use Nette\Application\Routers\RouteList;
+use Tymy\Module\Core\Interfaces\RouterInterface;
 
 /**
  * Description of Router
  *
  * @author Matej Kminek <matej.kminek@attendees.eu>, 13. 9. 2020
  */
-class Router
+class Router implements RouterInterface
 {
-    /**
-     * @return Array
-     */
-    public function createRoutes()
+
+    public function addRoutes(RouteList &$router): void
     {
-        return [
-            new Route('discussion[s][/accessible][/withNew]', array(
-                'module' => 'Discussion',
-                'presenter' => 'Default',
-                'action' => 'default',
-                    )),
-            new Route('discussion[s][/newOnly]', array(
-                'module' => 'Discussion',
-                'presenter' => 'NewOnly',
-                'action' => 'default',
-                    )),
-            new Route('discussion[s][/<resourceId \d+>]/<mode html|bb>[/<subResourceId \d+>]', array(
-                'module' => 'Discussion',
-                'presenter' => 'Post',
-                'action' => 'mode',
-                    )),
-        ];
+        $router->withPath("api")
+                ->addRoute('discussion[s][/accessible][/withNew]', array(
+                    'module' => 'Discussion',
+                    'presenter' => 'Default',
+                    'action' => 'default',
+                ))
+                ->addRoute('discussion[s][/newOnly]', array(
+                    'module' => 'Discussion',
+                    'presenter' => 'NewOnly',
+                    'action' => 'default',
+                ))
+                ->addRoute('discussion[s][/<resourceId \d+>]/<mode html|bb>[/<subResourceId \d+>]', array(
+                    'module' => 'Discussion',
+                    'presenter' => 'Post',
+                    'action' => 'mode',
+        ));
     }
+
 }

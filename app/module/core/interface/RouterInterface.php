@@ -2,7 +2,7 @@
 
 namespace Tymy\Module\Core\Interfaces;
 
-use Nette\Application\Routers\Route;
+use Nette\Application\Routers\RouteList;
 
 /**
  * Description of RouterInterface
@@ -11,6 +11,6 @@ use Nette\Application\Routers\Route;
  */
 interface RouterInterface
 {
-    /** @return Route[] */
-    public function createRoutes(): array;
+
+    public function addRoutes(RouteList &$router): void;
 }

@@ -4,22 +4,26 @@ namespace Tymy;
 
 use Nette\Application\Routers\Route;
 use Nette\Application\Routers\RouteList;
+use Nette\DI\Container;
+use Tymy\Module\Core\Interfaces\RouterInterface;
 
 class RouterFactory
 {
-    private array $moduleRoutes = [];
+
+    private Container $container;
+
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
+    }
 
     /**
      * @return RouteList
      */
     public function createRouter(): RouteList
     {
-        $router = new RouteList;
-
-        foreach ($this->moduleRoutes as $moduleRoute) {
-            $router->add($moduleRoute);
-        }
-
+        $router = $this->moduleRouteList();
+        
         // API routes
         $router->withPath("api")
                 ->addRoute('<module>[s][/<resourceId \d+>][/<presenter>][s][/<subResourceId \d+>][/<action>]', [
@@ -77,6 +81,18 @@ class RouterFactory
         $router->addRoute('<presenter>/<action>', 'Homepage:default');
 
         return $router;
+    }
+
+    private function moduleRouteList(): Routelist
+    {
+        $router = new RouteList;
+
+        $routers = $this->container->findByType(RouterInterface::class);
+
+        foreach ($routers as $moduleRouter) {
+            /* @var $moduleRouter RouterInterface */
+            $moduleRouter->addRoutes($router);
+        }
     }
 
     public function addModuleRoutes(array $moduleRoutes): RouterFactory
