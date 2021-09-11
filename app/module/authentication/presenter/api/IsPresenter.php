@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Module\Authentication\Presenter\Api;
+namespace Tymy\Module\Authentication\Presenter\Api;
 
-use App\Module\Core\Presenter\Api\BasePresenter;
+use Tymy\Module\Core\Presenter\Api\BasePresenter;
 use Tymy\Module\Team\Manager\TeamManager;
 
 /**

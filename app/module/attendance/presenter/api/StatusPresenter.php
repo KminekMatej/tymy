@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Module\Attendance\Presenter\Api;
+namespace Tymy\Module\Attendance\Presenter\Api;
 
 use Exception;
 use Tymy\Module\Attendance\Manager\StatusManager;
 use Tymy\Module\Attendance\Manager\StatusSetManager;
-use App\Module\Core\Presenter\Api\SecuredPresenter;
+use Tymy\Module\Core\Presenter\Api\SecuredPresenter;
 
 /**
  * Description of StatusPresenter

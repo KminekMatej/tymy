@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Module\Discussion\Presenter\Api;
+namespace Tymy\Module\Discussion\Presenter\Api;
 
-use App\Module\Core\Presenter\Api\SecuredPresenter;
+use Tymy\Module\Core\Presenter\Api\SecuredPresenter;
 use Tymy\Module\Discussion\Manager\DiscussionManager;
 
 /**

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Module\Authorization\Presenter\Api;
+namespace Tymy\Module\Authorization\Presenter\Api;
 
 use Swoole\MySQL\Exception;
 use Tymy\Module\Authorization\Manager\AuthorizationManager;
-use App\Module\Core\Presenter\Api\BasePresenter;
+use Tymy\Module\Core\Presenter\Api\BasePresenter;
 use Tymy\Module\User\Manager\UserManager;
 
 /**

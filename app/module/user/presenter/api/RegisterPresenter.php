@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Module\User\Presenter\Api;
+namespace Tymy\Module\User\Presenter\Api;
 
 use Exception;
-use App\Module\Core\Presenter\Api\BasePresenter;
+use Tymy\Module\Core\Presenter\Api\BasePresenter;
 use Tymy\Module\User\Manager\UserManager;
 
 /**

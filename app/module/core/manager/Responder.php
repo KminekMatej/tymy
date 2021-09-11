@@ -9,7 +9,7 @@ use Nette\Application\Responses\JsonResponse;
 use Nette\Http\Request;
 use Nette\Http\Response;
 use Tymy\Module\Core\Exception\ResponderException;
-use App\Module\Core\Presenter\Api\BasePresenter;
+use Tymy\Module\Core\Presenter\Api\BasePresenter;
 
 /**
  * Description of Responder
