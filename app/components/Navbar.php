@@ -1,11 +1,12 @@
 <?php
 
-namespace Nette\Application\UI;
+namespace Tymy\Module\Core\Component;
 
+use Nette\Application\UI\Control;
 use Nette\Security\User;
-use Tapi\Exception\APIException;
+use Nette\Utils\DateTime;
 use Tymy\App\Model\Supplier;
-use Tymy\App\Presenters\SecuredPresenter;
+use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Debt\Manager\DebtManager;
 use Tymy\Module\Discussion\Manager\DiscussionManager;
 use Tymy\Module\Event\Manager\EventManager;
@@ -85,7 +86,7 @@ class NavbarControl extends Control
 
     private function events()
     {
-        $events = $this->eventManager->getEventsInterval($this->user->getId(), new \Nette\Utils\DateTime(), new \Nette\Utils\DateTime("+ 1 year"));
+        $events = $this->eventManager->getEventsInterval($this->user->getId(), new DateTime(), new DateTime("+ 1 year"));
         $this->template->events = $events;
         $this->template->eventWarnings = $this->eventManager->getWarnings($events);
         $this->template->eventColors = $this->supplier->getEventColors();

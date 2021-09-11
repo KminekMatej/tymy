@@ -2,7 +2,7 @@
 
 namespace Tymy\Module\Core\Presenter\Front;
 
-use Nette\Application\UI\NavbarControl;
+use Tymy\Module\Core\Component\NavbarControl;
 use Nette\Security\IUserStorage;
 use Tracy\Debugger;
 use Tymy\App\Model\SettingMenu;
