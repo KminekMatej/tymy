@@ -17,7 +17,7 @@ class RouteList extends NetteRouteList
     public function addApiRoute(string $mask, $metadata = [], int $flags = 0)
     {
         $metadata['module'] = [
-            Route::VALUE => "Api:" . $metadata['module'],
+            Route::VALUE => isset($metadata['module']) ? "Api:" . $metadata['module'] : null,
             Route::FILTER_IN => function ($module) {
                 return 'Api:' . ucfirst($module);
             },
