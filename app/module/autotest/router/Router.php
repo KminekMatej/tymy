@@ -1,6 +1,6 @@
 <?php
 
-namespace Tymy\Module\Test\Router;
+namespace Tymy\Module\Autotest\Router;
 
 use Nette\Application\Routers\RouteList;
 use Tymy\Module\Core\Interfaces\RouterInterface;
@@ -15,10 +15,11 @@ class Router implements RouterInterface
 
     public function addRoutes(RouteList &$router): void
     {
-        $router->withPath("api")->addRoute('test[/<resourceId>]', array(
-            'module' => 'Test',
+        $router->addRoute('autotest[/<resourceId>]', array(
+            'module' => 'Autotest',
             'presenter' => 'Default',
             'action' => 'default',
         ));
     }
+
 }
