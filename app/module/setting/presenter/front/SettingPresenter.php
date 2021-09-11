@@ -3,13 +3,14 @@
 namespace Tymy\Module\Core\Presenter\Front;
 
 use Nette\Application\UI\Form;
+use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
 use stdClass;
 use Tapi\EventListResource;
 use Tapi\UserResource;
 use Tymy\Module\Attendance\Manager\StatusManager;
-use Tymy\Module\Attendance\Model\Status;
 use Tymy\Module\Discussion\Manager\DiscussionManager;
+use Tymy\Module\Discussion\Model\Discussion;
 use Tymy\Module\Event\Manager\EventManager;
 use Tymy\Module\Event\Manager\EventTypeManager;
 use Tymy\Module\Event\Model\Event;
@@ -23,7 +24,7 @@ use Tymy\Module\Poll\Manager\PollManager;
 use Tymy\Module\Poll\Model\Option;
 use Tymy\Module\Poll\Model\Poll;
 
-class SettingsPresenter extends SecuredPresenter
+class SettingPresenter extends SecuredPresenter
 {
 
     /** @inject */
@@ -158,7 +159,7 @@ class SettingsPresenter extends SecuredPresenter
             "3" => ["caption" => $this->translator->translate("discussion.new")]
         ]);
         $this->template->isNew = true;
-        $this->template->discussion = (new \Tymy\Module\Discussion\Model\Discussion())
+        $this->template->discussion = (new Discussion())
                 ->setId(-1)
                 ->setCaption("")
                 ->setDescription("")
@@ -260,9 +261,9 @@ class SettingsPresenter extends SecuredPresenter
                     ->setId(-1)
                     ->setCaption("")
                     ->setDescription("")
-                    ->setStartTime(new \Nette\Utils\DateTime("+ 24 hours"))
-                    ->setEndTime(new \Nette\Utils\DateTime("+ 25 hours"))
-                    ->setCloseTime(new \Nette\Utils\DateTime("+ 23 hours"))
+                    ->setStartTime(new DateTime("+ 24 hours"))
+                    ->setEndTime(new DateTime("+ 25 hours"))
+                    ->setCloseTime(new DateTime("+ 23 hours"))
                     ->setPlace("")
                     ->setLink("")
         ];

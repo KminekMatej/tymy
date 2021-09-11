@@ -1,9 +1,9 @@
 <?php
 
-namespace Tymy\Module\Core\Presenter\Front;
+namespace Tymy\Module\Team\Presenter\Front;
 
-use Tapi\Exception\APIException;
 use Tapi\UserResource;
+use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Model\User;
 
