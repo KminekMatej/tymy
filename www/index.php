@@ -1,12 +1,15 @@
 <?php
 
+use Nette\Application\Application;
+use Tymy\Bootstrap;
+
 declare(strict_types=1);
 
 // absolute filesystem path to the web root
 define('WWW_DIR', dirname(__FILE__));
 
-require __DIR__ . '/../app/bootstrap.php';
+require __DIR__ . '/../app/Bootstrap.php';
 
-\Tymy\Bootstrap::boot()
-	->getByType(Nette\Application\Application::class)
+Bootstrap::boot()
+	->getByType(Application::class)
 	->run();
