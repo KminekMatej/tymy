@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Module\Test\Presenter\Api;
+namespace App\Module\Presenter\Front\Presenter\Api;
 
 use Tymy\Bootstrap;
 use Nette\Http\UrlScript;
