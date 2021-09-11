@@ -1,6 +1,6 @@
 <?php
 
-namespace Tymy\App\Presenters;
+namespace Tymy\Module\Core\Presenter\Front;
 
 use Nette\Application\UI\NavbarControl;
 use Nette\Security\IUserStorage;

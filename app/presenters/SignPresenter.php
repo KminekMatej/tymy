@@ -1,6 +1,6 @@
 <?php
 
-namespace Tymy\App\Presenters;
+namespace Tymy\Module\Core\Presenter\Front;
 
 use Tymy\App\Forms\PwdLostFormFactory;
 use Tymy\App\Forms\PwdResetFormFactory;

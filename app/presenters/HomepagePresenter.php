@@ -1,6 +1,6 @@
 <?php
 
-namespace Tymy\App\Presenters;
+namespace Tymy\Module\Core\Presenter\Front;
 
 use Tymy\Module\Debt\Manager\DebtManager;
 use Tymy\Module\Discussion\Manager\DiscussionManager;
