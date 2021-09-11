@@ -327,7 +327,6 @@ abstract class RequestCase extends TestCase
 
     public function authorizeAdmin($userName = null, $password = null)
     {
-        var_dump($this->config);
         $this->user->logout(true);
         $this->user->setAuthenticator($this->authenticationManager);
         $this->user->login($userName ? $userName : $this->config["user_admin_login"], $password ? $password : $this->config["user_admin_pwd"]);
