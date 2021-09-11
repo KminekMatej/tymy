@@ -1,25 +1,19 @@
 <?php
 
-namespace Tymy\Module\Core\Presenter\Front;
+namespace Tymy\Module\Setting\Presenter\Front;
 
 use Nette\Application\UI\Form;
-use Nette\Utils\Strings;
 use stdClass;
 use Tapi\UserResource;
 use Tymy\Module\Attendance\Manager\StatusManager;
 use Tymy\Module\Event\Manager\EventManager;
 use Tymy\Module\Event\Manager\EventTypeManager;
 use Tymy\Module\Event\Model\EventType;
-use Tymy\Module\Multiaccount\Manager\MultiaccountManager;
 use Tymy\Module\Permission\Manager\PermissionManager;
-use Tymy\Module\Permission\Model\Permission;
-use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\Poll\Manager\OptionManager;
 use Tymy\Module\Poll\Manager\PollManager;
-use Tymy\Module\Poll\Model\Option;
-use Tymy\Module\Poll\Model\Poll;
 
-class SettingPresenter extends SecuredPresenter
+class DefaultPresenter extends SettingDefaultPresenter
 {
 
     /** @inject */
@@ -41,66 +35,9 @@ class SettingPresenter extends SecuredPresenter
     public StatusManager $statusManager;
 
 
-    public function actionApp()
-    {
-        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("settings.application"), "link" => $this->link(":Setting:app")]]);
-        $currentVersion = $this->supplier->getVersion(0);
-        $this->template->version = $currentVersion;
-        $previousPatch = NULL;
-        $firstMinor = NULL;
-        foreach ($this->supplier->getVersions() as $version) {
-            if (empty($previousPatch) && ($currentVersion->major != $version->major || $currentVersion->minor != $version->minor || $currentVersion->patch != $version->patch)) {
-                $previousPatch = $version;
-            }
-            if ($currentVersion->major == $version->major && $currentVersion->minor == $version->minor && $version->patch == 0) {
-                $firstMinor = $version;
-            }
-        }
-        if ($previousPatch === NULL)
-            $previousPatch = $this->supplier->getVersion(count($this->supplier->getVersions()));
-        $this->template->previousPatchVersion = $previousPatch;
-        $this->template->firstMinorVersion = $firstMinor;
-
-        $this->template->allSkins = $this->supplier->getAllSkins();
-    }
-
-    public function renderMultiaccount()
-    {
-        $this->setLevelCaptions(["3" => ["caption" => $this->translator->translate("settings.multiaccount", 1), "link" => $this->link(":Setting:multiaccounts")]]);
-        $this->template->multiaccounts = $this->multiAccountManager->getList();
-    }
-
     public function renderDefault()
     {
         $this->template->accessibleSettings = $this->getAccessibleSettings();
-    }
-
-    public function handleMultiaccountRemove($team)
-    {
-        $this->multiAccountManager->delete($team);
-        $this->flashMessage($this->translator->translate("common.alerts.multiaccountRemoved", NULL, ['team' => $team]), "success");
-        $this->redirect("Settings:multiaccount");
-    }
-
-    public function createComponentAddMaForm()
-    {
-        $form = new Form();
-        $form->addText("sysName", $this->translator->translate("team.team", 1));
-        $form->addText("username", $this->translator->translate("sign.username"));
-        $form->addPassword("password", $this->translator->translate("sign.password"));
-        $form->addSubmit("save");
-        $multiAccountManager = $this->multiAccountManager;
-        $form->onSuccess[] = function (Form $form, stdClass $values) use ($multiAccountManager) {
-            /* @var $multiAccountManager MultiaccountManager */
-            $multiAccountManager->create([
-                "login" => $values->username,
-                "password" => $values->password,
-                    ], $values->sysName);
-
-            $this->flashMessage($this->translator->translate("common.alerts.multiaccountAdded", NULL, ["team" => $values->sysName]));
-            $this->redirect("Settings:multiaccount");
-        };
-        return $form;
     }
 
     public function createComponentUserConfigForm()
