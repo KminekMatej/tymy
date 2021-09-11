@@ -1,6 +1,6 @@
 <?php
 
-namespace Tymy\Test;
+namespace Tymy\Module\Autotest;
 
 use Nette\Utils\DateTime;
 

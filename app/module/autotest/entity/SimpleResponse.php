@@ -1,12 +1,12 @@
 <?php
 
-namespace Tymy\Test;
+namespace Tymy\Module\Autotest;
 
 use Nette\Application\IResponse;
 use Nette\Application\Request;
 use Nette\Application\UI\Presenter;
 use Nette\Http\Response;
-use Tymy\Test\Entity\Assert;
+use Tymy\Module\Autotest\Entity\Assert;
 
 /**
  * Class for easy checking response

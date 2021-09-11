@@ -1,12 +1,12 @@
 <?php
 
-namespace Tymy\Test\Debt;
+namespace Tymy\Module\Autotest\Debt;
 
 use Tymy\Bootstrap;
 use Nette\Utils\DateTime;
 use Tymy\Module\Debt\Model\Debt;
-use Tymy\Test\Entity\Assert;
-use Tymy\Test\RequestCase;
+use Tymy\Module\Autotest\Entity\Assert;
+use Tymy\Module\Autotest\RequestCase;
 
 require getenv("ROOT_DIR") . '/app/Bootstrap.php';
 $container = Bootstrap::boot();

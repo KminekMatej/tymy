@@ -1,12 +1,12 @@
 <?php
 
-namespace Tymy\Test\User;
+namespace Tymy\Module\Autotest\User;
 
 use Tymy\Bootstrap;
 use Tymy\Module\User\Model\User;
-use Tymy\Test\Entity\Assert;
-use Tymy\Test\RequestCase;
-use Tymy\Test\SimpleResponse;
+use Tymy\Module\Autotest\Entity\Assert;
+use Tymy\Module\Autotest\RequestCase;
+use Tymy\Module\Autotest\SimpleResponse;
 
 require getenv("ROOT_DIR") . '/app/Bootstrap.php';
 $container = Bootstrap::boot();

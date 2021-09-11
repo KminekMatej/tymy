@@ -1,11 +1,11 @@
 <?php
 
-namespace Tymy\Test\Permission;
+namespace Tymy\Module\Autotest\Permission;
 
 use Tymy\Bootstrap;
 use Tymy\Module\Permission\Model\Permission;
-use Tymy\Test\Entity\Assert;
-use Tymy\Test\RequestCase;
+use Tymy\Module\Autotest\Entity\Assert;
+use Tymy\Module\Autotest\RequestCase;
 
 require getenv("ROOT_DIR") . '/app/Bootstrap.php';
 $container = Bootstrap::boot();

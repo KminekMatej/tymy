@@ -1,14 +1,14 @@
 <?php
 
-namespace Tymy\Test\Discussion;
+namespace Tymy\Module\Autotest\Discussion;
 
 use Tymy\Bootstrap;
 use Nette\Utils\DateTime;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Discussion\Model\Discussion;
-use Tymy\Test\Entity\Assert;
-use Tymy\Test\RequestCase;
-use Tymy\Test\SimpleResponse;
+use Tymy\Module\Autotest\Entity\Assert;
+use Tymy\Module\Autotest\RequestCase;
+use Tymy\Module\Autotest\SimpleResponse;
 
 require getenv("ROOT_DIR") . '/app/Bootstrap.php';
 $container = Bootstrap::boot();

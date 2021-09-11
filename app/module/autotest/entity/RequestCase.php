@@ -1,6 +1,6 @@
 <?php
 
-namespace Tymy\Test;
+namespace Tymy\Module\Autotest;
 
 use Tymy\Bootstrap;
 use Nette\Application\BadRequestException;
@@ -23,7 +23,7 @@ use Tester\TestCase;
 use Tymy\Module\Authentication\Manager\AuthenticationManager;
 use Tymy\Module\Core\Manager\Responder;
 use Tymy\Module\Core\Model\BaseModel;
-use Tymy\Test\Entity\Assert;
+use Tymy\Module\Autotest\Entity\Assert;
 use const ROOT_DIR;
 use const TEST_DIR;
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace Tymy\Test\Authentication;
+namespace Tymy\Module\Autotest\Authentication;
 
 use Tymy\Bootstrap;
-use Tymy\Test\RequestCase;
+use Tymy\Module\Autotest\RequestCase;
 
 require getenv("ROOT_DIR") . '/app/Bootstrap.php';
 $container = Bootstrap::boot();

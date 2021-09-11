@@ -1,10 +1,10 @@
 <?php
 
-namespace Tymy\Test\Right;
+namespace Tymy\Module\Autotest\Right;
 
 use Tymy\Bootstrap;
 use Tymy\Module\Right\Model\Right;
-use Tymy\Test\RequestCase;
+use Tymy\Module\Autotest\RequestCase;
 
 require getenv("ROOT_DIR") . '/app/Bootstrap.php';
 $container = Bootstrap::boot();

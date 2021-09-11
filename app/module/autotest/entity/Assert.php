@@ -1,8 +1,8 @@
 <?php
 
-namespace Tymy\Test\Entity;
+namespace Tymy\Module\Autotest\Entity;
 
-use Tymy\Test\SimpleResponse;
+use Tymy\Module\Autotest\SimpleResponse;
 
 /**
  * Description of Assert

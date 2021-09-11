@@ -1,11 +1,11 @@
 <?php
 
-namespace Tymy\Test\Event;
+namespace Tymy\Module\Autotest\Event;
 
 use Tymy\Bootstrap;
 use Tymy\Module\Attendance\Model\Attendance;
-use Tymy\Test\Entity\Assert;
-use Tymy\Test\RequestCase;
+use Tymy\Module\Autotest\Entity\Assert;
+use Tymy\Module\Autotest\RequestCase;
 
 require getenv("ROOT_DIR") . '/app/Bootstrap.php';
 $container = Bootstrap::boot();

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tymy\Test;
+namespace Tymy\Module\Autotest;
 
 use Nette;
 use Nette\Http\FileUpload;

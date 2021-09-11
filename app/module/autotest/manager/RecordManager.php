@@ -1,6 +1,6 @@
 <?php
 
-namespace Tymy\Test;
+namespace Tymy\Module\Autotest;
 
 use Nette\Utils\DateTime;
 use Tymy\Module\Core\Model\BaseModel;
@@ -10,7 +10,7 @@ use Tymy\Module\Event\Model\Event;
 use Tymy\Module\Permission\Model\Permission;
 use Tymy\Module\Poll\Model\Poll;
 use Tymy\Module\User\Model\User;
-use Tymy\Test\Entity\Assert;
+use Tymy\Module\Autotest\Entity\Assert;
 
 /**
  * Description of RecordManager
