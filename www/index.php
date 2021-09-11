@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 use Nette\Application\Application;
 use Tymy\Bootstrap;
 
-declare(strict_types=1);
 
 // absolute filesystem path to the web root
 define('WWW_DIR', dirname(__FILE__));
