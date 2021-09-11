@@ -4,6 +4,6 @@
 #
 
 services:  
-  TestsManager: Tymy\Module\Test\Manager\TestsManager
-  TestsRouter: Tymy\Module\Test\Router\Router
+  TestsManager: Tymy\Module\Autotest\Manager\TestsManager
+  TestsRouter: Tymy\Module\Autotest\Router\Router
   
