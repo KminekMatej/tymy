@@ -32,8 +32,7 @@ class RouterFactory
                             return 'Api:' . ucfirst($module);
                         },
                         Route::FILTER_OUT => function ($module) {
-                            list(, $module) = explode(':', $module);
-                            return strtolower($module);
+                            return is_array($module) ? strtolower(explode(':', $module)[1]) : $module;
                         },
                     ],
                     'presenter' => 'Default',
@@ -78,7 +77,7 @@ class RouterFactory
         $router->addRoute('nastaveni/opravneni/nove', 'Settings:permission_new');
         $router->addRoute('nastaveni/opravneni[/<permission>]', 'Settings:permissions');
         $router->addRoute('nastaveni/aplikace', 'Settings:app');
-        $router->addRoute('<presenter>/<action>', 'Homepage:default');
+        $router->addRoute('<module>[/<presenter>][/<action>]', 'Default:default');
 
         return $router;
     }
