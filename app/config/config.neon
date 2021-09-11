@@ -5,8 +5,8 @@
 application:
         errorPresenter: Error
         mapping:
-            *: Tymy\App\Presenters\*Presenter
-            Api: App\Module\*\Presenter\Api\*Presenter
+            *: Tymy\Module\*\Presenter\Front\*Presenter
+            Api: Tymy\Module\*\Presenter\Api\*Presenter
 
 
 session:
