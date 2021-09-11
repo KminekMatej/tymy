@@ -10,6 +10,7 @@ use Tymy\Module\Autotest\Manager\TestsManager;
  */
 
 $runner->setEnvironmentVariable("ROOT_DIR", ROOT_DIR);
+$runner->setEnvironmentVariable("AUTOTEST", true);
 
 $runner->outputHandlers = [
     new ConsolePrinter($runner, true, TestsManager::OUT_CONSOLE),

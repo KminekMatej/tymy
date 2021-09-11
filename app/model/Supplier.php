@@ -104,7 +104,7 @@ class Supplier {
     }
 
     public function setTym($tym) {
-        $this->tym = $tym == self::AUTODETECT ? explode(".", $_SERVER["HTTP_HOST"])[0] : $tym;
+        $this->tym = getenv("AUTOTEST") ? "autotest" : explode(".", $_SERVER["HTTP_HOST"])[0];
         return $this;
     }
 
