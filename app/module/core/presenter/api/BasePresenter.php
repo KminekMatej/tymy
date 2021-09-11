@@ -320,5 +320,15 @@ class BasePresenter extends Presenter
         
         parent::terminate();
     }
-
+    
+    /**
+     * Allow access to this presenter only if debugger mode is enabled.
+     * If debugger is disabled, redirect to Homepage
+     */
+    protected function allowOnlyInDebuggerMode(): void
+    {
+        if(Debugger::$productionMode){  //
+            $this->redirect("Core:Homepage:Default");
+        }
+    }
 }
