@@ -18,10 +18,6 @@ $container = Bootstrap::boot();
  */
 class PollTest extends RequestCase
 {
-    public function getBasePath()
-    {
-        return "/" . basename(__DIR__);
-    }
 
     public function getModule(): string
     {

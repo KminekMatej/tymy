@@ -23,14 +23,14 @@ $container = Bootstrap::boot();
  */
 class AttendanceStatusTest extends RequestCase
 {
-    public function getBasePath()
+    protected function getBasePath(): string
     {
-        return "/" . basename(__DIR__) . "Status";
+        return parent::getBasePath() . "Status";
     }
 
     public function getStatusSetPath()
     {
-        return "/" . basename(__DIR__) . "StatusSet";
+        return parent::getBasePath() . "StatusSet";
     }
 
     public function getModule(): string

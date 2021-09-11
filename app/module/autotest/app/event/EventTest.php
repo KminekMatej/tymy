@@ -17,10 +17,6 @@ $container = Bootstrap::boot();
  */
 class EventTest extends RequestCase
 {
-    public function getBasePath()
-    {
-        return "/" . basename(__DIR__);
-    }
 
     public function getModule(): string
     {

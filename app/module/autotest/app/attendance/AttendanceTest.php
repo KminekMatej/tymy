@@ -20,11 +20,6 @@ class AttendanceTest extends RequestCase
 {
     private ?int $eventId = null;
 
-    public function getBasePath()
-    {
-        return "/" . basename(__DIR__);
-    }
-
     public function getModule(): string
     {
         return Attendance::MODULE;

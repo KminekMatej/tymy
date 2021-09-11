@@ -18,11 +18,6 @@ $container = Bootstrap::boot();
  */
 class PermissionTest extends RequestCase
 {
-    public function getBasePath()
-    {
-        return "/" . basename(__DIR__);
-    }
-
     public function getModule(): string
     {
         return Permission::MODULE;

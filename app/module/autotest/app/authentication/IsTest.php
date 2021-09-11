@@ -36,7 +36,7 @@ class IsTest extends RequestCase
         //not used in this test
     }
 
-    public function getBasePath()
+    protected function getBasePath(): string
     {
         return "is";
     }

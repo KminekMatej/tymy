@@ -102,7 +102,7 @@ class Supplier {
     public function getApiRoot() {
         return $this->apiRoot;
     }
-
+    
     public function setTym($tym) {
         $this->tym = getenv("AUTOTEST") ? "autotest" : explode(".", $_SERVER["HTTP_HOST"])[0];
         return $this;

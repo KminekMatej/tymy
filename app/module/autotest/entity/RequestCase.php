@@ -101,7 +101,10 @@ abstract class RequestCase extends TestCase
      */
     abstract public function getModule();
 
-    abstract public function getBasePath();
+    protected function getBasePath(): string
+    {
+        return "/api/" . $this->getModule();
+    }
 
     abstract public function createRecord();
 

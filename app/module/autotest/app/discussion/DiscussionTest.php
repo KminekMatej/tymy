@@ -251,7 +251,7 @@ class DiscussionTest extends RequestCase
         return $this->recordManager->createDiscussion();
     }
 
-    public function getBasePath()
+    protected function getBasePath(): string
     {
         return Discussion::MODULE;
     }
