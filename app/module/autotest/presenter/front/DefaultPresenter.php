@@ -124,7 +124,7 @@ class DefaultPresenter extends BasePresenter
      */
     private function mockAutotestServer(UrlScript $url)
     {
-        $this->template->urlroot = "{$url->scheme}://{$url->host}{$url->basePath}test";
+        $this->template->urlroot = "{$url->scheme}://{$url->host}{$url->basePath}autotest";
         $team = substr($url->host, 0, strpos($url->host, "."));
         putenv("team=$team");
     }
