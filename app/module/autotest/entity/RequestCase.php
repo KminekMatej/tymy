@@ -79,10 +79,10 @@ abstract class RequestCase extends TestCase
 
     public function __construct(Container $container)
     {
-        define('TEST_DIR', Bootstrap::normalizePath(ROOT_DIR . "/vendor/tymy.cz/test"));
+        define('TEST_DIR', Bootstrap::normalizePath(Bootstrap::MODULES_DIR . "/autotest"));
         define('WWW_DIR', Bootstrap::normalizePath(ROOT_DIR . "/www"));
         $this->container = $container;
-        $this->user = $this->container->getByType('Nette\Security\User');
+        $this->user = $this->container->getByType(User::class);
         $this->authenticationManager = $this->container->getByType(AuthenticationManager::class);
         $this->httpRequest = $this->container->getService("http.request");
         $this->requestFactory = $this->container->getService("http.requestFactory");
@@ -327,6 +327,7 @@ abstract class RequestCase extends TestCase
 
     public function authorizeAdmin($userName = null, $password = null)
     {
+        var_dump($this->config);
         $this->user->logout(true);
         $this->user->setAuthenticator($this->authenticationManager);
         $this->user->login($userName ? $userName : $this->config["user_admin_login"], $password ? $password : $this->config["user_admin_pwd"]);
