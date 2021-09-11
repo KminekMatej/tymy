@@ -1,6 +1,6 @@
 <?php
 
-namespace Tymy\Module\Test\Manager;
+namespace Tymy\Module\Autotest\Manager;
 
 use Tester\Runner\CliTester;
 use const ROOT_DIR;
@@ -62,7 +62,7 @@ class TestsManager
      *
      * @return string[] Array of folders, with exceptions set in SKIP constant
      */
-    public function getHelp()
+    public function getAllFolders()
     {
         $dirs = array_filter(glob(TEST_DIR . '/app/*'), 'is_dir');
         $modules = ["all"];

@@ -2,7 +2,7 @@
 
 use Tester\Runner\Output\ConsolePrinter;
 use Tester\Runner\Output\JUnitPrinter;
-use Tymy\Module\Test\Manager\TestsManager;
+use Tymy\Module\Autotest\Manager\TestsManager;
 
 /*
  * Setup file for nette runner

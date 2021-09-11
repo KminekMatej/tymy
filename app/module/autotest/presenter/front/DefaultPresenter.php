@@ -8,7 +8,7 @@ use SimpleXMLElement;
 use Swoole\MySQL\Exception;
 use Tymy\Bootstrap;
 use Tymy\Module\Core\Presenter\Api\BasePresenter;
-use Tymy\Module\Test\Manager\TestsManager;
+use Tymy\Module\Autotest\Manager\TestsManager;
 use const ROOT_DIR;
 
 class DefaultPresenter extends BasePresenter
@@ -56,7 +56,7 @@ class DefaultPresenter extends BasePresenter
 
         $cols = 5;
 
-        $allModules = $this->testsManager->getHelp();
+        $allModules = $this->testsManager->getAllFolders();
         $this->template->modules = $allModules;
         $this->template->testsOutput = $output ? $output['console'] : null;
         $this->template->cols = $cols;
