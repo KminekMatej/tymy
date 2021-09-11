@@ -24,22 +24,12 @@ class RouterFactory
     {
         /* @var $router RouteList */
         $router = $this->moduleRouteList();
-        
+
         // API routes
-        $router->withPath("api")
-                ->addRoute('<module>[s][/<resourceId \d+>][/<presenter>][s][/<subResourceId \d+>][/<action>]', [
-                    'module' => [
-                        Route::FILTER_IN => function ($module) {
-                            return 'Api:' . ucfirst($module);
-                        },
-                        Route::FILTER_OUT => function ($module) {
-                            return is_array($module) ? strtolower(explode(':', $module)[1]) : $module;
-                        },
-                    ],
-                    'presenter' => 'Default',
-                    'action' => 'default',
-                        ]
-        );
+        $router->addApiRoute('<module>[s][/<resourceId \d+>][/<presenter>][s][/<subResourceId \d+>][/<action>]', [
+            'presenter' => 'Default',
+            'action' => 'default',
+        ]);
 
         // APP routes
         $router->addRoute('index.php', 'Homepage:default', Route::ONE_WAY);
