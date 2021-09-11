@@ -2,12 +2,12 @@
 
 namespace Tymy\Module\Autotest\Presenter\Front;
 
-use Tymy\Module\Core\Presenter\Api\BasePresenter;
 use Nette\Http\UrlScript;
 use Nette\Utils\DateTime;
 use SimpleXMLElement;
 use Swoole\MySQL\Exception;
 use Tymy\Bootstrap;
+use Tymy\Module\Core\Presenter\Api\BasePresenter;
 use Tymy\Module\Test\Manager\TestsManager;
 use const ROOT_DIR;
 
@@ -15,16 +15,15 @@ class DefaultPresenter extends BasePresenter
 {
     public const PHP_CMD_PARAM = "php_cmd";
 
-    /** @var array */
-    private $log;
+    private array $log;
 
-    /** @var TestsManager @inject */
-    public $testsManager;
+    /** @inject */
+    public TestsManager $testsManager;
 
     public function startup()
     {
         parent::startup();
-        define('TEST_DIR', Bootstrap::normalizePath(ROOT_DIR . "/vendor/tymy.cz/test"));
+        define('TEST_DIR', Bootstrap::normalizePath(Bootstrap::MODULES_DIR . "/autotest"));
     }
 
     protected function beforeRender(): void
