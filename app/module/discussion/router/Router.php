@@ -2,7 +2,7 @@
 
 namespace Tymy\Module\Discussion\Router;
 
-use Nette\Application\Routers\RouteList;
+use Tymy\Module\Core\Router\RouteList;
 use Tymy\Module\Core\Interfaces\RouterInterface;
 
 /**
@@ -16,17 +16,17 @@ class Router implements RouterInterface
     public function addRoutes(RouteList &$router): void
     {
         $router->withPath("api")
-                ->addRoute('discussion[s][/accessible][/withNew]', array(
+                ->addApiRoute('discussion[s][/accessible][/withNew]', array(
                     'module' => 'Discussion',
                     'presenter' => 'Default',
                     'action' => 'default',
                 ))
-                ->addRoute('discussion[s][/newOnly]', array(
+                ->addApiRoute('discussion[s][/newOnly]', array(
                     'module' => 'Discussion',
                     'presenter' => 'NewOnly',
                     'action' => 'default',
                 ))
-                ->addRoute('discussion[s][/<resourceId \d+>]/<mode html|bb>[/<subResourceId \d+>]', array(
+                ->addApiRoute('discussion[s][/<resourceId \d+>]/<mode html|bb>[/<subResourceId \d+>]', array(
                     'module' => 'Discussion',
                     'presenter' => 'Post',
                     'action' => 'mode',

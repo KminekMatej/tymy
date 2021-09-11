@@ -2,7 +2,7 @@
 
 namespace Tymy\Module\Permission\Router;
 
-use Nette\Application\Routers\RouteList;
+use Tymy\Module\Core\Router\RouteList;
 use Tymy\Module\Core\Interfaces\RouterInterface;
 
 /**
@@ -15,7 +15,7 @@ class Router implements RouterInterface
 
     public function addRoutes(RouteList &$router): void
     {
-        $router->withPath("api")->addRoute('permission<action Name|Type>[/<name \D+>]', array(
+        $router->addApiRoute('permission<action Name|Type>[/<name \D+>]', array(
             'module' => 'Permission',
             'presenter' => 'Default',
         ));

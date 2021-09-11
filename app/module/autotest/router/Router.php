@@ -2,7 +2,7 @@
 
 namespace Tymy\Module\Autotest\Router;
 
-use Nette\Application\Routers\RouteList;
+use Tymy\Module\Core\Router\RouteList;
 use Tymy\Module\Core\Interfaces\RouterInterface;
 
 /**
@@ -15,7 +15,7 @@ class Router implements RouterInterface
 
     public function addRoutes(RouteList &$router): void
     {
-        $router->addRoute('autotest[/<resourceId>]', array(
+        $router->addApiRoute('autotest[/<resourceId>]', array(
             'module' => 'Autotest',
             'presenter' => 'Default',
             'action' => 'default',

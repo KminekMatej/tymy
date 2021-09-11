@@ -2,7 +2,7 @@
 
 namespace Tymy\Module\Multiaccount\Router;
 
-use Nette\Application\Routers\RouteList;
+use Tymy\Module\Core\Router\RouteList;
 use Tymy\Module\Core\Interfaces\RouterInterface;
 
 /**
@@ -15,7 +15,7 @@ class Router implements RouterInterface
 
     public function addRoutes(RouteList &$router): void
     {
-        $router->withPath("api")->addRoute('multiaccount[s][/<resourceId>]', array(
+        $router->addApiRoute('multiaccount[s][/<resourceId>]', array(
             'module' => 'Multiaccount',
             'presenter' => 'Default',
             'action' => 'default',

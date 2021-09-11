@@ -2,7 +2,7 @@
 
 namespace Tymy\Module\Authentication\Router;
 
-use Nette\Application\Routers\RouteList;
+use Tymy\Module\Core\Router\RouteList;
 use Tymy\Module\Core\Interfaces\RouterInterface;
 
 /**
@@ -15,12 +15,12 @@ class Router implements RouterInterface
 
     public function addRoutes(RouteList &$router): void
     {
-        $router->withPath("api")->addRoute('log<action \D+>[/<username>][/<password>]', array(
+        $router->addApiRoute('log<action \D+>[/<username>][/<password>]', array(
                     'module' => 'Authentication',
                     'presenter' => 'Default',
                     'action' => 'default',
                 ))
-                ->addRoute('is', array(
+                ->addApiRoute('is', array(
                     'module' => 'Authentication',
                     'presenter' => 'Is',
                     'action' => 'default',

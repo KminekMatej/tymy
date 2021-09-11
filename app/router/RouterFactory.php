@@ -3,9 +3,9 @@
 namespace Tymy;
 
 use Nette\Application\Routers\Route;
-use Nette\Application\Routers\RouteList;
 use Nette\DI\Container;
 use Tymy\Module\Core\Interfaces\RouterInterface;
+use Tymy\Module\Core\Router\RouteList;
 
 class RouterFactory
 {
@@ -22,6 +22,7 @@ class RouterFactory
      */
     public function createRouter(): RouteList
     {
+        /* @var $router RouteList */
         $router = $this->moduleRouteList();
         
         // API routes
@@ -77,11 +78,15 @@ class RouterFactory
         $router->addRoute('nastaveni/opravneni/nove', 'Settings:permission_new');
         $router->addRoute('nastaveni/opravneni[/<permission>]', 'Settings:permissions');
         $router->addRoute('nastaveni/aplikace', 'Settings:app');
-        $router->addRoute('<module>[/<presenter>][/<action>]', 'Default:default');
+        $router->addRoute('[<module>][/<presenter>][/<action>]', 'Core:Homepage:default');
 
         return $router;
     }
 
+    /**
+     * Create RouteList, already containing routes from modules
+     * @return Routelist
+     */
     private function moduleRouteList(): Routelist
     {
         $router = new RouteList;

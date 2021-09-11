@@ -2,7 +2,7 @@
 
 namespace Tymy\Module\Core\Interfaces;
 
-use Nette\Application\Routers\RouteList;
+use Tymy\Module\Core\Router\RouteList;
 
 /**
  * Description of RouterInterface

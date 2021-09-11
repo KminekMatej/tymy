@@ -2,7 +2,7 @@
 
 namespace Tymy\Module\Event\Router;
 
-use Nette\Application\Routers\RouteList;
+use Tymy\Module\Core\Router\RouteList;
 use Tymy\Module\Core\Interfaces\RouterInterface;
 
 /**
@@ -16,12 +16,12 @@ class Router implements RouterInterface
     public function addRoutes(RouteList &$router): void
     {
         $router->withPath("api")
-                ->addRoute('event[s]/withMyAttendance', array(
+                ->addApiRoute('event[s]/withMyAttendance', array(
                     'module' => 'Event',
                     'presenter' => 'Default',
                     'action' => 'default',
                 ))
-                ->addRoute('eventTypes', array(
+                ->addApiRoute('eventTypes', array(
                     'module' => 'Event',
                     'presenter' => 'Types',
                     'action' => 'default',

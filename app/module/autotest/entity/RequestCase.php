@@ -9,7 +9,7 @@ use Nette\Application\PresenterFactory;
 use Nette\Application\Request;
 use Nette\Application\Responses\JsonResponse;
 use Nette\Application\Responses\TextResponse;
-use Nette\Application\Routers\RouteList;
+use Tymy\Module\Core\Router\RouteList;
 use Nette\Application\UI\Presenter;
 use Nette\DI\Container;
 use Nette\Http\Request as Request2;
