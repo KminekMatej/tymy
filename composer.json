@@ -19,5 +19,12 @@
     "require-dev": {
         "nette/tester": "^2.0"
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "config": {
+        "discard-changes": true,
+        "secure-http": false,
+        "platform": {
+            "php": "7.4.0"
+        }
+    }
 }
