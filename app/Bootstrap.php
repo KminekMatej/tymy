@@ -14,6 +14,7 @@ require __DIR__ . '/../vendor/autoload.php';
 
 class Bootstrap
 {
+
     public const MODULES_DIR = ROOT_DIR . "/app/module";
 
     public static function boot(): Container
@@ -22,6 +23,7 @@ class Bootstrap
         define("ROOT_DIR", getenv("ROOT_DIR") ? self::normalizePath(getenv("ROOT_DIR")) : self::normalizePath(__DIR__ . "/.."));
 
         define('TMP_FOLDER', ROOT_DIR . "/temp/tymy.cz");
+        define('MODULES', array_diff(scandir(self::MODULES_DIR), array('..', '.')));
 
         $configurator = new Configurator;
 
@@ -48,9 +50,7 @@ class Bootstrap
 
         $configurator->addParameters(["team" => getenv("team") ?: substr($_SERVER["HTTP_HOST"], 0, strpos($_SERVER["HTTP_HOST"], "."))]);
 
-        $modules = scandir(self::MODULES_DIR);
-
-        self::addModuleConfig($configurator, $modules);
+        self::addModuleConfig($configurator, MODULES);
 
         return $configurator->createContainer();
     }
@@ -95,7 +95,7 @@ class Bootstrap
             }
 
             $configFile = self::MODULES_DIR . "/$module/config/config.neon";
-            
+
             if (file_exists($configFile)) {
                 $configurator->addConfig($configFile);
             }
