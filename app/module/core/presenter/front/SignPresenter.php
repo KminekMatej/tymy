@@ -78,7 +78,7 @@ class SignPresenter extends BasePresenter
     {
         return $this->signUpFactory->create(function () {
                     $this->flashMessage($this->translator->translate("common.alerts.registrationSuccesfull"), 'success');
-                    $this->redirect('Sign:In');
+                    $this->redirect(':Core:Sign:In');
                 });
     }
 
@@ -92,18 +92,18 @@ class SignPresenter extends BasePresenter
         $form->onSuccess[] = function (Nette\Application\UI\Form $form, stdClass $values) {
             try {
                 $this->pwdLost->init()
-                        ->setCallbackUri($this->link('//Sign:pwdreset') . "?code=%2s")
+                        ->setCallbackUri($this->link('//:Core:Sign:pwdreset') . "?code=%2s")
                         ->setHostname($this->getHttpRequest()->getRemoteHost())
                         ->setMail($values->email)
                         ->getData();
             } catch (APIException $ex) {
                 $this->flashMessage($this->translator->translate("common.alerts.userNotFound"));
-                $this->redirect('Sign:pwdlost');
+                $this->redirect(':Core:Sign:pwdlost');
             }
 
             $this->flashMessage($this->translator->translate("common.alerts.resetCodeSent"));
 
-            $this->redirect('Sign:pwdreset');
+            $this->redirect(':Core:Sign:pwdreset');
         };
         return $form;
     }
@@ -118,7 +118,7 @@ class SignPresenter extends BasePresenter
         $form->onSuccess[] = function (Nette\Application\UI\Form $form, stdClass $values) {
             $data = $this->resetPwd($values->code);
             $this->flashMessage($this->translator->translate("common.alerts.resetCodeSent"));
-            $this->redirect('Sign:pwdnew', ["pwd" => $data]);
+            $this->redirect(':Core:Sign:pwdnew', ["pwd" => $data]);
         };
         return $form;
     }
@@ -129,7 +129,7 @@ class SignPresenter extends BasePresenter
             $this->getUser()->logout();
         }
         $this->flashMessage($this->translator->translate("common.alerts.logoutSuccesfull"));
-        $this->redirect('Sign:In');
+        $this->redirect(':Core:Sign:In');
     }
 
     public function renderPwdNew()
@@ -142,7 +142,7 @@ class SignPresenter extends BasePresenter
         if (($resetCode = $this->getRequest()->getParameter("code")) != null) {
             $data = $this->resetPwd($resetCode);
             $this->flashMessage($this->translator->translate("common.alerts.pwdResetSuccesfull"));
-            $this->redirect('Sign:pwdnew', ["pwd" => $data]);
+            $this->redirect(':Core:Sign:pwdnew', ["pwd" => $data]);
         }
     }
 
