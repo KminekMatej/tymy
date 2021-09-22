@@ -8,6 +8,7 @@ use Nette\Utils\DateTime;
 use Tapi\Exception\APIException;
 use Tracy\Debugger;
 use Tymy\App\Model\Supplier;
+use Tymy\Bootstrap;
 use Tymy\Module\Team\Manager\TeamManager;
 
 
@@ -33,7 +34,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
     public function beforeRender() {
         parent::beforeRender();
         $this->translator->setDefaultLocale("EN");
-        $this->template->componentsDir = \Tymy\Bootstrap::MODULES_DIR . "/core/presenter/templates/components";
+        $this->template->componentsDir = Bootstrap::MODULES_DIR . "/core/presenter/templates/components";
         $this->template->setTranslator($this->translator);
         date_default_timezone_set('Europe/Prague');
         
@@ -59,9 +60,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
     
     public function formatLayoutTemplateFiles(): array
     {
-        $list = parent::formatLayoutTemplateFiles();
-        $list[] = \Tymy\Bootstrap::MODULES_DIR . "/core/presenter/templates/@layout.latte";
-        return $list;
+        return [Bootstrap::MODULES_DIR . "/core/presenter/templates/@layout.latte"];
     }
 
     
