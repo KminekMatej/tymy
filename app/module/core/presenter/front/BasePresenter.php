@@ -12,7 +12,7 @@ use Tymy\Module\Team\Manager\TeamManager;
 
 
 /**
- * Base presenter for all application presenters.
+ * Base presenter for all front application presenters.
  */
 abstract class BasePresenter extends Nette\Application\UI\Presenter {
     
@@ -55,6 +55,14 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
             return $this->translator->translate("common.months." . strtolower(DateTime::createFromFormat("!m", strval($number))->format("F"))) ;
         });
     }
+    
+    public function formatLayoutTemplateFiles(): array
+    {
+        $list = parent::formatLayoutTemplateFiles();
+        $list[] = \Tymy\Bootstrap::MODULES_DIR . "/core/presenter/templates/@layout.latte";
+        return $list;
+    }
+
     
     public function handleTapiException(APIException $ex, $redirect = null, $args = []){
         $this->flashMessage($this->translator->translate("common.alerts.exceptionOccured") . ": " . $ex->getMessage(), "danger");
