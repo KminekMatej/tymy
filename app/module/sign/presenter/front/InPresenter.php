@@ -42,7 +42,7 @@ class InPresenter extends BasePresenter
             }
             if (!is_null($this->user->getIdentity()))
                 Debugger::log($this->user->getIdentity()->data["callName"] . "@" . $this->supplier->getTym() . " logged in");
-            $this->redirect('Homepage:');
+            $this->redirect(':Core:Homepage:');
         });
 
         return $form;
@@ -65,7 +65,7 @@ class InPresenter extends BasePresenter
             }
             if (!is_null($this->user->getIdentity()))
                 Debugger::log($this->user->getIdentity()->data["callName"] . "@" . $this->supplier->getTym() . " logged in using transfer key");
-            $this->redirect('Homepage:');
+            $this->redirect(':Core:Homepage:');
         }
     }
 
