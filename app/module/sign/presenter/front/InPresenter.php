@@ -5,14 +5,9 @@ namespace Tymy\Module\Sign\Presenter\Front;
 use Nette;
 use Nette\Application\UI\Form;
 use Nette\NotImplementedException;
-use stdClass;
 use Tapi\Exception\APIException;
 use Tracy\Debugger;
-use Tymy\App\Forms\PwdLostFormFactory;
-use Tymy\App\Forms\PwdResetFormFactory;
 use Tymy\App\Forms\SignInFormFactory;
-use Tymy\App\Forms\SignUpFormFactory;
-use Tymy\App\Model\Supplier;
 use Tymy\Module\Authentication\Manager\AuthenticationManager;
 use Tymy\Module\Core\Presenter\Front\BasePresenter;
 
@@ -21,9 +16,6 @@ class InPresenter extends BasePresenter
 
     /** @inject */
     public SignInFormFactory $signInFactory;
-
-    /** @inject */
-    public Supplier $supplier;
 
     /** @inject */
     public AuthenticationManager $authenticationManager;
