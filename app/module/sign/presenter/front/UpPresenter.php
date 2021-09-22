@@ -20,7 +20,7 @@ class UpPresenter extends BasePresenter
     {
         return $this->signUpFactory->create(function () {
                     $this->flashMessage($this->translator->translate("common.alerts.registrationSuccesfull"), 'success');
-                    $this->redirect(':Core:Sign:In');
+                    $this->redirect(':Sign:In');
                 });
     }
 

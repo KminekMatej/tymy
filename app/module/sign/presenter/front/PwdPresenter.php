@@ -19,7 +19,7 @@ class PwdPresenter extends BasePresenter
         if (($resetCode = $this->getRequest()->getParameter("code")) != null) {
             $data = $this->resetPwd($resetCode);
             $this->flashMessage($this->translator->translate("common.alerts.pwdResetSuccesfull"));
-            $this->redirect(':Core:Sign:pwdnew', ["pwd" => $data]);
+            $this->redirect(':Sign:Pwd:new', ["pwd" => $data]);
         }
     }
 
@@ -38,18 +38,18 @@ class PwdPresenter extends BasePresenter
         $form->onSuccess[] = function (Nette\Application\UI\Form $form, stdClass $values) {
             try {
                 $this->pwdLost->init()
-                        ->setCallbackUri($this->link('//:Core:Sign:pwdreset') . "?code=%2s")
+                        ->setCallbackUri($this->link('//:Sign:Pwd:reset') . "?code=%2s")
                         ->setHostname($this->getHttpRequest()->getRemoteHost())
                         ->setMail($values->email)
                         ->getData();
             } catch (APIException $ex) {
                 $this->flashMessage($this->translator->translate("common.alerts.userNotFound"));
-                $this->redirect(':Core:Sign:pwdlost');
+                $this->redirect(':Sign:Pwd:lost');
             }
 
             $this->flashMessage($this->translator->translate("common.alerts.resetCodeSent"));
 
-            $this->redirect(':Core:Sign:pwdreset');
+            $this->redirect(':Sign:Pwd:reset');
         };
         return $form;
     }
@@ -64,7 +64,7 @@ class PwdPresenter extends BasePresenter
         $form->onSuccess[] = function (Nette\Application\UI\Form $form, stdClass $values) {
             $data = $this->resetPwd($values->code);
             $this->flashMessage($this->translator->translate("common.alerts.resetCodeSent"));
-            $this->redirect(':Core:Sign:pwdnew', ["pwd" => $data]);
+            $this->redirect(':Sign:Pwd:new', ["pwd" => $data]);
         };
         return $form;
     }
