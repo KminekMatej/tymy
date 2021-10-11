@@ -38,7 +38,7 @@ class PlayerPresenter extends SecuredPresenter
     public function startup()
     {
         parent::startup();
-        $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("team.team", 1), "link" => $this->link("Team:")]]);
+        $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("team.team", 1), "link" => $this->link(":Team:Default:")]]);
     }
 
     public function renderNew($player = null)
@@ -101,7 +101,7 @@ class PlayerPresenter extends SecuredPresenter
         /* @var $user User */
         $user = $this->userManager->getById($this->parseIdFromWebname($player));
 
-        $this->setLevelCaptions(["2" => ["caption" => $user->getDisplayName(), "link" => $this->link("Team:player", $user->getWebName())]]);
+        $this->setLevelCaptions(["2" => ["caption" => $user->getDisplayName(), "link" => $this->link(":Team:Player:", $user->getWebName())]]);
 
         $this->template->player = $user;
         $this->template->canUpdate = $this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("USR_UPDATE")) || $user->getId() == $this->getUser()->getId();

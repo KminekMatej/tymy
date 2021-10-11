@@ -53,16 +53,16 @@ class DefaultPresenter extends SecuredPresenter {
         });
         
         $this->template->addFilter('namedayToday', function ($name, $webname) {
-            return $this->translator->translate("team.hasNamedayToday", NULL, ["name" => '<strong><a href='.$this->link("Team:player", $webname).'>'.$name.'</a></strong>']);
+            return $this->translator->translate("team.hasNamedayToday", NULL, ["name" => '<strong><a href='.$this->link(":Team:Player:", $webname).'>'.$name.'</a></strong>']);
         });
         $this->template->addFilter('namedayTommorow', function ($name, $webname) {
-            return $this->translator->translate("team.hasNamedayTommorow", NULL, ["name" => '<strong><a href='.$this->link("Team:player", $webname).'>'.$name.'</a></strong>']);
+            return $this->translator->translate("team.hasNamedayTommorow", NULL, ["name" => '<strong><a href='.$this->link(":Team:Player:", $webname).'>'.$name.'</a></strong>']);
         });
         $this->template->addFilter('birthdayToday', function ($name, $webname, $year) {
-            return $this->translator->translate("team.hasBirthdayToday", NULL, ["name" => '<strong><a href='.$this->link("Team:player", $webname).'>'.$name.'</a></strong>', "year" => '<strong>'.$year.'.</strong>']);
+            return $this->translator->translate("team.hasBirthdayToday", NULL, ["name" => '<strong><a href='.$this->link(":Team:Player:", $webname).'>'.$name.'</a></strong>', "year" => '<strong>'.$year.'.</strong>']);
         });
         $this->template->addFilter('birthdayTommorow', function ($name, $webname, $year) {
-            return $this->translator->translate("team.hasBirthdayTommorow", NULL, ["name" => '<strong><a href='.$this->link("Team:player", $webname).'>'.$name.'</a></strong>', "year" => '<strong>'.$year.'.</strong>']);
+            return $this->translator->translate("team.hasBirthdayTommorow", NULL, ["name" => '<strong><a href='.$this->link(":Team:Player:", $webname).'>'.$name.'</a></strong>', "year" => '<strong>'.$year.'.</strong>']);
         });
         
     }

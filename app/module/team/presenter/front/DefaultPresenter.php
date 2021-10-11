@@ -39,7 +39,7 @@ class DefaultPresenter extends SecuredPresenter
     public function startup()
     {
         parent::startup();
-        $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("team.team", 1), "link" => $this->link("Team:")]]);
+        $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("team.team", 1), "link" => $this->link(":Team:Default:")]]);
     }
 
     public function actionPlayers()
