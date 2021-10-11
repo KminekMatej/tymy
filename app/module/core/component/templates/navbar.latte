@@ -16,7 +16,7 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <button n:if="empty($discussions)" class="dropdown-item disabled" type="button"> - {_discussion.noDiscussion} - </button>
                     {ifset $discussions}
-                        <a n:foreach="$discussions as $d" class="dropdown-item" href="{plink Discussion:discussion $d->getWebname()}" id="discussion-{$d->getId()}">
+                        <a n:foreach="$discussions as $d" class="dropdown-item" href="{plink :Discussion:Discussion: $d->getWebname()}" id="discussion-{$d->getId()}">
                             {if $discussionWarnings > 0}<span class="badge badge-primary" {if $d->getNewPosts() == 0}style="visibility: hidden"{/if}>{$d->getNewPosts()}</span>{/if}
                             {$d->getCaption()}
                         </a>
@@ -28,7 +28,7 @@
                 {if $eventWarnings > 0}<span class="badge badge-pill badge-danger badge-new">{$eventWarnings}</span>{/if}
                 <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-calendar" aria-hidden="true"></i> {_event.attendance,2}</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item" href="{plink Event:}">{_common.allOfThem}</a>
+                    <a class="dropdown-item" href="{plink :Event:Default:}">{_common.allOfThem}</a>
                     {ifset $events}
                         <a n:foreach="$events as $ev" class="dropdown-item" href="{plink Event:event $ev->getWebName()}">
                             {if $ev->warning}<span class="badge badge-danger"><i class="fa fa-info" aria-hidden="true"></i></span>{/if}
@@ -63,7 +63,7 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <button n:if="empty($polls)" class="dropdown-item disabled" type="button"> - {_poll.noPoll} - </button>
                     {if !empty($polls)}
-                        <a n:foreach="$polls as $p" class="dropdown-item" href="{plink Poll:poll $p->getWebName()}">
+                        <a n:foreach="$polls as $p" class="dropdown-item" href="{plink :Poll:Poll: $p->getWebName()}">
                             {if !$p->getVoted() && $p->getCanVote()}<span class="badge badge-danger"><i class="fa fa-info" aria-hidden="true"></i></span>{/if}
                             {$p->getCaption()}
                         </a>

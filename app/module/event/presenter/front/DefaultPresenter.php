@@ -1,8 +1,7 @@
 <?php
 
-namespace Tymy\Module\Core\Presenter\Front;
+namespace Tymy\Module\Event\Presenter\Front;
 
-use Nette\Application\Responses\JsonResponse;
 use Nette\Utils\DateTime;
 use Tymy\Module\Attendance\Manager\AttendanceManager;
 use Tymy\Module\Attendance\Manager\HistoryManager;
@@ -10,12 +9,13 @@ use Tymy\Module\Attendance\Manager\StatusManager;
 use Tymy\Module\Attendance\Model\Attendance;
 use Tymy\Module\Attendance\Model\Status;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Event\Manager\EventManager;
 use Tymy\Module\Event\Manager\EventTypeManager;
 use Tymy\Module\Event\Model\Event;
 use Tymy\Module\User\Model\User;
 
-class EventPresenter extends SecuredPresenter
+class DefaultPresenter extends SecuredPresenter
 {
     /** @inject */
     public EventManager $eventManager;
