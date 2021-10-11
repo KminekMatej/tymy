@@ -43,10 +43,10 @@
                 {if $playersWarnings > 0}<span class="badge badge-pill badge-danger badge-new">{$playersWarnings}</span>{/if}
                 <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-users" aria-hidden="true"></i> {_team.team,1}</a>    
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item" href="{plink :Team:Default:player $me->getWebName()}">{$me->getDisplayName()} <span class="badge badge-danger" n:if="$me->getWarnings()">{$me->getWarnings()}</span></a>
+                    <a class="dropdown-item" href="{plink :Team:Player: $me->getWebName()}">{$me->getDisplayName()} <span class="badge badge-danger" n:if="$me->getWarnings()">{$me->getWarnings()}</span></a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{plink :Team:Default:inits}" n:if="$counts['INIT'] > 0 && $user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('SEE_INITS'))">{_team.INIT,2} ({$counts['INIT']})</a>
-                    <a class="dropdown-item" href="{plink :Team:Default:players}">{_team.PLAYER,2} ({$counts['PLAYER']}) <span class="badge badge-success" n:if="$counts['NEW:PLAYER'] > 0">{_common.new}</span></a>
+                    <a class="dropdown-item" href="{plink :Team:Player:s}">{_team.PLAYER,2} ({$counts['PLAYER']}) <span class="badge badge-success" n:if="$counts['NEW:PLAYER'] > 0">{_common.new}</span></a>
                     <a class="dropdown-item" href="{plink :Team:Default:members}">{_team.MEMBER,2} ({$counts['MEMBER']})</a>
                     <a class="dropdown-item" href="{plink :Team:Default:sicks}">{_team.SICK,2} ({$counts['SICK']})</a>
                     <a class="dropdown-item" href="{plink :Team:Default:}">{_common.everyone} ({$counts['ALL']}) <span class="badge badge-success" n:if="$counts['NEW'] > 0">{_common.new}</span></a>
@@ -116,7 +116,7 @@
             <li class="nav-item dropdown" name="user">
                 <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-circle" aria-hidden="true"></i> {$me->getDisplayName()}</a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item" href="{plink :Team:Default:player $me->getWebName()}"><i class="fa fa-user" aria-hidden="true"></i> {_team.profile}</a>
+                    <a class="dropdown-item" href="{plink :Team:Player: $me->getWebName()}"><i class="fa fa-user" aria-hidden="true"></i> {_team.profile}</a>
                     <a class="dropdown-item" href="{plink :Sign:Out:default}"><i class="fa fa-power-off" aria-hidden="true"></i> {_sign.logout}</a>
                     {if !empty($multiaccounts)}
                     <div class="dropdown-divider"></div>

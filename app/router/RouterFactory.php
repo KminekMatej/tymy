@@ -44,8 +44,6 @@ class RouterFactory
         $router->addRoute('tym/marodi', 'Team:sicks');
         $router->addRoute('tym/dresy', 'Team:jerseys');
         $router->addRoute('tym/novy', 'Team:new');
-        $router->addRoute('tym/<player>', 'Team:player');
-        $router->addRoute('tym/<player>/novy', 'Team:new');
         $router->addRoute('ankety', 'Poll:default');
         $router->addRoute('diskuze/<discussion>[/<page>] ? search=<search>', 'Discussion:discussion');
         $router->addRoute('udalosti/<udalost>', 'Event:event');
@@ -68,6 +66,8 @@ class RouterFactory
         $router->addRoute('nastaveni/opravneni/nove', 'Settings:permission_new');
         $router->addRoute('nastaveni/opravneni[/<permission>]', 'Settings:permissions');
         $router->addRoute('nastaveni/aplikace', 'Settings:app');*/
+        $router->addRoute('team/<player>', "Team:Player:default");
+        $router->addRoute('team/<player>/new', 'Team:Player:new');
         $router->addRoute('[<module>][/<presenter>][/<action>]', [
             "module" => [
                 Route::VALUE => "Core",
@@ -82,9 +82,26 @@ class RouterFactory
             ],
             "presenter" => [
                 Route::VALUE => "Default",
+                Route::FILTER_TABLE => [
+                    "registrovani" => "inits",
+                    "hraci" => "players",
+                    "clenove" => "members",
+                    "marodi" => "sicks",
+                    "dresy" => "jerseys",
+                    "novy" => "new",
+                ],
             ],
             "action" => [
-                Route::VALUE => "default"
+                Route::VALUE => "default",
+                Route::FILTER_TABLE => [
+                    "registrovani" => "inits",
+                    "hrac" => "player",
+                    "hraci" => "players",
+                    "clenove" => "members",
+                    "marodi" => "sicks",
+                    "dresy" => "jerseys",
+                    "novy" => "new",
+                ],
             ],
         ]);
 
