@@ -82,7 +82,7 @@ class SecuredPresenter extends BasePresenter {
             if ($this->getUser()->getLogoutReason() === IUserStorage::INACTIVITY) {
                 $this->flashMessage($this->translator->translate("common.alerts.inactivityLogout"));
             }
-            $this->redirect(':Sign:In');
+            $this->redirect(':Sign:In:');
         }
         if(array_key_exists("language", $this->getUser()->getIdentity()->getData())){
             $this->translator->setLocale(self::LOCALES[$this->getUser()->getIdentity()->getData()["language"]]);

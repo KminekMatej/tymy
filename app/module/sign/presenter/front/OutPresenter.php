@@ -13,7 +13,7 @@ class OutPresenter extends BasePresenter
             $this->getUser()->logout();
         }
         $this->flashMessage($this->translator->translate("common.alerts.logoutSuccesfull"));
-        $this->redirect(':Sign:In');
+        $this->redirect(':Sign:In:');
     }
 
 }
