@@ -74,7 +74,7 @@
                                     {var $prestatusTo = empty($history->getPreStatusTo()) ? $emptyStatus : $eventType->getPreStatusSet()[$history->getPreStatusTo()]}
                                     <th scope="row">
                                         <figure class="figure text-center" style="width: 100px; margin-bottom: 0px">
-                                            <a href="{plink Team:player $history->getUser()->getWebName()}">
+                                            <a href="{plink :Team:Default:player $history->getUser()->getWebName()}">
                                                 <img src="{$tymyRoot}/{$history->getUser()->getPictureUrl()}" class="figure-img img-fluid rounded user_pic mb-0" />
                                             </a>
                                         </figure>
@@ -147,7 +147,7 @@
                                         </div>
                                         <div class="col-10">
                                             <figure n:foreach="$usrs as $usr" id="player-{$usr->getId()}" class="figure text-center player" style="width: 100px">
-                                                <a href="{plink Team:player $usr->getWebName()}">
+                                                <a href="{plink :Team:Default:player $usr->getWebName()}">
                                                     <img src="{$tymyRoot}/{$usr->getPictureUrl()}" class="figure-img img-fluid rounded" alt="{$usr->getFullName()}" />
                                                     <figcaption class="figure-caption">{$usr->getDisplayName()}</figcaption>
                                                     <figcaption n:ifset="$event->getAttendance()[$usr->getId()]" class="figure-caption" style="font-size: 70%; display: inline-block">{$usr->getPreDescription()}</figcaption>

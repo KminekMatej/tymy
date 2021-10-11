@@ -15,7 +15,7 @@ class FeedPresenter extends SecuredPresenter
     /** @inject */
     public EventManager $eventManager;
 
-    public function actionFeed(string $start, string $end)
+    public function actionDefault(string $start, string $end)
     {
         $events = $this->eventManager->getEventsInterval($this->user->getId(), new DateTime($start), new DateTime($end));
 

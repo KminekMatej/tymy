@@ -32,7 +32,7 @@ class RouterFactory
         ]);
 
         // APP routes
-        $router->addRoute('index.php', 'Homepage:default', Route::ONE_WAY);
+        /*$router->addRoute('index.php', 'Homepage:default', Route::ONE_WAY);
         $router->addRoute('diskuze', 'Discussion:default');
         $router->addRoute('udalosti', 'Event:default');
         //$router->addRoute('poznamky', 'Notes:default');
@@ -67,8 +67,26 @@ class RouterFactory
         $router->addRoute('nastaveni/multiucet', 'Settings:multiaccount');
         $router->addRoute('nastaveni/opravneni/nove', 'Settings:permission_new');
         $router->addRoute('nastaveni/opravneni[/<permission>]', 'Settings:permissions');
-        $router->addRoute('nastaveni/aplikace', 'Settings:app');
-        $router->addRoute('[<module>][/<presenter>][/<action>]', 'Core:Homepage:default');
+        $router->addRoute('nastaveni/aplikace', 'Settings:app');*/
+        $router->addRoute('[<module>][/<presenter>][/<action>]', [
+            "module" => [
+                Route::VALUE => "Core",
+                Route::FILTER_TABLE => [
+                    "diskuze" => "Discussion",
+                    "udalosti" => "Event",
+                    "dluznicek" => "Debt",
+                    "tym" => "Team",
+                    "ankety" => "Poll",
+                    "astaveni" => "Setting",
+                ],
+            ],
+            "presenter" => [
+                Route::VALUE => "Homepage",
+            ],
+            "action" => [
+                Route::VALUE => "default"
+            ],
+        ]);
 
         return $router;
     }

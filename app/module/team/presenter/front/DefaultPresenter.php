@@ -7,7 +7,7 @@ use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Model\User;
 
-class TeamPresenter extends SecuredPresenter
+class DefaultPresenter extends SecuredPresenter
 {
     private $userType;
     public $userCreator;

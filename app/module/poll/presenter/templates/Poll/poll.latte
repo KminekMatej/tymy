@@ -102,7 +102,7 @@
                         </tr>
                         <tr n:foreach="$poll->getOrderedVotes() as $userId => $vote" data-vote n:attr="data-gender => !$poll->getAnonymousResults() ? $users[$userId]->gender, data-status => !$poll->getAnonymousResults() ? $users[$userId]->getStatus()">
                             <th>
-                                <a n:if="!$poll->getAnonymousResults()" href="{plink Team:player $users[$userId]->getWebName()}">{$users[$userId]->getDisplayName()}</a>
+                                <a n:if="!$poll->getAnonymousResults()" href="{plink :Team:Default:player $users[$userId]->getWebName()}">{$users[$userId]->getDisplayName()}</a>
                                 <a n:if="$poll->getAnonymousResults()">Anonym</a>
                             </th>
                                 {foreach $poll->getOptions() as $option}
