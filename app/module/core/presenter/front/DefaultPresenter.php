@@ -9,7 +9,7 @@ use Tymy\Module\Event\Manager\EventTypeManager;
 use Tymy\Module\News\Manager\NewsManager;
 use Tymy\Module\User\Manager\UserManager;
 
-class HomepagePresenter extends SecuredPresenter {
+class DefaultPresenter extends SecuredPresenter {
 
     public $navbar;
     public $live;

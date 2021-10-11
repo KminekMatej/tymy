@@ -77,11 +77,11 @@ class RouterFactory
                     "dluznicek" => "Debt",
                     "tym" => "Team",
                     "ankety" => "Poll",
-                    "astaveni" => "Setting",
+                    "nastaveni" => "Setting",
                 ],
             ],
             "presenter" => [
-                Route::VALUE => "Homepage",
+                Route::VALUE => "Default",
             ],
             "action" => [
                 Route::VALUE => "default"

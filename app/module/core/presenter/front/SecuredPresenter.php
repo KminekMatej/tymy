@@ -90,7 +90,7 @@ class SecuredPresenter extends BasePresenter {
         $this->supplier->loadUserNeon($this->getUser()->getId());
         
         $this->setAccessibleSettings();
-        $this->setLevelCaptions(["0" => ["caption" => $this->translator->translate("common.mainPage"), "link" => $this->link(":Core:Homepage:")]]);
+        $this->setLevelCaptions(["0" => ["caption" => $this->translator->translate("common.mainPage"), "link" => $this->link(":Core:Default:")]]);
     }
     
     protected function createComponentNavbar() {

@@ -328,7 +328,7 @@ class BasePresenter extends Presenter
     protected function allowOnlyInDebuggerMode(): void
     {
         if(Debugger::$productionMode){  //
-            $this->redirect("Core:Homepage:Default");
+            $this->redirect("Core:Default:Default");
         }
     }
 }
