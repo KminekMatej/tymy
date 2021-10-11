@@ -93,7 +93,7 @@ class DiscussionPresenter extends SecuredPresenter
         //set users
         $this->template->userList = $this->userManager->getList();
 
-        $this->setLevelCaptions(["2" => ["caption" => $d->getCaption(), "link" => $this->link("Discussion:discussion", [$d->getWebName()])]]);
+        $this->setLevelCaptions(["2" => ["caption" => $d->getCaption(), "link" => $this->link(":Discussion:Default:", [$d->getWebName()])]]);
 
         $this->template->userId = $this->getUser()->getId();
         $this->template->discussionPosts = $discussionPosts;
