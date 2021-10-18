@@ -13,7 +13,7 @@
                 <div class="card-body">
                     {foreach $polls as $poll}
                         <div class="row my-2">
-                            <div class="col-sm-3 name"><a href="{plink Poll:poll $poll->getWebName()}">{$poll->getCaption()}</a></div>
+                            <div class="col-sm-3 name"><a href="{plink :Poll:Poll: $poll->getWebName()}">{$poll->getCaption()}</a></div>
                             <div class="col-sm-9">{$poll->getDescription()}</div>
                         </div>
                     {/foreach}

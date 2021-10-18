@@ -9,7 +9,7 @@
     <div class="row justify-content-md-center">
         <div class="col-md-10">
             <div class="addPost" data-postId>
-                    <form action="{plink Discussion:discussion $discussion->getDiscussion()->getWebName()}" method="GET" class="form-inline">
+                    <form action="{plink :Discussion:Discussion: $discussion->getDiscussion()->getWebName()}" method="GET" class="form-inline">
                         <div class="input-group">
                             <input class="form-control" type="text" name="search" placeholder="{_discussion.postBlock.enterSearchTerms}" value="{$search}">
                             <select class="form-control custom-select mr-sm-2" name="suser">
@@ -22,10 +22,10 @@
                         </div>
                         <span class="mr-auto">
                             <input type="submit" value="{_common.search}" class="form-control btn btn-outline-success mr-sm-2">
-                            <a n:if="$search || $suser" href="{plink Discussion:discussion $discussion->getDiscussion()->getWebName()}" class="btn btn-outline-secondary" title="{_common.refresh}" onclick="$(this).children('i').addClass('fa-spin')"><i class="fa fa-sync" aria-hidden="true"></i></a>
+                            <a n:if="$search || $suser" href="{plink :Discussion:Discussion: $discussion->getDiscussion()->getWebName()}" class="btn btn-outline-secondary" title="{_common.refresh}" onclick="$(this).children('i').addClass('fa-spin')"><i class="fa fa-sync" aria-hidden="true"></i></a>
                         </span>
-                        <button onclick="updatePost({plink Discussion:editpost $discussion->getDiscussion()->getId()})" type="button" class="btn btn-warning mx-1" id="editPost" n:if="$discussion->getDiscussion()->getCanWrite()">{_common.edit}</button>    
-                        <button onclick="addPost({plink Discussion:newpost $discussion->getDiscussion()->getId()})" type="button" class="btn btn-primary" n:if="$discussion->getDiscussion()->getCanWrite()">{_common.insert}</button>    
+                        <button onclick="updatePost({plink :Discussion:Discussion:editpost $discussion->getDiscussion()->getId()})" type="button" class="btn btn-warning mx-1" id="editPost" n:if="$discussion->getDiscussion()->getCanWrite()">{_common.edit}</button>    
+                        <button onclick="addPost({plink :Discussion:Discussion:newpost $discussion->getDiscussion()->getId()})" type="button" class="btn btn-primary" n:if="$discussion->getDiscussion()->getCanWrite()">{_common.insert}</button>    
                     </form>
             </div>
         </div>

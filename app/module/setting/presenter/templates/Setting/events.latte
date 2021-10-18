@@ -42,7 +42,7 @@
                         {if $events}
                         <tr n:foreach="$events as $event" data-binder-id="{$event->getId()}">
                             <td>
-                                <a n:if="!$isNew" href="{plink Settings:events $event->getWebName()}" class="btn btn-sm btn-light btn-light-bordered"  title="{_common.edit}" style="margin-right: 2px">
+                                <a n:if="!$isNew" href="{plink :Setting:Event: $event->getWebName()}" class="btn btn-sm btn-light btn-light-bordered"  title="{_common.edit}" style="margin-right: 2px">
                                     <i class="fa fa-external-link-alt" aria-hidden="true"></i>
                                 </a>
                             </td>
@@ -92,7 +92,7 @@
                     </div>
                 </div>
                 <div class="card-footer text-right">
-                    <a n:if="!$isNew && $user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_CREATE'))" class="btn btn-lg btn-success" href="{plink Settings:event_new}" onclick="btnRotate($(this), true)" title="{_common.save}" style="margin-right: 10px">
+                    <a n:if="!$isNew && $user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_CREATE'))" class="btn btn-lg btn-success" href="{plink :Setting:Event:New}" onclick="btnRotate($(this), true)" title="{_common.save}" style="margin-right: 10px">
                         <i class="fa fa-plus" aria-hidden="true"></i>
                     </a>
                     <button n:if="!$isNew && $user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_UPDATE'))" class="btn btn-lg btn-primary binder-save-all-btn" href="{link eventsEdit!}" title="{_common.saveAll}"><i class="fa fa-save" aria-hidden="true"></i></button>
@@ -106,9 +106,9 @@
 
 <nav aria-label="Page navigation" n:if="!$isNew">
     <ul class="pagination justify-content-center">
-        <li n:class="$currentPage == 1 ? disabled, page-item"><a class="page-link" href="{plink Settings:events null,$currentPage-1}">{_common.navigationBlock.previous}</a></li>
-        <li n:foreach="$pagination as $page" n:class="$currentPage == $page ? active, page-item"><a class="page-link" href="{plink Settings:events null,$page}">{$page}</a></li>
-        <li n:class="$currentPage == $lastPage ? disabled, page-item"><a class="page-link" href="{plink Settings:events null,$currentPage+1}">{_common.navigationBlock.next}</a></li>
+        <li n:class="$currentPage == 1 ? disabled, page-item"><a class="page-link" href="{plink :Setting:Event: null,$currentPage-1}">{_common.navigationBlock.previous}</a></li>
+        <li n:foreach="$pagination as $page" n:class="$currentPage == $page ? active, page-item"><a class="page-link" href="{plink :Setting:Event: null,$page}">{$page}</a></li>
+        <li n:class="$currentPage == $lastPage ? disabled, page-item"><a class="page-link" href="{plink :Setting:Event: null,$currentPage+1}">{_common.navigationBlock.next}</a></li>
     </ul>
 </nav>
 

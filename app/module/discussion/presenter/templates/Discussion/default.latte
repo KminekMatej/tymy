@@ -22,7 +22,7 @@
                         <div class="row my-2">
                             <div class="col-sm-4 name" id="discussion-pane-{$item->getId()}">
                                 <h5><span n:class="badge,badge-pill,badge-danger,$item->getNewPosts() == 0 ? d-none">{$item->getNewPosts()}</span>
-                                <a href="{plink Discussion:discussion $item->getWebName()}">{$item->getCaption()}</a></h5>
+                                <a href="{plink :Discussion:Discussion: $item->getWebName()}">{$item->getCaption()}</a></h5>
                             </div>
                             <div class="col-sm-8 dis-description"><h5>{$item->getDescription()}</h5></div>
                         </div>

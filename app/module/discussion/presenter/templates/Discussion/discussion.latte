@@ -45,10 +45,10 @@
                     <div class="card-header {$chc} py-1">
                         <span class="name">{$item->getCreatedBy()->getCallName()}</span>
                         <div class="btn-group btn-group-sm float-md-right" role="group">
-                            <a n:if="$discussionPosts->getDiscussion()->getCanStick()" n:class="btn,btn-sm,$item->getSticky() ? active,$item->getSticky() ? btn-dark:btn-light,!$item->getSticky() ? btn-light-bordered" href="{plink Discussion:stickPost $item->getId(), $discussionPosts->getDiscussion()->getId(), $item->getSticky() ? false : true}" title="{if $item->getSticky()}{_discussion.unpin}{else}{_discussion.pin}{/if}"><i class="fa fa-thumbtack" aria-hidden="true"></i></a>
+                            <a n:if="$discussionPosts->getDiscussion()->getCanStick()" n:class="btn,btn-sm,$item->getSticky() ? active,$item->getSticky() ? btn-dark:btn-light,!$item->getSticky() ? btn-light-bordered" href="{plink :Discussion:Discussion:stickPost $item->getId(), $discussionPosts->getDiscussion()->getId(), $item->getSticky() ? false : true}" title="{if $item->getSticky()}{_discussion.unpin}{else}{_discussion.pin}{/if}"><i class="fa fa-thumbtack" aria-hidden="true"></i></a>
                             <button class="btn btn-sm btn-light btn-light-bordered clipboard-btn" data-clipboard-target="#post-{$item->getId()}" title="{_common.copyToClipboard}"><i class="far fa-copy" aria-hidden="true"></i></button>
                             <button class="btn btn-sm btn-light btn-light-bordered" onclick="loadPost({$item->getId()})" title="{_common.edit} / {_common.copy}"><i class="far fa-edit" aria-hidden="true"></i></button>
-                            <a n:if="$discussionPosts->getDiscussion()->getCanDelete() || ($discussionPosts->getDiscussion()->editablePosts && $item->getCreatedById() == $user->getId()) " class="btn btn-sm btn-light btn-light-bordered delete" href="{plink Discussion:deletePost $item->getId(), $discussionPosts->getDiscussion()->getId(), $currentPage}" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></a>
+                            <a n:if="$discussionPosts->getDiscussion()->getCanDelete() || ($discussionPosts->getDiscussion()->editablePosts && $item->getCreatedById() == $user->getId()) " class="btn btn-sm btn-light btn-light-bordered delete" href="{plink :Discussion:Discussion:deletePost $item->getId(), $discussionPosts->getDiscussion()->getId(), $currentPage}" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></a>
                         </div>
                         <span class="float-md-right mx-2">{$item->getCreatedAt()|date:'j.n.Y G:i'}</span>
                         <div class="alert alert-warning float-md-right mx-1" n:if="$item->getUpdatedAt()" style="margin: 0px; padding: 4px; font-size: 10px;">{_common.edited} {$userList[$item->getUpdatedById()]->getDisplayName()}, {$item->getUpdatedAt()|date:'j.n.Y G:i'}</div>
@@ -69,11 +69,11 @@
         <div class="col">
             <nav aria-label="Page navigation">
                 <ul class="pagination justify-content-center">
-                    <li n:class="$currentPage == 1 ? disabled, page-item"><a class="page-link" href="{plink Discussion:discussion $nazevDiskuze, 1}">{_common.navigationBlock.first}</a></li>
-                    <li n:class="$currentPage == 1 ? disabled, page-item"><a class="page-link" href="{if $currentPage==2}{plink Discussion:discussion $nazevDiskuze}{else}{plink Discussion:discussion $nazevDiskuze,$currentPage-1, $search}{/if}">{_common.navigationBlock.previous}</a></li>
-                    <li n:foreach="$pagination as $page" n:class="$currentPage == $page ? active, page-item"><a class="page-link" href="{if $page==1}{plink Discussion:discussion $nazevDiskuze}{else}{plink Discussion:discussion $nazevDiskuze,$page, $search}{/if}">{$page}</a></li>
-                    <li n:class="$currentPage == $lastPage ? disabled, page-item"><a class="page-link" href="{plink Discussion:discussion $nazevDiskuze,$currentPage+1, $search}">{_common.navigationBlock.next}</a></li>
-                    <li n:class="$currentPage == $lastPage ? disabled, page-item"><a class="page-link" href="{plink Discussion:discussion $nazevDiskuze, $lastPage}">{_common.navigationBlock.last}</a></li>
+                    <li n:class="$currentPage == 1 ? disabled, page-item"><a class="page-link" href="{plink :Discussion:Discussion: $nazevDiskuze, 1}">{_common.navigationBlock.first}</a></li>
+                    <li n:class="$currentPage == 1 ? disabled, page-item"><a class="page-link" href="{if $currentPage==2}{plink :Discussion:Discussion: $nazevDiskuze}{else}{plink :Discussion:Discussion: $nazevDiskuze,$currentPage-1, $search}{/if}">{_common.navigationBlock.previous}</a></li>
+                    <li n:foreach="$pagination as $page" n:class="$currentPage == $page ? active, page-item"><a class="page-link" href="{if $page==1}{plink :Discussion:Discussion: $nazevDiskuze}{else}{plink :Discussion:Discussion: $nazevDiskuze,$page, $search}{/if}">{$page}</a></li>
+                    <li n:class="$currentPage == $lastPage ? disabled, page-item"><a class="page-link" href="{plink :Discussion:Discussion: $nazevDiskuze,$currentPage+1, $search}">{_common.navigationBlock.next}</a></li>
+                    <li n:class="$currentPage == $lastPage ? disabled, page-item"><a class="page-link" href="{plink :Discussion:Discussion: $nazevDiskuze, $lastPage}">{_common.navigationBlock.last}</a></li>
                 </ul>
             </nav>
         </div>

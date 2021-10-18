@@ -70,7 +70,7 @@
     <div class="row">
         <div class="col-md-5 my-3">
             <div class="card sh-box" id='calendar'></div>
-            <a class="btn btn-sm btn-light btn-light-bordered my-1 d-block" href="{plink Event:}">{_event.goToEvents} ...</a>
+            <a class="btn btn-sm btn-light btn-light-bordered my-1 d-block" href="{plink :Event:Default:}">{_event.goToEvents} ...</a>
         </div>
         <div class="col-md-7 my-3">
             <div class="card sh-box discussion-box">
@@ -87,7 +87,7 @@
                         <div class="row my-2">
                             <div class="col-sm-4 name" id="discussion-pane-{$item->getId()}">
                                 <span n:class="badge,badge-pill,badge-danger,$item->getNewPosts() == 0 ? d-none">{$item->getNewPosts()}</span>
-                                <a href="{plink Discussion:discussion $item->getWebName()}">{$item->getCaption()}</a>
+                                <a href="{plink :Discussion:Discussion: $item->getWebName()}">{$item->getCaption()}</a>
                             </div>
                             <div class="col-sm-8 dis-description">{$item->getDescription()}</div>
                         </div>

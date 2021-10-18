@@ -25,7 +25,7 @@ class PermissionPresenter extends SettingDefaultPresenter
         }
     }
 
-    public function renderPermission_new()
+    public function renderNew()
     {
         $this->allowSys("IS_ADMIN");
 

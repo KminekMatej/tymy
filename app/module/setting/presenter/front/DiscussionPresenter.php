@@ -21,7 +21,7 @@ class DiscussionPresenter extends SettingDefaultPresenter
         }
     }
 
-    public function renderDiscussion_new()
+    public function renderNew()
     {
         $this->allowSys("DSSETUP");
 
