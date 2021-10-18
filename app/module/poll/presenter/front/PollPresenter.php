@@ -19,7 +19,7 @@ class PollPresenter extends SecuredPresenter
     public function startup()
     {
         parent::startup();
-        $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("poll.poll", 2), "link" => $this->link("Poll:")]]);
+        $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("poll.poll", 2), "link" => $this->link(":Poll:Default:")]]);
     }
 
     public function renderDefault($anketa)
@@ -28,7 +28,7 @@ class PollPresenter extends SecuredPresenter
         $poll = $this->pollManager->getById($this->parseIdFromWebname($anketa));
         $this->template->users = $this->userManager->getIdList();
 
-        $this->setLevelCaptions(["2" => ["caption" => $poll->getCaption(), "link" => $this->link("Poll:poll", $poll->getWebName())]]);
+        $this->setLevelCaptions(["2" => ["caption" => $poll->getCaption(), "link" => $this->link(":Poll:Poll:", $poll->getWebName())]]);
 
         $this->template->poll = $poll;
         $this->template->radioLayout = $poll->getMinItems() == 1 && $poll->getMaxItems() == 1;
