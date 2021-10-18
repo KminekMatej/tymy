@@ -20,8 +20,9 @@ use Tymy\Module\User\Manager\UserManager;
  *
  * @author matej
  */
-class SecuredPresenter extends BasePresenter {
-    
+class SecuredPresenter extends BasePresenter
+{
+
     protected $levelCaptions;
 
     /** @inject */
@@ -45,37 +46,34 @@ class SecuredPresenter extends BasePresenter {
     /** @inject */
     public MultiaccountManager $multiaccountManager;
     public $discussionNews;
-    
     public $apiRights;
-    
     public $userRightsList;
-    
     public $eventTypeList;
-    
     public $noteList;
-    
     public $statusList;
-    
     public $cacheStorage;
-    
     public $accessibleSettings = [];
-    
-    public function getLevelCaptions(){
+
+    public function getLevelCaptions()
+    {
         return $this->levelCaptions;
     }
-    
-    public function setLevelCaptions($levelCaptions){
-        if(!is_array($levelCaptions)) return false;
+
+    public function setLevelCaptions($levelCaptions)
+    {
+        if (!is_array($levelCaptions))
+            return false;
         foreach ($levelCaptions as $level => $caption) {
             $this->levelCaptions[$level] = $caption;
         }
-        
-        for ($index = max(array_keys($levelCaptions))+1; $index < count($this->levelCaptions); $index++) {
+
+        for ($index = max(array_keys($levelCaptions)) + 1; $index < count($this->levelCaptions); $index++) {
             unset($this->levelCaptions[$index]);
         }
     }
-        
-    protected function startup() {
+
+    protected function startup()
+    {
         parent::startup();
         Debugger::$maxDepth = 7;
         if (!$this->getUser()->isLoggedIn()) {
@@ -84,29 +82,31 @@ class SecuredPresenter extends BasePresenter {
             }
             $this->redirect(':Sign:In:');
         }
-        if(array_key_exists("language", $this->getUser()->getIdentity()->getData())){
+        if (array_key_exists("language", $this->getUser()->getIdentity()->getData())) {
             $this->translator->setLocale(self::LOCALES[$this->getUser()->getIdentity()->getData()["language"]]);
         }
         $this->supplier->loadUserNeon($this->getUser()->getId());
-        
+
         $this->setAccessibleSettings();
         $this->setLevelCaptions(["0" => ["caption" => $this->translator->translate("common.mainPage"), "link" => $this->link(":Core:Default:")]]);
     }
-    
-    protected function createComponentNavbar() {
+
+    protected function createComponentNavbar()
+    {
         $navbar = new NavbarControl($this, $this->pollManager, $this->discussionManager, $this->eventManager, $this->debtManager, $this->userManager, $this->multiaccountManager, $this->user, $this->teamManager);
         $navbar->redrawControl();
         return $navbar;
     }
-    
-    protected function parseIdFromWebname($webName){
-        if(strpos($webName, "-")){
-            return substr($webName,0,strpos($webName, "-"));
+
+    protected function parseIdFromWebname($webName)
+    {
+        if (strpos($webName, "-")) {
+            return substr($webName, 0, strpos($webName, "-"));
         }
-        if(intval($webName))
+        if (intval($webName))
             return intval($webName);
     }
-    
+
     /**
      * Smart pagination script
      * @link https://stackoverflow.com/questions/163809/smart-pagination-algorithm
@@ -116,7 +116,8 @@ class SecuredPresenter extends BasePresenter {
      * @param int $adjacents Number of shown links
      * @return type
      */
-    protected function pagination($data, $limit = null, $current = null, $adjacents = null) {
+    protected function pagination($data, $limit = null, $current = null, $adjacents = null)
+    {
         $result = array();
 
         if (isset($data, $limit) === true) {
@@ -131,8 +132,9 @@ class SecuredPresenter extends BasePresenter {
 
         return $result;
     }
-    
-    public function getAccessibleSettings() {
+
+    public function getAccessibleSettings()
+    {
         return $this->accessibleSettings;
     }
 
@@ -170,68 +172,18 @@ class SecuredPresenter extends BasePresenter {
         return $this;
     }
 
-    /*protected function showNotes($recordId = NULL) {
-        $notesToShow = [];
-        $presenterName = [
-            'WELCOME' => "Homepage",
-            'DISKUZE' => "Discussion",
-            'UDALOST' => "Event",
-            'ANKETA' => "Poll",
-            'TYM' => "Team",
-            'NASTAVENI' => "Settings",
-            'POZNAMKY' => "Notes",
+    protected function getAllRoles(): array
+    {
+        return [
+            (object) ["code" => "SUPER", "caption" => $this->translator->translate("team.administrator"), "class" => $this->supplier->getRoleClass("SUPER")],
+            (object) ["code" => "USR", "caption" => $this->translator->translate("team.userAdmin"), "class" => $this->supplier->getRoleClass("USR")],
+            (object) ["code" => "ATT", "caption" => $this->translator->translate("team.attendanceAdmin"), "class" => $this->supplier->getRoleClass("ATT")],
         ];
-        if($this->template->noteList == null)
-            return;
-        foreach ($this->template->noteList as $note) {
-            $display = explode(":", $note->specialPage);
-            $displayPresenter = $display[0];
-            $displayRule = NULL;
-            $displayId = NULL;
-            if(count($display) == 2){
-                if(is_numeric($display[1])){
-                    $displayId = $display[1];
-                } else {
-                    $displayRule = $display[1];
-                }
-            } else if (count($display) > 2){
-                $displayId = $display[1];
-                $displayRule = $display[2];
-            }
-            $displayPresenterPassed = array_key_exists($displayPresenter, $presenterName) && $presenterName[$displayPresenter] == $this->getRequest()->presenterName;
-            switch ($displayRule) {
-                case NULL:
-                    $displayRulePassed = !array_key_exists('lastLogin', $this->getUser()->getIdentity()->getData()) && !$note->shown; //when rule is not filled, display only on first login
-                    break;
-                case "ALWAYS":
-                    $displayRulePassed = TRUE;
-                    break;
-                case "NEW":
-                    $displayRulePassed = $this->getUser()->getIdentity()->getData()["isNew"];
-                    break;
-                default:
-                    $displayRulePassed = FALSE;
-                    break;
-            }
-            $displayIdPassed = is_null($displayId) ? TRUE : ($this->getUser()->getId() == $displayId && $displayPresenter=="WELCOME") || $recordId == $displayId;
-            if($displayPresenterPassed && $displayRulePassed && $displayIdPassed){
-                $notesToShow[] = str_replace(":", "_", $note->specialPage);
-                $note->shown = TRUE;
-            }
-        }
-        $this->template->notesToShow = $notesToShow;
-        $this->noteList->saveToCache();
-    }*/
-    
-    protected function getAllRoles(){
-        $allRoles = [];
-        $allRoles[] = (object) ["code" => "SUPER", "caption" => $this->translator->translate("team.administrator"), "class" => $this->supplier->getRoleClass("SUPER")];
-        $allRoles[] = (object) ["code" => "USR", "caption" => $this->translator->translate("team.userAdmin"), "class" => $this->supplier->getRoleClass("USR")];
-        $allRoles[] = (object) ["code" => "ATT", "caption" => $this->translator->translate("team.attendanceAdmin"), "class" => $this->supplier->getRoleClass("ATT")];
-        return $allRoles;
     }
-    
-    protected function redrawNavbar(){
+
+    protected function redrawNavbar()
+    {
         $this['navbar']->redrawControl("nav");
     }
+
 }
