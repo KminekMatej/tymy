@@ -17,6 +17,7 @@ use Tymy\Module\User\Model\User;
 
 class DefaultPresenter extends SecuredPresenter
 {
+
     /** @inject */
     public EventManager $eventManager;
 
@@ -32,9 +33,10 @@ class DefaultPresenter extends SecuredPresenter
     /** @inject */
     public HistoryManager $historyManager;
 
-    public function startup()
+    public function beforeRender()
     {
-        parent::startup();
+        parent::beforeRender();
+
         $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("event.attendance", 2), "link" => $this->link(":Event:Default:")]]);
 
         $this->template->addFilter('genderTranslate', function ($gender) {
@@ -64,11 +66,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->template->addFilter("statusColor", function (Status $status) {
             return $this->supplier->getStatusColor($status->getCode());
         });
-    }
 
-    public function beforeRender()
-    {
-        parent::beforeRender();
         $this->template->statusList = $this->statusManager->getList();
     }
 
@@ -225,4 +223,5 @@ class DefaultPresenter extends SecuredPresenter
         $this->template->histories = $this->historyManager->getEventHistory($eventId);
         $this->template->emptyStatus = (object) ["code" => "", "caption" => "Nezadáno"];
     }
+
 }
