@@ -15,6 +15,7 @@ use Tymy\Module\User\Manager\UserManager;
  */
 class DiscussionPresenter extends SecuredPresenter
 {
+
     /** @inject */
     public DiscussionManager $discussionManager;
 
@@ -24,9 +25,9 @@ class DiscussionPresenter extends SecuredPresenter
     /** @inject */
     public UserManager $userManager;
 
-    public function startup()
+    public function beforeRender()
     {
-        parent::startup();
+        parent::beforeRender();
         $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("discussion.discussion", 2), "link" => $this->link("Discussion:")]]);
     }
 
@@ -109,4 +110,5 @@ class DiscussionPresenter extends SecuredPresenter
         $newpost->redrawControl();
         return $newpost;
     }
+
 }
