@@ -1,11 +1,12 @@
 <?php
 
-namespace Tymy\Module\Core\Presenter\Front;
+namespace Tymy\Module\Debt\Presenter\Front;
 
 use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
 use QrCode\QRcode;
 use Tapi\TapiObject;
+use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Debt\Manager\DebtManager;
 use Tymy\Module\Debt\Model\Debt;
 use Tymy\Module\Permission\Model\Privilege;
@@ -17,7 +18,7 @@ use function iban_set_checksum;
  *
  * @author Matej Kminek <matej.kminek@attendees.eu>, 10. 2. 2020
  */
-class DebtPresenter extends SecuredPresenter
+class DefaultPresenter extends SecuredPresenter
 {
 
     /** @inject */
