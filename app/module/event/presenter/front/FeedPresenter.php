@@ -42,7 +42,7 @@ class FeedPresenter extends SecuredPresenter
                 "backgroundColor" => $event->getBackgroundColor(),
                 "borderColor" => $event->getBorderColor(),
                 "textColor" => $event->getTextColor(),
-                "url" => $this->link("Event:event", $event->getWebName()),
+                "url" => $this->link(":Event:Default:event", $event->getWebName()),
             ];
         }
 
