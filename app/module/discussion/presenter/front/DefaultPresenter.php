@@ -8,7 +8,7 @@ use Tymy\Module\Discussion\Manager\PostManager;
 use Tymy\Module\User\Manager\UserManager;
 
 /**
- * Description of DiscussionPresenter
+ * Description of DefaultPresenter
  *
  * @author matej
  */
@@ -24,9 +24,9 @@ class DefaultPresenter extends SecuredPresenter
     /** @inject */
     public UserManager $userManager;
 
-    public function startup()
+    public function beforeRender()
     {
-        parent::startup();
+        parent::beforeRender();
         $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("discussion.discussion", 2), "link" => $this->link("Discussion:")]]);
     }
 
