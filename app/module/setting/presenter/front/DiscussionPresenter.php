@@ -2,7 +2,6 @@
 
 namespace Tymy\Module\Setting\Presenter\Front;
 
-use Tymy\Module\Discussion\Manager\DiscussionManager;
 use Tymy\Module\Discussion\Model\Discussion;
 
 class DiscussionPresenter extends SettingDefaultPresenter
