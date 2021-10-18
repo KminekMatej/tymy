@@ -11,10 +11,10 @@ use Tymy\Module\User\Manager\UserManager;
 
 class DefaultPresenter extends SecuredPresenter {
 
-    public $navbar;
-    public $live;
-    public $tkResource;
-    public $newsResource;
+    /**
+     * @todo finish refactoring transfer key jumps
+     */
+    private $tkResource;
     
     /** @inject */
     public EventManager $eventManager;
