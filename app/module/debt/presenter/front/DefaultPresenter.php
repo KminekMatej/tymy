@@ -24,9 +24,9 @@ class DefaultPresenter extends SecuredPresenter
     /** @inject */
     public DebtManager $debtManager;
 
-    public function startup()
+    public function beforeRender()
     {
-        parent::startup();
+        parent::beforeRender();
         $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("debt.debt", 2), "link" => $this->link("Debt:")]]);
     }
 
