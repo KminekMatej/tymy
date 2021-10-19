@@ -184,11 +184,10 @@ class PostManager extends BaseManager
         return parent::deleteRecord($subResourceId);
     }
 
-    public function mode(int $discussionId, ?int $page = null, string $mode = "html", ?string $search = null, ?string $suser = null, ?string $jump2Date = null): DiscussionPosts
+    public function mode(int $discussionId, int $page = 1, string $mode = "html", ?string $search = null, ?string $suser = null, ?string $jump2Date = null): DiscussionPosts
     {
         $this->allowDiscussion($discussionId);
 
-        $page = $page ?: 1;
         if ($jump2Date) {
             $page = $this->getPageNumberFromDate($discussionId, $this->discussion->getNewInfo()->getNewsCount(), new DateTime($jump2Date));
         }
