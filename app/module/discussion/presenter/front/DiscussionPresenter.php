@@ -63,7 +63,7 @@ class DiscussionPresenter extends SecuredPresenter
         }
     }
 
-    public function actionNewPost($discussion)
+    public function actionNewPost(string $discussion)
     {
         $post = $this->getHttpRequest()->getPost("post");
         if (trim($post) != "") {
@@ -76,7 +76,7 @@ class DiscussionPresenter extends SecuredPresenter
         $this->setView('discussion');
     }
 
-    public function actionEditPost($discussion)
+    public function actionEditPost(string $discussion)
     {
         $postId = $this->getHttpRequest()->getPost("postId");
         $text = $this->getHttpRequest()->getPost("post");
