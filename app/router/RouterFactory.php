@@ -30,6 +30,24 @@ class RouterFactory
             'presenter' => 'Default',
             'action' => 'default',
         ]);
+/*
+        $moduleFilters = [
+            "diskuze" => "Discussion",
+            "udalosti" => "Event",
+            "dluznicek" => "Debt",
+            "tym" => "Team",
+            "ankety" => "Poll",
+            "nastaveni" => "Setting",
+        ];
+
+        $presenterFilters = [
+            "registrovani" => "inits",
+            "hraci" => "players",
+            "clenove" => "members",
+            "marodi" => "sicks",
+            "dresy" => "jerseys",
+            "novy" => "new",
+        ];*/
 
         // APP routes
         /*$router->addRoute('index.php', 'Homepage:default', Route::ONE_WAY);
@@ -45,7 +63,6 @@ class RouterFactory
         $router->addRoute('tym/dresy', 'Team:jerseys');
         $router->addRoute('tym/novy', 'Team:new');
         $router->addRoute('ankety', 'Poll:default');
-        $router->addRoute('diskuze/<discussion>[/<page>] ? search=<search>', 'Discussion:discussion');
         $router->addRoute('udalosti/<udalost>', 'Event:event');
         $router->addRoute('dluznicek/<dluh>', 'Debt:debt');
         $router->addRoute('dluznicek/<dluh>/qr', 'Debt:debtImg');
@@ -66,42 +83,34 @@ class RouterFactory
         $router->addRoute('nastaveni/opravneni/nove', 'Settings:permission_new');
         $router->addRoute('nastaveni/opravneni[/<permission>]', 'Settings:permissions');
         $router->addRoute('nastaveni/aplikace', 'Settings:app');*/
+        $router->addRoute('discussion/<discussion>[/<page \d+>][/<action>] ? search=<search>', [
+            "module" => [
+                Route::VALUE => "Discussion",
+            //    Route::FILTER_TABLE => $moduleFilters,
+            ],
+            "presenter" => [
+                Route::VALUE => "Discussion",
+            //    Route::FILTER_TABLE => $presenterFilters,
+            ],
+            "action" => [
+                Route::VALUE => "default",
+            ],
+        ]);
+
         $router->addRoute('team/<player>', "Team:Player:default");
         $router->addRoute('team/<player>/new', 'Team:Player:new');
         $router->addRoute('[<module>][/<presenter>][/<action>]', [
             "module" => [
                 Route::VALUE => "Core",
-                Route::FILTER_TABLE => [
-                    "diskuze" => "Discussion",
-                    "udalosti" => "Event",
-                    "dluznicek" => "Debt",
-                    "tym" => "Team",
-                    "ankety" => "Poll",
-                    "nastaveni" => "Setting",
-                ],
+            //    Route::FILTER_TABLE => $moduleFilters,
             ],
             "presenter" => [
                 Route::VALUE => "Default",
-                Route::FILTER_TABLE => [
-                    "registrovani" => "inits",
-                    "hraci" => "players",
-                    "clenove" => "members",
-                    "marodi" => "sicks",
-                    "dresy" => "jerseys",
-                    "novy" => "new",
-                ],
+            //    Route::FILTER_TABLE => $presenterFilters,
             ],
             "action" => [
                 Route::VALUE => "default",
-                Route::FILTER_TABLE => [
-                    "registrovani" => "inits",
-                    "hrac" => "player",
-                    "hraci" => "players",
-                    "clenove" => "members",
-                    "marodi" => "sicks",
-                    "dresy" => "jerseys",
-                    "novy" => "new",
-                ],
+            //    Route::FILTER_TABLE => $presenterFilters,
             ],
         ]);
 
