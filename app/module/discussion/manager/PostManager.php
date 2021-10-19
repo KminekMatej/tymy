@@ -274,8 +274,8 @@ class PostManager extends BaseManager
         $query[] = "WHERE (`ds_items`.`ds_id` = ?)";
         $params[] = $discussionId;
         if (!empty($search)) {
-            $query[] = "AND MATCH(item) AGAINST(? IN BOOLEAN MODE)";
-            $params[] = $search;
+            $query[] = "AND `item` LIKE ?";
+            $params[] = "%$search%";
         }
         if (!empty($searchUserId)) {
             $query[] = "AND `ds_read`.`user_id` = ?";
@@ -337,7 +337,7 @@ class PostManager extends BaseManager
                 ->where("ds_id", $discussionId);
 
         if (!empty($search)) {
-            $selector->where("MATCH(item) AGAINST(? IN BOOLEAN MODE)", $search);
+            $selector->where("item LIKE ?", "%$search%");
         }
 
         if (!empty($searchUserId)) {
