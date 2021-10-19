@@ -83,6 +83,19 @@ class RouterFactory
         $router->addRoute('nastaveni/opravneni/nove', 'Settings:permission_new');
         $router->addRoute('nastaveni/opravneni[/<permission>]', 'Settings:permissions');
         $router->addRoute('nastaveni/aplikace', 'Settings:app');*/
+        $router->addRoute('team[/<action players|members|sicks|inits|jerseys>]', [
+            "module" => [
+                Route::VALUE => "Team",
+            //    Route::FILTER_TABLE => $moduleFilters,
+            ],
+            "presenter" => [
+                Route::VALUE => "Default",
+            //    Route::FILTER_TABLE => $presenterFilters,
+            ],
+            "action" => [
+                Route::VALUE => "default",
+            ],
+        ]);
         $router->addRoute('discussion/<discussion>[/<page \d+>][/<action>] ? search=<search>', [
             "module" => [
                 Route::VALUE => "Discussion",
