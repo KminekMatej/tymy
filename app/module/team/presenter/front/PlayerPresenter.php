@@ -13,6 +13,7 @@ class PlayerPresenter extends SecuredPresenter
     public function beforeRender()
     {
         parent::beforeRender();
+        $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("team.team", 1), "link" => $this->link(":Team:Default:")]]);
 
         $allFields = UserResource::getAllFields($this->translator);
         $this->template->addFilter('errorsCount', function ($player, $tabName) use ($allFields) {
@@ -33,12 +34,6 @@ class PlayerPresenter extends SecuredPresenter
 
             return count($errFields);
         });
-    }
-
-    public function startup()
-    {
-        parent::startup();
-        $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("team.team", 1), "link" => $this->link(":Team:Default:")]]);
     }
 
     public function renderNew($player = null)
