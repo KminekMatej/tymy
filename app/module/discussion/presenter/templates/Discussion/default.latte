@@ -4,31 +4,92 @@
 {control navbar}
 {/block}
 
+{block scripts}
+{include parent}
+<script src="{$basePath}/js/scroll_man_scroll.js?ver={$appver}"></script>
+<script src="{$basePath}/resources/ckeditor/ckeditor.js?ver={$appver}"></script>
+<script src="{$basePath}/resources/clipboard/dist/clipboard.{$js}?ver={$appver}"></script>
+<script>
+    $(document).ready(function () {
+        new Clipboard('BUTTON.clipboard-btn');
+    });
+</script>
+{/block}
+
 {block content}
-<div class="container discussions">
-    <div class="row justify-content-md-center">
-        <div class="col my-3">
-            <div class="card sh-box discussion-box">
-                <div class="card-header">
-                    <div class="row">
-                        <div class="col"><h4 class="card-title">{_discussion.discussion, 2}</h4></div>
-                        <div class="col col-md-auto">
-                            <button class="btn btn-sm btn-light btn-light-bordered refresh" title="{_common.refresh}" onclick="refresh()" data-href="{link navbar:refresh!}"><i class="fa fa-sync" aria-hidden="true"></i></button>
+
+{block newpost}
+{control newPost $discussionPosts, $search, $suser}
+{/block}
+<div class="container discussion" n:snippet="discussion">
+    {foreach $discussionPosts->getPosts() as $item}
+        {dump $item}
+        {var $stickyIcon = ''}
+        {if $item->getSticky()}
+            {var $chc = 'post-sticky bg-warning'}
+            {var $cc = 'post-sticky'}
+            {var $stickyIcon = 'sticky'}
+        {elseif $item->getNewPost()}
+            {var $chc = 'post-new text-white bg-primary'}
+            {var $cc = 'post-new'}
+        {elseif $item->getCreatedById() == $userId}
+            {var $chc = 'post-mine'}
+            {var $cc = 'post-mine'}
+        {else}
+            {var $chc = ''}
+            {var $cc = ''}
+        {/if}
+        <div class="row" id="row-{$item->getId()}">
+            <div class="col">
+                <div class="card my-1 {$cc} sh-box">
+                    <div class="card-header {$chc} py-1">
+                        <span class="name">{$item->getCreatedBy()->getCallName()}</span>
+                        <div class="btn-group btn-group-sm float-md-right" role="group">
+                            <a n:if="$discussionPosts->getDiscussion()->getCanStick()" n:class="btn,btn-sm,$item->getSticky() ? active,$item->getSticky() ? btn-dark:btn-light,!$item->getSticky() ? btn-light-bordered" href="{plink :Discussion:Discussion:stickPost $item->getId(), $discussionPosts->getDiscussion()->getId(), $item->getSticky() ? false : true}" title="{if $item->getSticky()}{_discussion.unpin}{else}{_discussion.pin}{/if}"><i class="fa fa-thumbtack" aria-hidden="true"></i></a>
+                            <button class="btn btn-sm btn-light btn-light-bordered clipboard-btn" data-clipboard-target="#post-{$item->getId()}" title="{_common.copyToClipboard}"><i class="far fa-copy" aria-hidden="true"></i></button>
+                            <button class="btn btn-sm btn-light btn-light-bordered" onclick="loadPost({$item->getId()})" title="{_common.edit} / {_common.copy}"><i class="far fa-edit" aria-hidden="true"></i></button>
+                            <a n:if="$discussionPosts->getDiscussion()->getCanDelete() || ($discussionPosts->getDiscussion()->editablePosts && $item->getCreatedById() == $user->getId()) " class="btn btn-sm btn-light btn-light-bordered delete" href="{plink :Discussion:Discussion:deletePost $item->getId(), $discussionPosts->getDiscussion()->getId(), $currentPage}" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></a>
+                        </div>
+                        <span class="float-md-right mx-2">{$item->getCreatedAt()|date:'j.n.Y G:i'}</span>
+                        <div class="alert alert-warning float-md-right mx-1" n:if="$item->getUpdatedAt()" style="margin: 0px; padding: 4px; font-size: 10px;">{_common.edited} {$userList[$item->getUpdatedById()]->getDisplayName()}, {$item->getUpdatedAt()|date:'j.n.Y G:i'}</div>
+                    </div>
+                    <div class="card-body">
+                        <img class="user_pic" src="{$tymyRoot}/{$item->getCreatedBy()->getPictureUrl()}" />
+                        <div class="card-text" id="post-{$item->getId()}">
+                        {if $item->getPost()}{$item->getPost()|noescape}{/if}
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
-                    {foreach $discussions as $item}
-                        <div class="row my-2">
-                            <div class="col-sm-4 name" id="discussion-pane-{$item->getId()}">
-                                <h5><span n:class="badge,badge-pill,badge-danger,$item->getNewPosts() == 0 ? d-none">{$item->getNewPosts()}</span>
-                                <a href="{plink :Discussion:Discussion: $item->getWebName()}">{$item->getCaption()}</a></h5>
-                            </div>
-                            <div class="col-sm-8 dis-description"><h5>{$item->getDescription()}</h5></div>
-                        </div>
-                    {/foreach}
-                </div>
             </div>
+        </div>
+    {/foreach}
+</div>
+<div class="container navigation">
+    <div class="row">
+        <div class="col">
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    <li n:class="$currentPage == 1 ? disabled, page-item"><a class="page-link" href="{plink :Discussion:Discussion: $nazevDiskuze, 1}">{_common.navigationBlock.first}</a></li>
+                    <li n:class="$currentPage == 1 ? disabled, page-item"><a class="page-link" href="{if $currentPage==2}{plink :Discussion:Discussion: $nazevDiskuze}{else}{plink :Discussion:Discussion: $nazevDiskuze,$currentPage-1, $search}{/if}">{_common.navigationBlock.previous}</a></li>
+                    <li n:foreach="$pagination as $page" n:class="$currentPage == $page ? active, page-item"><a class="page-link" href="{if $page==1}{plink :Discussion:Discussion: $nazevDiskuze}{else}{plink :Discussion:Discussion: $nazevDiskuze,$page, $search}{/if}">{$page}</a></li>
+                    <li n:class="$currentPage == $lastPage ? disabled, page-item"><a class="page-link" href="{plink :Discussion:Discussion: $nazevDiskuze,$currentPage+1, $search}">{_common.navigationBlock.next}</a></li>
+                    <li n:class="$currentPage == $lastPage ? disabled, page-item"><a class="page-link" href="{plink :Discussion:Discussion: $nazevDiskuze, $lastPage}">{_common.navigationBlock.last}</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <form action="{plink this}" method="GET" class="form-inline justify-content-center">
+            <div class="input-group mb-3">
+                    <input type="text" name="jump2date" class="form-control" placeholder="{_discussion.jump2date}" aria-label="{_discussion.jump2date}">
+                    <div class="input-group-append">
+                        <button class="btn btn-light btn-light-bordered" type="submit">{_discussion.go}</button>
+                    </div>
+            </div>
+            </form>
         </div>
     </div>
 </div>
+
+
