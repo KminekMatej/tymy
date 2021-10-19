@@ -41,7 +41,7 @@ class User extends BaseModel
     private string $fullName;
     private ?string $callName = null;
     private ?string $language = null;
-    private ?string $email;
+    private ?string $email = null;
     private ?string $jerseyNumber = null;
     private ?string $gender = null;
     private ?string $street = null;

@@ -38,17 +38,16 @@ class PlayerPresenter extends SecuredPresenter
 
     public function renderNew($player = null)
     {
-        if (!$this->getUser()->isAllowed("user", "canCreate")) {
+        if (!$this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('USR_CREATE'))) {
             $this->flashMessage($this->translator->translate("common.alerts.notPermitted"), "warning");
             $this->redirect('this');
         }
 
         $this->template->canUpdate = true;
 
-        $teamData = $this->is->getData();
+        $team = $this->teamManager->getTeam();
 
         $errFls = array_intersect($this->supplier->getRequiredFields(), array_merge(UserResource::FIELDS_PERSONAL, UserResource::FIELDS_LOGIN, UserResource::FIELDS_TEAMINFO, UserResource::FIELDS_ADDRESS));
-
 
         if ($player) {  //new player based on another user
             $user = $this->userManager->getById($this->parseIdFromWebname($player));
@@ -58,29 +57,11 @@ class PlayerPresenter extends SecuredPresenter
                     ->setPictureUrl("");
         } else {    //brand new player
             $newPlayer = (new User())
-                    ->setId(null)
-                    ->setLogin("")
+                    ->setLanguage($team->getDefaultLanguageCode())
                     ->setCanLogin(true)
                     ->setCanEditCallName(true)
                     ->setStatus("PLAYER")
-                    ->setFirstName("")
-                    ->setLastName("")
-                    ->setCallName("")
-                    ->setLanguage($teamData->defaultLanguageCode)
-                    ->setEmail("")
-                    ->setJerseyNumber("")
                     ->setGender("UNKNOWN")
-                    ->setStreet("")
-                    ->setCity("")
-                    ->setZipCode("")
-                    ->setPhone("")
-                    ->setPhone2("")
-                    ->setBirthDate("")
-                    ->setNameDayMonth(null)
-                    ->setNameDayDay(null)
-                    ->setFullName("")
-                    ->setPictureUrl("")
-                    ->setDisplayName("")
                     ->setIsNew(true)
                     ->setErrFields($errFls);
         }

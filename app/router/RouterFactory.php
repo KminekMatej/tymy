@@ -110,8 +110,8 @@ class RouterFactory
             ],
         ]);
 
-        $router->addRoute('team/<player>', "Team:Player:default");
-        $router->addRoute('team/<player>/new', 'Team:Player:new');
+        /*$router->addRoute('team/<player>', "Team:Player:default");
+        $router->addRoute('team/<player>/new', 'Team:Player:new');*/
         $router->addRoute('[<module>][/<presenter>][/<action>]', [
             "module" => [
                 Route::VALUE => "Core",
