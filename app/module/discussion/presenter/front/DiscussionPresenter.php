@@ -2,7 +2,7 @@
 
 namespace Tymy\Module\Discussion\Presenter\Front;
 
-use Nette\Application\UI\NewPostControl;
+use Tymy\Module\Core\Component\NewPostControl;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Discussion\Manager\DiscussionManager;
 use Tymy\Module\Discussion\Manager\PostManager;

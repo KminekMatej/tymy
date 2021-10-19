@@ -1,7 +1,8 @@
 <?php
 
-namespace Nette\Application\UI;
+namespace Tymy\Module\Core\Component;
 
+use Nette\Application\UI\Control;
 use Tymy\Module\User\Manager\UserManager;
 
 /**
