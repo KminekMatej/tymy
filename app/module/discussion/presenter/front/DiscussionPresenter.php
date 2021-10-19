@@ -66,14 +66,15 @@ class DiscussionPresenter extends SecuredPresenter
     public function actionNewPost(string $discussion)
     {
         $post = $this->getHttpRequest()->getPost("post");
+        $discussionId = intval($discussion);
         if (trim($post) != "") {
             $this->postManager->create([
                 "post" => $post,
-                "discussionId" => $discussion,
+                "discussionId" => $discussionId,
                 "createdById" => $this->user->getId(),
-            ]);
+            ], $discussionId);
         }
-        $this->setView('discussion');
+        $this->setView('default');
     }
 
     public function actionEditPost(string $discussion)
@@ -81,13 +82,14 @@ class DiscussionPresenter extends SecuredPresenter
         $postId = $this->getHttpRequest()->getPost("postId");
         $text = $this->getHttpRequest()->getPost("post");
         $sticky = $this->getHttpRequest()->getPost("sticky");
+        $discussionId = intval($discussion);
 
         $this->postManager->update([
             "post" => $text,
             "sticky" => $sticky,
-                ], $discussion, $postId);
+                ], $discussionId, $postId);
 
-        $this->setView('discussion');
+        $this->setView('default');
     }
 
     public function actionDeletePost($postId, $discussionId, $currentPage)
