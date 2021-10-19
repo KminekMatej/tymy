@@ -72,7 +72,7 @@ class DefaultPresenter extends SecuredPresenter
 
     public function renderDefault()
     {
-        $users = $this->userManager->getByStatus($this->userType);
+        $users = isset($this->userType) ? $this->userManager->getByStatus($this->userType) : $this->userManager->getList();
         $allMails = [];
         if ($users) {
             foreach ($users as $u) {
