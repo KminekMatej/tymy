@@ -96,14 +96,14 @@ class DiscussionPresenter extends SecuredPresenter
     {
         $this->postManager->delete($discussionId, $postId);
 
-        $this->redirect("Discussion:discussion", ["discussion" => $discussionId, "page" => $currentPage]);
+        $this->redirect(":Discussion:Discussion:", ["discussion" => $discussionId, "page" => $currentPage]);
     }
 
     public function actionStickPost($postId, $discussionId, $sticky)
     {
         $this->postManager->stickPost($postId, $discussionId, $sticky ? true : false);
 
-        $this->redirect("Discussion:discussion", ["discussion" => $discussionId, "page" => 1]);
+        $this->redirect(":Discussion:Discussion:", ["discussion" => $discussionId, "page" => 1]);
     }
 
     protected function createComponentNewPost()
