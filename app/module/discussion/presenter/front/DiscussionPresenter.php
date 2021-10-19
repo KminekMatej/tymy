@@ -28,10 +28,10 @@ class DiscussionPresenter extends SecuredPresenter
     public function beforeRender()
     {
         parent::beforeRender();
-        $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("discussion.discussion", 2), "link" => $this->link("Discussion:")]]);
+        $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("discussion.discussion", 2), "link" => $this->link(":Discussion:Default:")]]);
     }
 
-    public function renderDefault($discussion, $page, $search, $suser = "all", $jump2date = "")
+    public function renderDefault(string $discussion, int $page = 1, ?string $search = null, string $suser = "all", ?string $jump2date = null)
     {
         $d = (is_int($discussion) || is_numeric($discussion)) ? $this->discussionManager->getById(intval($discussion)) : $this->discussionManager->getByWebName($discussion, $this->user->getId());
 
@@ -48,7 +48,7 @@ class DiscussionPresenter extends SecuredPresenter
         //set users
         $this->template->userList = $this->userManager->getList();
 
-        $this->setLevelCaptions(["2" => ["caption" => $d->getCaption(), "link" => $this->link(":Discussion:Default:", [$d->getWebName()])]]);
+        $this->setLevelCaptions(["2" => ["caption" => $d->getCaption(), "link" => $this->link(":Discussion:Discussion:", [$d->getWebName()])]]);
 
         $this->template->userId = $this->getUser()->getId();
         $this->template->discussionPosts = $discussionPosts;
