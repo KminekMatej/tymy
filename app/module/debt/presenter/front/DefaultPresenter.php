@@ -27,12 +27,37 @@ class DefaultPresenter extends SecuredPresenter
     public function beforeRender()
     {
         parent::beforeRender();
-        $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("debt.debt", 2), "link" => $this->link("Debt:")]]);
+        $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("debt.debt", 2), "link" => $this->link(":Debt:Default:")]]);
+    }
+
+    public function actionDefault(?string $resource = null)
+    {
+        if ($resource) {
+            $this->setView("debt");
+        }
     }
 
     public function renderDefault()
     {
         $this->template->debts = $this->debtManager->getListUserAllowed();
+    }
+
+    public function renderDebt(string $resource)
+    {
+        $debtId = $this->parseIdFromWebname($resource);
+
+        /* @var $debt Debt */
+        $debt = $this->debtManager->getById($debtId);
+        $this->template->debt = $debt;
+        $this->template->userListWithTeam = $this->userManager->getByIdWithTeam();
+
+        if ($debt->getCanEdit()) {
+            $this->template->payeeList = $this->getPayeeList();
+        } else {
+            $this->template->payeeList = $this->userManager->getByIdWithTeam();
+        }
+
+        $this->template->countryList = $this->getCountryList();
     }
 
     public function renderDebtImg($dluh)
@@ -143,33 +168,16 @@ class DefaultPresenter extends SecuredPresenter
         return rtrim($paymentString, "*");
     }
 
-    public function renderDebt($dluh)
-    {
-        $debtId = $this->parseIdFromWebname($dluh);
-
-        /* @var $debt Debt */
-        $debt = $this->debtManager->getById($debtId);
-        $this->template->debt = $debt;
-        $this->template->userListWithTeam = $this->userManager->getByIdWithTeam();
-
-        if ($debt->getCanEdit()) {
-            $this->template->payeeList = $this->getPayeeList();
-        } else {
-            $this->template->payeeList = $this->userManager->getByIdWithTeam();
-        }
-
-        $this->template->countryList = $this->getCountryList();
-    }
-
     public function handleDebtCreate()
     {
         $bind = $this->getRequest()->getPost();
 
+        /* @var $createdDebt Debt */
         $createdDebt = $this->debtManager->create($bind["changes"]);
 
         $this->flashMessage($this->translator->translate("common.alerts.debtAdded"), "success");
 
-        $this->redirect("Debt:debt", $createdDebt->getId());
+        $this->redirect(":Debt:Default:", $createdDebt->getWebName());
     }
 
     public function handleDebtEdit()

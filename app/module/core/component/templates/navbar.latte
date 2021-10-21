@@ -84,7 +84,7 @@
                                 <div class="dropdown-divider"></div>
                                 {var $divided = true}
                             {/if}
-                        <a n:if="empty($d->getPaymentReceived())" class="dropdown-item" href="{plink :Debt:Default:debt $d->getWebName()}">
+                        <a n:if="empty($d->getPaymentReceived())" class="dropdown-item" href="{plink :Debt:Default: $d->getWebName()}">
                             <span class="{$d->getClass()}">{$d->getCaption()}</span>
                             <span class="font-italic">{$d->getDisplayString()}</span>
                         </a>
