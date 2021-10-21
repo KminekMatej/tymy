@@ -63,7 +63,7 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <button n:if="empty($polls)" class="dropdown-item disabled" type="button"> - {_poll.noPoll} - </button>
                     {if !empty($polls)}
-                        <a n:foreach="$polls as $p" class="dropdown-item" href="{plink :Poll:Poll: $p->getWebName()}">
+                        <a n:foreach="$polls as $p" class="dropdown-item" href="{plink :Poll:Default: $p->getWebName()}">
                             {if !$p->getVoted() && $p->getCanVote()}<span class="badge badge-danger"><i class="fa fa-info" aria-hidden="true"></i></span>{/if}
                             {$p->getCaption()}
                         </a>
