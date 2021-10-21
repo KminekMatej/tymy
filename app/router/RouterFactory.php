@@ -110,9 +110,7 @@ class RouterFactory
             ],
         ]);
 
-        /*$router->addRoute('team/<player>', "Team:Player:default");
-        $router->addRoute('team/<player>/new', 'Team:Player:new');*/
-        $router->addRoute('[<module>][/<presenter>][/<action>]', [
+        $router->addRoute('[<module>][/<presenter>][/<resource \d+(\-.+)?>][/<action>]', [
             "module" => [
                 Route::VALUE => "Core",
             //    Route::FILTER_TABLE => $moduleFilters,
