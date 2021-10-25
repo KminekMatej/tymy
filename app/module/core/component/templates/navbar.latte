@@ -110,9 +110,9 @@
                     {if !empty($multiaccounts)}
                     <div class="dropdown-divider"></div>
                     {foreach $multiaccounts as $maTeam}
-                        {var $caption = empty($maTeam->getName()) ? $maTeam->getSysName() : $maTeam->getName()}
-                        <a n:if="$maTeam->getSysName() != $steam->getSysName()" class="dropdown-item" href="{plink :Core:Default:jump $maTeam->getSysName(), (property_exists($maTeam, 'v2') && $maTeam->getV2())}"><i class="fa fa-angle-double-right" aria-hidden="true"></i> {$caption}</a>
-                        <button n:if="$maTeam->getSysName() == $steam->getSysName()" class="dropdown-item disabled" type="button"><i class="fa fa-angle-double-right" aria-hidden="true"></i> {$caption}</button>
+                        {var $caption = empty($maTeam->name) ? $maTeam->sysName : $maTeam->name}
+                        <a n:if="$maTeam->sysName != $team->getSysName()" class="dropdown-item" href="{plink :Core:Default:jump $maTeam->sysName, ($maTeam->v2 ?? null)}"><i class="fa fa-angle-double-right" aria-hidden="true"></i> {$caption}</a>
+                        <button n:if="$maTeam->sysName == $team->getSysName()" class="dropdown-item disabled" type="button"><i class="fa fa-angle-double-right" aria-hidden="true"></i> {$caption}</button>
                     {/foreach}
                     {/if}
                 </div>
