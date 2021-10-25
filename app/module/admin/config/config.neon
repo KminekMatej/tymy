@@ -1,2 +1,3 @@
 services:
     AdminManager: Tymy\Module\Admin\Manager\AdminManager(%ghosts%)
+    MigrationManager: Tymy\Module\Admin\Manager\MigrationManager(@database.team.context)
