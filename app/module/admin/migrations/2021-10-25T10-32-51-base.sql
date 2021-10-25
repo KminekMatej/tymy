@@ -393,6 +393,15 @@ CREATE TABLE `mail_log` (
   `received` datetime DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+CREATE TABLE `migration` (
+  `id` int(11) NOT NULL,
+  `created` timestamp NOT NULL DEFAULT current_timestamp(),
+  `migration_from` varchar(16) NOT NULL,
+  `migration` varchar(16) NOT NULL,
+  `time` double NOT NULL,
+  `result` enum('OK','ERROR') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `notes` (
   `id` int(11) NOT NULL,
   `caption` varchar(150) DEFAULT NULL,
@@ -726,6 +735,9 @@ ALTER TABLE `export_settings`
   ADD UNIQUE KEY `id` (`id`),
   ADD UNIQUE KEY `export_settings_unique` (`export_id`,`event_type`,`pre_status`);
 
+ALTER TABLE `migration`
+  ADD PRIMARY KEY (`id`);
+
 ALTER TABLE `notes`
   ADD PRIMARY KEY (`id`);
 
@@ -805,6 +817,9 @@ ALTER TABLE `export`
 
 ALTER TABLE `export_settings`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `migration`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `notes`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
