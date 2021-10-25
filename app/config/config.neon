@@ -8,6 +8,13 @@ application:
             *: Tymy\Module\*\Presenter\Front\*Presenter
             Api: Tymy\Module\*\Presenter\Api\*Presenter
 
+http:
+    csp:
+        default-src: "'self' https://tymy.cz"
+        script-src: "'self' 'unsafe-inline'"
+        font-src: "'self' https://tymy.cz https://fonts.gstatic.com/"
+        style-src: "'self' https://tymy.cz https://fonts.googleapis.com/ 'unsafe-inline'"
+        img-src: "'self' data:"
 
 session:
         expiration: 14 days
