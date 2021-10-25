@@ -620,9 +620,6 @@ CREATE TABLE `users` (
   `last_read_news` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `users` (`id`, `created_at`, `user_name`, `password`, `can_login`, `last_login`, `status`, `roles`, `first_name`, `last_name`, `call_name`, `editable_call_name`, `email_name`, `street`, `city`, `zipcode`, `phone`, `phone2`, `icq`, `account_number`, `birth_date`, `birth_code`, `nameday_month`, `nameday_day`, `language`, `sex`, `jersey_number`, `password2`, `gdpr_accepted_at`, `gdpr_revoked_at`, `last_read_news`) VALUES
-(1, '2021-10-25 10:12:41', 'admin', 'a02b4b8443386da5e3e925b29a01435a', 'YES', NULL, 'PLAYER', 'SUPER', 'admin', 'admin', 'admin', 'NO', 'admin', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'CZ', 'unknown', '', NULL, '2021-10-25 10:12:41', NULL, '2021-10-25 08:12:41');
-
 CREATE TABLE `usr_mails` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
@@ -630,8 +627,6 @@ CREATE TABLE `usr_mails` (
   `type` enum('DEF','SMS','WEB','USR') DEFAULT 'USR'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-INSERT INTO `usr_mails` (`id`, `user_id`, `email`, `type`) VALUES
-(1, 1, 'matej@penzion-rataje.eu', 'DEF');
 CREATE TABLE `v_users` (
 `id` int(11)
 ,`created_at` datetime
