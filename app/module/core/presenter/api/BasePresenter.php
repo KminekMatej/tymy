@@ -46,7 +46,7 @@ class BasePresenter extends Presenter
         parent::__construct();
     }
 
-    public function startup()
+    protected function startup()
     {
         Debugger::timer("request");
         parent::startup();
