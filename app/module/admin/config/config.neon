@@ -1,0 +1,2 @@
+services:
+    AdminManager: Tymy\Module\Admin\Manager\AdminManager(%ghosts%)
