@@ -70,7 +70,7 @@ class EventPresenter extends SettingDefaultPresenter
             $this->redirect('Settings:events');
         }
 
-        $this->setLevelCaptions(["3" => ["caption" => $eventObj->getCaption(), "link" => $this->link(":Setting:events", $eventObj->getWebName())]]);
+        $this->setLevelCaptions(["3" => ["caption" => $eventObj->getCaption(), "link" => $this->link(":Setting:Event:", $eventObj->getWebName())]]);
         $this->template->event = $eventObj;
     }
 

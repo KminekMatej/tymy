@@ -33,7 +33,7 @@ class AppPresenter extends SettingDefaultPresenter
 
     public function actionApp()
     {
-        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("settings.application"), "link" => $this->link(":Setting:app")]]);
+        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("settings.application"), "link" => $this->link(":Setting:App:")]]);
         $currentVersion = $this->supplier->getVersion(0);
         $this->template->version = $currentVersion;
         $previousPatch = NULL;

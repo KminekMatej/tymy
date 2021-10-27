@@ -68,7 +68,7 @@ class PermissionPresenter extends SettingDefaultPresenter
 
         $this->setLevelCaptions([
             "2" => ["caption" => $this->translator->translate("permission.permission", 2), "link" => $this->link(":Setting:Permission:")],
-            "3" => ["caption" => $perm->getName(), "link" => $this->link(":Setting:permissions", $perm->getWebname())]
+            "3" => ["caption" => $perm->getName(), "link" => $this->link(":Setting:Permission:", $perm->getWebname())]
         ]);
 
         $users = $this->userManager->getIdList();

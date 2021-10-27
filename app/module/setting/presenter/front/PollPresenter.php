@@ -69,7 +69,7 @@ class PollPresenter extends SettingDefaultPresenter
         if (count($pollObj->getOptions()) == 0) {
             $pollObj->setOptions([(new Option())->setId(-1)->setPollId($pollId)->setCaption("")->setType("TEXT")]);
         }
-        $this->setLevelCaptions(["3" => ["caption" => $pollObj->getCaption(), "link" => $this->link(":Setting:polls", $pollObj->getWebName())]]);
+        $this->setLevelCaptions(["3" => ["caption" => $pollObj->getCaption(), "link" => $this->link(":Setting:Poll:", $pollObj->getWebName())]]);
         $this->template->poll = $pollObj;
     }
 

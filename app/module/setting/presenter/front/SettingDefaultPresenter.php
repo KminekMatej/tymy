@@ -37,7 +37,7 @@ class SettingDefaultPresenter extends SecuredPresenter
     protected function startup()
     {
         parent::startup();
-        $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("settings.setting", 2), "link" => $this->link(":Setting:")]]);
+        $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("settings.setting", 2), "link" => $this->link(":Setting:Default:")]]);
         $this->template->addFilter("typeColor", function ($type) {
             $color = $this->supplier->getEventColors();
             return $color[$type];
