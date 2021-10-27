@@ -1,0 +1,80 @@
+{import $componentsDir . '/secured.latte'}
+
+{block navbar}
+{control navbar}
+{/block}
+
+{block scripts}
+{include parent}
+<script src="{$basePath}/js/Binder.js?ver={$appver}"></script>
+{/block}
+
+{block content}
+
+<div class="container settings">
+    <div class="row">
+        <div class="col">
+            <div class="card sh-box my-3" data-binder-id="{$discussion->getId()}">
+                <div class="card-header">
+                    <h4>{if $isNew}{_discussion.newDiscussion}{else}{_discussion.editDiscussion} {$discussion->getId()}{/if}</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <tr><th>{_settings.title}</th>
+                            <td>
+                                <input type="text" name="caption" value="{$discussion->getCaption()}" data-value="{$discussion->getCaption()}" class="col-6 form-control" />
+                            </td></tr>
+                        <tr><th>{_settings.description}</th><td><textarea name="description" data-value="{$discussion->getDescription()}" class="form-control col-6">{$discussion->getDescription()}</textarea></td></tr>
+                        <tr><th>{_settings.canRead}</th>
+                            <td>
+                                <select name="readRightName" class="col-6 form-control" data-value="{$discussion->getReadRightName()}">
+                                    <option value="">-- {_common.everyone} --</option>
+                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $discussion->getReadRightName() == $userPermission->getName()">{$userPermission->getCaption()}</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr><th>{_settings.canWrite}</th>
+                            <td>
+                                <select name="writeRightName" class="col-6 form-control" data-value="{$discussion->getWriteRightName()}">
+                                    <option value="">-- {_common.everyone} --</option>
+                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $discussion->getWriteRightName() == $userPermission->getName()">{$userPermission->getCaption()}</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr><th>{_settings.canDelete}</th>
+                            <td>
+                                <select name="deleteRightName" class="col-6 form-control" data-value="{$discussion->getDeleteRightName()}">
+                                    <option value="">-- {_common.everyone} --</option>
+                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $discussion->getDeleteRightName() == $userPermission->getName()">{$userPermission->getCaption()}</option>
+                                </select>
+                            </td>
+                        </tr>
+                            <tr><th>{_settings.canTop}</th>
+                                <td>
+                                    <select name="stickyRightName" class="col-6 form-control" data-value="{$discussion->getStickyRightName()}">
+                                        <option value="">-- {_common.everyone} --</option>
+                                        <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $discussion->getStickyRightName() == $userPermission->getName()">{$userPermission->getCaption()}</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        <tr><th title="{_discussion.publicTitle}">{_discussion.public}</th>
+                            <td><label class="custom-control custom-checkbox">
+                              <input type="checkbox" name="publicRead" n:attr="data-value => $discussion->getPublicRead(), checked => $discussion->getPublicRead()" class="col-6 form-control custom-control-input" />
+                              <span class="custom-control-label"></span>
+                            </label></td></tr>
+                        <tr><th>{_discussion.editablePosts}</th>
+                            <td><label class="custom-control custom-checkbox">
+                              <input type="checkbox" name="editablePosts" n:attr="data-value => $discussion->getEditablePosts(), checked => $discussion->getEditablePosts()" class="col-6 form-control custom-control-input" />
+                              <span class="custom-control-label"></span>
+                            </label></td></tr>
+                    </table>
+                </div>
+                <div class="card-footer text-right" n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('DSSETUP'))">
+                    <button n:if="!$isNew" href="{link discussionDelete!}" class="btn btn-danger mx-2 binder-delete-btn" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                    <button n:if="!$isNew" href="{link discussionEdit!}" class="btn btn-lg btn-primary binder-save-btn" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
+                    <button n:if="$isNew" href="{link discussionCreate!}" class="btn btn-lg btn-primary binder-save-btn" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

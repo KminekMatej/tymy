@@ -7,6 +7,13 @@ use Tymy\Module\Discussion\Model\Discussion;
 class DiscussionPresenter extends SettingBasePresenter
 {
 
+    public function actionDefault(?string $resource = null)
+    {
+        if ($resource) {
+            $this->setView("detail");
+        }
+    }
+    
     public function actionDefault($discussion = NULL)
     {
         $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("discussion.discussion", 2), "link" => $this->link(":Setting:Discussion:")]]);

@@ -1,0 +1,113 @@
+{import $componentsDir . '/secured.latte'}
+
+{block scripts}
+{include parent}
+<script src="{$basePath}/js/Binder.js?ver={$appver}"></script>
+{/block}
+
+{block navbar}
+{control navbar}
+{/block}
+
+{block content}
+
+<div class="container settings">
+    <div class="row">
+        <div class="col">
+            <div class="card sh-box my-3" data-binder-id="{$perm->getId()}">
+                <div class="card-header row">
+                    <div class="col-8"><h4>{if $isNew}{_permission.newPermission}{else}{_permission.editPermission} {$perm->getId()}{/if}</h4></div>
+                    <div class="col-4"><div class="alert alert-warning float-md-right mx-1" n:if="$perm->getUpdatedAt() && $lastEditedUser" style="margin: 0px; padding: 4px; font-size: 10px;">{_common.edited} {$lastEditedUser->getDisplayName()}, {$perm->getUpdatedAt()|date:'j.n.Y G:i'}</div></div>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <tr>
+                            <th>{_settings.title}</th>
+                            <td><input type="text" name="name" value="{$perm->getName()}" {if $perm->getType()=='USR'}data-value="{$perm->getName()}"{/if} class="col-6 form-control" {if $perm->getType()!='USR'}disabled{/if} /></td>
+                        </tr>
+                        <tr>
+                            <th>{_settings.description}</th>
+                            <td><input type="text" name="caption" value="{$perm->getCaption()}" {if $perm->getType()=='USR'}data-value="{$perm->getCaption()}"{/if} class="col-6 form-control" {if $perm->getType()!='USR'}disabled{/if} /></td>
+                        </tr>
+                        <tr>
+                            <th>
+                                {_settings.status}
+                            </th>
+                            <td class="row statuses">
+                                <div class="col-3">
+                                    <div class="custom-control custom-radio" n:foreach="$allowances as $key => $allowance">
+                                        <input type="radio" id="statusAllowance_{$key}" name="statusAllowance" data-value="" value="{$key}" class="custom-control-input" n:attr="checked => $key == $statusesRule" onchange="statesChange()">
+                                        <label class="custom-control-label" for="statusAllowance_{$key}">{$allowance}</label>
+                                    </div>
+                                </div>
+                                <div class="col-9">
+                                    <div class="btn-group">
+                                        <button name="statuses[{$key}]" data-value="-1" n:foreach="$statuses as $key => $status" data-key="{$key}" class="btn btn-outline-secondary {if !empty($statusesRule) && in_array($status, $perm->{$statusesRule.'Statuses'})}active{/if}" onclick="stateCheck(this)">{$status}</button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                {_team.roles, 2}
+                            </th>
+                            <td class="row roles">
+                                <div class="col-3">
+                                    <div class="custom-control custom-radio" n:foreach="$allowances as $key => $allowance">
+                                        <input type="radio" id="roleAllowance_{$key}" name="roleAllowance" data-value="" value="{$key}" class="custom-control-input" n:attr="checked => $key == $rolesRule" onchange="rolesChange()">
+                                        <label class="custom-control-label" for="roleAllowance_{$key}">{$allowance}</label>
+                                    </div>
+                                </div>
+                                <div class="col-9">
+                                    <div class="btn-group">
+                                        {var $getRoles = 'get' . ucfirst($rolesRule) . 'Roles'}
+                                        <button name="roles[{$role->code}]" data-value="-1" n:foreach="$roles as $role" data-key="{$role->code}" class="btn btn-outline-secondary {if !empty($rolesRule) && in_array($role->code, $perm->$getRoles())}active{/if}" onclick="roleCheck(this)">{$role->caption}</button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                {_common.user}
+                            </th>
+                            <td class="row ids">
+                                <div class="col-3">
+                                    <div class="custom-control custom-radio" n:foreach="$allowances as $key => $allowance">
+                                        <input type="radio" id="userAllowance_{$key}" name="userAllowance" data-value="" value="{$key}" class="custom-control-input" n:attr="checked => $key == $usersRule" onchange="usersChange()">
+                                        <label class="custom-control-label" for="userAllowance_{$key}">{$allowance}</label>
+                                    </div>
+                                </div>
+                                    <div class="col-9 row">
+                                        <div class="col-4 p-1" n:foreach="$users as $u">
+                                            <div class="custom-control custom-checkbox" title="{$u->getFullName()}">
+                                                <input type="checkbox" class="custom-control-input" name="userCheck_{$u->getId()}" data-value="{$usersRule && in_array($u->getId(),$perm->{$usersRule.'Users'}) ? 1 : 0}" id="userCheck_{$u->getId()}" data-key="{$u->getId()}" {if $usersRule && in_array($u->getId(), $perm->{$usersRule.'Users'})}checked{/if} onclick="usersChange()">
+                                                <label class="custom-control-label" for="userCheck_{$u->getId()}">{$u->getDisplayName()} <img class="usrImg border rounded" src="{$u->getPictureUrl()}" /></label>
+                                            </div>
+                                        </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                {_permission.results}
+                            </th>
+                            <td>
+                                <div class="row" n:foreach="$allowances as $key => $allowance" data-class="{$key}">
+                                    <div class="col-2"><strong>{$allowance}</strong></div>
+                                    <div class="col-10">
+                                        <img n:foreach="$users as $usr" {if $key == 'allowed'}style="display: none"{/if} data-rule="{$allowance}" data-status="{$usr->getStatus()}" data-roles="{join(',', $usr->getRoles())}" data-id="{$usr->getId()}" class="border rounded user" src="{$usr->getPictureUrl()}" />
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="card-footer text-right">
+                    <button href="{link permissionDelete!}" class="btn btn-danger mx-2 binder-delete-btn" title="{_common.delete}" ><i class="fa fa-times" aria-hidden="true"></i></button>
+                    <button n:if="!$isNew" href="{link permissionEdit!}" class="btn btn-lg btn-primary binder-save-btn" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
+                    <button n:if="$isNew" href="{link permissionCreate!}" class="btn btn-lg btn-primary binder-save-btn" title="{_permission.createPermission}"><i class="fa fa-save" aria-hidden="true"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
