@@ -1,5 +1,4 @@
 <?php
-
 namespace Tymy\Module\Setting\Presenter\Front;
 
 use Tymy\Module\Attendance\Manager\StatusManager;
@@ -32,16 +31,11 @@ class SettingBasePresenter extends SecuredPresenter
         $this->template->statusList = $this->statusManager->getAllStatusCodes();
         $this->template->userPermissions = $this->permissionManager->getByType(Permission::TYPE_USER);
         $this->template->systemPermissions = $this->permissionManager->getByType(Permission::TYPE_SYSTEM);
-    }
 
-    protected function startup()
-    {
-        parent::startup();
         $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("settings.setting", 2), "link" => $this->link(":Setting:Default:")]]);
         $this->template->addFilter("typeColor", function ($type) {
             $color = $this->supplier->getEventColors();
             return $color[$type];
         });
     }
-
 }
