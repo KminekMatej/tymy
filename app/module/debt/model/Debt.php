@@ -23,7 +23,7 @@ class Debt extends BaseModel implements JsonSerializable
     private float $amount;
     private ?string $currencyIso = null;
     private ?string $countryIso = null;
-    private ?int $debtorId = null;
+    private int $debtorId = 0;
     private ?string $debtorType = null;
     private ?int $payeeId = null;
     private ?string $payeeType = null;
@@ -73,7 +73,7 @@ class Debt extends BaseModel implements JsonSerializable
         return $this->countryIso;
     }
 
-    public function getDebtorId(): ?int
+    public function getDebtorId(): int
     {
         return $this->debtorId;
     }
@@ -225,7 +225,7 @@ class Debt extends BaseModel implements JsonSerializable
 
     public function setDebtorId(?int $debtorId)
     {
-        $this->debtorId = $debtorId;
+        $this->debtorId = $debtorId ?: 0;
         return $this;
     }
 
