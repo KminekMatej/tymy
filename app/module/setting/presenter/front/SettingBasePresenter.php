@@ -17,13 +17,13 @@ class SettingBasePresenter extends SecuredPresenter
 {
 
     /** @inject */
-    private PermissionManager $permissionManager;
+    public PermissionManager $permissionManager;
 
     /** @inject */
-    private EventTypeManager $eventTypeManager;
+    public EventTypeManager $eventTypeManager;
 
     /** @inject */
-    private StatusManager $statusManager;
+    public StatusManager $statusManager;
 
     public function beforeRender()
     {
