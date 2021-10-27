@@ -5,9 +5,9 @@ namespace Tymy\Module\Setting\Presenter\Front;
 use Nette\Application\UI\Form;
 use stdClass;
 use Tymy\Module\Multiaccount\Manager\MultiaccountManager;
-use Tymy\Module\Setting\Presenter\Front\SettingDefaultPresenter;
+use Tymy\Module\Setting\Presenter\Front\SettingBasePresenter;
 
-class MultiaccountPresenter extends SettingDefaultPresenter
+class MultiaccountPresenter extends SettingBasePresenter
 {
 
     public function renderDefault()

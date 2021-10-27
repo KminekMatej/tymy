@@ -2,7 +2,7 @@
 
 namespace Tymy\Module\Setting\Presenter\Front;
 
-class ReportPresenter extends SettingDefaultPresenter
+class ReportPresenter extends SettingBasePresenter
 {
 
     public function renderDefault()

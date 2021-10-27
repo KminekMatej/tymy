@@ -4,7 +4,7 @@ namespace Tymy\Module\Setting\Presenter\Front;
 
 use Tymy\Module\Discussion\Model\Discussion;
 
-class DiscussionPresenter extends SettingDefaultPresenter
+class DiscussionPresenter extends SettingBasePresenter
 {
 
     public function actionDefault($discussion = NULL)

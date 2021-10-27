@@ -6,9 +6,9 @@ use Nette\Utils\Strings;
 use Tymy\Module\Permission\Manager\PermissionManager;
 use Tymy\Module\Permission\Model\Permission;
 use Tymy\Module\Permission\Model\Privilege;
-use Tymy\Module\Setting\Presenter\Front\SettingDefaultPresenter;
+use Tymy\Module\Setting\Presenter\Front\SettingBasePresenter;
 
-class PermissionPresenter extends SettingDefaultPresenter
+class PermissionPresenter extends SettingBasePresenter
 {
 
     /** @inject */

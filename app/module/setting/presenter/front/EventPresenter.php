@@ -6,9 +6,9 @@ use Nette\Utils\DateTime;
 use Tapi\EventListResource;
 use Tymy\Module\Event\Manager\EventManager;
 use Tymy\Module\Event\Model\Event;
-use Tymy\Module\Setting\Presenter\Front\SettingDefaultPresenter;
+use Tymy\Module\Setting\Presenter\Front\SettingBasePresenter;
 
-class EventPresenter extends SettingDefaultPresenter
+class EventPresenter extends SettingBasePresenter
 {
 
     /** @inject */

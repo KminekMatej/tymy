@@ -13,7 +13,7 @@ use Tymy\Module\Permission\Model\Permission;
  *
  * @author kminekmatej, 11. 9. 2021
  */
-class SettingDefaultPresenter extends SecuredPresenter
+class SettingBasePresenter extends SecuredPresenter
 {
 
     /** @inject */

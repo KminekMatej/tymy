@@ -9,7 +9,7 @@ use Tymy\Module\Permission\Manager\PermissionManager;
 use Tymy\Module\Poll\Manager\OptionManager;
 use Tymy\Module\Poll\Manager\PollManager;
 
-class AppPresenter extends SettingDefaultPresenter
+class AppPresenter extends SettingBasePresenter
 {
 
     /** @inject */

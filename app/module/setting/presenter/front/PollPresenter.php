@@ -6,9 +6,9 @@ use Tymy\Module\Poll\Manager\OptionManager;
 use Tymy\Module\Poll\Manager\PollManager;
 use Tymy\Module\Poll\Model\Option;
 use Tymy\Module\Poll\Model\Poll;
-use Tymy\Module\Setting\Presenter\Front\SettingDefaultPresenter;
+use Tymy\Module\Setting\Presenter\Front\SettingBasePresenter;
 
-class PollPresenter extends SettingDefaultPresenter
+class PollPresenter extends SettingBasePresenter
 {
 
     /** @inject */
