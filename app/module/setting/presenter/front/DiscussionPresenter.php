@@ -10,21 +10,17 @@ class DiscussionPresenter extends SettingBasePresenter
     public function actionDefault(?string $resource = null)
     {
         if ($resource) {
-            $this->setView("detail");
+            $this->setView("discussion");
         }
     }
     
-    public function actionDefault($discussion = NULL)
+    public function renderDefault()
     {
         $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("discussion.discussion", 2), "link" => $this->link(":Setting:Discussion:")]]);
-        if (!is_null($discussion)) {
-            $this->setView("discussion");
-        } else {
-            $this->template->isNew = false;
-            $discussions = $this->discussionManager->getList();
-            $this->template->discussions = $discussions;
-            $this->template->discussionsCount = count($discussions);
-        }
+        $this->template->isNew = false;
+        $discussions = $this->discussionManager->getList();
+        $this->template->discussions = $discussions;
+        $this->template->discussionsCount = count($discussions);
     }
 
     public function renderNew()
@@ -47,12 +43,12 @@ class DiscussionPresenter extends SettingBasePresenter
         $this->setView("discussion");
     }
 
-    public function renderDiscussion($discussion)
+    public function renderDiscussion(?string $resource = null)
     {
         $this->allowSys("DSSETUP");
 
         //RENDERING DISCUSSION DETAIL
-        $discussionObj = $this->discussionManager->getByWebName($discussion);
+        $discussionObj = $this->discussionManager->getByWebName($resource);
         if ($discussionObj == NULL) {
             $this->flashMessage($this->translator->translate("discussion.errors.discussionNotExists", NULL, ['id' => $discussionId]), "danger");
             $this->redirect('Settings:events');
