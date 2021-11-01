@@ -51,7 +51,7 @@ class DiscussionPresenter extends SettingBasePresenter
         $discussionObj = $this->discussionManager->getByWebName($resource);
         if ($discussionObj == NULL) {
             $this->flashMessage($this->translator->translate("discussion.errors.discussionNotExists", NULL, ['id' => $discussionId]), "danger");
-            $this->redirect('Settings:events');
+            $this->redirect(':Setting:Event:');
         }
         $this->setLevelCaptions(["3" => ["caption" => $discussionObj->getCaption(), "link" => $this->link(":Setting:Discussion:", $discussionObj->getWebName())]]);
         $this->template->isNew = FALSE;

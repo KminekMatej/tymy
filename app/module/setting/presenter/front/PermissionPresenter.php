@@ -63,7 +63,7 @@ class PermissionPresenter extends SettingBasePresenter
         $perm = $this->permissionManager->getByWebName($permission);
         if ($perm == NULL) {
             $this->flashMessage($this->translator->translate("permission.errors.permissionNotExists", NULL, ['id' => $permission]), "danger");
-            $this->redirect('Settings:events');
+            $this->redirect(':Setting:Event:');
         }
 
         $this->setLevelCaptions([

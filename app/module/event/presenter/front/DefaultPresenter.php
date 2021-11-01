@@ -110,7 +110,7 @@ class DefaultPresenter extends SecuredPresenter
         $eventTypes = $this->eventTypeManager->getIndexedList();
         $users = $this->userManager->getList();
 
-        $this->setLevelCaptions(["2" => ["caption" => $event->getCaption(), "link" => $this->link("Event:event", $event->getId() . "-" . $event->getWebName())]]);
+        $this->setLevelCaptions(["2" => ["caption" => $event->getCaption(), "link" => $this->link(":Event:Default:event", $event->getId() . "-" . $event->getWebName())]]);
 
         //array keys are pre-set for sorting purposes
         $attArray = [];
