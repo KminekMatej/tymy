@@ -2,7 +2,7 @@
 
 {block scripts}
 {include parent}
-{var $presenterName = strtolower(\Nette\Application\Helpers::splitName($presenter->request->getPresenterName())[0])}
+{var $presenterName = strtolower(\Nette\Application\Helpers::splitName($presenter->request->getPresenterName())[1])}
 {var $presenterUcName = ucFirst($presenterName)}
 
 {var $presenterScriptPath = "{$wwwDir}/js/{$presenterUcName}/{$presenterName}.js"}
