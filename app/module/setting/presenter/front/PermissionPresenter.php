@@ -16,7 +16,7 @@ class PermissionPresenter extends SettingBasePresenter
 
     public function actionPermissions($permission = NULL)
     {
-        $this->allowSys('IS_ADMIN');
+        $this->allowPermission('IS_ADMIN');
 
         if (!is_null($permission)) {
             $this->setView("permission");
@@ -27,7 +27,7 @@ class PermissionPresenter extends SettingBasePresenter
 
     public function renderNew()
     {
-        $this->allowSys("IS_ADMIN");
+        $this->allowPermission("IS_ADMIN");
 
         $this->setLevelCaptions([
             "2" => ["caption" => $this->translator->translate("permission.permission", 2), "link" => $this->link(":Setting:Permission:")],
@@ -58,7 +58,7 @@ class PermissionPresenter extends SettingBasePresenter
 
     public function renderPermission($permission)
     {
-        $this->allowSys("IS_ADMIN");
+        $this->allowPermission("IS_ADMIN");
 
         $perm = $this->permissionManager->getByWebName($permission);
         if ($perm == NULL) {
@@ -150,26 +150,6 @@ class PermissionPresenter extends SettingBasePresenter
         }
 
         return $output;
-    }
-
-    /**
-     * Shortcut for allowing user with specific SYS permission.
-     * If user is not allowed to perform such thing, message is shown and gets redirected to Settings homepage
-     * 
-     * @param string $permissionName
-     * @return void
-     */
-    private function allowSys(string $permissionName): void
-    {
-        if (!$this->getUser()->isAllowed($this->user->getId(), Privilege::SYS($permissionName))) {
-            $this->notAllowed();
-        }
-    }
-
-    private function notAllowed()
-    {
-        $this->flashMessage($this->translator->translate("common.alerts.notPermitted"));
-        $this->redirect("Settings:");
     }
 
 }
