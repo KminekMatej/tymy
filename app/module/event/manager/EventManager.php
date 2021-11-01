@@ -389,5 +389,4 @@ class EventManager extends BaseManager
     {
         return $this->database->table(Event::TABLE)->count("id");
     }
-
 }
