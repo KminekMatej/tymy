@@ -87,7 +87,6 @@
                         <i class="fa fa-plus" aria-hidden="true"></i>
                     </a>
                     <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_UPDATE'))" class="btn btn-lg btn-primary binder-save-all-btn" href="{link eventsEdit!}" title="{_common.saveAll}"><i class="fa fa-save" aria-hidden="true"></i></button>
-                    <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_CREATE'))" class="btn btn-lg btn-primary binder-save-all-btn" href="{link eventsCreate!}" title="{_common.saveAll}"><i class="fa fa-save" aria-hidden="true"></i></button>
                 </div>
                 
             </div>
