@@ -90,4 +90,56 @@ class DetailPresenter extends EventBasePresenter
         $this->template->myPreStatusCaption = $eventCaptions["myPreStatusCaption"];
         $this->template->myPostStatusCaption = $eventCaptions["myPostStatusCaption"];
     }
+
+    private function getEventCaptions($event, $eventTypes)
+    {
+        return [
+            "myPreStatusCaption" => empty($event->myAttendance->preStatus) || $event->myAttendance->preStatus == "UNKNOWN" ? "not-set" : $eventTypes[$event->type]->preStatusSet[$event->myAttendance->preStatus]->code,
+            "myPostStatusCaption" => empty($event->myAttendance->postStatus) || $event->myAttendance->postStatus == "UNKNOWN" ? "not-set" : $eventTypes[$event->type]->postStatusSet[$event->myAttendance->postStatus]->code,
+        ];
+    }
+
+    public function handleLoadHistory($udalost)
+    {
+        $eventId = $this->parseIdFromWebname($udalost);
+        $this->loadEventHistory($eventId);
+        $this->redrawControl("history");
+        $this->redrawControl("historyBtn");
+    }
+
+    public function handleAttendance($id, $code, $desc)
+    {
+        $this->attendanceManager->create([
+            "userId" => $this->user->getId(),
+            "eventId" => $id,
+            "preStatus" => $code,
+            "preDescription" => $desc
+        ]);
+
+        if ($this->isAjax()) {
+            $this->redrawControl("attendanceWarning");
+            $this->redrawControl("attendanceTabs");
+            $this->redrawNavbar();
+        }
+    }
+
+    public function handleAttendanceResult($id)
+    {
+        $results = $this->getRequest()->getPost()["resultSet"];
+
+        foreach ($results as $postStatusData) {
+            $postStatusData["eventId"] = $id;
+            $this->attendanceManager->create($postStatusData);
+        }
+        if ($this->isAjax()) {
+            $this->redrawControl("attendanceTabs");
+            $this->redrawNavbar();
+        }
+    }
+
+    private function loadEventHistory($eventId)
+    {
+        $this->template->histories = $this->historyManager->getEventHistory($eventId);
+        $this->template->emptyStatus = (object) ["code" => "", "caption" => "Nezadáno"];
+    }
 }
