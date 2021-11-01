@@ -30,7 +30,7 @@ class PollPresenter extends SettingBasePresenter
 
     public function renderPoll_new()
     {
-        $this->allowSys('ASK.VOTE_UPDATE');
+        $this->allowPermission('ASK.VOTE_UPDATE');
 
         $this->setLevelCaptions([
             "2" => ["caption" => $this->translator->translate("poll.poll", 2), "link" => $this->link(":Setting:Poll:")],
@@ -56,7 +56,7 @@ class PollPresenter extends SettingBasePresenter
 
     public function renderPoll($poll)
     {
-        $this->allowSys('ASK.VOTE_UPDATE');
+        $this->allowPermission('ASK.VOTE_UPDATE');
 
         //RENDERING POLL DETAIL
         $pollId = $this->parseIdFromWebname($poll);

@@ -25,7 +25,7 @@ class DiscussionPresenter extends SettingBasePresenter
 
     public function renderNew()
     {
-        $this->allowSys("DSSETUP");
+        $this->allowPermission("DSSETUP");
 
         $this->setLevelCaptions([
             "2" => ["caption" => $this->translator->translate("discussion.discussion", 2), "link" => $this->link(":Setting:Discussion:")],
@@ -45,7 +45,7 @@ class DiscussionPresenter extends SettingBasePresenter
 
     public function renderDiscussion(?string $resource = null)
     {
-        $this->allowSys("DSSETUP");
+        $this->allowPermission("DSSETUP");
 
         //RENDERING DISCUSSION DETAIL
         $discussionObj = $this->discussionManager->getByWebName($resource);
