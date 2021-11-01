@@ -31,9 +31,9 @@
                     <a class="dropdown-item" href="{plink :Event:Default:}">{_common.allOfThem}</a>
                     {ifset $events}
                         <a n:foreach="$events as $ev" class="dropdown-item" href="{plink :Event:Default:event $ev->getWebName()}">
-                            {if $ev->warning}<span class="badge badge-danger"><i class="fa fa-info" aria-hidden="true"></i></span>{/if}
-                            <span style="color: {$eventColors[$ev->type]|noescape}" n:if="array_key_exists($ev->type, $eventColors)">{$ev->startTime|date:'j.n.'} - {$ev->caption}</span>
-                            <span n:if="!array_key_exists($ev->type, $eventColors)">{$ev->startTime|date:'j.n.'} - {$ev->caption}</span>
+                            {if $ev->getAttendancePending()}<span class="badge badge-danger"><i class="fa fa-info" aria-hidden="true"></i></span>{/if}
+                            <span style="color: {$eventColors[$ev->getType()]|noescape}" n:if="array_key_exists($ev->getType(), $eventColors)">{$ev->getStartTime()|date:'j.n.'} - {$ev->getCaption()}</span>
+                            <span n:if="!array_key_exists($ev->getType(), $eventColors)">{$ev->getStartTime()|date:'j.n.'} - {$ev->getCaption()}</span>
                         </a>
                     {/ifset}
                 </div>
