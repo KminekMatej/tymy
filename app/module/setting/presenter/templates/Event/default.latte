@@ -20,7 +20,7 @@
         <div class="col">
             <div class="card sh-box my-3">
                 <div class="card-header">
-                    <h4>{if $isNew}{_event.newEvents}{else}{_event.editEvent,2}{/if}</h4>
+                    <h4>{_event.editEvent,2}</h4>
                 </div>
                 <div class="card-body">
                     <table class="table table-xs table-hover">
@@ -42,61 +42,52 @@
                         {if $events}
                         <tr n:foreach="$events as $event" data-binder-id="{$event->getId()}">
                             <td>
-                                <a n:if="!$isNew" href="{plink :Setting:Event: $event->getWebName()}" class="btn btn-sm btn-light btn-light-bordered"  title="{_common.edit}" style="margin-right: 2px">
+                                <a href="{plink :Setting:Event: $event->getWebName()}" class="btn btn-sm btn-light btn-light-bordered"  title="{_common.edit}" style="margin-right: 2px">
                                     <i class="fa fa-external-link-alt" aria-hidden="true"></i>
                                 </a>
                             </td>
                             <td>
-                                <span n:if="!$isNew" class="badge" style="background-color: {$event->getType()|typeColor|noescape}">{$event->getType()}</span>
-                                <select name="type" data-value n:if="$isNew" class="form-control form-control-sm">
-                                    <option n:foreach="$eventTypes as $type => $evType" value="{$type}">{$evType->getCaption()}</option>
-                                </select>
+                                <span class="badge" style="background-color: {$event->getType()|typeColor|noescape}">{$event->getType()}</span>
                             </td>
                             <td><input type="text" name="caption" data-value="{$event->getCaption()}" value="{$event->getCaption()}" class="form-control form-control-sm" style="max-width: 100px;" required/></td>
                             <td><textarea name="description" data-value="{$event->getDescription()}" rows="1" class="form-control form-control-sm">{$event->getDescription()}</textarea></td>
-                            <td><input type="text" name="startTime" data-value="{$isNew ? '' : $event->getStartTime()|date:'d.m.Y H:i'}" value="{$event->getStartTime()|date:'d.m.Y H:i'}" class="form-control form-control-sm" style="-webkit-flex-direction:row; max-width: 175px;" required placeholder="dd.mm.rrrr hh:mm"/></td>
-                            <td><input type="text" name="endTime" data-value="{$isNew ? '' : $event->getEndTime()|date:'d.m.Y H:i'}" value="{$event->getEndTime()|date:'d.m.Y H:i'}" class="form-control form-control-sm" style="-webkit-flex-direction:row; max-width: 175px;" required placeholder="dd.mm.rrrr hh:mm"/></td>
-                            <td><input type="text" name="closeTime" data-value="{$isNew ? '' : $event->getCloseTime()|date:'d.m.Y H:i'}" value="{$event->getCloseTime()|date:'d.m.Y H:i'}" class="form-control form-control-sm" style="-webkit-flex-direction:row; max-width: 175px;" required placeholder="dd.mm.rrrr hh:mm"/></td>
+                            <td><input type="text" name="startTime" data-value="{$event->getStartTime()|date:'d.m.Y H:i'}" value="{$event->getStartTime()|date:'d.m.Y H:i'}" class="form-control form-control-sm" style="-webkit-flex-direction:row; max-width: 175px;" required placeholder="dd.mm.rrrr hh:mm"/></td>
+                            <td><input type="text" name="endTime" data-value="{$event->getEndTime()|date:'d.m.Y H:i'}" value="{$event->getEndTime()|date:'d.m.Y H:i'}" class="form-control form-control-sm" style="-webkit-flex-direction:row; max-width: 175px;" required placeholder="dd.mm.rrrr hh:mm"/></td>
+                            <td><input type="text" name="closeTime" data-value="{$event->getCloseTime()|date:'d.m.Y H:i'}" value="{$event->getCloseTime()|date:'d.m.Y H:i'}" class="form-control form-control-sm" style="-webkit-flex-direction:row; max-width: 175px;" required placeholder="dd.mm.rrrr hh:mm"/></td>
                             <td><input type="text" name="place" data-value="{$event->getPlace()}" value="{$event->getPlace()}" class="form-control form-control-sm"/></td>
                             <td><input type="text" name="link" data-value="{$event->getLink()}" value="{$event->getLink()}" class="form-control form-control-sm"/></td>
                             <td>
-                                <select name="viewRightName" data-value="{$isNew ? '' : $event->getViewRightName()}" class="form-control form-control-sm">
+                                <select name="viewRightName" data-value="{$event->getViewRightName()}" class="form-control form-control-sm">
                                     <option value="">-- {_common.everyone} --</option>
-                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => !$isNew && $event->getViewRightName() == $userPermission->getName()">{$userPermission->getCaption()}</option>
+                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => && $event->getViewRightName() == $userPermission->getName()">{$userPermission->getCaption()}</option>
                                 </select>
                             </td>
                             <td>
-                                <select name="planRightName" data-value="{$isNew ? '' : $event->getPlanRightName()}" class="form-control form-control-sm">
+                                <select name="planRightName" data-value="{$event->getPlanRightName()}" class="form-control form-control-sm">
                                     <option value="">-- {_common.everyone} --</option>
-                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => !$isNew && $event->getPlanRightName() == $userPermission->getName()">{$userPermission->getCaption()}</option>
+                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $event->getPlanRightName() == $userPermission->getName()">{$userPermission->getCaption()}</option>
                                 </select>
                             </td>
                             <td>
-                                <select name="resultRightName" data-value="{$isNew ? '' : $event->getResultRightName()}" class="form-control form-control-sm">
+                                <select name="resultRightName" data-value="{$event->getResultRightName()}" class="form-control form-control-sm">
                                     <option value="">-- {_common.everyone} --</option>
-                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => !$isNew && $event->getResultRightName() == $userPermission->getName()">{$userPermission->getCaption()}</option>
+                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $event->getResultRightName() == $userPermission->getName()">{$userPermission->getCaption()}</option>
                                 </select>
                             </td>
                             <td class="btn-group" role="group">
-                                <button n:if="!$isNew && $user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_UPDATE'))" href="{link eventEdit!}" class="btn btn-sm btn-primary binder-save-btn" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
-                                <button n:if="!$isNew && $user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_DELETE'))" href="{link eventDelete!}" class="btn btn-sm btn-danger binder-delete-btn" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></button>
-                                <button n:if="$isNew && $user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_CREATE'))" class="btn btn-sm btn-outline-danger" title="{_common.delete}" onclick="removeRow(this)"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_UPDATE'))" href="{link eventEdit!}" class="btn btn-sm btn-primary binder-save-btn" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
+                                <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_DELETE'))" href="{link eventDelete!}" class="btn btn-sm btn-danger binder-delete-btn" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></button>
                             </td>
                         </tr>
                         {/if}
                     </table>
-                    <div class="text-center" n:if="$isNew">
-                        <button class="btn btn-sm btn-outline-success" title="{_event.duplicateEventDay}" onclick="duplicateEventRow('day')"><i class="fa fa-plus" aria-hidden="true"></i> {_common.day}</button>
-                        <button class="btn btn-sm btn-outline-success" title="{_event.duplicateEventWeek}" onclick="duplicateEventRow('week')"><i class="fa fa-plus" aria-hidden="true"></i> {_common.week}</button>
-                        <button class="btn btn-sm btn-outline-success" title="{_settievent.duplicateEventMonth}" onclick="duplicateEventRow('month')"><i class="fa fa-plus" aria-hidden="true"></i> {_common.month}</button>
-                    </div>
                 </div>
                 <div class="card-footer text-right">
-                    <a n:if="!$isNew && $user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_CREATE'))" class="btn btn-lg btn-success" href="{plink :Setting:Event:New}" onclick="btnRotate($(this), true)" title="{_common.save}" style="margin-right: 10px">
+                    <a n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_CREATE'))" class="btn btn-lg btn-success" href="{plink :Setting:Event:New}" onclick="btnRotate($(this), true)" title="{_common.save}" style="margin-right: 10px">
                         <i class="fa fa-plus" aria-hidden="true"></i>
                     </a>
-                    <button n:if="!$isNew && $user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_UPDATE'))" class="btn btn-lg btn-primary binder-save-all-btn" href="{link eventsEdit!}" title="{_common.saveAll}"><i class="fa fa-save" aria-hidden="true"></i></button>
-                    <button n:if="$isNew && $user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_CREATE'))" class="btn btn-lg btn-primary binder-save-all-btn" href="{link eventsCreate!}" title="{_common.saveAll}"><i class="fa fa-save" aria-hidden="true"></i></button>
+                    <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_UPDATE'))" class="btn btn-lg btn-primary binder-save-all-btn" href="{link eventsEdit!}" title="{_common.saveAll}"><i class="fa fa-save" aria-hidden="true"></i></button>
+                    <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_CREATE'))" class="btn btn-lg btn-primary binder-save-all-btn" href="{link eventsCreate!}" title="{_common.saveAll}"><i class="fa fa-save" aria-hidden="true"></i></button>
                 </div>
                 
             </div>
@@ -104,7 +95,7 @@
     </div>
 </div>
 
-<nav aria-label="Page navigation" n:if="!$isNew">
+<nav aria-label="Page navigation">
     <ul class="pagination justify-content-center">
         <li n:class="$currentPage == 1 ? disabled, page-item"><a class="page-link" href="{plink :Setting:Event: null,$currentPage-1}">{_common.navigationBlock.previous}</a></li>
         <li n:foreach="$pagination as $page" n:class="$currentPage == $page ? active, page-item"><a class="page-link" href="{plink :Setting:Event: null,$page}">{$page}</a></li>

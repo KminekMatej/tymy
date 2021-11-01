@@ -36,6 +36,7 @@
                             <th>{_event.canView-sm}</th>
                             <th>{_event.canPlan-sm}</th>
                             <th>{_event.canResult-sm}</th>
+                            <th></th>
                         </tr>
                         {if $events}
                             <tr n:foreach="$events as $event" data-binder-id="{$event->getId()}">
@@ -68,6 +69,9 @@
                                         <option value="">-- {_common.everyone} --</option>
                                         <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" >{$userPermission->getCaption()}</option>
                                     </select>
+                                </td>
+                                <td class="btn-group" role="group">
+                                    <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_CREATE'))" class="btn btn-sm btn-outline-danger" title="{_common.delete}" onclick="removeRow(this)"><i class="fa fa-times" aria-hidden="true"></i></button>
                                 </td>
                             </tr>
                         {/if}
