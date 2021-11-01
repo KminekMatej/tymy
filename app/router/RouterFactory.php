@@ -110,6 +110,21 @@ class RouterFactory
             ],
         ]);
 
+        $router->addRoute('[<module>][/<presenter>]/<resource \d+(\-.+)?>[/<action>]', [
+            "module" => [
+                Route::VALUE => "Core",
+            //    Route::FILTER_TABLE => $moduleFilters,
+            ],
+            "presenter" => [
+                Route::VALUE => "Detail",
+            //    Route::FILTER_TABLE => $presenterFilters,
+            ],
+            "action" => [
+                Route::VALUE => "default",
+            //    Route::FILTER_TABLE => $presenterFilters,
+            ],
+        ]);
+
         $router->addRoute('[<module>][/<presenter>][/<resource \d+(\-.+)?>][/<action>]', [
             "module" => [
                 Route::VALUE => "Core",

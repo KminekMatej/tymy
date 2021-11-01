@@ -33,7 +33,7 @@
             events: function(start, end, timezone, callback) {
                 var events = [];
                 {foreach $events as $evnt}
-                    events.push({l}id: {$evnt->getId()}, title: {$evnt->getCaption()},start: {$evnt->getStartTime()|date:\Tymy\Module\Core\Model\BaseModel::DATETIME_ISO_FORMAT},end: {$evnt->getEndTime()|date:\Tymy\Module\Core\Model\BaseModel::DATETIME_ISO_FORMAT},backgroundColor: {$evnt->getBackgroundColor()},borderColor: {$evnt->getBorderColor()},textColor: {$evnt->getTextColor()},url: {plink ':Event:Default:event', $evnt->getWebName()}{r});
+                    events.push({l}id: {$evnt->getId()}, title: {$evnt->getCaption()},start: {$evnt->getStartTime()|date:\Tymy\Module\Core\Model\BaseModel::DATETIME_ISO_FORMAT},end: {$evnt->getEndTime()|date:\Tymy\Module\Core\Model\BaseModel::DATETIME_ISO_FORMAT},backgroundColor: {$evnt->getBackgroundColor()},borderColor: {$evnt->getBorderColor()},textColor: {$evnt->getTextColor()},url: {plink ':Event:Detail:', $evnt->getWebName()}{r});
                 {/foreach}
                 callback(events);
             },
@@ -90,7 +90,7 @@
                         {if isset($evMonths[$actMonth]) && count($evMonths[$actMonth]) > 0 }
                             {foreach $evMonths[$actMonth] as $ev}
                                 <div n:class="row, $ev->getInPast() ? evnt-past, $ev->getInPast() ? collapse">
-                                    <div class="col" title=" {$ev->getCaption()} ({$eventTypes[$ev->getType()]->getCaption()})&#13;{$ev->getStartTime()|date:'j.n. H:i'} -> {$ev->getEndTime()|date:'j.n H:i'}"><a href="{plink :Event:Default:event, $ev->getWebName()}}" class="event-heading">{$ev->getCaption()}</a><span class="event-time text-muted float-right">{$ev->getStartTime()|date:'j.n. H:i'}</span></div>
+                                    <div class="col" title=" {$ev->getCaption()} ({$eventTypes[$ev->getType()]->getCaption()})&#13;{$ev->getStartTime()|date:'j.n. H:i'} -> {$ev->getEndTime()|date:'j.n H:i'}"><a href="{plink :Event:Detail:, $ev->getWebName()}}" class="event-heading">{$ev->getCaption()}</a><span class="event-time text-muted float-right">{$ev->getStartTime()|date:'j.n. H:i'}</span></div>
                                 </div>
                                 <div n:class="row, mb-2, $ev->getInPast() ? evnt-past, $ev->getInPast() ? collapse">
                                     <div class="col">
