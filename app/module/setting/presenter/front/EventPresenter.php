@@ -14,28 +14,30 @@ class EventPresenter extends SettingBasePresenter
     /** @inject */
     public EventManager $eventManager;
 
-    public function actionEvents($event = NULL, $page = 1)
+    public function actionDefault(?string $resource = null, int $page = 1)
     {
-        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("event.event", 2), "link" => $this->link(":Setting:Event:")]]);
-        if (!is_null($event)) {
+        if ($resource) {
             $this->setView("event");
-        } else {
-            $this->template->isNew = false;
-            $page = is_numeric($page) ? $page : 1;
-            $limit = EventListResource::PAGING_EVENTS_PER_PAGE;
-            $offset = ($page - 1) * $limit;
-            $this->template->events = $this->eventManager->getList(null, "id", $limit, $offset); // get all events
-            $allEventsCount = $this->eventManager->countAllEvents();
-            $this->template->eventsCount = $allEventsCount;
-            $this->template->currentPage = $page;
-            $this->template->lastPage = ceil($allEventsCount / $limit);
-            $this->template->pagination = $this->pagination($allEventsCount, $limit, $page, 5);
         }
     }
 
-    public function renderEvent_new()
+    public function renderDefault(?string $resource = null, int $page = 1)
     {
-        $this->allowSys('EVE_CREATE');
+        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("event.event", 2), "link" => $this->link(":Setting:Event:")]]);
+        $this->template->isNew = false;
+        $limit = EventListResource::PAGING_EVENTS_PER_PAGE;
+        $offset = ($page - 1) * $limit;
+        $this->template->events = $this->eventManager->getList(null, "id", $limit, $offset); // get all events
+        $allEventsCount = $this->eventManager->countAllEvents();
+        $this->template->eventsCount = $allEventsCount;
+        $this->template->currentPage = $page;
+        $this->template->lastPage = ceil($allEventsCount / $limit);
+        $this->template->pagination = $this->pagination($allEventsCount, $limit, $page, 5);
+    }
+
+    public function renderNew()
+    {
+        $this->allowPermission('EVE_CREATE');
 
         $this->setLevelCaptions([
             "2" => ["caption" => $this->translator->translate("event.event", 2), "link" => $this->link(":Setting:Event:")],
@@ -53,16 +55,14 @@ class EventPresenter extends SettingBasePresenter
                     ->setPlace("")
                     ->setLink("")
         ];
-
-        $this->setView("events");
     }
 
-    public function renderEvent($event)
+    public function renderEvent(string $resource)
     {
-        $this->allowSys('EVE_UPDATE');
+        $this->allowPermission('EVE_UPDATE');
 
         //RENDERING EVENT DETAIL
-        $eventId = $this->parseIdFromWebname($event);
+        $eventId = $this->parseIdFromWebname($resource);
         /* @var $eventObj Event */
         $eventObj = $this->eventManager->getById($eventId);
         if ($eventObj == NULL) {
@@ -76,7 +76,7 @@ class EventPresenter extends SettingBasePresenter
 
     public function handleEventsEdit()
     {
-        $this->allowSys('EVE_UPDATE');
+        $this->allowPermission('EVE_UPDATE');
 
         $post = $this->getRequest()->getPost();
         $binders = $post["binders"];
@@ -87,7 +87,7 @@ class EventPresenter extends SettingBasePresenter
 
     public function handleEventsCreate()
     {
-        $this->allowSys('EVE_CREATE');
+        $this->allowPermission('EVE_CREATE');
 
         $binders = $this->getRequest()->getPost()["binders"];
 
