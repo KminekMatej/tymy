@@ -42,7 +42,7 @@
                             <tr n:foreach="$events as $event" data-binder-id="{$event->getId()}">
                                 <td>
                                     <select name="type" data-value class="form-control form-control-sm">
-                                        <option n:foreach="$eventTypes as $type => $evType" value="{$type}">{$evType->getCaption()}</option>
+                                        <option n:foreach="$eventTypes as $eventType" value="{$eventType->getCode()}">{$eventType->getCaption()}</option>
                                     </select>
                                 </td>
                                 <td><input type="text" name="caption" data-value="{$event->getCaption()}" value="{$event->getCaption()}" class="form-control form-control-sm" style="max-width: 100px;" required/></td>
@@ -53,19 +53,19 @@
                                 <td><input type="text" name="place" data-value="{$event->getPlace()}" value="{$event->getPlace()}" class="form-control form-control-sm"/></td>
                                 <td><input type="text" name="link" data-value="{$event->getLink()}" value="{$event->getLink()}" class="form-control form-control-sm"/></td>
                                 <td>
-                                    <select name="viewRightName" data-value="{$isNew ? '' : $event->getViewRightName()}" class="form-control form-control-sm">
+                                    <select name="viewRightName" data-value="{$event->getViewRightName()}" class="form-control form-control-sm">
                                         <option value="">-- {_common.everyone} --</option>
                                         <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}">{$userPermission->getCaption()}</option>
                                     </select>
                                 </td>
                                 <td>
-                                    <select name="planRightName" data-value="{$isNew ? '' : $event->getPlanRightName()}" class="form-control form-control-sm">
+                                    <select name="planRightName" data-value="{$event->getPlanRightName()}" class="form-control form-control-sm">
                                         <option value="">-- {_common.everyone} --</option>
                                         <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}">{$userPermission->getCaption()}</option>
                                     </select>
                                 </td>
                                 <td>
-                                    <select name="resultRightName" data-value="{$isNew ? '' : $event->getResultRightName()}" class="form-control form-control-sm">
+                                    <select name="resultRightName" data-value="{$event->getResultRightName()}" class="form-control form-control-sm">
                                         <option value="">-- {_common.everyone} --</option>
                                         <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" >{$userPermission->getCaption()}</option>
                                     </select>
