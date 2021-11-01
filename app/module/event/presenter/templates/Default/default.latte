@@ -33,7 +33,7 @@
             events: function(start, end, timezone, callback) {
                 var events = [];
                 {foreach $events as $evnt}
-                    events.push({l}id: {$evnt->getId()}, title: {$evnt->getCaption()},start: {$evnt->getStartTime()|date:\Tymy\Module\Core\Model\BaseModel::DATETIME_ISO_FORMAT},end: {$evnt->getEndTime()|date:\Tymy\Module\Core\Model\BaseModel::DATETIME_ISO_FORMAT},backgroundColor: {$evnt->getBackgroundColor()},borderColor: {$evnt->getBorderColor()},textColor: {$evnt->getTextColor()},url: {plink ':Event:Event:', $evnt->getWebName()}{r});
+                    events.push({l}id: {$evnt->getId()}, title: {$evnt->getCaption()},start: {$evnt->getStartTime()|date:\Tymy\Module\Core\Model\BaseModel::DATETIME_ISO_FORMAT},end: {$evnt->getEndTime()|date:\Tymy\Module\Core\Model\BaseModel::DATETIME_ISO_FORMAT},backgroundColor: {$evnt->getBackgroundColor()},borderColor: {$evnt->getBorderColor()},textColor: {$evnt->getTextColor()},url: {plink ':Event:Default:event', $evnt->getWebName()}{r});
                 {/foreach}
                 callback(events);
             },
