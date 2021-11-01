@@ -38,4 +38,20 @@ class SettingBasePresenter extends SecuredPresenter
             return $color[$type];
         });
     }
+    
+    /**
+     * Test if currently logged user is allowed to operate under specified permission name
+     * If user is not allowed to perform such thing, message is shown and gets redirected to Settings homepage
+     * 
+     * @param string $permissionName Permission name
+     * @param string $type Permission type, default SYS
+     * @return void
+     */
+    protected function allowPermission(string $permissionName, string $type = "SYS"): void
+    {
+        if (!$this->getUser()->isAllowed($this->user->getId(), $type == "SYS" ? Privilege::SYS($permissionName) : Privilege::USR($permissionName))) {
+            $this->flashMessage($this->translator->translate("common.alerts.notPermitted"));
+            $this->redirect("Settings:");
+        }
+    }
 }
