@@ -1,5 +1,4 @@
-{import 'js-loader.latte'}
-{import 'css-loader.latte'}
+{import 'loader.latte'}
 {import 'localization.latte'}
 
 {block scripts}
@@ -7,7 +6,3 @@
         <script src="{$basePath}/js/main.js?ver={$appver}"></script>
         <script src="{$basePath}/js/timer.js?ver={$appver}"></script>
 {/block}
-
-{*{block notes}
-{include 'notes.latte'}
-{/block}*}
