@@ -24,7 +24,6 @@ class EventPresenter extends SettingBasePresenter
     public function renderDefault(?string $resource = null, int $page = 1)
     {
         $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("event.event", 2), "link" => $this->link(":Setting:Event:")]]);
-        $this->template->isNew = false;
         $limit = EventListResource::PAGING_EVENTS_PER_PAGE;
         $offset = ($page - 1) * $limit;
         $this->template->events = $this->eventManager->getList(null, "id", $limit, $offset); // get all events
@@ -43,7 +42,6 @@ class EventPresenter extends SettingBasePresenter
             "2" => ["caption" => $this->translator->translate("event.event", 2), "link" => $this->link(":Setting:Event:")],
             "3" => ["caption" => $this->translator->translate("event.new", 2)]
         ]);
-        $this->template->isNew = true;
         $this->template->events = [
                     (new Event())
                     ->setId(-1)
@@ -90,12 +88,22 @@ class EventPresenter extends SettingBasePresenter
         $this->allowPermission('EVE_CREATE');
 
         $binders = $this->getRequest()->getPost()["binders"];
-
-        foreach ($binders as $bind) {
+        
+        foreach ($binders as &$bind) {
+            $this->normalizeDates($bind["changes"]);
             $this->eventManager->create($bind["changes"]);
         }
 
-        $this->redirect('Settings:events');
+        $this->redirect(':Setting:Event:');
+    }
+    
+    private function normalizeDates(array &$data)
+    {
+        foreach (["startTime", "endTime", "closeTime"] as $timeKey) {
+            if (isset($data[$timeKey])) {
+                $data[$timeKey] = new DateTime($data[$timeKey]);
+            }
+        }
     }
 
     public function handleEventEdit()
