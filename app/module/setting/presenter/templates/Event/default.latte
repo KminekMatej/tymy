@@ -59,7 +59,7 @@
                             <td>
                                 <select name="viewRightName" data-value="{$event->getViewRightName()}" class="form-control form-control-sm">
                                     <option value="">-- {_common.everyone} --</option>
-                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => && $event->getViewRightName() == $userPermission->getName()">{$userPermission->getCaption()}</option>
+                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $event->getViewRightName() == $userPermission->getName()">{$userPermission->getCaption()}</option>
                                 </select>
                             </td>
                             <td>
