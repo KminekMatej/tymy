@@ -12,9 +12,13 @@
     ],
     "require": {
         "php": ">=7.4",
-        "nette/nette": "^3.0",
+        "nette/nette": "^3.1",
         "kdyby/translation": "dev-master",
-        "globalcitizen/php-iban": "^4.0"
+        "globalcitizen/php-iban": "^4.0",
+        "minishlink/web-push": "v6.0.5",
+        "ext-json": "*",
+        "ext-pdo": "*",
+        "ext-curl": "*"
     },
     "require-dev": {
         "nette/tester": "^2.0"
