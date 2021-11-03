@@ -27,10 +27,10 @@
 
 {foreach [strtolower($presenterParts[0]), strtolower($presenterParts[1]), strtolower($presenter->getView())] as $part}
     {var $partUc = ucFirst($part)}
-    {var $partPath = "{$wwwDir}/css/{$module}/{$part}.css"}
-    {var $partUcPath = "{$wwwDir}/css/{$module}/{$partUc}.css"}
-    {var $partScript = "{$basePath}/css/{$module}/{$part}.css"}
-    {var $partUcScript = "{$basePath}/css/{$module}/{$partUc}.css"}
+    {var $partPath = "{$wwwDir}/skins/{$skin}/css/{$module}/{$part}.css"}
+    {var $partUcPath = "{$wwwDir}/skins/{$skin}/css/{$module}/{$partUc}.css"}
+    {var $partScript = "{$basePath}/skins/{$skin}/css/{$module}/{$part}.css"}
+    {var $partUcScript = "{$basePath}/skins/{$skin}/css/{$module}/{$partUc}.css"}
     {var $scriptPath = ucFirst($part)}
     {* Include styles for whole module / presenter / view, if they exist *}
     <link rel="stylesheet" href="{$partScript}?ver={$appver}" n:if="file_exists($partPath)" />
