@@ -1,5 +1,16 @@
 $(document).ready(function () {
     reTitle();
+
+    const pushNotificationSuported = isPushNotificationSupported();
+    if (pushNotificationSuported) {
+        registerServiceWorker();
+        initializePushNotifications().then(function (consent) {
+            if (consent === 'granted') {
+                sendNotification();
+            }
+        });
+    }
+
 });
 
 function reTitle() {
