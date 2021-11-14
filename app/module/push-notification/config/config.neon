@@ -4,7 +4,6 @@
 #
 
 services:
-  PushNotificationManager: Tymy\Module\PushNotification\Manager\PushNotificationManager(%vapid.vapid_subject%, %vapid.vapid_public_key%, %vapid.vapid_private_key%)
-  PushNotificationCRUDManager: Tymy\Module\PushNotification\Manager\PushNotificationCRUDManager
+  PushNotificationManager: Tymy\Module\PushNotification\Manager\PushNotificationManager
   WebPush: Minishlink\WebPush\WebPush(%vapid%, [], 6, [verify: false])
 
