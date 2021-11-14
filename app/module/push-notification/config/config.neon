@@ -1,0 +1,10 @@
+#
+# WARNING: it is CRITICAL that this file & directory are NOT accessible directly via a web browser!
+# https://nette.org/security-warning
+#
+
+services:
+  PushNotificationManager: Tymy\Module\PushNotification\Manager\PushNotificationManager(%vapid.vapid_subject%, %vapid.vapid_public_key%, %vapid.vapid_private_key%)
+  PushNotificationCRUDManager: Tymy\Module\PushNotification\Manager\PushNotificationCRUDManager
+  WebPush: Minishlink\WebPush\WebPush(%vapid%, [], 6, [verify: false])
+
