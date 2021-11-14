@@ -12,7 +12,7 @@ use Tymy\Module\PushNotification\Model\Subscriber;
 class DefaultPresenter extends SecuredPresenter
 {
     
-    private Subscriber $subscriber = null;
+    private ?Subscriber $subscriber = null;
 
     /** @inject */
     public PushNotificationManager $pushNotificationManager;
@@ -45,7 +45,7 @@ class DefaultPresenter extends SecuredPresenter
     /**
      * @todo Disabled - to be enabled if this would be needed at all
      */
-    private function requestGet()
+    protected function requestGet($resourceId, $subResourceId)
     {
         $this->respondBadRequest();
         $this->respondOk($this->subscriber->toJson());
@@ -54,7 +54,7 @@ class DefaultPresenter extends SecuredPresenter
     /**
      * @todo Disabled - to be enabled if this would be needed at all
      */
-    private function requestGetList()
+    protected function requestGetList()
     {
         $this->respondBadRequest();
     }
