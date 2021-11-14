@@ -28,11 +28,8 @@ abstract class BaseModel implements JsonSerializable
     public const B64_REGEX = '/^data:(\w+)\/(\w+);base64,(.*)/m';
 
 
-    /** @var int */
-    private $id;
-
-    /** @var bool */
-    private $hasMeta = true;    //defaultly set hasMeta to true. This is set to false during metaMap() inside _Manager function
+    private int $id;
+    private bool $hasMeta = true;    //defaultly set hasMeta to true. This is set to false during metaMap() inside _Manager function
 
     /** @return Field[] */
     abstract public function getScheme(): array;
