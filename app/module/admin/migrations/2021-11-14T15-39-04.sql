@@ -36,6 +36,12 @@ ALTER TABLE `status_sets` ENGINE = INNODB;
 ALTER TABLE `texts` ENGINE = INNODB;
 ALTER TABLE `usr_mails` ENGINE = INNODB;
 
+ALTER TABLE `export` DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
+ALTER TABLE `export` CHANGE `hash` `hash` VARCHAR(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+ALTER TABLE `export_settings` DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
+ALTER TABLE `export_settings` CHANGE `pre_status` `pre_status` VARCHAR(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+ALTER TABLE `export_settings` CHANGE `pre_status` `pre_status` VARCHAR(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+
 -- DOWN:
 -- commands that reverts updates from UP section shall be written here:
 
