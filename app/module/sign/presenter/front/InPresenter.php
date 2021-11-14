@@ -30,7 +30,7 @@ class InPresenter extends BasePresenter
             try {
                 $this->user->setExpiration('20 minutes');
                 $r = $this->user->login($values->name, $values->password);
-            } catch (APIException $exc) {
+            } catch (Nette\Security\AuthenticationException $exc) {
                 switch ($exc->getMessage()) {
                     case "Login not approved":
                         $this->flashMessage($this->translator->translate("common.alerts.loginNotApproved"), "danger");
@@ -40,8 +40,9 @@ class InPresenter extends BasePresenter
                         break;
                 }
             }
-            if (!is_null($this->user->getIdentity()))
+            if (!is_null($this->user->getIdentity())){
                 Debugger::log($this->user->getIdentity()->data["callName"] . "@" . $this->supplier->getTym() . " logged in");
+            }
             $this->redirect(':Core:Default:');
         });
 
