@@ -2,8 +2,10 @@
 namespace Tymy\Module\PushNotification\Manager;
 
 use ErrorException;
+use Minishlink\WebPush\MessageSentReport;
 use Minishlink\WebPush\Subscription;
 use Minishlink\WebPush\WebPush;
+use Nette\NotImplementedException;
 use Tracy\Debugger;
 use Tracy\ILogger;
 use Tymy\Module\Core\Factory\ManagerFactory;
@@ -12,6 +14,7 @@ use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\PushNotification\Mapper\SubscriberMapper;
 use Tymy\Module\PushNotification\Model\PushNotification;
 use Tymy\Module\PushNotification\Model\Subscriber;
+use Tymy\Module\User\Manager\UserManager;
 
 /**
  * PushNotificationManager is a class for handling read operations upon Push Notification subscription table.
@@ -21,11 +24,13 @@ class PushNotificationManager extends BaseManager
 
     private bool $isQueue = false;
     private WebPush $webPush;
+    private UserManager $userManager;
 
-    public function __construct(ManagerFactory $managerFactory, WebPush $webPush)
+    public function __construct(ManagerFactory $managerFactory, WebPush $webPush, UserManager $userManager)
     {
         parent::__construct($managerFactory);
         $this->webPush = $webPush;
+        $this->userManager = $userManager;
     }
 
     /**
@@ -44,11 +49,11 @@ class PushNotificationManager extends BaseManager
     /**
      * Send Push notification message to subscribed user
      *
-     * @param object $message Message what will be send as Push notification message
+     * @param object $payload Message what will be send as Push notification message
      * @param int $userId ID of user to send Push notification
      * @param bool $flush Instant flush message
      */
-    public function handlePushNotification(object $message, int $userId, bool $flush = false)
+    public function notifyUser(object $payload, int $userId)
     {
         try {
             foreach ($this->getList() as $subscriber) {
@@ -57,13 +62,67 @@ class PushNotificationManager extends BaseManager
                     continue;
                 }
                 $this->isQueue = true;
-                $this->webPush->sendOneNotification(
+                $report = $this->webPush->sendOneNotification(
                     Subscription::create(json_decode($subscriber->subscription, true)), // subscription
-                    json_encode($message) // payload
+                    json_encode($payload) // payload
                 );
+                $this->processReport($subscriber, $report);
             }
         } catch (ErrorException $e) {
             Debugger::log('WebPush ErrorException: ' . $e->getMessage(), ILogger::EXCEPTION);
+        }
+    }
+
+    /**
+     * Notify multiple users by their ids
+     * 
+     * @param object $payload
+     * @param int[] $userIds
+     * @return void
+     */
+    public function notifyUsers(object $payload, array $userIds): void
+    {
+        foreach ($userIds as $userId) {
+            $this->notifyUser($payload, $userId);
+        }
+    }
+
+    /**
+     * Notify every subscriber
+     * 
+     * @param object $payload
+     * @param int[] $userIds
+     * @return void
+     */
+    public function notifyEveryone(object $payload): void
+    {
+        try {
+            foreach ($this->getList() as $subscriber) {
+                /* @var $subscriber Subscriber */
+                $this->isQueue = true;
+                $report = $this->webPush->sendOneNotification(
+                    Subscription::create(json_decode($subscriber->subscription, true)), // subscription
+                    json_encode($payload) // payload
+                );
+                $this->processReport($subscriber, $report);
+            }
+        } catch (ErrorException $e) {
+            Debugger::log('WebPush ErrorException: ' . $e->getMessage(), ILogger::EXCEPTION);
+        }
+    }
+
+    /**
+     * Deletes subscriber from database if its already expired.
+     * May contain another post-processing tasks
+     * 
+     * @param Subscriber $subscriber
+     * @param MessageSentReport $report
+     * @return void
+     */
+    private function processReport(Subscriber $subscriber, MessageSentReport $report): void
+    {
+        if (!$report->isSuccess() && $report->isSubscriptionExpired()) {
+            $this->delete($subscriber->getId());    //sending to void subscription - delete it from DB to avoid ghosts
         }
     }
 
