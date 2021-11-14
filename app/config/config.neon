@@ -31,7 +31,7 @@ services:
         SignUpFormFactory: Tymy\App\Forms\SignUpFormFactory
         PwdLostFormFactory: Tymy\App\Forms\PwdLostFormFactory
         PwdResetFormFactory: Tymy\App\Forms\PwdResetFormFactory
-        WebPush: Minishlink\WebPush\WebPushPush(%vapid%)
+        WebPush: Minishlink\WebPush\WebPush(%vapid%)
         routerFactory: Tymy\RouterFactory
         router: @routerFactory::createRouter
         authorizator:
