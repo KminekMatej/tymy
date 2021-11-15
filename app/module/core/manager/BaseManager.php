@@ -37,7 +37,6 @@ abstract class BaseManager
     protected Responder $responder;
     protected User $user;
     protected Supplier $supplier;
-    protected NotificationService $notificationService;
 
     /** @var int[] */
     private array $allIdList = [];
@@ -52,7 +51,6 @@ abstract class BaseManager
         $this->responder = $managerFactory->responder;
         $this->user = $managerFactory->user;
         $this->supplier = $managerFactory->supplier;
-        $this->notificationService = $managerFactory->notificationService;
     }
 
     /** @return Field[] */

@@ -20,10 +20,9 @@ class ManagerFactory
     public Responder $responder;
     public Supplier $supplier;
     public User $user;
-    public NotificationService $notificationService;
     public string $teamSysName;
 
-    public function __construct(Explorer $mainDatabase, Explorer $teamDatabase, string $teamSysName, Responder $responder, User $user, Supplier $supplier, NotificationService $notificationService)
+    public function __construct(Explorer $mainDatabase, Explorer $teamDatabase, string $teamSysName, Responder $responder, User $user, Supplier $supplier)
     {
         $this->mainDatabase = $mainDatabase;
         $this->teamDatabase = $teamDatabase;
@@ -31,6 +30,5 @@ class ManagerFactory
         $this->responder = $responder;
         $this->user = $user;
         $this->supplier = $supplier;
-        $this->notificationService = $notificationService;
     }
 }
