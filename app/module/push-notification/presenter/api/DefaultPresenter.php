@@ -3,7 +3,6 @@ namespace Tymy\Module\PushNotification\Presenter\Api;
 
 use Tymy\Module\Core\Presenter\Api\SecuredPresenter;
 use Tymy\Module\PushNotification\Manager\PushNotificationManager;
-use Tymy\Module\PushNotification\Model\PushNotification;
 use Tymy\Module\PushNotification\Model\Subscriber;
 
 /**
@@ -11,8 +10,6 @@ use Tymy\Module\PushNotification\Model\Subscriber;
  */
 class DefaultPresenter extends SecuredPresenter
 {
-
-    private ?Subscriber $subscriber = null;
 
     public function injectManager(PushNotificationManager $manager): void
     {
@@ -39,26 +36,22 @@ class DefaultPresenter extends SecuredPresenter
             $this->respondBadRequest("Missing request data");
         }
 
-        if (!array_key_exists('userId', $this->requestData)) {
-            $this->responder->E4013_MISSING_INPUT("userId");
-        }
+        $subscription = json_encode($this->requestData);
+        $pushNotification = $this->manager->getByUserAndSubscription($this->user->getId(), $subscription);
 
-        if (!array_key_exists('subscription', $this->requestData)) {
-            $this->responder->E4013_MISSING_INPUT("subscription");
-        }
-
-        $pushNotification = $this->pushNotificationManager->getByUserAndSubscription($this->requestData['userId'], $this->requestData['subscription']);
-
-        if ($pushNotification !== false) {
+        if ($pushNotification) {
             $this->respondOk($pushNotification->toJson());
         }
 
-        $createdSubscription = $this->pushNotificationManager->create($this->requestData);
+        $createdSubscription = $this->manager->create([
+            "userId" => $this->user->getId(),
+            "subscription" => $subscription,
+        ]);
 
         if (!$createdSubscription) {
-            $this->responder->E4011_CREATE_FAILED(PushNotification::MODULE);
+            $this->responder->E4011_CREATE_FAILED(Subscriber::MODULE);
         }
 
-        $this->respondOkCreated($createdSubscription->toJson());
+        $this->respondOkCreated($createdSubscription->jsonSerialize());
     }
 }

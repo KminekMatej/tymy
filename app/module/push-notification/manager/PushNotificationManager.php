@@ -41,7 +41,7 @@ class PushNotificationManager extends BaseManager
      */
     public function getByUserAndSubscription(int $userId, string $subscription)
     {
-        return $this->map($this->database->table(PushNotification::TABLE)
+        return $this->map($this->database->table(Subscriber::TABLE)
                     ->where("user_id", $userId)
                     ->where("subscription", $subscription)->fetch());
     }
