@@ -11,7 +11,6 @@ use Tymy\Module\Discussion\Model\Discussion;
 use Tymy\Module\Discussion\Model\Post;
 use Tymy\Module\PushNotification\Model\PushNotification;
 use Tymy\Module\PushNotification\Model\Subscriber;
-use Tymy\Module\User\Manager\UserManager;
 
 /**
  * Description of NotificationGenerator
@@ -23,12 +22,10 @@ class NotificationService
 
     private bool $isQueue = false;
     private WebPush $webPush;
-    private UserManager $userManager;
 
-    public function __construct(WebPush $webPush, UserManager $userManager)
+    public function __construct(WebPush $webPush)
     {
         $this->webPush = $webPush;
-        $this->userManager = $userManager;
     }
 
     public function newPost(Discussion $discussion, Post $post)
@@ -53,8 +50,8 @@ class NotificationService
                 }
                 $this->isQueue = true;
                 $report = $this->webPush->sendOneNotification(
-                    Subscription::create(json_decode($subscriber->subscription, true)), // subscription
-                    json_encode($notification->jsonSerialize()) // payload
+                    Subscription::create(\json_decode($subscriber->subscription, true)), // subscription
+                    \json_encode($notification->jsonSerialize()) // payload
                 );
                 $this->processReport($subscriber, $report);
             }
