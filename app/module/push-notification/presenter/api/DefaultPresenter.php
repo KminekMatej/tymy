@@ -1,9 +1,9 @@
 <?php
-
-namespace Tymy\Module\PushNotification\Presenter;
+namespace Tymy\Module\PushNotification\Presenter\Api;
 
 use Tymy\Module\Core\Presenter\Api\SecuredPresenter;
 use Tymy\Module\PushNotification\Manager\PushNotificationManager;
+use Tymy\Module\PushNotification\Model\PushNotification;
 use Tymy\Module\PushNotification\Model\Subscriber;
 
 /**
@@ -11,51 +11,54 @@ use Tymy\Module\PushNotification\Model\Subscriber;
  */
 class DefaultPresenter extends SecuredPresenter
 {
-    
+
     private ?Subscriber $subscriber = null;
 
-    /** @inject */
-    public PushNotificationManager $pushNotificationManager;
-
-    public function actionDefault(int $resourceId)
+    public function injectManager(PushNotificationManager $manager): void
     {
-        $this->subscriber = $this->loadResource($resourceId, $this->pushNotificationManager);
-
-        $this->allowRequest();
-
-        switch ($this->getRequest()->getMethod()) {
-            case 'GET':
-                $resourceId ? $this->requestGet() : $this->requestGetList();
-                break;
-            default:
-                $this->respondNotAllowed();
-                break;
-        }
-    }
-
-    protected function allowRead(?int $recordId = null): void
-    {
-        if ($recordId) {
-            if (!$this->canRead($this->subscriber, $this->user->getId())) {
-                $this->responder->E4001_VIEW_NOT_PERMITTED(Subscriber::MODULE, $recordId);
-            }
-        }
-    }
-
-    /**
-     * @todo Disabled - to be enabled if this would be needed at all
-     */
-    protected function requestGet($resourceId, $subResourceId)
-    {
-        $this->respondBadRequest();
-        $this->respondOk($this->subscriber->toJson());
+        $this->manager = $manager;
     }
     
-    /**
-     * @todo Disabled - to be enabled if this would be needed at all
-     */
-    protected function requestGetList()
+    public function actionDefault($resourceId, $subResourceId)
     {
-        $this->respondBadRequest();
+        switch ($this->getRequest()->getMethod()) {
+            /*case 'GET':
+                $resourceId ? $this->requestGet($resourceId, $subResourceId) : $this->requestGetList();*/
+                // no break
+            case 'POST':
+                $this->requestPost($resourceId);
+                // no break
+        }
+
+        $this->respondNotAllowed();
+    }
+
+    protected function requestPost($resourceId)
+    {
+        if (empty($this->requestData)) {
+            $this->respondBadRequest("Missing request data");
+        }
+
+        if (!array_key_exists('userId', $this->requestData)) {
+            $this->responder->E4013_MISSING_INPUT("userId");
+        }
+
+        if (!array_key_exists('subscription', $this->requestData)) {
+            $this->responder->E4013_MISSING_INPUT("subscription");
+        }
+
+        $pushNotification = $this->pushNotificationManager->getByUserAndSubscription($this->requestData['userId'], $this->requestData['subscription']);
+
+        if ($pushNotification !== false) {
+            $this->respondOk($pushNotification->toJson());
+        }
+
+        $createdSubscription = $this->pushNotificationManager->create($this->requestData);
+
+        if (!$createdSubscription) {
+            $this->responder->E4011_CREATE_FAILED(PushNotification::MODULE);
+        }
+
+        $this->respondOkCreated($createdSubscription->toJson());
     }
 }
