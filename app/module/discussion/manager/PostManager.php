@@ -142,8 +142,13 @@ class PostManager extends BaseManager
         $this->allowCreate($data);
 
         $createdRow = parent::createByArray($data);
+        $createdPost = $this->getById($createdRow->id);
 
-        return $this->getById($createdRow->id);
+
+        $notification = $this->notificationService->newPost($this->discussion, $createdPost);
+        $this->notificationService->notifyUsers($notification, $this->discussionManager->getAllowedReaders($this->discussion));
+
+        return $createdPost;
     }
 
     public function read(int $resourceId, ?int $subResourceId = null): Post
