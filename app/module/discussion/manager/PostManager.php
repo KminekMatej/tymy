@@ -13,6 +13,8 @@ use Tymy\Module\Discussion\Mapper\PostMapper;
 use Tymy\Module\Discussion\Model\Discussion;
 use Tymy\Module\Discussion\Model\DiscussionPosts;
 use Tymy\Module\Discussion\Model\Post;
+use Tymy\Module\PushNotification\Manager\NotificationGenerator;
+use Tymy\Module\PushNotification\Manager\PushNotificationManager;
 use Tymy\Module\User\Manager\UserManager;
 
 /**
@@ -29,16 +31,20 @@ class PostManager extends BaseManager
     public const MAXIMUM_FIRST_PAGE_SIZE = 200;
 
     private DiscussionManager $discussionManager;
+    private PushNotificationManager $pushNotificationManager;
+    private NotificationGenerator $notificationGenerator;
     private UserManager $userManager;
     private bool $inBbCode = true;
     private ?Discussion $discussion;
     private ?Post $post;
 
-    public function __construct(ManagerFactory $managerFactory, DiscussionManager $discussionManager, UserManager $userManager)
+    public function __construct(ManagerFactory $managerFactory, DiscussionManager $discussionManager, UserManager $userManager, PushNotificationManager $pushNotificationManager, NotificationGenerator $notificationGenerator)
     {
         parent::__construct($managerFactory);
         $this->discussionManager = $discussionManager;
         $this->userManager = $userManager;
+        $this->pushNotificationManager = $pushNotificationManager;
+        $this->notificationGenerator = $notificationGenerator;
     }
 
     public function allowDiscussion($discussionId)
@@ -145,8 +151,8 @@ class PostManager extends BaseManager
         $createdPost = $this->getById($createdRow->id);
 
 
-        $notification = $this->notificationService->newPost($this->discussion, $createdPost);
-        $this->notificationService->notifyUsers($notification, $this->discussionManager->getAllowedReaders($this->discussion));
+        $notification = $this->notificationGenerator->newPost($this->discussion, $createdPost);
+        $this->pushNotificationManager->notifyUsers($notification, $this->discussionManager->getAllowedReaders($this->discussion));
 
         return $createdPost;
     }
