@@ -5,7 +5,6 @@ $(document).ready(function () {
     if (pushNotificationSuported) {
         registerServiceWorker();
         requestPushPermission();
-        sendNotification();
     }
 
 });
@@ -49,9 +48,9 @@ function isPushNotificationSupported() {
  * 
  */
 function registerServiceWorker() {
-    return navigator.serviceWorker.register('/js/service-worker.js')
+    return navigator.serviceWorker.register('/service-worker.js')
             .then(function (registration) {
-                console.log('Service worker successfully registered.');
+                console.log('Service worker successfully registered with scope ' + registration.scope);
                 return registration;
             })
             .catch(function (err) {
@@ -79,7 +78,7 @@ function requestPushPermission() {
 /**
  * shows a notification
  */
-function sendNotification() {
+/*function sendNotification() {
     const img = "/images/jason-leung-HM6TMmevbZQ-unsplash.jpg";
     const text = "Take a look at this brand new t-shirt!";
     const title = "New Product Available";
@@ -95,4 +94,4 @@ function sendNotification() {
     navigator.serviceWorker.ready.then(function (serviceWorker) {
         serviceWorker.showNotification(title, options);
     });
-}
+}*/
