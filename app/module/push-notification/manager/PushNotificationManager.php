@@ -37,7 +37,7 @@ class PushNotificationManager extends BaseManager
      * Get Push Notification subscription based on user ID and subscription
      * @param int $userId
      * @param string $subscription
-     * @return PushNotification
+     * @return Subscriber
      */
     public function getByUserAndSubscription(int $userId, string $subscription)
     {
@@ -121,6 +121,7 @@ class PushNotificationManager extends BaseManager
      */
     private function processReport(Subscriber $subscriber, MessageSentReport $report): void
     {
+        Debugger::barDump($report);
         if (!$report->isSuccess() && $report->isSubscriptionExpired()) {
             $this->delete($subscriber->getId());    //sending to void subscription - delete it from DB to avoid ghosts
         }
