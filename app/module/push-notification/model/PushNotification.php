@@ -24,7 +24,7 @@ class PushNotification implements \JsonSerializable
         $this->badge = $badge;
     }
 
-    public function jsonSerialize(): mixed
+    public function jsonSerialize()
     {
         $array = [
             "title" => $this->title,
