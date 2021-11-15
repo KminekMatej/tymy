@@ -5,5 +5,5 @@
 
 services:
   PushNotificationManager: Tymy\Module\PushNotification\Manager\PushNotificationManager
-  WebPush: Minishlink\WebPush\WebPush(%vapid%, [], 6, [verify: false])
+  WebPush: Minishlink\WebPush\WebPush(%push-notification%, [], 6, [verify: false])
 
