@@ -45,9 +45,19 @@ async function saveSubscription(subscription) {
 }
 
 async function processPush(event) {
-    console.log(event.data);
-    // From here we can write the data to IndexedDB, send it to any open
-    // windows, display a notification, etc.
+    if (event.data) {
+        var payload = event.data.json();
+        const options = {
+            body: payload.message,
+            icon: "/images/logo/tymy_icon_black_round_256.png",
+            vibrate: [200, 100, 200],
+            image: payload.image,
+            badge: payload.badge, //badge support is not done yet - in the future may hold number of unread posts / events etc.
+            actions: [{action: "Detail", title: "View", icon: "/images/logo/tymy_icon_black_round_256.png"}]
+        };
+
+        event.waitUntil(self.registration.showNotification(payload.title, options));
+    }
 }
 
 function base64UrlToUint8Array(base64UrlData) {
