@@ -101,7 +101,7 @@ class PushNotificationManager extends BaseManager
                 /* @var $subscriber Subscriber */
                 $this->isQueue = true;
                 $report = $this->webPush->sendOneNotification(
-                    Subscription::create(json_decode($subscriber->subscription, true)), // subscription
+                    Subscription::create(json_decode($subscriber->getSubscription(), true)), // subscription
                     json_encode($payload) // payload
                 );
                 $this->processReport($subscriber, $report);
