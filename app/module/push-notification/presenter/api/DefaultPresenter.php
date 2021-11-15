@@ -3,7 +3,6 @@ namespace Tymy\Module\PushNotification\Presenter\Api;
 
 use Tymy\Module\Core\Presenter\Api\SecuredPresenter;
 use Tymy\Module\PushNotification\Manager\PushNotificationManager;
-use Tymy\Module\PushNotification\Model\PushNotification;
 use Tymy\Module\PushNotification\Model\Subscriber;
 
 /**
@@ -16,16 +15,13 @@ class DefaultPresenter extends SecuredPresenter
     {
         $this->manager = $manager;
     }
-    
+
     public function actionDefault($resourceId, $subResourceId)
     {
         switch ($this->getRequest()->getMethod()) {
-            /*case 'GET':
-                $resourceId ? $this->requestGet($resourceId, $subResourceId) : $this->requestGetList();*/
-                // no break
             case 'POST':
                 $this->requestPost($resourceId);
-                // no break
+            // no break
         }
 
         $this->respondNotAllowed();
@@ -37,12 +33,12 @@ class DefaultPresenter extends SecuredPresenter
             $this->respondBadRequest("Missing request data");
         }
 
-        $subscription = json_encode($this->requestData);
-        /* @var $pushNotification PushNotification */
-        $pushNotification = $this->manager->getByUserAndSubscription($this->user->getId(), $subscription);
+        $subscription = \json_encode($this->requestData);
+        /* @var $subscriber Subscriber */
+        $subscriber = $this->manager->getByUserAndSubscription($this->user->getId(), $subscription);
 
-        if ($pushNotification) {
-            $this->respondOk($pushNotification->jsonSerialize());
+        if ($subscriber) {
+            $this->respondOk($subscriber->jsonSerialize());
         }
 
         $createdSubscription = $this->manager->create([
