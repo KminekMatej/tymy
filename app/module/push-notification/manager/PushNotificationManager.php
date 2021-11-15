@@ -49,11 +49,11 @@ class PushNotificationManager extends BaseManager
     /**
      * Send Push notification message to subscribed user
      *
-     * @param object $payload Message what will be send as Push notification message
+     * @param PushNotification $notification Push notification object to be sent. Can be generated using NotificationGenerator
      * @param int $userId ID of user to send Push notification
      * @param bool $flush Instant flush message
      */
-    public function notifyUser(object $payload, int $userId)
+    public function notifyUser(PushNotification $notification, int $userId)
     {
         try {
             foreach ($this->getList() as $subscriber) {
@@ -64,7 +64,7 @@ class PushNotificationManager extends BaseManager
                 $this->isQueue = true;
                 $report = $this->webPush->sendOneNotification(
                     Subscription::create(json_decode($subscriber->subscription, true)), // subscription
-                    json_encode($payload) // payload
+                    json_encode($notification->jsonSerialize()) // payload
                 );
                 $this->processReport($subscriber, $report);
             }
@@ -76,25 +76,25 @@ class PushNotificationManager extends BaseManager
     /**
      * Notify multiple users by their ids
      * 
-     * @param object $payload
+     * @param PushNotification $notification
      * @param int[] $userIds
      * @return void
      */
-    public function notifyUsers(object $payload, array $userIds): void
+    public function notifyUsers(PushNotification $notification, array $userIds): void
     {
         foreach ($userIds as $userId) {
-            $this->notifyUser($payload, $userId);
+            $this->notifyUser($notification, $userId);
         }
     }
 
     /**
-     * Notify every subscriber
+     * Notify every subscriber with PushNotification object.
      * 
-     * @param object $payload
+     * @param PushNotification $notification
      * @param int[] $userIds
      * @return void
      */
-    public function notifyEveryone(object $payload): void
+    public function notifyEveryone(PushNotification $notification): void
     {
         try {
             foreach ($this->getList() as $subscriber) {
@@ -102,7 +102,7 @@ class PushNotificationManager extends BaseManager
                 $this->isQueue = true;
                 $report = $this->webPush->sendOneNotification(
                     Subscription::create(json_decode($subscriber->getSubscription(), true)), // subscription
-                    json_encode($payload) // payload
+                    json_encode($notification->jsonSerialize()) // payload
                 );
                 $this->processReport($subscriber, $report);
             }
