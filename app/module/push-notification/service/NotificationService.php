@@ -1,9 +1,17 @@
 <?php
 namespace Tymy\Module\PushNotification\Service;
 
+use ErrorException;
+use Minishlink\WebPush\MessageSentReport;
+use Minishlink\WebPush\Subscription;
+use Minishlink\WebPush\WebPush;
+use Tracy\Debugger;
+use Tracy\ILogger;
 use Tymy\Module\Discussion\Model\Discussion;
 use Tymy\Module\Discussion\Model\Post;
 use Tymy\Module\PushNotification\Model\PushNotification;
+use Tymy\Module\PushNotification\Model\Subscriber;
+use Tymy\Module\User\Manager\UserManager;
 
 /**
  * Description of NotificationGenerator
