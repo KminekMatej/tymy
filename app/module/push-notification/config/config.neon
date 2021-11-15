@@ -5,6 +5,6 @@
 
 services:
   PushNotificationManager: Tymy\Module\PushNotification\Manager\PushNotificationManager
-  NotificationService: Tymy\Module\PushNotification\Service\NotificationService
+  NotificationGenerator: Tymy\Module\PushNotification\Manager\NotificationGenerator
   WebPush: Minishlink\WebPush\WebPush(%push-notification%, [], 6, [verify: false])
 
