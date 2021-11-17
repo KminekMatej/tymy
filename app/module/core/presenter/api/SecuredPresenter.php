@@ -16,11 +16,11 @@ class SecuredPresenter extends BasePresenter
         parent::startup();
 
         if ($tsid = $this->getParameter("TSID")) {
-            if (session_id()) {
-                session_abort();
+            if ($this->session->getId()) {
+                $this->session->close();
             }
             session_id($tsid);
-            session_start();
+            $this->session->start();
         }
 
         if (!isset($this->user) || !$this->user->isLoggedIn()) {
