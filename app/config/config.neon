@@ -45,11 +45,6 @@ extensions:
 translation:
     default: cs
 parameters:
-    push-notification:
-        VAPID:
-            subject: 'tymy.cz'
-            publicKey: 'BNFwVh2n9jBpGDMx3Kiz47ldm8GrSP74Ff4VL54v6AoPg01BnT2TtqdEXBm6M7C8Nx3PoqqPie7kESKgm8jkAog'
-            privateKey: 'aRLI8MMO0vayahiTYcUxpzN__nfAOvCMAXPem5SXjAY'
     appConfig:
         allSkins:
             hell-boy: 'Hellboy'
