@@ -2,8 +2,8 @@
 
 namespace Tymy\Module\Event\Router;
 
-use Tymy\Module\Core\Router\RouteList;
 use Tymy\Module\Core\Interfaces\RouterInterface;
+use Tymy\Module\Core\Router\RouteList;
 
 /**
  * Description of Router
@@ -15,8 +15,7 @@ class Router implements RouterInterface
 
     public function addRoutes(RouteList &$router): void
     {
-        $router->withPath("api")
-                ->addApiRoute('event[s]/withMyAttendance', array(
+        $router->addApiRoute('event[s]/withMyAttendance', array(
                     'module' => 'Event',
                     'presenter' => 'Default',
                     'action' => 'default',

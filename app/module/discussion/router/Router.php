@@ -15,8 +15,7 @@ class Router implements RouterInterface
 
     public function addRoutes(RouteList &$router): void
     {
-        $router->withPath("api")
-                ->addApiRoute('discussion[s][/accessible][/withNew]', array(
+        $router->addApiRoute('discussion[s][/accessible][/withNew]', array(
                     'module' => 'Discussion',
                     'presenter' => 'Default',
                     'action' => 'default',
