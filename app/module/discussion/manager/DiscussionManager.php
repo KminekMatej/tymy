@@ -223,6 +223,10 @@ class DiscussionManager extends BaseManager
     public function getAllowedReaders(BaseModel $record): array
     {
         /* @var $record Discussion */
+        if (empty($record->getReadRightName())) {
+            return $this->getAllUserIds();
+        }
+
         return $this->userManager->getUserIdsWithPrivilege(Privilege::USR($record->getReadRightName()));
     }
 
