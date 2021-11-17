@@ -17,7 +17,6 @@ use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Core\Model\Filter;
 use Tymy\Module\Core\Model\Order;
-use Tymy\Module\PushNotification\Service\NotificationService;
 use Tymy\Module\User\Model\User as UserEntity;
 
 /**
