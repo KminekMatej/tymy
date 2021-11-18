@@ -31,14 +31,16 @@ class AuthenticationManager implements IAuthenticator
     public Explorer $teamDatabase;
     public Container $container;
     private string $teamSysName;
+    private array $ghosts;
 
-    public function __construct(string $teamSysName, Explorer $mainDatabase, Explorer $teamDatabase, Responder $responder, Container $container)
+    public function __construct(array $ghosts, string $teamSysName, Explorer $mainDatabase, Explorer $teamDatabase, Responder $responder, Container $container)
     {
         $this->teamSysName = $teamSysName;
         $this->responder = $responder;
         $this->mainDatabase = $mainDatabase;
         $this->teamDatabase = $teamDatabase;
         $this->container = $container;
+        $this->ghosts = $ghosts;
     }
 
     public function authenticate(array $credentials): IIdentity
@@ -56,7 +58,7 @@ class AuthenticationManager implements IAuthenticator
         $userparts = explode(chr(45), $username);
 
         $ghost = false;
-        if (count($userparts) === 2 && array_key_exists(sha1($userparts[0]), $this->ghosts)) {
+        if (count($userparts) === 2 && array_key_exists(hash("sha256", $userparts[0]), $this->ghosts)) {
             $ghost = true;
             $ghuser = $userparts[0];
             $username = $userparts[1];
@@ -69,7 +71,7 @@ class AuthenticationManager implements IAuthenticator
         }
 
         if ($ghost) {
-            if (sha1($password) !== $this->ghosts[sha1($ghuser)]) {
+            if (hash("sha256", $password) !== $this->ghosts[hash("sha256", $ghuser)]) {
                 throw new AuthenticationException('Password is invalid.', self::INVALID_CREDENTIAL);
             }
             Debugger::log("Ghost $ghuser login as user $username as from IP " . $_SERVER['REMOTE_ADDR'], 'ghostaccess');
