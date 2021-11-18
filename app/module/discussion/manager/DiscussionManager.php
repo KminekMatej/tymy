@@ -82,7 +82,7 @@ class DiscussionManager extends BaseManager
         $discussion = parent::map($row, $force);
 
         $discussion->setNewInfo(new NewInfo($discussion->getId(), $row->newInfo, $row->lastVisit));
-        $discussion->setWebName(Strings::webalize($discussion->getCaption()));
+        $discussion->setWebName(Strings::webalize($discussion->getId() . "-" . $discussion->getCaption()));
 
         return $discussion;
     }
