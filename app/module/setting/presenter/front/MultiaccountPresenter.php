@@ -13,7 +13,7 @@ class MultiaccountPresenter extends SettingBasePresenter
     public function renderDefault()
     {
         $this->setLevelCaptions(["3" => ["caption" => $this->translator->translate("settings.multiaccount", 1), "link" => $this->link(":Setting:Multiaccount:")]]);
-        $this->template->multiaccounts = $this->multiAccountManager->getList();
+        $this->template->multiaccounts = $this->multiaccountManager->getList();
     }
 
     public function handleMultiaccountRemove($team)

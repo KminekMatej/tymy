@@ -11,7 +11,6 @@ use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\Team\Model\SimpleTeam;
 use Tymy\Module\Team\Model\Team;
 use Tymy\Module\User\Manager\UserManager;
-use Tymy\Module\User\Model\User;
 
 /**
  * Description of MultiaccountManager
@@ -28,6 +27,8 @@ class MultiaccountManager extends BaseManager
         parent::__construct($managerFactory);
         $this->teamManager = $teamManager;
         $this->userManager = $userManager;
+        $this->database = $this->mainDatabase;
+        $this->idCol = null;    //there is no simple primary key column in database - so avoid errors from BaseManager
     }
 
     protected function getClassName(): string
