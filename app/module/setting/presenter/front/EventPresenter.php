@@ -14,6 +14,12 @@ class EventPresenter extends SettingBasePresenter
     /** @inject */
     public EventManager $eventManager;
 
+    public function beforeRender()
+    {
+        parent::beforeRender();
+        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("event.event", 2), "link" => $this->link(":Setting:Event:")]]);
+    }
+
     public function actionDefault(?string $resource = null, int $page = 1)
     {
         if ($resource) {
@@ -23,7 +29,6 @@ class EventPresenter extends SettingBasePresenter
 
     public function renderDefault(?string $resource = null, int $page = 1)
     {
-        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("event.event", 2), "link" => $this->link(":Setting:Event:")]]);
         $limit = EventListResource::PAGING_EVENTS_PER_PAGE;
         $offset = ($page - 1) * $limit;
         $this->template->events = $this->eventManager->getList(null, "id", $limit, $offset); // get all events
@@ -39,7 +44,6 @@ class EventPresenter extends SettingBasePresenter
         $this->allowPermission('EVE_CREATE');
 
         $this->setLevelCaptions([
-            "2" => ["caption" => $this->translator->translate("event.event", 2), "link" => $this->link(":Setting:Event:")],
             "3" => ["caption" => $this->translator->translate("event.new", 2)]
         ]);
         $this->template->events = [
