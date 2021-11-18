@@ -40,7 +40,7 @@ class PermissionManager extends BaseManager
         /* @var $permission Permission */
         $permission = parent::map($row, $force);
 
-        $permission->setWebname(Strings::webalize($permission->getName()));
+        $permission->setWebname(Strings::webalize($permission->getId() . "-" . $permission->getName()));
 
         return $permission;
     }
