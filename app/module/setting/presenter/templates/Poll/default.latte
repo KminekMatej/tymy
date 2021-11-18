@@ -20,7 +20,7 @@
         <div class="col">
             <div class="card sh-box my-3">
                 <div class="card-header">
-                    <h4>{if $isNew}{_poll.newPoll}{else}{_poll.configPolls}{/if}</h4>
+                    <h4>{_poll.configPolls}</h4>
                 </div>
                 <div class="card-body">
                     <table class="table table-xs table-hover">
@@ -43,7 +43,7 @@
                         </tr>
                         <tr n:foreach="$polls as $poll" data-binder-id="{$poll->getId()}">
                             <td>
-                                <a n:if="!$isNew" href="{plink :Setting:Poll: $poll->getWebName()}" class="btn btn-sm btn-light btn-light-bordered"  title="{_common.edit}" style="margin-right: 2px">
+                                <a href="{plink :Setting:Poll: $poll->getWebName()}" class="btn btn-sm btn-light btn-light-bordered"  title="{_common.edit}" style="margin-right: 2px">
                                     <i class="fa fa-external-link-alt" aria-hidden="true"></i>
                                 </a>
                             </td>
@@ -90,18 +90,15 @@
                             </td>
                             <td><input name="orderFlag" data-value="{$poll->getOrderFlag()}" type="number" value="{$poll->getOrderFlag()}" class="form-control form-control-sm" style="max-width: 70px;"/></td>
 
-                            <td class="btn-group" role="group" n:if="$isNew">
-                                <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))" href="{link pollCreate!}" class="btn btn-sm btn-primary binder-save-btn" title="{_common.save}" style="margin-right: 2px"><i class="fa fa-save" aria-hidden="true"></i></button>
-                            </td>
-                            <td class="btn-group" role="group" n:if="!$isNew">
+                            <td class="btn-group" role="group">
                                 <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))" href="{link pollEdit!}" class="btn btn-sm btn-primary binder-save-btn" title="{_common.save}" style="margin-right: 2px"><i class="fa fa-save" aria-hidden="true"></i></button>
-                                <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))" href="{link pollDelete!}" n:class="btn,btn-sm,btn-danger, !$isNew ? binder-delete-btn" title="{_common.delete}" n:attr="onclick => $isNew ? 'removeRow(this)'"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))" href="{link pollDelete!}" class="btn btn-sm btn-danger binder-delete-btn" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></button>
                             </td>
                         </tr>
                     </table>
                 </div>
                 <div class="card-footer text-right">
-                    <a n:if="!$isNew && $user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))" class="btn btn-lg btn-success" href="{plink :Setting:Poll:new}" onclick="btnRotate($(this), true)" title="{_poll.createPoll}" style="margin-right: 10px">
+                    <a n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))" class="btn btn-lg btn-success" href="{plink :Setting:Poll:new}" onclick="btnRotate($(this), true)" title="{_poll.createPoll}" style="margin-right: 10px">
                         <i class="fa fa-plus" aria-hidden="true"></i>
                     </a>
                 </div>
