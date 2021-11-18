@@ -2,11 +2,12 @@
 
 namespace Tymy\Module\Team\Manager;
 
-use Nette\Database\Table\ActiveRow;
 use Nette\Database\IRow;
+use Nette\Database\Table\ActiveRow;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\Team\Mapper\TeamMapper;
 use Tymy\Module\Team\Model\SimpleTeam;
 use Tymy\Module\Team\Model\Team;
@@ -170,7 +171,9 @@ class TeamManager extends BaseManager
 
     protected function allowUpdate(?int $recordId = null, ?array &$data = null): void
     {
-        //todo
+        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("TEAM_UPDATE"))) {
+            $this->respondForbidden();
+        }
     }
 
     public function create(array $data, ?int $resourceId = null): BaseModel
@@ -183,9 +186,15 @@ class TeamManager extends BaseManager
 
     public function read(int $resourceId, ?int $subResourceId = null): BaseModel
     {
+        
     }
 
     public function update(array $data, int $resourceId, ?int $subResourceId = null): BaseModel
     {
+        $this->allowUpdate($resourceId);
+
+        parent::updateByArray($resourceId, $data);
+
+        return $this->getById($resourceId);
     }
 }
