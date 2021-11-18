@@ -14,14 +14,17 @@ class PermissionPresenter extends SettingBasePresenter
     /** @inject */
     public PermissionManager $permissionManager;
 
-    public function actionPermissions($permission = NULL)
+    public function beforeRender()
     {
+        parent::beforeRender();
         $this->allowPermission('IS_ADMIN');
+        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("permission.permission", 2), "link" => $this->link(":Setting:Permission:")]]);
+    }
 
-        if (!is_null($permission)) {
+    public function actionDefault(?string $resource = null)
+    {
+        if ($resource) {
             $this->setView("permission");
-        } else {
-            $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("permission.permission", 2), "link" => $this->link(":Setting:Permission:")]]);
         }
     }
 
@@ -30,10 +33,8 @@ class PermissionPresenter extends SettingBasePresenter
         $this->allowPermission("IS_ADMIN");
 
         $this->setLevelCaptions([
-            "2" => ["caption" => $this->translator->translate("permission.permission", 2), "link" => $this->link(":Setting:Permission:")],
             "3" => ["caption" => $this->translator->translate("permission.newPermission")]
         ]);
-        $this->template->isNew = true;
 
         $users = $this->userManager->getIdList();
 
@@ -52,38 +53,35 @@ class PermissionPresenter extends SettingBasePresenter
         $this->template->rolesRule = "revoked";
         $this->template->statusesRule = "revoked";
         $this->template->usersRule = "revoked";
-
-        $this->setView("permission");
     }
 
-    public function renderPermission($permission)
+    public function renderPermission(?string $resource = null)
     {
         $this->allowPermission("IS_ADMIN");
 
-        $perm = $this->permissionManager->getByWebName($permission);
-        if ($perm == NULL) {
+        $permission = $this->permissionManager->getByWebName($resource);
+        if (!$permission) {
             $this->flashMessage($this->translator->translate("permission.errors.permissionNotExists", NULL, ['id' => $permission]), "danger");
             $this->redirect(':Setting:Event:');
         }
 
         $this->setLevelCaptions([
-            "2" => ["caption" => $this->translator->translate("permission.permission", 2), "link" => $this->link(":Setting:Permission:")],
-            "3" => ["caption" => $perm->getName(), "link" => $this->link(":Setting:Permission:", $perm->getWebname())]
+            "3" => ["caption" => $permission->getName(), "link" => $this->link(":Setting:Permission:", $permission->getWebname())]
         ]);
 
         $users = $this->userManager->getIdList();
 
-        $this->template->lastEditedUser = $users[$perm->getUpdatedById()] ?? null;
+        $this->template->lastEditedUser = $users[$permission->getUpdatedById()] ?? null;
         $this->template->allowances = ["allowed" => "Povoleno", "revoked" => "Zakázáno"];
         $this->template->statuses = ["PLAYER" => "Hráč", "SICK" => "Marod", "MEMBER" => "Člen"];
         $this->template->roles = $this->getAllRoles();
 
-        $this->template->rolesRule = empty($perm->getAllowedRoles()) && empty($perm->getRevokedRoles()) ? null : (empty($perm->getRevokedRoles()) ? "allowed" : "revoked");
-        $this->template->statusesRule = empty($perm->getAllowedStatuses()) && empty($perm->getRevokedStatuses()) ? null : (empty($perm->getRevokedStatuses()) ? "allowed" : "revoked");
-        $this->template->usersRule = empty($perm->getAllowedUsers()) && empty($perm->getRevokedUsers()) ? null : (empty($perm->getRevokedUsers()) ? "allowed" : "revoked");
+        $this->template->rolesRule = empty($permission->getAllowedRoles()) && empty($permission->getRevokedRoles()) ? null : (empty($permission->getRevokedRoles()) ? "allowed" : "revoked");
+        $this->template->statusesRule = empty($permission->getAllowedStatuses()) && empty($permission->getRevokedStatuses()) ? null : (empty($permission->getRevokedStatuses()) ? "allowed" : "revoked");
+        $this->template->usersRule = empty($permission->getAllowedUsers()) && empty($permission->getRevokedUsers()) ? null : (empty($permission->getRevokedUsers()) ? "allowed" : "revoked");
 
         $this->template->users = $users;
-        $this->template->perm = $perm;
+        $this->template->perm = $permission;
         $this->template->isNew = false;
     }
 
