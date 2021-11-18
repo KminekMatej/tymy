@@ -20,7 +20,7 @@ class MultiaccountPresenter extends SettingBasePresenter
     {
         $this->multiAccountManager->delete($team);
         $this->flashMessage($this->translator->translate("common.alerts.multiaccountRemoved", NULL, ['team' => $team]), "success");
-        $this->redirect("Settings:multiaccount");
+        $this->redirect(":Setting:Multiaccount:");
     }
 
     public function createComponentAddMaForm()
@@ -39,7 +39,7 @@ class MultiaccountPresenter extends SettingBasePresenter
                     ], $values->sysName);
 
             $this->flashMessage($this->translator->translate("common.alerts.multiaccountAdded", NULL, ["team" => $values->sysName]));
-            $this->redirect("Settings:multiaccount");
+            $this->redirect(":Setting:Multiaccount:");
         };
         return $form;
     }

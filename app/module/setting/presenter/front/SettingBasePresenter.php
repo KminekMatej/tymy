@@ -52,7 +52,7 @@ class SettingBasePresenter extends SecuredPresenter
     {
         if (!$this->getUser()->isAllowed($this->user->getId(), $type == "SYS" ? Privilege::SYS($permissionName) : Privilege::USR($permissionName))) {
             $this->flashMessage($this->translator->translate("common.alerts.notPermitted"));
-            $this->redirect("Settings:");
+            $this->redirect(":Setting:Default:");
         }
     }
 }

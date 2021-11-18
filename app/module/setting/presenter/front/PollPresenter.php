@@ -64,7 +64,7 @@ class PollPresenter extends SettingBasePresenter
         $pollObj = $this->pollManager->getById($pollId);
         if ($pollObj == NULL) {
             $this->flashMessage($this->translator->translate("poll.errors.pollNotExists", NULL, ['id' => $pollId]), "danger");
-            $this->redirect('Settings:polls');
+            $this->redirect(':Setting:Poll:');
         }
         if (count($pollObj->getOptions()) == 0) {
             $pollObj->setOptions([(new Option())->setId(-1)->setPollId($pollId)->setCaption("")->setType("TEXT")]);
@@ -85,7 +85,7 @@ class PollPresenter extends SettingBasePresenter
     public function handlePollCreate()
     {
         $this->pollManager->create($this->getRequest()->getPost()["changes"]);
-        $this->redirect('Settings:polls');
+        $this->redirect(':Setting:Poll:');
     }
 
     public function handlePollEdit()

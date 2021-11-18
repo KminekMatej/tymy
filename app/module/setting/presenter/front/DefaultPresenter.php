@@ -50,7 +50,7 @@ class DefaultPresenter extends SettingBasePresenter
             $userNeon->skin = $values->skin;
             $this->supplier->saveUserNeon($this->getUser()->getId(), (array) $userNeon);
             $this->flashMessage($this->translator->translate("common.alerts.configSaved"));
-            $this->redirect("Settings:app");
+            $this->redirect(":Setting:App:");
         };
         return $form;
     }

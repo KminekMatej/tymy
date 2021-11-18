@@ -56,7 +56,6 @@ class TeamPresenter extends SettingBasePresenter
             $teamNeon->status_colors = $statusColors;
 
             $this->supplier->saveTeamNeon((array) $teamNeon);
-            $this->statusList->cleanCache();
 
             //check if there is some TAPI change to be commited
             $teamData = $this->teamManager->getTeam();
@@ -69,7 +68,7 @@ class TeamPresenter extends SettingBasePresenter
             }
 
             $this->flashMessage($this->translator->translate("common.alerts.configSaved"));
-            $this->redirect("Settings:team");
+            $this->redirect(":Setting:Team:");
         };
         return $form;
     }

@@ -65,7 +65,7 @@ class EventPresenter extends SettingBasePresenter
         $eventObj = $this->eventManager->getById($eventId);
         if ($eventObj == NULL) {
             $this->flashMessage($this->translator->translate("event.errors.eventNotExists", NULL, ['id' => $eventId]), "danger");
-            $this->redirect(':Settings:Event:');
+            $this->redirect(':Setting:Event:');
         }
 
         $this->setLevelCaptions(["3" => ["caption" => $eventObj->getCaption(), "link" => $this->link(":Setting:Event:", $eventObj->getWebName())]]);

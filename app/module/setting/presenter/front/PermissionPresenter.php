@@ -93,7 +93,7 @@ class PermissionPresenter extends SettingBasePresenter
         /* @var $createdPermission Permission */
         $createdPermission = $this->permissionManager->create($this->composePermissionData($bind["changes"]));
 
-        $this->redirect("Settings:permissions", [Strings::webalize($createdPermission->getName())]);
+        $this->redirect(":Setting:Permission:", [Strings::webalize($createdPermission->getName())]);
     }
 
     public function handlePermissionEdit()
@@ -105,7 +105,7 @@ class PermissionPresenter extends SettingBasePresenter
         $updatedPermission = $this->permissionManager->update($data, $bind["id"]);
 
         if (array_key_exists("name", $data)) {   //if name has been changed, redirect to a new name is neccessary
-            $this->redirect("Settings:permissions", [Strings::webalize($updatedPermission->getName())]);
+            $this->redirect(":Setting:Permission:", [Strings::webalize($updatedPermission->getName())]);
         }
     }
 

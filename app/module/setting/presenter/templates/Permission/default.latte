@@ -20,7 +20,7 @@
                                 <i n:if="$perm->getMeAllowed()" class="fas fa-check-circle text-success" title="{_permission.permitted}"></i>
                                 <i n:if="!$perm->getMeAllowed()" class="fas fa-ban text-danger" title="{_permission.not-permitted}"></i>
                             </td>
-                            <td><a n:href="Settings:permissions $perm->getWebName()" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></a></td>
+                            <td><a n:href=":Setting:Permission: $perm->getWebName()" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></a></td>
                         </tr>
                     </table>
                 </div>
@@ -39,7 +39,7 @@
                                 <i n:if="$perm->getMeAllowed()" class="fas fa-check-circle text-success" title="{_permission.permitted}"></i>
                                 <i n:if="!$perm->getMeAllowed()" class="fas fa-ban text-danger" title="{_permission.not-permitted}"></i>
                             </td>
-                            <td><a n:href="Settings:permissions $perm->getWebName()" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></a></td>
+                            <td><a n:href=":Setting:Permission: $perm->getWebName()" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></a></td>
                         </tr>
                     </table>
                 </div>

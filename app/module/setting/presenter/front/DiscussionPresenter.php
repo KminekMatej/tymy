@@ -71,7 +71,7 @@ class DiscussionPresenter extends SettingBasePresenter
     {
         $discussionData = (object) $this->getRequest()->getPost()["changes"]; // new discussion is always as ID 1
         $this->discussionManager->create($discussionData);
-        $this->redirect('Settings:discussions');
+        $this->redirect(':Setting:Discussion:');
     }
 
     public function handleDiscussionEdit()
