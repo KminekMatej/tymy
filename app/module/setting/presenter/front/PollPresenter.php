@@ -17,18 +17,25 @@ class PollPresenter extends SettingBasePresenter
     /** @inject */
     public OptionManager $optionManager;
 
-    public function actionPolls($poll = NULL)
+    public function actionDefault(?string $resource = null)
     {
-        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("poll.poll", 2), "link" => $this->link(":Setting:Poll:")]]);
-        if (!is_null($poll)) {
+        if ($resource) {
             $this->setView("poll");
-        } else {
-            $this->template->isNew = false;
-            $this->template->polls = $this->pollManager->getList();
         }
     }
 
-    public function renderPoll_new()
+    public function beforeRender()
+    {
+        parent::beforeRender();
+        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("poll.poll", 2), "link" => $this->link(":Setting:Poll:")]]);
+    }
+
+    public function renderDefault()
+    {
+        $this->template->polls = $this->pollManager->getList();
+    }
+
+    public function renderNew()
     {
         $this->allowPermission('ASK.VOTE_UPDATE');
 
@@ -36,30 +43,27 @@ class PollPresenter extends SettingBasePresenter
             "2" => ["caption" => $this->translator->translate("poll.poll", 2), "link" => $this->link(":Setting:Poll:")],
             "3" => ["caption" => $this->translator->translate("poll.new")]
         ]);
-        $this->template->isNew = true;
 
         $this->template->polls = [(new Poll())
-                    ->setId(-1)
-                    ->setCaption("")
-                    ->setDescription("")
-                    ->setStatus("DESIGN")
-                    ->setMinItems(1)
-                    ->setMaxItems(99)
-                    ->setMainMenu("")
-                    ->setAnonymousResults("")
-                    ->setChangeableVotes("")
-                    ->setShowResults("NEVER")
+                ->setId(-1)
+                ->setCaption("")
+                ->setDescription("")
+                ->setStatus("DESIGN")
+                ->setMinItems(1)
+                ->setMaxItems(99)
+                ->setMainMenu("")
+                ->setAnonymousResults("")
+                ->setChangeableVotes("")
+                ->setShowResults("NEVER")
         ];
-
-        $this->setView("polls");
     }
 
-    public function renderPoll($poll)
+    public function renderPoll(?string $resource = null)
     {
         $this->allowPermission('ASK.VOTE_UPDATE');
 
         //RENDERING POLL DETAIL
-        $pollId = $this->parseIdFromWebname($poll);
+        $pollId = $this->parseIdFromWebname($resource);
         /* @var $pollObj Poll */
         $pollObj = $this->pollManager->getById($pollId);
         if ($pollObj == NULL) {
