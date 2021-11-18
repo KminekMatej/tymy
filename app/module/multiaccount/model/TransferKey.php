@@ -1,9 +1,9 @@
 <?php
-
 namespace Tymy\Module\Multiaccount\Model;
 
 use JsonSerializable;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Multiaccount\Mapper\TransferKeyMapper;
 
 /**
  * Description of TransferKey
@@ -12,6 +12,7 @@ use Tymy\Module\Core\Model\BaseModel;
  */
 class TransferKey extends BaseModel implements JsonSerializable
 {
+
     public const MODULE = "multiaccount";
     public const TABLE = "multi_accounts";
 
@@ -20,12 +21,6 @@ class TransferKey extends BaseModel implements JsonSerializable
 
     /** @var int target team user's id */
     private int $uid;
-
-    public function __construct(string $transferKey, int $uid)
-    {
-        $this->transferKey = $transferKey;
-        $this->uid = $uid;
-    }
 
     public function jsonSerialize()
     {
@@ -42,7 +37,7 @@ class TransferKey extends BaseModel implements JsonSerializable
 
     public function getScheme(): array
     {
-        return []; //no mapping needed here
+        return TransferKeyMapper::scheme();
     }
 
     public function getTable(): string
