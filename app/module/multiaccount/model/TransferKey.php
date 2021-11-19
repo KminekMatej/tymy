@@ -22,6 +22,12 @@ class TransferKey extends BaseModel implements JsonSerializable
     /** @var int target team user's id */
     private int $uid;
 
+    public function __construct(string $transferKey, int $uid)
+    {
+        $this->transferKey = $transferKey;
+        $this->uid = $uid;
+    }
+
     public function getTransferKey(): string
     {
         return $this->transferKey;
