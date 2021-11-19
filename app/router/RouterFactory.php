@@ -110,6 +110,8 @@ class RouterFactory
             ],
         ]);
 
+        $router->addRoute('jump/<teamSysName>', "Core:Default:jump");
+
         $router->addRoute('[<module>][/<presenter>]/<resource \d+(\-.+)?>[/<action>]', [
             "module" => [
                 Route::VALUE => "Core",
