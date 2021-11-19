@@ -2,19 +2,18 @@
 
 namespace Tymy\Module\Core\Presenter\Front;
 
+use Tracy\Debugger;
 use Tymy\Module\Debt\Manager\DebtManager;
 use Tymy\Module\Discussion\Manager\DiscussionManager;
 use Tymy\Module\Event\Manager\EventManager;
 use Tymy\Module\Event\Manager\EventTypeManager;
+use Tymy\Module\Multiaccount\Manager\MultiaccountManager;
+use Tymy\Module\Multiaccount\Model\TransferKey;
 use Tymy\Module\News\Manager\NewsManager;
 use Tymy\Module\User\Manager\UserManager;
 
 class DefaultPresenter extends SecuredPresenter {
 
-    /**
-     * @todo finish refactoring transfer key jumps
-     */
-    private $tkResource;
     
     /** @inject */
     public EventManager $eventManager;
@@ -34,8 +33,12 @@ class DefaultPresenter extends SecuredPresenter {
     /** @inject */
     public EventTypeManager $eventTypeManager;
     
+    /** @inject */
+    public MultiaccountManager $multiaccountManager;
+    
     public function beforeRender() {
         parent::beforeRender();
+        Debugger::barDump($this->link(":jump", "dev"));
         $this->template->addFilter('lastLogin', function ($lastLogin) {
             $diff = date("U") - strtotime($lastLogin);
             if($diff == 1) return $this->translator->translate("common.lastLogin.secondAgo");
@@ -86,16 +89,13 @@ class DefaultPresenter extends SecuredPresenter {
         $this->template->neverLogin = $this->translator->translate("common.never");
     }
 
-    public function actionJump($teamSysName, $hasV2){
-        $tk = $this->tkResource->init()->setTeam($teamSysName)->getData();
-        if($hasV2){
-            $url = "https://$teamSysName.tymy.cz/v2/sign/in?tk=" . $tk->transferKey;
-        } else {
-            $url = "http://$teamSysName.tymy.cz/?tk=".$tk->transferKey."&uid=".$tk->uid."&page=main";
-        }
-        $this->redirectUrl($url);
+    public function actionJump(string $teamSysName)
+    {
+        /* @var $tk TransferKey */
+        $tk = $this->multiaccountManager->read($teamSysName);
+        $this->redirectUrl("https://$teamSysName.tymy.cz/sign/in?tk=" . $tk->getTransferKey());
     }
-    
+
     private function sortUsersByLastLogin($usersArray){
         $notSetValues = [];
         foreach ($usersArray as $key => $value) {
