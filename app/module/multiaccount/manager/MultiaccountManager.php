@@ -1,8 +1,6 @@
 <?php
 namespace Tymy\Module\Multiaccount\Manager;
 
-use Nette\Database\IRow;
-use Nette\Database\Table\ActiveRow;
 use Nette\Utils\DateTime;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
@@ -63,7 +61,7 @@ class MultiaccountManager extends BaseManager
      *
      * @param int $resourceId
      * @param int|null $subResourceId
-     * @return BaseModel
+     * @return TransferKey
      */
     public function read($resourceId, ?int $subResourceId = null): BaseModel
     {
