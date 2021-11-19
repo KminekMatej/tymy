@@ -111,7 +111,7 @@
                     <div class="dropdown-divider"></div>
                     {foreach $multiaccounts as $maTeam}
                         {var $caption = empty($maTeam->name) ? $maTeam->sysName : $maTeam->name}
-                        <a n:if="$maTeam->sysName != $team->getSysName()" class="dropdown-item" href="{plink :Core:Default:jump $maTeam->sysName, ($maTeam->v2 ?? null)}"><i class="fa fa-angle-double-right" aria-hidden="true"></i> {$caption}</a>
+                        <a n:if="$maTeam->sysName != $team->getSysName()" class="dropdown-item" href="{plink :Core:Default:jump $maTeam->sysName}"><i class="fa fa-angle-double-right" aria-hidden="true"></i> {$caption}</a>
                         <button n:if="$maTeam->sysName == $team->getSysName()" class="dropdown-item disabled" type="button"><i class="fa fa-angle-double-right" aria-hidden="true"></i> {$caption}</button>
                     {/foreach}
                     {/if}
