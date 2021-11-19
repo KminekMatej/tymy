@@ -1,7 +1,8 @@
 <?php
-
 namespace Tymy\Module\Multiaccount\Manager;
 
+use Nette\Database\IRow;
+use Nette\Database\Table\ActiveRow;
 use Nette\Utils\DateTime;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
@@ -19,6 +20,7 @@ use Tymy\Module\User\Manager\UserManager;
  */
 class MultiaccountManager extends BaseManager
 {
+
     private UserManager $userManager;
     private TeamManager $teamManager;
 
@@ -98,8 +100,10 @@ class MultiaccountManager extends BaseManager
         $accountId = $this->getAccountId();
 
         $existingAccountRow = $this->mainDatabase->table($this->getTable())
-                        ->where("user_id", $userId)
-                        ->where("team_id", $targetTeam->getId())->fetch();
+            ->where("user_id", $userId)
+            ->where("team_id", $targetTeam->getId())
+            ->fetch();
+
         $existingAccountId = $existingAccountRow ? $existingAccountRow->account_id : null;
 
         if ($accountId && $existingAccountId == $accountId) {
@@ -156,9 +160,9 @@ class MultiaccountManager extends BaseManager
         }
 
         $this->mainDatabase->table($this->getTable())
-                ->where("account_id", $accountId)
-                ->where("team_id", $targetTeam->getId())
-                ->delete();
+            ->where("account_id", $accountId)
+            ->where("team_id", $targetTeam->getId())
+            ->delete();
 
         //if deleted record was the last one (which means the last record is just pointing to itself), delete all the accountId rows
         if (!empty($accountId) && $accountId) {
@@ -174,7 +178,7 @@ class MultiaccountManager extends BaseManager
     }
 
     /**
-     * Get list of polls, which currently logged user is allowed to vote in
+     * Get list of users multiaccounts
      * @return SimpleTeam[]
      */
     public function getListUserAllowed()
@@ -203,9 +207,9 @@ class MultiaccountManager extends BaseManager
     private function getAccountId(): ?int
     {
         $accountRow = $this->mainDatabase->table(TransferKey::TABLE)
-                ->where("team_id", $this->teamManager->getTeam()->getId())
-                ->where("user_id", $this->user->getId())
-                ->fetch();
+            ->where("team_id", $this->teamManager->getTeam()->getId())
+            ->where("user_id", $this->user->getId())
+            ->fetch();
 
         return $accountRow ? $accountRow->account_id : null;
     }
@@ -234,11 +238,11 @@ class MultiaccountManager extends BaseManager
 
         $newTk = sha1($accountId . rand(0, 100000));
         $this->mainDatabase->table(TransferKey::TABLE)
-                ->where("account_id", $accountId)
-                ->where("team_id", $targetTeam->getId())
-                ->update([
-                    "transfer_key" => $newTk,
-                    "tk_dtm" => (new DateTime())->format(BaseModel::DATETIME_ENG_FORMAT)
+            ->where("account_id", $accountId)
+            ->where("team_id", $targetTeam->getId())
+            ->update([
+                "transfer_key" => $newTk,
+                "tk_dtm" => (new DateTime())->format(BaseModel::DATETIME_ENG_FORMAT)
         ]);
 
         return new TransferKey($newTk, $targetUserId);
@@ -254,9 +258,9 @@ class MultiaccountManager extends BaseManager
     private function getTargetUserId(int $accountId, int $teamId): int
     {
         $row = $this->mainDatabase->table(TransferKey::TABLE)
-                ->where("account_id", $accountId)
-                ->where("team_id", $teamId)
-                ->fetch();
+            ->where("account_id", $accountId)
+            ->where("team_id", $teamId)
+            ->fetch();
 
         if (!$row) {
             $this->responder->E4005_OBJECT_NOT_FOUND(Team::MODULE, $teamId);

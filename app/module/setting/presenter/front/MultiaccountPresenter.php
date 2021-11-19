@@ -13,12 +13,12 @@ class MultiaccountPresenter extends SettingBasePresenter
     public function renderDefault()
     {
         $this->setLevelCaptions(["3" => ["caption" => $this->translator->translate("settings.multiaccount", 1), "link" => $this->link(":Setting:Multiaccount:")]]);
-        $this->template->multiaccounts = $this->multiaccountManager->getList();
+        $this->template->multiaccounts = $this->multiaccountManager->getListUserAllowed();
     }
 
     public function handleMultiaccountRemove($team)
     {
-        $this->multiAccountManager->delete($team);
+        $this->multiaccountManager->delete($team);
         $this->flashMessage($this->translator->translate("common.alerts.multiaccountRemoved", NULL, ['team' => $team]), "success");
         $this->redirect(":Setting:Multiaccount:");
     }
@@ -30,10 +30,10 @@ class MultiaccountPresenter extends SettingBasePresenter
         $form->addText("username", $this->translator->translate("sign.username"));
         $form->addPassword("password", $this->translator->translate("sign.password"));
         $form->addSubmit("save");
-        $multiAccountManager = $this->multiAccountManager;
-        $form->onSuccess[] = function (Form $form, stdClass $values) use ($multiAccountManager) {
-            /* @var $multiAccountManager MultiaccountManager */
-            $multiAccountManager->create([
+        $multiaccountManager = $this->multiaccountManager;
+        $form->onSuccess[] = function (Form $form, stdClass $values) use ($multiaccountManager) {
+            /* @var $multiaccountManager MultiaccountManager */
+            $multiaccountManager->create([
                 "login" => $values->username,
                 "password" => $values->password,
                     ], $values->sysName);
