@@ -73,14 +73,17 @@ class AuthorizationManager implements IAuthorizator
      */
     public function getPermission(string $type, string $name): ?Permission
     {
-        $key = "$type-$name";
-        if(!array_key_exists($key, $this->permissionCache)){
-            $row = $this->teamDatabase->table(Permission::TABLE)->where("right_type", $type)->where("name", $name)->limit(1)->fetch();
-            $permission = $row ? $this->map(Permission::class, PermissionMapper::scheme(), $row) : null;
-            $this->permissionCache[$key] = $permission;
+        if (!array_key_exists($type, $this->permissionCache)) {
+            $this->permissionCache[$type] = [];
+            $typePermissions = $this->teamDatabase->table(Permission::TABLE)->where("right_type", $type)->fetchAll();
+            foreach ($typePermissions as $typePermissionRow) {
+                /* @var $permission Permission */
+                $permission = $typePermissionRow ? $this->map(Permission::class, PermissionMapper::scheme(), $typePermissionRow) : null;
+                $this->permissionCache[$type][$permission->getName()] = $permission;
+            }
         }
-        
-        return $this->permissionCache[$key];
+
+        return $this->permissionCache[$type][$name];
     }
 
     /**
