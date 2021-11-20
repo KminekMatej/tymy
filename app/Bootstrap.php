@@ -21,8 +21,7 @@ class Bootstrap
     {
         // absolute filesystem path to the application root
         define("ROOT_DIR", getenv("ROOT_DIR") ? self::normalizePath(getenv("ROOT_DIR")) : self::normalizePath(__DIR__ . "/.."));
-
-        define('TMP_FOLDER', ROOT_DIR . "/temp/tymy.cz");
+        define("TEAM_DIR", dirname($_SERVER['SCRIPT_FILENAME'], 2));
         define('MODULES', array_diff(scandir(self::MODULES_DIR), array('..', '.')));
 
         $configurator = new Configurator;
@@ -36,10 +35,10 @@ class Bootstrap
 
         $configurator->setDebugMode($debug ? $debug : false);
 
-        $configurator->enableTracy(ROOT_DIR . '/log');
+        $configurator->enableTracy(TEAM_DIR . '/log');
 
         $configurator->setTimeZone('Europe/Prague');
-        $configurator->setTempDirectory(ROOT_DIR . '/temp');
+        $configurator->setTempDirectory(TEAM_DIR . '/temp');
 
         $configurator->createRobotLoader()
                 ->addDirectory(__DIR__)
