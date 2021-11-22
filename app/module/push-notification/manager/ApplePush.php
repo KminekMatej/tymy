@@ -48,11 +48,6 @@ class ApplePush
             ]
         ]);
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer $token", "apns-topic: $apns_topic"]);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $payloadJSON);
-
         //generate JWT token
         $token = $this->jwtConfiguration->builder()
             ->issuedBy($team->getSysName() . ".tymy.cz")
@@ -63,6 +58,11 @@ class ApplePush
             ->withClaim("userId", $pushNotification->getUserId())
             ->getToken($this->jwtConfiguration->signer(), $this->jwtConfiguration->signingKey());
 
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer {$token->toString()}", "apns-topic: $apns_topic"]);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $payloadJSON);
+
         foreach ($subscribers as $subscriber) {
             /* @var $subscriber Subscriber */
             if ($subscriber->getType() !== Subscriber::TYPE_APNS) {
@@ -72,9 +72,9 @@ class ApplePush
             curl_setopt($ch, CURLOPT_URL, self::URL_DEV . "/{$subscriber->getSubscription()}");
 
             $response = curl_exec($ch);
-            $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-            if ($response === false || $httpcode !== 200) {
+            $info = curl_getinfo($ch);
+            
+            if ($response === false || $info["http_code"] !== 200) {
                 //todo: handle error
             }
         }
