@@ -21,13 +21,14 @@ use Tymy\Module\PushNotification\Model\Subscriber;
 class PushNotificationManager extends BaseManager
 {
 
-    private bool $isQueue = false;
     private WebPush $webPush;
+    private ApplePush $applePush;
 
-    public function __construct(ManagerFactory $managerFactory, WebPush $webPush)
+    public function __construct(ManagerFactory $managerFactory, WebPush $webPush, ApplePush $applePush)
     {
         parent::__construct($managerFactory);
         $this->webPush = $webPush;
+        $this->applePush = $applePush;
     }
 
     /**
@@ -41,6 +42,19 @@ class PushNotificationManager extends BaseManager
         return $this->map($this->database->table(Subscriber::TABLE)
                     ->where("user_id", $userId)
                     ->where("subscription", $subscription)->fetch());
+    }
+
+    /**
+     * Get Subscribers by userIds
+     * 
+     * @param int[] User ids
+     * @return Subscriber[]
+     */
+    private function getByUsers(array $userIds)
+    {
+        return $this->mapAll($this->database->table(Subscriber::TABLE)
+                    ->where("user_id", $userIds)
+                    ->fetchAll());
     }
 
     /**
@@ -109,13 +123,20 @@ class PushNotificationManager extends BaseManager
      */
     public function notifyUser(PushNotification $notification, int $userId)
     {
+        return $this->notifyUsers($notification, [$userId]);
+    }
+
+    /**
+     * Notify all subscribers registered through Web push messaging
+     * @param PushNotification $notification
+     * @param Subscriber[] $subscribers
+     * @return void
+     */
+    private function webPushBulk(PushNotification $notification, array $subscribers): void
+    {
         try {
-            foreach ($this->getList() as $subscriber) {
+            foreach ($subscribers as $subscriber) {
                 /* @var $subscriber Subscriber */
-                if ($userId !== $subscriber->getUserId()) {
-                    continue;
-                }
-                $this->isQueue = true;
                 $report = $this->webPush->sendOneNotification(
                     Subscription::create(\json_decode($subscriber->getSubscription(), true)), // subscription
                     \json_encode($notification->jsonSerialize()) // payload
@@ -128,6 +149,36 @@ class PushNotificationManager extends BaseManager
     }
 
     /**
+     * 
+     * @param PushNotification $notification
+     * @param Subscriber[] $subscribers
+     * @todo
+     */
+    private function applePushBulk(PushNotification $notification, array $subscribers)
+    {
+        try {
+            foreach ($subscribers as $subscriber) {
+                /* @var $subscriber Subscriber */
+                $this->applePush->sendOneNotification($subscriber, $notification);
+                //TODO: handle detecting expired subsriptions here
+            }
+        } catch (ErrorException $e) {
+            Debugger::log('WebPush ErrorException: ' . $e->getMessage(), ILogger::EXCEPTION);
+        }
+    }
+
+    /**
+     * 
+     * @param PushNotification $notification
+     * @param Subscriber[] $subscribers
+     * @todo
+     */
+    private function androidPushBulk(PushNotification $notification, array $subscribers)
+    {
+        
+    }
+
+    /**
      * Notify multiple users by their ids
      * 
      * @param PushNotification $notification
@@ -136,8 +187,35 @@ class PushNotificationManager extends BaseManager
      */
     public function notifyUsers(PushNotification $notification, array $userIds): void
     {
-        foreach ($userIds as $userId) {
-            $this->notifyUser($notification, $userId);
+        $appleSubscriptions = [];
+        $androidSubscriptions = [];
+        $webSubscriptions = [];
+
+        foreach ($this->getByUsers($userIds) as $subscriber) {
+            /* @var $subscriber Subscriber */
+            switch ($subscriber->getType()) {
+                case Subscriber::TYPE_WEB:
+                    $webSubscriptions[] = $subscriber;
+                    break;
+                case Subscriber::TYPE_APNS:
+                    $appleSubscriptions[] = $subscriber;
+                    break;
+                case Subscriber::TYPE_FCM:
+                    $androidSubscriptions[] = $subscriber;
+                    break;
+            }
+        }
+
+        if (!empty($webSubscriptions)) {
+            $this->webPushBulk($notification, $webSubscriptions);
+        }
+
+        if (!empty($appleSubscriptions)) {
+            $this->applePushBulk($notification, $appleSubscriptions);
+        }
+
+        if (!empty($androidSubscriptions)) {
+            $this->androidPushBulk($notification, $androidSubscriptions);
         }
     }
 
@@ -150,18 +228,35 @@ class PushNotificationManager extends BaseManager
      */
     public function notifyEveryone(PushNotification $notification): void
     {
-        try {
-            foreach ($this->getList() as $subscriber) {
-                /* @var $subscriber Subscriber */
-                $this->isQueue = true;
-                $report = $this->webPush->sendOneNotification(
-                    Subscription::create(json_decode($subscriber->getSubscription(), true)), // subscription
-                    json_encode($notification->jsonSerialize()) // payload
-                );
-                $this->processReport($subscriber, $report);
+        $appleSubscriptions = [];
+        $androidSubscriptions = [];
+        $webSubscriptions = [];
+
+        foreach ($this->getList() as $subscriber) {
+            /* @var $subscriber Subscriber */
+            switch ($subscriber->getType()) {
+                case Subscriber::TYPE_WEB:
+                    $webSubscriptions[] = $subscriber;
+                    break;
+                case Subscriber::TYPE_APNS:
+                    $appleSubscriptions[] = $subscriber;
+                    break;
+                case Subscriber::TYPE_FCM:
+                    $androidSubscriptions[] = $subscriber;
+                    break;
             }
-        } catch (ErrorException $e) {
-            Debugger::log('WebPush ErrorException: ' . $e->getMessage(), ILogger::EXCEPTION);
+        }
+
+        if (!empty($webSubscriptions)) {
+            $this->webPushBulk($notification, $webSubscriptions);
+        }
+
+        if (!empty($appleSubscriptions)) {
+            $this->applePushBulk($notification, $appleSubscriptions);
+        }
+
+        if (!empty($androidSubscriptions)) {
+            $this->androidPushBulk($notification, $androidSubscriptions);
         }
     }
 
@@ -178,15 +273,5 @@ class PushNotificationManager extends BaseManager
         if (!$report->isSuccess() && $report->isSubscriptionExpired()) {
             $this->delete($subscriber->getId());    //sending to void subscription - delete it from DB to avoid ghosts
         }
-    }
-
-    /**
-     * Return bool value based on if there is
-     * some push notification in queue
-     * @return bool
-     */
-    public function isQueue()
-    {
-        return $this->isQueue;
     }
 }
