@@ -51,25 +51,25 @@ class AndroidPush
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
-        foreach ($subscribers as $value) {
+        foreach ($subscribers as $subscriber) {
             if ($subscriber->getType() !== Subscriber::TYPE_FCM) {
                 return;
             }
 
-            $payload = [
+            $payload = json_encode([
                 'registration_ids' => $subscriber->getSubscription(),
                 'data' => [
                     'message' => $pushNotification->getMessage(),
                     'title' => $pushNotification->getTitle()
                 ]
-            ];
+            ]);
 
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
 
             $response = curl_exec($ch);
-            $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $info = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-            if ($response === false || $httpcode !== 200) {
+            if ($response === false || $info["http_code"] !== 200) {
                 //todo: handle error
             }
         }
