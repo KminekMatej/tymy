@@ -28,6 +28,36 @@ class PushNotification implements \JsonSerializable
         $this->badge = $badge;
     }
 
+    public function getUserId(): int
+    {
+        return $this->userId;
+    }
+
+    public function getTeamId(): int
+    {
+        return $this->teamId;
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
+
+    public function getImageUrl(): ?string
+    {
+        return $this->imageUrl;
+    }
+
+    public function getBadge(): ?int
+    {
+        return $this->badge;
+    }
+
     public function jsonSerialize()
     {
         $array = [
