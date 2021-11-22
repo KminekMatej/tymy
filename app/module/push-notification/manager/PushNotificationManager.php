@@ -54,6 +54,7 @@ class PushNotificationManager extends BaseManager
     {
         return $this->mapAll($this->database->table(Subscriber::TABLE)
                     ->where("user_id", $userIds)
+                    ->where("user_id != ?", $this->user->getId())   //do not notify myself
                     ->fetchAll());
     }
 
@@ -233,6 +234,10 @@ class PushNotificationManager extends BaseManager
         $webSubscriptions = [];
 
         foreach ($this->getList() as $subscriber) {
+            if ($subscriber->getUserId() == $this->user->getId()) {
+                continue; //do not notify myself
+            }
+
             /* @var $subscriber Subscriber */
             switch ($subscriber->getType()) {
                 case Subscriber::TYPE_WEB:
