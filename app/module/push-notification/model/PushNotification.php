@@ -20,7 +20,7 @@ class PushNotification implements \JsonSerializable
 
     public function __construct(int $userId, int $teamId, string $title, string $message, ?string $imageUrl, ?int $badge)
     {
-        $this->userId = $title;
+        $this->userId = $userId;
         $this->teamId = $teamId;
         $this->title = $title;
         $this->message = $message;
