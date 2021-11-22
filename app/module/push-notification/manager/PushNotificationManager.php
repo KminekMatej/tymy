@@ -23,12 +23,14 @@ class PushNotificationManager extends BaseManager
 
     private WebPush $webPush;
     private ApplePush $applePush;
+    private AndroidPush $androidPush;
 
-    public function __construct(ManagerFactory $managerFactory, WebPush $webPush, ApplePush $applePush)
+    public function __construct(ManagerFactory $managerFactory, WebPush $webPush, ApplePush $applePush, AndroidPush $androidPush)
     {
         parent::__construct($managerFactory);
         $this->webPush = $webPush;
         $this->applePush = $applePush;
+        $this->androidPush = $androidPush;
     }
 
     /**
@@ -158,13 +160,10 @@ class PushNotificationManager extends BaseManager
     private function applePushBulk(PushNotification $notification, array $subscribers)
     {
         try {
-            foreach ($subscribers as $subscriber) {
-                /* @var $subscriber Subscriber */
-                $this->applePush->sendOneNotification($subscriber, $notification);
-                //TODO: handle detecting expired subsriptions here
-            }
+            $this->applePush->sendBulkNotifications($subscribers, $notification);
+            //TODO: handle detecting expired subsriptions here
         } catch (ErrorException $e) {
-            Debugger::log('WebPush ErrorException: ' . $e->getMessage(), ILogger::EXCEPTION);
+            Debugger::log('Apple Push ErrorException: ' . $e->getMessage(), ILogger::EXCEPTION);
         }
     }
 
@@ -176,7 +175,12 @@ class PushNotificationManager extends BaseManager
      */
     private function androidPushBulk(PushNotification $notification, array $subscribers)
     {
-        
+        try {
+            $this->androidPush->sendBulkNotifications($subscribers, $notification);
+            //TODO: handle detecting expired subsriptions here
+        } catch (ErrorException $e) {
+            Debugger::log('FCM Push ErrorException: ' . $e->getMessage(), ILogger::EXCEPTION);
+        }
     }
 
     /**

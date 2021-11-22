@@ -6,6 +6,7 @@ use Lcobucci\JWT\Configuration;
 use Tymy\Module\PushNotification\Model\PushNotification;
 use Tymy\Module\PushNotification\Model\Subscriber;
 use Tymy\Module\Team\Manager\TeamManager;
+use function GuzzleHttp\json_encode;
 
 /**
  * Description of ApplePush
@@ -26,25 +27,15 @@ class ApplePush
         $this->teamManager = $teamManager;
     }
 
-    public function sendOneNotification(Subscriber $subscriber, PushNotification $pushNotification)
+    public function sendBulkNotifications(array $subscribers, PushNotification $pushNotification)
     {
-        if ($subscriber->getType() !== Subscriber::TYPE_APNS) {
+        if (empty($subscribers)) {
             return;
         }
 
         $team = $this->teamManager->getTeam();
         $now = new DateTimeImmutable();
         $apns_topic = 'tymy.cz.ios-application';
-
-        //generate JWT token
-        $token = $this->jwtConfiguration->builder()
-            ->issuedBy($team->getSysName() . ".tymy.cz")
-            ->issuedAt($now)
-            ->identifiedBy('4f1g23a12aa')
-            ->expiresAt($now->modify('+2 hours'))
-            ->withClaim("teamId", $pushNotification->getTeamId())
-            ->withClaim("userId", $pushNotification->getUserId())
-            ->getToken($this->jwtConfiguration->signer(), $this->jwtConfiguration->signingKey());
 
         $payloadJSON = json_encode([
             'aps' => [
@@ -57,14 +48,35 @@ class ApplePush
             ]
         ]);
 
-        $url = self::URL_DEV . "/{$subscriber->getSubscription()}";
-
-        $ch = curl_init($url);
-
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $payloadJSON);
+        $ch = curl_init();
         curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2);
         curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer $token", "apns-topic: $apns_topic"]);
-        $response = curl_exec($ch);
-        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $payloadJSON);
+
+        //generate JWT token
+        $token = $this->jwtConfiguration->builder()
+            ->issuedBy($team->getSysName() . ".tymy.cz")
+            ->issuedAt($now)
+            ->identifiedBy('4f1g23a12aa')
+            ->expiresAt($now->modify('+2 hours'))
+            ->withClaim("teamId", $pushNotification->getTeamId())
+            ->withClaim("userId", $pushNotification->getUserId())
+            ->getToken($this->jwtConfiguration->signer(), $this->jwtConfiguration->signingKey());
+
+        foreach ($subscribers as $subscriber) {
+            /* @var $subscriber Subscriber */
+            if ($subscriber->getType() !== Subscriber::TYPE_APNS) {
+                continue;
+            }
+
+            curl_setopt($ch, CURLOPT_URL, self::URL_DEV . "/{$subscriber->getSubscription()}");
+
+            $response = curl_exec($ch);
+            $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+            if ($response === false || $httpcode !== 200) {
+                //todo: handle error
+            }
+        }
     }
 }
