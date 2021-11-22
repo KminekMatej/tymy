@@ -23,7 +23,6 @@
 {/block}
 <div class="container discussion" n:snippet="discussion">
     {foreach $discussionPosts->getPosts() as $item}
-        {dump $item}
         {var $stickyIcon = ''}
         {if $item->getSticky()}
             {var $chc = 'post-sticky bg-warning'}
