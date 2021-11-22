@@ -11,13 +11,17 @@ use Tymy\Module\Core\Model\BaseModel;
 class PushNotification implements \JsonSerializable
 {
 
+    private int $userId;
+    private int $teamId;
     private string $title;
     private string $message;
     private ?string $imageUrl = null;
     private ?int $badge = null;
 
-    public function __construct(string $title, string $message, ?string $imageUrl, ?int $badge)
+    public function __construct(int $userId, int $teamId, string $title, string $message, ?string $imageUrl, ?int $badge)
     {
+        $this->userId = $title;
+        $this->teamId = $teamId;
         $this->title = $title;
         $this->message = $message;
         $this->imageUrl = $imageUrl;
@@ -27,10 +31,12 @@ class PushNotification implements \JsonSerializable
     public function jsonSerialize()
     {
         $array = [
+            "userId" => $this->userId,
+            "teamId" => $this->teamId,
             "title" => $this->title,
             "message" => $this->message,
             "image" => $this->imageUrl,
-            "image" => $this->imageUrl,
+            "badge" => $this->badge,
         ];
 
         if (isset($this->imageUrl)) {
