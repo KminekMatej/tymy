@@ -16,6 +16,7 @@
 
 CREATE TABLE `push_notification` (
   `id` int(11) NOT NULL,
+  `type` ENUM('WEB','APNS','FCM') NOT NULL DEFAULT 'WEB',
   `user_id` int(11) NOT NULL,
   `subscription` text NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
