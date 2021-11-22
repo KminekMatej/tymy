@@ -7,4 +7,5 @@ services:
   PushNotificationManager: Tymy\Module\PushNotification\Manager\PushNotificationManager
   NotificationGenerator: Tymy\Module\PushNotification\Manager\NotificationGenerator
   WebPush: Minishlink\WebPush\WebPush(%push-notification%, [], 6, [verify: false])
+  JwtContainer: Lcobucci\JWT\Configuration::forAsymmetricSigner(Lcobucci\JWT\Signer\Rsa\Sha256, Lcobucci\JWT\Signer\Key\InMemory::file(%APNS.privateKey%), Lcobucci\JWT\Signer\Key\InMemory::file(%APNS.publicKey%))
 
