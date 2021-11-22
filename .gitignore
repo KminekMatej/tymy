@@ -1,6 +1,8 @@
 /nbproject/
 /log/*
 !/log/.gitkeep 
+/certs/*
+!/certs/.gitkeep 
 /temp/*
 !/temp/.gitkeep 
 /tests/setup_DEV.php
