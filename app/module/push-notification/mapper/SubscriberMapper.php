@@ -17,6 +17,7 @@ class SubscriberMapper extends BaseMapper
         return [
             Field::int()->withPropertyAndColumn("id", false, false),
             Field::int()->withColumn("created")->setProperty("created")->setChangeable(false),
+            Field::int()->withPropertyAndColumn("type"),
             Field::int()->withColumn("user_id", true)->setProperty("userId"),
             Field::string()->withPropertyAndColumn("subscription", true),
         ];

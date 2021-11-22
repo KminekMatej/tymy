@@ -10,10 +10,19 @@ class Subscriber extends BaseModel
 
     const MODULE = "push-notification";
     const TABLE = "push_notification";
+    const TYPE_WEB = "WEB";
+    const TYPE_APNS = "APNS";
+    const TYPE_FCM = "FCM";
 
+    private string $type;
     private int $userId;
     private string $subscription;
     private DateTime $created;
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
 
     public function getUserId(): int
     {
@@ -28,6 +37,12 @@ class Subscriber extends BaseModel
     public function getCreated(): DateTime
     {
         return $this->created;
+    }
+
+    public function setType(string $type)
+    {
+        $this->type = $type;
+        return $this;
     }
 
     public function setUserId(int $userId)
@@ -47,7 +62,7 @@ class Subscriber extends BaseModel
         $this->created = $created;
         return $this;
     }
-    
+
     public function getModule(): string
     {
         return self::MODULE;
@@ -62,5 +77,4 @@ class Subscriber extends BaseModel
     {
         return self::TABLE;
     }
-
 }
