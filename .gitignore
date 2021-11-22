@@ -1,8 +1,6 @@
 /nbproject/
 /log/*
 !/log/.gitkeep 
-/certs/*
-!/certs/.gitkeep 
 /temp/*
 !/temp/.gitkeep 
 /tests/setup_DEV.php
@@ -18,3 +16,5 @@
 /vendor/
 /app/config/debug.local.neon
 /app/config/config.local.neon
+/app/certs/*
+!/app/certs/.gitkeep 
