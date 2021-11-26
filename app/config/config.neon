@@ -33,8 +33,6 @@ services:
         PwdResetFormFactory: Tymy\App\Forms\PwdResetFormFactory
         routerFactory: Tymy\RouterFactory
         router: @routerFactory::createRouter
-        authorizator:
-            factory: Tymy\App\Model\TapiAuthorizator
         cacheStorage:
             factory: Nette\Caching\Storages\NewMemcachedStorage()
 
