@@ -1,12 +1,10 @@
 <?php
 
 namespace Test\Tapi;
-use Tapi\Exception\APIException;
 
-use Nette;
-use Nette\Application\Request;
 use Tester\Assert;
 use Tester\Environment;
+use Tymy\Module\Core\Model\RequestMethod;
 
 $container = require substr(__DIR__, 0, strpos(__DIR__, "tests/tapi")) . "tests/bootstrap.php";
 
@@ -25,7 +23,7 @@ class PasswordResetResourceTest extends TapiTest {
     }
 
     public function getMethod() {
-        return \Tymy\Module\Core\Model\RequestMethod::GET;
+        return RequestMethod::GET;
     }
     
     public function setCorrectInputParams() {

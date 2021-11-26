@@ -5,7 +5,6 @@ namespace Tymy\Module\Sign\Presenter\Front;
 use Nette;
 use Nette\Application\UI\Form;
 use Nette\NotImplementedException;
-use Tapi\Exception\APIException;
 use Tracy\Debugger;
 use Tymy\App\Forms\SignInFormFactory;
 use Tymy\Module\Authentication\Manager\AuthenticationManager;
@@ -54,7 +53,7 @@ class InPresenter extends BasePresenter
         if ($tk = $this->getRequest()->getParameter("tk")) {
             try {
                 $this->tkLogin($tk);
-            } catch (APIException $exc) {
+            } catch (Nette\Security\AuthenticationException $exc) {
                 switch ($exc->getMessage()) {
                     case "Login not approved":
                         $this->flashMessage($this->translator->translate("common.alerts.loginNotApproved"), "danger");

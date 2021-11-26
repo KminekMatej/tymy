@@ -5,7 +5,7 @@ namespace Tymy\App\Forms;
 use Nette;
 use Nette\Application\UI\Form;
 use Nette\Security\User;
-use Tymy\App\Model\Supplier;
+use Tymy\Module\Core\Model\Supplier;
 
 class PwdResetFormFactory {
 

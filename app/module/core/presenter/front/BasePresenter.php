@@ -5,10 +5,9 @@ namespace Tymy\Module\Core\Presenter\Front;
 use Kdyby\Translation\Translator;
 use Nette;
 use Nette\Utils\DateTime;
-use Tapi\Exception\APIException;
 use Tracy\Debugger;
-use Tymy\App\Model\Supplier;
 use Tymy\Bootstrap;
+use Tymy\Module\Core\Model\Supplier;
 use Tymy\Module\Team\Manager\TeamManager;
 
 
@@ -61,15 +60,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
     public function formatLayoutTemplateFiles(): array
     {
         return [Bootstrap::MODULES_DIR . "/core/presenter/templates/@layout.latte"];
-    }
-
-    
-    public function handleTapiException(APIException $ex, $redirect = null, $args = []){
-        $this->flashMessage($this->translator->translate("common.alerts.exceptionOccured") . ": " . $ex->getMessage(), "danger");
-        if($redirect)
-            $this->redirect ($redirect, $args);
-        else
-            $this->error($this->translator->translate("common.alerts.exceptionOccured") .": " . $ex->getMessage(), $ex->getCode());
     }
     
 }

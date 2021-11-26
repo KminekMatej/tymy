@@ -4,7 +4,6 @@ namespace Tymy\Module\Sign\Presenter\Front;
 
 use Nette;
 use stdClass;
-use Tapi\Exception\APIException;
 use Tymy\App\Forms\PwdLostFormFactory;
 use Tymy\Module\Core\Presenter\Front\BasePresenter;
 
@@ -42,7 +41,7 @@ class PwdPresenter extends BasePresenter
                         ->setHostname($this->getHttpRequest()->getRemoteHost())
                         ->setMail($values->email)
                         ->getData();
-            } catch (APIException $ex) {
+            } catch (Nette\Security\AuthenticationException $exc) {
                 $this->flashMessage($this->translator->translate("common.alerts.userNotFound"));
                 $this->redirect(':Sign:Pwd:lost');
             }

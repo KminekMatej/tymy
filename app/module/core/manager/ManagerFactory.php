@@ -3,7 +3,7 @@ namespace Tymy\Module\Core\Factory;
 
 use Nette\Database\Explorer;
 use Nette\Security\User;
-use Tymy\App\Model\Supplier;
+use Tymy\Module\Core\Model\Supplier;
 use Tymy\Module\Core\Manager\Responder;
 use Tymy\Module\PushNotification\Service\NotificationService;
 

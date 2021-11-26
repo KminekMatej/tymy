@@ -5,7 +5,7 @@ namespace Tymy\Module\Core\Component;
 use Nette\Application\UI\Control;
 use Nette\Security\User;
 use Nette\Utils\DateTime;
-use Tymy\App\Model\Supplier;
+use Tymy\Module\Core\Model\Supplier;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Debt\Manager\DebtManager;
 use Tymy\Module\Discussion\Manager\DiscussionManager;

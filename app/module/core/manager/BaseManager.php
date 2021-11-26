@@ -10,7 +10,7 @@ use Nette\Database\Table\ActiveRow;
 use Nette\Security\User;
 use Nette\Utils\DateTime;
 use PDOException;
-use Tymy\App\Model\Supplier;
+use Tymy\Module\Core\Model\Supplier;
 use Tymy\Module\Core\Exception\DBException;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Model\BaseModel;

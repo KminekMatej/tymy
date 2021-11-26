@@ -1,6 +1,6 @@
 <?php
 
-namespace Tymy\App\Model;
+namespace Tymy\Module\Core\Model;
 
 use Nette\Neon\Neon;
 use stdClass;

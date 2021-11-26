@@ -2,10 +2,10 @@
 
 namespace Tymy\Module\Core\Presenter\Front;
 
-use Tymy\Module\Core\Component\NavbarControl;
 use Nette\Security\IUserStorage;
 use Tracy\Debugger;
-use Tymy\App\Model\SettingMenu;
+use Tymy\Module\Core\Component\NavbarControl;
+use Tymy\Module\Core\Model\SettingMenu;
 use Tymy\Module\Debt\Manager\DebtManager;
 use Tymy\Module\Discussion\Manager\DiscussionManager;
 use Tymy\Module\Event\Manager\EventManager;
