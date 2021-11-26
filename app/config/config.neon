@@ -3,7 +3,6 @@
 # https://nette.org/security-warning
 #
 application:
-        errorPresenter: Error
         mapping:
             *: Tymy\Module\*\Presenter\Front\*Presenter
             Api: Tymy\Module\*\Presenter\Api\*Presenter
