@@ -26,7 +26,7 @@ class DiscussionCreateResourceTest extends TapiTest {
     }
 
     public function getMethod() {
-        return \Tapi\RequestMethod::POST;
+        return \Tymy\Module\Core\Model\RequestMethod::POST;
     }
 
     public function setCorrectInputParams() {

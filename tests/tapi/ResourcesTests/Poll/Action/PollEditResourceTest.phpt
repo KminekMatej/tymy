@@ -24,7 +24,7 @@ class PollEditResourceTest extends TapiTest {
     }
 
     public function getMethod() {
-        return \Tapi\RequestMethod::PUT;
+        return \Tymy\Module\Core\Model\RequestMethod::PUT;
     }
     
     public function setCorrectInputParams() {

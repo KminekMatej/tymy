@@ -24,7 +24,7 @@ class OptionDeleteResourceTest extends TapiTest {
     }
 
     public function getMethod() {
-        return \Tapi\RequestMethod::DELETE;
+        return \Tymy\Module\Core\Model\RequestMethod::DELETE;
     }
     
     public function setCorrectInputParams() {

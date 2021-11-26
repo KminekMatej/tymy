@@ -24,7 +24,7 @@ class EventDetailResourceTest extends TapiTest {
     }
 
     public function getMethod() {
-        return \Tapi\RequestMethod::GET;
+        return \Tymy\Module\Core\Model\RequestMethod::GET;
     }
 
     public function setCorrectInputParams() {
