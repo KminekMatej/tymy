@@ -18,7 +18,8 @@
         "minishlink/web-push": "v6.0.5",
         "ext-json": "*",
         "ext-pdo": "*",
-        "ext-curl": "*"
+        "ext-curl": "*",
+        "lcobucci/jwt": "4.1.5"
     },
     "require-dev": {
         "nette/tester": "^2.0"
