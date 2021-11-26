@@ -1,0 +1,17 @@
+<li class="nav-item dropdown" name="team">
+    {if $playersWarnings > 0}<span class="badge badge-pill badge-danger badge-new">{$playersWarnings}</span>{/if}
+    <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-users" aria-hidden="true"></i> {_team.team,1}</a>    
+    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+        <a class="dropdown-item" href="{plink :Team:Player: $me->getWebName()}">{$me->getDisplayName()} <span class="badge badge-danger" n:if="$me->getWarnings()">{$me->getWarnings()}</span></a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="{plink :Team:Default:inits}" n:if="$counts['INIT'] > 0 && $user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('SEE_INITS'))">{_team.INIT,2} ({$counts['INIT']})</a>
+        <a class="dropdown-item" href="{plink :Team:Default:players}">{_team.PLAYER,2} ({$counts['PLAYER']}) <span class="badge badge-success" n:if="$counts['NEW:PLAYER'] > 0">{_common.new}</span></a>
+        <a class="dropdown-item" href="{plink :Team:Default:members}">{_team.MEMBER,2} ({$counts['MEMBER']})</a>
+        <a class="dropdown-item" href="{plink :Team:Default:sicks}">{_team.SICK,2} ({$counts['SICK']})</a>
+        <a class="dropdown-item" href="{plink :Team:Default:}">{_common.everyone} ({$counts['ALL']}) <span class="badge badge-success" n:if="$counts['NEW'] > 0">{_common.new}</span></a>
+        <a class="dropdown-item" href="{plink :Team:Player:new}" n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('USR_CREATE'))"><i class="fa fa-plus-circle text-success" aria-hidden="true"></i> {_common.new}</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="{plink :Team:Default:jerseys}">{_team.jerseyList}</a>
+
+    </div>
+</li>

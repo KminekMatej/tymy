@@ -1,0 +1,22 @@
+<li class="nav-item dropdown" name="debts">
+    {if $debtWarnings > 0}<span class="badge badge-pill badge-danger badge-new">{$debtWarnings}</span>{/if}
+    <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-money-bill-alt" aria-hidden="true"></i> {_debt.debt,2}</a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+        <button n:if="empty($debts)" class="dropdown-item disabled" type="button"> - {_debt.noDebt} - </button>
+        {ifset $debts}
+            {var $divided = false}
+            {var $prevD = null}
+            {foreach $debts as $d}
+                {if !$divided && !$d->getCanSetSentDate() && $prevD && $prevD->getCanSetSentDate()}
+                    <div class="dropdown-divider"></div>
+                    {var $divided = true}
+                {/if}
+                <a n:if="empty($d->getPaymentReceived())" class="dropdown-item" href="{plink :Debt:Default: $d->getWebName()}">
+                    <span class="{$d->getClass()}">{$d->getCaption()}</span>
+                    <span class="font-italic">{$d->getDisplayString()}</span>
+                </a>
+            {/foreach}
+            <a class="dropdown-item" href="{plink :Debt:Default:new}"><i class="fa fa-plus-circle text-success" aria-hidden="true"></i> {_common.new}</a>
+        {/ifset}
+    </div>
+</li>

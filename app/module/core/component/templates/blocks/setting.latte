@@ -1,0 +1,6 @@
+<li class="nav-item dropdown" name="settings">
+    <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cogs" aria-hidden="true"></i> {_settings.setting,2}</a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+        <a n:foreach="$accessibleSettings as $set" n:class="dropdown-item, !$set->enabled ? disabled" n:attr="href => $set->enabled ? $set->href : '#', disabled => !$set->enabled"><i class="fa {$set->icon}" aria-hidden="true"></i> {$set->name}</a>
+    </div>
+</li>

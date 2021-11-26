@@ -1,105 +1,21 @@
 {snippet nav}
 {var $allWarnings = $discussionWarnings + $eventWarnings + $playersWarnings + $voteWarnings}
 <nav class="navbar navbar-expand-lg fixed-top" data-title="{$allWarnings}">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{_common.toogleNavigation}">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="{_common.toogleNavigation}">
         <span class="navbar-toggler-icon"></span>
     </button>
     <a class="navbar-brand" href="{$baseUrl}" title="{$team->getSysName()|firstUpper}.Tymy.CZ">
         <img src="{$basePath}/images/logo/tymy_icon_32.png" width="30" height="30" alt="" class="mr-2">
         {$team->getSysName()|firstUpper}
     </a>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div class="collapse navbar-collapse" id="navbarContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item dropdown" name="discussions">
-                {if $discussionWarnings > 0}<span class="badge badge-pill badge-danger badge-new">{$discussionWarnings}</span>{/if}
-                <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-comments" aria-hidden="true"></i> {_discussion.discussion, 2}</a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <button n:if="empty($discussions)" class="dropdown-item disabled" type="button"> - {_discussion.noDiscussion} - </button>
-                    {ifset $discussions}
-                        <a n:foreach="$discussions as $d" class="dropdown-item" href="{plink :Discussion:Discussion: $d->getWebname()}" id="discussion-{$d->getId()}">
-                            {if $discussionWarnings > 0}<span class="badge badge-primary" {if $d->getNewPosts() == 0}style="visibility: hidden"{/if}>{$d->getNewPosts()}</span>{/if}
-                            {$d->getCaption()}
-                        </a>
-                    {/ifset}
-                </div>
-            </li>
-            
-            <li class="nav-item dropdown" name="events">
-                {if $eventWarnings > 0}<span class="badge badge-pill badge-danger badge-new">{$eventWarnings}</span>{/if}
-                <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-calendar" aria-hidden="true"></i> {_event.attendance,2}</a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item" href="{plink :Event:Default:}">{_common.allOfThem}</a>
-                    {ifset $events}
-                        <a n:foreach="$events as $ev" class="dropdown-item" href="{plink :Event:Detail: $ev->getWebName()}">
-                            {if $ev->getAttendancePending()}<span class="badge badge-danger"><i class="fa fa-info" aria-hidden="true"></i></span>{/if}
-                            <span style="color: {$eventColors[$ev->getType()]|noescape}" n:if="array_key_exists($ev->getType(), $eventColors)">{$ev->getStartTime()|date:'j.n.'} - {$ev->getCaption()}</span>
-                            <span n:if="!array_key_exists($ev->getType(), $eventColors)">{$ev->getStartTime()|date:'j.n.'} - {$ev->getCaption()}</span>
-                        </a>
-                    {/ifset}
-                </div>
-            </li>
-            
-            <li class="nav-item dropdown" name="team">
-                {if $playersWarnings > 0}<span class="badge badge-pill badge-danger badge-new">{$playersWarnings}</span>{/if}
-                <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-users" aria-hidden="true"></i> {_team.team,1}</a>    
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item" href="{plink :Team:Player: $me->getWebName()}">{$me->getDisplayName()} <span class="badge badge-danger" n:if="$me->getWarnings()">{$me->getWarnings()}</span></a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="{plink :Team:Default:inits}" n:if="$counts['INIT'] > 0 && $user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('SEE_INITS'))">{_team.INIT,2} ({$counts['INIT']})</a>
-                    <a class="dropdown-item" href="{plink :Team:Default:players}">{_team.PLAYER,2} ({$counts['PLAYER']}) <span class="badge badge-success" n:if="$counts['NEW:PLAYER'] > 0">{_common.new}</span></a>
-                    <a class="dropdown-item" href="{plink :Team:Default:members}">{_team.MEMBER,2} ({$counts['MEMBER']})</a>
-                    <a class="dropdown-item" href="{plink :Team:Default:sicks}">{_team.SICK,2} ({$counts['SICK']})</a>
-                    <a class="dropdown-item" href="{plink :Team:Default:}">{_common.everyone} ({$counts['ALL']}) <span class="badge badge-success" n:if="$counts['NEW'] > 0">{_common.new}</span></a>
-                    <a class="dropdown-item" href="{plink :Team:Player:new}" n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('USR_CREATE'))"><i class="fa fa-plus-circle text-success" aria-hidden="true"></i> {_common.new}</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="{plink :Team:Default:jerseys}">{_team.jerseyList}</a>
-                    
-                </div>
-            </li>
-            
-            <li class="nav-item dropdown" name="polls">
-                {if $voteWarnings > 0}<span class="badge badge-pill badge-danger badge-new">{$voteWarnings}</span>{/if}
-                <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-chart-pie" aria-hidden="true"></i> {_poll.poll,2}</a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <button n:if="empty($polls)" class="dropdown-item disabled" type="button"> - {_poll.noPoll} - </button>
-                    {if !empty($polls)}
-                        <a n:foreach="$polls as $p" class="dropdown-item" href="{plink :Poll:Default: $p->getWebName()}">
-                            {if !$p->getVoted() && $p->getCanVote()}<span class="badge badge-danger"><i class="fa fa-info" aria-hidden="true"></i></span>{/if}
-                            {$p->getCaption()}
-                        </a>
-                    {/if}
-                </div>
-            </li>
-            
-            <li class="nav-item dropdown" name="debts">
-                {if $debtWarnings > 0}<span class="badge badge-pill badge-danger badge-new">{$debtWarnings}</span>{/if}
-                <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-money-bill-alt" aria-hidden="true"></i> {_debt.debt,2}</a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <button n:if="empty($debts)" class="dropdown-item disabled" type="button"> - {_debt.noDebt} - </button>
-                    {ifset $debts}
-                        {var $divided = false}
-                        {var $prevD = null}
-                        {foreach $debts as $d}
-                            {if !$divided && !$d->getCanSetSentDate() && $prevD && $prevD->getCanSetSentDate()}
-                                <div class="dropdown-divider"></div>
-                                {var $divided = true}
-                            {/if}
-                        <a n:if="empty($d->getPaymentReceived())" class="dropdown-item" href="{plink :Debt:Default: $d->getWebName()}">
-                            <span class="{$d->getClass()}">{$d->getCaption()}</span>
-                            <span class="font-italic">{$d->getDisplayString()}</span>
-                        </a>
-                        {/foreach}
-                        <a class="dropdown-item" href="{plink :Debt:Default:new}"><i class="fa fa-plus-circle text-success" aria-hidden="true"></i> {_common.new}</a>
-                    {/ifset}
-                </div>
-            </li>
-            
-            <li class="nav-item dropdown" name="settings">
-                <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cogs" aria-hidden="true"></i> {_settings.setting,2}</a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <a n:foreach="$accessibleSettings as $set" n:class="dropdown-item, !$set->enabled ? disabled" n:attr="href => $set->enabled ? $set->href : '#', disabled => !$set->enabled"><i class="fa {$set->icon}" aria-hidden="true"></i> {$set->name}</a>
-                </div>
-            </li>
+            {include 'blocks/discussion.latte'}
+            {include 'blocks/event.latte'}
+            {include 'blocks/team.latte'}
+            {include 'blocks/poll.latte'}
+            {include 'blocks/debt.latte'}
+            {include 'blocks/setting.latte'}
         </ul>
         <ul class="navbar-nav"> 
             <li class="nav-item dropdown" name="user">
@@ -108,12 +24,12 @@
                     <a class="dropdown-item" href="{plink :Team:Player: $me->getWebName()}"><i class="fa fa-user" aria-hidden="true"></i> {_team.profile}</a>
                     <a class="dropdown-item" href="{plink :Sign:Out:default}"><i class="fa fa-power-off" aria-hidden="true"></i> {_sign.logout}</a>
                     {if !empty($multiaccounts)}
-                    <div class="dropdown-divider"></div>
-                    {foreach $multiaccounts as $maTeam}
-                        {var $caption = empty($maTeam->name) ? $maTeam->sysName : $maTeam->name}
-                        <a n:if="$maTeam->sysName != $team->getSysName()" class="dropdown-item" href="{plink :Core:Default:jump $maTeam->sysName}"><i class="fa fa-angle-double-right" aria-hidden="true"></i> {$caption}</a>
-                        <button n:if="$maTeam->sysName == $team->getSysName()" class="dropdown-item disabled" type="button"><i class="fa fa-angle-double-right" aria-hidden="true"></i> {$caption}</button>
-                    {/foreach}
+                        <div class="dropdown-divider"></div>
+                        {foreach $multiaccounts as $maTeam}
+                            {var $caption = empty($maTeam->name) ? $maTeam->sysName : $maTeam->name}
+                            <a n:if="$maTeam->sysName != $team->getSysName()" class="dropdown-item" href="{plink :Core:Default:jump $maTeam->sysName}"><i class="fa fa-angle-double-right" aria-hidden="true"></i> {$caption}</a>
+                            <button n:if="$maTeam->sysName == $team->getSysName()" class="dropdown-item disabled" type="button"><i class="fa fa-angle-double-right" aria-hidden="true"></i> {$caption}</button>
+                        {/foreach}
                     {/if}
                 </div>
             </li>

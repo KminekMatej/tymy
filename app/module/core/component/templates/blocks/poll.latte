@@ -1,0 +1,13 @@
+<li class="nav-item dropdown" name="polls">
+    {if $voteWarnings > 0}<span class="badge badge-pill badge-danger badge-new">{$voteWarnings}</span>{/if}
+    <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-chart-pie" aria-hidden="true"></i> {_poll.poll,2}</a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+        <button n:if="empty($polls)" class="dropdown-item disabled" type="button"> - {_poll.noPoll} - </button>
+        {if !empty($polls)}
+            <a n:foreach="$polls as $p" class="dropdown-item" href="{plink :Poll:Default: $p->getWebName()}">
+                {if !$p->getVoted() && $p->getCanVote()}<span class="badge badge-danger"><i class="fa fa-info" aria-hidden="true"></i></span>{/if}
+                    {$p->getCaption()}
+            </a>
+        {/if}
+    </div>
+</li>
