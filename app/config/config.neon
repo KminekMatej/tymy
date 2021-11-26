@@ -25,7 +25,7 @@ services:
         Responder: Tymy\Module\Core\Manager\Responder
         MailService: Tymy\Module\Core\Service\MailService
         TranslationManager: Tymy\Module\Core\Manager\TranslationManager(@database.main.context)
-        Supplier: Tymy\App\Model\Supplier(%tapi%, %wwwDir%, %appDir%, %appConfig%)
+        Supplier: Tymy\Module\Core\Model\Supplier(%tapi%, %wwwDir%, %appDir%, %appConfig%)
         FormFactory: Tymy\App\Forms\FormFactory
         SignInFormFactory: Tymy\App\Forms\SignInFormFactory
         SignUpFormFactory: Tymy\App\Forms\SignUpFormFactory
