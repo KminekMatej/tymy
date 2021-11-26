@@ -40,19 +40,4 @@ class DefaultPresenter extends SettingBasePresenter
         $this->template->accessibleSettings = $this->getAccessibleSettings();
     }
 
-    public function createComponentUserConfigForm()
-    {
-        $form = new Form();
-        $form->addSelect("skin", "Skin", $this->supplier->getAllSkins())->setValue($this->supplier->getSkin());
-        $form->addSubmit("save");
-        $form->onSuccess[] = function (Form $form, stdClass $values) {
-            $userNeon = $this->supplier->getUserNeon();
-            $userNeon->skin = $values->skin;
-            $this->supplier->saveUserNeon($this->getUser()->getId(), (array) $userNeon);
-            $this->flashMessage($this->translator->translate("common.alerts.configSaved"));
-            $this->redirect(":Setting:App:");
-        };
-        return $form;
-    }
-
 }

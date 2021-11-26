@@ -1,7 +1,8 @@
 <?php
-
 namespace Tymy\Module\Setting\Presenter\Front;
 
+use Nette\Application\UI\Form;
+use stdClass;
 use Tymy\Module\Attendance\Manager\StatusManager;
 use Tymy\Module\Event\Manager\EventManager;
 use Tymy\Module\Event\Manager\EventTypeManager;
@@ -30,10 +31,14 @@ class AppPresenter extends SettingBasePresenter
     /** @inject */
     public StatusManager $statusManager;
 
-
-    public function actionApp()
+    public function beforeRender()
     {
+        parent::beforeRender();
         $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("settings.application"), "link" => $this->link(":Setting:App:")]]);
+    }
+
+    public function renderDefault()
+    {
         $currentVersion = $this->supplier->getVersion(0);
         $this->template->version = $currentVersion;
         $previousPatch = NULL;
@@ -54,4 +59,18 @@ class AppPresenter extends SettingBasePresenter
         $this->template->allSkins = $this->supplier->getAllSkins();
     }
 
+    public function createComponentUserConfigForm()
+    {
+        $form = new Form();
+        $form->addSelect("skin", "Skin", $this->supplier->getAllSkins())->setValue($this->supplier->getSkin());
+        $form->addSubmit("save");
+        $form->onSuccess[] = function (Form $form, stdClass $values) {
+            $userNeon = $this->supplier->getUserNeon();
+            $userNeon->skin = $values->skin;
+            $this->supplier->saveUserNeon($this->getUser()->getId(), (array) $userNeon);
+            $this->flashMessage($this->translator->translate("common.alerts.configSaved"));
+            $this->redirect(":Setting:App:");
+        };
+        return $form;
+    }
 }
