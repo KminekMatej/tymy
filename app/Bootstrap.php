@@ -21,7 +21,8 @@ class Bootstrap
     {
         // absolute filesystem path to the application root
         define("ROOT_DIR", getenv("ROOT_DIR") ? self::normalizePath(getenv("ROOT_DIR")) : self::normalizePath(__DIR__ . "/.."));
-        define("TEAM_DIR", dirname($_SERVER['SCRIPT_FILENAME'], 2));
+        define("TEAM_DIR", str_replace("//", "/", dirname($_SERVER['SCRIPT_FILENAME'], 2)));
+        
         define('MODULES', array_diff(scandir(self::MODULES_DIR), array('..', '.')));
 
         $configurator = new Configurator;
