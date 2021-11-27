@@ -1,0 +1,11 @@
+<li class="nav-item dropdown" name="files">
+    {*{if $fileWarnings > 0}<span class="badge badge-pill badge-danger badge-new">{$fileWarnings}</span>{/if}*}
+    <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-folder-open" aria-hidden="true"></i> {_file.file,2}</a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+        <button n:if="empty($files)" class="dropdown-item disabled" type="button"> - {_file.noFile} - </button>
+        <a class="dropdown-item" n:foreach="$files as $file" href="{$baseUrl}/download{$file}" target="_blank">
+            <span>{ltrim($file, '/')}</span>
+        </a>
+        <a class="dropdown-item" href="{plink :Debt:Default:new}"><i class="fa fa-plus-circle text-success" aria-hidden="true"></i> {_common.new}</a>
+    </div>
+</li>

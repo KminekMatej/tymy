@@ -94,11 +94,43 @@ class NavbarControl extends Control
 
     private function initFiles(): void
     {
-        $downloadsFolder = TEAM_DIR . "/downloads";
-        $this->template->files = glob($downloadsFolder . "/*");
-        $this->template->usedSpace = disk_total_space($downloadsFolder);
-        \Tracy\Debugger::barDump($this->template->files);
-        \Tracy\Debugger::barDump($this->template->usedSpace);
+        $downloadsFolder = TEAM_DIR . "/download";
+        $this->template->files = array_map(function ($path) use ($downloadsFolder) {
+            return str_replace($downloadsFolder, "", $path);
+        }, glob($downloadsFolder . "/*.*"));
+        $this->template->usedSpace = $this->getDownloadFolderSize();
+    }
+
+    private function getDownloadFolderSize(): int
+    {
+        $downloadsFolder = TEAM_DIR . "/download";
+        $cachedSizeFile = TEAM_DIR . "/temp/cache/download-size.json";
+
+        $size = null;
+        $timestamp = new DateTime();
+
+        if (file_exists($cachedSizeFile)) {
+            $size = intval(file_get_contents($cachedSizeFile));
+            $timestamp = DateTime::createFromFormat("U", (string)filemtime($cachedSizeFile));
+        }
+
+        if ($size === null || $timestamp < new DateTime("- 10 minutes")) {
+            $size = $this->folderSize($downloadsFolder);
+            file_put_contents($cachedSizeFile, $size);
+        }
+
+        return $size;
+    }
+
+    private function folderSize(string $dir): int
+    {
+        $size = 0;
+
+        foreach (glob(rtrim($dir, '/') . '/*', GLOB_NOSORT) as $each) {
+            $size += is_file($each) ? filesize($each) : folderSize($each);
+        }
+        
+        return $size;
     }
 
     private function initSettings(): void
