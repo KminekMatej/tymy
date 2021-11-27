@@ -2,7 +2,6 @@
 
 namespace Tymy\Module\Core\Presenter\Front;
 
-use Tracy\Debugger;
 use Tymy\Module\Debt\Manager\DebtManager;
 use Tymy\Module\Discussion\Manager\DiscussionManager;
 use Tymy\Module\Event\Manager\EventManager;
@@ -38,7 +37,6 @@ class DefaultPresenter extends SecuredPresenter {
     
     public function beforeRender() {
         parent::beforeRender();
-        Debugger::barDump($this->link(":jump", "dev"));
         $this->template->addFilter('lastLogin', function ($lastLogin) {
             $diff = date("U") - strtotime($lastLogin);
             if($diff == 1) return $this->translator->translate("common.lastLogin.secondAgo");
