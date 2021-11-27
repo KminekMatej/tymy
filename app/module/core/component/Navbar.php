@@ -34,7 +34,7 @@ class NavbarControl extends Control
     private TeamManager $teamManager;
     private User $user;
 
-    public function __construct(SecuredPresenter $presenter, PollManager $pollManager, DiscussionManager $discussionManager, EventManager $eventManager, DebtManager $debtManager, UserManager $userManager, MultiaccountManager $multiaccountManager, User $user, TeamManager $teamManager)
+    public function __construct(SecuredPresenter $presenter, Supplier $supplier, PollManager $pollManager, DiscussionManager $discussionManager, EventManager $eventManager, DebtManager $debtManager, UserManager $userManager, MultiaccountManager $multiaccountManager, User $user, TeamManager $teamManager)
     {
         $this->presenter = $presenter;
         $this->discussionManager = $discussionManager;
@@ -43,25 +43,25 @@ class NavbarControl extends Control
         $this->debtManager = $debtManager;
         $this->userManager = $userManager;
         $this->multiaccountManager = $multiaccountManager;
-        $this->supplier = $this->presenter->supplier;
+        $this->supplier = $supplier;
         $this->user = $user;
         $this->teamManager = $teamManager;
         $this->accessibleSettings = $this->presenter->getAccessibleSettings();
     }
 
-    private function multiaccounts()
+    private function initMultiaccounts(): void
     {
         $this->template->multiaccounts = $this->multiaccountManager->getListUserAllowed();
     }
 
-    private function discussions()
+    private function initDiscussions(): void
     {
         $discussions = $this->discussionManager->getListUserAllowed($this->user->getId());
         $this->template->discussions = $discussions;
         $this->template->discussionWarnings = $this->discussionManager->getWarnings($discussions);
     }
 
-    private function debts()
+    private function initDebts(): void
     {
         $debts = $this->debtManager->getListUserAllowed();
         $this->template->debts = $debts;
@@ -69,7 +69,7 @@ class NavbarControl extends Control
         
     }
 
-    private function players()
+    private function initPlayers(): void
     {
         $users = $this->userManager->getList();
         $this->template->counts = $this->userManager->getCounts($users);
@@ -77,14 +77,14 @@ class NavbarControl extends Control
         $this->template->me = $this->userManager->getById($this->user->getId());
     }
 
-    private function polls()
+    private function initPolls(): void
     {
         $polls = $this->pollManager->getListUserAllowed();
         $this->template->polls = $polls;
         $this->template->voteWarnings = $this->pollManager->getWarnings($polls);
     }
 
-    private function events()
+    private function initEvents(): void
     {
         $events = $this->eventManager->getEventsInterval($this->user->getId(), new DateTime(), new DateTime("+ 1 year"));
         $this->template->events = $events;
@@ -92,39 +92,29 @@ class NavbarControl extends Control
         $this->template->eventColors = $this->supplier->getEventColors();
     }
 
-    private function settings()
+    private function initSettings(): void
     {
         $this->template->accessibleSettings = $this->accessibleSettings;
     }
 
     public function render()
     {
-        $template = $this->template;
-        $template->setFile(__DIR__ . '/templates/navbar.latte');
+        $this->template->setFile(__DIR__ . '/templates/navbar.latte');
         $this->template->levels = $this->presenter->getLevelCaptions();
         $this->template->presenterName = $this->presenter->getName();
         $this->template->action = $this->presenter->getAction();
         $this->template->userId = $this->user->getId();
         $this->template->team = $this->teamManager->getTeam();
 
-        //tapi discussions
-        $this->discussions();
-        //tapi players
-        $this->players();
-        //tapi events
-        $this->events();
-        //tapi polls
-        $this->polls();
-        //tapi settings
-        $this->settings();
-        /* //tapi notes
-          $this->notes(); */
-        //tapi multiaccounts
-        $this->multiaccounts();
-        //tapi debts
-        $this->debts();
+        $this->initDiscussions();
+        $this->initPlayers();
+        $this->initEvents();
+        $this->initPolls();
+        $this->initSettings();
+        $this->initMultiaccounts();
+        $this->initDebts();
 
-        $template->render();
+        $this->template->render();
     }
 
     public function handleRefresh()

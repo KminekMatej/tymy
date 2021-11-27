@@ -1,7 +1,3 @@
-#
-# WARNING: it is CRITICAL that this file & directory are NOT accessible directly via a web browser!
-# https://nette.org/security-warning
-#
 application:
         mapping:
             *: Tymy\Module\*\Presenter\Front\*Presenter
@@ -20,11 +16,6 @@ session:
 
 
 services:
-        ManagerFactory: Tymy\Module\Core\Factory\ManagerFactory(@database.main.context, @database.team.context, %team%)
-        Responder: Tymy\Module\Core\Manager\Responder
-        MailService: Tymy\Module\Core\Service\MailService
-        TranslationManager: Tymy\Module\Core\Manager\TranslationManager(@database.main.context)
-        Supplier: Tymy\Module\Core\Model\Supplier(%tapi%, %wwwDir%, %appDir%, %appConfig%)
         FormFactory: Tymy\App\Forms\FormFactory
         SignInFormFactory: Tymy\App\Forms\SignInFormFactory
         SignUpFormFactory: Tymy\App\Forms\SignUpFormFactory
