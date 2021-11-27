@@ -34,7 +34,7 @@ class NavbarControl extends Control
     private TeamManager $teamManager;
     private User $user;
 
-    public function __construct(SecuredPresenter $presenter, Supplier $supplier, PollManager $pollManager, DiscussionManager $discussionManager, EventManager $eventManager, DebtManager $debtManager, UserManager $userManager, MultiaccountManager $multiaccountManager, User $user, TeamManager $teamManager)
+    public function __construct(SecuredPresenter $presenter, PollManager $pollManager, DiscussionManager $discussionManager, EventManager $eventManager, DebtManager $debtManager, UserManager $userManager, MultiaccountManager $multiaccountManager, User $user, TeamManager $teamManager)
     {
         $this->presenter = $presenter;
         $this->discussionManager = $discussionManager;
@@ -43,7 +43,7 @@ class NavbarControl extends Control
         $this->debtManager = $debtManager;
         $this->userManager = $userManager;
         $this->multiaccountManager = $multiaccountManager;
-        $this->supplier = $supplier;
+        $this->supplier = $presenter->supplier;
         $this->user = $user;
         $this->teamManager = $teamManager;
         $this->accessibleSettings = $this->presenter->getAccessibleSettings();
@@ -92,6 +92,15 @@ class NavbarControl extends Control
         $this->template->eventColors = $this->supplier->getEventColors();
     }
 
+    private function initFiles(): void
+    {
+        $downloadsFolder = TEAM_DIR . "/downloads";
+        $this->template->files = glob($downloadsFolder . "/*");
+        $this->template->usedSpace = disk_total_space($downloadsFolder);
+        \Tracy\Debugger::barDump($this->template->files);
+        \Tracy\Debugger::barDump($this->template->usedSpace);
+    }
+
     private function initSettings(): void
     {
         $this->template->accessibleSettings = $this->accessibleSettings;
@@ -113,6 +122,7 @@ class NavbarControl extends Control
         $this->initSettings();
         $this->initMultiaccounts();
         $this->initDebts();
+        $this->initFiles();
 
         $this->template->render();
     }
