@@ -2,7 +2,10 @@
 
 namespace Tymy\Module\Core\Component;
 
+use Kdyby\Translation\Translator;
 use Nette\Application\UI\Control;
+use Nette\Application\UI\Form;
+use Nette\Http\FileUpload;
 use Nette\Security\User;
 use Nette\Utils\DateTime;
 use Tymy\Module\Core\Model\Supplier;
@@ -14,6 +17,7 @@ use Tymy\Module\Multiaccount\Manager\MultiaccountManager;
 use Tymy\Module\Poll\Manager\PollManager;
 use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\User\Manager\UserManager;
+use const TEAM_DIR;
 
 /**
  * Description of Navbar
@@ -22,6 +26,9 @@ use Tymy\Module\User\Manager\UserManager;
  */
 class NavbarControl extends Control
 {
+
+    private const DOWNLOAD_DIR = TEAM_DIR . "/download";
+
     private SecuredPresenter $presenter;
     private Supplier $supplier;
     private array $accessibleSettings;
@@ -32,6 +39,7 @@ class NavbarControl extends Control
     private UserManager $userManager;
     private MultiaccountManager $multiaccountManager;
     private TeamManager $teamManager;
+    private Translator $translator;
     private User $user;
 
     public function __construct(SecuredPresenter $presenter, PollManager $pollManager, DiscussionManager $discussionManager, EventManager $eventManager, DebtManager $debtManager, UserManager $userManager, MultiaccountManager $multiaccountManager, User $user, TeamManager $teamManager)
@@ -47,6 +55,7 @@ class NavbarControl extends Control
         $this->user = $user;
         $this->teamManager = $teamManager;
         $this->accessibleSettings = $this->presenter->getAccessibleSettings();
+        $this->translator = $this->presenter->translator;
     }
 
     private function initMultiaccounts(): void
@@ -94,16 +103,35 @@ class NavbarControl extends Control
 
     private function initFiles(): void
     {
-        $downloadsFolder = TEAM_DIR . "/download";
-        $this->template->files = array_map(function ($path) use ($downloadsFolder) {
-            return str_replace($downloadsFolder, "", $path);
-        }, glob($downloadsFolder . "/*.*"));
+        $this->template->files = array_map(function ($path) {
+            return str_replace(self::DOWNLOAD_DIR, "", $path);
+        }, glob(self::DOWNLOAD_DIR . "/*.*"));
         $this->template->usedSpace = $this->getDownloadFolderSize();
+    }
+
+    public function createComponentFileUploadForm(): Form
+    {
+        //create file upload ability
+        $form = new Form;
+        $form->addUpload("file", $this->translator->translate("file.file"));
+        $form->addSubmit("save", "Nahrát");
+        $form->onSuccess[] = [$this, "fileLoad"];
+        
+        return $form;
+    }
+
+    public function fileLoad(Form $form, $values)
+    {
+        /* @var $file FileUpload */
+        $file = $values['file'];
+
+        if ($file->isOk()) {
+            $file->move(self::DOWNLOAD_DIR . '/' . $file_name);
+        }
     }
 
     private function getDownloadFolderSize(): int
     {
-        $downloadsFolder = TEAM_DIR . "/download";
         $cachedSizeFile = TEAM_DIR . "/temp/cache/download-size.json";
 
         $size = null;
@@ -115,7 +143,7 @@ class NavbarControl extends Control
         }
 
         if ($size === null || $timestamp < new DateTime("- 10 minutes")) {
-            $size = $this->folderSize($downloadsFolder);
+            $size = $this->folderSize(self::DOWNLOAD_DIR);
             file_put_contents($cachedSizeFile, $size);
         }
 
