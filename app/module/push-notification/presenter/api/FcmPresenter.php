@@ -16,18 +16,18 @@ class FcmPresenter extends SecuredPresenter
         $this->manager = $manager;
     }
 
-    public function actionDefault()
+    public function actionDefault($resourceId)
     {
         switch ($this->getRequest()->getMethod()) {
             case 'POST':
-                $this->requestPost();
+                $this->requestPost($resourceId);
             // no break
         }
 
         $this->respondNotAllowed();
     }
 
-    protected function requestPost()
+    protected function requestPost($resourceId)
     {
         if (empty($this->requestData)) {
             $this->respondBadRequest("Missing request data");
