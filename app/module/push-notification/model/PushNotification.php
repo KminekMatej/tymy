@@ -65,8 +65,6 @@ class PushNotification implements \JsonSerializable
             "teamId" => $this->teamId,
             "title" => $this->title,
             "message" => $this->message,
-            "image" => $this->imageUrl,
-            "badge" => $this->badge,
         ];
 
         if (isset($this->imageUrl)) {
