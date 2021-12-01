@@ -60,7 +60,7 @@ class FirebasePush
 
         $response = curl_exec($ch);
         $info = curl_getinfo($ch);
-        \Tracy\Debugger::barDump([$response, $info]);
+
         if ($response === false || $info["http_code"] !== 200) {
             //todo: handle error
         }
