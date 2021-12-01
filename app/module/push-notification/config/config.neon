@@ -8,6 +8,6 @@ services:
   NotificationGenerator: Tymy\Module\PushNotification\Manager\NotificationGenerator
   WebPush: Minishlink\WebPush\WebPush(%web-push%, [], 6, [verify: false])
   ApplePush: Tymy\Module\PushNotification\Manager\ApplePush
-  AndroidPush: Tymy\Module\PushNotification\Manager\AndroidPush(%fcm%)
+  FirebasePush: Tymy\Module\PushNotification\Manager\FirebasePush(%fcm%)
   JwtContainer: Lcobucci\JWT\Configuration::forAsymmetricSigner(Lcobucci\JWT\Signer\Rsa\Sha256(), Lcobucci\JWT\Signer\Key\InMemory::file(%apns.privateKey%), Lcobucci\JWT\Signer\Key\InMemory::file(%apns.publicKey%))
 
