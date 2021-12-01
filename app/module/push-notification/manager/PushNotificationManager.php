@@ -23,14 +23,14 @@ class PushNotificationManager extends BaseManager
 
     private WebPush $webPush;
     private ApplePush $applePush;
-    private AndroidPush $androidPush;
+    private FirebasePush $firebasePush;
 
-    public function __construct(ManagerFactory $managerFactory, WebPush $webPush, ApplePush $applePush, AndroidPush $androidPush)
+    public function __construct(ManagerFactory $managerFactory, WebPush $webPush, ApplePush $applePush, FirebasePush $androidPush)
     {
         parent::__construct($managerFactory);
         $this->webPush = $webPush;
         $this->applePush = $applePush;
-        $this->androidPush = $androidPush;
+        $this->firebasePush = $androidPush;
     }
 
     /**
@@ -173,10 +173,10 @@ class PushNotificationManager extends BaseManager
      * @param Subscriber[] $subscribers
      * @todo
      */
-    private function androidPushBulk(PushNotification $notification, array $subscribers)
+    private function firebasePushBulk(PushNotification $notification, array $subscribers)
     {
         try {
-            $this->androidPush->sendBulkNotifications($subscribers, $notification);
+            $this->firebasePush->sendBulkNotifications($subscribers, $notification);
             //TODO: handle detecting expired subsriptions here
         } catch (ErrorException $e) {
             Debugger::log('FCM Push ErrorException: ' . $e->getMessage(), ILogger::EXCEPTION);
@@ -193,7 +193,7 @@ class PushNotificationManager extends BaseManager
     public function notifyUsers(PushNotification $notification, array $userIds): void
     {
         $appleSubscriptions = [];
-        $androidSubscriptions = [];
+        $firebaseSubscriptions = [];
         $webSubscriptions = [];
 
         foreach ($this->getByUsers($userIds) as $subscriber) {
@@ -206,7 +206,7 @@ class PushNotificationManager extends BaseManager
                     $appleSubscriptions[] = $subscriber;
                     break;
                 case Subscriber::TYPE_FCM:
-                    $androidSubscriptions[] = $subscriber;
+                    $firebaseSubscriptions[] = $subscriber;
                     break;
             }
         }
@@ -219,8 +219,8 @@ class PushNotificationManager extends BaseManager
             $this->applePushBulk($notification, $appleSubscriptions);
         }
 
-        if (!empty($androidSubscriptions)) {
-            $this->androidPushBulk($notification, $androidSubscriptions);
+        if (!empty($firebaseSubscriptions)) {
+            $this->firebasePushBulk($notification, $firebaseSubscriptions);
         }
     }
 
@@ -265,7 +265,7 @@ class PushNotificationManager extends BaseManager
         }
 
         if (!empty($androidSubscriptions)) {
-            $this->androidPushBulk($notification, $androidSubscriptions);
+            $this->firebasePushBulk($notification, $androidSubscriptions);
         }
     }
 

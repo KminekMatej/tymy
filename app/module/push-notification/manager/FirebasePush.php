@@ -10,7 +10,7 @@ use Tymy\Module\Team\Manager\TeamManager;
  *
  * @author kminekmatej, 22. 11. 2021, 12:28:27
  */
-class AndroidPush
+class FirebasePush
 {
 
     private const URL = "https://fcm.googleapis.com/fcm/send";
@@ -27,18 +27,16 @@ class AndroidPush
     /**
      * Send multiple notifications using FCM
      * 
-     * @param array $subscribers
+     * @param string[] $deviceIds
      * @param PushNotification $pushNotification
      * @return void
      */
-    public function sendBulkNotifications(array $subscribers, PushNotification $pushNotification): void
+    public function sendBulkNotifications(array $deviceIds, PushNotification $pushNotification): void
     {
-        if (empty($subscribers)) {
+        if (empty($deviceIds)) {
             return;
         }
 
-
-        $team = $this->teamManager->getTeam();
         $fcmApiKey = $this->fcm["key"];
 
         $ch = curl_init();
@@ -50,29 +48,23 @@ class AndroidPush
         ]);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        $payload = json_encode([
+            'registration_ids' => $deviceIds,
+            'data' => [
+                'message' => $pushNotification->getMessage(),
+                'title' => $pushNotification->getTitle()
+            ]
+        ]);
 
-        foreach ($subscribers as $subscriber) {
-            if ($subscriber->getType() !== Subscriber::TYPE_FCM) {
-                return;
-            }
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
 
-            $payload = json_encode([
-                'registration_ids' => $subscriber->getSubscription(),
-                'data' => [
-                    'message' => $pushNotification->getMessage(),
-                    'title' => $pushNotification->getTitle()
-                ]
-            ]);
+        $response = curl_exec($ch);
+        $info = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-
-            $response = curl_exec($ch);
-            $info = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-            if ($response === false || $info["http_code"] !== 200) {
-                //todo: handle error
-            }
+        if ($response === false || $info["http_code"] !== 200) {
+            //todo: handle error
         }
+
         curl_close($ch);
     }
 }
