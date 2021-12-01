@@ -25,12 +25,12 @@ class PushNotificationManager extends BaseManager
     private ApplePush $applePush;
     private FirebasePush $firebasePush;
 
-    public function __construct(ManagerFactory $managerFactory, WebPush $webPush, ApplePush $applePush, FirebasePush $androidPush)
+    public function __construct(ManagerFactory $managerFactory, WebPush $webPush, ApplePush $applePush, FirebasePush $firebasePush)
     {
         parent::__construct($managerFactory);
         $this->webPush = $webPush;
         $this->applePush = $applePush;
-        $this->firebasePush = $androidPush;
+        $this->firebasePush = $firebasePush;
     }
 
     /**
