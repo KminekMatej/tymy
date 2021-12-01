@@ -59,8 +59,8 @@ class FirebasePush
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
 
         $response = curl_exec($ch);
-        $info = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
+        $info = curl_getinfo($ch);
+        \Tracy\Debugger::barDump([$response, $info]);
         if ($response === false || $info["http_code"] !== 200) {
             //todo: handle error
         }
