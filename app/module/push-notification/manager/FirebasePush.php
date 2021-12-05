@@ -1,9 +1,11 @@
 <?php
 namespace Tymy\Module\PushNotification\Manager;
 
+use Tracy\Debugger;
+use Tracy\ILogger;
 use Tymy\Module\PushNotification\Model\PushNotification;
-use Tymy\Module\PushNotification\Model\Subscriber;
 use Tymy\Module\Team\Manager\TeamManager;
+use function GuzzleHttp\json_encode;
 
 /**
  * Description of AndroidPush
@@ -60,9 +62,10 @@ class FirebasePush
 
         $response = curl_exec($ch);
         $info = curl_getinfo($ch);
-
+        
         if ($response === false || $info["http_code"] !== 200) {
-            //todo: handle error
+            Debugger::log($response, ILogger::WARNING);
+            Debugger::log($info, ILogger::WARNING);
         }
 
         curl_close($ch);
