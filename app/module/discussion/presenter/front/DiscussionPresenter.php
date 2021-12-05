@@ -46,7 +46,7 @@ class DiscussionPresenter extends SecuredPresenter
         $discussionPosts = $this->postManager->mode($d->getId(), $page, "html", $search, $suser, $jump2date);
 
         //set users
-        $this->template->userList = $this->userManager->getList();
+        $this->template->userList = $this->userManager->getIdList();
 
         $this->setLevelCaptions(["2" => ["caption" => $d->getCaption(), "link" => $this->link(":Discussion:Discussion:", [$d->getWebName()])]]);
 
