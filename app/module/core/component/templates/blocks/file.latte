@@ -6,12 +6,8 @@
         <a class="dropdown-item" n:foreach="$files as $file" href="{$baseUrl}/download{$file}" target="_blank">
             <span>{ltrim($file, '/')}</span>
         </a>
-        <li class="dropdown-divider">
-            {form fileUploadForm}
-                <a class="dropdown-item" href="asd">
-                    <i class="fa fa-plus-circle text-success" aria-hidden="true"></i> {_common.new}
-                </a>
-            {/form}
-        </li>
+        <a class="dropdown-item" href="#">
+            <i class="fa fa-plus-circle text-success" aria-hidden="true"></i> {_common.new}
+        </a>
     </div>
 </li>
