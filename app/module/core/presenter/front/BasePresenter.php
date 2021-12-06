@@ -30,7 +30,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
     
     /** @inject */
     public TeamManager $teamManager;
-    private Team $team;
+    protected Team $team;
 
 	protected function startup()
     {
