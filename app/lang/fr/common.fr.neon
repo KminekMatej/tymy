@@ -30,6 +30,7 @@ or: ou
 day: jour
 week: semaine
 month: moi
+name: Nom
 navigationBlock:
     first: premier
     previous: précédent

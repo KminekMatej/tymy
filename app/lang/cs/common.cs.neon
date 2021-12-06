@@ -30,6 +30,7 @@ or: nebo
 day: Den
 week: Týden
 month: Měsíc
+name: Název
 navigationBlock:
     first: První
     previous: Předchozí

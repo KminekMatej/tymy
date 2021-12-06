@@ -2,3 +2,9 @@ file: File|Files
 noFile: No file
 fileList: Files list
 files: files
+usedSpace: Used
+folder: Folder|Folders
+allFiles: All files
+upload: Upload file...
+mkdir: New folder
+size: Size

@@ -30,6 +30,7 @@ or: or
 day: Day
 week: Week
 month: Month
+name: Name
 navigationBlock:
     first: First
     previous: Previous
