@@ -8,8 +8,8 @@
 
 {foreach [strtolower($presenterParts[0]), strtolower($presenterParts[1]), strtolower($presenter->getView())] as $part}
     {var $partUc = ucFirst($part)}
-    {var $partPath = "{$wwwDir}/js/{$module}/{$part}.js"}
-    {var $partUcPath = "{$wwwDir}/js/{$module}/{$partUc}.js"}
+    {var $partPath = "{$wwwDir}/public/js/{$module}/{$part}.js"}
+    {var $partUcPath = "{$wwwDir}/public/js/{$module}/{$partUc}.js"}
     {var $partScript = "{$publicPath}/js/{$module}/{$part}.js"}
     {var $partUcScript = "{$publicPath}/js/{$module}/{$partUc}.js"}
     {var $scriptPath = ucFirst($part)}
@@ -27,8 +27,8 @@
 
 {foreach [strtolower($presenterParts[0]), strtolower($presenterParts[1]), strtolower($presenter->getView())] as $part}
     {var $partUc = ucFirst($part)}
-    {var $partPath = "{$wwwDir}/skins/{$skin}/css/{$module}/{$part}.css"}
-    {var $partUcPath = "{$wwwDir}/skins/{$skin}/css/{$module}/{$partUc}.css"}
+    {var $partPath = "{$wwwDir}/public/skins/{$skin}/css/{$module}/{$part}.css"}
+    {var $partUcPath = "{$wwwDir}/public/skins/{$skin}/css/{$module}/{$partUc}.css"}
     {var $partScript = "{$publicPath}/skins/{$skin}/css/{$module}/{$part}.css"}
     {var $partUcScript = "{$publicPath}/skins/{$skin}/css/{$module}/{$partUc}.css"}
     {var $scriptPath = ucFirst($part)}
