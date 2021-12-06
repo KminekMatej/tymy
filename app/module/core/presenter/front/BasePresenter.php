@@ -39,7 +39,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 
         $this->template->locale = $this->translator->getLocale();
 
-        $this->template->publicPath = $this->getHttpRequest()->getUrl()->getBasePath() . "/public";
+        $this->template->publicPath = $this->getHttpRequest()->getUrl()->getBasePath() . "public";
 
         $this->template->js = Debugger::$productionMode ? "min.js" : "js";
         $this->template->css = Debugger::$productionMode ? "min.css" : "css";
