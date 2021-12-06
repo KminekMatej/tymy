@@ -197,4 +197,18 @@ class TeamManager extends BaseManager
 
         return $this->getById($resourceId);
     }
+
+    /**
+     * Get maximum available downloads folder size
+     * 
+     * @param Team $team
+     * @return int
+     */
+    public function getMaxDownloadSize(Team $team): int
+    {
+        $bytesFree = 1024 * 1024 * 10; //10 MB for free teams
+        $bytesFull = 1024 * 1024 * 100; //100 MB for full teams
+
+        return strpos($team->getTariff, "FULL") !== false ? $bytesFull : $bytesFree;
+    }
 }
