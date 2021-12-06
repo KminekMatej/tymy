@@ -36,12 +36,14 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
         $this->template->componentsDir = Bootstrap::MODULES_DIR . "/core/presenter/templates/components";
         $this->template->setTranslator($this->translator);
         date_default_timezone_set('Europe/Prague');
-        
+
         $this->template->locale = $this->translator->getLocale();
-        
+
+        $this->template->publicPath = $this->getHttpRequest()->getUrl()->getBasePath() . "/public";
+
         $this->template->js = Debugger::$productionMode ? "min.js" : "js";
         $this->template->css = Debugger::$productionMode ? "min.css" : "css";
-        
+
         $this->template->team = $this->teamManager->getTeam();
         $this->template->tymyRoot = $this->supplier->getTymyRoot();
         $this->template->apiRoot = $this->supplier->getApiRoot();
