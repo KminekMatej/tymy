@@ -1,5 +1,5 @@
 {**
- * @param string   $basePath web base path
+ * @param string   $publicPath web base path
  * @param array    $flashes  flash messages
 *}
 <!DOCTYPE html>
@@ -9,31 +9,40 @@
         <meta name="author" content="Matej Kminek">
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        <link rel="apple-touch-icon" sizes="180x180" href="{$basePath}/apple-touch-icon.png?ver={$appver}">
-        <link rel="icon" type="image/png" sizes="32x32" href="{$basePath}/favicon-32x32.png?ver={$appver}">
-        <link rel="icon" type="image/png" sizes="16x16" href="{$basePath}/favicon-16x16.png?ver={$appver}">
-        <link rel="manifest" href="{$basePath}/site.webmanifest?ver={$appver}">
-        <link rel="mask-icon" href="{$basePath}/safari-pinned-tab.svg?ver={$appver}" color="#c21214">
+        <link rel="apple-touch-icon" sizes="180x180" href="{$publicPath}/apple-touch-icon.png?ver={$appver}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{$publicPath}/favicon-32x32.png?ver={$appver}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{$publicPath}/favicon-16x16.png?ver={$appver}">
+        <link rel="manifest" href="{$publicPath}/site.webmanifest?ver={$appver}">
+        <link rel="mask-icon" href="{$publicPath}/safari-pinned-tab.svg?ver={$appver}" color="#c21214">
         <meta name="msapplication-TileColor" content="#da532c">
-        <meta name="msapplication-config" content="{$basePath}/browserconfig.xml?ver={$appver}" />
+        <meta name="msapplication-config" content="{$publicPath}/browserconfig.xml?ver={$appver}" />
         <meta name="theme-color" content="#ffffff">
 
         <title>{ifset $title}{$title} | {/ifset}{$team->getName() ?: $team->getSysName()|firstUpper} | Tymy.CZ v2</title>
 
         {block styles}
-        <link rel="stylesheet" href="{$basePath}/resources/bootstrap4/css/bootstrap.{$css}?ver={$appver}" />
-        <link rel="stylesheet" href="{$basePath}/resources/fontawesome/css/fontawesome-all.{$css}?ver={$appver}" />
+        <link rel="stylesheet" href="{$publicPath}/resources/bootstrap4/css/bootstrap.{$css}?ver={$appver}" />
+        <link rel="stylesheet" href="{$publicPath}/resources/fontawesome/css/fontawesome-all.{$css}?ver={$appver}" />
         <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet" />
-        <link rel="stylesheet" href="{$basePath}/skins/{$skin}/css/style.css?ver={$appver}" />
+        <link rel="stylesheet" href="{$publicPath}/skins/{$skin}/css/style.css?ver={$appver}" />
         {/block}
         {block scripts}
 
-        <script src="{$basePath}/resources/popper/umd/popper.{$js}?ver={$appver}"></script>
-        <script src="{$basePath}/resources/fullcalendar/lib/moment.min.js?ver={$appver}"></script>
-        <script src="{$basePath}/resources/jQuery/jquery-3.2.1.{$js}?ver={$appver}"></script>
-        <script src="{$basePath}/resources/bootstrap4/js/bootstrap.{$js}?ver={$appver}"></script>
-        <script src="{$basePath}/js/nette.ajax.js?ver={$appver}"></script>
-        <script defer src="{$basePath}/resources/fontawesome/js/fontawesome-all.{$js}?ver={$appver}"></script>
+        <script src="{$publicPath}/resources/popper/umd/popper.{$js}?ver={$appver}"></script>
+        <script src="{$publicPath}/resources/fullcalendar/lib/moment.min.js?ver={$appver}"></script>
+        <script src="{$publicPath}/resources/jQuery/jquery-3.2.1.{$js}?ver={$appver}"></script>
+        <script src="{$publicPath}/resources/bootstrap4/js/bootstrap.{$js}?ver={$appver}"></script>
+        <script src="{$publicPath}/resources/fileUpload/functions.js?ver={$appver}" type="text/javascript"></script>
+        <script src="{$publicPath}/resources/fileUpload/js/vendor/jquery.ui.widget.js" type="text/javascript"></script>
+        <script src="{$publicPath}/resources/fileUpload/js/load-image.all.min.js" type="text/javascript"></script>
+        <script src="{$publicPath}/resources/fileUpload/js/jquery.fileupload.js" type="text/javascript"></script>
+        <script src="{$publicPath}/resources/fileUpload/js/jquery.fileupload-process.js" type="text/javascript"></script>
+        <script src="{$publicPath}/resources/fileUpload/js/jquery.fileupload-image.js" type="text/javascript"></script>
+        <script src="{$publicPath}/resources/fileUpload/js/jquery.fileupload-video.js" type="text/javascript"></script>
+        <script src="{$publicPath}/resources/fileUpload/controller.js" type="text/javascript"></script>
+                
+        <script src="{$publicPath}/js/nette.ajax.js?ver={$appver}"></script>
+        <script defer src="{$publicPath}/resources/fontawesome/js/fontawesome-all.{$js}?ver={$appver}"></script>
         {/block}
 
         {block head}{/block}
@@ -41,7 +50,7 @@
 
     <body>
         {var $skinLogoFile = "{$wwwDir}/skins/{$skin}/img/skin-logo.png"}
-        <img src="{$basePath}/skins/{$skin}/img/skin-logo.png?ver={$appver}" class="skin-logo" n:if="file_exists($skinLogoFile)">
+        <img src="{$publicPath}/skins/{$skin}/img/skin-logo.png?ver={$appver}" class="skin-logo" n:if="file_exists($skinLogoFile)">
         {block navbar}{/block}
         {snippet flashes}
         <div n:if="$flashes" class="container">
