@@ -26,13 +26,48 @@ class DefaultPresenter extends SecuredPresenter
         parent::beforeRender();
         $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("file.file", 2), "link" => $this->link(":File:Default:")]]);
         $this->initFileStats();
+
         $this->template->addFilter('filesize', function ($sizeInBytes) {
             return $this->formatBytes($sizeInBytes);
+        });
+
+        $this->template->addFilter('filetype', function ($filename) {
+            $mime = mime_content_type($filename);
+            switch (true) {
+                case array_key_exists($mime, UploadFilter::getArchiveMimeTypes()):
+                    return "ARCHIVE";
+                    break;
+                case array_key_exists($mime, UploadFilter::getAudioMimeTypes()):
+                    return "AUDIO";
+                    break;
+                case array_key_exists($mime, UploadFilter::getDocumentMimeTypes()):
+                    return UploadFilter::getDocumentMimeTypes()[$mime] ?? "DOCUMENT";   //separate pdf, xls etc.
+                    break;
+                case array_key_exists($mime, UploadFilter::getImageMimeTypes()):
+                    return "IMAGE";
+                    break;
+                default:
+                    return "OTHER";
+                    break;
+            }
         });
     }
 
     public function renderDefault(string $folder = "/")
     {
+        $folderNoSeparators = trim($folder, "/");
+        $i = 3;
+        $folderLink = "";
+        $parentFolder = "";
+        $folderParts = explode("/", $folder);
+        foreach ($folderParts as $folderPart) {
+            $parentFolder = $folderLink;
+            $folderLink .= "$folderPart";
+            $this->setLevelCaptions([$i => ["caption" => $folderPart, "link" => $this->link(":File:Default:", $folderLink)]]);
+            $folderLink .= "/";
+            $i++;
+        }
+
         $usedSpace = $this->fileStats["usedSpace"];
         $maxSpace = $this->teamManager->getMaxDownloadSize($this->team);
 
@@ -48,10 +83,13 @@ class DefaultPresenter extends SecuredPresenter
         $this->template->bluePercent = $blue;
         $this->template->yellPercent = $yell;
         $this->template->redPercent = $red;
+        $this->template->locale = $this->translator->getLocale();
 
-        $this->template->folder = $folder;
+        $this->template->folder = $folderNoSeparators;
+        array_pop($folderParts);
+        $this->template->parentFolder = join("/", $folderParts);
         $this->template->fileTypes = $this->fileStats["fileTypes"];
-        $this->template->contents = $this->getContents($folder);
+        $this->template->contents = $this->getContents("/" . $folderNoSeparators);
     }
 
     /**
@@ -62,8 +100,7 @@ class DefaultPresenter extends SecuredPresenter
      */
     private function getContents(string $folder): array
     {
-        $contents = glob(FileUploadHandler::DOWNLOAD_DIR . $folder . "*");
-
+        $contents = glob(FileUploadHandler::DOWNLOAD_DIR . $folder . "/*");
         $arr = [
             "contents" => $contents,
             "dirs" => [],
@@ -72,7 +109,11 @@ class DefaultPresenter extends SecuredPresenter
 
         foreach ($contents as $filename) {
             if (is_dir($filename)) {
-                $arr["dirs"][] = $filename;
+                $arr["dirs"][] = [
+                    "name" => $filename,
+                    "size" => $this->folderSize($filename),
+                    "count" => count(array_filter(glob("$filename/*"), 'is_file')),
+                ];
             } elseif (is_file($filename)) {
                 $arr["files"][] = $filename;
             }
@@ -178,7 +219,7 @@ class DefaultPresenter extends SecuredPresenter
         $size = 0;
 
         foreach (glob(rtrim($dir, '/') . '/*', GLOB_NOSORT) as $each) {
-            $size += is_file($each) ? filesize($each) : folderSize($each);
+            $size += is_file($each) ? filesize($each) : $this->folderSize($each);
         }
 
         return $size;
@@ -207,5 +248,36 @@ class DefaultPresenter extends SecuredPresenter
         $bytes /= (1 << (10 * $pow));
 
         return round($bytes, $precision) . ' ' . $units[$pow];
+    }
+    
+    public function handleDelete(string $folder = "/", string $filename)
+    {
+        $sanitized = trim($filename, "/. ");
+        $filepath = FileUploadHandler::DOWNLOAD_DIR . "/" . $filename;
+
+        if(is_file($filepath) || is_link($filepath)){
+            unlink($filepath);
+        } elseif(is_dir($filepath)){
+            $this->rrmdir($filepath);
+        }
+    }
+
+    private function rrmdir($dir)
+    {
+        if (is_link($dir)) {
+            unlink($dir);
+        } else if (is_dir($dir)) {
+            $objects = scandir($dir);
+            foreach ($objects as $object) {
+                if ($object != "." && $object != "..") {
+                    if (is_dir($dir . "/" . $object))
+                        $this->rrmdir($dir . "/" . $object);
+                    else {
+                        unlink($dir . "/" . $object);
+                    }
+                }
+            }
+            rmdir($dir);
+        }
     }
 }

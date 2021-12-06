@@ -8,3 +8,4 @@ allFiles: Tous les fichiers
 upload: Téléverser un fichier...
 mkdir: Nouveau dossier
 size: Taille
+confirmDelete: Vraiment supprimer le fichier ?

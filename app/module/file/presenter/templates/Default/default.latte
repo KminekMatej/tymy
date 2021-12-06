@@ -54,160 +54,105 @@
                             </div>
                         </div>
                     </div>
-                            
-                    <h5>{_file.folder|2}</h5>
-                    <div class="row mt-3">
-                        <div class="col-12 col-lg-4">
+
+                            <div class="row mt-3">
+                        <div class="col-12 col-lg-4" n:foreach="$contents['dirs'] as $dir">
                             <div class="card shadow-none border radius-15">
-                                <div class="card-body">
+                                <a class="card-body" n:href=":File:Default: folder => $folder . '/' . basename($dir['name'])">
                                     <div class="d-flex align-items-center">
-                                        <div class="font-30 text-primary"><i class="bx bxs-folder"></i>
-                                        </div>
-                                        <div class="user-groups ms-auto">
-                                            <img src="https://bootdey.com/img/Content/avatar/avatar1.png" width="35" height="35" class="rounded-circle" alt="">
-                                            <img src="https://bootdey.com/img/Content/avatar/avatar2.png" width="35" height="35" class="rounded-circle" alt="">
-                                        </div>
-                                        <div class="user-plus">+</div>
+                                        <div class="text-warning" style="font-size: 30px"><i class="fas fa-folder"></i></div>
                                     </div>
-                                    <h6 class="mb-0 text-primary">Analytics</h6>
-                                    <small>15 {_file.usedSpace}</small>
-                                </div>
+                                    <h6 class="mb-0 text-primary">{basename($dir['name'])}</h6>
+                                    <small>
+                                        {$dir['count']} 
+                                        {if $locale == 'cs'}
+                                            {if $dir['count'] == 0}Souborů{elseif $dir['count'] == 1}Soubor{elseif $dir['count'] < 5}Soubory{else}Souborů{/if}
+                                        {else}
+                                            {_file.file,2}
+                                        {/if}
+                                    </small>
+                                </a>
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="d-flex align-items-center">
-                        <div>
-                            <h5 class="mb-0">{_file.allFiles}</h5>
-                        </div>
-                    </div>
+
                     <div class="table-responsive mt-3">
                         <table class="table table-striped table-hover table-sm mb-0">
                             <thead>
                                 <tr>
-                                    <th>{_common.name} <i class="bx bx-up-arrow-alt ms-2"></i>
-                                    </th>
+                                    <th>{_common.name} <i class="bx bx-up-arrow-alt ms-2"></i></th>
                                     <th>{_file.size}</th>
                                     <th>{_file.uploaded}</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>
+                                <tr n:if="!empty($folder)">
+                                    <td colspan="4" class="text-center">
                                         <div class="d-flex align-items-center">
-                                            <div><i class="bx bxs-file-pdf me-2 font-24 text-danger"></i>
-                                            </div>
-                                            <div class="font-weight-bold text-danger">Competitor Analysis Template</div>
+                                            <i class="fas mr-2 font-24 fa-level-up-alt"></i>
+                                            <a class="font-weight-bold" n:href=":File:Default: $parentFolder">..</a>
                                         </div>
-                                    </td>
-                                    <td>Only you</td>
-                                    <td>Sep 3, 2019</td>
-                                    <td><i class="fa fa-ellipsis-h font-24"></i>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div><i class="bx bxs-file me-2 font-24 text-primary"></i>
-                                            </div>
-                                            <div class="font-weight-bold text-primary">How to Create a Case Study</div>
-                                        </div>
-                                    </td>
-                                    <td>3 members</td>
-                                    <td>Jun 12, 2019</td>
-                                    <td><i class="fa fa-ellipsis-h font-24"></i>
+                                <tr n:if="empty($contents['files'])">
+                                    <td colspan="4" class="text-center">
+                                        - {_file.noFile} -
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr n:foreach="$contents['files'] as $file">
+                                    {var $filetype = ($file|filetype)}
+                                    {switch $filetype}
+                                    {case "ARCHIVE"}
+                                    {var $fileClass = 'fa-file-archive'}
+                                    {var $fileColor = 'text-light'}
+                                    {case "AUDIO"}
+                                    {var $fileClass = 'fa-file-audio'}
+                                    {var $fileColor = 'text-light'}
+                                    {case "VIDEO"}
+                                    {var $fileClass = 'fa-file-video'}
+                                    {var $fileColor = 'text-dark'}
+                                    {case "xls"}
+                                    {case "xlsx"}
+                                    {var $fileClass = 'fa-file-excel'}
+                                    {var $fileColor = 'text-success'}
+                                    {case "pdf"}
+                                    {var $fileClass = 'fa-file-pdf'}
+                                    {var $fileColor = 'text-primary'}
+                                    {case "doc"}
+                                    {case "docx"}
+                                    {var $fileClass = 'fa-file-word'}
+                                    {var $fileColor = 'text-primary'}
+                                    {case "ppt"}
+                                    {case "pptx"}
+                                    {var $fileClass = 'fa-file-powerpoint'}
+                                    {var $fileColor = 'text-danger'}
+                                    {case "DOCUMENT"}
+                                    {var $fileClass = 'fa-file-alt'}
+                                    {var $fileColor = 'text-secondary'}
+                                    {case "IMAGE"}
+                                    {var $fileClass = 'fa-file-image'}
+                                    {var $fileColor = 'text-warning'}
+                                    {default}
+                                    {var $fileClass = 'fa-file'}
+                                    {var $fileColor = ''}
+                                    {/switch}
                                     <td>
                                         <div class="d-flex align-items-center">
-                                            <div><i class="bx bxs-file me-2 font-24 text-primary"></i>
-                                            </div>
-                                            <div class="font-weight-bold text-primary">Landing Page Structure</div>
+                                            <i class="fas mr-2 font-24 {$fileClass} {$fileColor}"></i>
+                                            <a n:class="$fileColor ? font-weight-bold" href="{$basePath}/download{$folder}{basename($file)}" target="_blank">{basename($file)}</a>
                                         </div>
                                     </td>
-                                    <td>10 members</td>
-                                    <td>Jul 17, 2019</td>
-                                    <td><i class="fa fa-ellipsis-h font-24"></i>
-                                    </td>
-                                </tr>
-                                <tr>
+                                    <td>{filesize($file)|filesize}</td>
+                                    <td>{filemtime($file)|date:'j.n.Y H:i:s'}</td>
                                     <td>
-                                        <div class="d-flex align-items-center">
-                                            <div><i class="bx bxs-file-pdf me-2 font-24 text-danger"></i>
+                                        <div class="btn-group">
+                                            <i class="fa fa-ellipsis-h font-24" data-toggle="dropdown" data-display="static" aria-expanded="false" style="cursor: pointer"></i>
+                                            <div class="dropdown-menu dropdown-menu-lg-right">
+                                                <a class="dropdown-item" onclick="return confirm({_file.confirmDelete})" type="button" n:href="delete! folder => $folder, filename => basename($file)">{_common.delete}</a>
                                             </div>
-                                            <div class="font-weight-bold text-danger">Meeting Report</div>
                                         </div>
-                                    </td>
-                                    <td>5 members</td>
-                                    <td>Aug 28, 2019</td>
-                                    <td><i class="fa fa-ellipsis-h font-24"></i>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div><i class="bx bxs-file me-2 font-24 text-primary"></i>
-                                            </div>
-                                            <div class="font-weight-bold text-primary">Project Documents</div>
-                                        </div>
-                                    </td>
-                                    <td>Only you</td>
-                                    <td>Aug 17, 2019</td>
-                                    <td><i class="fa fa-ellipsis-h font-24"></i>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div><i class="bx bxs-file-doc me-2 font-24 text-success"></i>
-                                            </div>
-                                            <div class="font-weight-bold text-success">Review Checklist Template</div>
-                                        </div>
-                                    </td>
-                                    <td>7 members</td>
-                                    <td>Sep 8, 2019</td>
-                                    <td><i class="fa fa-ellipsis-h font-24"></i>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div><i class="bx bxs-file me-2 font-24 text-primary"></i>
-                                            </div>
-                                            <div class="font-weight-bold text-primary">How to Create a Case Study</div>
-                                        </div>
-                                    </td>
-                                    <td>3 members</td>
-                                    <td>Jun 12, 2019</td>
-                                    <td><i class="fa fa-ellipsis-h font-24"></i>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div><i class="bx bxs-file me-2 font-24 text-primary"></i>
-                                            </div>
-                                            <div class="font-weight-bold text-primary">Landing Page Structure</div>
-                                        </div>
-                                    </td>
-                                    <td>10 members</td>
-                                    <td>Jul 17, 2019</td>
-                                    <td><i class="fa fa-ellipsis-h font-24"></i>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div><i class="bx bxs-file-doc me-2 font-24 text-success"></i>
-                                            </div>
-                                            <div class="font-weight-bold text-success">Review Checklist Template</div>
-                                        </div>
-                                    </td>
-                                    <td>7 members</td>
-                                    <td>Sep 8, 2019</td>
-                                    <td><i class="fa fa-ellipsis-h font-24"></i>
+
                                     </td>
                                 </tr>
                             </tbody>

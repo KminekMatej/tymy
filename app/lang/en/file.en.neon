@@ -8,3 +8,4 @@ allFiles: All files
 upload: Upload file...
 mkdir: New folder
 size: Size
+confirmDelete: Are you sure you want to delete this file?

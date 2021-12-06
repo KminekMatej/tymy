@@ -8,3 +8,4 @@ allFiles: Wszystkie pliki
 upload: Przesyłanie pliku
 mkdir: Nowy folder
 size: Rozmiar
+confirmDelete: Naprawdę usunąć plik?
