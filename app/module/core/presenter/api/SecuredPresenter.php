@@ -1,5 +1,4 @@
 <?php
-
 namespace Tymy\Module\Core\Presenter\Api;
 
 use Tymy\Module\User\Model\User;
@@ -11,11 +10,14 @@ use Tymy\Module\User\Model\User;
  */
 class SecuredPresenter extends BasePresenter
 {
+
+    private const TSID = "TSID";
+
     public function startup()
     {
         parent::startup();
 
-        if ($tsid = $this->getParameter("TSID")) {
+        if ($tsid = $this->getParameter(self::TSID) ?: $this->httpRequest->getHeader(self::TSID)) {
             if ($this->session->getId()) {
                 $this->session->close();
             }
