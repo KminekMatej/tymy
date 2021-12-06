@@ -104,7 +104,6 @@ class NavbarControl extends Control
         $this->template->files = array_map(function ($path) {
             return str_replace(FileUploadHandler::DOWNLOAD_DIR, "", $path);
         }, glob(FileUploadHandler::DOWNLOAD_DIR . "/*.*"));
-        $this->template->usedSpace = $this->getDownloadFolderSize();
     }
 
     public function createComponentFileUploadForm(): Form
@@ -126,37 +125,6 @@ class NavbarControl extends Control
         if ($file->isOk()) {
             $file->move(FileUploadHandler::DOWNLOAD_DIR . '/' . $file_name);
         }
-    }
-
-    private function getDownloadFolderSize(): int
-    {
-        $cachedSizeFile = TEAM_DIR . "/temp/cache/download-size.json";
-
-        $size = null;
-        $timestamp = new DateTime();
-
-        if (file_exists($cachedSizeFile)) {
-            $size = intval(file_get_contents($cachedSizeFile));
-            $timestamp = DateTime::createFromFormat("U", (string)filemtime($cachedSizeFile));
-        }
-
-        if ($size === null || $timestamp < new DateTime("- 10 minutes")) {
-            $size = $this->folderSize(FileUploadHandler::DOWNLOAD_DIR);
-            file_put_contents($cachedSizeFile, $size);
-        }
-
-        return $size;
-    }
-
-    private function folderSize(string $dir): int
-    {
-        $size = 0;
-
-        foreach (glob(rtrim($dir, '/') . '/*', GLOB_NOSORT) as $each) {
-            $size += is_file($each) ? filesize($each) : folderSize($each);
-        }
-        
-        return $size;
     }
 
     private function initSettings(): void
