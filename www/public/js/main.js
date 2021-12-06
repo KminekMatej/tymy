@@ -1,4 +1,4 @@
-s$(document).ready(function () {
+$(document).ready(function () {
     reTitle();
 
     const pushNotificationSuported = isPushNotificationSupported();
