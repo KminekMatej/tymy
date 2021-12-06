@@ -21,16 +21,25 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
     /** @persistent */
     public $locale;
 
-    /** @var Translator @inject */
-    public $translator;
+    /** @inject */
+    public Translator $translator;
 
-    /** @var Supplier @inject */
-    public $supplier;
+    /** @inject */
+    public Supplier $supplier;
     
     /** @inject */
     public TeamManager $teamManager;
-    
-    public function beforeRender() {
+    private Team $team;
+
+    protected function startup(): void
+    {
+        parent::startup();
+
+        $this->team = $this->teamManager->getTeam();
+    }
+
+    public function beforeRender()
+    {
         parent::beforeRender();
         $this->translator->setDefaultLocale("EN");
         $this->template->componentsDir = Bootstrap::MODULES_DIR . "/core/presenter/templates/components";
