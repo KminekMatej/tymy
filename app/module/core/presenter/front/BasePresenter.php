@@ -9,6 +9,7 @@ use Tracy\Debugger;
 use Tymy\Bootstrap;
 use Tymy\Module\Core\Model\Supplier;
 use Tymy\Module\Team\Manager\TeamManager;
+use Tymy\Module\Team\Model\Team;
 
 
 /**
@@ -31,7 +32,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
     public TeamManager $teamManager;
     private Team $team;
 
-    protected function startup(): void
+	protected function startup()
     {
         parent::startup();
 
