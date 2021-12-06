@@ -19,7 +19,7 @@ class UploadFilter extends BaseFilter
             self::getImageMimeTypes();
     }
 
-    public function getArchiveMimeTypes(): array
+    public static function getArchiveMimeTypes(): array
     {
         return [
             'application/zip' => 'zip',
@@ -29,7 +29,7 @@ class UploadFilter extends BaseFilter
         ];
     }
 
-    public function getAudioMimeTypes(): array
+    public static function getAudioMimeTypes(): array
     {
         return [
             'audio/mpeg3' => 'mp3',
@@ -39,7 +39,7 @@ class UploadFilter extends BaseFilter
         ];
     }
 
-    public function getDocumentMimeTypes(): array
+    public static function getDocumentMimeTypes(): array
     {
         return [
             'text/plain' => 'txt',
