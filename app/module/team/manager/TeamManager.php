@@ -209,6 +209,6 @@ class TeamManager extends BaseManager
         $bytesFree = 1024 * 1024 * 10; //10 MB for free teams
         $bytesFull = 1024 * 1024 * 100; //100 MB for full teams
 
-        return strpos($team->getTariff, "FULL") !== false ? $bytesFull : $bytesFree;
+        return strpos($team->getTariff(), "FULL") !== false ? $bytesFull : $bytesFree;
     }
 }
