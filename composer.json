@@ -19,7 +19,8 @@
         "ext-json": "*",
         "ext-pdo": "*",
         "ext-curl": "*",
-        "lcobucci/jwt": "4.1.5"
+        "lcobucci/jwt": "4.1.5",
+        "jzechy/jquery-fileupload": "2.1.x-dev"
     },
     "require-dev": {
         "nette/tester": "^2.0"

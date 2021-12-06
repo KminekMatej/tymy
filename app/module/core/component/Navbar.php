@@ -8,6 +8,7 @@ use Nette\Application\UI\Form;
 use Nette\Http\FileUpload;
 use Nette\Security\User;
 use Nette\Utils\DateTime;
+use Tymy\Module\File\Handler\FileUploadHandler;
 use Tymy\Module\Core\Model\Supplier;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Debt\Manager\DebtManager;
@@ -26,9 +27,6 @@ use const TEAM_DIR;
  */
 class NavbarControl extends Control
 {
-
-    private const DOWNLOAD_DIR = TEAM_DIR . "/download";
-
     private SecuredPresenter $presenter;
     private Supplier $supplier;
     private array $accessibleSettings;
@@ -104,8 +102,8 @@ class NavbarControl extends Control
     private function initFiles(): void
     {
         $this->template->files = array_map(function ($path) {
-            return str_replace(self::DOWNLOAD_DIR, "", $path);
-        }, glob(self::DOWNLOAD_DIR . "/*.*"));
+            return str_replace(FileUploadHandler::DOWNLOAD_DIR, "", $path);
+        }, glob(FileUploadHandler::DOWNLOAD_DIR . "/*.*"));
         $this->template->usedSpace = $this->getDownloadFolderSize();
     }
 
@@ -126,7 +124,7 @@ class NavbarControl extends Control
         $file = $values['file'];
 
         if ($file->isOk()) {
-            $file->move(self::DOWNLOAD_DIR . '/' . $file_name);
+            $file->move(FileUploadHandler::DOWNLOAD_DIR . '/' . $file_name);
         }
     }
 
@@ -143,7 +141,7 @@ class NavbarControl extends Control
         }
 
         if ($size === null || $timestamp < new DateTime("- 10 minutes")) {
-            $size = $this->folderSize(self::DOWNLOAD_DIR);
+            $size = $this->folderSize(FileUploadHandler::DOWNLOAD_DIR);
             file_put_contents($cachedSizeFile, $size);
         }
 
@@ -174,6 +172,7 @@ class NavbarControl extends Control
         $this->template->action = $this->presenter->getAction();
         $this->template->userId = $this->user->getId();
         $this->template->team = $this->teamManager->getTeam();
+        $this->template->publicPath = $this->presenter->getHttpRequest()->getUrl()->getBasePath() . "public";
 
         $this->initDiscussions();
         $this->initPlayers();

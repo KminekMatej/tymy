@@ -30,6 +30,12 @@ tracy:
     email: matej.kminek@attendees.eu
 extensions:
     translation: Kdyby\Translation\DI\TranslationExtension
+    fileUpload: Zet\FileUpload\FileUploadExtension
+fileUpload:
+    maxFiles: 10
+    maxFileSize: 2M
+    fileFilter: Tymy\Module\File\Filter\UploadFilter
+    uploadModel: Tymy\Module\File\Handler\FileUploadHandler
 translation:
     default: cs
 parameters:

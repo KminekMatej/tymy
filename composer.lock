@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "21800510b77e9837768f96716aa8a73d",
+    "content-hash": "db53fb394ed82c8ae00020330fdfe896",
     "packages": [
         {
             "name": "brick/math",
@@ -495,6 +495,81 @@
                 }
             ],
             "time": "2021-10-06T17:43:30+00:00"
+        },
+        {
+            "name": "jzechy/jquery-fileupload",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/contributte/fileupload.git",
+                "reference": "5b34933b989aa12a3fcc6303774b28a02d548ae6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/contributte/fileupload/zipball/5b34933b989aa12a3fcc6303774b28a02d548ae6",
+                "reference": "5b34933b989aa12a3fcc6303774b28a02d548ae6",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "latte/latte": "^2.10",
+                "nette/application": "^3.1",
+                "nette/caching": "^3.1",
+                "nette/di": "^3.0",
+                "nette/forms": "^3.1",
+                "nette/http": "^3.1",
+                "nette/utils": "^3.2",
+                "php": ">=7.2.0"
+            },
+            "require-dev": {
+                "ninjify/nunjuck": "^0.4",
+                "ninjify/qa": "^0.12",
+                "phpstan/phpstan": "^0.12",
+                "phpstan/phpstan-deprecation-rules": "^0.12",
+                "phpstan/phpstan-nette": "^0.12",
+                "phpstan/phpstan-strict-rules": "^0.12",
+                "tracy/tracy": "~2.6.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.1.x-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jan 'Zechy' Zechovský",
+                    "email": "email@zechy.cz",
+                    "homepage": "http://zechy.cz"
+                }
+            ],
+            "description": "Nette UploadControl rozšířené o blueimp jQuery FileUpload.",
+            "homepage": "https://github.com/JZechy/jQuery-FileUpload",
+            "support": {
+                "issues": "https://github.com/contributte/fileupload/issues",
+                "source": "https://github.com/contributte/fileupload/tree/master"
+            },
+            "funding": [
+                {
+                    "url": "https://contributte.org/partners.html",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/f3l1x",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-11-24T10:37:41+00:00"
         },
         {
             "name": "kdyby/strict-objects",
@@ -3974,7 +4049,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "kdyby/translation": 20
+        "kdyby/translation": 20,
+        "jzechy/jquery-fileupload": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
