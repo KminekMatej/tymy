@@ -26,6 +26,9 @@ class DefaultPresenter extends SecuredPresenter
         parent::beforeRender();
         $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("file.file", 2), "link" => $this->link(":File:Default:")]]);
         $this->initFileStats();
+        $this->template->addFilter('filesize', function ($sizeInBytes) {
+            return $this->formatBytes($sizeInBytes);
+        });
     }
 
     public function renderDefault(string $folder = "/")
@@ -47,6 +50,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->template->redPercent = $red;
 
         $this->template->folder = $folder;
+        $this->template->fileTypes = $this->fileStats["fileTypes"];
         $this->template->contents = $this->getContents($folder);
     }
 
@@ -111,31 +115,56 @@ class DefaultPresenter extends SecuredPresenter
             if (is_file($each)) {
                 $mime = mime_content_type($each);
 
-                if (!array_key_exists("size", $this->fileStats)) {
-                    $this->fileStats["size"] = [
-                        "archive" => 0,
-                        "audio" => 0,
-                        "document" => 0,
-                        "image" => 0,
-                        "other" => 0,
+                if (!array_key_exists("fileTypes", $this->fileStats)) {
+                    $this->fileStats["fileTypes"] = [
+                        "archive" => [
+                            "size" => 0,
+                            "count" => 0,
+                            "name" => "Archiv",
+                        ],
+                        "audio" => [
+                            "size" => 0,
+                            "count" => 0,
+                            "name" => "Hudba",
+                        ],
+                        "document" => [
+                            "size" => 0,
+                            "count" => 0,
+                            "name" => "Dokumenty",
+                        ],
+                        "image" => [
+                            "size" => 0,
+                            "count" => 0,
+                            "name" => "Obrázky",
+                        ],
+                        "other" => [
+                            "size" => 0,
+                            "count" => 0,
+                            "name" => "Ostatní",
+                        ],
                     ];
                 }
 
                 switch (true) {
                     case array_key_exists($mime, UploadFilter::getArchiveMimeTypes()):
-                        $this->fileStats["size"]["archive"] += filesize($each);
+                        $this->fileStats["fileTypes"]["archive"]["size"] += filesize($each);
+                        $this->fileStats["fileTypes"]["archive"]["count"]++;
                         break;
                     case array_key_exists($mime, UploadFilter::getAudioMimeTypes()):
-                        $this->fileStats["size"]["audio"] += filesize($each);
+                        $this->fileStats["fileTypes"]["audio"]["size"] += filesize($each);
+                        $this->fileStats["fileTypes"]["audio"]["count"]++;
                         break;
                     case array_key_exists($mime, UploadFilter::getDocumentMimeTypes()):
-                        $this->fileStats["size"]["document"] += filesize($each);
+                        $this->fileStats["fileTypes"]["document"]["size"] += filesize($each);
+                        $this->fileStats["fileTypes"]["document"]["count"]++;
                         break;
                     case array_key_exists($mime, UploadFilter::getImageMimeTypes()):
-                        $this->fileStats["size"]["image"] += filesize($each);
+                        $this->fileStats["fileTypes"]["image"]["size"] += filesize($each);
+                        $this->fileStats["fileTypes"]["image"]["count"]++;
                         break;
                     default:
-                        $this->fileStats["size"]["other"] += filesize($each);
+                        $this->fileStats["fileTypes"]["other"]["size"] += filesize($each);
+                        $this->fileStats["fileTypes"]["other"]["count"]++;
                         break;
                 }
             } elseif (is_dir($each)) {
