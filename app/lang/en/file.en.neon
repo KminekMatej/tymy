@@ -5,7 +5,9 @@ files: files
 usedSpace: Used
 folder: Folder|Folders
 allFiles: All files
-upload: Upload file...
+upload: Upload
+add: Add
 mkdir: New folder
 size: Size
 confirmDelete: Are you sure you want to delete this file?
+dirNameError: Invalid folder name

@@ -7,5 +7,7 @@ folder: Dossier|Dossiers
 allFiles: Tous les fichiers
 upload: Téléverser un fichier...
 mkdir: Nouveau dossier
+add: Ajouter
 size: Taille
 confirmDelete: Vraiment supprimer le fichier ?
+dirNameError: Nom de dossier invalide

@@ -7,5 +7,7 @@ folder: Folder|Foldery
 allFiles: Wszystkie pliki
 upload: Przesyłanie pliku
 mkdir: Nowy folder
+add: Dodaj
 size: Rozmiar
 confirmDelete: Naprawdę usunąć plik?
+dirNameError: Zła nazwa folderu

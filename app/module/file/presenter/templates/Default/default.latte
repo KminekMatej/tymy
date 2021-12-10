@@ -4,10 +4,16 @@
 {control navbar}
 {/block}
 
+
 {block styles}
 {include parent}
 <link href="https://cdn.lineicons.com/3.0/lineicons.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
+{/block}
+
+{block scripts}
+{include parent}
+<script src="{$publicPath}/js/netteForms.js?ver={$appver}"></script>
 {/block}
 
 {block content}
@@ -18,7 +24,17 @@
         <div class="col-12 col-lg-3">
             <div class="card mb-2">
                 <div class="card-body">
-                    <div class="d-grid"> <a href="javascript:;" class="btn btn-primary">+ {_common.new}</a></div>
+                    <div class="d-grid"> 
+                        <div class="dropdown">
+                            <button class="btn btn-primary" data-toggle="dropdown" data-display="static" aria-expanded="false">+ {_file.add}</button>
+                            <div class="dropdown-menu">
+                                <button class="dropdown-item" data-toggle="modal" data-target="#newFolderModal"><i class="fas fa-folder text-warning"></i> {_file.folder, 1}</button>
+
+                                <div class="dropdown-divider"></div>
+                                <button class="dropdown-item"><i class="fas fa-file text-secondary"></i> {_file.file, 1}</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="card">
@@ -55,7 +71,7 @@
                         </div>
                     </div>
 
-                            <div class="row mt-3">
+                    <div class="row mt-3">
                         <div class="col-12 col-lg-4" n:foreach="$contents['dirs'] as $dir">
                             <div class="card shadow-none border radius-15">
                                 <a class="card-body" n:href=":File:Default: folder => $folder . '/' . basename($dir['name'])">
@@ -165,3 +181,24 @@
 
 </div>
 
+<div class="modal fade" id="newFolderModal" tabindex="-1" aria-labelledby="newFolderModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newFolderModalLabel">{_file.mkdir}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {form newFolderForm}
+                <div class="modal-body">
+                    <input type="hidden" n:name="folder" value="{$folder}">
+                    {input name, class=>'form-control'}
+                </div>
+                <div class="modal-footer">
+                    <button n:name="send" type="submit" class="btn btn-primary">{_file.add}</button>
+                </div>
+            {/form}
+        </div>
+    </div>
+</div>

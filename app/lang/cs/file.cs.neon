@@ -6,7 +6,8 @@ usedSpace: Použito
 folder: Složka|Složky
 allFiles: Všechny soubory
 uploaded: Vytvořeno
-upload: Nahrát soubor...
+add: Přidat
 mkdir: Nová složka
 size: Velikost
 confirmDelete: Opravde chcete tento soubor smazat?
+dirNameError: Chybný název složky

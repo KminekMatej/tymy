@@ -1,6 +1,7 @@
 <?php
 namespace Tymy\Module\File\Presenter\Front;
 
+use Nette\Application\UI\Form;
 use Nette\Utils\DateTime;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\File\Filter\UploadFilter;
@@ -90,6 +91,27 @@ class DefaultPresenter extends SecuredPresenter
         $this->template->parentFolder = join("/", $folderParts);
         $this->template->fileTypes = $this->fileStats["fileTypes"];
         $this->template->contents = $this->getContents("/" . $folderNoSeparators);
+    }
+
+    public function createComponentNewFolderForm()
+    {
+        $form = new Form();
+
+        $form->addHidden("folder");
+
+        $form->addText('name')
+            ->setRequired('Vyplňte název složky')
+            ->addRule(Form::PATTERN_ICASE, $this->translator->translate("file.dirNameError"), '([a-zA-Z_\-0-9áčďéěíňóřšťůúýžÁČĎÉĚÍŇÓŘŠŤŮÚÝŽ ]+\.?)*[a-zA-Z_\-0-9áčďéěíňóřšťůúýžÁČĎÉĚÍŇÓŘŠŤŮÚÝŽ ]+');
+
+        $form->addSubmit('send', $this->translator->translate("file.add"));
+        $form->onSuccess[] = function (Form $form, $values) {
+            $currentFolder = $values->folder;
+            $folderName = $values->name;
+            mkdir(FileUploadHandler::DOWNLOAD_DIR . $currentFolder . "/" . $folderName);
+            $this->redirect(":File:Default:", $currentFolder . "/" . $folderName);  //redirect to new folder
+        };
+
+        return $form;
     }
 
     /**
