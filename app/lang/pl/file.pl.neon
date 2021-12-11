@@ -8,6 +8,8 @@ allFiles: Wszystkie pliki
 upload: Przesyłanie pliku
 mkdir: Nowy folder
 add: Dodaj
+rename: Przemianować
 size: Rozmiar
 confirmDelete: Naprawdę usunąć plik?
+confirmFolderDelete: Czy na pewno chcesz usunąć ten folder?
 dirNameError: Zła nazwa folderu

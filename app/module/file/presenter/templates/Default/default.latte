@@ -72,8 +72,15 @@
                     </div>
 
                     <div class="row mt-3">
-                        <div class="col-12 col-lg-4" n:foreach="$contents['dirs'] as $dir">
-                            <div class="card shadow-none border radius-15">
+                        <div class="col-12 col-lg-4 mb-2" n:foreach="$contents['dirs'] as $dir">
+                            <div class="card shadow-none border radius-15" style="position: relative">
+                                <div class="btn-group" style="position: absolute; z-index: 200; right: 10px; top: 10px">
+                                    <i class="fa fa-ellipsis-h" data-toggle="dropdown" data-display="static" aria-expanded="false"></i>
+                                    <div class="dropdown-menu dropdown-menu-lg-right">
+                                        <button class="dropdown-item" data-toggle="modal" data-target="#renameModal" data-oldname="{basename($dir['name'])}"> {_file.rename, 1}</button>
+                                        <a class="dropdown-item" onclick="return confirm({_file.confirmDelete})" type="button" n:href="delete! folder => $folder, filename => basename($dir['name'])">{_common.delete}</a>
+                                    </div>
+                                </div>
                                 <a class="card-body" n:href=":File:Default: folder => $folder . '/' . basename($dir['name'])">
                                     <div class="d-flex align-items-center">
                                         <div class="text-warning" style="font-size: 30px"><i class="fas fa-folder"></i></div>
@@ -165,10 +172,10 @@
                                         <div class="btn-group">
                                             <i class="fa fa-ellipsis-h font-24" data-toggle="dropdown" data-display="static" aria-expanded="false" style="cursor: pointer"></i>
                                             <div class="dropdown-menu dropdown-menu-lg-right">
+                                                <button class="dropdown-item" data-toggle="modal" data-target="#renameModal" data-oldname="{basename($file)}"> {_file.rename, 1}</button>
                                                 <a class="dropdown-item" onclick="return confirm({_file.confirmDelete})" type="button" n:href="delete! folder => $folder, filename => basename($file)">{_common.delete}</a>
                                             </div>
                                         </div>
-
                                     </td>
                                 </tr>
                             </tbody>
@@ -197,6 +204,29 @@
                 </div>
                 <div class="modal-footer">
                     <button n:name="send" type="submit" class="btn btn-primary">{_file.add}</button>
+                </div>
+            {/form}
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="renameModal" tabindex="-1" aria-labelledby="renameModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="renameModalLabel">{_file.rename}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {form renameForm}
+                <div class="modal-body">
+                    <input type="hidden" n:name="folder" value="{$folder}">
+                    <input type="hidden" n:name="oldName">
+                    {input name, class=>'form-control'}
+                </div>
+                <div class="modal-footer">
+                    <button n:name="send" type="submit" class="btn btn-primary">{_file.rename}</button>
                 </div>
             {/form}
         </div>

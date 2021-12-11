@@ -16,7 +16,9 @@ use const TEAM_DIR;
  */
 class DefaultPresenter extends SecuredPresenter
 {
-
+    
+    private const DIR_NAME_REGEX = '([a-zA-Z_\-0-9áčďéěíňóřšťůúýžÁČĎÉĚÍŇÓŘŠŤŮÚÝŽ ]+\.?)*[a-zA-Z_\-0-9áčďéěíňóřšťůúýžÁČĎÉĚÍŇÓŘŠŤŮÚÝŽ ]+';
+    
     /** @inject */
     public TeamManager $teamManager;
     private array $fileStats;
@@ -109,6 +111,31 @@ class DefaultPresenter extends SecuredPresenter
             $folderName = $values->name;
             mkdir(FileUploadHandler::DOWNLOAD_DIR . $currentFolder . "/" . $folderName);
             $this->redirect(":File:Default:", $currentFolder . "/" . $folderName);  //redirect to new folder
+        };
+
+        return $form;
+    }
+
+    public function createComponentRenameForm()
+    {
+        $form = new Form();
+
+        $form->addHidden("folder");
+        $form->addHidden("oldName");
+
+        $form->addText('name')
+            ->setRequired()
+            ->addRule(Form::PATTERN_ICASE, $this->translator->translate("file.dirNameError"), self::DIR_NAME_REGEX);
+
+        $form->addSubmit('send', $this->translator->translate("file.rename"));
+        $form->onSuccess[] = function (Form $form, $values) {
+            $oldpath = FileUploadHandler::DOWNLOAD_DIR . $values->folder . "/" . trim($values->oldName, "/. ");
+            if (file_exists($oldpath)) {
+                $newpath = FileUploadHandler::DOWNLOAD_DIR . $values->folder . "/" . trim($values->name, "/. ");
+                rename($oldpath, $newpath);
+            }
+
+            $this->redirect(":File:Default:", $values->folder);
         };
 
         return $form;

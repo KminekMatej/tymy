@@ -1,0 +1,18 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 11. 12. 2021, 11:14:32
+    Author     : kminekmatej
+*/
+
+.fa-ellipsis-h {
+    cursor: pointer;
+    color: #cfcfcf !important;
+}
+
+.fa-ellipsis-h:hover {
+    color: #007bff !important;
+}
+ 

@@ -7,7 +7,9 @@ folder: Složka|Složky
 allFiles: Všechny soubory
 uploaded: Vytvořeno
 add: Přidat
+rename: Přejmenovat
 mkdir: Nová složka
 size: Velikost
 confirmDelete: Opravde chcete tento soubor smazat?
+confirmFolderDelete: Opravde chcete tuto složku smazat?
 dirNameError: Chybný název složky
