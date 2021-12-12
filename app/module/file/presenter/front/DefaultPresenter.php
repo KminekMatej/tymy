@@ -4,8 +4,7 @@ namespace Tymy\Module\File\Presenter\Front;
 use Nette\Application\UI\Form;
 use Nette\Utils\DateTime;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
-use Tymy\Module\File\Filter\UploadFilter;
-use Tymy\Module\File\Handler\FileUploadHandler;
+use Tymy\Module\File\Handler\FileManager;
 use Tymy\Module\Team\Manager\TeamManager;
 use const TEAM_DIR;
 
@@ -16,11 +15,14 @@ use const TEAM_DIR;
  */
 class DefaultPresenter extends SecuredPresenter
 {
-    
+
     private const DIR_NAME_REGEX = '([a-zA-Z_\-0-9áčďéěíňóřšťůúýžÁČĎÉĚÍŇÓŘŠŤŮÚÝŽ ]+\.?)*[a-zA-Z_\-0-9áčďéěíňóřšťůúýžÁČĎÉĚÍŇÓŘŠŤŮÚÝŽ ]+';
-    
+
     /** @inject */
     public TeamManager $teamManager;
+
+    /** @inject */
+    public FileManager $fileManager;
     private array $fileStats;
     private array $contents;
 
@@ -37,16 +39,16 @@ class DefaultPresenter extends SecuredPresenter
         $this->template->addFilter('filetype', function ($filename) {
             $mime = mime_content_type($filename);
             switch (true) {
-                case array_key_exists($mime, UploadFilter::getArchiveMimeTypes()):
+                case array_key_exists($mime, FileManager::getArchiveMimeTypes()):
                     return "ARCHIVE";
                     break;
-                case array_key_exists($mime, UploadFilter::getAudioMimeTypes()):
+                case array_key_exists($mime, FileManager::getAudioMimeTypes()):
                     return "AUDIO";
                     break;
-                case array_key_exists($mime, UploadFilter::getDocumentMimeTypes()):
-                    return UploadFilter::getDocumentMimeTypes()[$mime] ?? "DOCUMENT";   //separate pdf, xls etc.
+                case array_key_exists($mime, FileManager::getDocumentMimeTypes()):
+                    return FileManager::getDocumentMimeTypes()[$mime] ?? "DOCUMENT";   //separate pdf, xls etc.
                     break;
-                case array_key_exists($mime, UploadFilter::getImageMimeTypes()):
+                case array_key_exists($mime, FileManager::getImageMimeTypes()):
                     return "IMAGE";
                     break;
                 default:
@@ -99,17 +101,18 @@ class DefaultPresenter extends SecuredPresenter
     {
         $form = new Form();
 
-        $form->addHidden("folder");
+        $form->addHidden("folder")
+            ->addRule(Form::PATTERN_ICASE, $this->translator->translate("file.dirNameError"), self::DIR_NAME_REGEX);;
 
         $form->addText('name')
             ->setRequired('Vyplňte název složky')
-            ->addRule(Form::PATTERN_ICASE, $this->translator->translate("file.dirNameError"), '([a-zA-Z_\-0-9áčďéěíňóřšťůúýžÁČĎÉĚÍŇÓŘŠŤŮÚÝŽ ]+\.?)*[a-zA-Z_\-0-9áčďéěíňóřšťůúýžÁČĎÉĚÍŇÓŘŠŤŮÚÝŽ ]+');
+            ->addRule(Form::PATTERN_ICASE, $this->translator->translate("file.dirNameError"), self::DIR_NAME_REGEX);
 
         $form->addSubmit('send', $this->translator->translate("file.add"));
         $form->onSuccess[] = function (Form $form, $values) {
             $currentFolder = $values->folder;
             $folderName = $values->name;
-            mkdir(FileUploadHandler::DOWNLOAD_DIR . $currentFolder . "/" . $folderName);
+            mkdir(FileManager::DOWNLOAD_DIR . $currentFolder . "/" . $folderName);
             $this->redirect(":File:Default:", $currentFolder . "/" . $folderName);  //redirect to new folder
         };
 
@@ -120,8 +123,8 @@ class DefaultPresenter extends SecuredPresenter
     {
         $form = new Form();
 
-        $form->addHidden("folder");
-        $form->addHidden("oldName");
+        $form->addHidden("folder")->addRule(Form::PATTERN_ICASE, $this->translator->translate("file.dirNameError"), self::DIR_NAME_REGEX);
+        $form->addHidden("oldName")->addRule(Form::PATTERN_ICASE, $this->translator->translate("file.dirNameError"), self::DIR_NAME_REGEX);
 
         $form->addText('name')
             ->setRequired()
@@ -129,13 +132,28 @@ class DefaultPresenter extends SecuredPresenter
 
         $form->addSubmit('send', $this->translator->translate("file.rename"));
         $form->onSuccess[] = function (Form $form, $values) {
-            $oldpath = FileUploadHandler::DOWNLOAD_DIR . $values->folder . "/" . trim($values->oldName, "/. ");
+            $oldpath = FileManager::DOWNLOAD_DIR . $values->folder . "/" . trim($values->oldName, "/. ");
             if (file_exists($oldpath)) {
-                $newpath = FileUploadHandler::DOWNLOAD_DIR . $values->folder . "/" . trim($values->name, "/. ");
+                $newpath = FileManager::DOWNLOAD_DIR . $values->folder . "/" . trim($values->name, "/. ");
                 rename($oldpath, $newpath);
             }
 
             $this->redirect(":File:Default:", $values->folder);
+        };
+
+        return $form;
+    }
+
+    public function createComponentUploadFileForm()
+    {
+        $form = new Form();
+
+        $form->addHidden("folder")->addRule(Form::PATTERN_ICASE, $this->translator->translate("file.dirNameError"), self::DIR_NAME_REGEX);
+
+        $form->addUpload('upload');
+
+        $form->onSuccess[] = function (Form $form, $values) {
+            $this->fileManager->save($values->upload, $values->folder);
         };
 
         return $form;
@@ -149,7 +167,7 @@ class DefaultPresenter extends SecuredPresenter
      */
     private function getContents(string $folder): array
     {
-        $contents = glob(FileUploadHandler::DOWNLOAD_DIR . $folder . "/*");
+        $contents = glob(FileManager::DOWNLOAD_DIR . $folder . "/*");
         $arr = [
             "contents" => $contents,
             "dirs" => [],
@@ -192,9 +210,9 @@ class DefaultPresenter extends SecuredPresenter
 
         if (empty($this->fileStats) || $timestamp < new DateTime("- 10 minutes")) {
             $this->fileStats = [
-                "usedSpace" => $this->folderSize(FileUploadHandler::DOWNLOAD_DIR),
+                "usedSpace" => $this->folderSize(FileManager::DOWNLOAD_DIR),
             ];
-            $this->loadFileTypeSizes(FileUploadHandler::DOWNLOAD_DIR);
+            $this->loadFileTypeSizes(FileManager::DOWNLOAD_DIR);
             file_put_contents($cachedSizeFile, \json_encode($this->fileStats));
         }
     }
@@ -236,19 +254,19 @@ class DefaultPresenter extends SecuredPresenter
                 }
 
                 switch (true) {
-                    case array_key_exists($mime, UploadFilter::getArchiveMimeTypes()):
+                    case array_key_exists($mime, FileManager::getArchiveMimeTypes()):
                         $this->fileStats["fileTypes"]["archive"]["size"] += filesize($each);
                         $this->fileStats["fileTypes"]["archive"]["count"]++;
                         break;
-                    case array_key_exists($mime, UploadFilter::getAudioMimeTypes()):
+                    case array_key_exists($mime, FileManager::getAudioMimeTypes()):
                         $this->fileStats["fileTypes"]["audio"]["size"] += filesize($each);
                         $this->fileStats["fileTypes"]["audio"]["count"]++;
                         break;
-                    case array_key_exists($mime, UploadFilter::getDocumentMimeTypes()):
+                    case array_key_exists($mime, FileManager::getDocumentMimeTypes()):
                         $this->fileStats["fileTypes"]["document"]["size"] += filesize($each);
                         $this->fileStats["fileTypes"]["document"]["count"]++;
                         break;
-                    case array_key_exists($mime, UploadFilter::getImageMimeTypes()):
+                    case array_key_exists($mime, FileManager::getImageMimeTypes()):
                         $this->fileStats["fileTypes"]["image"]["size"] += filesize($each);
                         $this->fileStats["fileTypes"]["image"]["count"]++;
                         break;
@@ -298,15 +316,15 @@ class DefaultPresenter extends SecuredPresenter
 
         return round($bytes, $precision) . ' ' . $units[$pow];
     }
-    
+
     public function handleDelete(string $folder = "/", string $filename)
     {
         $sanitized = trim($filename, "/. ");
-        $filepath = FileUploadHandler::DOWNLOAD_DIR . "/" . $filename;
+        $filepath = FileManager::DOWNLOAD_DIR . "/" . $filename;
 
-        if(is_file($filepath) || is_link($filepath)){
+        if (is_file($filepath) || is_link($filepath)) {
             unlink($filepath);
-        } elseif(is_dir($filepath)){
+        } elseif (is_dir($filepath)) {
             $this->rrmdir($filepath);
         }
     }

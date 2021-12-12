@@ -1,0 +1,2 @@
+services:
+    FileManager: Tymy\Module\File\Handler\FileManager

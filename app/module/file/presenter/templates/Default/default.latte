@@ -31,7 +31,14 @@
                                 <button class="dropdown-item" data-toggle="modal" data-target="#newFolderModal"><i class="fas fa-folder text-warning"></i> {_file.folder, 1}</button>
 
                                 <div class="dropdown-divider"></div>
-                                <button class="dropdown-item"><i class="fas fa-file text-secondary"></i> {_file.file, 1}</button>
+                                <div class="dropdown-item">
+                                    {form uploadFileForm}
+                                        <label style="margin-bottom: 0px; cursor: pointer">
+                                            <input type="hidden" n:name="folder" value="{$folder}">
+                                            <i class="fas fa-file-alt text-secondary"></i> {_file.file, 1} <input id="fileupload" type="file" n:name="upload" class="" lang="cs" hidden />
+                                        </label>
+                                    {/form}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -39,6 +46,7 @@
             </div>
             <div class="card">
                 <div class="card-body">
+                    
                     <h5 class="mb-0 text-primary font-weight-bold">{$usedSpace}  / <span class="float-end text-secondary">{$maxSpace}</span></h5>
                     <p class="mb-0 mt-2"><span class="text-secondary">{_file.usedSpace}</span>
                     </p>

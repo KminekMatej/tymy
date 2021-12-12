@@ -4,4 +4,15 @@ $(document).ready(function () {
         $(this).find('.modal-body input[name=oldName]').val(button.data('oldname'));
         $(this).find('.modal-body input#frm-renameForm-name').val(button.data('oldname'));
     });
+
+    $('#fileupload').fileupload({
+        dataType: 'json',
+        error: function (xhr, ajaxOptions, thrownError) {
+            if (xhr.status == 400) {
+                alert('Chyba při nahrávání souboru');
+            }
+
+        }
+    });
+
 });

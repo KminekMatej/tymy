@@ -8,17 +8,16 @@ use Nette\Application\UI\Form;
 use Nette\Http\FileUpload;
 use Nette\Security\User;
 use Nette\Utils\DateTime;
-use Tymy\Module\File\Handler\FileUploadHandler;
 use Tymy\Module\Core\Model\Supplier;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Debt\Manager\DebtManager;
 use Tymy\Module\Discussion\Manager\DiscussionManager;
 use Tymy\Module\Event\Manager\EventManager;
+use Tymy\Module\File\Handler\FileManager;
 use Tymy\Module\Multiaccount\Manager\MultiaccountManager;
 use Tymy\Module\Poll\Manager\PollManager;
 use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\User\Manager\UserManager;
-use const TEAM_DIR;
 
 /**
  * Description of Navbar
@@ -102,8 +101,8 @@ class NavbarControl extends Control
     private function initFiles(): void
     {
         $this->template->files = array_map(function ($path) {
-            return str_replace(FileUploadHandler::DOWNLOAD_DIR, "", $path);
-        }, glob(FileUploadHandler::DOWNLOAD_DIR . "/*.*"));
+            return str_replace(FileManager::DOWNLOAD_DIR, "", $path);
+        }, glob(FileManager::DOWNLOAD_DIR . "/*.*"));
     }
 
     public function createComponentFileUploadForm(): Form
@@ -123,7 +122,7 @@ class NavbarControl extends Control
         $file = $values['file'];
 
         if ($file->isOk()) {
-            $file->move(FileUploadHandler::DOWNLOAD_DIR . '/' . $file_name);
+            $file->move(FileManager::DOWNLOAD_DIR . '/' . $file_name);
         }
     }
 
