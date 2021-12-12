@@ -36,7 +36,6 @@ class FileManager
      */
     public function save(FileUpload $file, string $folder): string
     {
-        $sanitizedFolder = "/" . trim($folder, "/. ");
         $mime = mime_content_type($file->getTemporaryFile());
 
         if (!array_key_exists($mime, $this->getMimeTypes())) {
@@ -54,12 +53,12 @@ class FileManager
             mkdir(self::DOWNLOAD_DIR, 0777, true);
         }
 
-        $targetFile = self::DOWNLOAD_DIR . "/$sanitizedFolder/" . $file->getSanitizedName();
+        $targetFile = self::DOWNLOAD_DIR . "/$folder/" . $file->getSanitizedName();
 
         if (!$file->move($targetFile)) {
-            Debugger::log("File saving failed [$targetFile]");
+            Debugger::barDump("File saving failed [$targetFile]");
         }
-        
+
         return $targetFile;
     }
 

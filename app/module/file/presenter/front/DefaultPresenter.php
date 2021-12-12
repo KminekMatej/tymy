@@ -102,7 +102,7 @@ class DefaultPresenter extends SecuredPresenter
         $form = new Form();
 
         $form->addHidden("folder")
-            ->addRule(Form::PATTERN_ICASE, $this->translator->translate("file.dirNameError"), self::DIR_NAME_REGEX);;
+            ->addRule(Form::PATTERN_ICASE, $this->translator->translate("file.dirNameError"), self::DIR_NAME_REGEX);
 
         $form->addText('name')
             ->setRequired('Vyplňte název složky')
@@ -153,7 +153,9 @@ class DefaultPresenter extends SecuredPresenter
         $form->addUpload('upload');
 
         $form->onSuccess[] = function (Form $form, $values) {
-            $this->fileManager->save($values->upload, $values->folder);
+            $folder = trim($values->folder, "/. ");
+            $this->fileManager->save($values->upload, $folder);
+            $this->reloadFileList($folder);
         };
 
         return $form;
@@ -319,14 +321,15 @@ class DefaultPresenter extends SecuredPresenter
 
     public function handleDelete(string $folder = "/", string $filename)
     {
-        $sanitized = trim($filename, "/. ");
-        $filepath = FileManager::DOWNLOAD_DIR . "/" . $filename;
+        $filepath = FileManager::DOWNLOAD_DIR . "/" . trim($folder, "/. ") . "/" . trim($filename, "/. ");
 
         if (is_file($filepath) || is_link($filepath)) {
             unlink($filepath);
         } elseif (is_dir($filepath)) {
             $this->rrmdir($filepath);
         }
+
+        //$this->reloadFileList($folder);
     }
 
     private function rrmdir($dir)
@@ -346,5 +349,11 @@ class DefaultPresenter extends SecuredPresenter
             }
             rmdir($dir);
         }
+    }
+
+    private function reloadFileList(string $folder)
+    {
+        $this->template->contents = $this->getContents("/" . $folder);
+        $this->redrawControl("file-list");
     }
 }
