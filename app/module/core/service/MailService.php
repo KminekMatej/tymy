@@ -6,7 +6,8 @@ use Nette\Application\LinkGenerator;
 use Nette\Application\UI\ITemplateFactory;
 use Nette\Mail\Mailer;
 use Nette\Mail\Message;
-use Tymy\Module\Core\Manager\TranslationManager;
+use Tracy\Debugger;
+use Tymy\Module\Core\Manager\StringsManager;
 use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\Team\Model\Team;
 
@@ -26,15 +27,15 @@ class MailService
     private LinkGenerator $linkGenerator;
     private ITemplateFactory $templateFactory;
     private Mailer $mailSender;
-    private TranslationManager $translationManager;
+    private StringsManager $stringsManager;
 
-    public function __construct(TeamManager $teamManager, LinkGenerator $linkGenerator, ITemplateFactory $templateFactory, Mailer $mailer, TranslationManager $translationManager)
+    public function __construct(TeamManager $teamManager, LinkGenerator $linkGenerator, ITemplateFactory $templateFactory, Mailer $mailer, StringsManager $stringsManager)
     {
         $this->teamManager = $teamManager;
         $this->linkGenerator = $linkGenerator;
         $this->templateFactory = $templateFactory;
         $this->mailSender = $mailer;
-        $this->translationManager = $translationManager;
+        $this->stringsManager = $stringsManager;
     }
 
     private function startup()
@@ -55,39 +56,39 @@ class MailService
     public function mailUserRegistered(string $nameTo, string $emailTo, string $login, string $email, ?string $firstName = null, ?string $lastName = null, ?string $note = "")
     {
         $this->startup();
-        $body = $this->translationManager->translateBy("register", "reg_mail_body_5s", $login, $firstName, $lastName, $email, $note);
-        $subject = $this->teamDomain . ": " . $this->translationManager->translateBy("register", "reg_mail_subj", $this->teamDomain);
+        $body = $this->stringsManager->translateBy("register", "reg_mail_body_5s", $login, $firstName, $lastName, $email, $note);
+        $subject = $this->teamDomain . ": " . $this->stringsManager->translateBy("register", "reg_mail_subj", $this->teamDomain);
         $this->sendMail($nameTo, $emailTo, $body, $subject);
     }
 
     public function mailLoginApproved(string $name, string $email)
     {
         $this->startup();
-        $body = $this->translationManager->translateBy("register", "allow_mail_body_1s", $this->teamDomain);
-        $subject = $this->translationManager->translateBy("profile", "allow_mail_subj", $this->teamDomain);
+        $body = $this->stringsManager->translateBy("register", "allow_mail_body_1s", $this->teamDomain);
+        $subject = $this->stringsManager->translateBy("profile", "allow_mail_subj", $this->teamDomain);
         $this->sendMail($name, $email, $body, $subject);
     }
 
     public function mailLoginDenied(string $name, string $email)
     {
         $this->startup();
-        $body = $this->translationManager->translateBy("profile", "deny_mail_body_1s", $this->teamDomain);
-        $subject = $this->translationManager->translateBy("profile", "deny_mail_subj", $this->teamDomain);
+        $body = $this->stringsManager->translateBy("profile", "deny_mail_body_1s", $this->teamDomain);
+        $subject = $this->stringsManager->translateBy("profile", "deny_mail_subj", $this->teamDomain);
         $this->sendMail($name, $email, $body, $subject);
     }
 
     public function mailPwdReset(string $name, string $email, string $callbackUri, string $hostName, string $resetCode)
     {
         $this->startup();
-        $body = $this->translationManager->translateBy("pswd_reset", "rc_mail_body_4s", $hostName, $this->teamDomain, $resetCode, sprintf($callbackUri, $resetCode));
-        $subject = "{$this->teamDomain}: " . $this->translationManager->translateBy("pswd_reset", "pswd_mail_subj");
+        $body = $this->stringsManager->translateBy("pswd_reset", "rc_mail_body_4s", $hostName, $this->teamDomain, $resetCode, sprintf($callbackUri, $resetCode));
+        $subject = "{$this->teamDomain}: " . $this->stringsManager->translateBy("pswd_reset", "pswd_mail_subj");
         $this->sendMail($name, $email, $body, $subject);
     }
 
     private function sendMail(string $name, string $email, string $body, string $subject = null)
     {
-        \Tracy\Debugger::log("Sending to: $name<$email>, subject $subject: $body");
-        \Tracy\Debugger::barDump($body, "Sending to: $name<$email>, subject $subject");
+        Debugger::log("Sending to: $name<$email>, subject $subject: $body");
+        Debugger::barDump($body, "Sending to: $name<$email>, subject $subject");
         return; //debug
         $mail = new Message();
         $mail->setFrom(sprintf(self::ROBOT_EMAIL_FROM_S, $this->team->getSysName()), $this->team->getSysName())

@@ -2,5 +2,5 @@ services:
     Supplier: Tymy\Module\Core\Model\Supplier(%tapi%, %wwwDir%, %appDir%, %appConfig%)
     ManagerFactory: Tymy\Module\Core\Factory\ManagerFactory(@database.main.context, @database.team.context, %team%)
     Responder: Tymy\Module\Core\Manager\Responder
-    TranslationManager: Tymy\Module\Core\Manager\TranslationManager(@database.main.context)
+    StringsManager: Tymy\Module\Core\Manager\StringsManager(@database.main.context)
     MailService: Tymy\Module\Core\Service\MailService
