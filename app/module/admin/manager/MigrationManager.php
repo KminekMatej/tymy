@@ -364,7 +364,7 @@ class MigrationManager
                 $this->migrateOne($mig);
             }
         } catch (Exception $exc) {
-            $msg = "An ERROR happened during migration: [" . $exc->getMessage() . "], performing rollback.";
+            $msg = "An ERROR happened occured migration: [" . $exc->getMessage() . "], performing rollback.";
             Debugger::log($msg);
             $this->logg($msg);
             try {
