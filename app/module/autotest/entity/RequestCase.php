@@ -2,14 +2,12 @@
 
 namespace Tymy\Module\Autotest;
 
-use Tymy\Bootstrap;
 use Nette\Application\BadRequestException;
 use Nette\Application\IResponse;
 use Nette\Application\PresenterFactory;
 use Nette\Application\Request;
 use Nette\Application\Responses\JsonResponse;
 use Nette\Application\Responses\TextResponse;
-use Tymy\Module\Core\Router\RouteList;
 use Nette\Application\UI\Presenter;
 use Nette\DI\Container;
 use Nette\Http\Request as Request2;
@@ -20,12 +18,16 @@ use Nette\Security\User;
 use Nette\Utils\DateTime;
 use Tester\Environment;
 use Tester\TestCase;
+use Tracy\Debugger;
+use Tymy\Bootstrap;
 use Tymy\Module\Authentication\Manager\AuthenticationManager;
+use Tymy\Module\Autotest\Entity\Assert;
 use Tymy\Module\Core\Manager\Responder;
 use Tymy\Module\Core\Model\BaseModel;
-use Tymy\Module\Autotest\Entity\Assert;
-use const ROOT_DIR;
+use Tymy\Module\Core\Router\RouteList;
+use const TEAM_DIR;
 use const TEST_DIR;
+use function GuzzleHttp\json_encode;
 
 /**
  * Envelope class for all api testing classes
@@ -102,7 +104,7 @@ abstract class RequestCase extends TestCase
 
     protected function getBasePath(): string
     {
-        return "/api/" . $this->getModule();
+        return $this->getModule();
     }
 
     abstract public function createRecord();
@@ -219,7 +221,7 @@ abstract class RequestCase extends TestCase
     /** @return SimpleResponse */
     public function request($url, $method = "GET", $data = [], $responseClass = null)
     {
-        $url = $url[0] == "/" ? $url : "/" . $url;
+        $url = "/api/" . trim($url, "/ ");
         $httpRequest = $this->mockHttpRequest($method, $url, $data);
 
         $this->logs[] = $log = new RequestLog($method, $url, $data);
