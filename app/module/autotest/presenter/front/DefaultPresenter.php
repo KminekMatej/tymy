@@ -1,5 +1,4 @@
 <?php
-
 namespace Tymy\Module\Autotest\Presenter\Front;
 
 use Nette\Http\UrlScript;
@@ -14,6 +13,7 @@ use const ROOT_DIR;
 
 class DefaultPresenter extends BasePresenter
 {
+
     public const PHP_CMD_PARAM = "php_cmd";
 
     private array $log;
@@ -39,12 +39,12 @@ class DefaultPresenter extends BasePresenter
                 '/\[red\]/',
                 '/\[\/green\]/',
                 '/\[\/red\]/',
-                    ], [
+                ], [
                 "<strong style='color:green'>",
                 "<strong style='color:red'>",
                 "</strong>",
                 "</strong>",
-                    ], htmlspecialchars((string) $text, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'));
+                ], htmlspecialchars((string) $text, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'));
 
             return $text;
         });
@@ -78,7 +78,7 @@ class DefaultPresenter extends BasePresenter
         foreach ($xml->testsuite->testcase as $case) {
             $nameParts = explode("/", $case->attributes()->classname);
             $cnt = count($nameParts);
-            $dir = $nameParts[$cnt-2];
+            $dir = $nameParts[$cnt - 2];
             if (isset($results[$dir]) && $results[$dir] == "fail") {
                 continue;   //if there is already fail on current dir, just simply continue
             }
@@ -120,7 +120,7 @@ class DefaultPresenter extends BasePresenter
             $this->handleException($exc);
         }
 
-        return ["console" => file_get_contents(TestsManager::OUT_CONSOLE), "junit" => file_get_contents(TestsManager::OUT_JUNIT)] ;
+        return ["console" => file_get_contents(TestsManager::OUT_CONSOLE), "junit" => file_get_contents(TestsManager::OUT_JUNIT)];
     }
 
     /**
@@ -132,10 +132,5 @@ class DefaultPresenter extends BasePresenter
         $this->template->urlroot = "{$url->scheme}://{$url->host}{$url->basePath}autotest";
         $team = substr($url->host, 0, strpos($url->host, "."));
         putenv("team=$team");
-    }
-
-    private function logg($text)
-    {
-        $this->log[] = (new DateTime())->format("j.n.Y H:i:s") . " " . $text;
     }
 }
