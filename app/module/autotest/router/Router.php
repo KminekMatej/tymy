@@ -15,7 +15,7 @@ class Router implements RouterInterface
 
     public function addRoutes(RouteList &$router): void
     {
-        $router->addApiRoute('autotest[/<resourceId>]', array(
+        $router->addRoute('autotest[/<resourceId>]', array(
             'module' => 'Autotest',
             'presenter' => 'Default',
             'action' => 'default',
