@@ -49,7 +49,7 @@ class PostPresenter extends SecuredPresenter
             $this->respondBadRequest();
         }
 
-        $posts = $this->manager->mode($resourceId, $subResourceId, $mode, $this->getRequest()->getParameter("search"), $this->getRequest()->getParameter("suser"), $this->getRequest()->getParameter("jump2date"));
+        $posts = $this->manager->mode($resourceId, $subResourceId ?: 1, $mode, $this->getRequest()->getParameter("search"), $this->getRequest()->getParameter("suser"), $this->getRequest()->getParameter("jump2date"));
 
         $this->respondOk($posts->jsonSerialize());
     }
