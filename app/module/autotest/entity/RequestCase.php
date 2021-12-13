@@ -35,7 +35,6 @@ use const TEST_DIR;
 abstract class RequestCase extends TestCase
 {
     public const REGEX_JSON_DATE = '#^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}#';
-    private const CHARS = '\x09\x0A\x0D\x20-\x7E\xA0-\x{10FFFF}';
 
     /** @var JsonResponse */
     protected $jsonResponse;
@@ -80,7 +79,7 @@ abstract class RequestCase extends TestCase
     public function __construct(Container $container)
     {
         define('TEST_DIR', Bootstrap::normalizePath(Bootstrap::MODULES_DIR . "/autotest"));
-        define('WWW_DIR', Bootstrap::normalizePath(ROOT_DIR . "/www"));
+        define('WWW_DIR', Bootstrap::normalizePath(TEAM_DIR . "/www"));
         $this->container = $container;
         $this->user = $this->container->getByType(User::class);
         $this->authenticationManager = $this->container->getByType(AuthenticationManager::class);
@@ -129,7 +128,7 @@ abstract class RequestCase extends TestCase
             return;
         }
 
-        $fp = fopen(ROOT_DIR . '/log/requests.log', 'a+');
+        $fp = fopen(Debugger::$logDirectory . '/requests.log', 'a+');
         flock($fp, LOCK_EX);
 
         foreach ($this->logs as $requestLog) {
@@ -269,55 +268,6 @@ abstract class RequestCase extends TestCase
         );
     }
 
-    /* @todo structure comparer - maybe not so needed */
-    protected function compareStructure(array $expectedStructure, array $actualData)
-    {
-        /*
-         * $expectedStructure = [
-         *  "name" => "string(0,19)",
-         *  "amount" => "int(0,35)",
-         *  "canRead" => "bool",
-         *  "subProperty" => [
-         *      "subName" => "string"
-         *      "subId" => "int"
-         * ],
-         * ]
-         *
-         */
-        $re = '/(string|int|array|bool)(\((\d+),(\d+)\))?/m';
-        foreach ($expectedStructure as $expectedKey => $property) {
-            //check that this structure key is set also in data
-            Assert::hasKey($expectedKey, $actualData);
-            $matches = [];
-            $matched = preg_match($re, $property, $matches);
-            Assert::true($matched);
-            $type = $matches[1];
-            $min = $max = null;
-
-            Assert::type($type, $actualData[$expectedKey]);
-
-            if (count($matches) > 1) {
-                $min = $matches[3];
-                $max = $matches[4];
-                switch ($type) {
-                    case "string":
-                        $length = strlen($actualData[$expectedKey]);
-                        Assert::true($length <= $max);
-                        Assert::true($length >= $min);
-                        break;
-                    case "int":
-                        $length = strlen($actualData[$expectedKey]);
-                        Assert::true($length <= $max);
-                        Assert::true($length >= $min);
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-        }
-    }
-
     public function authorizeUser($userName = null, $password = null)
     {
         $this->user->logout(true);
@@ -346,8 +296,8 @@ abstract class RequestCase extends TestCase
             if ($skip && ((is_array($skip) && in_array($key, $skip)) || $key == $skip)) {
                 continue;
             }
-            $newEnc = json_encode($new);
-            Assert::true(array_key_exists($key, $new), "Field `$key` aint returned. Returned data: " . $newEnc);
+            
+            Assert::hasKey($key, $new);
             Assert::equal($value, $new[$key], "Error on `$key` field");
         }
     }
