@@ -27,6 +27,7 @@ class ApplePush
     private Configuration $jwtConfiguration;
     private TeamManager $teamManager;
     private array $apns;
+    private array $expiredSubscribers = [];
 
     public function __construct(array $apns, Configuration $jwtConfiguration, TeamManager $teamManager)
     {
@@ -37,6 +38,8 @@ class ApplePush
 
     public function sendBulkNotifications(array $subscribers, PushNotification $pushNotification)
     {
+        $this->expiredSubscribers = [];
+
         if (empty($subscribers)) {
             return;
         }
@@ -90,9 +93,21 @@ class ApplePush
             $response = curl_exec($ch);
             $info = curl_getinfo($ch);
 
-            if ($response === false || $info["http_code"] !== 200) {
+            if ($response !== true || $info["http_code"] !== 200) {
+                $decodedResponse = json_decode($response);
+                $errorReason = $decodedResponse->reason ?? null;
+                switch ($errorReason) {
+                    case "BadDeviceToken"://invalid device id, delete from database
+                        $this->expiredSubscribers[] = $subscriber;
+                        break;
+                }
                 Debugger::log("APNS notifikace nemohla být odeslána, chyba: " . $response . ", infodata: " . json_encode($info), ILogger::ERROR);
             }
         }
+    }
+
+    public function getExpiredSubscribers(): array
+    {
+        return $this->expiredSubscribers;
     }
 }

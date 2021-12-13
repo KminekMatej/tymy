@@ -155,15 +155,15 @@ class PushNotificationManager extends BaseManager
      * 
      * @param PushNotification $notification
      * @param Subscriber[] $subscribers
-     * @todo
      */
     private function applePushBulk(PushNotification $notification, array $subscribers)
     {
-        try {
-            $this->applePush->sendBulkNotifications($subscribers, $notification);
-            //TODO: handle detecting expired subsriptions here
-        } catch (ErrorException $e) {
-            Debugger::log('Apple Push ErrorException: ' . $e->getMessage(), ILogger::EXCEPTION);
+        $this->applePush->sendBulkNotifications($subscribers, $notification);
+
+        //delete expired subscribers after sent
+        foreach ($this->applePush->getExpiredSubscribers() as $subscriber) {
+            /* @var $subscriber Subscriber */
+            $this->delete($subscriber->getId());
         }
     }
 
