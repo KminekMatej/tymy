@@ -3,10 +3,9 @@
 namespace Tymy\Module\Autotest\Debt;
 
 use Tymy\Bootstrap;
-use Nette\Utils\DateTime;
-use Tymy\Module\Debt\Model\Debt;
 use Tymy\Module\Autotest\Entity\Assert;
 use Tymy\Module\Autotest\RequestCase;
+use Tymy\Module\Multiaccount\Model\TransferKey;
 
 require getenv("ROOT_DIR") . '/app/Bootstrap.php';
 $container = Bootstrap::boot();
@@ -22,7 +21,7 @@ class MultiaccountTest extends RequestCase
 
     public function getModule(): string
     {
-        return Debt::MODULE;
+        return TransferKey::MODULE;
     }
 
     public function testGet()
