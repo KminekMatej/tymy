@@ -66,7 +66,7 @@ class DefaultPresenter extends BasePresenter
         $this->template->testsOutput = $output ? $output['console'] : null;
         $this->template->cols = $cols;
         $this->template->rows = ceil(count($allModules) / $cols);
-        $this->template->requests = file_exists(ROOT_DIR . "/log/requests.log") ? file(ROOT_DIR . "/log/requests.log") : [];
+        $this->template->requests = file_exists(TEAM_DIR . "/log_autotest/requests.log") ? file(TEAM_DIR . "/log_autotest/requests.log") : [];
     }
 
     private function processTestsOutput($output)
