@@ -6,9 +6,10 @@ use Nette\Http\UrlScript;
 use Nette\Utils\DateTime;
 use SimpleXMLElement;
 use Swoole\MySQL\Exception;
+use Tracy\Debugger;
 use Tymy\Bootstrap;
-use Tymy\Module\Core\Presenter\Api\BasePresenter;
 use Tymy\Module\Autotest\Manager\TestsManager;
+use Tymy\Module\Core\Presenter\Api\BasePresenter;
 use const ROOT_DIR;
 
 class DefaultPresenter extends BasePresenter
@@ -23,6 +24,10 @@ class DefaultPresenter extends BasePresenter
     public function startup()
     {
         parent::startup();
+        if (Debugger::$productionMode) {
+            $this->respondForbidden();
+        }
+
         define('TEST_DIR', Bootstrap::normalizePath(Bootstrap::MODULES_DIR . "/autotest"));
     }
 

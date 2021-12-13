@@ -21,9 +21,10 @@ class Bootstrap
     {
         // absolute filesystem path to the application root
         define("ROOT_DIR", getenv("ROOT_DIR") ? self::normalizePath(getenv("ROOT_DIR")) : self::normalizePath(__DIR__ . "/.."));
-        define("TEAM_DIR", str_replace("//", "/", dirname($_SERVER['SCRIPT_FILENAME'], 2)));
-        
+        define("TEAM_DIR", getenv("TEAM_DIR") ?: str_replace("//", "/", dirname($_SERVER['SCRIPT_FILENAME'], 2)));
         define('MODULES', array_diff(scandir(self::MODULES_DIR), array('..', '.')));
+        
+        $autotestMode = getenv("AUTOTEST") || isset($_GET["AUTOTEST"]) ? true : false;
 
         $configurator = new Configurator;
 
@@ -36,14 +37,14 @@ class Bootstrap
 
         $configurator->setDebugMode($debug ? $debug : false);
 
-        $configurator->enableTracy(TEAM_DIR . '/log');
+        $configurator->enableTracy($autotestMode ? TEAM_DIR . '/log_autotest' : TEAM_DIR . '/log');
 
         $configurator->setTimeZone('Europe/Prague');
-        $configurator->setTempDirectory(TEAM_DIR . '/temp');
+        $configurator->setTempDirectory($autotestMode ? TEAM_DIR . '/temp_autotest' : TEAM_DIR . '/temp');
 
         $configurator->createRobotLoader()
-                ->addDirectory(__DIR__)
-                ->register();
+            ->addDirectory(__DIR__)
+            ->register();
 
         $configurator->addConfig(__DIR__ . '/config/config.neon');
         $configurator->addConfig(__DIR__ . '/config/config.local.neon');
