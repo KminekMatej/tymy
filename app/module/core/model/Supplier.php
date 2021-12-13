@@ -7,37 +7,23 @@ use stdClass;
 
 class Supplier {
 
-    const AUTODETECT = "_autodetect";
-
-    private $tapi_config;
     private $tym;
-    private $tymyRoot;
-    private $apiRoot;
     private $versions;
     private $wwwDir;
-    private $appDir;
     private $allSkins;
-    private $teamNeonDir;
     private $teamNeon;
     private $userNeon;
 
-    public function __construct($tapi_config, $wwwDir, $appDir, $appConfig) {
-        $this->setTapi_config($tapi_config);
-        $this->setWwwDir($wwwDir);
-        $this->setAppDir($appDir);
+    public function __construct($appConfig)
+    {
         $this->setVersion();
         $this->setAllSkins($appConfig["allSkins"]);
-        $this->setTeamNeonDir(sprintf($tapi_config["src_dir"], $this->getAppDir(), $this->getTym()));
         $this->loadTeamNeon();
     }
 
-    public function getTapi_config() {
-        return $this->tapi_config;
-    }
-
     private function loadTeamNeon() {
-        $tmpTeamNeon = $this->getAppDir() . "/config/config.team.template.neon";
-        $teamNeon = $this->getTeamNeonDir() . "/config.team.neon";
+        $tmpTeamNeon = ROOT_DIR . "/app/config/config.team.template.neon";
+        $teamNeon = TEAM_DIR . "/config/config.team.neon";
         if (!file_exists($teamNeon) && file_exists($tmpTeamNeon))
             copy($tmpTeamNeon, $teamNeon);
         if (!file_exists($teamNeon))
@@ -46,7 +32,7 @@ class Supplier {
     }
 
     public function loadUserNeon($userId) {
-        $tmpUserNeon = $this->getAppDir() . "/config/config.user.template.neon";
+        $tmpUserNeon = ROOT_DIR . "/app/config/config.user.template.neon";
         $userNeon = $this->getUserNeonFile($userId);
         if (!file_exists($userNeon) && file_exists($tmpUserNeon))
             copy($tmpUserNeon, $userNeon);
@@ -63,18 +49,6 @@ class Supplier {
     public function saveTeamNeon($neonArray){
         $teamNeon = $this->getTeamNeonFile();
         file_put_contents($teamNeon, Neon::encode($neonArray, Neon::BLOCK));
-    }
-    
-    public function setTapi_config($tapi_config) {
-        $this->tapi_config = $tapi_config;
-        $this->setTym($tapi_config['tym']);
-        $this->setTymyRoot($tapi_config["protocol"] . "://" . $this->getTym() . "." . $tapi_config["root"]);
-        $this->setApiRoot($this->getTymyRoot() . DIRECTORY_SEPARATOR . $tapi_config["tapi_api_root"]);
-        return $this;
-    }
-
-    public function getWwwDir() {
-        return $this->wwwDir;
     }
 
     public function getAppDir() {
@@ -94,27 +68,9 @@ class Supplier {
     public function getTym() {
         return $this->tym;
     }
-
-    public function getTymyRoot() {
-        return $this->tymyRoot;
-    }
-
-    public function getApiRoot() {
-        return $this->apiRoot;
-    }
     
     public function setTym($tym) {
         $this->tym = getenv("AUTOTEST") ? "autotest" : explode(".", $_SERVER["HTTP_HOST"])[0];
-        return $this;
-    }
-
-    private function setApiRoot($apiRoot) {
-        $this->apiRoot = $apiRoot;
-        return $this;
-    }
-
-    private function setTymyRoot($tymyRoot) {
-        $this->tymyRoot = $tymyRoot;
         return $this;
     }
 
@@ -169,19 +125,6 @@ class Supplier {
         }
     }
 
-    public function getTeamNeonDir() {
-        return $this->teamNeonDir;
-    }
-
-    public function setTeamNeonDir($teamNeonDir) {
-        $this->teamNeonDir = $teamNeonDir;
-        return $this;
-    }
-
-    public function isHttps() {
-        return strtolower($this->getTapi_config()["protocol"]) == "https";
-    }
-
     public function getTeamNeon() {
         return $this->teamNeon;
     }
@@ -221,10 +164,10 @@ class Supplier {
     }
 
     private function getUserNeonFile($userId){
-        return $this->getTeamNeonDir() . "/config.user.$userId.neon";
+        return TEAM_DIR . "/config/config.user.$userId.neon";
     }
     
     private function getTeamNeonFile(){
-        return $this->getTeamNeonDir() . "/config.team.neon";
+        return TEAM_DIR . "/config/config.team.neon";
     }
 }

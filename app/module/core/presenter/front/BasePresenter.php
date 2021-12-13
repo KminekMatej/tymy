@@ -55,11 +55,9 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
         $this->template->css = Debugger::$productionMode ? "min.css" : "css";
 
         $this->template->team = $this->teamManager->getTeam();
-        $this->template->tymyRoot = $this->supplier->getTymyRoot();
-        $this->template->apiRoot = $this->supplier->getApiRoot();
+        $this->template->tymyRoot = $this->teamManager->getTeamFolder();
         
-        $this->template->wwwDir = $this->supplier->getWwwDir();
-        $this->template->appDir = $this->supplier->getAppDir();
+        $this->template->wwwDir = ROOT_DIR . "/www";
         $this->template->skin = $this->supplier->getSkin();
         
         $this->template->appver = $this->supplier->getVersionCode();
