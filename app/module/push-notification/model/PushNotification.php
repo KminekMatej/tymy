@@ -17,8 +17,9 @@ class PushNotification implements JsonSerializable
     private string $message;
     private ?string $imageUrl = null;
     private ?int $badge = null;
+    private array $params = [];
 
-    public function __construct(int $userId, int $teamId, string $title, string $message, ?string $imageUrl, ?int $badge)
+    public function __construct(int $userId, int $teamId, string $title, string $message, ?string $imageUrl, ?int $badge, array $params = [])
     {
         $this->userId = $userId;
         $this->teamId = $teamId;
@@ -26,6 +27,7 @@ class PushNotification implements JsonSerializable
         $this->message = $message;
         $this->imageUrl = $imageUrl;
         $this->badge = $badge;
+        $this->params = $params;
     }
 
     public function getUserId(): int
@@ -56,6 +58,17 @@ class PushNotification implements JsonSerializable
     public function getBadge(): ?int
     {
         return $this->badge;
+    }
+
+    public function getParams(): array
+    {
+        return $this->params;
+    }
+
+    public function addParam(string $name, mixed $value)
+    {
+        $this->params[$name] = $value;
+        return $this;
     }
 
     public function jsonSerialize()

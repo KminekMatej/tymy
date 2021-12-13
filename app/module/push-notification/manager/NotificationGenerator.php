@@ -27,6 +27,16 @@ class NotificationGenerator
 
     public function newPost(Discussion $discussion, Post $post)
     {
-        return new PushNotification($this->user->getId(), $this->teamManager->getTeam()->getId(), "{$post->getCreatedBy()->getCallName()} posted in {$discussion->getWebName()}", $post->getPost(), null, null);
+        return new PushNotification(
+            $this->user->getId(),
+            $this->teamManager->getTeam()->getId(),
+            "{$post->getCreatedBy()->getCallName()} posted in {$discussion->getWebName()}",
+            $post->getPost(),
+            null,
+            null,
+            [
+                "discussionId" => $discussion->getId()
+            ]
+        );
     }
 }
