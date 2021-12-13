@@ -1,14 +1,14 @@
 <?php
 namespace Tymy\Module\PushNotification\Model;
 
-use Tymy\Module\Core\Model\BaseModel;
+use JsonSerializable;
 
 /**
  * Description of PushNotification
  *
  * @author kminekmatej, 14. 11. 2021, 21:29:25
  */
-class PushNotification implements \JsonSerializable
+class PushNotification implements JsonSerializable
 {
 
     private int $userId;
