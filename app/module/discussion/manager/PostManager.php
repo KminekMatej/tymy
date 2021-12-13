@@ -151,7 +151,7 @@ class PostManager extends BaseManager
         $createdPost = $this->getById($createdRow->id);
 
 
-        $notification = $this->notificationGenerator->newPost($this->discussion, $createdPost);
+        $notification = $this->notificationGenerator->createPost($this->discussion, $createdPost);
         $this->pushNotificationManager->notifyUsers($notification, $this->discussionManager->getAllowedReaders($this->discussion));
 
         return $createdPost;

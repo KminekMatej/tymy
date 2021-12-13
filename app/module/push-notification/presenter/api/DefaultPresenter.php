@@ -2,7 +2,9 @@
 namespace Tymy\Module\PushNotification\Presenter\Api;
 
 use Tymy\Module\Core\Presenter\Api\SecuredPresenter;
+use Tymy\Module\PushNotification\Manager\NotificationGenerator;
 use Tymy\Module\PushNotification\Manager\PushNotificationManager;
+use Tymy\Module\PushNotification\Model\PushNotification;
 use Tymy\Module\PushNotification\Model\Subscriber;
 
 /**

@@ -15,9 +15,10 @@ use Tymy\Module\Team\Manager\TeamManager;
 class NotificationGenerator
 {
 
+    public const CREATE_POST = "create-post";
+
     private User $user;
     private TeamManager $teamManager;
-    private Team $team;
 
     public function __construct(User $user, TeamManager $teamManager)
     {
@@ -25,9 +26,10 @@ class NotificationGenerator
         $this->teamManager = $teamManager;
     }
 
-    public function newPost(Discussion $discussion, Post $post)
+    public function createPost(Discussion $discussion, Post $post)
     {
         return new PushNotification(
+            self::CREATE_POST,
             $this->user->getId(),
             $this->teamManager->getTeam()->getId(),
             "{$post->getCreatedBy()->getCallName()} posted in {$discussion->getWebName()}",
