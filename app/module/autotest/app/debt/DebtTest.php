@@ -174,7 +174,11 @@ class DebtTest extends RequestCase
     {
         $this->authorizeUser();
 
-        $recordId = $this->recordManager->createDebt(null, ["payeeId" => $this->config["user_test_id"], "debtorId" => null, "caption" => "Tým mi dluží přeplatek za finále MČR, id: " . $this->user->getId()]);
+        $recordId = $this->recordManager->createDebt(null, [
+            "payeeId" => $this->config["user_test_id"],
+            "debtorId" => 0,
+            "caption" => "Tým mi dluží přeplatek za finále MČR, id: " . $this->user->getId()
+        ]);
 
         //admin can mark it as paymentSent
         $this->authorizeAdmin($this->config["user_mainadmin_login"], $this->config["user_mainadmin_pwd"]);
