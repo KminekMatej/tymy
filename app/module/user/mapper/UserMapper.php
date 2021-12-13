@@ -1,5 +1,4 @@
 <?php
-
 namespace Tymy\Module\User\Mapper;
 
 use Tymy\Module\Core\Mapper\BaseMapper;
@@ -12,6 +11,7 @@ use Tymy\Module\Core\Model\Field;
  */
 class UserMapper extends BaseMapper
 {
+
     public static function scheme(): array
     {
         return [
@@ -42,7 +42,7 @@ class UserMapper extends BaseMapper
             Field::datetime()->withColumn("gdpr_accepted_at")->setProperty("gdprAccepted")->setChangeable(false),
             Field::datetime()->withColumn("gdpr_revoked_at")->setProperty("gdprRevoked")->setChangeable(false),
             Field::datetime()->withColumn("last_read_news")->setProperty("lastReadNews")->setChangeable(false),
-
+            Field::string()->withPropertyAndColumn("skin"),
         ];
     }
 }

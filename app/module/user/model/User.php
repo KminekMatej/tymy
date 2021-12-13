@@ -1,5 +1,4 @@
 <?php
-
 namespace Tymy\Module\User\Model;
 
 use Nette\Utils\DateTime;
@@ -13,6 +12,7 @@ use Tymy\Module\User\Mapper\UserMapper;
  */
 class User extends BaseModel
 {
+
     public const TABLE = "users";
     public const TABLE_MAILS = "usr_mails";
     public const TABLE_PWD_RESET = "pwd_reset";
@@ -63,6 +63,7 @@ class User extends BaseModel
     private int $warnings = 0;
     private array $errFields = [];
     private ?string $webName = null;
+    private string $skin = "Hellboy";
 
     public function getLogin(): string
     {
@@ -226,6 +227,11 @@ class User extends BaseModel
     public function getWebName(): ?string
     {
         return $this->webName;
+    }
+
+    public function getSkin(): string
+    {
+        return $this->skin;
     }
 
     public function setLogin(string $login)
@@ -455,6 +461,12 @@ class User extends BaseModel
     public function setWebName(?string $webName): self
     {
         $this->webName = $webName;
+        return $this;
+    }
+
+    public function setSkin(string $skin)
+    {
+        $this->skin = $skin;
         return $this;
     }
 
