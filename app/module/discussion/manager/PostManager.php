@@ -381,19 +381,20 @@ class PostManager extends BaseManager
      */
     private function markAllAsRead(int $userId, int $discussionId): void
     {
-        $updated = $this->database->table(Post::TABLE_READ)
-                ->where("ds_id", $discussionId)
-                ->where("user_id", $userId)
-                ->update([
-            "last_date" => Explorer::literal("NOW()")
-        ]);
+        $selector = $this->database->table(Post::TABLE_READ)
+            ->where("ds_id", $discussionId)
+            ->where("user_id", $userId);
 
-        if (!$updated) { //record does not exist yet, create new one for user and discussion
+        if ($selector->count()) {
+            $selector->update([
+                "last_date" => Explorer::literal("NOW()")
+            ]);
+        } else {//record does not exist yet, create new one for user and discussion
             $this->database->table(Post::TABLE_READ)
-                    ->insert([
-                        "last_date" => Explorer::literal("NOW()"),
-                        "ds_id" => $discussionId,
-                        "user_id" => $userId,
+                ->insert([
+                    "last_date" => Explorer::literal("NOW()"),
+                    "ds_id" => $discussionId,
+                    "user_id" => $userId,
             ]);
         }
     }
