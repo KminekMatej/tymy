@@ -52,7 +52,7 @@ class ApplePush
             ->issuedBy($this->apns['teamId'])
             ->issuedAt($now)
             ->withHeader('kid', $this->apns['keyId'])
-            ->getToken(new Sha256(new MultibyteStringConverter()), InMemory::file($this->apns['key']));
+            ->getToken(new Sha256(new MultibyteStringConverter()), InMemory::file(ROOT_DIR . "/" . $this->apns['key']));
 
         $headers = [
             "apns-topic: " . $this->apns['topic'],
@@ -92,7 +92,7 @@ class ApplePush
 
             $response = curl_exec($ch);
             $info = curl_getinfo($ch);
-
+            Debugger::barDump([$headers, $payloadJSON, $response, $info], "Notifying apple device {$subscriber->getSubscription()}");
             if ($response !== true || $info["http_code"] !== 200) {
                 $decodedResponse = json_decode($response);
                 $errorReason = $decodedResponse->reason ?? null;
