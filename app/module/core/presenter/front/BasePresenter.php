@@ -59,7 +59,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
         $this->template->tymyRoot = $this->teamManager->getTeamFolder();
         
         $this->template->wwwDir = ROOT_DIR . "/www";
-        $this->template->skin = $this->skin = $this->team->getSkin() ?: TeamManager::DEFAULT_SKIN;
+        $this->template->skin = $this->skin = $this->team->getSkin();
 
         $this->template->appver = $this->supplier->getVersionCode();
         

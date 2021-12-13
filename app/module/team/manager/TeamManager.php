@@ -20,7 +20,7 @@ use Tymy\Module\Team\Model\Team;
 class TeamManager extends BaseManager
 {
 
-    public const DEFAULT_SKIN = "Hellboy";
+    public const DEFAULT_SKIN = "hell-boy";
 
     private string $teamFolder;
 

@@ -3,6 +3,7 @@ namespace Tymy\Module\Team\Model;
 
 use Nette\Utils\DateTime;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\Team\Mapper\TeamMapper;
 
 /**
@@ -144,7 +145,7 @@ class Team extends BaseModel
 
     public function getSkin(): string
     {
-        return $this->skin;
+        return $this->skin ?? TeamManager::DEFAULT_SKIN;
     }
 
     public function getFeatures(): array
