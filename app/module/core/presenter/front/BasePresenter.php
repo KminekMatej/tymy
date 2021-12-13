@@ -31,6 +31,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
     /** @inject */
     public TeamManager $teamManager;
     protected Team $team;
+    protected string $skin;
 
 	protected function startup()
     {
@@ -58,8 +59,8 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
         $this->template->tymyRoot = $this->teamManager->getTeamFolder();
         
         $this->template->wwwDir = ROOT_DIR . "/www";
-        $this->template->skin = $this->supplier->getSkin();
-        
+        $this->template->skin = $this->skin = $this->team->getSkin() ?: TeamManager::DEFAULT_SKIN;
+
         $this->template->appver = $this->supplier->getVersionCode();
         
         $this->template->addFilter('monthName', function ($number) {

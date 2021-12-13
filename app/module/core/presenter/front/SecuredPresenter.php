@@ -82,9 +82,16 @@ class SecuredPresenter extends BasePresenter
             }
             $this->redirect(':Sign:In:');
         }
-        if (array_key_exists("language", $this->getUser()->getIdentity()->getData())) {
-            $this->translator->setLocale(self::LOCALES[$this->getUser()->getIdentity()->getData()["language"]]);
+
+        $userData = $this->getUser()->getIdentity()->getData();
+        if (array_key_exists("language", $userData)) {
+            $this->translator->setLocale(self::LOCALES[$userData["language"]]);
         }
+
+        if ($userData["skin"]) {//set user defined skin instead of team one after login
+            $this->template->skin = $this->skin = $userData["skin"];
+        }
+
         $this->supplier->loadUserNeon($this->getUser()->getId());
 
         $this->setAccessibleSettings();

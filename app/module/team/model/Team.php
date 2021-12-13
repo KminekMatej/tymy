@@ -1,5 +1,4 @@
 <?php
-
 namespace Tymy\Module\Team\Model;
 
 use Nette\Utils\DateTime;
@@ -13,162 +12,92 @@ use Tymy\Module\Team\Mapper\TeamMapper;
  */
 class Team extends BaseModel
 {
+
     public const TABLE = "teams";
     public const TABLE_FEATURES = "features";
     public const MODULE = "team";
 
-    /** @var string */
-    private $sysName;
-
-    /** @var string */
-    private $name;
-
-    /** @var string */
-    private $dbName;
+    private string $sysName;
+    private string $name;
+    private string $dbName;
 
     /** @var string[] */
-    private $languages;
+    private array $languages;
+    private string $defaultLanguageCode;
+    private ?string $sport = null;
+    private ?string $accountNumber = null;
+    private ?string $web = null;
+    private ?int $countryId = null;
+    private int $maxUsers;
+    private int $maxEventsMonth;
+    private bool $advertisement;
+    private Datetime $insertDate;
+    private int $timeZone;
+    private string $dstFlag;
+    private ?DateTime $tariffUntil = null;
+    private ?string $tariffPayment = null;
+    private string $attCheckType;
+    private int $attendanceCheckDays;
+    private string $tariff;
+    private string $skin;
+    private array $features;
 
-    /** @var string */
-    private $defaultLanguageCode;
-
-    /** @var string */
-    private $sport;
-
-    /** @var string[] */
-    private $modules;
-
-    /** @var string */
-    private $accountNumber;
-
-    /** @var string */
-    private $web;
-
-    /** @var int */
-    private $countryId;
-
-    /** @var string */
-    private $attendEmail;
-
-    /** @var string */
-    private $excuseMail;
-
-    /** @var int */
-    private $maxUsers;
-
-    /** @var int */
-    private $maxEventsMonth;
-
-    /** @var bool */
-    private $advertisement;
-
-    /** @var Datetime */
-    private $insertDate;
-
-    /** @var int */
-    private $timeZone;
-
-    /** @var string */
-    private $dstFlag;
-
-    /** @var string */
-    private $appVersion;
-
-    /** @var bool */
-    private $useNamedays;
-
-    /** @var DateTime */
-    private $tariffUntil;
-
-    /** @var string */
-    private $tariffPayment;
-
-    /** @var string */
-    private $attCheckType;
-
-    /** @var int */
-    private $attendanceCheckDays;
-
-    /** @var string */
-    private $host;
-
-    /** @var string */
-    private $tariff;
-
-    /** @var array */
-    private $features;
-
-    public function getSysName()
+    public function getSysName(): string
     {
         return $this->sysName;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function getDbName()
+    public function getDbName(): string
     {
         return $this->dbName;
     }
 
-    public function getLanguages()
+    public function getLanguages(): array
     {
         return $this->languages;
     }
 
-    public function getDefaultLanguageCode()
+    public function getDefaultLanguageCode(): string
     {
         return $this->defaultLanguageCode;
     }
 
-    public function getSport()
+    public function getSport(): ?string
     {
         return $this->sport;
     }
 
-    public function getModules()
-    {
-        return $this->modules;
-    }
-
-    public function getAccountNumber()
+    public function getAccountNumber(): ?string
     {
         return $this->accountNumber;
     }
 
-    public function getWeb()
+    public function getWeb(): ?string
     {
         return $this->web;
     }
 
-    public function getCountryId()
+    public function getCountryId(): ?int
     {
         return $this->countryId;
     }
 
-    public function getAttendEmail()
-    {
-        return $this->attendEmail;
-    }
-
-    public function getExcuseMail()
-    {
-        return $this->excuseMail;
-    }
-
-    public function getMaxUsers()
+    public function getMaxUsers(): int
     {
         return $this->maxUsers;
     }
 
-    public function getMaxEventsMonth()
+    public function getMaxEventsMonth(): int
     {
         return $this->maxEventsMonth;
     }
 
-    public function getAdvertisement()
+    public function getAdvertisement(): bool
     {
         return $this->advertisement;
     }
@@ -178,72 +107,49 @@ class Team extends BaseModel
         return $this->insertDate;
     }
 
-    public function getTimeZone()
+    public function getTimeZone(): int
     {
         return $this->timeZone;
     }
 
-    public function getDstFlag()
+    public function getDstFlag(): string
     {
         return $this->dstFlag;
     }
 
-    public function getAppVersion()
-    {
-        return $this->appVersion;
-    }
-
-    public function getUseNamedays()
-    {
-        return $this->useNamedays;
-    }
-
-    public function getTariffUntil(): DateTime
+    public function getTariffUntil(): ?DateTime
     {
         return $this->tariffUntil;
     }
 
-    public function getTariffPayment()
+    public function getTariffPayment(): ?string
     {
         return $this->tariffPayment;
     }
 
-    public function getAttCheckType()
+    public function getAttCheckType(): string
     {
         return $this->attCheckType;
     }
 
-    public function getAttendanceCheckDays()
+    public function getAttendanceCheckDays(): int
     {
         return $this->attendanceCheckDays;
     }
 
-    public function getHost()
-    {
-        return $this->host;
-    }
-
-    public function getTariff()
+    public function getTariff(): string
     {
         return $this->tariff;
     }
 
-    public function setSysName($sysName)
+    public function getSkin(): string
     {
-        $this->sysName = $sysName;
-        return $this;
+        return $this->skin;
     }
 
-    public function setName($name)
+    public function getFeatures(): array
     {
-        $this->name = $name;
-        return $this;
-    }
-
-    public function setDbName($dbName)
-    {
-        $this->dbName = $dbName;
-        return $this;
+        return $this->features;
     }
 
     public function setLanguages($languages)
@@ -252,67 +158,67 @@ class Team extends BaseModel
         return $this;
     }
 
-    public function setDefaultLanguageCode($defaultLanguageCode)
+    public function setSysName(string $sysName)
+    {
+        $this->sysName = $sysName;
+        return $this;
+    }
+
+    public function setName(string $name)
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    public function setDbName(string $dbName)
+    {
+        $this->dbName = $dbName;
+        return $this;
+    }
+
+    public function setDefaultLanguageCode(string $defaultLanguageCode)
     {
         $this->defaultLanguageCode = $defaultLanguageCode;
         return $this;
     }
 
-    public function setSport($sport)
+    public function setSport(?string $sport)
     {
         $this->sport = $sport;
         return $this;
     }
 
-    public function setModules($modules)
-    {
-        $this->modules = is_string($modules) ? explode(",", $modules) : $modules;
-        return $this;
-    }
-
-    public function setAccountNumber($accountNumber)
+    public function setAccountNumber(?string $accountNumber)
     {
         $this->accountNumber = $accountNumber;
         return $this;
     }
 
-    public function setWeb($web)
+    public function setWeb(?string $web)
     {
         $this->web = $web;
         return $this;
     }
 
-    public function setCountryId($countryId)
+    public function setCountryId(?int $countryId)
     {
         $this->countryId = $countryId;
         return $this;
     }
 
-    public function setAttendEmail($attendEmail)
-    {
-        $this->attendEmail = $attendEmail;
-        return $this;
-    }
-
-    public function setExcuseMail($excuseMail)
-    {
-        $this->excuseMail = $excuseMail;
-        return $this;
-    }
-
-    public function setMaxUsers($maxUsers)
+    public function setMaxUsers(int $maxUsers)
     {
         $this->maxUsers = $maxUsers;
         return $this;
     }
 
-    public function setMaxEventsMonth($maxEventsMonth)
+    public function setMaxEventsMonth(int $maxEventsMonth)
     {
         $this->maxEventsMonth = $maxEventsMonth;
         return $this;
     }
 
-    public function setAdvertisement($advertisement)
+    public function setAdvertisement(bool $advertisement)
     {
         $this->advertisement = $advertisement;
         return $this;
@@ -324,72 +230,55 @@ class Team extends BaseModel
         return $this;
     }
 
-    public function setTimeZone($timeZone)
+    public function setTimeZone(int $timeZone)
     {
         $this->timeZone = $timeZone;
         return $this;
     }
 
-    public function setDstFlag($dstFlag)
+    public function setDstFlag(string $dstFlag)
     {
         $this->dstFlag = $dstFlag;
         return $this;
     }
 
-    public function setAppVersion($appVersion)
-    {
-        $this->appVersion = $appVersion;
-        return $this;
-    }
-
-    public function setUseNamedays($useNamedays)
-    {
-        $this->useNamedays = $useNamedays;
-        return $this;
-    }
-
-    public function setTariffUntil(DateTime $tariffUntil)
+    public function setTariffUntil(?DateTime $tariffUntil)
     {
         $this->tariffUntil = $tariffUntil;
         return $this;
     }
 
-    public function setTariffPayment($tariffPayment)
+    public function setTariffPayment(?string $tariffPayment)
     {
         $this->tariffPayment = $tariffPayment;
         return $this;
     }
 
-    public function setAttCheckType($attCheckType)
+    public function setAttCheckType(string $attCheckType)
     {
         $this->attCheckType = $attCheckType;
         return $this;
     }
 
-    public function setAttendanceCheckDays($attendanceCheckDays)
+    public function setAttendanceCheckDays(int $attendanceCheckDays)
     {
         $this->attendanceCheckDays = $attendanceCheckDays;
         return $this;
     }
 
-    public function setHost($host)
-    {
-        $this->host = $host;
-        return $this;
-    }
-
-    public function setTariff($tariff)
+    public function setTariff(string $tariff)
     {
         $this->tariff = $tariff;
         return $this;
     }
 
-    public function getFeatures()
+    public function setSkin(string $skin)
     {
-        return $this->features;
+        $this->skin = $skin;
+        return $this;
     }
 
-    public function setFeatures($features)
+    public function setFeatures(array $features)
     {
         $this->features = $features;
         return $this;

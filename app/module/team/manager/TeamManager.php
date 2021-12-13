@@ -19,6 +19,9 @@ use Tymy\Module\Team\Model\Team;
  */
 class TeamManager extends BaseManager
 {
+
+    public const DEFAULT_SKIN = "Hellboy";
+
     private string $teamFolder;
 
     public function __construct(string $teamFolder, ManagerFactory $managerFactory)

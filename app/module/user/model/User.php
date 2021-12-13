@@ -3,6 +3,7 @@ namespace Tymy\Module\User\Model;
 
 use Nette\Utils\DateTime;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\User\Mapper\UserMapper;
 
 /**
@@ -63,7 +64,7 @@ class User extends BaseModel
     private int $warnings = 0;
     private array $errFields = [];
     private ?string $webName = null;
-    private string $skin = "Hellboy";
+    private string $skin;
 
     public function getLogin(): string
     {
@@ -231,7 +232,7 @@ class User extends BaseModel
 
     public function getSkin(): string
     {
-        return $this->skin;
+        return $this->skin ?: TeamManager::DEFAULT_SKIN;
     }
 
     public function setLogin(string $login)

@@ -143,13 +143,6 @@ class Supplier {
         return $this;
     }
 
-    public function getSkin() {
-        if ($this->getUserNeon() != NULL && !empty($this->getUserNeon()->skin))
-            return $this->getUserNeon()->skin;
-        else
-            return $this->getTeamNeon()->skin;
-    }
-
     public function getRequiredFields() {
         return $this->getTeamNeon()->userRequiredFields;
     }
