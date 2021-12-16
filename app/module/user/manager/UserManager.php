@@ -54,7 +54,7 @@ class UserManager extends BaseManager
     /** @var SimpleUser[] */
     private array $simpleUserCache = [];
 
-    public function __construct(ManagerFactory $managerFactory, MailService $mailService, PermissionManager $permissionManager, AuthenticationManager $authenticationManager, Request $request, Translator $translator)
+    public function __construct(ManagerFactory $managerFactory, MailService $mailService, PermissionManager $permissionManager, AuthenticationManager $authenticationManager, Request $request, Translator $translator, TeamManager $teamManager)
     {
         parent::__construct($managerFactory);
         $this->mailService = $mailService;
@@ -62,6 +62,7 @@ class UserManager extends BaseManager
         $this->authenticationManager = $authenticationManager;
         $this->translator = $translator;
         $this->request = $request;
+        $this->teamManager = $teamManager;
     }
 
     /**
