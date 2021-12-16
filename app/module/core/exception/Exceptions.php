@@ -1,5 +1,4 @@
 <?php
-
 namespace Tymy\Module\Core\Exception;
 
 use Exception;
@@ -11,4 +10,10 @@ use Exception;
  */
 class ResponderException extends Exception
 {
+    
+}
+
+class MissingInputException extends Exception
+{
+    
 }

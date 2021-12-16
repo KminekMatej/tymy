@@ -566,11 +566,9 @@ class UserManager extends BaseManager
 
         $inits = $this->getByStatus("INIT");
 
-        $this->checkInputs($data);
-
         foreach (["password", "email"] as $neccessaryField) {
             if (!array_key_exists($neccessaryField, $data)) {
-                $this->responder->E4013_MISSING_INPUT($neccessaryField);
+                throw new MissingInputException($neccessaryField);
             }
         }
 

@@ -14,6 +14,7 @@ use Tracy\Debugger;
 use Tracy\ILogger;
 use Tymy\Module\Core\Exception\DeleteIntegrityException;
 use Tymy\Module\Core\Exception\IntegrityException;
+use Tymy\Module\Core\Exception\MissingInputException;
 use Tymy\Module\Core\Exception\UpdateIntegrityException;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Manager\Responder;
@@ -164,6 +165,11 @@ class BasePresenter extends Presenter
         if (is_a($exc, IntegrityException::class)) {
             /* @var $exc IntegrityException */
             $this->responder->E4007_RELATION_PROHIBITS($exc->failingField);
+        }
+
+        if (is_a($exc, MissingInputException::class)) {
+            /* @var $exc IntegrityException */
+            $this->responder->E4013_MISSING_INPUT($exc->getMessage());
         }
 
         throw $exc;

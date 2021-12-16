@@ -4,6 +4,7 @@ namespace Tymy\App\Forms;
 
 use Nette;
 use Nette\Application\UI\Form;
+use Tymy\Module\Core\Exception\MissingInputException;
 use Tymy\Module\User\Manager\UserManager;
 
 class SignUpFormFactory {
@@ -66,6 +67,9 @@ class SignUpFormFactory {
                 ]);
             } catch (\Nette\InvalidArgumentException $exc) {
                 $form['username']->addError($exc->getMessage());
+                return;
+            } catch (MissingInputException $exc) {
+                $form[$exc->getMessage()]->addError("This field is required");
                 return;
             }
             $onSuccess();
