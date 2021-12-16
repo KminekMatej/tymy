@@ -65,13 +65,6 @@ class TeamManager extends BaseManager
         $sTeam->languages = explode(",", $row->languages);
         $sTeam->defaultLanguageCode = $row->default_lc;
 
-        $featuresRow = $row->related(Team::TABLE_FEATURES, "team_id")->fetch();
-
-        if ($featuresRow) {
-            $features = json_decode($featuresRow->features);
-            $sTeam->v2 = $features->v2 ?? false;
-        }
-
         return $sTeam;
     }
 
@@ -84,12 +77,11 @@ class TeamManager extends BaseManager
     public function toSimpleTeam(Team $team): SimpleTeam
     {
         return (new SimpleTeam())
-                        ->setName($team->getName())
-                        ->setSport($team->getSport())
-                        ->setSysName($team->getName())
-                        ->setDefaultLanguageCode($team->getDefaultLanguageCode())
-                        ->setLanguages($team->getLanguages())
-                        ->setV2($team->getFeatures()["v2"]);
+                ->setName($team->getName())
+                ->setSport($team->getSport())
+                ->setSysName($team->getName())
+                ->setDefaultLanguageCode($team->getDefaultLanguageCode())
+                ->setLanguages($team->getLanguages());
     }
 
     /**

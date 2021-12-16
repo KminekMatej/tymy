@@ -16,7 +16,6 @@ class SimpleTeam implements JsonSerializable
     public string $sport;
     public array $languages;
     public string $defaultLanguageCode;
-    public bool $v2;
 
     public function setSysName(string $sysName)
     {
@@ -48,12 +47,6 @@ class SimpleTeam implements JsonSerializable
         return $this;
     }
 
-    public function setV2(bool $v2)
-    {
-        $this->v2 = $v2;
-        return $this;
-    }
-
     public function jsonSerialize()
     {
         return [
@@ -62,7 +55,6 @@ class SimpleTeam implements JsonSerializable
             "sport" => $this->sport,
             "languages" => $this->languages,
             "defaultLanguageCode" => $this->defaultLanguageCode,
-            "v2" => $this->v2,
         ];
     }
 }
