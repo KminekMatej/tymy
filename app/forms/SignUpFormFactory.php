@@ -4,7 +4,7 @@ namespace Tymy\App\Forms;
 
 use Nette;
 use Nette\Application\UI\Form;
-use Tapi\UserRegisterResource;
+use Tymy\Module\User\Manager\UserManager;
 
 class SignUpFormFactory {
 
@@ -18,10 +18,11 @@ class SignUpFormFactory {
     /** @var FormFactory */
     private $factory;
 
-    private $registerResource;
+    private UserManager $userManager;
 
-    public function __construct(FormFactory $factory) {
+    public function __construct(FormFactory $factory, UserManager $userManager) {
         $this->factory = $factory;
+        $this->userManager = $userManager;
     }
 
     /**
@@ -55,14 +56,14 @@ class SignUpFormFactory {
 
         $form->onSuccess[] = function (Form $form, $values) use ($onSuccess) {
             try {
-                $this->registerResource
-                        ->setLogin($values->username)
-                        ->setPassword($values->password)
-                        ->setEmail($values->email)
-                        ->setFirstName($values->firstName)
-                        ->setLastName($values->lastName)
-                        ->setNote($values->admin_note)
-                        ->perform();
+                $this->userManager->register([
+                    "login" => $values->username,
+                    "password" => $values->password,
+                    "email" => $values->email,
+                    "firstName" => $values->firstName,
+                    "lastName" => $values->lastName,
+                    "note" => $values->admin_note,
+                ]);
             } catch (\Nette\InvalidArgumentException $exc) {
                 $form['username']->addError($exc->getMessage());
                 return;

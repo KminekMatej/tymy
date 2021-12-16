@@ -2,7 +2,7 @@
 
 namespace Tymy\Module\User\Presenter\Api;
 
-use Exception;
+use Nette\InvalidArgumentException;
 use Tymy\Module\Core\Presenter\Api\BasePresenter;
 use Tymy\Module\User\Manager\UserManager;
 
@@ -26,6 +26,8 @@ class RegisterPresenter extends BasePresenter
 
         try {
             $registeredUser = $this->manager->register($this->requestData);
+        } catch (InvalidArgumentException $exc) {
+            $this->respondBadRequest($exc->getMessage());
         } catch (Exception $exc) {
             $this->handleException($exc);
         }

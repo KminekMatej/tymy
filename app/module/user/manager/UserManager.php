@@ -9,6 +9,7 @@ use Nette\Database\IRow;
 use Nette\Database\Table\ActiveRow;
 use Nette\Database\Table\Selection;
 use Nette\Http\Request;
+use Nette\InvalidArgumentException;
 use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
 use Tymy\Module\Authentication\Manager\AuthenticationManager;
@@ -550,10 +551,17 @@ class UserManager extends BaseManager
         }
     }
 
-    private function allowRegister(array &$data)
+    /**
+     * Check if registration is allowed
+     * 
+     * @param array $data
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    private function allowRegister(array &$data): void
     {
         if (empty($data)) {
-            $this->respondBadRequest();
+            throw new InvalidArgumentException("Invalid data");
         }
 
         $inits = $this->getByStatus("INIT");
@@ -567,30 +575,30 @@ class UserManager extends BaseManager
         }
 
         if ($this->loginExists($data["login"])) {
-            $this->respondBadRequest("Username taken");
+            throw new InvalidArgumentException("Username taken");
         }
 
         if (count($inits) > 3) {
-            $this->respondBadRequest("Registrations limit reached");
+            throw new InvalidArgumentException("Registrations limit reached");
         }
 
         if (strlen($data["password"]) < 3) {
-            $this->respondBadRequest("Password failure");
+            throw new InvalidArgumentException("Password failure");
         }
         if (!preg_match(BaseModel::MAIL_REGEX, $data["email"])) {
-            $this->respondBadRequest("E-mail failure");
+            throw new InvalidArgumentException("E-mail failure");
         }
         if (strlen($data["login"]) < 3 || strlen($data["login"]) > 20) {
-            $this->respondBadRequest("Username failure");
+            throw new InvalidArgumentException("Username failure");
         }
         if ($this->loginExists($data["login"])) {
-            $this->respondBadRequest("Username taken");
+            throw new InvalidArgumentException("Username taken");
         }
         if ($this->limitUsersReached()) {
-            $this->respondForbidden("User quota limit reached");
+            throw new InvalidArgumentException("User quota limit reached");
         }
         if ($this->getIdByEmail($data["email"])) {
-            $this->respondBadRequest("E-mail taken");
+            throw new InvalidArgumentException("E-mail taken");
         }
     }
 
