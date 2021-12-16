@@ -64,7 +64,7 @@ class User extends BaseModel
     private int $warnings = 0;
     private array $errFields = [];
     private ?string $webName = null;
-    private string $skin;
+    private ?string $skin = null;
 
     public function getLogin(): string
     {
@@ -465,7 +465,7 @@ class User extends BaseModel
         return $this;
     }
 
-    public function setSkin(string $skin)
+    public function setSkin(?string $skin = null)
     {
         $this->skin = $skin;
         return $this;
