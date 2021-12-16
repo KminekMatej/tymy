@@ -12,25 +12,15 @@ use Tymy\Module\Team\Manager\TeamManager;
  */
 class IsPresenter extends BasePresenter
 {
-    /** @var TeamManager @inject */
-    public $teamManager;
+    /** @inject */
+    public TeamManager $teamManager;
 
     public function actionDefault()
-    {
-        $this->teamManager->isFeatureAllowed("api") === true ? $this->is() : $this->isNot();
-    }
-
-    private function is()
     {
         if ($this->getRequest()->getMethod() !== "GET") {
             $this->respondNotAllowed();
         }
 
         $this->responder->A200_OK($this->teamManager->getTeamSimple()->jsonSerialize());
-    }
-
-    private function isNot()
-    {
-        $this->responder->E403_FORBIDDEN("API disabled");
     }
 }
