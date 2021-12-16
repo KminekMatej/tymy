@@ -1,5 +1,4 @@
 <?php
-
 namespace Tymy\Module\Team\Manager;
 
 use Nette\Database\IRow;
@@ -19,7 +18,6 @@ use Tymy\Module\Team\Model\Team;
  */
 class TeamManager extends BaseManager
 {
-
     public const DEFAULT_SKIN = "hell-boy";
 
     private string $teamFolder;
@@ -29,30 +27,6 @@ class TeamManager extends BaseManager
         parent::__construct($managerFactory);
         $this->database = $this->mainDatabase;
         $this->teamFolder = $teamFolder;
-    }
-
-    /**
-     *
-     * @param ActiveRow $row
-     * @param bool $force
-     * @return Team
-     */
-    public function map(?IRow $row, bool $force = false): ?BaseModel
-    {
-        /* @var $team Team */
-        $team = parent::map($row, $force);
-
-        if (!$team) {
-            return null;
-        }
-
-        $featuresRow = $row->related(Team::TABLE_FEATURES, "team_id")->fetch();
-
-        if ($featuresRow) {
-            $team->setFeatures(json_decode($featuresRow->features, true));
-        }
-
-        return $team;
     }
 
     public function mapSimple($row): SimpleTeam
@@ -112,17 +86,6 @@ class TeamManager extends BaseManager
     {
         return $this->mapSimple($this->database->table(Team::TABLE)->where("sys_name", $this->teamSysName)->fetch());
     }
-    
-    /**
-     * Test whether team feature is allowed or not
-     * 
-     * @param string $feature
-     * @return bool
-     */
-    public function isFeatureAllowed(string $feature): bool
-    {
-        return $this->getTeam()->getFeatures()[$feature];
-    }
 
     protected function getClassName(): string
     {
@@ -173,10 +136,12 @@ class TeamManager extends BaseManager
 
     public function create(array $data, ?int $resourceId = null): BaseModel
     {
+        
     }
 
     public function delete(int $resourceId, ?int $subResourceId = null): int
     {
+        
     }
 
     public function read(int $resourceId, ?int $subResourceId = null): BaseModel

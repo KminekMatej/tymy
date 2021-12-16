@@ -15,7 +15,6 @@ class Team extends BaseModel
 {
 
     public const TABLE = "teams";
-    public const TABLE_FEATURES = "features";
     public const MODULE = "team";
 
     private string $sysName;
@@ -41,7 +40,6 @@ class Team extends BaseModel
     private int $attendanceCheckDays;
     private string $tariff;
     private string $skin;
-    private array $features;
 
     public function getSysName(): string
     {
@@ -146,11 +144,6 @@ class Team extends BaseModel
     public function getSkin(): string
     {
         return $this->skin ?? TeamManager::DEFAULT_SKIN;
-    }
-
-    public function getFeatures(): array
-    {
-        return $this->features;
     }
 
     public function setLanguages($languages)
@@ -276,12 +269,6 @@ class Team extends BaseModel
     public function setSkin(string $skin)
     {
         $this->skin = $skin;
-        return $this;
-    }
-
-    public function setFeatures(array $features)
-    {
-        $this->features = $features;
         return $this;
     }
 
