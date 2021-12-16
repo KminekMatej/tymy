@@ -3,6 +3,7 @@
 namespace Tymy\Module\User\Manager;
 
 use Exception;
+use Kdyby\Translation\Translator;
 use Nette\Application\AbortException;
 use Nette\Database\IRow;
 use Nette\Database\Table\ActiveRow;
@@ -17,6 +18,7 @@ use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Service\MailService;
 use Tymy\Module\Permission\Manager\PermissionManager;
 use Tymy\Module\Permission\Model\Privilege;
+use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\Team\Model\Team;
 use Tymy\Module\User\Mapper\UserMapper;
 use Tymy\Module\User\Model\SimpleUser;
@@ -33,22 +35,30 @@ class UserManager extends BaseManager
     public const HASH_LIMIT = 20;
     public const VALIDITYMIN = 10;
     public const MAX_PWD_REQUESTS = 3;
+    private const FIELDS_PERSONAL = ["gender", "firstName", "lastName", "phone", "email", "birthDate", "nameDayMonth", "nameDayDay", "language"];
+    private const FIELDS_LOGIN = ["callName", "canEditCallName", "login", "password", "canLogin"];
+    private const FIELDS_TEAMINFO = ["status", "jerseyNumber"];
+    private const FIELDS_ADDRESS = ["street", "city", "zipCode"];
 
     private MailService $mailService;
     private Request $request;
     private PermissionManager $permissionManager;
     private AuthenticationManager $authenticationManager;
+    private TeamManager $teamManager;
+    private Translator $translator;
     private ?User $userModel = null;
+    private array $userFields;
 
     /** @var SimpleUser[] */
     private array $simpleUserCache = [];
 
-    public function __construct(ManagerFactory $managerFactory, MailService $mailService, PermissionManager $permissionManager, AuthenticationManager $authenticationManager, Request $request)
+    public function __construct(ManagerFactory $managerFactory, MailService $mailService, PermissionManager $permissionManager, AuthenticationManager $authenticationManager, Request $request, Translator $translator)
     {
         parent::__construct($managerFactory);
         $this->mailService = $mailService;
         $this->permissionManager = $permissionManager;
         $this->authenticationManager = $authenticationManager;
+        $this->translator = $translator;
         $this->request = $request;
     }
 
@@ -265,6 +275,19 @@ class UserManager extends BaseManager
      */
     public function loginExists(string $login)
     {
+        return $this->database->table($this->getTable())->select("id")->where("user_name", $login)->count("id") > 0;
+    }
+
+    /**
+     * Check if login is already taken
+     *
+     * @param string $login
+     * @return bool
+     */
+    public function limitUsersReached()
+    {
+        $this->
+        $limit = $this->teamManager->getTeam()->getMaxUsers();
         return $this->database->table($this->getTable())->select("id")->where("user_name", $login)->count("id") > 0;
     }
 
@@ -554,6 +577,9 @@ class UserManager extends BaseManager
         if ($this->loginExists($data["login"])) {
             $this->respondBadRequest("Username taken");
         }
+        if ($this->loginExists($data["login"])) {
+            $this->respondBadRequest("Username taken");
+        }
         if ($this->getIdByEmail($data["email"])) {
             $this->respondBadRequest("E-mail taken");
         }
@@ -783,4 +809,44 @@ class UserManager extends BaseManager
         return (new User())->setId(0)->setCallName("*** TEAM ***");
     }
 
+    /**
+     * Get array of user fields
+     * 
+     * @return array
+     */
+    public function getAllFields(): array
+    {
+        if (isset($this->userFields)) {
+            return $this->userFields;
+        }
+
+        $this->userFields = [
+            "PERSONAL" => [],
+            "LOGIN" => [],
+            "TEAMINFO" => [],
+            "ADDRESS" => [],
+            "ALL" => []
+        ];
+        foreach (self::FIELDS_PERSONAL as $field) {
+            $caption = $this->translator->translate("team." . $field);
+            $this->userFields["PERSONAL"][$field] = $caption;
+            $this->userFields["ALL"][$field] = $caption;
+        }
+        foreach (self::FIELDS_LOGIN as $field) {
+            $caption = $this->translator->translate("team." . $field);
+            $this->userFields["LOGIN"][$field] = $this->translator->translate("team." . $field);
+            $this->userFields["ALL"][$field] = $caption;
+        }
+        foreach (self::FIELDS_TEAMINFO as $field) {
+            $caption = $this->translator->translate("team." . $field);
+            $this->userFields["TEAMINFO"][$field] = $this->translator->translate("team." . $field);
+            $this->userFields["ALL"][$field] = $caption;
+        }
+        foreach (self::FIELDS_ADDRESS as $field) {
+            $caption = $this->translator->translate("team." . $field);
+            $this->userFields["ADDRESS"][$field] = $this->translator->translate("team." . $field);
+            $this->userFields["ALL"][$field] = $caption;
+        }
+        return $this->userFields;
+    }
 }

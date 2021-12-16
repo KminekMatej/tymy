@@ -21,7 +21,7 @@ class TeamPresenter extends SettingBasePresenter
         $form->addText("sport", $this->translator->translate("team.sport"))->setValue($team->getSport());
         $form->addSelect("defaultLanguage", $this->translator->translate("team.defaultLanguage"), ["CZ" => "Česky", "EN" => "English", "FR" => "Le français", "PL" => "Polski"])->setValue($team->getDefaultLanguageCode() ?: "CZ");
         $form->addSelect("skin", $this->translator->translate("team.defaultSkin"), $this->supplier->getAllSkins())->setValue($team->getSkin());
-        $form->addMultiSelect("requiredFields", $this->translator->translate("team.requiredFields"), UserResource::getAllFields($this->translator)["ALL"])->setValue($teamNeon->userRequiredFields);
+        $form->addMultiSelect("requiredFields", $this->translator->translate("team.requiredFields"), $this->userManager->getAllFields()["ALL"])->setValue($teamNeon->userRequiredFields);
 
         foreach ($eventTypes as $etype) {
             /* @var $etype EventType */

@@ -15,7 +15,7 @@ class DefaultPresenter extends SecuredPresenter
     {
         parent::beforeRender();
 
-        $allFields = UserResource::getAllFields($this->translator);
+        $allFields = $this->userManager->getAllFields();
         $this->template->addFilter('errorsCount', function ($player, $tabName) use ($allFields) {
             switch ($tabName) {
                 case "osobni-udaje":
