@@ -482,6 +482,9 @@ class UserManager extends BaseManager
         if ($this->loginExists($data["login"])) {
             $this->respondBadRequest("Username taken");
         }
+        if ($this->limitUsersReached()) {
+            $this->respondForbidden("User quota limit reached");
+        }
         if ($this->getIdByEmail($data["email"])) {
             $this->respondBadRequest("E-mail taken");
         }
@@ -534,6 +537,11 @@ class UserManager extends BaseManager
         if (array_key_exists("email", $data) && $this->getIdByEmail($data["email"]) !== $this->userModel->getId()) {
             //changing mail to already existing one
             $this->responder->E4002_EDIT_NOT_PERMITTED(User::MODULE, $recordId);
+        }
+
+        //changing user status from deleted?
+        if ($this->userModel->getStatus() == "DELETED" && array_key_exists("status", $data) && $data["status"] !== "DELETED" && $this->limitUsersReached()) {
+            $this->respondForbidden("User quota limit reached");
         }
 
         //surge that user with ID 1 will always stay Admin
