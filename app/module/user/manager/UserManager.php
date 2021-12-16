@@ -48,6 +48,7 @@ class UserManager extends BaseManager
     private Translator $translator;
     private ?User $userModel = null;
     private array $userFields;
+    private array $userCounts;
 
     /** @var SimpleUser[] */
     private array $simpleUserCache = [];
@@ -279,16 +280,16 @@ class UserManager extends BaseManager
     }
 
     /**
-     * Check if login is already taken
+     * Check if user limit has been reached
      *
      * @param string $login
      * @return bool
      */
-    public function limitUsersReached()
+    public function limitUsersReached(): bool
     {
-        $this->
         $limit = $this->teamManager->getTeam()->getMaxUsers();
-        return $this->database->table($this->getTable())->select("id")->where("user_name", $login)->count("id") > 0;
+        $currentCount = $this->getCounts($this->getList())["ACTIVE"];
+        return $currentCount >= $limit;
     }
 
     /**
@@ -577,8 +578,8 @@ class UserManager extends BaseManager
         if ($this->loginExists($data["login"])) {
             $this->respondBadRequest("Username taken");
         }
-        if ($this->loginExists($data["login"])) {
-            $this->respondBadRequest("Username taken");
+        if ($this->limitUsersReached()) {
+            $this->respondForbidden("User quota limit reached");
         }
         if ($this->getIdByEmail($data["email"])) {
             $this->respondBadRequest("E-mail taken");
@@ -725,8 +726,13 @@ class UserManager extends BaseManager
      */
     public function getCounts(array $users): array
     {
-        $counts = [
+        if (isset($this->userCounts)) {
+            return $this->userCounts;
+        }
+
+        $this->userCounts = [
             "ALL" => 0,
+            "ACTIVE" => 0,
             "NEW" => 0,
             "PLAYER" => 0,
             "NEW:PLAYER" => 0,
@@ -735,23 +741,26 @@ class UserManager extends BaseManager
             "DELETED" => 0,
             "INIT" => 0,
         ];
-        
+
         foreach ($users as $user) {
             /* @var $user User */
-            $counts["ALL"]++;
-            $counts[$user->getStatus()]++;
+            $this->userCounts["ALL"]++;
+            $this->userCounts[$user->getStatus()]++;
+            if ($user->getStatus() !== "DELETED") {
+                $this->userCounts["ACTIVE"]++;
+            }
 
             if ($user->getIsNew()) {
-                $counts["NEW"]++;
+                $this->userCounts["NEW"]++;
                 if ($user->getStatus() == User::STATUS_PLAYER) {
-                    $counts["NEW:PLAYER"]++;
+                    $this->userCounts["NEW:PLAYER"]++;
                 }
             }
         }
-        
-        return $counts;
+
+        return $this->userCounts;
     }
-    
+
     /**
      * Get sum of all warnings of desired users
      * 
