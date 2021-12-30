@@ -1,5 +1,6 @@
 <?php
-namespace Tymy\App\Forms;
+
+namespace Tymy\Module\Sign\Form;
 
 use Nette\Application\UI\Form;
 use Nette\SmartObject;
@@ -9,20 +10,13 @@ class SignInFormFactory
 
     use SmartObject;
 
-    private FormFactory $factory;
-
-    public function __construct(FormFactory $factory)
-    {
-        $this->factory = $factory;
-    }
-
     /**
      * @return Form
      */
     public function create(callable $onSuccess): Form
     {
 
-        $form = $this->factory->create();
+        $form = new Form;
 
         $form->addText('name')
             ->setAttribute("placeholder", "uživatelské jméno")

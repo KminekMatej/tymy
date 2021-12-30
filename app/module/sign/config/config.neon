@@ -1,0 +1,3 @@
+services:
+    SignInFormFactory: Tymy\Module\Sign\Form\SignInFormFactory
+    SignUpFormFactory: Tymy\Module\Sign\Form\SignUpFormFactory

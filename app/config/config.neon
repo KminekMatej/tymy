@@ -16,9 +16,6 @@ session:
 
 
 services:
-        FormFactory: Tymy\App\Forms\FormFactory
-        SignInFormFactory: Tymy\App\Forms\SignInFormFactory
-        SignUpFormFactory: Tymy\App\Forms\SignUpFormFactory
         PwdLostFormFactory: Tymy\App\Forms\PwdLostFormFactory
         PwdResetFormFactory: Tymy\App\Forms\PwdResetFormFactory
         routerFactory: Tymy\RouterFactory

@@ -3,8 +3,8 @@
 namespace Tymy\Module\Sign\Presenter\Front;
 
 use Nette;
-use Tymy\App\Forms\SignUpFormFactory;
 use Tymy\Module\Core\Presenter\Front\BasePresenter;
+use Tymy\Module\Sign\Form\SignUpFormFactory;
 
 class UpPresenter extends BasePresenter
 {

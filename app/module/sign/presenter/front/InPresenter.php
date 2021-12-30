@@ -6,9 +6,9 @@ use Nette;
 use Nette\Application\UI\Form;
 use Nette\NotImplementedException;
 use Tracy\Debugger;
-use Tymy\App\Forms\SignInFormFactory;
 use Tymy\Module\Authentication\Manager\AuthenticationManager;
 use Tymy\Module\Core\Presenter\Front\BasePresenter;
+use Tymy\Module\Sign\Form\SignInFormFactory;
 
 class InPresenter extends BasePresenter
 {
