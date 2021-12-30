@@ -34,7 +34,35 @@ class DiscussionTest extends RequestCase
         for ($index = 0; $index < $iterations; $index++) {
             $d = array_shift($data);
             $idRecord = $d["id"];
-            $responseObj = $this->request($this->getBasePath() . "/$idRecord")->expect(200, "array");
+            $response = $this->request($this->getBasePath() . "/$idRecord")->expect(200, "array")->getData();
+            Assert::hasKey("numberOfPosts", $response);
+            Assert::hasKey("newPosts", $response);
+            Assert::hasKey("id", $response);
+            Assert::hasKey("createdAt", $response);
+            Assert::hasKey("createdById", $response);
+            Assert::hasKey("updatedById", $response);
+            Assert::hasKey("updatedAt", $response);
+            Assert::hasKey("caption", $response);
+            Assert::hasKey("description", $response);
+            Assert::hasKey("readRightName", $response);
+            Assert::hasKey("writeRightName", $response);
+            Assert::hasKey("deleteRightName", $response);
+            Assert::hasKey("stickyRightName", $response);
+            Assert::hasKey("publicRead", $response);
+            Assert::hasKey("status", $response);
+            Assert::hasKey("editablePosts", $response);
+            Assert::hasKey("order", $response);
+            Assert::hasKey("canRead", $response);
+            Assert::hasKey("canWrite", $response);
+            Assert::hasKey("canDelete", $response);
+            Assert::hasKey("canStick", $response);
+            Assert::hasKey("newPosts", $response);
+            Assert::hasKey("numberOfPosts", $response);
+            Assert::hasKey("newInfo", $response);
+            Assert::type("array", $response->newInfo);
+            Assert::hasKey("discussionId", $response->newInfo);
+            Assert::hasKey("newsCount", $response->newInfo);
+            Assert::hasKey("lastVisit", $response->newInfo);
         }
     }
 
