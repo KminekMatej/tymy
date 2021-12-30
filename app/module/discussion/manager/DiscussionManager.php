@@ -82,6 +82,7 @@ class DiscussionManager extends BaseManager
         $discussion = parent::map($row, $force);
 
         $discussion->setNewInfo(new NewInfo($discussion->getId(), $row->newInfo, $row->lastVisit));
+        $discussion->setNumberOfPosts($row->numberOfPosts);
         $discussion->setWebName(Strings::webalize($discussion->getId() . "-" . $discussion->getCaption()));
 
         return $discussion;
@@ -104,7 +105,12 @@ class DiscussionManager extends BaseManager
                 SELECT COUNT(`ds_items`.`id`) 
                 FROM `ds_items` 
                 WHERE `ds_items`.`insert_date` > `ds_read`.`last_date` AND `ds_items`.`ds_id` = `discussions`.`id`
-            ) AS `newInfo` 
+            ) AS `newInfo`, 
+            (
+                SELECT COUNT(`ds_items`.`id`) 
+                FROM `ds_items` 
+                WHERE `ds_items`.`ds_id` = `discussions`.`id`
+            ) AS `numberOfPosts` 
             FROM `discussions` 
             LEFT JOIN `ds_read` ON `discussions`.`id` = `ds_read`.`ds_id` AND
             (`ds_read`.`ds_id`=`discussions`.`id`) AND (`ds_read`.`user_id` = ?) 
@@ -146,7 +152,12 @@ class DiscussionManager extends BaseManager
                 SELECT COUNT(`ds_items`.`id`) 
                 FROM `ds_items` 
                 WHERE `ds_items`.`insert_date` > `ds_read`.`last_date` AND `ds_items`.`ds_id` = `discussions`.`id`
-            ) AS `newInfo` 
+            ) AS `newInfo`, 
+            (
+                SELECT COUNT(`ds_items`.`id`) 
+                FROM `ds_items` 
+                WHERE `ds_items`.`ds_id` = `discussions`.`id`
+            ) AS `numberOfPosts` 
             FROM `discussions` 
             LEFT JOIN `ds_read` ON `discussions`.`id` = `ds_read`.`ds_id` AND
             (`ds_read`.`ds_id`=`discussions`.`id`) AND (`ds_read`.`user_id` = ?) 
@@ -164,7 +175,12 @@ class DiscussionManager extends BaseManager
                 SELECT COUNT(`ds_items`.`id`) 
                 FROM `ds_items` 
                 WHERE `ds_items`.`insert_date` > `ds_read`.`last_date` AND `ds_items`.`ds_id` = `discussions`.`id`
-            ) AS `newInfo` 
+            ) AS `newInfo`, 
+            (
+                SELECT COUNT(`ds_items`.`id`) 
+                FROM `ds_items` 
+                WHERE `ds_items`.`ds_id` = `discussions`.`id`
+            ) AS `numberOfPosts` 
             FROM `discussions` 
             LEFT JOIN `ds_read` ON `discussions`.`id` = `ds_read`.`ds_id` AND
             (`ds_read`.`ds_id`=`discussions`.`id`) AND (`ds_read`.`user_id` = ?) 

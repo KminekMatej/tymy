@@ -35,6 +35,7 @@ class Discussion extends BaseModel
     private bool $canDelete = false;
     private bool $canStick = false;
     private int $newPosts = 0;
+    private int $numberOfPosts = 0;
     private NewInfo $newInfo;
     private string $webName;
 
@@ -252,6 +253,12 @@ class Discussion extends BaseModel
         return $this;
     }
 
+    public function setNumberOfPosts(int $numberOfPosts)
+    {
+        $this->numberOfPosts = $numberOfPosts;
+        return $this;
+    }
+
     public function getNewInfo(): NewInfo
     {
         return $this->newInfo;
@@ -292,6 +299,7 @@ class Discussion extends BaseModel
                     "canDelete" => $this->getCanDelete(),
                     "canStick" => $this->getCanStick(),
                     "newPosts" => $this->getNewPosts(),
+                    "numberOfPosts" => $this->numberOfPosts,
                     "newInfo" => $this->getNewInfo()->jsonSerialize(),
         ];
     }
