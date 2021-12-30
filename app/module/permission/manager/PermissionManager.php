@@ -48,7 +48,7 @@ class PermissionManager extends BaseManager
     protected function metaMap(BaseModel &$model, $userId = null): void
     {
         $privilege = $model->getType() == Permission::TYPE_SYSTEM ? Privilege::SYS($model->getName()) : Privilege::USR($model->getName());
-        $model->setMeAllowed($this->user->isAllowed($this->user->getId(), $privilege));
+        $model->setMeAllowed($this->user->isLoggedIn() ? $this->user->isAllowed($this->user->getId(), $privilege) : false);
     }
 
     public function canEdit($entity, $userId): bool
