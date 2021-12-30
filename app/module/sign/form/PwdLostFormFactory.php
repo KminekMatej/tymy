@@ -1,5 +1,5 @@
 <?php
-namespace Tymy\App\Forms;
+namespace Tymy\Module\Sign\Form;
 
 use Nette\Application\UI\Form;
 use Nette\SmartObject;
@@ -9,20 +9,13 @@ class PwdLostFormFactory
 
     use SmartObject;
 
-    private FormFactory $factory;
-
-    public function __construct(FormFactory $factory)
-    {
-        $this->factory = $factory;
-    }
-
     /**
      * @return Form
      */
     public function create(): Form
     {
 
-        $form = $this->factory->create();
+        $form = new Form();
 
         $form->addText('email')
             ->setAttribute("placeholder", "E-mail")

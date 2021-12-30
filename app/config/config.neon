@@ -16,8 +16,6 @@ session:
 
 
 services:
-        PwdLostFormFactory: Tymy\App\Forms\PwdLostFormFactory
-        PwdResetFormFactory: Tymy\App\Forms\PwdResetFormFactory
         routerFactory: Tymy\RouterFactory
         router: @routerFactory::createRouter
         cacheStorage:

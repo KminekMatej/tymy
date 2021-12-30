@@ -1,3 +1,5 @@
 services:
     SignInFormFactory: Tymy\Module\Sign\Form\SignInFormFactory
     SignUpFormFactory: Tymy\Module\Sign\Form\SignUpFormFactory
+    PwdLostFormFactory: Tymy\Module\Sign\Form\PwdLostFormFactory
+    PwdResetFormFactory: Tymy\Module\Sign\Form\PwdResetFormFactory
