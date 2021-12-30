@@ -53,7 +53,7 @@
                         <div class="alert alert-warning float-md-right mx-1" n:if="$item->getUpdatedAt()" style="margin: 0px; padding: 4px; font-size: 10px;">{_common.edited} {$userList[$item->getUpdatedById()]->getDisplayName()}, {$item->getUpdatedAt()|date:'j.n.Y G:i'}</div>
                     </div>
                     <div class="card-body">
-                        <img class="user_pic" src="{$tymyRoot}/{$item->getCreatedBy()->getPictureUrl()}" />
+                        <img class="user_pic" src="{$item->getCreatedBy()->getPictureUrl()}" />
                         <div class="card-text" id="post-{$item->getId()}">
                         {if $item->getPost()}{$item->getPost()|noescape}{/if}
                         </div>

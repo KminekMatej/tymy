@@ -56,7 +56,7 @@
                                         <th>{_team.profilePhoto}:</th><td n:class="in_array('pictureUrl',$player->getErrFields()) ? is-invalid">
                                             <div class="row">
                                                 <div class="col-1">
-                                                    <img class="user_pic" src="{$tymyRoot}/{$player->getPictureUrl()}" />
+                                                    <img class="user_pic" src="{$player->getPictureUrl()}" />
                                                 </div>
                                                 <div class="col-10" n:if="$canUpdate">
                                                     <div class="row">

@@ -127,7 +127,7 @@
                         <div class="tab-pane fade show active" id="live" role="tabpanel">
                             <figure class="figure text-center" style="width: 100px" n:foreach="$liveUsers as $live">
                                 <a href="{plink :Team:Player: $live->getWebName()}" title="{$live->getCallName()}">
-                                    <img src="{$tymyRoot}/{$live->getPictureUrl()}" class="figure-img img-fluid rounded user_pic" alt="{$live->getCallName()}" />
+                                    <img src="{$live->getPictureUrl()}" class="figure-img img-fluid rounded user_pic" alt="{$live->getCallName()}" />
                                     <figcaption class="figure-caption">{$live->getCallName()}</figcaption>
                                 </a>
                             </figure>
@@ -138,7 +138,7 @@
                                 {var $lastLogin = $usr->getLastLogin() ? ($usr->getLastLogin()|date:'j.n.Y H:i:s') : $neverLogin}
                                 {var $caption = $usr->getLastLogin() ? ($usr->getLastLogin()|lastLogin) : $neverLogin}
                                 <a href="{plink :Team:Player: $usr->getWebName()}" title="{$lastLogin}">
-                                    <img src="{$tymyRoot}/{$usr->getPictureUrl()}" class="figure-img img-fluid rounded user_pic" n:attr="alt => property_exists($usr, 'fullName' ? $usr->getFullName() : '')"/>
+                                    <img src="{$usr->getPictureUrl()}" class="figure-img img-fluid rounded user_pic" n:attr="alt => property_exists($usr, 'fullName' ? $usr->getFullName() : '')"/>
                                     <figcaption class="figure-caption">{$usr->getDisplayName()}</figcaption>
                                     <figcaption class="figure-caption" style="font-size: 70%; display: inline-block">{$caption}</figcaption>
                                 </a>
