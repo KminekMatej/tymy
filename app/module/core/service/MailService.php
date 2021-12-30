@@ -87,9 +87,6 @@ class MailService
 
     private function sendMail(string $name, string $email, string $body, string $subject = null)
     {
-        Debugger::log("Sending to: $name<$email>, subject $subject: $body");
-        Debugger::barDump($body, "Sending to: $name<$email>, subject $subject");
-        return; //debug
         $mail = new Message();
         $mail->setFrom(sprintf(self::ROBOT_EMAIL_FROM_S, $this->team->getSysName()), $this->team->getSysName())
                 ->addTo($email, $name)
