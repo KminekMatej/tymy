@@ -4,8 +4,10 @@ namespace Tymy\Module\Event\Presenter\Front;
 use Tymy\Module\Attendance\Manager\StatusManager;
 use Tymy\Module\Attendance\Model\Attendance;
 use Tymy\Module\Attendance\Model\Status;
+use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Event\Manager\EventTypeManager;
+use Tymy\Module\Event\Model\Event;
 
 /**
  * Description of EventBasePresenter
@@ -15,13 +17,12 @@ use Tymy\Module\Event\Manager\EventTypeManager;
 class EventBasePresenter extends SecuredPresenter
 {
 
-    
     /** @inject */
     public EventTypeManager $eventTypeManager;
 
     /** @inject */
     public StatusManager $statusManager;
-    
+
     public function beforeRender()
     {
         parent::beforeRender();
@@ -57,5 +58,32 @@ class EventBasePresenter extends SecuredPresenter
         });
 
         $this->template->statusList = $this->statusManager->getList();
+    }
+
+    /**
+     * Transform array of events into event feed - array in format specified by FullCalendar specifications
+     * 
+     * @param Event[] $events
+     * @return array
+     */
+    protected function toFeed(array $events): array
+    {
+        $feed = [];
+
+        foreach ($events as $event) {
+            /* @var $event Event */
+            $feed[] = [
+                "id" => $event->getId(),
+                "title" => $event->getCaption(),
+                "start" => $event->getStartTime()->format(BaseModel::DATETIME_ISO_FORMAT),
+                "end" => $event->getEndTime()->format(BaseModel::DATETIME_ISO_FORMAT),
+                "backgroundColor" => $event->getBackgroundColor(),
+                "borderColor" => $event->getBorderColor(),
+                "textColor" => $event->getTextColor(),
+                "url" => $this->link(":Event:Detail:", $event->getWebName()),
+            ];
+        }
+
+        return $feed;
     }
 }
