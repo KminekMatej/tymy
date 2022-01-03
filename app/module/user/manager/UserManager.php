@@ -206,6 +206,10 @@ class UserManager extends BaseManager
             $array["roles"] = join(",", $array["roles"]);
         }
 
+        if (array_key_exists("password", $array)) {
+            $array["password"] = $this->hashPassword($array["password"]);
+        }
+
         return parent::updateByArray($id, $array);
     }
 
