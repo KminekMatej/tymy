@@ -11,9 +11,6 @@ class DefaultPresenter extends EventBasePresenter
 {
 
     /** @inject */
-    public AttendanceManager $attendanceManager;
-
-    /** @inject */
     public HistoryManager $historyManager;
 
 

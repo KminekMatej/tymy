@@ -107,22 +107,6 @@ class DetailPresenter extends EventBasePresenter
         $this->redrawControl("historyBtn");
     }
 
-    public function handleAttendance($id, $code, $desc)
-    {
-        $this->attendanceManager->create([
-            "userId" => $this->user->getId(),
-            "eventId" => $id,
-            "preStatus" => $code,
-            "preDescription" => $desc
-        ]);
-
-        if ($this->isAjax()) {
-            $this->redrawControl("attendanceWarning");
-            $this->redrawControl("attendanceTabs");
-            $this->redrawNavbar();
-        }
-    }
-
     public function handleAttendanceResult($id)
     {
         $results = $this->getRequest()->getPost()["resultSet"];

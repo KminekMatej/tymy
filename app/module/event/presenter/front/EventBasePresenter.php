@@ -1,6 +1,7 @@
 <?php
 namespace Tymy\Module\Event\Presenter\Front;
 
+use Tymy\Module\Attendance\Manager\AttendanceManager;
 use Tymy\Module\Attendance\Manager\StatusManager;
 use Tymy\Module\Attendance\Model\Attendance;
 use Tymy\Module\Attendance\Model\Status;
@@ -22,6 +23,9 @@ class EventBasePresenter extends SecuredPresenter
 
     /** @inject */
     public StatusManager $statusManager;
+
+    /** @inject */
+    public AttendanceManager $attendanceManager;
 
     public function beforeRender()
     {
@@ -85,5 +89,21 @@ class EventBasePresenter extends SecuredPresenter
         }
 
         return $feed;
+    }
+
+    public function handleAttendance($id, $code, $desc)
+    {
+        $this->attendanceManager->create([
+            "userId" => $this->user->getId(),
+            "eventId" => $id,
+            "preStatus" => $code,
+            "preDescription" => $desc
+        ]);
+
+        if ($this->isAjax()) {
+            $this->redrawControl("attendanceWarning");
+            $this->redrawControl("attendanceTabs");
+            $this->redrawNavbar();
+        }
     }
 }
