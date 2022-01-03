@@ -39,6 +39,7 @@ class UserMapper extends BaseMapper
             Field::int()->withPropertyAndColumn("nameday_day")->setProperty("nameDayDay"),
             Field::string()->withColumn("account_number")->setProperty("accountNumber"),
             Field::string()->withColumn("birth_code")->setProperty("birthCode"),
+            Field::string()->withColumn("password")->setProperty("password"),
             Field::datetime()->withColumn("gdpr_accepted_at")->setProperty("gdprAccepted")->setChangeable(false),
             Field::datetime()->withColumn("gdpr_revoked_at")->setProperty("gdprRevoked")->setChangeable(false),
             Field::datetime()->withColumn("last_read_news")->setProperty("lastReadNews")->setChangeable(false),

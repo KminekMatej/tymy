@@ -335,6 +335,7 @@ class UserManager extends BaseManager
      */
     public function register(array $array): User
     {
+        \Tracy\Debugger::barDump($array);
         $this->allowRegister($array);
 
         $array["status"] = "INIT";

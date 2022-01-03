@@ -495,6 +495,7 @@ class User extends BaseModel
     public function jsonSerialize()
     {
         $data = parent::jsonSerialize();
+        unset($data["password"]);
         $data["birthDate"] = $this->getBirthDate() ? $this->getBirthDate()->format(self::DATE_ENG_FORMAT) : null;
 
         return $data + [
