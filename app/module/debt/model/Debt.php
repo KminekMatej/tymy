@@ -17,6 +17,7 @@ class Debt extends BaseModel implements JsonSerializable
 {
     public const TABLE = "debt";
     public const MODULE = "debt";
+    public const CURRENCIES = ["CZK" => "Kč", "EUR" => "€"];
 
     private DateTime $created;
     private ?int $createdUserId = null;

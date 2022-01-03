@@ -6,6 +6,7 @@ use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
 use QrCode\QRcode;
 use Tapi\TapiObject;
+use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Debt\Model\Debt;
 use const QR_ECLEVEL_H;
 use function iban_set_checksum;
@@ -70,12 +71,12 @@ class DefaultPresenter extends DebtBasePresenter
                 ->setCurrencyIso("CZK")
                 ->setCountryIso("CZ")
                 ->setCaption("")
-                ->setCreated((new DateTime())->format(TapiObject::MYSQL_DATE))
+                ->setCreated((new DateTime())->format(BaseModel::DATE_ENG_FORMAT))
                 ->setDebtorId(null)
                 ->setDebtorType("user")
                 ->setPayeeId($this->user->getId())
                 ->setPayeeType("user")
-                ->setDebtDate((new DateTime())->format(TapiObject::MYSQL_DATE))
+                ->setDebtDate((new DateTime())->format(BaseModel::DATE_ENG_FORMAT))
                 ->setPayeeAccountNumber("")
                 ->setVarcode(null)
                 ->setCanRead(true)
