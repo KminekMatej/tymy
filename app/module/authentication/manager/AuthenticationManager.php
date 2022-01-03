@@ -76,7 +76,7 @@ class AuthenticationManager implements IAuthenticator
             }
             Debugger::log("Ghost $ghuser login as user $username as from IP " . $_SERVER['REMOTE_ADDR'], 'ghostaccess');
         } else {
-            if (!$this->passwordMatch($row->password, $password)) {   // not password or generated password does not match
+            if (!$this->passwordMatch($password, $row->password)) {   // not password or generated password does not match
                 throw new AuthenticationException('Password is invalid.', self::INVALID_CREDENTIAL);
             }
         }
@@ -130,12 +130,16 @@ class AuthenticationManager implements IAuthenticator
 
     /**
      * Check that password matches
-     * @param string $expectedPwd
      * @param string $suppliedPassword
+     * @param string|null $expectedPwd  (can be null for new non-approved users)
      * @return bool
      */
-    public function passwordMatch(string $expectedPwd, string $suppliedPassword): bool
+    public function passwordMatch(string $suppliedPassword, ?string $expectedPwd = null): bool
     {
+        if (empty($expectedPwd)) {
+            return false;
+        }
+
         if ($expectedPwd == $suppliedPassword) {
             return true;
         }

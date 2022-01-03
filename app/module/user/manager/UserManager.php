@@ -313,7 +313,7 @@ class UserManager extends BaseManager
 
         $expectedPassword = $userRow->password;
 
-        return $this->authenticationManager->passwordMatch($expectedPassword, $password) ? $userRow->id : null;
+        return $this->authenticationManager->passwordMatch($password, $expectedPassword) ? $userRow->id : null;
     }
 
     /**
