@@ -32,7 +32,7 @@ class NotificationGenerator
             self::CREATE_POST,
             $this->user->getId(),
             $this->teamManager->getTeam()->getId(),
-            "{$post->getCreatedBy()->getCallName()} posted in {$discussion->getWebName()}",
+            "{$post->getCreatedBy()->getCallName()} posted in {$discussion->getCaption()}",
             $post->getPost(),
             null,
             null,
