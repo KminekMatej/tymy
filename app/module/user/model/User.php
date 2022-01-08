@@ -28,6 +28,10 @@ class User extends BaseModel
     public const STATUS_PLAYER = "PLAYER";
     public const STATUS_SICK = "SICK";
     public const STATUS_INIT = "INIT";
+    public const FIELDS_PERSONAL = ["gender", "firstName", "lastName", "phone", "email", "birthDate", "nameDayMonth", "nameDayDay", "language"];
+    public const FIELDS_LOGIN = ["callName", "canEditCallName", "login", "password", "canLogin"];
+    public const FIELDS_TEAMINFO = ["status", "jerseyNumber"];
+    public const FIELDS_ADDRESS = ["street", "city", "zipCode"];
 
     private string $login;
     private bool $canLogin = false;

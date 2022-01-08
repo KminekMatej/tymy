@@ -3,7 +3,6 @@ namespace Tymy\Module\Setting\Presenter\Front;
 
 use Nette\Application\UI\Form;
 use stdClass;
-use Tapi\UserResource;
 use Tymy\Module\Event\Model\EventType;
 
 class TeamPresenter extends SettingBasePresenter

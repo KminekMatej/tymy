@@ -47,7 +47,7 @@ class PlayerPresenter extends SecuredPresenter
 
         $team = $this->teamManager->getTeam();
 
-        $errFls = array_intersect($this->supplier->getRequiredFields(), array_merge(UserResource::FIELDS_PERSONAL, UserResource::FIELDS_LOGIN, UserResource::FIELDS_TEAMINFO, UserResource::FIELDS_ADDRESS));
+        $errFls = array_intersect($this->supplier->getRequiredFields(), array_merge(User::FIELDS_PERSONAL, User::FIELDS_LOGIN, User::FIELDS_TEAMINFO, User::FIELDS_ADDRESS));
 
         if ($player) {  //new player based on another user
             $user = $this->userManager->getById($this->parseIdFromWebname($player));
