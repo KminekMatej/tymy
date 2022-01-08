@@ -6,6 +6,7 @@ use stdClass;
 use Tymy\Module\Core\Presenter\Front\BasePresenter;
 use Tymy\Module\Sign\Form\PwdLostFormFactory;
 use Tymy\Module\Sign\Form\PwdResetFormFactory;
+use Tymy\Module\User\Manager\UserManager;
 
 class PwdPresenter extends BasePresenter
 {
@@ -15,6 +16,9 @@ class PwdPresenter extends BasePresenter
 
     /** @inject */
     public PwdResetFormFactory $pwdResetFactory;
+
+    /** @inject */
+    public UserManager $userManager;
 
     public function renderReset()
     {
@@ -39,11 +43,8 @@ class PwdPresenter extends BasePresenter
         $form = $this->pwdLostFactory->create();
         $form->onSuccess[] = function (Nette\Application\UI\Form $form, stdClass $values) {
             try {
-                $this->pwdLost->init()
-                    ->setCallbackUri($this->link('//:Sign:Pwd:reset') . "?code=%2s")
-                    ->setHostname($this->getHttpRequest()->getRemoteHost())
-                    ->setMail($values->email)
-                    ->getData();
+                $this->userManager->pwdLost($values->email, $this->getHttpRequest()->getRemoteHost(), $this->link('//:Sign:Pwd:reset') . "?code=%2s");
+                    
             } catch (Nette\Security\AuthenticationException $exc) {
                 $this->flashMessage($this->translator->translate("common.alerts.userNotFound"));
                 $this->redirect(':Sign:Pwd:lost');

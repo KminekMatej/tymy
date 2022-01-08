@@ -8,7 +8,7 @@ use Nette\Application\Application;
 use Nette\Application\Responses\JsonResponse;
 use Nette\Http\Request;
 use Nette\Http\Response;
-use Tymy\Module\Core\Exception\ResponderException;
+use Tymy\Module\Core\Exception\DebugResponse;
 use Tymy\Module\Core\Presenter\Api\BasePresenter;
 
 /**
@@ -76,7 +76,7 @@ class Responder
 
         if ($this->request->getQuery("debug") !== null) {//if this is some error response, add also message to generic payload object
             \Tracy\Debugger::barDump($respond, "Response");
-            throw new ResponderException($message, $code);
+            throw new DebugResponse($message, $code);
         }
 
         $this->presenter->sendResponse(new JsonResponse(
