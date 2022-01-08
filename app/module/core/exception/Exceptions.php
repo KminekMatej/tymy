@@ -26,7 +26,9 @@ class TymyResponse extends Exception
     private ?int $httpCode = null;
     private bool $success = true;
     private ?string $sessionKey = null;
-    private mixed $payload = null;
+    
+    /** @var mixed */
+    private $payload = null;
 
     public function __construct(string $message = "", int $httpCode = Response::S200_OK, ?int $code = null, mixed $payload, bool $success = true, ?string $sessionKey, Throwable $previous = null)
     {
