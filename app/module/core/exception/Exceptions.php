@@ -24,7 +24,6 @@ class TymyResponse extends Exception
 {
 
     private ?int $httpCode = null;
-    private ?int $code = null;
     private bool $success = true;
     private ?string $sessionKey = null;
 
@@ -46,11 +45,6 @@ class TymyResponse extends Exception
         return $this->httpCode;
     }
 
-    public function getCode(): ?int
-    {
-        return $this->code;
-    }
-
     public function getSuccess(): bool
     {
         return $this->success;
@@ -69,12 +63,6 @@ class TymyResponse extends Exception
     public function setHttpCode(?int $httpCode)
     {
         $this->httpCode = $httpCode;
-        return $this;
-    }
-
-    public function setCode(?int $code)
-    {
-        $this->code = $code;
         return $this;
     }
 
