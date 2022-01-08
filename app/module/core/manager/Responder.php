@@ -9,6 +9,7 @@ use Nette\Application\Responses\JsonResponse;
 use Nette\Http\Request;
 use Nette\Http\Response;
 use Tymy\Module\Core\Exception\DebugResponse;
+use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Core\Presenter\Api\BasePresenter;
 
 /**
@@ -53,36 +54,25 @@ class Responder
         $this->httpCode = $httpCode;
     }
 
-    private function respond(int $code, string $message, string $sessionKey = null)
+    /**
+     * Respond using TymyResponse. TymyResponse is being catched on BasePresenters and trated differently, if it is API presenter or App presenter
+     * 
+     * @param int $code Specific tymy app response code
+     * @param string $message Additional response message
+     * @param string $sessionKey SessionKey - used only for auth responses
+     * @return void
+     * @throws TymyResponse
+     */
+    private function respond(int $code, string $message, string $sessionKey = null): void
     {
-        $this->presenter->getHttpResponse()->setCode($this->httpCode);
-        $success = $this->httpCode >= 200 && $this->httpCode <= 299;
-
-        $respond = [
-            "status" => $success ? "OK" : "ERROR",
-        ];
-
-        if (!$success && !empty($message)) {
-            $respond["statusMessage"] = $message;
-        }
-
-        if ($success && !empty($sessionKey)) {
-            $respond["sessionKey"] = $sessionKey;
-        }
-
-        if ($this->payload !== null) {
-            $respond["data"] = $this->payload;
-        }
-
-        if ($this->request->getQuery("debug") !== null) {//if this is some error response, add also message to generic payload object
-            \Tracy\Debugger::barDump($respond, "Response");
-            throw new DebugResponse($message, $code);
-        }
-
-        $this->presenter->sendResponse(new JsonResponse(
-            $respond,
-            "application/json;charset=utf-8"
-        ));
+        throw new TymyResponse(
+                $message,
+                $this->httpCode,
+                $code,
+                $this->payload,
+                $this->httpCode >= 200 && $this->httpCode <= 299,
+                $sessionKey
+        );
     }
 
     private function throw(string $message)

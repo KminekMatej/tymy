@@ -3,22 +3,27 @@
 namespace Tymy\Module\Core\Presenter\Api;
 
 use Nette\Application\AbortException;
+use Nette\Application\Request;
+use Nette\Application\Response;
+use Nette\Application\Responses\JsonResponse;
 use Nette\Application\UI\Presenter;
 use Nette\Database\Explorer;
 use Nette\Database\Table\ActiveRow;
 use Nette\DI\Container;
-use Nette\Http\Request;
-use Nette\Http\Response;
+use Nette\Http\Request as HttpRequest;
+use Nette\Http\Response as HttpResponse;
 use Nette\Utils\JsonException;
 use Tracy\Debugger;
 use Tracy\ILogger;
 use Tymy\Module\Core\Exception\DeleteIntegrityException;
 use Tymy\Module\Core\Exception\IntegrityException;
 use Tymy\Module\Core\Exception\MissingInputException;
+use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Core\Exception\UpdateIntegrityException;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Manager\Responder;
 use Tymy\Module\Core\Model\BaseModel;
+use function GuzzleHttp\json_decode;
 
 /**
  * Description of BasePresenter
@@ -34,9 +39,9 @@ class BasePresenter extends Presenter
     protected ?ActiveRow $subResourceRow = null;
     protected BaseManager $manager;
     /** @inject */
-    public Request $httpRequest;
+    public HttpRequest $httpRequest;
     /** @inject */
-    public Response $httpResponse;
+    public HttpResponse $httpResponse;
 
     /** @var mixed */
     protected $requestData;
@@ -337,4 +342,43 @@ class BasePresenter extends Presenter
             $this->redirect("Core:Default:Default");
         }
     }
+
+    public function run(Request $request): Response
+    {
+        try {
+            return parent::run($request);
+        } catch (TymyResponse $tResp) {
+
+            $this->getHttpResponse()->setCode($tResp->getHttpCode());
+
+            $respond = [
+                "status" => $tResp->getSuccess() ? "OK" : "ERROR",
+            ];
+
+            if (!$tResp->getSuccess() && !empty($tResp->getMessage())) {
+                $respond["statusMessage"] = $tResp->getMessage();
+            }
+
+            if ($tResp->getSuccess() && !empty($tResp->getSessionKey())) {
+                $respond["sessionKey"] = $tResp->getSessionKey();
+            }
+
+            if ($this->payload !== null) {
+                $respond["data"] = $tResp->getPayload();
+            }
+
+            if ($this->httpRequest->getQuery("debug") !== null) {//if this is some error response, add also message to generic payload object
+                \Tracy\Debugger::barDump([
+                    "success"
+                    ], "Response");
+                throw new DebugResponse($message, $code);
+            }
+
+            return new JsonResponse(
+                $respond,
+                "application/json;charset=utf-8"
+            );
+        }
+    }
+
 }
