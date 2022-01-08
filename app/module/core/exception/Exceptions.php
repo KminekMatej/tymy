@@ -2,6 +2,8 @@
 namespace Tymy\Module\Core\Exception;
 
 use Exception;
+use Nette\Http\Response;
+use Throwable;
 
 /**
  * Description of DebugResponse
@@ -21,11 +23,12 @@ class MissingInputException extends Exception
 class TymyResponse extends Exception
 {
 
+    private ?int $httpCode = null;
     private bool $success = true;
     private ?string $sessionKey = null;
     private mixed $payload = null;
-    
-    public function __construct(string $message = "", int $code = 0, mixed $payload, bool $success = true, ?string $sessionKey, \Throwable $previous = null)
+
+    public function __construct(string $message = "", int $httpCode = Response::S200_OK, ?int $code = null, mixed $payload, bool $success = true, ?string $sessionKey, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
         $this->success = $success;
@@ -33,7 +36,12 @@ class TymyResponse extends Exception
         $this->payload = $payload;
     }
 
-        public function getSuccess(): bool
+    public function getHttpCode(): ?int
+    {
+        return $this->httpCode;
+    }
+
+    public function getSuccess(): bool
     {
         return $this->success;
     }
@@ -46,6 +54,12 @@ class TymyResponse extends Exception
     public function getPayload(): mixed
     {
         return $this->payload;
+    }
+
+    public function setHttpCode(?int $httpCode)
+    {
+        $this->httpCode = $httpCode;
+        return $this;
     }
 
     public function setSuccess(bool $success)
