@@ -3,7 +3,6 @@
 namespace Tymy\Module\Setting\Presenter\Front;
 
 use Nette\Utils\DateTime;
-use Tapi\EventListResource;
 use Tymy\Module\Event\Manager\EventManager;
 use Tymy\Module\Event\Model\Event;
 use Tymy\Module\Setting\Presenter\Front\SettingBasePresenter;
@@ -29,7 +28,7 @@ class EventPresenter extends SettingBasePresenter
 
     public function renderDefault(?string $resource = null, int $page = 1)
     {
-        $limit = EventListResource::PAGING_EVENTS_PER_PAGE;
+        $limit = Event::PAGING_EVENTS_PER_PAGE;
         $offset = ($page - 1) * $limit;
         $this->template->events = $this->eventManager->getList(null, "id", $limit, $offset); // get all events
         $allEventsCount = $this->eventManager->countAllEvents();

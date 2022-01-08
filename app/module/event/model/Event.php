@@ -14,8 +14,10 @@ use Tymy\Module\Event\Mapper\EventMapper;
  */
 class Event extends BaseModel
 {
+
     public const TABLE = "events";
     public const MODULE = "event";
+    const PAGING_EVENTS_PER_PAGE = 15;
 
     private string $caption;
     private string $type;
