@@ -348,7 +348,6 @@ class BasePresenter extends Presenter
         try {
             return parent::run($request);
         } catch (TymyResponse $tResp) {
-
             $this->getHttpResponse()->setCode($tResp->getHttpCode());
 
             $respond = [

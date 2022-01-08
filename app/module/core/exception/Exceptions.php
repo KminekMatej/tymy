@@ -55,7 +55,7 @@ class TymyResponse extends Exception
         return $this->sessionKey;
     }
 
-    public function getPayload(): mixed
+    public function getPayload()
     {
         return $this->payload;
     }
@@ -78,7 +78,7 @@ class TymyResponse extends Exception
         return $this;
     }
 
-    public function setPayload(mixed $payload)
+    public function setPayload($payload)
     {
         $this->payload = $payload;
         return $this;
