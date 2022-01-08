@@ -130,147 +130,147 @@ class Responder
     }
     //***********  ERROR RESPONSES:
 
-    /** @throwsAbortExceptionn */
+    /** @throws AbortException */
     public function E400_BAD_REQUEST($message = null)
     {
         $this->init(Response::S400_BAD_REQUEST);
         $this->respond(400, ($message ? $message : ""));
     }
 
-    /** @throwsAbortExceptionn */
+    /** @throws AbortException */
     public function E401_UNAUTHORIZED($message = null)
     {
         $this->init(Response::S401_UNAUTHORIZED);
         $this->respond(401, ($message ? $message : "Unauthorized"));
     }
 
-    /** @throwsAbortExceptionn */
+    /** @throws AbortException */
     public function E403_FORBIDDEN($message = null)
     {
         $this->init();
         $this->respond(403, ($message ? $message : "Forbidden"));
     }
 
-    /** @throwsAbortExceptionn */
+    /** @throws AbortException */
     public function E404_NOT_FOUND()
     {
         $this->init(Response::S404_NOT_FOUND);
         $this->respond(404, "E404", "Not-found");
     }
 
-    /** @throwsAbortExceptionn */
+    /** @throws AbortException */
     public function E405_METHOD_NOT_ALLOWED()
     {
         $this->init(Response::S405_METHOD_NOT_ALLOWED);
         $this->respond(405, "E405", "Method not allowed");
     }
 
-    /** @throwsAbortExceptionn */
+    /** @throws AbortException */
     public function E500_INTERNAL_SERVER_ERROR($throw = false)
     {
         $this->init(Response::S500_INTERNAL_SERVER_ERROR);
         $throw ? $this->throw("E500") : $this->respond(500, "E500");
     }
 
-    /** @throwsAbortExceptionn */
+    /** @throws AbortException */
     public function E4001_VIEW_NOT_PERMITTED($module, $id)
     {
         $this->init();
         $this->respond(4001, "Forbidden to view `$id@$module`");
     }
 
-    /** @throwsAbortExceptionn */
+    /** @throws AbortException */
     public function E4002_EDIT_NOT_PERMITTED($module, $id)
     {
         $this->init();
         $this->respond(4002, "Forbidden to edit `$id@$module`");
     }
 
-    /** @throwsAbortExceptionn */
+    /** @throws AbortException */
     public function E4003_CREATE_NOT_PERMITTED($module)
     {
         $this->init();
         $this->respond(4003, "Forbidden to create record in `$module`");
     }
 
-    /** @throwsAbortExceptionn */
+    /** @throws AbortException */
     public function E4004_DELETE_NOT_PERMITTED($module, $id)
     {
         $this->init();
         $this->respond(4004, "Forbidden to delete `$id@$module`");
     }
 
-    /** @throwsAbortExceptionn */
+    /** @throws AbortException */
     public function E4005_OBJECT_NOT_FOUND($module, $id)
     {
         $this->init(Response::S404_NOT_FOUND);
         $this->respond(4005, "Object `$id@$module` not found");
     }
 
-    /** @throwsAbortExceptionn */
+    /** @throws AbortException */
     public function E4006_INVALID_REQUEST_DATA()
     {
         $this->init(Response::S400_BAD_REQUEST);
         $this->respond(4006, "Invalid request data");
     }
 
-    /** @throwsAbortExceptionn */
+    /** @throws AbortException */
     public function E4007_RELATION_PROHIBITS($field)
     {
         $this->init(Response::S400_BAD_REQUEST);
         $this->respond(4007, "Relation prohibits this operation on field `$field`");
     }
 
-    /** @throwsAbortExceptionn */
+    /** @throws AbortException */
     public function E4008_CHILD_NOT_RELATED_TO_PARENT($childModule, $childId, $parentModule, $parentId)
     {
         $this->init();
         $this->respond(4008, "Child `$childId@$childModule` not related to `$parentId@$parentModule`");
     }
 
-    /** @throwsAbortExceptionn */
+    /** @throws AbortException */
     public function E4009_CREATE_FAILED($module)
     {
         $this->init(Response::S400_BAD_REQUEST);
         $this->respond(4009, "Creating record in module `$module` failed");
     }
 
-    /** @throwsAbortExceptionn */
+    /** @throws AbortException */
     public function E4010_UPDATE_FAILED($module, $id)
     {
         $this->init(Response::S400_BAD_REQUEST);
         $this->respond(4010, "Updating `$id@$module` failed");
     }
 
-    /** @throwsAbortExceptionn */
+    /** @throws AbortException */
     public function E4011_DELETE_FAILED($module, $id)
     {
         $this->init(Response::S400_BAD_REQUEST);
         $this->respond(4011, "Deleting `$id@$module` failed");
     }
 
-    /** @throwsAbortExceptionn */
+    /** @throws AbortException */
     public function E4012_IMAGE_UPDATE_FAILED($module, $id)
     {
         $this->init(Response::S400_BAD_REQUEST);
         $this->respond(4012, "Updating image at `$id@$module` failed");
     }
 
-    /** @throwsAbortExceptionn */
+    /** @throws AbortException */
     public function E4013_MISSING_INPUT($inputName)
     {
         $this->init(Response::S400_BAD_REQUEST);
         $this->respond(4013, "Missing input `$inputName`");
     }
 
-    /** @throwsAbortExceptionn */
+    /** @throws AbortException */
     public function E4014_EMPTY_INPUT($inputName)
     {
         $this->init(Response::S400_BAD_REQUEST);
         $this->respond(4014, "Empty input `$inputName`");
     }
 
-    /** @throwsAbortExceptionn */
+    /** @throws AbortException */
     public function E4015_MISSING_URL_INPUT($inputName)
     {
         $this->init(Response::S400_BAD_REQUEST);
