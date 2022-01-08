@@ -24,23 +24,31 @@ class TymyResponse extends Exception
 {
 
     private ?int $httpCode = null;
+    private ?int $code = null;
     private bool $success = true;
     private ?string $sessionKey = null;
-    
+
     /** @var mixed */
     private $payload = null;
 
-    public function __construct(string $message = "", int $httpCode = Response::S200_OK, ?int $code = null, mixed $payload, bool $success = true, ?string $sessionKey, Throwable $previous = null)
+    public function __construct(string $message = "", int $httpCode = Response::S200_OK, ?int $code = null, $payload = null, bool $success = true, ?string $sessionKey, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
         $this->success = $success;
         $this->sessionKey = $sessionKey;
+        $this->code = $code;
         $this->payload = $payload;
+        $this->httpCode = $httpCode;
     }
 
     public function getHttpCode(): ?int
     {
         return $this->httpCode;
+    }
+
+    public function getCode(): ?int
+    {
+        return $this->code;
     }
 
     public function getSuccess(): bool
@@ -61,6 +69,12 @@ class TymyResponse extends Exception
     public function setHttpCode(?int $httpCode)
     {
         $this->httpCode = $httpCode;
+        return $this;
+    }
+
+    public function setCode(?int $code)
+    {
+        $this->code = $code;
         return $this;
     }
 
