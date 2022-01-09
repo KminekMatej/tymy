@@ -6,7 +6,6 @@ use Nette\Application\AbortException;
 use Nette\Application\Request;
 use Nette\Application\Response;
 use Nette\Application\Responses\JsonResponse;
-use Nette\Application\UI\Presenter;
 use Nette\Database\Explorer;
 use Nette\Database\Table\ActiveRow;
 use Nette\DI\Container;
@@ -15,6 +14,7 @@ use Nette\Http\Response as HttpResponse;
 use Nette\Utils\JsonException;
 use Tracy\Debugger;
 use Tracy\ILogger;
+use Tymy\Module\Core\Exception\DebugResponse;
 use Tymy\Module\Core\Exception\DeleteIntegrityException;
 use Tymy\Module\Core\Exception\IntegrityException;
 use Tymy\Module\Core\Exception\MissingInputException;
@@ -23,14 +23,14 @@ use Tymy\Module\Core\Exception\UpdateIntegrityException;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Manager\Responder;
 use Tymy\Module\Core\Model\BaseModel;
-use function GuzzleHttp\json_decode;
+use Tymy\Module\Core\Presenter\RootPresenter;
 
 /**
  * Description of BasePresenter
  *
  * @author Matej Kminek <matej.kminek@attendees.eu>, 2. 8. 2020
  */
-class BasePresenter extends Presenter
+class BasePresenter extends RootPresenter
 {
     /** @inject */
     public Responder $responder;
@@ -90,7 +90,7 @@ class BasePresenter extends Presenter
     private function decodeJsonData(): void
     {
         try {
-            $this->requestData = json_decode($this->getHttpRequest()->getRawBody(), true);
+            $this->requestData = \json_decode($this->getHttpRequest()->getRawBody(), true);
             if (json_last_error() != JSON_ERROR_NONE) {
                 throw new JsonException();
             }
@@ -367,7 +367,7 @@ class BasePresenter extends Presenter
             }
 
             if ($this->httpRequest->getQuery("debug") !== null) {//if this is some error response, add also message to generic payload object
-                \Tracy\Debugger::barDump([
+                Debugger::barDump([
                     $respond
                     ], "Response");
                 throw new DebugResponse($message, $code);

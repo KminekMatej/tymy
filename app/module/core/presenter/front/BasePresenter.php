@@ -3,7 +3,6 @@
 namespace Tymy\Module\Core\Presenter\Front;
 
 use Kdyby\Translation\Translator;
-use Nette;
 use Nette\Application\Request;
 use Nette\Application\Response;
 use Nette\Utils\DateTime;
@@ -11,6 +10,7 @@ use Tracy\Debugger;
 use Tymy\Bootstrap;
 use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Core\Model\Supplier;
+use Tymy\Module\Core\Presenter\RootPresenter;
 use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\Team\Model\Team;
 use const ROOT_DIR;
@@ -19,7 +19,7 @@ use const ROOT_DIR;
 /**
  * Base presenter for all front application presenters.
  */
-abstract class BasePresenter extends Nette\Application\UI\Presenter {
+abstract class BasePresenter extends RootPresenter {
     
     const LOCALES = ["CZ" => "cs", "EN" => "en-gb", "FR" => "fr", "PL" => "pl"];
     
@@ -27,29 +27,14 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
     public $locale;
 
     /** @inject */
-    public Translator $translator;
-
-    /** @inject */
     public Supplier $supplier;
-    
-    /** @inject */
-    public TeamManager $teamManager;
-    protected Team $team;
     protected string $skin;
-
-	protected function startup()
-    {
-        parent::startup();
-
-        $this->team = $this->teamManager->getTeam();
-    }
 
     public function beforeRender()
     {
         parent::beforeRender();
         $this->template->componentsDir = Bootstrap::MODULES_DIR . "/core/presenter/templates/components";
         $this->template->setTranslator($this->translator);
-        $this->translator->setLocale(self::LOCALES[$this->team->getDefaultLanguageCode()]);
         date_default_timezone_set('Europe/Prague');
 
         $this->template->locale = $this->translator->getLocale();
