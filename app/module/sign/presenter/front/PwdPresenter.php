@@ -42,16 +42,9 @@ class PwdPresenter extends BasePresenter
     {
         $form = $this->pwdLostFactory->create();
         $form->onSuccess[] = function (Nette\Application\UI\Form $form, stdClass $values) {
-            try {
-                $this->userManager->pwdLost($values->email, $this->getHttpRequest()->getRemoteHost(), $this->link('//:Sign:Pwd:reset') . "?code=%2s");
-                    
-            } catch (Nette\Security\AuthenticationException $exc) {
-                $this->flashMessage($this->translator->translate("common.alerts.userNotFound"));
-                $this->redirect(':Sign:Pwd:lost');
-            }
-
+            $this->userManager->pwdLost($values->email, $this->getHttpRequest()->getRemoteHost(), $this->link('//:Sign:Pwd:reset') . "?code=%2s");
+            //$tResp->setRedirect(':Sign:Pwd:lost');
             $this->flashMessage($this->translator->translate("common.alerts.resetCodeSent"));
-
             $this->redirect(':Sign:Pwd:reset');
         };
         return $form;
