@@ -49,7 +49,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
         parent::beforeRender();
         $this->template->componentsDir = Bootstrap::MODULES_DIR . "/core/presenter/templates/components";
         $this->template->setTranslator($this->translator);
-        $this->translator->setLocale(\Tymy\Module\Core\Model\BaseModel::LANG_LOCALES[$this->team->getDefaultLanguageCode()]);
+        $this->translator->setLocale(self::LOCALES[$this->team->getDefaultLanguageCode()]);
         date_default_timezone_set('Europe/Prague');
 
         $this->template->locale = $this->translator->getLocale();
