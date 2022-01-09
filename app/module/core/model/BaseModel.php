@@ -26,7 +26,8 @@ abstract class BaseModel implements JsonSerializable
 
     public const MAIL_REGEX = '/^(([^<>()\[\]\\\\.,;:\s@"]+(\.[^<>()\[\]\\\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/';
     public const B64_REGEX = '/^data:(\w+)\/(\w+);base64,(.*)/m';
-
+    
+    public const LANG_LOCALES = ["CZ" => "cs", "EN" => "en", "FR" => "fr", "PL" => "pl"];
 
     private int $id;
     private bool $hasMeta = true;    //defaultly set hasMeta to true. This is set to false during metaMap() inside _Manager function
