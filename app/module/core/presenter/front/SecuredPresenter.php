@@ -86,6 +86,7 @@ class SecuredPresenter extends BasePresenter
         $userData = $this->getUser()->getIdentity()->getData();
         if (array_key_exists("language", $userData)) {
             $this->translator->setLocale(self::LOCALES[$userData["language"]]);
+            $this->template->locale = $this->translator->getLocale();
         }
 
         if ($userData["skin"]) {//set user defined skin instead of team one after login
