@@ -26,6 +26,7 @@ class TymyResponse extends Exception
     private ?int $httpCode = null;
     private bool $success = true;
     private ?string $sessionKey = null;
+    private ?string $redirect = null;
 
     /** @var mixed */
     private $payload = null;
@@ -60,6 +61,11 @@ class TymyResponse extends Exception
         return $this->payload;
     }
 
+    public function getRedirect(): ?string
+    {
+        return $this->redirect;
+    }
+
     public function setHttpCode(?int $httpCode)
     {
         $this->httpCode = $httpCode;
@@ -81,6 +87,12 @@ class TymyResponse extends Exception
     public function setPayload($payload)
     {
         $this->payload = $payload;
+        return $this;
+    }
+
+    public function setRedirect(?string $redirect)
+    {
+        $this->redirect = $redirect;
         return $this;
     }
 }
