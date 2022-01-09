@@ -368,7 +368,7 @@ class BasePresenter extends Presenter
 
             if ($this->httpRequest->getQuery("debug") !== null) {//if this is some error response, add also message to generic payload object
                 \Tracy\Debugger::barDump([
-                    "success"
+                    $respond
                     ], "Response");
                 throw new DebugResponse($message, $code);
             }
