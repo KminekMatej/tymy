@@ -575,9 +575,9 @@ abstract class BaseManager
         $this->responder->E403_FORBIDDEN($message ?? "Nedostatečná práva");
     }
 
-    protected function respondNotFound()
+    protected function respondNotFound(?string $module = null, ?int $id = null)
     {
-        $this->responder->E404_NOT_FOUND();
+        $this->responder->E404_NOT_FOUND($module, $id);
     }
 
     protected function respondNotAllowed()
