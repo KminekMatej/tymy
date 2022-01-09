@@ -4,12 +4,16 @@ namespace Tymy\Module\Core\Presenter\Front;
 
 use Kdyby\Translation\Translator;
 use Nette;
+use Nette\Application\Request;
+use Nette\Application\Response;
 use Nette\Utils\DateTime;
 use Tracy\Debugger;
 use Tymy\Bootstrap;
+use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Core\Model\Supplier;
 use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\Team\Model\Team;
+use const ROOT_DIR;
 
 
 /**
@@ -71,5 +75,14 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
     {
         return [Bootstrap::MODULES_DIR . "/core/presenter/templates/@layout.latte"];
     }
-    
+
+    public function run(Request $request): Response
+    {
+        try {
+            return parent::run($request);
+        } catch (TymyResponse $tResp) {
+            //convert TymyException into proper flash message
+            $this->flashMessage($tResp->getMessage() . "(" . $tResp->getCode() . ")", $tResp->getSuccess() ? "success" : "danger");
+        }
+    }
 }
