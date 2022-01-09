@@ -21,7 +21,6 @@ use const ROOT_DIR;
  */
 abstract class BasePresenter extends RootPresenter {
     
-    const LOCALES = ["CZ" => "cs", "EN" => "en-gb", "FR" => "fr", "PL" => "pl"];
     
     /** @persistent */
     public $locale;
