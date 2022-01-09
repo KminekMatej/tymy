@@ -55,7 +55,9 @@ alerts:
     registrationSuccesfull: "Inscription validée. Merci de patienter afin que l'administrateur valide votre inscription."
     userNotFound: "Nom d'utilisateur inconnu. Merci de ré-essayer ou contacter l'administrateur"
     resetCodeSent: Le code réinitialisé a été envoyé sur votre adresse mail.
+    pwdResetFailed: Échec de la réinitialisation du mot de passe
     pwdResetSuccesfull: Votre mot de passe a été mis à jour.
+    tooManyTries: Trop de tentatives de réinitialisation atteintes - réinitialisation bloquée
     inactivityLogout: "Vous avez été déconnecté à la suite d'une longue période d'inactivité. Merci de vous reconnecter."
     exceptionOccured: "Une erreur s'est produite"
     confirmDelete: Vraiment supprimer?

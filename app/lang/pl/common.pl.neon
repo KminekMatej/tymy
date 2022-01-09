@@ -55,7 +55,9 @@ alerts:
     registrationSuccesfull: Rejestracja ukończona. Czekaj na zatwierdzenie przez administratora.
     userNotFound: "Użytkownik nieodnaleziony, wystąpił błąd. Skontaktuj sięz administratorem."
     resetCodeSent: Kod do zmiany hasła został wysłany na Twój adres e-mail
+    pwdResetFailed: Resetowanie hasła nie powiodło się
     pwdResetSuccesfull: Twoje hasło zostało pomyślnie zmienione
+    tooManyTries: Osiągnięto zbyt wiele prób resetowania — resetowanie zablokowane
     inactivityLogout: "Zostałeś wylogowany, ze względu na brak czynności. Zaloguj się ponownie."
     exceptionOccured: Wystąpił nieoczekiwany błąd
     confirmDelete: Czy na pewno chcesz to usunąć?
