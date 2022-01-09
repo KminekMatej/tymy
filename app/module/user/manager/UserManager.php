@@ -661,18 +661,18 @@ class UserManager extends BaseManager
     {
         $userId = $this->getIdByEmail($email);
         if (empty($userId)) {
-            $this->respondNotFound();
+            $this->respondNotFound(User::MODULE);
         }
 
         /* @var $user User */
         $user = $this->getById($userId);
 
         if (!$user->getCanLogin() || !in_array($user->getStatus(), [User::STATUS_PLAYER, User::STATUS_MEMBER, User::STATUS_SICK])) {
-            $this->respondBadRequest("Password reset failed");
+            $this->respondBadRequest($this->translator->translate("common.alerts.pwdResetFailed"));
         }
 
         if ($this->pwdLostCount($userId) > self::MAX_PWD_REQUESTS) {
-            $this->respondBadRequest("Too many tries");
+            $this->respondBadRequest($this->translator->translate("common.alerts.tooManyTries"));
         }
 
         $resetCode = substr(md5(rand()), 0, 20);
