@@ -27,6 +27,7 @@ extensions:
     translation: Kdyby\Translation\DI\TranslationExtension
 translation:
     default: cs
+    debugger: true
 parameters:
     appConfig:
         allSkins:
