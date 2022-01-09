@@ -3,14 +3,14 @@
 namespace Tymy\Module\Core\Manager;
 
 use Exception;
+use Kdyby\Translation\Translator;
 use Nette\Application\AbortException;
 use Nette\Application\Application;
-use Nette\Application\Responses\JsonResponse;
 use Nette\Http\Request;
 use Nette\Http\Response;
-use Tymy\Module\Core\Exception\DebugResponse;
 use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Core\Presenter\Api\BasePresenter;
+use Tymy\Module\User\Model\User;
 
 /**
  * Description of Responder
@@ -19,21 +19,15 @@ use Tymy\Module\Core\Presenter\Api\BasePresenter;
  */
 class Responder
 {
-    /** @var Application */
-    private $application;
 
-    /** @var BasePresenter */
-    public $presenter;
-
-    /** @var BasePresenter */
-    public $presenterMock;
-
-    /** @var int */
-    private $httpCode = Response::S403_FORBIDDEN;
+    private Application $application;
+    public BasePresenter $presenter;
+    public BasePresenter $presenterMock;
+    public Translator $translator;
+    private int $httpCode = Response::S403_FORBIDDEN;
 
     /** @var mixed */
     private $payload;
-
     private Request $request;
 
     public function __construct(Application $application, Request $request)
@@ -142,9 +136,17 @@ class Responder
     }
 
     /** @throws AbortException */
-    public function E404_NOT_FOUND()
+    public function E404_NOT_FOUND(?string $module = null, $identifier = null)
     {
         $this->init(Response::S404_NOT_FOUND);
+        switch ($module) {
+            case User::MODULE:
+                $message = $this->translator->translate("common.alerts.userNotFound");
+                break;
+            default:
+                $message = "Not-found";
+                break;
+        }
         $this->respond(404, "E404", "Not-found");
     }
 
