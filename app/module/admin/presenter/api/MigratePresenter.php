@@ -21,7 +21,7 @@ class MigratePresenter extends AdminSecuredPresenter
         if ($output["success"]) {
             $this->respondOk($output["log"]);
         } else {
-            $this->responder->E500_INTERNAL_SERVER_ERROR(false, $output["log"]);
+            $this->responder->E4018_MIGRATION_FAILED($output["log"]);
         }
     }
 

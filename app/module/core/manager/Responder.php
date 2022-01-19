@@ -9,7 +9,7 @@ use Nette\Application\Application;
 use Nette\Http\Request;
 use Nette\Http\Response;
 use Tymy\Module\Core\Exception\TymyResponse;
-use Tymy\Module\Core\Presenter\Api\BasePresenter;
+use Tymy\Module\Core\Presenter\RootPresenter;
 use Tymy\Module\User\Model\User;
 
 /**
@@ -21,8 +21,8 @@ class Responder
 {
 
     private Application $application;
-    public BasePresenter $presenter;
-    public BasePresenter $presenterMock;
+    public RootPresenter $presenter;
+    public RootPresenter $presenterMock;
     public Translator $translator;
     private int $httpCode = Response::S403_FORBIDDEN;
 
@@ -293,5 +293,12 @@ class Responder
     {
         $this->init();
         $this->respond(4017, "Update blocked by `$blockingModule` `" . join(", ", $blockingIds) . "`");
+    }
+    
+    public function E4018_MIGRATION_FAILED(array $log = [])
+    {
+        $this->init(500);
+        $this->payload = $log;
+        $this->respond(4018, "Migration failed");
     }
 }
