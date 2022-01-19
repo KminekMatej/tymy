@@ -9,6 +9,7 @@ use PDOException;
 use Tracy\Debugger;
 use Tymy\Module\Admin\Entity\Migration;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Model\Supplier;
 
 
 /**
@@ -25,13 +26,15 @@ class MigrationManager
     const REGEX_BASE = "\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-base.sql";
 
     private Explorer $teamDatabase;
+    private Supplier $supplier;
     private array $log = [];
     private bool $tableExists;
     private array $migrationsCache = [];
     
-    public function __construct(Explorer $teamDatabase)
+    public function __construct(Explorer $teamDatabase, Supplier $supplier)
     {
         $this->teamDatabase = $teamDatabase;
+        $this->supplier = $supplier;
     }
 
     private function migrationTableExists(): bool
@@ -318,6 +321,7 @@ class MigrationManager
      */
     public function migrateUp(): array
     {
+        $this->migrateFromVersion1();
         $currentMigration = $this->getLatestMigration();
 
         $this->logg("Current database version is " . ($currentMigration ?: "not-set"));
@@ -342,6 +346,58 @@ class MigrationManager
         }
 
         return ["success" => $success, "log" => $this->log];
+    }
+    
+    /**
+     * Function automatically checks whether migrations from v1 has already been performed and if not, performs them before it even starts migrating
+     * 
+     * Can be removed after all teams has been switched to new version
+     * @return void
+     */
+    private function migrateFromVersion1(): void
+    {
+        //is there some migration table at all?
+        $tables = $this->teamDatabase->query("SHOW TABLES")->fetchPairs();
+        
+        if(empty($tables)){
+            return; //no tables exists - this is a new system, simply perform the base migration to fill it
+        }
+        
+        $migrationTableExists = in_array("migration", $tables);
+        if($migrationTableExists){
+            return; //there is already migration table structure, no neeed to continue
+        }
+
+        $usersTableExists = in_array("users", $tables);
+        if($usersTableExists){
+            $usersColumns = $this->teamDatabase->query("SHOW COLUMNS FROM users")->fetchPairs();
+            $usersHasBirthcodeField = array_key_exists("birth_code", $usersColumns);
+        } else {
+            $usersHasBirthcodeField = false;
+        }
+        
+        if (!$usersHasBirthcodeField) {  //this database does not have birth_code field in users
+            $this->executeSqlContents(file_get_contents("/var/www/vhosts/tymy.cz/src/v1/1.1.23/sql/0018_birthcode.sql"), $this->log);
+        }
+
+
+        if (!$migrationTableExists) {   //create table with first basic migration
+            $this->teamDatabase->query("CREATE TABLE `migration` (
+                `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+                `created` timestamp NOT NULL DEFAULT current_timestamp(),
+                `migration_from` varchar(19) NOT NULL,
+                `migration` varchar(19) NOT NULL,
+                `time` double NOT NULL,
+                `result` enum('OK','ERROR') NOT NULL
+              ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+
+            $this->teamDatabase->table("migration")->insert([
+                "migration_from" => "0",
+                "migration" => "2021-10-25T11-00-00",
+                "time" => "0",
+                "result" => "OK",
+            ]);
+        }
     }
 
     /**
