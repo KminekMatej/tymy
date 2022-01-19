@@ -14,7 +14,7 @@
 -- UP:
 -- commands that updates database shall be written here:
 
-DELETE * FROM `usr_mails` WHERE `user_id` NOT IN (SELECT `id` FROM `users` WHERE 1);
+DELETE FROM `usr_mails` WHERE `user_id` NOT IN (SELECT `id` FROM `users` WHERE 1);
 
 ALTER TABLE `usr_mails` ADD FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
