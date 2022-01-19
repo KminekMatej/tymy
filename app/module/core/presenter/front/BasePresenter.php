@@ -59,14 +59,4 @@ abstract class BasePresenter extends RootPresenter {
     {
         return [Bootstrap::MODULES_DIR . "/core/presenter/templates/@layout.latte"];
     }
-
-    public function run(Request $request): Response
-    {
-        try {
-            return parent::run($request);
-        } catch (TymyResponse $tResp) {
-            //convert TymyException into proper flash message
-            $this->flashMessage($tResp->getMessage() . "(" . $tResp->getCode() . ")", $tResp->getSuccess() ? "success" : "danger");
-        }
-    }
 }
