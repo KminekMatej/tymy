@@ -3,6 +3,7 @@
 namespace Tymy\Module\Discussion\Presenter\Front;
 
 use Tymy\Module\Core\Component\NewPostControl;
+use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Discussion\Manager\DiscussionManager;
 use Tymy\Module\Discussion\Manager\PostManager;
@@ -79,15 +80,20 @@ class DiscussionPresenter extends SecuredPresenter
 
     public function actionEditPost(string $discussion)
     {
+
         $postId = $this->getHttpRequest()->getPost("postId");
         $text = $this->getHttpRequest()->getPost("post");
         $sticky = $this->getHttpRequest()->getPost("sticky");
         $discussionId = intval($discussion);
 
-        $this->postManager->update([
-            "post" => $text,
-            "sticky" => $sticky,
+        try {
+            $this->postManager->update([
+                "post" => $text,
+                "sticky" => $sticky,
                 ], $discussionId, $postId);
+        } catch (TymyResponse $tResp) {
+            $this->handleTymyResponse($tResp);
+        }
 
         $this->setView('default');
     }
