@@ -396,8 +396,8 @@ CREATE TABLE `mail_log` (
 CREATE TABLE `migration` (
   `id` int(11) NOT NULL,
   `created` timestamp NOT NULL DEFAULT current_timestamp(),
-  `migration_from` varchar(16) NOT NULL,
-  `migration` varchar(16) NOT NULL,
+  `migration_from` varchar(19) NOT NULL,
+  `migration` varchar(19) NOT NULL,
   `time` double NOT NULL,
   `result` enum('OK','ERROR') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
