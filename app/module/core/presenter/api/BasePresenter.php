@@ -370,7 +370,7 @@ class BasePresenter extends RootPresenter
                 Debugger::barDump([
                     $respond
                     ], "Response");
-                throw new DebugResponse($message, $code);
+                throw new DebugResponse("Debugger response", $tResp->getHttpCode());
             }
 
             return new JsonResponse(
