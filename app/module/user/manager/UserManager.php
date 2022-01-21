@@ -691,7 +691,7 @@ class UserManager extends BaseManager
      * Check conditions, reset password and return the new password
      * 
      * @param string $resetCode
-     * @return string
+     * @return string New password
      */
     public function pwdReset(string $resetCode): string
     {

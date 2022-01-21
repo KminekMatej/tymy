@@ -3,6 +3,7 @@ namespace Tymy\Module\Sign\Presenter\Front;
 
 use Nette;
 use stdClass;
+use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Core\Presenter\Front\BasePresenter;
 use Tymy\Module\Sign\Form\PwdLostFormFactory;
 use Tymy\Module\Sign\Form\PwdResetFormFactory;
@@ -22,10 +23,15 @@ class PwdPresenter extends BasePresenter
 
     public function renderReset()
     {
-        if (($resetCode = $this->getRequest()->getParameter("code")) != null) {
-            $data = $this->resetPwd($resetCode);
-            $this->flashMessage($this->translator->translate("common.alerts.pwdResetSuccesfull"));
-            $this->redirect(':Sign:Pwd:new', ["pwd" => $data]);
+        $resetCode = $this->getRequest()->getParameter("code");
+        if (!empty($resetCode)) {
+            try {
+                $newPassword = $this->userManager->pwdReset($resetCode);
+                $this->flashMessage($this->translator->translate("common.alerts.pwdResetSuccesfull"));
+                $this->redirect(':Sign:Pwd:new', ["pwd" => $newPassword]);
+            } catch (TymyResponse $tResp) {
+                $this->handleTymyResponse($tResp);
+            }
         }
     }
 
@@ -42,10 +48,13 @@ class PwdPresenter extends BasePresenter
     {
         $form = $this->pwdLostFactory->create();
         $form->onSuccess[] = function (Nette\Application\UI\Form $form, stdClass $values) {
-            $this->userManager->pwdLost($values->email, $this->getHttpRequest()->getRemoteHost(), $this->link('//:Sign:Pwd:reset') . "?code=%2s");
-            //$tResp->setRedirect(':Sign:Pwd:lost');
-            $this->flashMessage($this->translator->translate("common.alerts.resetCodeSent"));
-            $this->redirect(':Sign:Pwd:reset');
+            try {
+                $this->userManager->pwdLost($values->email, $this->getHttpRequest()->getRemoteHost(), $this->link('//:Sign:Pwd:reset') . "?code=%2s");
+                $this->flashMessage($this->translator->translate("common.alerts.resetCodeSent"));
+                $this->redirect(':Sign:Pwd:reset');
+            } catch (TymyResponse $tResp) {
+                $this->handleTymyResponse($tResp);
+            }
         };
         return $form;
     }
@@ -58,17 +67,14 @@ class PwdPresenter extends BasePresenter
     {
         $form = $this->pwdResetFactory->create();
         $form->onSuccess[] = function (Nette\Application\UI\Form $form, stdClass $values) {
-            $data = $this->resetPwd($values->code);
-            $this->flashMessage($this->translator->translate("common.alerts.resetCodeSent"));
-            $this->redirect(':Sign:Pwd:new', ["pwd" => $data]);
+            try {
+                $newPassword = $this->userManager->pwdReset($values->code);
+                $this->flashMessage($this->translator->translate("common.alerts.pwdResetSuccesfull"));
+                $this->redirect(':Sign:Pwd:new', ["pwd" => $newPassword]);
+            } catch (TymyResponse $tResp) {
+                $this->handleTymyResponse($tResp);
+            }
         };
         return $form;
-    }
-
-    private function resetPwd($code)
-    {
-        return $this->pwdReset->init()
-                ->setCode($code)
-                ->getData();
     }
 }
