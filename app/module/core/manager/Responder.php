@@ -30,10 +30,11 @@ class Responder
     private $payload;
     private Request $request;
 
-    public function __construct(Application $application, Request $request)
+    public function __construct(Application $application, Request $request, Translator $translator)
     {
         $this->application = $application;
         $this->request = $request;
+        $this->translator = $translator;
     }
 
     private function init($httpCode = Response::S403_FORBIDDEN)
@@ -147,7 +148,7 @@ class Responder
                 $message = "Not-found";
                 break;
         }
-        $this->respond(404, "E404", "Not-found");
+        $this->respond(404, $message, "Not-found");
     }
 
     /** @throws AbortException */
