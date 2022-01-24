@@ -23,6 +23,7 @@ abstract class BaseModel implements JsonSerializable
     public const YEAR_MONTH = "Y-m";
     public const DATETIME_ENG_FORMAT = "Y-m-d H:i:s";
     public const DATETIME_ISO_FORMAT = "Y-m-d\TH:i:s";
+    public const DATETIME_ISO_NO_SECS_FORMAT = "Y-m-d\TH:i:00";
 
     public const MAIL_REGEX = '/^(([^<>()\[\]\\\\.,;:\s@"]+(\.[^<>()\[\]\\\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/';
     public const B64_REGEX = '/^data:(\w+)\/(\w+);base64,(.*)/m';
