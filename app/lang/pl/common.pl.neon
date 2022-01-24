@@ -7,6 +7,8 @@ save: Zapisz
 saveAll: Zapisz wszystko
 edited: "Poprawił(a)"
 everyone: Wszyscy
+noone: Nikt
+adminOnly: Tylko administrator
 allOfThem: Wszystkie
 refresh: Odśwież
 insert: Wklej

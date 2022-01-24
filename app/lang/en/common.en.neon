@@ -7,6 +7,8 @@ save: Save
 saveAll: Save all
 edited: Edited by
 everyone: Everyone
+noone: No-one
+adminOnly: Administrator only
 allOfThem: All of them
 refresh: Refresh
 insert: Insert

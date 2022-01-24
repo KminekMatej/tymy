@@ -17,6 +17,8 @@ menu: Menu
 new: Nový
 link: Odkaz
 never: Nikdy
+noone: Nikdo
+adminOnly: Pouze Administrátor
 chooseFile: Vyberte soubor
 chooseSex: Vyberte pohlaví
 chooseType: Vyberte typ

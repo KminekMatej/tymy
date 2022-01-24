@@ -7,6 +7,8 @@ save: Sauvegarder
 saveAll: Tout sauvegarder
 edited: "Edité (ée)"
 everyone: Tout le monde
+noone: Personne
+adminOnly: Administrateur uniquement
 allOfThem: Tous les autres
 refresh: Rafraîchir
 insert: Insérer

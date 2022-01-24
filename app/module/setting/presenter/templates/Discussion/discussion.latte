@@ -44,7 +44,7 @@
                         <tr><th>{_settings.canDelete}</th>
                             <td>
                                 <select name="deleteRightName" class="col-6 form-control" data-value="{$discussion->getDeleteRightName()}">
-                                    <option value="">-- {_common.everyone} --</option>
+                                    <option value="">-- {_common.adminOnly} --</option>
                                     <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $discussion->getDeleteRightName() == $userPermission->getName()">{$userPermission->getCaption()}</option>
                                 </select>
                             </td>
@@ -52,7 +52,7 @@
                             <tr><th>{_settings.canTop}</th>
                                 <td>
                                     <select name="stickyRightName" class="col-6 form-control" data-value="{$discussion->getStickyRightName()}">
-                                        <option value="">-- {_common.everyone} --</option>
+                                        <option value="">-- {_common.adminOnly} --</option>
                                         <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $discussion->getStickyRightName() == $userPermission->getName()">{$userPermission->getCaption()}</option>
                                     </select>
                                 </td>

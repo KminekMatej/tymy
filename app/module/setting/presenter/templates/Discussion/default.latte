@@ -60,13 +60,13 @@
                             </td>
                             <td>
                                 <select name="deleteRightName" data-value="{$d->getDeleteRightName()}" class="form-control form-control-sm">
-                                    <option value="">-- {_common.everyone} --</option>
+                                    <option value="">-- {_common.adminOnly} --</option>
                                     <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $d->getDeleteRightName() == $userPermission->getName()">{$userPermission->getCaption()}</option>
                                 </select>
                             </td>
                             <td>
                                 <select name="stickyRightName" data-value="{$d->getStickyRightName()}" class="form-control form-control-sm">
-                                    <option value="">-- {_common.everyone} --</option>
+                                    <option value="">-- {_common.adminOnly} --</option>
                                     <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $d->getStickyRightName() == $userPermission->getName()">{$userPermission->getCaption()}</option>
                                 </select>
                             </td>
