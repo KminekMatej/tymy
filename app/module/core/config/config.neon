@@ -4,3 +4,4 @@ services:
     Responder: Tymy\Module\Core\Manager\Responder
     StringsManager: Tymy\Module\Core\Manager\StringsManager(@database.main.context)
     MailService: Tymy\Module\Core\Service\MailService
+    FormFactory: Tymy\Module\Core\Factory\FormFactory
