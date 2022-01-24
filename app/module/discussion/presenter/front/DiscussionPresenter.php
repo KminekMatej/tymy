@@ -82,15 +82,19 @@ class DiscussionPresenter extends SecuredPresenter
     {
 
         $postId = $this->getHttpRequest()->getPost("postId");
-        $text = $this->getHttpRequest()->getPost("post");
-        $sticky = $this->getHttpRequest()->getPost("sticky");
+
+        $updates = [];
+        if ($this->getHttpRequest()->getPost("post")) {
+            $updates["post"] = $this->getHttpRequest()->getPost("post");
+        }
+        if ($this->getHttpRequest()->getPost("sticky")) {
+            $updates["sticky"] = $this->getHttpRequest()->getPost("sticky");
+        }
+
         $discussionId = intval($discussion);
 
         try {
-            $this->postManager->update([
-                "post" => $text,
-                "sticky" => $sticky,
-                ], $discussionId, $postId);
+            $this->postManager->update($updates, $discussionId, $postId);
         } catch (TymyResponse $tResp) {
             $this->handleTymyResponse($tResp);
         }
