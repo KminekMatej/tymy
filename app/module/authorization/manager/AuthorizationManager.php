@@ -126,12 +126,16 @@ class AuthorizationManager implements IAuthorizator
             if ($privilege->getName() == "SEE_INITS") {
                 return in_array($role, ["SUPER", "USR"]) ? self::ALLOW : self::DENY;
             }
+            
+            if($this->isAdmin($role)){
+                return self::ALLOW;
+            }
         }
 
-        if($privilege->getType() == "SYS" && $privilege->getName() == "IS_AMDIN"){
+        if ($privilege->getType() == "SYS" && $privilege->getName() == "IS_AMDIN") {
             return $this->isAdmin($role);
         }
-        
+
         $permission = $this->getPermission($privilege->getType(), $privilege->getName());
         if (!$permission) {
             //\Tracy\Debugger::log("No permission");
@@ -142,7 +146,7 @@ class AuthorizationManager implements IAuthorizator
         //\Tracy\Debugger::log("Allowed by id: " . ($this->isAllowedById($resource, $permission) ? "true" : "false"));
         return $this->isAllowedByRole($role, $permission) || $this->isAllowedByStatus($this->getUserStatus($resource), $permission) || $this->isAllowedById($resource, $permission) ? self::ALLOW : self::DENY;
     }
-    
+
     private function isAdmin(string $role)
     {
         return $role == "SUPER" ? self::ALLOW : self::DENY;
