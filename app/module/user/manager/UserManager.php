@@ -105,9 +105,13 @@ class UserManager extends BaseManager
         return $simples;
     }
 
-    public function isAdmin(int $userId)
+    public function isAdmin(?int $userId = null): bool
     {
-        return $this->database->table($this->getTable())->where("id", $userId)->where("roles LIKE %?%", UserEntity::ROLE_SUPER)->count("id") > 0;
+        if (empty($userId)) {
+            return $this->user->isInRole(User::ROLE_SUPER);
+        } else {
+            return $this->database->table($this->getTable())->where("id", $userId)->where("roles LIKE %?%", UserEntity::ROLE_SUPER)->count("id") > 0;
+        }
     }
 
     /**
