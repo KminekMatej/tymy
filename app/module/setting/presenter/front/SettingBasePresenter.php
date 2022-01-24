@@ -24,13 +24,16 @@ class SettingBasePresenter extends SecuredPresenter
 
     /** @inject */
     public StatusManager $statusManager;
+    
+    protected array $eventTypes;
+    protected array $userPermissions;
 
     public function beforeRender()
     {
         parent::beforeRender();
-        $this->template->eventTypes = $this->eventTypeManager->getList();
+        $this->template->eventTypes = $this->eventTypes = $this->eventTypeManager->getList();
         $this->template->statusList = $this->statusManager->getAllStatusCodes();
-        $this->template->userPermissions = $this->permissionManager->getByType(Permission::TYPE_USER);
+        $this->template->userPermissions = $this->userPermissions = $this->permissionManager->getByType(Permission::TYPE_USER);
         $this->template->systemPermissions = $this->permissionManager->getByType(Permission::TYPE_SYSTEM);
 
         $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("settings.setting", 2), "link" => $this->link(":Setting:Default:")]]);
