@@ -16,10 +16,6 @@
     padding: 0.1rem;
 }
 
-.table-xs INPUT[type='datetime-local']{
-    font-size: 12px;
-}
-
 .table-xs .custom-control-inline{
     margin-right: auto;
 }
