@@ -112,12 +112,13 @@ class AuthorizationManager implements IAuthorizator
      */
     public function isAllowed($role, $resource, $privilege): bool
     {
-        //\Tracy\Debugger::log("Checking role $role for user id $resource and privilege {$privilege->getType()}:{$privilege->getName()}");
         if (!$privilege) {
-            //\Tracy\Debugger::log("No privilege");
+            //\Tracy\Debugger::barDump("No privilege");
             return self::DENY;
         }
-        
+
+        //\Tracy\Debugger::barDump("Checking role $role for user id $resource and privilege {$privilege->getType()}:{$privilege->getName()}");
+
         if ($privilege->getType() == "SYS") {
             if ($privilege->getName() == "IS_ADMIN") {
                 return $this->isAdmin($role);
