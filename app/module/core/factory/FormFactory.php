@@ -10,11 +10,17 @@ use Tymy\Module\Event\Model\Event;
 
 class FormFactory
 {
-    
-    public EventTypeManager $eventTypeManager;
-    public EventManager $eventManager;
 
     use Nette\SmartObject;
+
+    private EventTypeManager $eventTypeManager;
+    private EventManager $eventManager;
+
+    public function __construct(EventTypeManager $eventTypeManager, EventManager $eventManager)
+    {
+        $this->eventTypeManager = $eventTypeManager;
+        $this->eventManager = $eventManager;
+    }
 
     /**
      * @return Form
