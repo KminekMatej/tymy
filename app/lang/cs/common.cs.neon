@@ -55,6 +55,7 @@ alerts:
     registrationSuccesfull: Registrace byla úspěšná. Nyní vyčkejte na schválení registrace administrátorem.
     userNotFound: "Uživatel nebyl nalezen, je zablokován nebo došlo k chybě. Zkuste to znovu, nebo kontaktujte týmového administrátora."
     resetCodeSent: Kód k resetování byl zaslán na Vaši e-mailovou adresu
+    invalidResetCode: Neplatný resetovací kód
     pwdResetFailed: Heslo se nepodařilo resetovat
     pwdResetSuccesfull: Vaše heslo bylo úspěšně resetováno
     tooManyTries: Překročen počet pokusů o reset hesla

@@ -702,11 +702,11 @@ class UserManager extends BaseManager
                 ->fetch();
         
         if (!$resetRow) {
-            $this->respondBadRequest("Invalid reset code");
+            $this->respondBadRequest($this->translator->translate("common.alerts.invalidResetCode"));
         }
         $user = $this->getById($resetRow->user_id);
         if (!$user) {
-            $this->respondBadRequest("Invalid user");
+            $this->respondBadRequest($this->translator->translate("common.alerts.invalidResetCode"));
         }
 
         $newPwd = substr(md5($resetCode . rand(0, 100000)), 0, 8);

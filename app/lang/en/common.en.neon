@@ -55,6 +55,7 @@ alerts:
     registrationSuccesfull: Registration succesfull. Kindly wait for administration approval now.
     userNotFound: "User not found, is blocked or other error happened. Please try again, or contact your team administrator."
     resetCodeSent: Reset code has been sent to your e-mail address
+    invalidResetCode: Invalid reset code
     pwdResetFailed: Resetting password failed
     pwdResetSuccesfull: Your password has been reset succesfully
     tooManyTries: Too many reset attempts reached - resetting blocked
