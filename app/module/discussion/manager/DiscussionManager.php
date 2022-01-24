@@ -93,8 +93,8 @@ class DiscussionManager extends BaseManager
         /* @var $model Discussion */
         $model->setCanRead(empty($model->getReadRightName()) || $this->user->isAllowed($this->user->getId(), Privilege::USR($model->getReadRightName())));
         $model->setCanWrite(empty($model->getWriteRightName()) || $this->user->isAllowed($this->user->getId(), Privilege::USR($model->getWriteRightName())));
-        $model->setCanDelete($this->user->isAllowed($this->user->getId(), Privilege::USR($model->getDeleteRightName())));
-        $model->setCanStick($this->user->isAllowed($this->user->getId(), Privilege::USR($model->getStickyRightName())));
+        $model->setCanDelete($this->userManager->isAdmin() || (!empty($model->getDeleteRightName()) && $this->user->isAllowed($this->user->getId(), Privilege::USR($model->getDeleteRightName()))));
+        $model->setCanStick($this->userManager->isAdmin() || (!empty($model->getStickyRightName()) || $this->user->isAllowed($this->user->getId(), Privilege::USR($model->getStickyRightName()))));
     }
 
     public function getById(int $id, bool $force = false): ?BaseModel
