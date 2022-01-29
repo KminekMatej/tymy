@@ -1,8 +1,12 @@
 <?php
-
 namespace Tymy\Module\Setting\Presenter\Front;
 
+use Nette\Application\UI\Form;
 use Nette\Utils\DateTime;
+use stdClass;
+use Tracy\Debugger;
+use Tymy\Module\Core\Exception\TymyResponse;
+use Tymy\Module\Core\Factory\FormFactory;
 use Tymy\Module\Event\Manager\EventManager;
 use Tymy\Module\Event\Model\Event;
 use Tymy\Module\Setting\Presenter\Front\SettingBasePresenter;
@@ -12,6 +16,9 @@ class EventPresenter extends SettingBasePresenter
 
     /** @inject */
     public EventManager $eventManager;
+
+    /** @inject */
+    public FormFactory $formFactory;
 
     public function beforeRender()
     {
@@ -46,15 +53,15 @@ class EventPresenter extends SettingBasePresenter
             "3" => ["caption" => $this->translator->translate("event.new", 2)]
         ]);
         $this->template->events = [
-                    (new Event())
-                    ->setId(-1)
-                    ->setCaption("")
-                    ->setDescription("")
-                    ->setStartTime(new DateTime("+ 24 hours"))
-                    ->setEndTime(new DateTime("+ 25 hours"))
-                    ->setCloseTime(new DateTime("+ 23 hours"))
-                    ->setPlace("")
-                    ->setLink("")
+                (new Event())
+                ->setId(-1)
+                ->setCaption("")
+                ->setDescription("")
+                ->setStartTime(new DateTime("+ 24 hours"))
+                ->setEndTime(new DateTime("+ 25 hours"))
+                ->setCloseTime(new DateTime("+ 23 hours"))
+                ->setPlace("")
+                ->setLink("")
         ];
     }
 
@@ -91,15 +98,16 @@ class EventPresenter extends SettingBasePresenter
         $this->allowPermission('EVE_CREATE');
 
         $binders = $this->getRequest()->getPost()["binders"];
-        
+
         foreach ($binders as &$bind) {
             $this->normalizeDates($bind["changes"]);
+            Debugger::barDump($bind["changes"]);
             $this->eventManager->create($bind["changes"]);
         }
 
-        $this->redirect(':Setting:Event:');
+        //$this->redirect(':Setting:Event:');
     }
-    
+
     private function normalizeDates(array &$data)
     {
         foreach (["startTime", "endTime", "closeTime"] as $timeKey) {
@@ -137,4 +145,47 @@ class EventPresenter extends SettingBasePresenter
         $this->eventManager->update($bind["changes"], $bind["id"]);
     }
 
+    public function createComponentEventLineForm()
+    {
+        return $this->formFactory->createEventLineForm(
+                $this->eventTypes,
+                $this->userPermissions,
+                [$this, "eventLineFormSuccess"]
+        );
+    }
+
+    public function eventLineFormSuccess(Form $form, stdClass $values)
+    {
+        try {
+            //load inputs until there are any more rows
+            $items = [(array) $values];
+            $baseKey = array_key_first((array) $values);
+            $data = $form->getHttpData();
+
+            $i = 1;
+            while (true) {
+                $nextKey = $baseKey . "-" . $i;
+
+                if (!array_key_exists($nextKey, $data)) {
+                    break;
+                }
+                //this row exists
+                $nextItem = [];
+                foreach ((array) $values as $name => $value) {
+                    $nextItem[$name] = $data["$name-$i"];
+                }
+                $items[] = $nextItem;
+                $i++;
+            }
+
+            $createdEvents = [];
+            foreach ($items as $item) {
+                $createdEvents[] = $this->eventManager->createByArray($item);
+            }
+
+            $this->redirect(':Setting:Event:');
+        } catch (TymyResponse $tResp) {
+            $this->handleTymyResponse($tResp);
+        }
+    }
 }

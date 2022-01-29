@@ -27,17 +27,21 @@ function duplicateLastRow(){
     table.append(newRow);
 }
 
-function duplicateEventRow(timePeriod){
+function duplicateEventRow(timePeriod) {
     var table = $("DIV.settings TABLE");
+    var formId = $("DIV.settings FORM").attr("id");
+
     var lastRow = table.find("TR:last");
-    
+
+    var rowIndex = table.find("TR").length - 1;
+
     var type = lastRow.find("SELECT[name=type]").val();
-    var startTime = moment(lastRow.find("INPUT[name=startTime]").val(), "DD.MM.YYYY HH:mm");
-    var endTime = moment(lastRow.find("INPUT[name=endTime]").val(), "DD.MM.YYYY HH:mm");
-    var closeTime = moment(lastRow.find("INPUT[name=closeTime]").val(), "DD.MM.YYYY HH:mm");
-    
+    var startTime = moment(lastRow.find("INPUT[name=startTime]").val());
+    var endTime = moment(lastRow.find("INPUT[name=endTime]").val());
+    var closeTime = moment(lastRow.find("INPUT[name=closeTime]").val());
+
     duplicateLastRow();
-    
+
     switch (timePeriod) {
         case 'day':
             startTime.add(1, "days");
@@ -57,10 +61,15 @@ function duplicateEventRow(timePeriod){
     }
     lastRow = table.find("TR:last");
     lastRow.find("SELECT[name=type]").val(type);
-    lastRow.find("INPUT[name=startTime]").val(startTime.format("DD.MM.YYYY HH:mm"));
-    lastRow.find("INPUT[name=endTime]").val(endTime.format("DD.MM.YYYY HH:mm"));
-    lastRow.find("INPUT[name=closeTime]").val(closeTime.format("DD.MM.YYYY HH:mm"));
-    loadBinders();
+    lastRow.find("INPUT[name=startTime]").val(startTime.format("YYYY-MM-DDTHH:mm"));
+    lastRow.find("INPUT[name=endTime]").val(endTime.format("YYYY-MM-DDTHH:mm"));
+    lastRow.find("INPUT[name=closeTime]").val(closeTime.format("YYYY-MM-DDTHH:mm"));
+    
+    lastRow.find("INPUT, TEXTAREA, SELECT").each(function(){
+        var name = $(this).attr("name");
+        $(this).attr("id", formId + '-' + name + '-' + rowIndex);
+        $(this).attr("name", name + '-' + rowIndex);
+    });
 }
 
 function removeRow(elm){
