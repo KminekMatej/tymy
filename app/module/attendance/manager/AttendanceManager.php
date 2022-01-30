@@ -30,6 +30,7 @@ class AttendanceManager extends BaseManager
     private HistoryManager $historyManager;
     private PermissionManager $permissionManager;
     private ?ActiveRow $eventRow;
+    private array $myAttendances;
 
 
     public function __construct(ManagerFactory $managerFactory, UserManager $userManager, PermissionManager $permissionManager, HistoryManager $historyManager)
@@ -331,5 +332,20 @@ class AttendanceManager extends BaseManager
     public function update(array $data, int $resourceId, ?int $subResourceId = null): BaseModel
     {
         //update si performed only during POST request
+    }
+
+    /**
+     * Get my attendance on specific event id, using cache
+     * 
+     * @param int $eventId
+     * @return ActiveRow|null
+     */
+    public function getUserAttendance(int $eventId): ?ActiveRow
+    {
+        if (!isset($this->myAttendances)) {
+            $this->myAttendances = $this->database->table($this->getTable())->where("user_id", $this->user->getId())->fetchPairs("event_id");
+        }
+
+        return $this->myAttendances[$eventId] ?? null;
     }
 }
