@@ -59,15 +59,9 @@ class EventManager extends BaseManager
         /* @var $event Event */
         $event = parent::map($row, $force);
 
-        $event->setType($row->{EventType::TABLE}->code);
-        $event->setInPast($row->in_past);
-        $event->setInFuture($row->in_future);
-
-        if (isset($row->user_id)) {
-            $event->setMyAttendance($this->attendanceManager->map($row));
-        } elseif ($event->getCloseTime() > new DateTime()) {   //my attendance doesnt exist and this event is still open
-            $event->setAttendancePending(true);
-        }
+        $event->setType($row->ref(EventType::TABLE, "event_type_id")->code);
+        $event->setInPast($row->start_time > $this->now);
+        $event->setInFuture($row->start_time < $this->now);
 
         $event->setWebName(Strings::webalize($event->getId() . "-" . $event->getCaption()));
 
@@ -81,14 +75,20 @@ class EventManager extends BaseManager
         $model->setCanPlan(empty($model->getPlanRightName()) || $this->user->isAllowed($this->user->getId(), Privilege::USR($model->getPlanRightName())));
         $model->setCanResult(empty($model->getResultRightName()) ? $this->user->isAllowed($this->user->getId(), Privilege::SYS("EVE_ATT_UPDATE")) : $this->user->isAllowed($this->user->getId(), Privilege::USR($model->getResultRightName())));
 
-        $colorList = $this->supplier->getEventColors();
-
-        if (array_key_exists($model->getType(), $colorList)) {
-            $invertColors = empty($model->getMyAttendance()) || empty($model->getMyAttendance()->getPreStatus());
-            $model->setBackgroundColor($invertColors ? 'white' : $colorList[$model->getType()]);
-            $model->setBorderColor($colorList[$model->getType()]);
-            $model->setTextColor($invertColors ? $colorList[$model->getType()] : '');
+        $eventColor = '#' . $this->eventTypeManager->getEventTypeColor($model->getEventTypeId());
+        
+        $myAttendance = $this->attendanceManager->getMyAttendance($model->getId());
+        
+        if($myAttendance){
+            $model->setMyAttendance($this->attendanceManager->map($myAttendance));
+        } elseif ($model->getCloseTime() > $this->now) { //my attendance doesnt exist and this event is still open
+            $model->setAttendancePending(true);
         }
+
+        $invertColors = !$myAttendance || empty($myAttendance->pre_status);
+        $model->setBackgroundColor($invertColors ? 'white' : $eventColor);
+        $model->setBorderColor($eventColor);
+        $model->setTextColor($invertColors ? $eventColor : '');
     }
 
     public function getById(int $id, bool $force = false): ?BaseModel
@@ -125,36 +125,26 @@ class EventManager extends BaseManager
      */
     public function getListUserAllowed(int $userId, ?string $filter = null, ?string $order = null, ?int $limit = null, ?int $offset = null)
     {
-        $order = $order ?: "startTime__desc";
         $readPerms = $this->permissionManager->getUserAllowedPermissionNames($this->userManager->getById($userId), Permission::TYPE_USER);
-        $params = [$userId];
+
+        $readPermsQ = ["`view_rights` IS NULL", "`view_rights` = ''"];
         if (!empty($readPerms)) {
-            $params[] = $readPerms;
+            $readPermsQ[] = "`view_rights` IN (?)";
         }
 
-        $filters = $filter ? $this->filterToArray($filter) : [];
+        $selector = $this->database->table($this->getTable())
+            ->where(join(" OR ", $readPermsQ), empty($readPerms) ? null : $readPerms);
 
-        $orders = $this->orderToArray($order);
-
-        if (!empty($filters)) {
-            $params = array_merge($params, Filter::toParams($filters));
+        if ($filter) {
+            Filter::addFilter($selector, $this->filterToArray($filter));
         }
 
-        $offset = $offset ?? 0;
-        $limitQuery = $limit ? " LIMIT $offset,$limit" : "";
+        if ($limit) {
+            $selector->limit($limit, $offset ?: 0);
+        }
 
-        $query = "SELECT events.*, "
-                . "IF(events.start_time > NOW(),1,0) AS in_future, "
-                . "IF(events.start_time < NOW(),1,0) AS in_past, "
-                . "attendance.* FROM events "
-                . "LEFT JOIN attendance ON events.id=attendance.event_id AND attendance.user_id=? "
-                . "WHERE "
-                . "(events.view_rights IS NULL OR events.view_rights = '' " . (empty($readPerms) ? "" : "OR events.view_rights IN (?) ") . ") "
-                . Filter::toAndQuery($filters)    //add filtering sql
-                . ($orders ? " ORDER BY " . Order::toString($orders) : "")
-                . $limitQuery;
+        $selector->order(Order::toString($this->orderToArray($order ?: "startTime__desc")));
 
-        $selector = $this->database->query($query, ...$params);
         $allRows = $selector->fetchAll();
 
         $eventIds = array_column($allRows, "id");
@@ -170,7 +160,7 @@ class EventManager extends BaseManager
 
         return $events;
     }
-    
+
     public function getList(?array $idList = null, string $idField = "id", ?int $limit = null, ?int $offset = null): array
     {
         $offset = $offset ?? 0;
