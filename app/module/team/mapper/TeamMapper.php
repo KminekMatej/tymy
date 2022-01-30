@@ -35,6 +35,7 @@ class TeamMapper extends BaseMapper
             Field::string()->withColumn("att_check_days")->setProperty("attendanceCheckDays"),
             Field::string()->withPropertyAndColumn("tariff"),
             Field::string()->withPropertyAndColumn("skin"),
+            Field::string()->withColumn("required_fields")->setProperty("requiredFields"),
             Field::string()->withColumn("tariff_until")->setProperty("tariffUntil"),
             Field::string()->withColumn("tariff_payment")->setProperty("tariffPayment"),
         ];

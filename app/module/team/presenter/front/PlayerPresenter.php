@@ -19,16 +19,16 @@ class PlayerPresenter extends SecuredPresenter
         $this->template->addFilter('errorsCount', function ($player, $tabName) use ($allFields) {
             switch ($tabName) {
                 case "osobni-udaje":
-                    $errFields = array_intersect(array_keys($allFields["PERSONAL"]), $this->supplier->getRequiredFields(), $player->getErrFields());
+                    $errFields = array_intersect(array_keys($allFields["PERSONAL"]), $this->team->getRequiredFields(), $player->getErrFields());
                     break;
                 case "prihlaseni":
-                    $errFields = array_intersect(array_keys($allFields["LOGIN"]), $this->supplier->getRequiredFields(), $player->getErrFields());
+                    $errFields = array_intersect(array_keys($allFields["LOGIN"]), $this->team->getRequiredFields(), $player->getErrFields());
                     break;
                 case "tymove-info":
-                    $errFields = array_intersect(array_keys($allFields["TEAMINFO"]), $this->supplier->getRequiredFields(), $player->getErrFields());
+                    $errFields = array_intersect(array_keys($allFields["TEAMINFO"]), $this->team->getRequiredFields(), $player->getErrFields());
                     break;
                 case "adresa":
-                    $errFields = array_intersect(array_keys($allFields["ADDRESS"]), $this->supplier->getRequiredFields(), $player->getErrFields());
+                    $errFields = array_intersect(array_keys($allFields["ADDRESS"]), $this->team->getRequiredFields(), $player->getErrFields());
                     break;
             }
 
@@ -47,7 +47,7 @@ class PlayerPresenter extends SecuredPresenter
 
         $team = $this->teamManager->getTeam();
 
-        $errFls = array_intersect($this->supplier->getRequiredFields(), array_merge(User::FIELDS_PERSONAL, User::FIELDS_LOGIN, User::FIELDS_TEAMINFO, User::FIELDS_ADDRESS));
+        $errFls = array_intersect($this->team->getRequiredFields(), array_merge(User::FIELDS_PERSONAL, User::FIELDS_LOGIN, User::FIELDS_TEAMINFO, User::FIELDS_ADDRESS));
 
         if ($player) {  //new player based on another user
             $user = $this->userManager->getById($this->parseIdFromWebname($player));

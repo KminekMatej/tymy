@@ -40,6 +40,7 @@ class Team extends BaseModel
     private int $attendanceCheckDays;
     private string $tariff;
     private string $skin;
+    private array $requiredFields = [];
 
     public function getSysName(): string
     {
@@ -145,7 +146,13 @@ class Team extends BaseModel
     {
         return $this->skin ?? TeamManager::DEFAULT_SKIN;
     }
+    
+    public function getRequiredFields(): array
+    {
+        return $this->requiredFields;
+    }
 
+    
     public function setLanguages($languages)
     {
         $this->languages = is_string($languages) ? explode(",", $languages) : $languages;
@@ -269,6 +276,12 @@ class Team extends BaseModel
     public function setSkin(string $skin)
     {
         $this->skin = $skin;
+        return $this;
+    }
+
+    public function setRequiredFields(string $requiredFields)
+    {
+        $this->requiredFields = explode(",", $requiredFields);
         return $this;
     }
 

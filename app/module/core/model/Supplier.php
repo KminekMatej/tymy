@@ -72,10 +72,6 @@ class Supplier {
     public function getRoleClass($role) {
         return $this->getTeamNeon()->roles_classes[$role];
     }
-    
-    public function getStatusColor($code) {
-        return property_exists($this->getTeamNeon(), "status_colors") && array_key_exists($code, $this->getTeamNeon()->status_colors) ? $this->getTeamNeon()->status_colors[$code] : "#0275d8";
-    }
 
     public function getVersions() {
         return $this->versions;
@@ -128,10 +124,6 @@ class Supplier {
     public function setUserNeon($userNeon) {
         $this->userNeon = $userNeon;
         return $this;
-    }
-
-    public function getRequiredFields() {
-        return $this->getTeamNeon()->userRequiredFields;
     }
 
     public function getAllSkins() {

@@ -244,7 +244,7 @@ class UserManager extends BaseManager
     
     private function addWarnings(User $user)
     {
-        foreach ($this->supplier->getRequiredFields() as $requiredField) {
+        foreach ($this->teamManager->getTeam()->getRequiredFields() as $requiredField) {
             $getter = "get" . ucfirst($requiredField);
             if (empty($user->$getter())) {
                 $user->addErrField($requiredField);
