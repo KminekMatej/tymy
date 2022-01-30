@@ -47,7 +47,7 @@
                                 </a>
                             </td>
                             <td>
-                                <span class="badge" style="background-color: {$event->getType()|typeColor|noescape}">{$event->getType()}</span>
+                                <span class="badge" style="background-color: #{$eventTypes[$event->getType()]->getColor()}">{$event->getType()}</span>
                             </td>
                             <td><input type="text" name="caption" data-value="{$event->getCaption()}" value="{$event->getCaption()}" class="form-control form-control-sm" style="max-width: 100px;" required/></td>
                             <td><textarea name="description" data-value="{$event->getDescription()}" rows="1" class="form-control form-control-sm">{$event->getDescription()}</textarea></td>

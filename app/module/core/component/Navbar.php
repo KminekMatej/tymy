@@ -13,6 +13,7 @@ use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Debt\Manager\DebtManager;
 use Tymy\Module\Discussion\Manager\DiscussionManager;
 use Tymy\Module\Event\Manager\EventManager;
+use Tymy\Module\Event\Manager\EventTypeManager;
 use Tymy\Module\File\Handler\FileManager;
 use Tymy\Module\Multiaccount\Manager\MultiaccountManager;
 use Tymy\Module\Poll\Manager\PollManager;
@@ -38,13 +39,15 @@ class NavbarControl extends Control
     private TeamManager $teamManager;
     private Translator $translator;
     private User $user;
+    private EventTypeManager $eventTypeManager;
 
-    public function __construct(SecuredPresenter $presenter, PollManager $pollManager, DiscussionManager $discussionManager, EventManager $eventManager, DebtManager $debtManager, UserManager $userManager, MultiaccountManager $multiaccountManager, User $user, TeamManager $teamManager)
+    public function __construct(SecuredPresenter $presenter, PollManager $pollManager, DiscussionManager $discussionManager, EventManager $eventManager, DebtManager $debtManager, UserManager $userManager, MultiaccountManager $multiaccountManager, User $user, TeamManager $teamManager, EventTypeManager $eventTypeManager)
     {
         $this->presenter = $presenter;
         $this->discussionManager = $discussionManager;
         $this->pollManager = $pollManager;
         $this->eventManager = $eventManager;
+        $this->eventTypeManager = $eventTypeManager;
         $this->debtManager = $debtManager;
         $this->userManager = $userManager;
         $this->multiaccountManager = $multiaccountManager;
@@ -95,6 +98,7 @@ class NavbarControl extends Control
         $events = $this->eventManager->getEventsInterval($this->user->getId(), new DateTime(), new DateTime("+ 1 year"));
         $this->template->events = $events;
         $this->template->eventWarnings = $this->eventManager->getWarnings($events);
+        $this->template->eventTypes = $this->eventTypeManager->getIndexedList();
     }
 
     private function initFiles(): void

@@ -30,7 +30,7 @@ class SettingBasePresenter extends SecuredPresenter
     protected function startup()
     {
         parent::startup();
-        $this->eventTypes = $this->eventTypeManager->getList();
+        $this->eventTypes = $this->eventTypeManager->getIndexedList();
         $this->userPermissions = $this->permissionManager->getByType(Permission::TYPE_USER);
     }
 
@@ -43,10 +43,6 @@ class SettingBasePresenter extends SecuredPresenter
         $this->template->systemPermissions = $this->permissionManager->getByType(Permission::TYPE_SYSTEM);
 
         $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("settings.setting", 2), "link" => $this->link(":Setting:Default:")]]);
-        $this->template->addFilter("typeColor", function ($type) {
-            $color = $this->supplier->getEventColors();
-            return $color[$type];
-        });
     }
     
     /**

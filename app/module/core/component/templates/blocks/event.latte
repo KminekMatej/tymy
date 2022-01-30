@@ -6,8 +6,8 @@
         {ifset $events}
             <a n:foreach="$events as $ev" class="dropdown-item" href="{plink :Event:Detail: $ev->getWebName()}">
                 {if $ev->getAttendancePending()}<span class="badge badge-danger"><i class="fa fa-info" aria-hidden="true"></i></span>{/if}
-                <span style="color: {$eventColors[$ev->getType()]|noescape}" n:if="array_key_exists($ev->getType(), $eventColors)">{$ev->getStartTime()|date:'j.n.'} - {$ev->getCaption()}</span>
-                <span n:if="!array_key_exists($ev->getType(), $eventColors)">{$ev->getStartTime()|date:'j.n.'} - {$ev->getCaption()}</span>
+                <span style="color: #{$eventTypes[$ev->getType()]->getColor()}" n:if="array_key_exists($ev->getType(), $eventTypes)">{$ev->getStartTime()|date:'j.n.'} - {$ev->getCaption()}</span>
+                <span n:if="!array_key_exists($ev->getType(), $eventTypes)">{$ev->getStartTime()|date:'j.n.'} - {$ev->getCaption()}</span>
             </a>
         {/ifset}
     </div>

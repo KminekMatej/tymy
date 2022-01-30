@@ -9,6 +9,7 @@ use Tymy\Module\Core\Model\SettingMenu;
 use Tymy\Module\Debt\Manager\DebtManager;
 use Tymy\Module\Discussion\Manager\DiscussionManager;
 use Tymy\Module\Event\Manager\EventManager;
+use Tymy\Module\Event\Manager\EventTypeManager;
 use Tymy\Module\Multiaccount\Manager\MultiaccountManager;
 use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\Poll\Manager\PollManager;
@@ -34,6 +35,9 @@ class SecuredPresenter extends BasePresenter
 
     /** @inject */
     public EventManager $eventManager;
+
+    /** @inject */
+    public EventTypeManager $eventTypeManager;
 
     /** @inject */
     public DebtManager $debtManager;
@@ -101,7 +105,7 @@ class SecuredPresenter extends BasePresenter
 
     protected function createComponentNavbar()
     {
-        $navbar = new NavbarControl($this, $this->pollManager, $this->discussionManager, $this->eventManager, $this->debtManager, $this->userManager, $this->multiaccountManager, $this->user, $this->teamManager);
+        $navbar = new NavbarControl($this, $this->pollManager, $this->discussionManager, $this->eventManager, $this->debtManager, $this->userManager, $this->multiaccountManager, $this->user, $this->teamManager, $this->eventTypeManager);
         $navbar->redrawControl();
         return $navbar;
     }
