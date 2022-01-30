@@ -61,8 +61,9 @@ class EventManager extends BaseManager
         $event = parent::map($row, $force);
 
         $event->setType($row->ref(EventType::TABLE, "event_type_id")->code);
-        $event->setInPast($row->start_time > $this->now);
-        $event->setInFuture($row->start_time < $this->now);
+
+        $event->setInPast($row->start_time < $this->now);
+        $event->setInFuture($row->start_time > $this->now);
 
         $event->setWebName(Strings::webalize($event->getId() . "-" . $event->getCaption()));
 
