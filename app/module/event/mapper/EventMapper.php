@@ -16,8 +16,10 @@ class EventMapper extends BaseMapper
     {
         return [
             Field::int()->withPropertyAndColumn("id", false, false),
+            Field::datetime()->withPropertyAndColumn("created", false, false),
+            Field::int()->withColumn("created_user_id", false, false)->setProperty("createdUserId"),
             Field::string()->withPropertyAndColumn("caption", true),
-            Field::string()->withPropertyAndColumn("type", true),
+            Field::int()->withColumn("event_type_id")->setProperty("eventTypeId"),
             Field::string()->withColumn("descr")->setProperty("description"),
             Field::string()->withColumn("close_time")->setProperty("closeTime"),
             Field::string()->withColumn("start_time", true)->setProperty("startTime"),

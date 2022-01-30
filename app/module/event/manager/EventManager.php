@@ -14,6 +14,7 @@ use Tymy\Module\Core\Model\Filter;
 use Tymy\Module\Core\Model\Order;
 use Tymy\Module\Event\Mapper\EventMapper;
 use Tymy\Module\Event\Model\Event;
+use Tymy\Module\Event\Model\EventType;
 use Tymy\Module\Permission\Manager\PermissionManager;
 use Tymy\Module\Permission\Model\Permission;
 use Tymy\Module\Permission\Model\Privilege;
@@ -27,15 +28,17 @@ use Tymy\Module\User\Manager\UserManager;
 class EventManager extends BaseManager
 {
     private PermissionManager $permissionManager;
-    private AttendanceManager $attendanceManager;
+    private AttendanceManager $attendanceManager;    
+    private EventTypeManager $eventTypeManager;    
     private UserManager $userManager;
     private DateTime $now;
     private ?Event $event = null;
 
-    public function __construct(ManagerFactory $managerFactory, PermissionManager $permissionManager, UserManager $userManager, AttendanceManager $attendanceManager)
+    public function __construct(ManagerFactory $managerFactory, PermissionManager $permissionManager, UserManager $userManager, AttendanceManager $attendanceManager, EventTypeManager $eventTypeManager)
     {
         parent::__construct($managerFactory);
         $this->permissionManager = $permissionManager;
+        $this->eventTypeManager = $eventTypeManager;
         $this->userManager = $userManager;
         $this->attendanceManager = $attendanceManager;
         $this->now = new DateTime();
@@ -56,6 +59,7 @@ class EventManager extends BaseManager
         /* @var $event Event */
         $event = parent::map($row, $force);
 
+        $event->setType($row->{EventType::TABLE}->code);
         $event->setInPast($row->in_past);
         $event->setInFuture($row->in_future);
 
@@ -217,6 +221,21 @@ class EventManager extends BaseManager
         if ($endTimeDT < $startTimeDT) {
             $this->respondBadRequest("Start time after end time");
         }
+
+        //if there is no `eventTypeId` supplied, load it from `type` input
+        if (!isset($data["eventTypeId"])) {
+            if (!isset($data["type"])) {
+                $this->responder->E4013_MISSING_INPUT("eventTypeId");
+            }
+
+            $code = $this->eventTypeManager->getByCode($data["type"]);
+
+            if (empty($code)) {
+                $this->respondNotFound("Event type", $data["type"]);
+            }
+
+            $data["eventTypeId"] = $code->id;
+        }
     }
 
     protected function allowDelete(?int $recordId): void
@@ -245,6 +264,17 @@ class EventManager extends BaseManager
 
         if (!$this->canEdit($this->event, $this->user->getId())) {
             $this->respondForbidden();
+        }
+
+        //if there is no `eventTypeId` supplied, load it from `type` input
+        if (isset($data["type"]) && $data["type"] !== $this->event->getType()) { //changing event type
+            $code = $this->eventTypeManager->getByCode($data["type"]);
+
+            if (empty($code)) {
+                $this->respondNotFound("Event type", $data["type"]);
+            }
+
+            $data["eventTypeId"] = $code->id;
         }
     }
 

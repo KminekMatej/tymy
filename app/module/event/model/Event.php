@@ -1,5 +1,4 @@
 <?php
-
 namespace Tymy\Module\Event\Model;
 
 use Nette\Utils\DateTime;
@@ -20,6 +19,9 @@ class Event extends BaseModel
     const PAGING_EVENTS_PER_PAGE = 15;
 
     private string $caption;
+    private DateTime $created;
+    private int $createdUserId = null;
+    private int $eventTypeId;
     private string $type;
     private ?string $description = null;
     private DateTime $closeTime;
@@ -46,6 +48,21 @@ class Event extends BaseModel
     public function getCaption(): string
     {
         return $this->caption;
+    }
+
+    public function getCreated(): DateTime
+    {
+        return $this->created;
+    }
+
+    public function getCreatedUserId(): int
+    {
+        return $this->createdUserId;
+    }
+
+    public function getEventTypeId(): int
+    {
+        return $this->eventTypeId;
     }
 
     public function getType(): string
@@ -161,6 +178,24 @@ class Event extends BaseModel
     public function setCaption(string $caption)
     {
         $this->caption = $caption;
+        return $this;
+    }
+
+    public function setCreated(DateTime $created)
+    {
+        $this->created = $created;
+        return $this;
+    }
+
+    public function setCreatedUserId(int $createdUserId)
+    {
+        $this->createdUserId = $createdUserId;
+        return $this;
+    }
+
+    public function setEventTypeId(int $eventTypeId)
+    {
+        $this->eventTypeId = $eventTypeId;
         return $this;
     }
 
@@ -315,6 +350,7 @@ class Event extends BaseModel
     public function jsonSerialize()
     {
         $json = parent::jsonSerialize() + [
+            "type" => $this->getType(),
             "attendance" => $this->arrayToJson($this->getAttendance()),
             "canView" => $this->getCanView(),
             "canPlan" => $this->getCanPlan(),

@@ -141,4 +141,16 @@ class EventTypeManager extends BaseManager
     {
         throw new NotImplementedException("Not implemented yet");
     }
+
+    /**
+     * Get Event type row from database, using its unique code or null, if this code has not been found
+     * 
+     * @param string $code
+     * @return ActiveRow|null
+     */
+    public function getByCode(string $code): ?ActiveRow
+    {
+        $typeRow = $this->database->table($this->getTable())->where("code", $code)->fetch();
+        return $typeRow ? $typeRow->id : null;
+    }
 }
