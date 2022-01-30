@@ -21,6 +21,7 @@ use Tymy\Module\Event\Model\EventType;
 class EventTypeManager extends BaseManager
 {
     private ?EventType $eventType = null;
+    private array $colorList;
     private StatusManager $statusManager;
 
     public function __construct(ManagerFactory $managerFactory, StatusManager $statusManager)
@@ -152,5 +153,20 @@ class EventTypeManager extends BaseManager
     {
         $typeRow = $this->database->table($this->getTable())->where("code", $code)->fetch();
         return $typeRow ? $typeRow->id : null;
+    }
+
+    /**
+     * Get event type color, cached
+     * 
+     * @param int $eventTypeId
+     * @return string Hexadecimal color value, without leading hashtag
+     */
+    public function getEventTypeColor(int $eventTypeId): string
+    {
+        if (!isset($this->colorList)) {
+            $this->colorList = $this->database->table($this->getTable())->fetchPairs("id", "color");
+        }
+
+        return $this->colorList[$eventTypeId];
     }
 }
