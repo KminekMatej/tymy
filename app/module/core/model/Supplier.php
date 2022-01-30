@@ -11,24 +11,12 @@ class Supplier {
     private $versions;
     private $wwwDir;
     private $allSkins;
-    private $teamNeon;
     private $userNeon;
 
     public function __construct($appConfig)
     {
         $this->setVersion();
         $this->setAllSkins($appConfig["allSkins"]);
-        $this->loadTeamNeon();
-    }
-
-    private function loadTeamNeon() {
-        $tmpTeamNeon = ROOT_DIR . "/app/config/config.team.template.neon";
-        $teamNeon = TEAM_DIR . "/config/config.team.neon";
-        if (!file_exists($teamNeon) && file_exists($tmpTeamNeon))
-            copy($tmpTeamNeon, $teamNeon);
-        if (!file_exists($teamNeon))
-            return NULL;
-        $this->setTeamNeon((object) Neon::decode(file_get_contents($teamNeon)));
     }
 
     public function loadUserNeon($userId) {
@@ -104,17 +92,8 @@ class Supplier {
         }
     }
 
-    public function getTeamNeon() {
-        return $this->teamNeon;
-    }
-
     public function getUserNeon() {
         return $this->userNeon;
-    }
-
-    public function setTeamNeon($teamNeon) {
-        $this->teamNeon = $teamNeon;
-        return $this;
     }
 
     public function setUserNeon($userNeon) {
