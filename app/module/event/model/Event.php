@@ -20,7 +20,7 @@ class Event extends BaseModel
 
     private string $caption;
     private DateTime $created;
-    private int $createdUserId = null;
+    private ?int $createdUserId = null;
     private int $eventTypeId;
     private string $type;
     private ?string $description = null;
@@ -55,7 +55,7 @@ class Event extends BaseModel
         return $this->created;
     }
 
-    public function getCreatedUserId(): int
+    public function getCreatedUserId(): ?int
     {
         return $this->createdUserId;
     }
@@ -187,7 +187,7 @@ class Event extends BaseModel
         return $this;
     }
 
-    public function setCreatedUserId(int $createdUserId)
+    public function setCreatedUserId(?int $createdUserId)
     {
         $this->createdUserId = $createdUserId;
         return $this;
