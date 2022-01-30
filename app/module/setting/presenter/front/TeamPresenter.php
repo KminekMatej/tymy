@@ -11,7 +11,6 @@ class TeamPresenter extends SettingBasePresenter
 
     public function createComponentTeamConfigForm()
     {
-        $teamNeon = $this->supplier->getTeamNeon();
         $eventTypes = $this->eventTypeManager->getList();
         $statusList = $this->statusManager->getByStatusCode();
         $team = $this->teamManager->getTeam();
