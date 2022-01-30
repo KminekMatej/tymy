@@ -449,7 +449,7 @@ abstract class BaseManager
             $value = $array[$field->getProperty()] ?? null;
             
             if (!$field->getChangeable()) {
-                if (in_array($field->getColumn(), ["user_id", "usr_cre"]) && !empty($this->user)) {
+                if (in_array($field->getColumn(), ["user_id", "usr_cre", "created_user_id"]) && !empty($this->user)) {
                     $value = $this->user->id;
                 } elseif (in_array($field->getColumn(), ["dat_cre", "insert_date"])) {
                     $value = new DateTime();
