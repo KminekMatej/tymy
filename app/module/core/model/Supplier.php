@@ -72,10 +72,6 @@ class Supplier {
     public function getRoleClass($role) {
         return $this->getTeamNeon()->roles_classes[$role];
     }
-
-    public function getStatusClass($code) {
-        return array_key_exists($code, $this->getTeamNeon()->status_classes) ? $this->getTeamNeon()->status_classes[$code] : "primary";
-    }
     
     public function getStatusColor($code) {
         return property_exists($this->getTeamNeon(), "status_colors") && array_key_exists($code, $this->getTeamNeon()->status_colors) ? $this->getTeamNeon()->status_colors[$code] : "#0275d8";

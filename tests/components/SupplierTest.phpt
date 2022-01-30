@@ -49,10 +49,6 @@ class SupplierTest extends TestCase {
         Assert::equal("btn-outline-success", $this->supplier->getRoleClass("SUPER"));
         Assert::equal("btn-outline-info", $this->supplier->getRoleClass("USR"));
         Assert::equal("btn-outline-warning", $this->supplier->getRoleClass("ATT"));
-        Assert::equal("warning", $this->supplier->getStatusClass("LAT"));
-        Assert::equal("danger", $this->supplier->getStatusClass("NO"));
-        Assert::equal("success", $this->supplier->getStatusClass("YES"));
-        Assert::equal("warning", $this->supplier->getStatusClass("DKY"));
         Assert::type("array", $this->supplier->getEventColors());
     }
     
