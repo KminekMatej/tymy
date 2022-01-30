@@ -2,6 +2,8 @@
 
 namespace Tymy\Module\Core\Model;
 
+use Nette\Database\Table\Selection;
+
 /**
  * Description of Filter
  *
@@ -36,42 +38,26 @@ class Filter
         return $this->value;
     }
 
-    public static function toParams(array $filters): array
-    {
-        $values = [];
-
-        foreach ($filters as $filter) {
-            /* @var $filter Filter */
-            $values[] = $filter->getValue();
-        }
-
-        return $values;
-    }
-
     /**
-     * Generate string to append to query, with each filter connected by ANDs and prepended with AND
+     * Add filters, one by one, to existing selector, using ->where functions
      * 
-     * @param Filter[] $filters
-     * @return string
+     * @param Selection $selector
+     * @param array $filters
+     * @return void
      */
-    public static function toAndQuery(array $filters): string
+    public static function addFilter(Selection &$selector, array $filters): void
     {
-        if(empty($filters)){
-            return "";
+        if (empty($filters)) {
+            return;
         }
-        
-        $q = [];
 
         foreach ($filters as $filter) {
             /* @var $filter Filter */
             if ($filter->getOperator() === "#=") {
-                $q[] = "UPPER(`{$filter->getColumn()}`) = UPPER(?)"; //UPPER(`column`) = UPPER('value'), replaced by question marks
+                $selector->where("UPPER(`{$filter->getColumn()}`) = UPPER(?)", $filter->getValue());
             } else {
-                $q[] = "`{$filter->getColumn()}` {$filter->getOperator()} ?"; //`column` >= 'value', replaced by question marks
+                $selector->where("`{$filter->getColumn()}` {$filter->getOperator()} ?", $filter->getValue()); //`column` >= 'value', replaced by question marks
             }
         }
-
-        return " AND " . join(" AND ", $q) . " ";//with trailing space
     }
-
 }
