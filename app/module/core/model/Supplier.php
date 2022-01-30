@@ -45,11 +45,6 @@ class Supplier {
         $userNeon = $this->getUserNeonFile($userId);
         file_put_contents($userNeon, Neon::encode($neonArray));
     }
-    
-    public function saveTeamNeon($neonArray){
-        $teamNeon = $this->getTeamNeonFile();
-        file_put_contents($teamNeon, Neon::encode($neonArray, Neon::BLOCK));
-    }
 
     public function getAppDir() {
         return $this->appDir;
@@ -84,10 +79,6 @@ class Supplier {
     
     public function getStatusColor($code) {
         return property_exists($this->getTeamNeon(), "status_colors") && array_key_exists($code, $this->getTeamNeon()->status_colors) ? $this->getTeamNeon()->status_colors[$code] : "#0275d8";
-    }
-
-    public function getEventColors() {
-        return $this->getTeamNeon()->event_colors;
     }
 
     public function getVersions() {

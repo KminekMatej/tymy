@@ -95,7 +95,6 @@ class NavbarControl extends Control
         $events = $this->eventManager->getEventsInterval($this->user->getId(), new DateTime(), new DateTime("+ 1 year"));
         $this->template->events = $events;
         $this->template->eventWarnings = $this->eventManager->getWarnings($events);
-        $this->template->eventColors = $this->supplier->getEventColors();
     }
 
     private function initFiles(): void

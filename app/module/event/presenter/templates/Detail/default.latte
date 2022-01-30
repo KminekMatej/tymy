@@ -13,10 +13,10 @@
 {include parent}
 <style type="text/css">
     {foreach $statusList as $status}
-    .attendance{$status->getCode()} { color: {$status|statusColor}; border-color: {$status|statusColor}; background-color: transparent; background-image: none; }
-    .attendance{$status->getCode()}.active { color: #fff; border-color: {$status|statusColor}; background-color: {$status|statusColor}; }
-    .attendance{$status->getCode()}:hover { color: #fff; border-color: {$status|statusColor}; background-color: {$status|statusColor}; }
-    .attendance{$status->getCode()}:not(:disabled):not(.disabled).active { color: #fff; border-color: {$status|statusColor}; background-color: {$status|statusColor}; }
+    .attendance{$status->getCode()} { color: #{$status->getColor()}; border-color: #{$status->getColor()}; background-color: transparent; background-image: none; }
+    .attendance{$status->getCode()}.active { color: #fff; border-color: #{$status->getColor()}; background-color: #{$status->getColor()}; }
+    .attendance{$status->getCode()}:hover { color: #fff; border-color: #{$status->getColor()}; background-color: #{$status->getColor()}; }
+    .attendance{$status->getCode()}:not(:disabled):not(.disabled).active { color: #fff; border-color: #{$status->getColor()}; background-color: #{$status->getColor()}; }
     BUTTON.disabled { cursor: auto }
     {/foreach}
 </style>

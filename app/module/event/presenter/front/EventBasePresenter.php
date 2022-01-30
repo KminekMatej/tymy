@@ -57,10 +57,6 @@ class EventBasePresenter extends SecuredPresenter
                 return $code == $myPostStatus && $myPostStatus != "not-set" ? "attendance$code disabled active" : "btn-outline-secondary disabled";
         });
 
-        $this->template->addFilter("statusColor", function (Status $status) {
-            return $this->supplier->getStatusColor($status->getCode());
-        });
-
         $this->template->statusList = $this->statusManager->getList();
     }
 
