@@ -340,7 +340,7 @@ class AttendanceManager extends BaseManager
      * @param int $eventId
      * @return ActiveRow|null
      */
-    public function getUserAttendance(int $eventId): ?ActiveRow
+    public function getMyAttendance(int $eventId): ?ActiveRow
     {
         if (!isset($this->myAttendances)) {
             $this->myAttendances = $this->database->table($this->getTable())->where("user_id", $this->user->getId())->fetchPairs("event_id");
