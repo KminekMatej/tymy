@@ -17,6 +17,7 @@ class StatusMapper extends BaseMapper
         return [
             Field::int()->withPropertyAndColumn("id", false, false),
             Field::string()->withPropertyAndColumn("code", true),
+            Field::string()->withPropertyAndColumn("color"),
             Field::string()->withPropertyAndColumn("caption", true),
             Field::int()->withColumn("set_id", true)->setProperty("statusSetId"),
             Field::int()->withColumn("usr_mod")->setProperty("updatedById"),

@@ -1,5 +1,4 @@
 <?php
-
 namespace Tymy\Module\Attendance\Model;
 
 use Nette\Utils\DateTime;
@@ -13,10 +12,12 @@ use Tymy\Module\Core\Model\BaseModel;
  */
 class Status extends BaseModel
 {
+
     public const TABLE = "statuses";
     public const MODULE = "attendance";
 
     private string $code;
+    private string $color = "d9ff00";
     private ?string $caption = null;
     private int $statusSetId;
     private ?int $updatedById = null;
@@ -25,6 +26,11 @@ class Status extends BaseModel
     public function getCode(): string
     {
         return $this->code;
+    }
+
+    public function getColor(): string
+    {
+        return $this->color;
     }
 
     public function getCaption(): ?string
@@ -50,6 +56,12 @@ class Status extends BaseModel
     public function setCode(string $code)
     {
         $this->code = $code;
+        return $this;
+    }
+
+    public function setColor(string $color)
+    {
+        $this->color = $color;
         return $this;
     }
 

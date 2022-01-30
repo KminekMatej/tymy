@@ -1,5 +1,4 @@
 <?php
-
 namespace Tymy\Module\Event\Model;
 
 use Nette\Utils\DateTime;
@@ -14,11 +13,13 @@ use Tymy\Module\Event\Mapper\EventTypeMapper;
  */
 class EventType extends BaseModel
 {
+
     public const TABLE = "event_types";
     public const MODULE = "event";
 
     private string $code;
     private ?string $caption = null;
+    private string $color = "827f76";   //default color if not set
     private ?int $preStatusSetId = null;
     private ?int $postStatusSetId = null;
     private ?string $mandatory = "FREE";
@@ -35,6 +36,11 @@ class EventType extends BaseModel
     public function getCaption(): ?string
     {
         return $this->caption;
+    }
+
+    public function getColor(): string
+    {
+        return $this->color;
     }
 
     public function getPreStatusSetId(): ?int
@@ -81,6 +87,12 @@ class EventType extends BaseModel
     public function setCaption(?string $caption)
     {
         $this->caption = $caption;
+        return $this;
+    }
+
+    public function setColor(?string $color)
+    {
+        $this->color = $color;
         return $this;
     }
 
