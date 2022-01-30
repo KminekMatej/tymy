@@ -14,6 +14,7 @@ use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\Poll\Manager\PollManager;
 use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\User\Manager\UserManager;
+use Tymy\Module\User\Model\User;
 
 /**
  * Description of SecuredPresenter
@@ -182,9 +183,9 @@ class SecuredPresenter extends BasePresenter
     protected function getAllRoles(): array
     {
         return [
-            (object) ["code" => "SUPER", "caption" => $this->translator->translate("team.administrator"), "class" => $this->supplier->getRoleClass("SUPER")],
-            (object) ["code" => "USR", "caption" => $this->translator->translate("team.userAdmin"), "class" => $this->supplier->getRoleClass("USR")],
-            (object) ["code" => "ATT", "caption" => $this->translator->translate("team.attendanceAdmin"), "class" => $this->supplier->getRoleClass("ATT")],
+            (object) ["code" => "SUPER", "caption" => $this->translator->translate("team.administrator"), "class" => User::ROLE_SUPER_CLASS],
+            (object) ["code" => "USR", "caption" => $this->translator->translate("team.userAdmin"), "class" => User::ROLE_USER_CLASS],
+            (object) ["code" => "ATT", "caption" => $this->translator->translate("team.attendanceAdmin"), "class" => User::ROLE_ATTENDANCE_CLASS],
         ];
     }
 

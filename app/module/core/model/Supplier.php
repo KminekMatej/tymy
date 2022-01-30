@@ -69,10 +69,6 @@ class Supplier {
         return $this;
     }
 
-    public function getRoleClass($role) {
-        return $this->getTeamNeon()->roles_classes[$role];
-    }
-
     public function getVersions() {
         return $this->versions;
     }

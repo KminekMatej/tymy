@@ -46,9 +46,6 @@ class SupplierTest extends TestCase {
         Assert::equal($team, $this->supplier->getTym());
         Assert::equal("https://$team.$root", $this->supplier->getTymyRoot());
         Assert::equal("https://$team.$root/api", $this->supplier->getApiRoot());
-        Assert::equal("btn-outline-success", $this->supplier->getRoleClass("SUPER"));
-        Assert::equal("btn-outline-info", $this->supplier->getRoleClass("USR"));
-        Assert::equal("btn-outline-warning", $this->supplier->getRoleClass("ATT"));
         Assert::type("array", $this->supplier->getEventColors());
     }
     
