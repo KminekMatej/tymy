@@ -4,6 +4,7 @@ namespace Tymy\Module\Event\Manager;
 
 use Nette\Database\IRow;
 use Nette\Database\Table\ActiveRow;
+use Nette\Database\Table\Selection;
 use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
 use Tymy\Module\Attendance\Manager\AttendanceManager;
@@ -93,10 +94,8 @@ class EventManager extends BaseManager
 
     public function getById(int $id, bool $force = false): ?BaseModel
     {
-        $query = "SELECT events.*, IF(events.start_time > NOW(),1,0) AS in_future, IF(events.start_time < NOW(),1,0) AS in_past, attendance.* FROM events LEFT JOIN attendance ON events.id=attendance.event_id AND attendance.user_id=? WHERE events.id=?";
+        $event = parent::getById($id);
 
-        $eventRow = $this->database->query($query, $this->user->getId(), $id)->fetch();
-        $event = $this->map($eventRow);
         $attendances = $this->attendanceManager->getByEvents([$event->getId()]);
 
         $event->setAttendance($attendances[$event->getId()] ?? []);
@@ -125,15 +124,7 @@ class EventManager extends BaseManager
      */
     public function getListUserAllowed(int $userId, ?string $filter = null, ?string $order = null, ?int $limit = null, ?int $offset = null)
     {
-        $readPerms = $this->permissionManager->getUserAllowedPermissionNames($this->userManager->getById($userId), Permission::TYPE_USER);
-
-        $readPermsQ = ["`view_rights` IS NULL", "`view_rights` = ''"];
-        if (!empty($readPerms)) {
-            $readPermsQ[] = "`view_rights` IN (?)";
-        }
-
-        $selector = $this->database->table($this->getTable())
-            ->where(join(" OR ", $readPermsQ), empty($readPerms) ? null : $readPerms);
+        $selector = $this->selectUserEvents($userId);
 
         if ($filter) {
             Filter::addFilter($selector, $this->filterToArray($filter));
@@ -161,20 +152,23 @@ class EventManager extends BaseManager
         return $events;
     }
 
-    public function getList(?array $idList = null, string $idField = "id", ?int $limit = null, ?int $offset = null): array
+    /**
+     * Get basic selector for user permitted events
+     * 
+     * @param int $userId
+     * @return Selection
+     */
+    private function selectUserEvents(int $userId): Selection
     {
-        $offset = $offset ?? 0;
-        $limitQuery = $limit ? " LIMIT $offset,$limit" : "";
+        $readPerms = $this->permissionManager->getUserAllowedPermissionNames($this->userManager->getById($userId), Permission::TYPE_USER);
 
-        $selector = $this->database->query("SELECT events.*, "
-                . "IF(events.start_time > NOW(),1,0) AS in_future, "
-                . "IF(events.start_time < NOW(),1,0) AS in_past "
-                . "FROM events "
-                . "WHERE 1"
-                . " ORDER BY events.start_time DESC "
-                . $limitQuery);
+        $readPermsQ = ["`view_rights` IS NULL", "`view_rights` = ''"];
+        if (!empty($readPerms)) {
+            $readPermsQ[] = "`view_rights` IN (?)";
+        }
 
-        return $this->mapAll($selector->fetchAll());
+        return $this->database->table($this->getTable())
+                ->where(join(" OR ", $readPermsQ), empty($readPerms) ? null : $readPerms);
     }
 
     /**
@@ -184,8 +178,7 @@ class EventManager extends BaseManager
      */
     public function getIdsUserAllowed($userId)
     {
-        $readPerms = $this->permissionManager->getUserAllowedPermissionNames($this->userManager->getById($userId), Permission::TYPE_USER);
-        return $this->database->table($this->getTable())->where("view_rights IS NULL OR view_rights = '' OR view_rights IN (?)", $readPerms)->order("start_time DESC")->fetchPairs(null, "id");
+        return $this->selectUserEvents($userId)->fetchPairs(null, "id");
     }
 
     protected function allowCreate(?array &$data = null): void
@@ -308,7 +301,9 @@ class EventManager extends BaseManager
     public function getAllowedReaders(BaseModel $record): array
     {
         /* @var $record Event */
-        return $this->userManager->getUserIdsWithPrivilege(Privilege::USR($record->getViewRightName()));
+        return $record->getViewRightName() ?
+            $this->userManager->getUserIdsWithPrivilege(Privilege::USR($record->getViewRightName())) :
+            $this->getAllUserIds();
     }
 
     public function create(array $data, ?int $resourceId = null): BaseModel
