@@ -77,7 +77,20 @@ DIV.post .arrow-right {
 
 /* Discussion post settings toolbar styling */
 
-DIV.sttings-bar BUTTON.btn.delete:hover, A.btn.delete:hover{
+DIV.post .content:hover > DIV.edit-bar {
+    display: block;
+}
+
+DIV.post .content DIV.edit-bar {
+    display: none;
+    position: absolute;
+    margin: 1px;
+    bottom: 3px;
+    right: 3px;
+    z-index: 10;
+}
+
+DIV.post .content DIV.edit-bar BUTTON.btn.delete:hover, A.btn.delete:hover{
     color: #fff;
     background-color: #c82333;
     border-color: #bd2130;
