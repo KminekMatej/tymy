@@ -75,6 +75,18 @@ DIV.post .arrow-right {
     border-bottom: 8px solid transparent;
 }
 
+/* New post styling */
+
+DIV.post.post-new .content{
+    border: 2px solid #007bff;
+}
+
+/* Sticky post styling */
+
+DIV.post.post-sticky .content{
+    border: 2px solid #ffee91;
+}
+
 /* Discussion post settings toolbar styling */
 
 DIV.post .content:hover > DIV.edit-bar {

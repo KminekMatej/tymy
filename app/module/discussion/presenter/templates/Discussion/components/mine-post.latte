@@ -4,6 +4,8 @@
         <div class="row header">
             <div class="col-8 created-by">
                 <a href="{plink :Team:Player: $item->getCreatedBy()->getId()}" title="{$item->getCreatedBy()->getCallName()}">{$item->getCreatedBy()->getCallName()}</a>
+                <i class="fas fa-thumbtack text-warning" n:if="$item->getSticky()"></i>
+                <span class="badge badge-primary" n:if="$item->getNewPost()">N</span>
             </div>
             <div class="col-4 text-right created" {if $item->getUpdatedAt()}title="{_common.edited} {$userList[$item->getUpdatedById()]->getDisplayName()}, {$item->getUpdatedAt()|date:'j.n.Y G:i'}"{/if}>
                 {$item->getCreatedAt()|date:'j.n.Y G:i'}

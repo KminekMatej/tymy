@@ -1,5 +1,6 @@
 {*TODO: enphasize sticky post and new posts*}
-<div class="row post post-other" id="row-{$item->getId()}">
+    
+<div n:class="row,post,post-other,$item->getSticky() ? post-sticky,$item->getNewPost() ? post-new" id="row-{$item->getId()}">
     <div class="col-1 avatar text-center">
         <img src="{$item->getCreatedBy()->getPictureUrl()}" />
     </div>
@@ -8,6 +9,8 @@
         <div class="row header">
             <div class="col-8 created-by">
                 <a href="{plink :Team:Player: $item->getCreatedBy()->getId()}" title="{$item->getCreatedBy()->getCallName()}">{$item->getCreatedBy()->getCallName()}</a>
+                <i class="fas fa-thumbtack text-warning" n:if="$item->getSticky()"></i>
+                <span class="badge badge-primary" n:if="$item->getNewPost()">N</span>
             </div>
             <div class="col-4 text-right created" {if $item->getUpdatedAt()}title="{_common.edited} {$userList[$item->getUpdatedById()]->getDisplayName()}, {$item->getUpdatedAt()|date:'j.n.Y G:i'}"{/if}>
                 {$item->getCreatedAt()|date:'j.n.Y G:i'}
