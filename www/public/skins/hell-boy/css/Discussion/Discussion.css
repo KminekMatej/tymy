@@ -4,29 +4,6 @@
 */
 
 
-DIV.card DIV.card-header SPAN.name{
-    font-weight: bold;
-}
-
-DIV.card-header.post-mine{
-    color: #0275d8;
-}
-
-BUTTON.btn.delete:hover, A.btn.delete:hover{
-    color: #fff;
-    background-color: #c82333;
-    border-color: #bd2130;
-}
-
-IMG.user_pic{
-    float: left;
-    margin: 0px 30px 10px 0px;
-}
-
-DIV.card-body OL{
-    display: inline-block;
-}
-
 .addPost{
     background-color: white; 
     padding: 2px; 
@@ -39,13 +16,86 @@ DIV.card-body OL{
     display: none;
 }
 
-DIV.row DIV.card-body blockquote{
+
+/* Discussion post area styling */
+
+DIV.post{
+    margin-bottom: 5px;
+}
+
+DIV.post .avatar{
+    padding-top: 10px;
+}
+
+DIV.post .avatar IMG{
+    border-radius: 2px;
+}
+
+DIV.post .header{
+    margin: 5px 0px;
+}
+
+DIV.post .header .created{
+    font-size: 12px;
+}
+
+DIV.post .content{
+    position: relative;
+    border-radius: 2px;
+    border: 1px solid #d1d1d1;
+}
+
+DIV.post-mine .content{
+    background-color: #cfedff;
+}
+
+DIV.post-other .content{
+    background-color: white;
+}
+
+DIV.post .arrow-left {
+    position: absolute;
+    left: -8px;
+    top: 20px;
+    border-top: 8px solid transparent;
+    border-right: 8px solid white;
+    border-bottom: 8px solid transparent;
+}
+
+DIV.post .arrow-right {
+    position: absolute;
+    right: -8px;
+    top: 20px;
+    border-top: 8px solid transparent;
+    border-left: 8px solid #cfedff;
+    border-bottom: 8px solid transparent;
+}
+
+/* Discussion post settings toolbar styling */
+
+DIV.sttings-bar BUTTON.btn.delete:hover, A.btn.delete:hover{
+    color: #fff;
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+/* Discussion post text content styling */
+
+DIV.post .content .text{
+    margin-bottom: 15px;
+}
+
+DIV.post .content .text OL{
+    display: inline-block;
+}
+
+DIV.post .content .text blockquote{
     margin: 10px;
     border-left: solid 5px #dedede;
     padding: 10px;
     font-style: italic;
 }
 
-DIV.row DIV.card-body blockquote P{
+DIV.post .content .text blockquote P{
     margin: 0px;
 }

@@ -1,0 +1,38 @@
+{*TODO: enphasize sticky post and new posts*}
+<div class="row post post-other" id="row-{$item->getId()}">
+    <div class="col-1 avatar text-center">
+        <img src="{$item->getCreatedBy()->getPictureUrl()}" />
+    </div>
+    <div class="col-11 content">
+        <div class="arrow-left"></div>
+        <div class="row header">
+            <div class="col-8 created-by">
+                <a href="{plink :Team:Player: $item->getCreatedBy()->getId()}" title="{$item->getCreatedBy()->getCallName()}">{$item->getCreatedBy()->getCallName()}</a>
+            </div>
+            <div class="col-4 text-right created">{$item->getCreatedAt()|date:'j.n.Y G:i'}</div>
+        </div>
+        <div class="text">
+            {if $item->getPost()}{$item->getPost()|noescape}{/if}
+        </div>
+    </div>
+    {*<div class="card my-1 {$cc} sh-box">
+        <div class="card-header {$chc} py-1">
+            
+            <div class="btn-group btn-group-sm float-md-right" role="group">
+                <a n:if="$discussionPosts->getDiscussion()->getCanStick()" n:class="btn,btn-sm,$item->getSticky() ? active,$item->getSticky() ? btn-dark:btn-light,!$item->getSticky() ? btn-light-bordered" href="{plink :Discussion:Discussion:stickPost $item->getId(), $discussionPosts->getDiscussion()->getId(), $item->getSticky() ? false : true}" title="{if $item->getSticky()}{_discussion.unpin}{else}{_discussion.pin}{/if}"><i class="fa fa-thumbtack" aria-hidden="true"></i></a>
+                <button class="btn btn-sm btn-light btn-light-bordered clipboard-btn" data-clipboard-target="#post-{$item->getId()}" title="{_common.copyToClipboard}"><i class="far fa-copy" aria-hidden="true"></i></button>
+                <button class="btn btn-sm btn-light btn-light-bordered" onclick="loadPost({$item->getId()})" title="{_common.edit} / {_common.copy}"><i class="far fa-edit" aria-hidden="true"></i></button>
+                <a n:if="$discussionPosts->getDiscussion()->getCanDelete() || ($discussionPosts->getDiscussion()->getEditablePosts() && $item->getCreatedById() == $user->getId()) " class="btn btn-sm btn-light btn-light-bordered delete" href="{plink :Discussion:Discussion:deletePost $item->getId(), $discussionPosts->getDiscussion()->getId(), $currentPage}" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></a>
+            </div>
+            <span></span>
+            <div class="alert alert-warning float-md-right mx-1" n:if="$item->getUpdatedAt()" style="margin: 0px; padding: 4px; font-size: 10px;">{_common.edited} {$userList[$item->getUpdatedById()]->getDisplayName()}, {$item->getUpdatedAt()|date:'j.n.Y G:i'}</div>
+        </div>
+        <div class="card-body">
+            
+            <div class="card-text" id="post-{$item->getId()}">
+            
+        </div>
+    </div>
+</div>*}
+
+</div>

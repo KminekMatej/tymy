@@ -23,44 +23,11 @@
 {/block}
 <div class="container discussion" n:snippet="discussion">
     {foreach $discussionPosts->getPosts() as $item}
-        {var $stickyIcon = ''}
-        {if $item->getSticky()}
-            {var $chc = 'post-sticky bg-warning'}
-            {var $cc = 'post-sticky'}
-            {var $stickyIcon = 'sticky'}
-        {elseif $item->getNewPost()}
-            {var $chc = 'post-new text-white bg-primary'}
-            {var $cc = 'post-new'}
-        {elseif $item->getCreatedById() == $userId}
-            {var $chc = 'post-mine'}
-            {var $cc = 'post-mine'}
+        {if $item->getCreatedById() == $userId}
+            {include 'components/mine-post.latte', item => $item}
         {else}
-            {var $chc = ''}
-            {var $cc = ''}
+            {include 'components/post.latte', item => $item}
         {/if}
-        <div class="row" id="row-{$item->getId()}">
-            <div class="col">
-                <div class="card my-1 {$cc} sh-box">
-                    <div class="card-header {$chc} py-1">
-                        <span class="name">{$item->getCreatedBy()->getCallName()}</span>
-                        <div class="btn-group btn-group-sm float-md-right" role="group">
-                            <a n:if="$discussionPosts->getDiscussion()->getCanStick()" n:class="btn,btn-sm,$item->getSticky() ? active,$item->getSticky() ? btn-dark:btn-light,!$item->getSticky() ? btn-light-bordered" href="{plink :Discussion:Discussion:stickPost $item->getId(), $discussionPosts->getDiscussion()->getId(), $item->getSticky() ? false : true}" title="{if $item->getSticky()}{_discussion.unpin}{else}{_discussion.pin}{/if}"><i class="fa fa-thumbtack" aria-hidden="true"></i></a>
-                            <button class="btn btn-sm btn-light btn-light-bordered clipboard-btn" data-clipboard-target="#post-{$item->getId()}" title="{_common.copyToClipboard}"><i class="far fa-copy" aria-hidden="true"></i></button>
-                            <button class="btn btn-sm btn-light btn-light-bordered" onclick="loadPost({$item->getId()})" title="{_common.edit} / {_common.copy}"><i class="far fa-edit" aria-hidden="true"></i></button>
-                            <a n:if="$discussionPosts->getDiscussion()->getCanDelete() || ($discussionPosts->getDiscussion()->getEditablePosts() && $item->getCreatedById() == $user->getId()) " class="btn btn-sm btn-light btn-light-bordered delete" href="{plink :Discussion:Discussion:deletePost $item->getId(), $discussionPosts->getDiscussion()->getId(), $currentPage}" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></a>
-                        </div>
-                        <span class="float-md-right mx-2">{$item->getCreatedAt()|date:'j.n.Y G:i'}</span>
-                        <div class="alert alert-warning float-md-right mx-1" n:if="$item->getUpdatedAt()" style="margin: 0px; padding: 4px; font-size: 10px;">{_common.edited} {$userList[$item->getUpdatedById()]->getDisplayName()}, {$item->getUpdatedAt()|date:'j.n.Y G:i'}</div>
-                    </div>
-                    <div class="card-body">
-                        <img class="user_pic" src="{$item->getCreatedBy()->getPictureUrl()}" />
-                        <div class="card-text" id="post-{$item->getId()}">
-                        {if $item->getPost()}{$item->getPost()|noescape}{/if}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     {/foreach}
 </div>
 <div class="container navigation">
