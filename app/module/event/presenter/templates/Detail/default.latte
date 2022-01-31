@@ -52,7 +52,7 @@
                         </div>
                         <div class="col-lg-8 d-flex flex-column-reverse align-items-center">
                             <div class="custom-container btn-group input-group pb-2" role="group" aria-label="Attendace setup container" id="action-{$event->getId()}">
-                                <input type="text" class="form-control form-control-sm custom-btn-sm" title="{_note.note,1}" name="preStatusDesc" value="{$event->getMyAttendance() ? $event->getMyAttendance()->getPreDescription() : ''}" />
+                                <input type="text" class="form-control custom-btn-sm" title="{_note.note,1}" name="preStatusDesc" value="{$event->getMyAttendance() ? $event->getMyAttendance()->getPreDescription() : ''}" />
                                 {foreach $eventType->getPreStatusSet() as $preStatus}
                                     <button onclick="updateAttendance(this, {link attendance! $event->getId(), $preStatus->getCode()})" class="btn custom-btn-sm {$event->getMyAttendance(),$event->getType(),$preStatus->getCode(),$event->getCanPlan(),$event->getCloseTime()|prestatusClass}">{$preStatus->getCaption()}</button>
                                 {/foreach}
