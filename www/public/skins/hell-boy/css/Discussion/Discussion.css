@@ -16,6 +16,10 @@
     display: none;
 }
 
+DIV.container.discussion{
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
 
 /* Discussion post area styling */
 

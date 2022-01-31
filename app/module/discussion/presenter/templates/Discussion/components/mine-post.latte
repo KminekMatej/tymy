@@ -5,7 +5,10 @@
             <div class="col-8 created-by">
                 <a href="{plink :Team:Player: $item->getCreatedBy()->getId()}" title="{$item->getCreatedBy()->getCallName()}">{$item->getCreatedBy()->getCallName()}</a>
             </div>
-            <div class="col-4 text-right created">{$item->getCreatedAt()|date:'j.n.Y G:i'}</div>
+            <div class="col-4 text-right created" {if $item->getUpdatedAt()}title="{_common.edited} {$userList[$item->getUpdatedById()]->getDisplayName()}, {$item->getUpdatedAt()|date:'j.n.Y G:i'}"{/if}>
+                {$item->getCreatedAt()|date:'j.n.Y G:i'}
+                <i class="fas fa-info-circle text-warning" n:if="$item->getUpdatedAt()"></i>
+            </div>
         </div>
         <div class="text">
             {if $item->getPost()}
@@ -30,7 +33,7 @@
                 <a n:if="$discussionPosts->getDiscussion()->getCanDelete() || ($discussionPosts->getDiscussion()->getEditablePosts() && $item->getCreatedById() == $user->getId()) " class="btn btn-sm btn-light btn-light-bordered delete" href="{plink :Discussion:Discussion:deletePost $item->getId(), $discussionPosts->getDiscussion()->getId(), $currentPage}" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></a>
             </div>
             <span class="float-md-right mx-2">{$item->getCreatedAt()|date:'j.n.Y G:i'}</span>
-            <div class="alert alert-warning float-md-right mx-1" n:if="$item->getUpdatedAt()" style="margin: 0px; padding: 4px; font-size: 10px;">{_common.edited} {$userList[$item->getUpdatedById()]->getDisplayName()}, {$item->getUpdatedAt()|date:'j.n.Y G:i'}</div>
+            <div class="alert alert-warning float-md-right mx-1" n:if="" style="margin: 0px; padding: 4px; font-size: 10px;"></div>
         </div>
         <div class="card-body">
             <img class="user_pic" src="{$item->getCreatedBy()->getPictureUrl()}" />

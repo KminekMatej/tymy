@@ -9,7 +9,10 @@
             <div class="col-8 created-by">
                 <a href="{plink :Team:Player: $item->getCreatedBy()->getId()}" title="{$item->getCreatedBy()->getCallName()}">{$item->getCreatedBy()->getCallName()}</a>
             </div>
-            <div class="col-4 text-right created">{$item->getCreatedAt()|date:'j.n.Y G:i'}</div>
+            <div class="col-4 text-right created" {if $item->getUpdatedAt()}title="{_common.edited} {$userList[$item->getUpdatedById()]->getDisplayName()}, {$item->getUpdatedAt()|date:'j.n.Y G:i'}"{/if}>
+                {$item->getCreatedAt()|date:'j.n.Y G:i'}
+                <i class="fas fa-info-circle text-warning" n:if="$item->getUpdatedAt()"></i>
+            </div>
         </div>
         <div class="text">
             {if $item->getPost()}{$item->getPost()|noescape}{/if}
