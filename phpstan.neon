@@ -3,17 +3,10 @@ parameters:
     paths:
         - app
         - bin
-        - cron
+        - tests
     tmpDir: temp/phpstan
-    bootstrapFiles:
-        - app/Bootstrap.php
     ignoreErrors:
             - '/Used constant (.*?) not found\./'
             - '/Constant ROOT_DIR not found/'
-            - '/Constant WWW_DIR not found/'
-            - '/Constant TMP_FOLDER not found/'
-            - '/Constant MODULES_DIR not found/'
-            - '/Constant CRZ_SOAP_USERPWD not found/'
-            - '/Constant TEST_DIR not found/'
+            - '/Constant TEAM_DIR not found/'
             - '/Access to an undefined property Nette\\Database\\Table\\ActiveRow::.*/'
-            - '/Cannot access property (.*?) on Nette\\Database\\Table\\ActiveRow.*/'
