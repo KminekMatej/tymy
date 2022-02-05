@@ -66,15 +66,15 @@ class PostManager extends BaseManager
     protected function allowDelete(?int $recordId): void
     {
         $this->allowUpdate($recordId);
-        
+
         if ($this->discussion->getCanDelete()) {
             return; //this user is specifically privileged to delete in this discussion
         }
-        
+
         if ($this->discussion->getEditablePosts()) {
             $this->respondForbidden();
         }
-        
+
         //posts in this discussions are editable, so delete is approved for the post author
         if ($this->post->getCreatedById() !== $this->user->getId()) {
             $this->respondForbidden();
@@ -167,7 +167,7 @@ class PostManager extends BaseManager
 
     /**
      * Update POST with checking permissions
-     * 
+     *
      * @param array $data
      * @param int $resourceId Id of discussion
      * @param int|null $subResourceId Id of post
@@ -374,7 +374,7 @@ class PostManager extends BaseManager
 
     /**
      * Mark all items in discussion as read for user
-     * 
+     *
      * @param int $userId
      * @param int $discussionId
      * @return void
@@ -401,7 +401,7 @@ class PostManager extends BaseManager
 
     /**
      * Stick/unstick a post
-     * 
+     *
      * @param int $postId
      * @param int $discussionId
      * @param bool $stick
