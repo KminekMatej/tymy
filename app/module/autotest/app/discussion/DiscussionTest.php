@@ -1,5 +1,7 @@
 <?php
 
+// phpcs:disable PSR1.Files.SideEffects
+
 namespace Tymy\Module\Autotest\Discussion;
 
 use Tymy\Bootstrap;

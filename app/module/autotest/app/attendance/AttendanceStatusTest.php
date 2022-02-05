@@ -1,5 +1,7 @@
 <?php
 
+// phpcs:disable PSR1.Files.SideEffects
+
 namespace Tymy\Module\Autotest\Event;
 
 use Tymy\Bootstrap;
@@ -60,7 +62,7 @@ class AttendanceStatusTest extends RequestCase
         $statusData = $this->recordManager->mockStatus($statusSetId);
         $statusResponseData = $this->request($this->getBasePath(), "POST", $statusData)->expect(201, "array")->getData();
 
-        $this->_testObjectEquality($statusData, $statusResponseData, ["image"]);
+        $this->assertObjectEquality($statusData, $statusResponseData, ["image"]);
         Assert::hasKey("updatedById", $statusResponseData);
         Assert::hasKey("updatedAt", $statusResponseData);
         Assert::type("int", $statusResponseData["updatedById"]);
@@ -111,13 +113,13 @@ class AttendanceStatusTest extends RequestCase
 
         $statusSetData = $this->recordManager->mockStatusSet();
         $statusSetResponseData = $this->request($this->getStatusSetPath(), "POST", $statusSetData)->expect(201, "array")->getData();
-        $this->_testObjectEquality($statusSetData, $statusSetResponseData);
+        $this->assertObjectEquality($statusSetData, $statusSetResponseData);
         $statusSetId = $statusSetResponseData["id"];
 
         //now get the status set and check created status is there
 
         $statusGetResponseData = $this->request($this->getBasePath() . "/$statusSetId")->expect(200, "array")->getData();
-        $this->_testObjectEquality($statusSetData, $statusGetResponseData);
+        $this->assertObjectEquality($statusSetData, $statusGetResponseData);
         Assert::equal($statusSetId, $statusGetResponseData["id"]);
         Assert::hasKey("statuses", $statusGetResponseData);
         Assert::type("array", $statusGetResponseData["statuses"]);
@@ -132,7 +134,7 @@ class AttendanceStatusTest extends RequestCase
         $this->request($this->getStatusSetPath() . "/$statusSetId", "PUT", $changeMock)->expect(200, "array");
 
         $statusGetResponseData = $this->request($this->getBasePath() . "/$statusSetId")->expect(200, "array")->getData();
-        $this->_testObjectEquality($changeMock, $statusGetResponseData);
+        $this->assertObjectEquality($changeMock, $statusGetResponseData);
 
         //now delete this status
         $this->request($this->getStatusSetPath() . "/$statusSetId", "DELETE")->expect(200);

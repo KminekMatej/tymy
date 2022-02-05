@@ -29,8 +29,6 @@ use Tymy\Module\Core\Router\RouteList;
 use const TEAM_DIR;
 use const TEST_DIR;
 
-use function GuzzleHttp\json_encode;
-
 /**
  * Envelope class for all api testing classes
  *
@@ -294,7 +292,7 @@ abstract class RequestCase extends TestCase
         }
     }
 
-    public function _testObjectEquality($original, $new, $skip = null)
+    public function assertObjectEquality($original, $new, $skip = null)
     {
         foreach ($original as $key => $value) {
             if ($skip && ((is_array($skip) && in_array($key, $skip)) || $key == $skip)) {

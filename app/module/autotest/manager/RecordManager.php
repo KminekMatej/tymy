@@ -35,7 +35,7 @@ class RecordManager
 
         $response = $this->requestCase->request($url, "POST", $data)->expect(201, "array");
 
-        $this->requestCase->_testObjectEquality($data, $response->getData(), $checkSkips);
+        $this->requestCase->assertObjectEquality($data, $response->getData(), $checkSkips);
 
         return $response->getData()[$identifier];
     }
@@ -48,7 +48,7 @@ class RecordManager
 
         $response = $this->requestCase->request(User::MODULE, "POST", $postData)->expect(201, "array");
 
-        $this->requestCase->_testObjectEquality($postData, $response->getData(), ["login", "password"]);
+        $this->requestCase->assertObjectEquality($postData, $response->getData(), ["login", "password"]);
 
         Assert::equal(false, array_key_exists("password", $response->getData())); //check password is not returned
         Assert::equal(strtoupper($postData["login"]), $response->getData()["login"]); //check login has been saved in uppercase
