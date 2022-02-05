@@ -31,7 +31,7 @@ class TymyResponse extends Exception
     /** @var mixed */
     private $payload = null;
 
-    public function __construct(string $message = "", int $httpCode = Response::S200_OK, ?int $code = null, $payload = null, bool $success = true, ?string $sessionKey, Throwable $previous = null)
+    public function __construct(string $message = "", int $httpCode = Response::S200_OK, ?int $code = null, $payload = null, bool $success = true, ?string $sessionKey = null, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
         $this->success = $success;
