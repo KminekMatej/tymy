@@ -50,7 +50,7 @@ DIV.post .content{
 }
 
 DIV.post-mine .content{
-    background-color: #dcfffa;
+    background-color: white;
 }
 
 DIV.post-other .content{
@@ -71,7 +71,7 @@ DIV.post .arrow-right {
     right: -8px;
     top: 20px;
     border-top: 8px solid transparent;
-    border-left: 8px solid #cfedff;
+    border-left: 8px solid white;
     border-bottom: 8px solid transparent;
 }
 
@@ -84,7 +84,7 @@ DIV.post.post-new .content{
 /* Sticky post styling */
 
 DIV.post.post-sticky .content{
-    border: 2px solid #ffee91;
+    border: 2px solid black;
 }
 
 /* Discussion post settings toolbar styling */
