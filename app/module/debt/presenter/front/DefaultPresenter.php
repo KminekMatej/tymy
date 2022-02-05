@@ -5,13 +5,12 @@ namespace Tymy\Module\Debt\Presenter\Front;
 use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
 use QrCode\QRcode;
-use Tapi\TapiObject;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Debt\Model\Debt;
 
-use const QR_ECLEVEL_H;
-
 use function iban_set_checksum;
+
+use const QR_ECLEVEL_H;
 
 /**
  * Description of DebtPresenter
