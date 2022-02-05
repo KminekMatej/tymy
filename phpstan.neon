@@ -1,12 +1,14 @@
 parameters:
-    level: 2
+    level: 1
     paths:
         - app
         - bin
         - tests
+    excludePaths:
+        - app/components/phpqrcode.php
     tmpDir: temp/phpstan
     ignoreErrors:
             - '/Used constant (.*?) not found\./'
             - '/Constant ROOT_DIR not found/'
             - '/Constant TEAM_DIR not found/'
-            - '/Access to an undefined property Nette\\Database\\Table\\ActiveRow::.*/'
+            - '/Constant TEST_DIR not found/'
