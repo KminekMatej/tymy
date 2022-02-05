@@ -1,5 +1,7 @@
 <?php
 
+// phpcs:disable PSR1.Classes.ClassDeclaration.MultipleClasses
+
 namespace Tymy\Module\Core\Exception;
 
 use Nette\Application\BadRequestException;
