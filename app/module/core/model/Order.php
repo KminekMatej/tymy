@@ -9,7 +9,6 @@ namespace Tymy\Module\Core\Model;
  */
 class Order
 {
-
     private string $column;
     private string $order;
 
@@ -40,5 +39,4 @@ class Order
 
         return join(", ", $outOrders);
     }
-
 }

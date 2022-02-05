@@ -13,39 +13,36 @@ use Nette\Application\Responses\ForwardResponse;
 use Nette\SmartObject;
 use Tracy\ILogger;
 
-
-
 class ErrorPresenter implements IPresenter
 {
-	use SmartObject;
+    use SmartObject;
 
-	/** @var ILogger */
-	private $logger;
-
-
-	public function __construct(ILogger $logger)
-	{
-		$this->logger = $logger;
-	}
+    /** @var ILogger */
+    private $logger;
 
 
-	/**
-	 * @return IResponse
-	 */
-	public function run(Request $request): Response
-	{
-		$e = $request->getParameter('exception');
+    public function __construct(ILogger $logger)
+    {
+        $this->logger = $logger;
+    }
 
-		if ($e instanceof BadRequestException) {
-			// $this->logger->log("HTTP code {$e->getCode()}: {$e->getMessage()} in {$e->getFile()}:{$e->getLine()}", 'access');
-			list($module, , $sep) = Helpers::splitName($request->getPresenterName());
-			return new ForwardResponse($request->setPresenterName($module . $sep . 'Error4xx'));
-		}
 
-		$this->logger->log($e, ILogger::EXCEPTION);
-		return new CallbackResponse(function () {
-			require __DIR__ . '/templates/Error/500.phtml';
-		});
-	}
+    /**
+     * @return IResponse
+     */
+    public function run(Request $request): Response
+    {
+        $e = $request->getParameter('exception');
 
+        if ($e instanceof BadRequestException) {
+            // $this->logger->log("HTTP code {$e->getCode()}: {$e->getMessage()} in {$e->getFile()}:{$e->getLine()}", 'access');
+            list($module, , $sep) = Helpers::splitName($request->getPresenterName());
+            return new ForwardResponse($request->setPresenterName($module . $sep . 'Error4xx'));
+        }
+
+        $this->logger->log($e, ILogger::EXCEPTION);
+        return new CallbackResponse(function () {
+            require __DIR__ . '/templates/Error/500.phtml';
+        });
+    }
 }

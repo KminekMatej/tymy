@@ -1,10 +1,12 @@
 <?php
+
 namespace Tymy\Module\PushNotification\Manager;
 
 use Tracy\Debugger;
 use Tracy\ILogger;
 use Tymy\Module\PushNotification\Model\PushNotification;
 use Tymy\Module\Team\Manager\TeamManager;
+
 use function GuzzleHttp\json_encode;
 
 /**
@@ -14,7 +16,6 @@ use function GuzzleHttp\json_encode;
  */
 class FirebasePush
 {
-
     private const URL = "https://fcm.googleapis.com/fcm/send";
 
     private array $fcm;
@@ -28,7 +29,7 @@ class FirebasePush
 
     /**
      * Send multiple notifications using FCM
-     * 
+     *
      * @param string[] $deviceIds
      * @param PushNotification $pushNotification
      * @return void
@@ -62,7 +63,7 @@ class FirebasePush
 
         $response = curl_exec($ch);
         $info = curl_getinfo($ch);
-        
+
         if ($response === false || $info["http_code"] !== 200) {
             Debugger::log($response, ILogger::WARNING);
             Debugger::log($info, ILogger::WARNING);

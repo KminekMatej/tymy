@@ -11,7 +11,6 @@ use Tymy\Module\Autotest\SimpleResponse;
  */
 class Assert extends \Tester\Assert
 {
-
     /**
      * Asserts that tymy system response is in error format and that responded code equals to expected one
      */

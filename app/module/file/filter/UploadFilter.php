@@ -1,4 +1,5 @@
 <?php
+
 namespace Tymy\Module\File\Filter;
 
 /**

@@ -1,4 +1,5 @@
 <?php
+
 namespace Tymy\Module\PushNotification\Manager;
 
 use ErrorException;
@@ -20,7 +21,6 @@ use Tymy\Module\PushNotification\Model\Subscriber;
  */
 class PushNotificationManager extends BaseManager
 {
-
     private WebPush $webPush;
     private ApplePush $applePush;
     private FirebasePush $firebasePush;
@@ -48,7 +48,7 @@ class PushNotificationManager extends BaseManager
 
     /**
      * Get Subscribers by userIds
-     * 
+     *
      * @param int[] User ids
      * @return Subscriber[]
      */
@@ -152,7 +152,7 @@ class PushNotificationManager extends BaseManager
     }
 
     /**
-     * 
+     *
      * @param PushNotification $notification
      * @param Subscriber[] $subscribers
      */
@@ -168,7 +168,7 @@ class PushNotificationManager extends BaseManager
     }
 
     /**
-     * 
+     *
      * @param PushNotification $notification
      * @param Subscriber[] $subscribers
      * @todo
@@ -185,7 +185,7 @@ class PushNotificationManager extends BaseManager
 
     /**
      * Notify multiple users by their ids
-     * 
+     *
      * @param PushNotification $notification
      * @param int[] $userIds
      * @return void
@@ -226,7 +226,7 @@ class PushNotificationManager extends BaseManager
 
     /**
      * Notify every subscriber with PushNotification object.
-     * 
+     *
      * @param PushNotification $notification
      * @param int[] $userIds
      * @return void
@@ -272,7 +272,7 @@ class PushNotificationManager extends BaseManager
     /**
      * Deletes subscriber from database if its already expired.
      * May contain another post-processing tasks
-     * 
+     *
      * @param Subscriber $subscriber
      * @param MessageSentReport $report
      * @return void

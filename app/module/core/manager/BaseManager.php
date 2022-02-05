@@ -26,7 +26,6 @@ use Tymy\Module\User\Model\User as UserEntity;
  */
 abstract class BaseManager
 {
-
     public const FILTER_REGEX = "/^([a-zA-Z]+)\s*(<|>|=|<=|>=|!=|#=)\s*([a-zA-Z0-9\\\\.:-]+)$/m";
 
     protected Explorer $mainDatabase;
@@ -201,7 +200,7 @@ abstract class BaseManager
     }
 
     /**
-     * 
+     *
      * @param int $id
      * @param bool $force
      * @return BaseModel|null
@@ -226,8 +225,8 @@ abstract class BaseManager
         if ($idList !== null) {
             $rows->where($idField, $idList);
         }
-        
-        if(is_int($limit) && is_int($offset)){
+
+        if (is_int($limit) && is_int($offset)) {
             $rows->limit($limit, $offset);
         }
 
@@ -442,12 +441,12 @@ abstract class BaseManager
 
         foreach ($this->getScheme() as $field) {
             /* @var $field Field */
-            if($field->getMandatory() && !array_key_exists($field->getProperty(), $array)){
+            if ($field->getMandatory() && !array_key_exists($field->getProperty(), $array)) {
                 $this->responder->E4013_MISSING_INPUT($field->getProperty());
             }
-            
+
             $value = $array[$field->getProperty()] ?? null;
-            
+
             if (!$field->getChangeable()) {
                 if (in_array($field->getColumn(), ["user_id", "usr_cre", "created_user_id"]) && !empty($this->user)) {
                     $value = $this->user->id;
@@ -604,7 +603,7 @@ abstract class BaseManager
 
     /**
      * Iterate through filterString, parse out all filters and return from them the array or Filter objects for further processing
-     * 
+     *
      * @param string $filterString
      * @return Filter[]
      */
@@ -612,7 +611,7 @@ abstract class BaseManager
     {
         $filters = explode("~", $filterString);
         $fParts = null;
-        
+
         if (empty($filters)) {
             return [];
         }
@@ -628,20 +627,20 @@ abstract class BaseManager
             $value = $fParts[3];
 
             $columnName = $this->getColumnName($fieldName);
-            
+
             if (!$columnName) {
                 $this->responder->E4005_OBJECT_NOT_FOUND("Column", $fieldName);
             }
 
             $conditions[] = new Filter($columnName, $operator, $value);
         }
-        
+
         return $conditions;
     }
-    
+
     /**
      * Iterate through $orderString, parse out all orders and return from them the array or Order objects for further processing
-     * 
+     *
      * @param string $orderString
      * @return Order[]
      */
@@ -664,11 +663,11 @@ abstract class BaseManager
             $direction = $oParts[1];
 
             $columnName = $this->getColumnName($fieldName);
-            
+
             if (!$columnName) {
                 $this->responder->E4005_OBJECT_NOT_FOUND("Column", $fieldName);
             }
-            
+
             $conditions[] = new Order($columnName, $direction);
         }
 
@@ -677,7 +676,7 @@ abstract class BaseManager
 
     /**
      * Check if current scheme contains property and return its corresponding column name
-     * 
+     *
      * @param string $propertyName Property to get
      * @return string|null
      */
@@ -696,5 +695,4 @@ abstract class BaseManager
 
         return null;
     }
-
 }

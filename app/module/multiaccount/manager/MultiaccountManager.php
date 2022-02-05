@@ -1,4 +1,5 @@
 <?php
+
 namespace Tymy\Module\Multiaccount\Manager;
 
 use Nette\Utils\DateTime;
@@ -18,7 +19,6 @@ use Tymy\Module\User\Manager\UserManager;
  */
 class MultiaccountManager extends BaseManager
 {
-
     private UserManager $userManager;
     private TeamManager $teamManager;
 

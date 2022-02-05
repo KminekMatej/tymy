@@ -19,7 +19,6 @@ $container = Bootstrap::boot();
  */
 class DebtTest extends RequestCase
 {
-
     public function getModule(): string
     {
         return Debt::MODULE;

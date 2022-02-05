@@ -1,4 +1,5 @@
 <?php
+
 namespace Tymy\Module\Core\Presenter\Api;
 
 use Tymy\Module\User\Model\User;
@@ -10,7 +11,6 @@ use Tymy\Module\User\Model\User;
  */
 class SecuredPresenter extends BasePresenter
 {
-
     private const TSID = "TSID";
 
     public function startup()

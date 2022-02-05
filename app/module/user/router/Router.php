@@ -12,7 +12,6 @@ use Tymy\Module\Core\Interfaces\RouterInterface;
  */
 class Router implements RouterInterface
 {
-
     public function addRoutes(RouteList &$router): void
     {
         $router->addApiRoute('user[s]/status[/<status>]', array(
@@ -29,6 +28,6 @@ class Router implements RouterInterface
                     'module' => 'User',
                     'presenter' => 'Live',
                     'action' => 'default',
-        ));
+                ));
     }
 }

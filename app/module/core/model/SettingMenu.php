@@ -9,7 +9,6 @@ namespace Tymy\Module\Core\Model;
  */
 class SettingMenu
 {
-
     public string $code;
     public string $name;
     public string $href;

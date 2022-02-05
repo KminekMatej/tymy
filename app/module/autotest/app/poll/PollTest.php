@@ -18,7 +18,6 @@ $container = Bootstrap::boot();
  */
 class PollTest extends RequestCase
 {
-
     public function getModule(): string
     {
         return Poll::MODULE;

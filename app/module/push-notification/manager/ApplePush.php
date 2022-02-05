@@ -1,4 +1,5 @@
 <?php
+
 namespace Tymy\Module\PushNotification\Manager;
 
 use DateTimeImmutable;
@@ -11,6 +12,7 @@ use Tracy\ILogger;
 use Tymy\Module\PushNotification\Model\PushNotification;
 use Tymy\Module\PushNotification\Model\Subscriber;
 use Tymy\Module\Team\Manager\TeamManager;
+
 use function GuzzleHttp\json_encode;
 
 /**
@@ -20,7 +22,6 @@ use function GuzzleHttp\json_encode;
  */
 class ApplePush
 {
-
     private const URL_SANDBOX = "https://api.sandbox.push.apple.com/3/device";
     private const URL_PRODUCTION = "https://api.push.apple.com/3/device";
 

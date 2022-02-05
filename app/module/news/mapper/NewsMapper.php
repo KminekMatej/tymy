@@ -12,7 +12,6 @@ use Tymy\Module\Core\Model\Field;
  */
 class NewsMapper extends BaseMapper
 {
-
     public static function scheme(): array
     {
         return [
@@ -24,5 +23,4 @@ class NewsMapper extends BaseMapper
             Field::string()->withPropertyAndColumn("team"),
         ];
     }
-
 }

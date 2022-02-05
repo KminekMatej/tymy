@@ -1,4 +1,5 @@
 <?php
+
 namespace Tymy\Module\Setting\Presenter\Front;
 
 use Nette\Application\UI\Form;
@@ -12,7 +13,6 @@ use Tymy\Module\Poll\Manager\PollManager;
 
 class AppPresenter extends SettingBasePresenter
 {
-
     /** @inject */
     public EventManager $eventManager;
 
@@ -41,8 +41,8 @@ class AppPresenter extends SettingBasePresenter
     {
         $currentVersion = $this->supplier->getVersion(0);
         $this->template->version = $currentVersion;
-        $previousPatch = NULL;
-        $firstMinor = NULL;
+        $previousPatch = null;
+        $firstMinor = null;
         foreach ($this->supplier->getVersions() as $version) {
             if (empty($previousPatch) && ($currentVersion->major != $version->major || $currentVersion->minor != $version->minor || $currentVersion->patch != $version->patch)) {
                 $previousPatch = $version;
@@ -51,8 +51,9 @@ class AppPresenter extends SettingBasePresenter
                 $firstMinor = $version;
             }
         }
-        if ($previousPatch === NULL)
+        if ($previousPatch === null) {
             $previousPatch = $this->supplier->getVersion(count($this->supplier->getVersions()));
+        }
         $this->template->previousPatchVersion = $previousPatch;
         $this->template->firstMinorVersion = $firstMinor;
 

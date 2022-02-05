@@ -1,4 +1,5 @@
 <?php
+
 namespace Tymy\Module\Event\Model;
 
 use Nette\Utils\DateTime;
@@ -13,7 +14,6 @@ use Tymy\Module\Event\Mapper\EventMapper;
  */
 class Event extends BaseModel
 {
-
     public const TABLE = "events";
     public const MODULE = "event";
     const PAGING_EVENTS_PER_PAGE = 15;

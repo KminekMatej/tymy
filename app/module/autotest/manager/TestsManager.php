@@ -3,6 +3,7 @@
 namespace Tymy\Module\Autotest\Manager;
 
 use Tester\Runner\CliTester;
+
 use const ROOT_DIR;
 use const TEST_DIR;
 

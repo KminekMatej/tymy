@@ -1,4 +1,5 @@
 <?php
+
 namespace Tymy\Module\PushNotification\Manager;
 
 use Nette\Security\User;
@@ -14,7 +15,6 @@ use Tymy\Module\Team\Manager\TeamManager;
  */
 class NotificationGenerator
 {
-
     public const CREATE_POST = "create-post";
 
     private User $user;

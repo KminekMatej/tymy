@@ -1,4 +1,5 @@
 <?php
+
 namespace Tymy\Module\Debt\Presenter\Front;
 
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
@@ -13,7 +14,6 @@ use Tymy\Module\User\Manager\UserManager;
  */
 class DebtBasePresenter extends SecuredPresenter
 {
-
     /** @inject */
     public DebtManager $debtManager;
 
@@ -28,7 +28,7 @@ class DebtBasePresenter extends SecuredPresenter
 
     /**
      * Get list of possible payees - always Me, but if user is permitted to manage team debts, also TEAM mocked user
-     * 
+     *
      * @return array
      */
     protected function getPayeeList(): array

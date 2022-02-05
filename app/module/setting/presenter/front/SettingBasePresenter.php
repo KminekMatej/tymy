@@ -1,4 +1,5 @@
 <?php
+
 namespace Tymy\Module\Setting\Presenter\Front;
 
 use Tymy\Module\Attendance\Manager\StatusManager;
@@ -15,7 +16,6 @@ use Tymy\Module\Permission\Model\Privilege;
  */
 class SettingBasePresenter extends SecuredPresenter
 {
-
     /** @inject */
     public PermissionManager $permissionManager;
 
@@ -44,11 +44,11 @@ class SettingBasePresenter extends SecuredPresenter
 
         $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("settings.setting", 2), "link" => $this->link(":Setting:Default:")]]);
     }
-    
+
     /**
      * Test if currently logged user is allowed to operate under specified permission name
      * If user is not allowed to perform such thing, message is shown and gets redirected to Settings homepage
-     * 
+     *
      * @param string $permissionName Permission name
      * @param string $type Permission type, default SYS
      * @return void

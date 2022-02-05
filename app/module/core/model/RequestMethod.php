@@ -7,7 +7,8 @@ namespace Tymy\Module\Core\Model;
  *
  * @author kminekmatej
  */
-abstract class RequestMethod {
+abstract class RequestMethod
+{
     const GET = "GET";
     const POST = "POST";
     const PUT = "PUT";

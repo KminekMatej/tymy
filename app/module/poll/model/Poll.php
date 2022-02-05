@@ -13,7 +13,6 @@ use Tymy\Module\Poll\Mapper\PollMapper;
  */
 class Poll extends BaseModel
 {
-
     public const MODULE = "poll";
     public const TABLE = "ask_quests";
     public const STATUS_DESIGN = "DESIGN";
@@ -410,5 +409,4 @@ class Poll extends BaseModel
             "voted" => $this->getVoted(),
         ];
     }
-
 }

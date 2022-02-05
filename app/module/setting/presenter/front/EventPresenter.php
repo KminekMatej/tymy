@@ -1,4 +1,5 @@
 <?php
+
 namespace Tymy\Module\Setting\Presenter\Front;
 
 use Nette\Application\UI\Form;
@@ -13,7 +14,6 @@ use Tymy\Module\Setting\Presenter\Front\SettingBasePresenter;
 
 class EventPresenter extends SettingBasePresenter
 {
-
     /** @inject */
     public EventManager $eventManager;
 
@@ -73,8 +73,8 @@ class EventPresenter extends SettingBasePresenter
         $eventId = $this->parseIdFromWebname($resource);
         /* @var $eventObj Event */
         $eventObj = $this->eventManager->getById($eventId);
-        if ($eventObj == NULL) {
-            $this->flashMessage($this->translator->translate("event.errors.eventNotExists", NULL, ['id' => $eventId]), "danger");
+        if ($eventObj == null) {
+            $this->flashMessage($this->translator->translate("event.errors.eventNotExists", null, ['id' => $eventId]), "danger");
             $this->redirect(':Setting:Event:');
         }
 
@@ -148,9 +148,9 @@ class EventPresenter extends SettingBasePresenter
     public function createComponentEventLineForm()
     {
         return $this->formFactory->createEventLineForm(
-                $this->eventTypes,
-                $this->userPermissions,
-                [$this, "eventLineFormSuccess"]
+            $this->eventTypes,
+            $this->userPermissions,
+            [$this, "eventLineFormSuccess"]
         );
     }
 

@@ -119,12 +119,12 @@ class DiscussionManager extends BaseManager
 
     /**
      * Get discussion object using its webname, optionally with check for user permissions
-     * 
+     *
      * @param string $webName
      * @return Discussion|null
      */
     public function getByWebName(string $webName, ?int $userId = null): ?Discussion
-    { 
+    {
         $discussionList = $userId ? $this->getListUserAllowed($userId) : $this->getList();
 
         foreach ($discussionList as $discussion) {
@@ -280,7 +280,7 @@ class DiscussionManager extends BaseManager
 
     /**
      * Get sum of all warnings of desired discussions
-     * 
+     *
      * @param Discussion[] $discussions
      * @return int
      */

@@ -16,7 +16,7 @@ class DefaultPresenter extends BasePresenter
 {
     /** @inject */
     public AuthorizationManager $AuthorizationManager;
-    
+
     /** @inject */
     public UserManager $userManager;
 
@@ -26,12 +26,11 @@ class DefaultPresenter extends BasePresenter
             $this->respondBadRequest();
         }
 
-        if($this->getRequest()->getMethod() !== "GET"){
+        if ($this->getRequest()->getMethod() !== "GET") {
             $this->respondForbidden();
         }
 
         $this->requestGetList($resourceId);
-        
     }
 
     private function requestGetList(int $userId)
@@ -44,5 +43,4 @@ class DefaultPresenter extends BasePresenter
 
         $this->respondOk($rights);
     }
-
 }

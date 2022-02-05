@@ -17,7 +17,6 @@ $container = Bootstrap::boot();
  */
 class EventTest extends RequestCase
 {
-
     public function getModule(): string
     {
         return Event::MODULE;

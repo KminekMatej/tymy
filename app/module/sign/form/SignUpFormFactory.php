@@ -1,4 +1,5 @@
 <?php
+
 namespace Tymy\Module\Sign\Form;
 
 use Nette;
@@ -8,7 +9,6 @@ use Tymy\Module\User\Manager\UserManager;
 
 class SignUpFormFactory
 {
-
     use Nette\SmartObject;
 
     const PASSWORD_MIN_LENGTH = 3;

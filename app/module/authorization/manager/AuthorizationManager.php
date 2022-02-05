@@ -30,11 +30,11 @@ class AuthorizationManager implements IAuthorizator
 
     private function getUserStatus($userId): string
     {
-        if(!array_key_exists($userId, $this->userCache)){
+        if (!array_key_exists($userId, $this->userCache)) {
             $userStatus = $this->teamDatabase->table(User::TABLE)->where("id", $userId)->fetch()["status"];
             $this->userCache[$userId] = $userStatus;
         }
-        
+
         return $this->userCache[$userId];
     }
 
@@ -126,8 +126,8 @@ class AuthorizationManager implements IAuthorizator
             if ($privilege->getName() == "SEE_INITS") {
                 return in_array($role, ["SUPER", "USR"]) ? self::ALLOW : self::DENY;
             }
-            
-            if($this->isAdmin($role)){
+
+            if ($this->isAdmin($role)) {
                 return self::ALLOW;
             }
         }
@@ -166,7 +166,7 @@ class AuthorizationManager implements IAuthorizator
     {
         return is_array($permission->getAllowedUsers()) && in_array($id, $permission->getAllowedUsers()) && (empty($permission->getRevokedUsers()) || !in_array($id, $permission->getRevokedUsers()));
     }
-    
+
     public function getListUserAllowed(User $user)
     {
         return (object)[
@@ -180,21 +180,21 @@ class AuthorizationManager implements IAuthorizator
             "debtRights" => $this->getDebtRights($user),
         ];
     }
-    
+
     private function getNotesRights(User $user)
     {
         return (object) [
                     "manageSharedNotes" => $this->isUserAllowed($user, Privilege::SYS("NOTES"))
         ];
     }
-    
+
     private function getDiscussionRights(User $user)
     {
         return (object) [
                     "setup" => $this->isUserAllowed($user, Privilege::SYS("DSSETUP"))
         ];
     }
-    
+
     private function getEventRights(User $user)
     {
         return (object) [
@@ -205,7 +205,7 @@ class AuthorizationManager implements IAuthorizator
                     "canPlanOthers" => $this->isUserAllowed($user, Privilege::SYS("ATT_UPDATE")),
         ];
     }
-    
+
     private function getPollRights(User $user)
     {
         return (object) [
@@ -215,21 +215,21 @@ class AuthorizationManager implements IAuthorizator
                     "canResetVotes" => $this->isUserAllowed($user, Privilege::SYS("ASK.VOTE_RESET")),
         ];
     }
-    
+
     private function getReportsRights(User $user)
     {
         return (object) [
                     "canSetup" => $this->isUserAllowed($user, Privilege::SYS("REP_SETUP"))
         ];
     }
-    
+
     private function getTeamRights(User $user)
     {
         return (object) [
                     "canSetup" => $this->isUserAllowed($user, Privilege::SYS("TEAM_UPDATE"))
         ];
     }
-    
+
     private function getUserRights(User $user)
     {
         return (object) [
@@ -238,12 +238,11 @@ class AuthorizationManager implements IAuthorizator
                     "canDelete" => $this->isUserAllowed($user, Privilege::SYS("USR_HDEL")),
         ];
     }
-    
+
     private function getDebtRights(User $user)
     {
         return (object) [
                     "canManageTeamDebts" => $this->isUserAllowed($user, Privilege::SYS("DEBTS_TEAM"))
         ];
     }
-
 }

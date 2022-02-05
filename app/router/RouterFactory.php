@@ -9,7 +9,6 @@ use Tymy\Module\Core\Router\RouteList;
 
 class RouterFactory
 {
-
     private Container $container;
 
     public function __construct(Container $container)
@@ -151,7 +150,7 @@ class RouterFactory
      */
     private function moduleRouteList(): Routelist
     {
-        $router = new RouteList;
+        $router = new RouteList();
 
         $routerNames = $this->container->findByType(RouterInterface::class);
 

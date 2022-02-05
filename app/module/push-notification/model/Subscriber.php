@@ -1,4 +1,5 @@
 <?php
+
 namespace Tymy\Module\PushNotification\Model;
 
 use Nette\Utils\DateTime;
@@ -7,7 +8,6 @@ use Tymy\Module\PushNotification\Mapper\SubscriberMapper;
 
 class Subscriber extends BaseModel
 {
-
     const MODULE = "push-notification";
     const TABLE = "push_notification";
     const TYPE_WEB = "WEB";

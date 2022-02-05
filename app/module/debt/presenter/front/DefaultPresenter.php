@@ -8,7 +8,9 @@ use QrCode\QRcode;
 use Tapi\TapiObject;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Debt\Model\Debt;
+
 use const QR_ECLEVEL_H;
+
 use function iban_set_checksum;
 
 /**
@@ -18,7 +20,6 @@ use function iban_set_checksum;
  */
 class DefaultPresenter extends DebtBasePresenter
 {
-
     public function actionDefault(?string $resource = null)
     {
         if ($resource) {
@@ -96,7 +97,7 @@ class DefaultPresenter extends DebtBasePresenter
         $accPrefix = null;
         $accountNumberBody = $accountNumber;
 
-        if (strpos($accountNumber, "/") === FALSE) {
+        if (strpos($accountNumber, "/") === false) {
             return null;
         }
 
@@ -135,8 +136,9 @@ class DefaultPresenter extends DebtBasePresenter
         $paymentString = "SPD*1.0";
 
         foreach ($payment as $key => $value) {
-            if (empty($value))
+            if (empty($value)) {
                 continue;
+            }
             $paymentString .= "*$key:$value";
         }
 
@@ -172,5 +174,4 @@ class DefaultPresenter extends DebtBasePresenter
     {
         $this->debtManager->update($bind["changes"], $bind["id"]);
     }
-
 }

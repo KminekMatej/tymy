@@ -13,7 +13,6 @@ use Tymy\Module\Permission\Mapper\PermissionMapper;
  */
 class Permission extends BaseModel
 {
-
     public const TABLE = "rights";
     public const MODULE = "permission";
     public const TYPE_USER = "USR";
@@ -200,5 +199,4 @@ class Permission extends BaseModel
     {
         return self::TABLE;
     }
-
 }

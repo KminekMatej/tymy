@@ -14,7 +14,6 @@ use Tymy\Module\News\Mapper\NewsMapper;
  */
 class Notice extends BaseModel implements JsonSerializable
 {
-
     public const TABLE = "news";
     public const MODULE = "news";
 

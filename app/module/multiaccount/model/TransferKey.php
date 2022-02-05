@@ -1,4 +1,5 @@
 <?php
+
 namespace Tymy\Module\Multiaccount\Model;
 
 use JsonSerializable;
@@ -12,7 +13,6 @@ use Tymy\Module\Multiaccount\Mapper\TransferKeyMapper;
  */
 class TransferKey extends BaseModel implements JsonSerializable
 {
-
     public const MODULE = "multiaccount";
     public const TABLE = "multi_accounts";
 

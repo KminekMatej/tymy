@@ -18,7 +18,6 @@ $container = Bootstrap::boot();
  */
 class MultiaccountTest extends RequestCase
 {
-
     public function getModule(): string
     {
         return TransferKey::MODULE;

@@ -9,7 +9,6 @@ namespace Tymy\Module\Admin\Manager;
  */
 class AdminManager
 {
-
     private array $ghosts;
 
     public function __construct(array $ghosts)
@@ -19,7 +18,7 @@ class AdminManager
 
     /**
      * Returns validity of given token
-     * 
+     *
      * @param string $token
      * @return bool
      */

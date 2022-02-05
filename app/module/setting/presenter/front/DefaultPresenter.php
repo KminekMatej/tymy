@@ -11,7 +11,6 @@ use Tymy\Module\Poll\Manager\PollManager;
 
 class DefaultPresenter extends SettingBasePresenter
 {
-
     /** @inject */
     public EventManager $eventManager;
 
@@ -35,5 +34,4 @@ class DefaultPresenter extends SettingBasePresenter
     {
         $this->template->accessibleSettings = $this->getAccessibleSettings();
     }
-
 }

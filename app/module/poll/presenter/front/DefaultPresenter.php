@@ -9,7 +9,6 @@ use Tymy\Module\Poll\Model\Poll;
 
 class DefaultPresenter extends SecuredPresenter
 {
-
     /** @inject */
     public PollManager $pollManager;
 
@@ -67,5 +66,4 @@ class DefaultPresenter extends SecuredPresenter
 
         $this->voteManager->create($votes, $pollId);
     }
-
 }

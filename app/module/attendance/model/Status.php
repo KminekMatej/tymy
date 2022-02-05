@@ -1,4 +1,5 @@
 <?php
+
 namespace Tymy\Module\Attendance\Model;
 
 use Nette\Utils\DateTime;
@@ -12,7 +13,6 @@ use Tymy\Module\Core\Model\BaseModel;
  */
 class Status extends BaseModel
 {
-
     public const TABLE = "statuses";
     public const MODULE = "attendance";
 

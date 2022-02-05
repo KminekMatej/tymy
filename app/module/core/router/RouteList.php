@@ -11,11 +11,9 @@ use Nette\Application\Routers\RouteList as NetteRouteList;
  */
 class RouteList extends NetteRouteList
 {
-
     public function addApiRoute(string $mask, $metadata = [], int $flags = 0)
     {
         $this->withPath("api")->withModule("Api")->addRoute($mask, $metadata, $flags);
         return $this;
     }
-
 }

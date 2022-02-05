@@ -12,7 +12,6 @@ use Tymy\Module\News\Manager\NewsManager;
  */
 class DefaultPresenter extends SecuredPresenter
 {
-
     public function injectManager(NewsManager $manager): void
     {
         $this->manager = $manager;
@@ -27,5 +26,4 @@ class DefaultPresenter extends SecuredPresenter
         $news = $this->manager->getListUserAllowed($this->user->getId());
         $this->respondOk($this->arrayToJson($news));
     }
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Tymy\Module\Core\Factory;
 
 use Nette\Database\Explorer;
@@ -14,7 +15,6 @@ use Tymy\Module\PushNotification\Service\NotificationService;
  */
 class ManagerFactory
 {
-
     public Explorer $mainDatabase;
     public Explorer $teamDatabase;
     public Responder $responder;

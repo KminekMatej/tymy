@@ -45,7 +45,7 @@ class BasePresenter extends RootPresenter
 
     /** @var mixed */
     protected $requestData;
-    
+
     public function __construct(Container $container)
     {
         $this->mainDatabase = $container->getByName("database.main.context");
@@ -69,7 +69,7 @@ class BasePresenter extends RootPresenter
 
     /**
      * Decode input request data passed as url-encoded string
-     * 
+     *
      * @return void
      */
     private function decodeUrlEncodedData(): void
@@ -317,28 +317,29 @@ class BasePresenter extends RootPresenter
     {
         $this->requestData = $requestData;
     }
-    
+
     public function terminate(): void
     {
         //log request & terminate
         $this->mainDatabase->table("api_log")->insert(
-                [
+            [
                     "remote_host" => $this->httpRequest->getRemoteHost(),
                     "request_url" => $this->httpRequest->getUrl()->absoluteUrl,
                     "response_status" => $this->httpResponse->getCode(),
                     "time_in_ms" => round(Debugger::timer("request") * 1000),
-                ]);
-        
+            ]
+        );
+
         parent::terminate();
     }
-    
+
     /**
      * Allow access to this presenter only if debugger mode is enabled.
      * If debugger is disabled, redirect to Homepage
      */
     protected function allowOnlyInDebuggerMode(): void
     {
-        if(Debugger::$productionMode){  //
+        if (Debugger::$productionMode) {  //
             $this->redirect("Core:Default:Default");
         }
     }
@@ -379,5 +380,4 @@ class BasePresenter extends RootPresenter
             );
         }
     }
-
 }

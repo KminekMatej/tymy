@@ -1,4 +1,5 @@
 <?php
+
 namespace Tymy\Module\Core\Exception;
 
 use Exception;
@@ -12,17 +13,14 @@ use Throwable;
  */
 class DebugResponse extends Exception
 {
-    
 }
 
 class MissingInputException extends Exception
 {
-    
 }
 
 class TymyResponse extends Exception
 {
-
     private ?int $httpCode = null;
     private bool $success = true;
     private ?string $sessionKey = null;

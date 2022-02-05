@@ -27,5 +27,4 @@ class VotePresenter extends SecuredPresenter
 
         $this->respondNotAllowed();
     }
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Tymy\Module\Team\Model;
 
 use Nette\Utils\DateTime;
@@ -13,7 +14,6 @@ use Tymy\Module\Team\Mapper\TeamMapper;
  */
 class Team extends BaseModel
 {
-
     public const TABLE = "teams";
     public const MODULE = "team";
 
@@ -146,13 +146,13 @@ class Team extends BaseModel
     {
         return $this->skin ?? TeamManager::DEFAULT_SKIN;
     }
-    
+
     public function getRequiredFields(): array
     {
         return $this->requiredFields;
     }
 
-    
+
     public function setLanguages($languages)
     {
         $this->languages = is_string($languages) ? explode(",", $languages) : $languages;

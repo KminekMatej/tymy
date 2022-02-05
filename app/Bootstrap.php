@@ -8,13 +8,13 @@ use Exception;
 use Nette\Configurator;
 use Nette\DI\Container;
 use Nette\Neon\Neon;
+
 use const ROOT_DIR;
 
 require __DIR__ . '/../vendor/autoload.php';
 
 class Bootstrap
 {
-
     public const MODULES_DIR = ROOT_DIR . "/app/module";
 
     public static function boot(): Container
@@ -23,10 +23,10 @@ class Bootstrap
         define("ROOT_DIR", getenv("ROOT_DIR") ? self::normalizePath(getenv("ROOT_DIR")) : self::normalizePath(__DIR__ . "/.."));
         define("TEAM_DIR", getenv("TEAM_DIR") ?: str_replace("//", "/", dirname($_SERVER['SCRIPT_FILENAME'], 2)));
         define('MODULES', array_diff(scandir(self::MODULES_DIR), array('..', '.')));
-        
+
         $autotestMode = getenv("AUTOTEST") || isset($_GET["AUTOTEST"]) ? true : false;
 
-        $configurator = new Configurator;
+        $configurator = new Configurator();
 
         try {   // debug.local.neon contains either true, to generally enable debug, or array of IP addresses
             $debugFile = ROOT_DIR . '/app/config/debug.local.neon';
@@ -58,7 +58,7 @@ class Bootstrap
 
     /**
      * Path normalizer - removes double dots from path to make it look clearer
-     * 
+     *
      * @param string $path
      * @return string
      */
@@ -83,7 +83,7 @@ class Bootstrap
 
     /**
      * Enrich configurator with config files from all of the submodules
-     * 
+     *
      * @param Configurator $configurator
      * @param array $modules
      * @return void

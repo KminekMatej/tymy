@@ -25,8 +25,10 @@ use Tymy\Module\Autotest\Entity\Assert;
 use Tymy\Module\Core\Manager\Responder;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Router\RouteList;
+
 use const TEAM_DIR;
 use const TEST_DIR;
+
 use function GuzzleHttp\json_encode;
 
 /**
@@ -191,7 +193,7 @@ abstract class RequestCase extends TestCase
 
         foreach ($changes as $key => $changed) {
             Assert::hasKey($key, $changedData->getData(), "Output key [$key] missing");
-            Assert::equal($changed, $changedData->getData()[$key], "Output key [$key] mismatch (expected $changed, returned ".$changedData->getData()[$key].")");
+            Assert::equal($changed, $changedData->getData()[$key], "Output key [$key] mismatch (expected $changed, returned " . $changedData->getData()[$key] . ")");
         }
     }
 
@@ -298,7 +300,7 @@ abstract class RequestCase extends TestCase
             if ($skip && ((is_array($skip) && in_array($key, $skip)) || $key == $skip)) {
                 continue;
             }
-            
+
             Assert::hasKey($key, $new);
             Assert::equal($value, $new[$key], "Error on `$key` field");
         }

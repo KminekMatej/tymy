@@ -5,8 +5,8 @@ namespace Tymy\Module\Core\Model;
 use Nette\Neon\Neon;
 use stdClass;
 
-class Supplier {
-
+class Supplier
+{
     private $tym;
     private $versions;
     private $wwwDir;
@@ -19,57 +19,70 @@ class Supplier {
         $this->setAllSkins($appConfig["allSkins"]);
     }
 
-    public function loadUserNeon($userId) {
+    public function loadUserNeon($userId)
+    {
         $tmpUserNeon = ROOT_DIR . "/app/config/config.user.template.neon";
         $userNeon = $this->getUserNeonFile($userId);
-        if (!file_exists($userNeon) && file_exists($tmpUserNeon))
+        if (!file_exists($userNeon) && file_exists($tmpUserNeon)) {
             copy($tmpUserNeon, $userNeon);
-        if (!file_exists($userNeon))
-            return NULL;
+        }
+        if (!file_exists($userNeon)) {
+            return null;
+        }
         $this->setUserNeon((object) Neon::decode(file_get_contents($userNeon)));
     }
 
-    public function saveUserNeon($userId, $neonArray){
+    public function saveUserNeon($userId, $neonArray)
+    {
         $userNeon = $this->getUserNeonFile($userId);
         file_put_contents($userNeon, Neon::encode($neonArray));
     }
 
-    public function getAppDir() {
+    public function getAppDir()
+    {
         return $this->appDir;
     }
 
-    public function setWwwDir($wwwDir) {
+    public function setWwwDir($wwwDir)
+    {
         $this->wwwDir = $wwwDir;
         return $this;
     }
 
-    public function setAppDir($appDir) {
+    public function setAppDir($appDir)
+    {
         $this->appDir = $appDir;
         return $this;
     }
 
-    public function getTym() {
+    public function getTym()
+    {
         return $this->tym;
     }
-    
-    public function setTym($tym) {
+
+    public function setTym($tym)
+    {
         $this->tym = getenv("AUTOTEST") ? "autotest" : explode(".", $_SERVER["HTTP_HOST"])[0];
         return $this;
     }
 
-    public function getVersions() {
+    public function getVersions()
+    {
         return $this->versions;
     }
 
-    public function getVersion($index = 0) {
+    public function getVersion($index = 0)
+    {
         return $this->versions[$index];
     }
-    
-    public function getVersionCode(){
+
+    public function getVersionCode()
+    {
         return $this->getVersion()->version;
     }
 
-    public function setVersion() {
+    public function setVersion()
+    {
         $taglog = file(TEAM_DIR . "/app/tag.log");
         foreach ($taglog as $log) {
             $matches = [];
@@ -92,29 +105,35 @@ class Supplier {
         }
     }
 
-    public function getUserNeon() {
+    public function getUserNeon()
+    {
         return $this->userNeon;
     }
 
-    public function setUserNeon($userNeon) {
+    public function setUserNeon($userNeon)
+    {
         $this->userNeon = $userNeon;
         return $this;
     }
 
-    public function getAllSkins() {
+    public function getAllSkins()
+    {
         return $this->allSkins;
     }
 
-    public function setAllSkins($allSkins) {
+    public function setAllSkins($allSkins)
+    {
         $this->allSkins = $allSkins;
         return $this;
     }
 
-    private function getUserNeonFile($userId){
+    private function getUserNeonFile($userId)
+    {
         return TEAM_DIR . "/config/config.user.$userId.neon";
     }
-    
-    private function getTeamNeonFile(){
+
+    private function getTeamNeonFile()
+    {
         return TEAM_DIR . "/config/config.team.neon";
     }
 }

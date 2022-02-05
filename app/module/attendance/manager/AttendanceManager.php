@@ -54,7 +54,7 @@ class AttendanceManager extends BaseManager
 
     /**
      * Get array of attendanced related to events
-     * 
+     *
      * @param array $eventIds
      * @return array
      */
@@ -336,7 +336,7 @@ class AttendanceManager extends BaseManager
 
     /**
      * Get my attendance on specific event id, using cache
-     * 
+     *
      * @param int $eventId
      * @return ActiveRow|null
      */

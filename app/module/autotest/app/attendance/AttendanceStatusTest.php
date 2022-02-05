@@ -179,7 +179,7 @@ class AttendanceStatusTest extends RequestCase
     private function getStatusSetId()
     {
         $allStatusSets = $this->request("attendanceStatus")->expect(200, "array")->getData();
-        return $allStatusSets[rand(0, count($allStatusSets)-1)]["id"];
+        return $allStatusSets[rand(0, count($allStatusSets) - 1)]["id"];
     }
 
     public function createRecord()

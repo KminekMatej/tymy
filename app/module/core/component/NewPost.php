@@ -19,7 +19,7 @@ class NewPostControl extends Control
         $this->userManager = $userManager;
     }
 
-    public function render($discussion, $search = NULL, $suser = NULL)
+    public function render($discussion, $search = null, $suser = null)
     {
 
         $this->template->addFilter('czechize', function ($status) {

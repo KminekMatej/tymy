@@ -8,7 +8,6 @@ use Tymy\Module\Event\Manager\EventManager;
 
 class FeedPresenter extends EventBasePresenter
 {
-
     /** @inject */
     public EventManager $eventManager;
 
@@ -18,5 +17,4 @@ class FeedPresenter extends EventBasePresenter
 
         $this->sendResponse(new JsonResponse($this->toFeed($events)));
     }
-
 }

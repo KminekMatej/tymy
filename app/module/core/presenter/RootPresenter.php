@@ -1,4 +1,5 @@
 <?php
+
 namespace Tymy\Module\Core\Presenter;
 
 use Nette\Application\UI\Presenter;
@@ -13,7 +14,6 @@ use Tymy\Module\Team\Model\Team;
  */
 abstract class RootPresenter extends Presenter
 {
-
     private const LOCALES = ["CZ" => "cs", "EN" => "en-gb", "FR" => "fr", "PL" => "pl"];
 
     protected Team $team;

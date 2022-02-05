@@ -18,7 +18,7 @@ class PwdPresenter extends BasePresenter
     }
 
     /*
-     * 
+     *
     @RequestMapping(value = "/pwdlost", method = RequestMethod.POST)
      */
     public function actionLost()
@@ -37,9 +37,9 @@ class PwdPresenter extends BasePresenter
 
         $this->respondOk();
     }
-    
+
     /**
-     * 
+     *
     @RequestMapping(value = "/pwdreset/{resetCode}", method = RequestMethod.GET)
      * @param string $code
      */
@@ -48,13 +48,13 @@ class PwdPresenter extends BasePresenter
         if ($this->getRequest()->getMethod() !== "GET") {
             $this->respondNotAllowed();
         }
-        
-        if(empty($code)){
+
+        if (empty($code)) {
             $this->respondBadRequest($code);
         }
-        
+
         $newPwd = $this->manager->pwdReset($code);
-        
+
         $this->respondOk($newPwd);
     }
 }

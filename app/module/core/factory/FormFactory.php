@@ -1,4 +1,5 @@
 <?php
+
 namespace Tymy\Module\Core\Factory;
 
 use Kdyby\Translation\Translator;
@@ -15,7 +16,6 @@ use Tymy\Module\Permission\Model\Permission;
 
 class FormFactory
 {
-
     use Nette\SmartObject;
 
     private EventTypeManager $eventTypeManager;
@@ -47,7 +47,7 @@ class FormFactory
             $permissions[$userPermission->getName()] = $userPermission->getCaption();
         }
 
-        $form = new Form;
+        $form = new Form();
 
         //     $id = $form->addHidden("id", $id);
 

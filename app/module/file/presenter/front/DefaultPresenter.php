@@ -1,4 +1,5 @@
 <?php
+
 namespace Tymy\Module\File\Presenter\Front;
 
 use Nette\Application\UI\Form;
@@ -6,6 +7,7 @@ use Nette\Utils\DateTime;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\File\Handler\FileManager;
 use Tymy\Module\Team\Manager\TeamManager;
+
 use const TEAM_DIR;
 
 /**
@@ -15,7 +17,6 @@ use const TEAM_DIR;
  */
 class DefaultPresenter extends SecuredPresenter
 {
-
     private const DIR_NAME_REGEX = '([a-zA-Z_\-0-9áčďéěíňóřšťůúýžÁČĎÉĚÍŇÓŘŠŤŮÚÝŽ ]+\.?)*[a-zA-Z_\-0-9áčďéěíňóřšťůúýžÁČĎÉĚÍŇÓŘŠŤŮÚÝŽ ]+';
 
     /** @inject */
@@ -163,7 +164,7 @@ class DefaultPresenter extends SecuredPresenter
 
     /**
      * Get download folder contents
-     * 
+     *
      * @param string $folder
      * @return array
      */
@@ -299,7 +300,7 @@ class DefaultPresenter extends SecuredPresenter
      * 805 = 805 B
      * 824320 = 805 KB
      * etc
-     * 
+     *
      * @param int $bytes
      * @param int $precision
      * @return string
@@ -336,13 +337,13 @@ class DefaultPresenter extends SecuredPresenter
     {
         if (is_link($dir)) {
             unlink($dir);
-        } else if (is_dir($dir)) {
+        } elseif (is_dir($dir)) {
             $objects = scandir($dir);
             foreach ($objects as $object) {
                 if ($object != "." && $object != "..") {
-                    if (is_dir($dir . "/" . $object))
+                    if (is_dir($dir . "/" . $object)) {
                         $this->rrmdir($dir . "/" . $object);
-                    else {
+                    } else {
                         unlink($dir . "/" . $object);
                     }
                 }

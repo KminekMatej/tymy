@@ -6,14 +6,13 @@ use Tymy\Module\Discussion\Model\Discussion;
 
 class DiscussionPresenter extends SettingBasePresenter
 {
-
     public function actionDefault(?string $resource = null)
     {
         if ($resource) {
             $this->setView("discussion");
         }
     }
-    
+
     public function renderDefault()
     {
         $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("discussion.discussion", 2), "link" => $this->link(":Setting:Discussion:")]]);
@@ -49,12 +48,12 @@ class DiscussionPresenter extends SettingBasePresenter
 
         //RENDERING DISCUSSION DETAIL
         $discussionObj = $this->discussionManager->getByWebName($resource);
-        if ($discussionObj == NULL) {
-            $this->flashMessage($this->translator->translate("discussion.errors.discussionNotExists", NULL, ['id' => $discussionId]), "danger");
+        if ($discussionObj == null) {
+            $this->flashMessage($this->translator->translate("discussion.errors.discussionNotExists", null, ['id' => $discussionId]), "danger");
             $this->redirect(':Setting:Event:');
         }
         $this->setLevelCaptions(["3" => ["caption" => $discussionObj->getCaption(), "link" => $this->link(":Setting:Discussion:", $discussionObj->getWebName())]]);
-        $this->template->isNew = FALSE;
+        $this->template->isNew = false;
         $this->template->discussion = $discussionObj;
     }
 
@@ -85,5 +84,4 @@ class DiscussionPresenter extends SettingBasePresenter
         $bind = $this->getRequest()->getPost();
         $this->discussionManager->delete($bind["id"]);
     }
-
 }

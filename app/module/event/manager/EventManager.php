@@ -29,8 +29,8 @@ use Tymy\Module\User\Manager\UserManager;
 class EventManager extends BaseManager
 {
     private PermissionManager $permissionManager;
-    private AttendanceManager $attendanceManager;    
-    private EventTypeManager $eventTypeManager;    
+    private AttendanceManager $attendanceManager;
+    private EventTypeManager $eventTypeManager;
     private UserManager $userManager;
     private DateTime $now;
     private ?Event $event = null;
@@ -78,10 +78,10 @@ class EventManager extends BaseManager
         $model->setCanResult(empty($model->getResultRightName()) ? $this->user->isAllowed($this->user->getId(), Privilege::SYS("EVE_ATT_UPDATE")) : $this->user->isAllowed($this->user->getId(), Privilege::USR($model->getResultRightName())));
 
         $eventColor = '#' . $this->eventTypeManager->getEventTypeColor($model->getEventTypeId());
-        
+
         $myAttendance = $this->attendanceManager->getMyAttendance($model->getId());
-        
-        if($myAttendance){
+
+        if ($myAttendance) {
             $model->setMyAttendance($this->attendanceManager->map($myAttendance));
         } elseif ($model->getCloseTime() > $this->now) { //my attendance doesnt exist and this event is still open
             $model->setAttendancePending(true);
@@ -155,7 +155,7 @@ class EventManager extends BaseManager
 
     /**
      * Get basic selector for user permitted events
-     * 
+     *
      * @param int $userId
      * @return Selection
      */
@@ -343,7 +343,7 @@ class EventManager extends BaseManager
 
     /**
      * Return events specified by interval
-     * 
+     *
      * @param int $userId
      * @param DateTime $from
      * @param DateTime $until
@@ -356,7 +356,7 @@ class EventManager extends BaseManager
 
     /**
      * Get sum of all events with pending attendances
-     * 
+     *
      * @param Event[] $events
      * @return int
      */
@@ -375,7 +375,7 @@ class EventManager extends BaseManager
 
     /**
      * Get list of events, separated in array with year-month as key
-     * 
+     *
      * @param array $events
      * @return array in the form of ["2021-01" => [...events...], "2021-02" => [...events...], ...]
      */

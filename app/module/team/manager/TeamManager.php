@@ -1,4 +1,5 @@
 <?php
+
 namespace Tymy\Module\Team\Manager;
 
 use Nette\Database\IRow;
@@ -136,17 +137,14 @@ class TeamManager extends BaseManager
 
     public function create(array $data, ?int $resourceId = null): BaseModel
     {
-        
     }
 
     public function delete(int $resourceId, ?int $subResourceId = null): int
     {
-        
     }
 
     public function read(int $resourceId, ?int $subResourceId = null): BaseModel
     {
-        
     }
 
     public function update(array $data, int $resourceId, ?int $subResourceId = null): BaseModel
@@ -160,7 +158,7 @@ class TeamManager extends BaseManager
 
     /**
      * Get maximum available downloads folder size
-     * 
+     *
      * @param Team $team
      * @return int
      */

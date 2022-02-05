@@ -10,7 +10,6 @@ use Tymy\Module\Setting\Presenter\Front\SettingBasePresenter;
 
 class PollPresenter extends SettingBasePresenter
 {
-
     /** @inject */
     public PollManager $pollManager;
 
@@ -66,8 +65,8 @@ class PollPresenter extends SettingBasePresenter
         $pollId = $this->parseIdFromWebname($resource);
         /* @var $pollObj Poll */
         $pollObj = $this->pollManager->getById($pollId);
-        if ($pollObj == NULL) {
-            $this->flashMessage($this->translator->translate("poll.errors.pollNotExists", NULL, ['id' => $pollId]), "danger");
+        if ($pollObj == null) {
+            $this->flashMessage($this->translator->translate("poll.errors.pollNotExists", null, ['id' => $pollId]), "danger");
             $this->redirect(':Setting:Poll:');
         }
         if (count($pollObj->getOptions()) == 0) {
@@ -139,7 +138,7 @@ class PollPresenter extends SettingBasePresenter
 
     /**
      * Update or create poll option
-     * 
+     *
      * @param array $bind
      * @return Option Created / updated option
      */
@@ -151,5 +150,4 @@ class PollPresenter extends SettingBasePresenter
             return $this->optionManager->update($bind["changes"], $bind["id"]);
         }
     }
-
 }

@@ -22,7 +22,9 @@
         "lcobucci/jwt": "4.1.5"
     },
     "require-dev": {
-        "nette/tester": "^2.0"
+        "nette/tester": "^2.0",
+        "phpstan/phpstan": "1.4.x-dev",
+        "squizlabs/php_codesniffer": "4.0.x-dev"
     },
     "minimum-stability": "stable",
     "config": {

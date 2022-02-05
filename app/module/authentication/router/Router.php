@@ -12,7 +12,6 @@ use Tymy\Module\Core\Interfaces\RouterInterface;
  */
 class Router implements RouterInterface
 {
-
     public function addRoutes(RouteList &$router): void
     {
         $router->addApiRoute('log<action \D+>[/<username>][/<password>]', array(
@@ -24,7 +23,6 @@ class Router implements RouterInterface
                     'module' => 'Authentication',
                     'presenter' => 'Is',
                     'action' => 'default',
-        ));
+                ));
     }
-
 }

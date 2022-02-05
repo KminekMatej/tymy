@@ -8,7 +8,6 @@ use Tymy\Module\Sign\Form\SignUpFormFactory;
 
 class UpPresenter extends BasePresenter
 {
-
     /** @inject */
     public SignUpFormFactory $signUpFactory;
 
@@ -21,7 +20,6 @@ class UpPresenter extends BasePresenter
         return $this->signUpFactory->create(function () {
                     $this->flashMessage($this->translator->translate("common.alerts.registrationSuccesfull"), 'success');
                     $this->redirect(':Sign:In:');
-                });
+        });
     }
-
 }

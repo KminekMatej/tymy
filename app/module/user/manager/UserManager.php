@@ -32,7 +32,6 @@ use Tymy\Module\User\Model\User;
  */
 class UserManager extends BaseManager
 {
-
     public const HASH_LIMIT = 20;
     public const VALIDITYMIN = 10;
     public const MAX_PWD_REQUESTS = 3;
@@ -163,7 +162,7 @@ class UserManager extends BaseManager
 
         if (!$updated) {
             $created = $this->database->table(User::TABLE_MAILS)->insert(
-                    [
+                [
                         "user_id" => $userId,
                         "type" => $type,
                         "email" => $email,
@@ -178,7 +177,7 @@ class UserManager extends BaseManager
 
     /**
      * Update users last read news to current timestamp
-     * 
+     *
      * @param int $userId
      * @return void
      */
@@ -234,14 +233,14 @@ class UserManager extends BaseManager
         $emailRow = $row->related(User::TABLE_MAILS, "user_id")->where("type", "DEF")->fetch();
 
         $user->setEmail($emailRow ? $emailRow["email"] : null);
-        
+
         $user->setWebName($user->getId() . "-" . Strings::webalize($user->getDisplayName()));
-        
+
         $this->addWarnings($user);
 
         return $user;
     }
-    
+
     private function addWarnings(User $user)
     {
         foreach ($this->teamManager->getTeam()->getRequiredFields() as $requiredField) {
@@ -252,11 +251,11 @@ class UserManager extends BaseManager
             }
 
             //email validation secondary check
-            if($requiredField == "email" && filter_var($user->getEmail(), FILTER_VALIDATE_EMAIL) === FALSE){
+            if ($requiredField == "email" && filter_var($user->getEmail(), FILTER_VALIDATE_EMAIL) === false) {
                 $user->addErrField("email");
             }
         }
-        
+
         if ($user->getStatus() == "INIT") {
             $user->addErrField("status");
         }
@@ -564,7 +563,7 @@ class UserManager extends BaseManager
 
     /**
      * Check if registration is allowed
-     * 
+     *
      * @param array $data
      * @return void
      * @throws InvalidArgumentException
@@ -655,7 +654,7 @@ class UserManager extends BaseManager
 
     /**
      * Checks prerequisities, generate reset code, store it into database and send informational mail to the resetting user
-     * 
+     *
      * @param int $userId
      * @param string $email
      * @param string $hostname
@@ -693,7 +692,7 @@ class UserManager extends BaseManager
 
     /**
      * Check conditions, reset password and return the new password
-     * 
+     *
      * @param string $resetCode
      * @return string New password
      */
@@ -704,7 +703,7 @@ class UserManager extends BaseManager
                 ->where("requested > NOW() - INTERVAL 1 HOUR")
                 ->where("reseted", null)
                 ->fetch();
-        
+
         if (!$resetRow) {
             $this->respondBadRequest($this->translator->translate("common.alerts.invalidResetCode"));
         }
@@ -730,7 +729,7 @@ class UserManager extends BaseManager
 
     /**
      * Count password reset requests in last hour
-     * 
+     *
      * @param int $userId
      * @return int
      */
@@ -742,10 +741,10 @@ class UserManager extends BaseManager
                         ->where("requested > NOW() - INTERVAL 1 HOUR")
                         ->count("id");
     }
-    
+
     /**
      * Get counts of supplied users, based on (mostly) status criteria
-     * 
+     *
      * @param User[] $users
      * @return array in the form of ["ALL" => (int),"NEW" => (int),"PLAYER" => (int),"NEW:PLAYER" => (int),"MEMBER" => (int),"SICK" => (int),"DELETED" => (int),"INIT" => (int)]
      */
@@ -788,7 +787,7 @@ class UserManager extends BaseManager
 
     /**
      * Get sum of all warnings of desired users
-     * 
+     *
      * @param User[] $users
      * @return int
      */
@@ -799,7 +798,7 @@ class UserManager extends BaseManager
             /* @var $user User */
             $count += $user->getWarnings();
         }
-        
+
         return $count;
     }
 
@@ -845,7 +844,7 @@ class UserManager extends BaseManager
 
     /**
      * Get array of user fields
-     * 
+     *
      * @return array
      */
     public function getAllFields(): array

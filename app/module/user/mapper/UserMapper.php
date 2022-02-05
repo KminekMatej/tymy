@@ -1,4 +1,5 @@
 <?php
+
 namespace Tymy\Module\User\Mapper;
 
 use Tymy\Module\Core\Mapper\BaseMapper;
@@ -11,7 +12,6 @@ use Tymy\Module\Core\Model\Field;
  */
 class UserMapper extends BaseMapper
 {
-
     public static function scheme(): array
     {
         return [

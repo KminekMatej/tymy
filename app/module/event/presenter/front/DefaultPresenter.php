@@ -9,12 +9,11 @@ use Tymy\Module\Core\Model\BaseModel;
 
 class DefaultPresenter extends EventBasePresenter
 {
-
     /** @inject */
     public HistoryManager $historyManager;
 
 
-    public function renderDefault($date = NULL, $direction = NULL)
+    public function renderDefault($date = null, $direction = null)
     {
         $dateTimeBase = new DateTime();
         $dateTimeFrom = $dateTimeBase->modifyClone("- 6 months")->setTime(0, 0, 0);
@@ -46,5 +45,4 @@ class DefaultPresenter extends EventBasePresenter
     {
         $this->redrawControl("events-agenda");
     }
-
 }

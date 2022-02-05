@@ -1,4 +1,5 @@
 <?php
+
 namespace Tymy\Module\Setting\Presenter\Front;
 
 use Nette\Application\UI\Form;
@@ -8,7 +9,6 @@ use Tymy\Module\Event\Model\EventType;
 
 class TeamPresenter extends SettingBasePresenter
 {
-
     public function createComponentTeamConfigForm()
     {
         $eventTypes = $this->eventTypeManager->getList();

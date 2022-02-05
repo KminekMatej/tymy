@@ -9,7 +9,6 @@ use Tymy\Module\Setting\Presenter\Front\SettingBasePresenter;
 
 class MultiaccountPresenter extends SettingBasePresenter
 {
-
     public function renderDefault()
     {
         $this->setLevelCaptions(["3" => ["caption" => $this->translator->translate("settings.multiaccount", 1), "link" => $this->link(":Setting:Multiaccount:")]]);
@@ -19,7 +18,7 @@ class MultiaccountPresenter extends SettingBasePresenter
     public function handleMultiaccountRemove($team)
     {
         $this->multiaccountManager->delete($team);
-        $this->flashMessage($this->translator->translate("common.alerts.multiaccountRemoved", NULL, ['team' => $team]), "success");
+        $this->flashMessage($this->translator->translate("common.alerts.multiaccountRemoved", null, ['team' => $team]), "success");
         $this->redirect(":Setting:Multiaccount:");
     }
 
@@ -38,10 +37,9 @@ class MultiaccountPresenter extends SettingBasePresenter
                 "password" => $values->password,
                     ], $values->sysName);
 
-            $this->flashMessage($this->translator->translate("common.alerts.multiaccountAdded", NULL, ["team" => $values->sysName]));
+            $this->flashMessage($this->translator->translate("common.alerts.multiaccountAdded", null, ["team" => $values->sysName]));
             $this->redirect(":Setting:Multiaccount:");
         };
         return $form;
     }
-
 }

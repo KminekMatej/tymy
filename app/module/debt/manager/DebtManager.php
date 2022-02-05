@@ -284,7 +284,7 @@ class DebtManager extends BaseManager
 
     /**
      * Get sum of all debts with pending payment
-     * 
+     *
      * @param Debt[] $debts
      * @return int
      */

@@ -12,7 +12,6 @@ use Tymy\Module\Core\Interfaces\RouterInterface;
  */
 class Router implements RouterInterface
 {
-
     public function addRoutes(RouteList &$router): void
     {
         $router->addApiRoute('attendance<action Status|StatusSet>[/<resourceId>]', array(

@@ -82,7 +82,7 @@ class PollManager extends BaseManager
         if ($poll->getStatus() == Poll::STATUS_OPENED && $poll->getCanVote() && !$poll->getVoted()) {
             $poll->setVotePending(true);
         }
-        
+
         $poll->setWebName(Strings::webalize($poll->getId() . "-" . $poll->getCaption()));
 
         $poll->fullyMapped = true;
@@ -314,7 +314,7 @@ class PollManager extends BaseManager
 
     /**
      * Get sum of all polls with pending vote
-     * 
+     *
      * @param Poll[] $polls
      * @return int
      */

@@ -12,7 +12,6 @@ use Tymy\Module\Sign\Form\SignInFormFactory;
 
 class InPresenter extends BasePresenter
 {
-
     /** @inject */
     public SignInFormFactory $signInFactory;
 
@@ -39,7 +38,7 @@ class InPresenter extends BasePresenter
                         break;
                 }
             }
-            if (!is_null($this->user->getIdentity())){
+            if (!is_null($this->user->getIdentity())) {
                 Debugger::log($this->user->getIdentity()->data["callName"] . "@" . $this->supplier->getTym() . " logged in");
             }
             $this->redirect(':Core:Default:');
@@ -63,8 +62,9 @@ class InPresenter extends BasePresenter
                         break;
                 }
             }
-            if (!is_null($this->user->getIdentity()))
+            if (!is_null($this->user->getIdentity())) {
                 Debugger::log($this->user->getIdentity()->data["callName"] . "@" . $this->supplier->getTym() . " logged in using transfer key");
+            }
             $this->redirect(':Core:Default:');
         }
     }
@@ -76,5 +76,4 @@ class InPresenter extends BasePresenter
         throw new NotImplementedException();
         $this->user->login($this->authenticationManager->tkAuthenticate($tk));
     }
-
 }

@@ -9,7 +9,6 @@ use Tymy\Module\User\Model\User;
 
 class PlayerPresenter extends SecuredPresenter
 {
-
     public function beforeRender()
     {
         parent::beforeRender();
@@ -124,8 +123,9 @@ class PlayerPresenter extends SecuredPresenter
 
     public function handleDelete()
     {
-        if (!$this->getUser()->isAllowed("user", "canDelete"))
+        if (!$this->getUser()->isAllowed("user", "canDelete")) {
             return;
+        }
         $bind = $this->getRequest()->getPost();
         $this->userManager->delete($bind["id"]);
         $this->flashMessage($this->translator->translate("common.alerts.userSuccesfullyDeleted"), "success");

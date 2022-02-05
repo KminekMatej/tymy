@@ -7,7 +7,6 @@ use Tymy\Module\User\Model\User;
 
 class DefaultPresenter extends SecuredPresenter
 {
-
     private string $userType;
 
     public function beforeRender()
@@ -106,13 +105,13 @@ class DefaultPresenter extends SecuredPresenter
             }
         }
         for ($i = $min; $i <= $max + 10; $i++) {
-            if (!array_key_exists($i, $jerseyList))
+            if (!array_key_exists($i, $jerseyList)) {
                 $jerseyList[$i] = null;
+            }
         }
         ksort($jerseyList);
 
         $this->template->jerseyList = $jerseyList;
         $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("team.jersey", 2), "link" => $this->link(":Team:Default:jerseys")]]);
     }
-
 }

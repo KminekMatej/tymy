@@ -7,7 +7,6 @@ use Nette\SmartObject;
 
 class SignInFormFactory
 {
-
     use SmartObject;
 
     /**
@@ -16,7 +15,7 @@ class SignInFormFactory
     public function create(callable $onSuccess): Form
     {
 
-        $form = new Form;
+        $form = new Form();
 
         $form->addText('name')
             ->setAttribute("placeholder", "uživatelské jméno")

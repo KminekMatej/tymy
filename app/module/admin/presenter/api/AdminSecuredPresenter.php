@@ -12,7 +12,6 @@ use Tymy\Module\Core\Presenter\Api\BasePresenter;
  */
 class AdminSecuredPresenter extends BasePresenter
 {
-
     /** @inject */
     public AdminManager $adminManager;
 
@@ -79,5 +78,4 @@ class AdminSecuredPresenter extends BasePresenter
     private function allowToken(?string $token): void
     {
     }
-
 }

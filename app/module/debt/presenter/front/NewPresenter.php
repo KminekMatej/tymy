@@ -14,7 +14,6 @@ use Tymy\Module\Debt\Model\Debt;
  */
 class NewPresenter extends DebtBasePresenter
 {
-
     /** @inject */
     public DebtManager $debtManager;
 
@@ -55,5 +54,4 @@ class NewPresenter extends DebtBasePresenter
 
         $this->redirect(":Debt:Default:", $createdDebt->getWebName());
     }
-
 }

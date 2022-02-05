@@ -19,7 +19,6 @@ use Tymy\Module\User\Model\User;
  */
 class NewsManager extends BaseManager
 {
-
     private UserManager $userManager;
 
     public function __construct(ManagerFactory $managerFactory, UserManager $userManager)
@@ -99,7 +98,7 @@ class NewsManager extends BaseManager
         $limit = (new DateTime("2019-01-01"))->setTime(0, 0, 0);
 
         $news = $this->mapAll(
-                $this->mainDatabase->table($this->getTable())
+            $this->mainDatabase->table($this->getTable())
                         ->where("lc", in_array($user->getLanguage(), ["EN", "CZ"]) ? $user->getLanguage() : "CZ")
                         ->where("inserted >= ?", $user->getLastReadNews() < $limit ? $limit : $user->getLastReadNews())
                         ->where("team = ? OR team IS NULL OR FALSE", $this->teamSysName)
@@ -111,5 +110,4 @@ class NewsManager extends BaseManager
 
         return $news;
     }
-
 }

@@ -13,15 +13,14 @@ use Tymy\Module\Core\Model\Supplier;
 use Tymy\Module\Core\Presenter\RootPresenter;
 use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\Team\Model\Team;
-use const ROOT_DIR;
 
+use const ROOT_DIR;
 
 /**
  * Base presenter for all front application presenters.
  */
-abstract class BasePresenter extends RootPresenter {
-    
-    
+abstract class BasePresenter extends RootPresenter
+{
     /** @persistent */
     public $locale;
 
@@ -44,17 +43,17 @@ abstract class BasePresenter extends RootPresenter {
         $this->template->css = Debugger::$productionMode ? "min.css" : "css";
 
         $this->template->team = $this->teamManager->getTeam();
-        
+
         $this->template->wwwDir = ROOT_DIR . "/www";
         $this->template->skin = $this->skin = $this->team->getSkin();
 
         $this->template->appver = $this->supplier->getVersionCode();
-        
+
         $this->template->addFilter('monthName', function ($number) {
             return $this->translator->translate("common.months." . strtolower(DateTime::createFromFormat("!m", strval($number))->format("F"))) ;
         });
     }
-    
+
     public function formatLayoutTemplateFiles(): array
     {
         return [Bootstrap::MODULES_DIR . "/core/presenter/templates/@layout.latte"];

@@ -20,7 +20,6 @@ class DBException
     public static function from(PDOException $exc, $type = null)
     {
         switch ($exc->getCode()) {
-
             case 23000: // key integrity failure
                 $matches = [];
                 $re = '/.* constraint fails \((.*), CONSTRAINT (.*) FOREIGN KEY \((.*)\) REFERENCES (.*) \((.*)\).*\)/';

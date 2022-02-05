@@ -11,7 +11,6 @@ use Tymy\Module\Admin\Manager\MigrationManager;
  */
 class MigratePresenter extends AdminSecuredPresenter
 {
-
     /** @inject */
     public MigrationManager $migrationManager;
 
@@ -24,5 +23,4 @@ class MigratePresenter extends AdminSecuredPresenter
             $this->responder->E4018_MIGRATION_FAILED($output["log"]);
         }
     }
-
 }

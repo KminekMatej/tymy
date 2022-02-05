@@ -19,7 +19,6 @@ use Tymy\Module\User\Model\User;
  */
 class Responder
 {
-
     private Application $application;
     public RootPresenter $presenter;
     public RootPresenter $presenterMock;
@@ -51,7 +50,7 @@ class Responder
 
     /**
      * Respond using TymyResponse. TymyResponse is being catched on BasePresenters and trated differently, if it is API presenter or App presenter
-     * 
+     *
      * @param int $code Specific tymy app response code
      * @param string $message Additional response message
      * @param string $sessionKey SessionKey - used only for auth responses
@@ -61,12 +60,12 @@ class Responder
     private function respond(int $code, string $message, string $sessionKey = null): void
     {
         throw new TymyResponse(
-                $message,
-                $this->httpCode,
-                $code,
-                $this->payload,
-                $this->httpCode >= 200 && $this->httpCode <= 299,
-                $sessionKey
+            $message,
+            $this->httpCode,
+            $code,
+            $this->payload,
+            $this->httpCode >= 200 && $this->httpCode <= 299,
+            $sessionKey
         );
     }
 
@@ -295,7 +294,7 @@ class Responder
         $this->init();
         $this->respond(4017, "Update blocked by `$blockingModule` `" . join(", ", $blockingIds) . "`");
     }
-    
+
     public function E4018_MIGRATION_FAILED(array $log = [])
     {
         $this->init(500);

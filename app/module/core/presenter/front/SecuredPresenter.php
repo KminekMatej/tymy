@@ -24,7 +24,6 @@ use Tymy\Module\User\Model\User;
  */
 class SecuredPresenter extends BasePresenter
 {
-
     protected $levelCaptions;
 
     /** @inject */
@@ -66,8 +65,9 @@ class SecuredPresenter extends BasePresenter
 
     public function setLevelCaptions($levelCaptions)
     {
-        if (!is_array($levelCaptions))
+        if (!is_array($levelCaptions)) {
             return false;
+        }
         foreach ($levelCaptions as $level => $caption) {
             $this->levelCaptions[$level] = $caption;
         }
@@ -115,8 +115,9 @@ class SecuredPresenter extends BasePresenter
         if (strpos($webName, "-")) {
             return substr($webName, 0, strpos($webName, "-"));
         }
-        if (intval($webName))
+        if (intval($webName)) {
             return intval($webName);
+        }
     }
 
     /**
@@ -153,33 +154,34 @@ class SecuredPresenter extends BasePresenter
     private function setAccessibleSettings()
     {
         if ($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("DSSETUP"))) {
-            $this->accessibleSettings[] = new SettingMenu("discussions", $this->translator->translate("discussion.discussion", 2), $this->link(":Setting:Discussion:"), "fa-comments", TRUE);
+            $this->accessibleSettings[] = new SettingMenu("discussions", $this->translator->translate("discussion.discussion", 2), $this->link(":Setting:Discussion:"), "fa-comments", true);
         }
-        if ($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('EVE_UPDATE')) ||
+        if (
+            $this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('EVE_UPDATE')) ||
                 $this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('EVE_CREATE')) ||
                 $this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('EVE_DELETE'))
         ) {
-            $this->accessibleSettings[] = new SettingMenu("events", $this->translator->translate("event.event", 2), $this->link(":Setting:Event:"), "fa-calendar", TRUE);
+            $this->accessibleSettings[] = new SettingMenu("events", $this->translator->translate("event.event", 2), $this->link(":Setting:Event:"), "fa-calendar", true);
         }
 
         if ($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("TEAM_UPDATE"))) {
-            $this->accessibleSettings[] = new SettingMenu("team", $this->translator->translate("team.team", 1), $this->link(":Setting:Team:"), "fa-users", TRUE);
+            $this->accessibleSettings[] = new SettingMenu("team", $this->translator->translate("team.team", 1), $this->link(":Setting:Team:"), "fa-users", true);
         }
 
         if ($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('ASK.VOTE_UPDATE'))) {
-            $this->accessibleSettings[] = new SettingMenu("polls", $this->translator->translate("poll.poll", 2), $this->link(":Setting:Poll:"), "fa-chart-pie", TRUE);
+            $this->accessibleSettings[] = new SettingMenu("polls", $this->translator->translate("poll.poll", 2), $this->link(":Setting:Poll:"), "fa-chart-pie", true);
         }
 
         if ($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("REP_SETUP"))) {
-            $this->accessibleSettings[] = new SettingMenu("reports", $this->translator->translate("report.report", 2), $this->link(":Setting:Report:"), "fa-chart-area", FALSE);
+            $this->accessibleSettings[] = new SettingMenu("reports", $this->translator->translate("report.report", 2), $this->link(":Setting:Report:"), "fa-chart-area", false);
         }
 
         if ($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('IS_ADMIN'))) {
-            $this->accessibleSettings[] = new SettingMenu("permissions", $this->translator->translate("permission.permission", 2), $this->link(":Setting:Permission:"), "fa-gavel", TRUE);
+            $this->accessibleSettings[] = new SettingMenu("permissions", $this->translator->translate("permission.permission", 2), $this->link(":Setting:Permission:"), "fa-gavel", true);
         }
 
-        $this->accessibleSettings[] = new SettingMenu("multiaccounts", $this->translator->translate("settings.multiaccount", 1), $this->link(":Setting:Multiaccount:"), "fa-sitemap", TRUE); //user can always look into multiaccount settings
-        $this->accessibleSettings[] = new SettingMenu("app", $this->translator->translate("settings.application"), $this->link(":Setting:App:"), "fa-laptop", TRUE); //user can always look into app settings to setup his own properties
+        $this->accessibleSettings[] = new SettingMenu("multiaccounts", $this->translator->translate("settings.multiaccount", 1), $this->link(":Setting:Multiaccount:"), "fa-sitemap", true); //user can always look into multiaccount settings
+        $this->accessibleSettings[] = new SettingMenu("app", $this->translator->translate("settings.application"), $this->link(":Setting:App:"), "fa-laptop", true); //user can always look into app settings to setup his own properties
 
         return $this;
     }
@@ -197,5 +199,4 @@ class SecuredPresenter extends BasePresenter
     {
         $this['navbar']->redrawControl("nav");
     }
-
 }

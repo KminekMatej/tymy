@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/PHPClass.php to edit this template
@@ -21,7 +22,6 @@ use Tymy\Module\User\Model\User;
  */
 class DetailPresenter extends EventBasePresenter
 {
-
     public function renderDefault(string $resource)
     {
         $this->template->cptNotDecidedYet = $this->translator->translate('event.notDecidedYet');

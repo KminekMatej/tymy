@@ -11,6 +11,5 @@ use Tymy\Module\Core\Router\RouteList;
  */
 interface RouterInterface
 {
-
     public function addRoutes(RouteList &$router): void;
 }

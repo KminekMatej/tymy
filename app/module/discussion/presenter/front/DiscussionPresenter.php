@@ -16,7 +16,6 @@ use Tymy\Module\User\Manager\UserManager;
  */
 class DiscussionPresenter extends SecuredPresenter
 {
-
     /** @inject */
     public DiscussionManager $discussionManager;
 
@@ -122,5 +121,4 @@ class DiscussionPresenter extends SecuredPresenter
         $newpost->redrawControl();
         return $newpost;
     }
-
 }

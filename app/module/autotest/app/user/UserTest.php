@@ -19,7 +19,6 @@ $container = Bootstrap::boot();
  */
 class UserTest extends RequestCase
 {
-
     public function getModule(): string
     {
         return User::MODULE;

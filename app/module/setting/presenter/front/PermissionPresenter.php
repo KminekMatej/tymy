@@ -10,7 +10,6 @@ use Tymy\Module\Setting\Presenter\Front\SettingBasePresenter;
 
 class PermissionPresenter extends SettingBasePresenter
 {
-
     /** @inject */
     public PermissionManager $permissionManager;
 
@@ -61,7 +60,7 @@ class PermissionPresenter extends SettingBasePresenter
 
         $permission = $this->permissionManager->getByWebName($resource);
         if (!$permission) {
-            $this->flashMessage($this->translator->translate("permission.errors.permissionNotExists", NULL, ['id' => $permission]), "danger");
+            $this->flashMessage($this->translator->translate("permission.errors.permissionNotExists", null, ['id' => $permission]), "danger");
             $this->redirect(':Setting:Event:');
         }
 
@@ -140,7 +139,7 @@ class PermissionPresenter extends SettingBasePresenter
         if (array_key_exists("userAllowance", $changes)) { //set either allowed or revoked users
             $userList = [];
             foreach ($changes as $key => $value) {
-                if (strpos($key, "userCheck") !== FALSE && $value == "true") {
+                if (strpos($key, "userCheck") !== false && $value == "true") {
                     $userList[] = (int) explode("_", $key)[1];
                 }
             }
@@ -149,5 +148,4 @@ class PermissionPresenter extends SettingBasePresenter
 
         return $output;
     }
-
 }

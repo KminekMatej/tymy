@@ -1,4 +1,5 @@
 <?php
+
 namespace Tymy\Module\Core\Manager;
 
 use Nette\Database\Explorer;
@@ -12,7 +13,6 @@ use Tymy\Module\Team\Manager\TeamManager;
  */
 class StringsManager
 {
-
     public const TABLE = "strings";
     public const LC = ["CZ" => "cs", "EN" => "en", "FR" => "fr", "PL" => "pl"];
 
@@ -52,7 +52,7 @@ class StringsManager
 
     /**
      * Translate by domain and code
-     * 
+     *
      * @param string $domain
      * @param string $code
      * @param mixed $parameters

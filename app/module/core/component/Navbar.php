@@ -75,7 +75,6 @@ class NavbarControl extends Control
         $debts = $this->debtManager->getListUserAllowed();
         $this->template->debts = $debts;
         $this->template->debtWarnings = $this->debtManager->getWarnings($debts);
-        
     }
 
     private function initPlayers(): void
@@ -111,11 +110,11 @@ class NavbarControl extends Control
     public function createComponentFileUploadForm(): Form
     {
         //create file upload ability
-        $form = new Form;
+        $form = new Form();
         $form->addUpload("file", $this->translator->translate("file.file"));
         $form->addSubmit("save", "Nahrát");
         $form->onSuccess[] = [$this, "fileLoad"];
-        
+
         return $form;
     }
 

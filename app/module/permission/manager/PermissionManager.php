@@ -339,5 +339,4 @@ class PermissionManager extends BaseManager
 
         return null;
     }
-
 }

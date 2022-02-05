@@ -16,7 +16,6 @@ use Tymy\Module\Poll\Model\Vote;
  */
 class VoteManager extends BaseManager
 {
-
     private Poll $poll;
 
     public function __construct(ManagerFactory $managerFactory)
@@ -38,59 +37,60 @@ class VoteManager extends BaseManager
     protected function allowCreate(?array &$data = null): void
     {
         //check consistency of userId and pollId (same user, same poll)
-        
+
         $voteUserId = null;
         foreach ($data as &$vote) {
-            if(empty($voteUserId) && !empty($vote["userId"])){
+            if (empty($voteUserId) && !empty($vote["userId"])) {
                 $voteUserId = $vote["userId"];
             }
-            
-            if(!empty($vote["userId"]) && !empty($voteUserId) && $vote["userId"] !== $voteUserId){
+
+            if (!empty($vote["userId"]) && !empty($voteUserId) && $vote["userId"] !== $voteUserId) {
                 $this->respondBadRequest("All votes must be for the same user");
                 $voteUserId = $vote["userId"];
             }
-            
-            
+
+
             if (!empty($vote["pollId"]) && $vote["pollId"] !== $this->poll->getId()) {
                 $this->respondBadRequest("All votes must have the same poll id ({$this->poll->getId()})");
             }
-            
+
             $vote["pollId"] = $this->poll->getId();
         }
-        
+
         $voteUserId = $voteUserId ?? $this->user->getId();
-        
+
         foreach ($data as &$vote) {
             $vote["userId"] = $voteUserId;
-            
+
             //transform booleanValue to YES/NO based on truthfullness
-            if(!empty($vote["booleanValue"])){
+            if (!empty($vote["booleanValue"])) {
                 $vote["booleanValue"] = $vote["booleanValue"] ? "YES" : "NO";
             }
         }
-        
+
         //check this user can vote
-        if($voteUserId === $this->user->getId() && !$this->poll->getCanVote()){
+        if ($voteUserId === $this->user->getId() && !$this->poll->getCanVote()) {
             $this->respondForbidden("Cannot vote in this poll");
         }
-        
+
         //check current user can vote as desired user
-        if($voteUserId !== $this->user->getId() && !$this->poll->getCanAlienVote()){
+        if ($voteUserId !== $this->user->getId() && !$this->poll->getCanAlienVote()) {
             $this->respondForbidden("Cannot deputy vote in this poll");
         }
-        
+
         //check if this user has already voted in unchangeable poll
-        if(!$this->poll->getChangeableVotes() && $this->userVoted($this->poll, $voteUserId)){
+        if (!$this->poll->getChangeableVotes() && $this->userVoted($this->poll, $voteUserId)) {
             $this->respondForbidden("Changing votes not allowed in this poll");
         }
-        
+
         $this->checkNumberOfAnswers($this->poll, $data);
-        
+
         //delete votes for this poll and user
         $this->database->table(Vote::TABLE)->where("quest_id", $this->poll->getId())->where("user_id", $voteUserId)->delete();
     }
-    
-    private function checkNumberOfAnswers(Poll $poll, array &$votes): void {
+
+    private function checkNumberOfAnswers(Poll $poll, array &$votes): void
+    {
         if ($poll->getMinItems() == null && $poll->getMaxItems() == null) {
             return;
         }
@@ -100,18 +100,18 @@ class VoteManager extends BaseManager
                 $answers++;
             }
         }
-        
-        if($poll->getMinItems() && $answers < $poll->getMinItems()){
+
+        if ($poll->getMinItems() && $answers < $poll->getMinItems()) {
             $this->respondBadRequest("Number of answers ($answers) must be greater than poll min limit ({$poll->getMinItems()}).");
         }
-        if($poll->getMaxItems() && $answers > $poll->getMaxItems()){
+        if ($poll->getMaxItems() && $answers > $poll->getMaxItems()) {
             $this->respondBadRequest("Number of answers ($answers) mustn't be greater than poll max limit ({$poll->getMaxItems()}).");
         }
     }
-    
+
     /**
      * Check if desired user already voted in this vote
-     * 
+     *
      * @param Poll $poll
      * @param int $userId
      * @return boolean
@@ -146,15 +146,14 @@ class VoteManager extends BaseManager
         }
 
         $this->allowCreate($data);
-        
+
         $createdVotes = [];
         //add votes
         foreach ($data as $vote) {
             $createdVotes[] = $this->map($this->createByArray($vote));
         }
-        
+
         return $createdVotes;
-        
     }
 
     public function delete(int $resourceId, ?int $subResourceId = null): int

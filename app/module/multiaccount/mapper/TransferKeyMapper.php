@@ -1,4 +1,5 @@
 <?php
+
 namespace Tymy\Module\Multiaccount\Mapper;
 
 use Tymy\Module\Core\Mapper\BaseMapper;
@@ -10,7 +11,6 @@ use Tymy\Module\Core\Mapper\BaseMapper;
  */
 class TransferKeyMapper extends BaseMapper
 {
-
     public static function scheme(): array
     {
         return [

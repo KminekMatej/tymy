@@ -1,4 +1,5 @@
 <?php
+
 namespace Tymy\Module\Event\Presenter\Front;
 
 use Tymy\Module\Attendance\Manager\AttendanceManager;
@@ -17,7 +18,6 @@ use Tymy\Module\Event\Model\Event;
  */
 class EventBasePresenter extends SecuredPresenter
 {
-
     /** @inject */
     public EventTypeManager $eventTypeManager;
 
@@ -35,9 +35,12 @@ class EventBasePresenter extends SecuredPresenter
 
         $this->template->addFilter('genderTranslate', function ($gender) {
             switch ($gender) {
-                case "MALE": return $this->translator->translate("team.male", 2);
-                case "FEMALE": return $this->translator->translate("team.female", 2);
-                case "UNKNOWN": return $this->translator->translate("team.unknownSex");
+                case "MALE":
+                    return $this->translator->translate("team.male", 2);
+                case "FEMALE":
+                    return $this->translator->translate("team.female", 2);
+                case "UNKNOWN":
+                    return $this->translator->translate("team.unknownSex");
             }
         });
 
@@ -47,14 +50,16 @@ class EventBasePresenter extends SecuredPresenter
             $myPreStatus = empty($myAttendance) || empty($myAttendance->getPreStatus()) || $myAttendance->getPreStatus() == "UNKNOWN" ? "not-set" : $eventTypes[$eventType]->getPreStatusSet()[$myAttendance->getPreStatus()]->getCode();
             $myPostStatus = empty($myAttendance) || empty($myAttendance->getPostStatus()) || $myAttendance->getPostStatus() == "UNKNOWN" ? "not-set" : $eventTypes[$eventType]->getPostStatusSet()[$myAttendance->getPostStatus()]->getCode();
 
-            if (!$canPlan)
+            if (!$canPlan) {
                 return $code == $myPostStatus && $myPostStatus != "not-set" ? "attendance$code disabled active" : "btn-outline-secondary disabled";
-            if (strtotime($startTime) > strtotime(date("c")))// pokud podminka plati, akce je budouci
+            }
+            if (strtotime($startTime) > strtotime(date("c"))) { // pokud podminka plati, akce je budouci
                 return $code == $myPreStatus ? "attendance$code active" : "attendance$code";
-            else if ($myPostStatus == "not-set") // akce uz byla, post status nevyplnen
+            } elseif ($myPostStatus == "not-set") { // akce uz byla, post status nevyplnen
                 return $code == $myPreStatus && $myPreStatus != "not-set" ? "attendance$code disabled active" : "btn-outline-secondary disabled";
-            else
+            } else {
                 return $code == $myPostStatus && $myPostStatus != "not-set" ? "attendance$code disabled active" : "btn-outline-secondary disabled";
+            }
         });
 
         $this->template->statusList = $this->statusManager->getList();
@@ -62,7 +67,7 @@ class EventBasePresenter extends SecuredPresenter
 
     /**
      * Transform array of events into event feed - array in format specified by FullCalendar specifications
-     * 
+     *
      * @param Event[] $events
      * @return array
      */

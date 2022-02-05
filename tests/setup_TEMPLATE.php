@@ -1,8 +1,10 @@
 <?php
+
 /**
- * Template for running tester. Specifies neede sensitive input data not to get public. Syntax to run tester is 
+ * Template for running tester. Specifies neede sensitive input data not to get public. Syntax to run tester is
  * /root_dir/tester -p php -c /root_dir/tests/php.ini --setup /root_dir/tests/setup_TEMPLATE.php /root_dir/tests/
  */
+
 $testedTeam = [
     "team" => "dev",
     "user" => "autotest",
@@ -11,7 +13,7 @@ $testedTeam = [
     "root" => "tymy.cz", //probable not to be changed
     "pass" => "********",
     "pass_admin" => "********",
-    "invasive" => FALSE, //if test is invasive, it performs also user registration, discussion item add etc. Probably test just once in time, no need to spam discussion and spam admins with new user info
+    "invasive" => false, //if test is invasive, it performs also user registration, discussion item add etc. Probably test just once in time, no need to spam discussion and spam admins with new user info
     "testUserId" => 2,
     "testEventId" => 74,
     "testEventUserId" => 112,

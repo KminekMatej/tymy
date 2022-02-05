@@ -14,7 +14,6 @@ use Tymy\Module\User\Manager\UserManager;
  */
 class DefaultPresenter extends SecuredPresenter
 {
-
     /** @inject */
     public DiscussionManager $discussionManager;
 
@@ -34,5 +33,4 @@ class DefaultPresenter extends SecuredPresenter
     {
         $this->template->discussions = $this->discussionManager->getListUserAllowed($this->user->getId());
     }
-
 }

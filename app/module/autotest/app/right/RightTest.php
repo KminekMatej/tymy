@@ -17,7 +17,6 @@ $container = Bootstrap::boot();
  */
 class RightTest extends RequestCase
 {
-
     public function getModule(): string
     {
         return Right::MODULE;

@@ -11,7 +11,6 @@ use Nette\Database\Table\Selection;
  */
 class Filter
 {
-
     private string $column;
     private string $operator;
     private $value;
@@ -40,7 +39,7 @@ class Filter
 
     /**
      * Add filters, one by one, to existing selector, using ->where functions
-     * 
+     *
      * @param Selection $selector
      * @param array $filters
      * @return void

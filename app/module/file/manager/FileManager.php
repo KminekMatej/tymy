@@ -1,4 +1,5 @@
 <?php
+
 namespace Tymy\Module\File\Handler;
 
 use Nette\Http\FileUpload;
@@ -6,6 +7,7 @@ use Nette\NotImplementedException;
 use Nette\Security\User;
 use Tracy\Debugger;
 use Tymy\Module\Core\Manager\Responder;
+
 use const TEAM_DIR;
 
 /**
@@ -15,7 +17,6 @@ use const TEAM_DIR;
  */
 class FileManager
 {
-
     const DOWNLOAD_DIR = TEAM_DIR . "/download";
 
     private User $user;
@@ -31,7 +32,7 @@ class FileManager
      * Uložení nahraného souboru.
      *
      * @param FileUpload   $file
-     * @param string $folder 
+     * @param string $folder
      * @return string Saved file path
      */
     public function save(FileUpload $file, string $folder): string

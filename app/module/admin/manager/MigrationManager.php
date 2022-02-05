@@ -11,7 +11,6 @@ use Tymy\Module\Admin\Entity\Migration;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Model\Supplier;
 
-
 /**
  * Description of MigrationManager
  *
@@ -19,7 +18,6 @@ use Tymy\Module\Core\Model\Supplier;
  */
 class MigrationManager
 {
-
     const MIGRATION_UP = true;
     const MIGRATION_DOWN = false;
     const REGEX_MIGRATION = "\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}.sql";
@@ -30,7 +28,7 @@ class MigrationManager
     private array $log = [];
     private bool $tableExists;
     private array $migrationsCache = [];
-    
+
     public function __construct(Explorer $teamDatabase, Supplier $supplier)
     {
         $this->teamDatabase = $teamDatabase;
@@ -297,7 +295,7 @@ class MigrationManager
                 if (empty($latestMigration)) {    //if there is no base migration done yet, use this base as migration base and remove all previous migrations
                     $migrations = [new Migration($file)];
                 }
-            } else if (preg_match('/.*\/migrations\/' . self::REGEX_MIGRATION . '/', $file)) {
+            } elseif (preg_match('/.*\/migrations\/' . self::REGEX_MIGRATION . '/', $file)) {
                 $mig = new Migration($file);
                 if (in_array($mig->getMigration(), $migrationsPerformed)) {
                     continue;   //skip already performed migration
@@ -347,10 +345,10 @@ class MigrationManager
 
         return ["success" => $success, "log" => $this->log];
     }
-    
+
     /**
      * Function automatically checks whether migrations from v1 has already been performed and if not, performs them before it even starts migrating
-     * 
+     *
      * Can be removed after all teams has been switched to new version
      * @return void
      */
@@ -358,24 +356,24 @@ class MigrationManager
     {
         //is there some migration table at all?
         $tables = $this->teamDatabase->query("SHOW TABLES")->fetchPairs();
-        
-        if(empty($tables)){
+
+        if (empty($tables)) {
             return; //no tables exists - this is a new system, simply perform the base migration to fill it
         }
-        
+
         $migrationTableExists = in_array("migration", $tables);
-        if($migrationTableExists){
+        if ($migrationTableExists) {
             return; //there is already migration table structure, no neeed to continue
         }
 
         $usersTableExists = in_array("users", $tables);
-        if($usersTableExists){
+        if ($usersTableExists) {
             $usersColumns = $this->teamDatabase->query("SHOW COLUMNS FROM users")->fetchPairs();
             $usersHasBirthcodeField = array_key_exists("birth_code", $usersColumns);
         } else {
             $usersHasBirthcodeField = false;
         }
-        
+
         if (!$usersHasBirthcodeField) {  //this database does not have birth_code field in users
             $this->executeSqlContents(file_get_contents("/var/www/vhosts/tymy.cz/src/v1/1.1.23/sql/0018_birthcode.sql"), $this->log);
         }

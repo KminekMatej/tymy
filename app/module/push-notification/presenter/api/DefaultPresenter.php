@@ -1,4 +1,5 @@
 <?php
+
 namespace Tymy\Module\PushNotification\Presenter\Api;
 
 use Tymy\Module\Core\Presenter\Api\SecuredPresenter;
@@ -12,7 +13,6 @@ use Tymy\Module\PushNotification\Model\Subscriber;
  */
 class DefaultPresenter extends SecuredPresenter
 {
-
     public function injectManager(PushNotificationManager $manager): void
     {
         $this->manager = $manager;

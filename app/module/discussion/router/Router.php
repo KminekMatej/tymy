@@ -12,7 +12,6 @@ use Tymy\Module\Core\Interfaces\RouterInterface;
  */
 class Router implements RouterInterface
 {
-
     public function addRoutes(RouteList &$router): void
     {
         $router->addApiRoute('discussion[s][/accessible][/withNew]', array(
@@ -29,7 +28,6 @@ class Router implements RouterInterface
                     'module' => 'Discussion',
                     'presenter' => 'Post',
                     'action' => 'mode',
-        ));
+                ));
     }
-
 }

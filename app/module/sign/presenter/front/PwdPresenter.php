@@ -1,4 +1,5 @@
 <?php
+
 namespace Tymy\Module\Sign\Presenter\Front;
 
 use Nette;
@@ -11,7 +12,6 @@ use Tymy\Module\User\Manager\UserManager;
 
 class PwdPresenter extends BasePresenter
 {
-
     /** @inject */
     public PwdLostFormFactory $pwdLostFactory;
 

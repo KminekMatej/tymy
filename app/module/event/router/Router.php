@@ -12,7 +12,6 @@ use Tymy\Module\Core\Router\RouteList;
  */
 class Router implements RouterInterface
 {
-
     public function addRoutes(RouteList &$router): void
     {
         $router->addApiRoute('event[s]/withMyAttendance', array(
@@ -24,6 +23,6 @@ class Router implements RouterInterface
                     'module' => 'Event',
                     'presenter' => 'Types',
                     'action' => 'default',
-        ));
+                ));
     }
 }

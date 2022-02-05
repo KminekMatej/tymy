@@ -1,4 +1,5 @@
 <?php
+
 namespace Tymy\Module\Sign\Form;
 
 use Nette\Application\UI\Form;
@@ -6,7 +7,6 @@ use Nette\SmartObject;
 
 class PwdLostFormFactory
 {
-
     use SmartObject;
 
     /**

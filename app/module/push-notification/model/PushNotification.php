@@ -1,4 +1,5 @@
 <?php
+
 namespace Tymy\Module\PushNotification\Model;
 
 use JsonSerializable;
@@ -10,7 +11,6 @@ use JsonSerializable;
  */
 class PushNotification implements JsonSerializable
 {
-
     private string $type;
     private int $userId;
     private int $teamId;
