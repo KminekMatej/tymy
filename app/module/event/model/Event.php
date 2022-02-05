@@ -16,7 +16,7 @@ class Event extends BaseModel
 {
     public const TABLE = "events";
     public const MODULE = "event";
-    const PAGING_EVENTS_PER_PAGE = 15;
+    public const PAGING_EVENTS_PER_PAGE = 15;
 
     private string $caption;
     private DateTime $created;

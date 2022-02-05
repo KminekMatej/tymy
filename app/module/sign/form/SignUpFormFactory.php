@@ -11,10 +11,10 @@ class SignUpFormFactory
 {
     use Nette\SmartObject;
 
-    const PASSWORD_MIN_LENGTH = 3;
-    const PASSWORD_PATTERN = '[^\s]{3,}';
-    const EMAIL_PATTERN = "^[-a-zA-Z0-9!#$%&'*+/=?^_`{|}~]+(\\.[-a-zA-Z0-9!#$%&'*+/=?^_`{|}~]+)*@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)+";
-    const LOGIN_PATTERN = '^[\w-]{3,20}';
+    public const PASSWORD_MIN_LENGTH = 3;
+    public const PASSWORD_PATTERN = '[^\s]{3,}';
+    public const EMAIL_PATTERN = "^[-a-zA-Z0-9!#$%&'*+/=?^_`{|}~]+(\\.[-a-zA-Z0-9!#$%&'*+/=?^_`{|}~]+)*@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)+";
+    public const LOGIN_PATTERN = '^[\w-]{3,20}';
 
     private UserManager $userManager;
 

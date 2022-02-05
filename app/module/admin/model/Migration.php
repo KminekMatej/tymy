@@ -11,9 +11,9 @@ use Nette\Utils\DateTime;
  */
 class Migration
 {
-    const TABLE = "migration";
-    const RESULT_OK = "OK";
-    const RESULT_ERROR = "ERROR";
+    public const TABLE = "migration";
+    public const RESULT_OK = "OK";
+    public const RESULT_ERROR = "ERROR";
 
     /** @var string */
     private $file;

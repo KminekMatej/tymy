@@ -17,7 +17,7 @@ use const TEAM_DIR;
  */
 class FileManager
 {
-    const DOWNLOAD_DIR = TEAM_DIR . "/download";
+    public const DOWNLOAD_DIR = TEAM_DIR . "/download";
 
     private User $user;
     private Responder $responder;

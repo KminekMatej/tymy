@@ -8,11 +8,11 @@ use Tymy\Module\PushNotification\Mapper\SubscriberMapper;
 
 class Subscriber extends BaseModel
 {
-    const MODULE = "push-notification";
-    const TABLE = "push_notification";
-    const TYPE_WEB = "WEB";
-    const TYPE_APNS = "APNS";
-    const TYPE_FCM = "FCM";
+    public const MODULE = "push-notification";
+    public const TABLE = "push_notification";
+    public const TYPE_WEB = "WEB";
+    public const TYPE_APNS = "APNS";
+    public const TYPE_FCM = "FCM";
 
     private string $type;
     private int $userId;
