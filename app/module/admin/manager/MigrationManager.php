@@ -18,10 +18,10 @@ use Tymy\Module\Core\Model\Supplier;
  */
 class MigrationManager
 {
-    const MIGRATION_UP = true;
-    const MIGRATION_DOWN = false;
-    const REGEX_MIGRATION = "\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}.sql";
-    const REGEX_BASE = "\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-base.sql";
+    private const MIGRATION_UP = true;
+    private const MIGRATION_DOWN = false;
+    private const REGEX_MIGRATION = "\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}.sql";
+    private const REGEX_BASE = "\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-base.sql";
 
     private Explorer $teamDatabase;
     private Supplier $supplier;
@@ -132,33 +132,40 @@ class MigrationManager
     {
         $this->logg("Extracting commands from contents");
 
-        $withoutComments = $this->remove_comments($contents);
-        $withoutRemarks = $this->remove_remarks($withoutComments);
+        $withoutComments = $this->removeComments($contents);
+        $withoutRemarks = $this->removeRemarks($withoutComments);
         if (substr_count($withoutRemarks, ";") == 0) {
             throw new Exception("No SQL command detected - are commands correctly ended by semicolon? (;)");
         }
 
-        return array_map('trim', $this->split_sql_file($withoutRemarks, ';'));
+        return array_map('trim', $this->splitSqlFile($withoutRemarks, ';'));
     }
 
-    private function remove_comments(&$output)
+    /**
+     * Remove all comments from input
+     * @param string $contents
+     * @return void
+     */
+    private function removeComments(string $contents): string
     {
         $this->logg("Removing comments");
 
         $search = '/\/\*.*?\*\//ms';
         $replace = "";
 
-        while (preg_match($search, $output)) {
-            $output = preg_replace($search, $replace, $output);
+        while (preg_match($search, $contents)) {
+            $contents = preg_replace($search, $replace, $contents);
         }
 
-        return $output;
+        return $contents;
     }
 
-//
-    // remove_remarks will strip the sql comment lines out of an uploaded sql file
-//
-    private function remove_remarks($sql)
+    /**
+     * Strip the sql comment lines out of an uploaded sql file
+     * @param string $sql
+     * @return string
+     */
+    private function removeRemarks(string $sql): string
     {
         $this->logg("Removing remarks");
         $lines = explode("\n", $sql);
@@ -185,11 +192,14 @@ class MigrationManager
         return join(" ", $output);
     }
 
-//
-    // split_sql_file will split an uploaded sql file into single sql statements.
-    // Note: expects trim() to have already been run on $sql.
-//
-    private function split_sql_file($sql, $delimiter)
+    /**
+     * Split an uploaded sql file into single sql statements.
+     * Note: expects trim() to have already been run on $sql.
+     * @param string $sql
+     * @param string $delimiter
+     * @return array
+     */
+    private function splitSqlFile(string $sql, string $delimiter): array
     {
         $this->logg("Splitting contents to SQL commands");
         // Split up our string into "possible" SQL statements.
