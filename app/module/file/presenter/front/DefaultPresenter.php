@@ -320,8 +320,12 @@ class DefaultPresenter extends SecuredPresenter
         return round($bytes, $precision) . ' ' . $units[$pow];
     }
 
-    public function handleDelete(string $folder = "/", string $filename)
+    public function handleDelete(string $folder = "/", string $filename = "")
     {
+        if (empty($filename)) {
+            return;
+        }
+
         $filepath = FileManager::DOWNLOAD_DIR . "/" . trim($folder, "/. ") . "/" . trim($filename, "/. ");
 
         if (is_file($filepath) || is_link($filepath)) {
