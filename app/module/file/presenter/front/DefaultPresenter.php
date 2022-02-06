@@ -94,6 +94,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->template->folder = $folderNoSeparators;
         array_pop($folderParts);
         $this->template->parentFolder = join("/", $folderParts);
+        \Tracy\Debugger::barDump($this->fileStats);
         $this->template->fileTypes = $this->fileStats["fileTypes"];
         $this->template->contents = $this->getContents("/" . $folderNoSeparators);
     }
@@ -215,6 +216,8 @@ class DefaultPresenter extends SecuredPresenter
             $this->fileStats = [
                 "usedSpace" => $this->folderSize(FileManager::DOWNLOAD_DIR),
             ];
+            \Tracy\Debugger::barDump(FileManager::DOWNLOAD_DIR);
+            
             $this->loadFileTypeSizes(FileManager::DOWNLOAD_DIR);
             file_put_contents($cachedSizeFile, \json_encode($this->fileStats));
         }
@@ -222,40 +225,39 @@ class DefaultPresenter extends SecuredPresenter
 
     private function loadFileTypeSizes(string $folder)
     {
+        if (!array_key_exists("fileTypes", $this->fileStats)) {
+            $this->fileStats["fileTypes"] = [
+                "archive" => [
+                    "size" => 0,
+                    "count" => 0,
+                    "name" => "Archiv",
+                ],
+                "audio" => [
+                    "size" => 0,
+                    "count" => 0,
+                    "name" => "Hudba",
+                ],
+                "document" => [
+                    "size" => 0,
+                    "count" => 0,
+                    "name" => "Dokumenty",
+                ],
+                "image" => [
+                    "size" => 0,
+                    "count" => 0,
+                    "name" => "Obrázky",
+                ],
+                "other" => [
+                    "size" => 0,
+                    "count" => 0,
+                    "name" => "Ostatní",
+                ],
+            ];
+        }
+
         foreach (glob(rtrim($folder, '/') . '/*', GLOB_NOSORT) as $each) {
             if (is_file($each)) {
                 $mime = mime_content_type($each);
-
-                if (!array_key_exists("fileTypes", $this->fileStats)) {
-                    $this->fileStats["fileTypes"] = [
-                        "archive" => [
-                            "size" => 0,
-                            "count" => 0,
-                            "name" => "Archiv",
-                        ],
-                        "audio" => [
-                            "size" => 0,
-                            "count" => 0,
-                            "name" => "Hudba",
-                        ],
-                        "document" => [
-                            "size" => 0,
-                            "count" => 0,
-                            "name" => "Dokumenty",
-                        ],
-                        "image" => [
-                            "size" => 0,
-                            "count" => 0,
-                            "name" => "Obrázky",
-                        ],
-                        "other" => [
-                            "size" => 0,
-                            "count" => 0,
-                            "name" => "Ostatní",
-                        ],
-                    ];
-                }
-
                 switch (true) {
                     case array_key_exists($mime, FileManager::getArchiveMimeTypes()):
                         $this->fileStats["fileTypes"]["archive"]["size"] += filesize($each);
