@@ -2,8 +2,8 @@
 
 namespace Tymy\Module\Core\Model;
 
-use Nette\Neon\Neon;
 use stdClass;
+use const TEAM_DIR;
 
 class Supplier
 {
@@ -11,31 +11,11 @@ class Supplier
     private $versions;
     private $wwwDir;
     private $allSkins;
-    private $userNeon;
 
     public function __construct($appConfig)
     {
         $this->setVersion();
         $this->setAllSkins($appConfig["allSkins"]);
-    }
-
-    public function loadUserNeon($userId)
-    {
-        $tmpUserNeon = ROOT_DIR . "/app/config/config.user.template.neon";
-        $userNeon = $this->getUserNeonFile($userId);
-        if (!file_exists($userNeon) && file_exists($tmpUserNeon)) {
-            copy($tmpUserNeon, $userNeon);
-        }
-        if (!file_exists($userNeon)) {
-            return null;
-        }
-        $this->setUserNeon((object) Neon::decode(file_get_contents($userNeon)));
-    }
-
-    public function saveUserNeon($userId, $neonArray)
-    {
-        $userNeon = $this->getUserNeonFile($userId);
-        file_put_contents($userNeon, Neon::encode($neonArray));
     }
 
     public function getAppDir()
@@ -105,17 +85,6 @@ class Supplier
         }
     }
 
-    public function getUserNeon()
-    {
-        return $this->userNeon;
-    }
-
-    public function setUserNeon($userNeon)
-    {
-        $this->userNeon = $userNeon;
-        return $this;
-    }
-
     public function getAllSkins()
     {
         return $this->allSkins;
@@ -125,15 +94,5 @@ class Supplier
     {
         $this->allSkins = $allSkins;
         return $this;
-    }
-
-    private function getUserNeonFile($userId)
-    {
-        return TEAM_DIR . "/config/config.user.$userId.neon";
-    }
-
-    private function getTeamNeonFile()
-    {
-        return TEAM_DIR . "/config/config.team.neon";
     }
 }
