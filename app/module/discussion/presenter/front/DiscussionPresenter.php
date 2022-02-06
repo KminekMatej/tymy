@@ -101,18 +101,24 @@ class DiscussionPresenter extends SecuredPresenter
         $this->setView('default');
     }
 
-    public function actionDeletePost($postId, $discussionId, $currentPage)
+    public function handleDeletePost($postId, $discussionId, $currentPage)
     {
-        $this->postManager->delete($discussionId, $postId);
-
-        $this->redirect(":Discussion:Discussion:", ["discussion" => $discussionId, "page" => $currentPage]);
+        try {
+            $this->postManager->delete($discussionId, $postId);
+            $this->redirect(":Discussion:Discussion:", ["discussion" => $discussionId, "page" => $currentPage]);
+        } catch (TymyResponse $tResp) {
+            $this->handleTymyResponse($tResp);
+        }
     }
 
     public function actionStickPost($postId, $discussionId, $sticky)
     {
-        $this->postManager->stickPost($postId, $discussionId, $sticky ? true : false);
-
-        $this->redirect(":Discussion:Discussion:", ["discussion" => $discussionId, "page" => 1]);
+        try {
+            $this->postManager->stickPost($postId, $discussionId, $sticky ? true : false);
+            $this->redirect(":Discussion:Discussion:", ["discussion" => $discussionId, "page" => 1]);
+        } catch (TymyResponse $tResp) {
+            $this->handleTymyResponse($tResp);
+        }
     }
 
     protected function createComponentNewPost()
