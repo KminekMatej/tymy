@@ -11,13 +11,8 @@ function addPost(url) {
     });
 }
 
-function copyPost(elm) {
-    var text = $("#" + elm).html();
-    clipboard.copy({"text/html": text});
-}
-
 function loadPost(postId) {
-    var text = $("#post-" + postId).html();
+    var text = $("DIV.post#row-" + postId + " DIV.text").html();
     $("DIV.addPost").attr("data-postId",postId);
     CKEDITOR.instances.addPost.setData(text);
     smoothScroll('addPost');
