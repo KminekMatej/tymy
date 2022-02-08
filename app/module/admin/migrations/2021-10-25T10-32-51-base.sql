@@ -636,42 +636,6 @@ CREATE TABLE `usr_mails` (
   `type` enum('DEF','SMS','WEB','USR') DEFAULT 'USR'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE `v_users` (
-`id` int(11)
-,`created_at` datetime
-,`user_name` varchar(20)
-,`password` varchar(40)
-,`can_login` enum('YES','NO')
-,`last_login` datetime
-,`status` varchar(15)
-,`roles` varchar(40)
-,`first_name` varchar(20)
-,`last_name` varchar(20)
-,`call_name` varchar(30)
-,`editable_call_name` enum('YES','NO')
-,`email_name` varchar(20)
-,`street` varchar(40)
-,`city` varchar(40)
-,`zipcode` varchar(12)
-,`phone` varchar(25)
-,`phone2` varchar(35)
-,`icq` varchar(25)
-,`account_number` varchar(32)
-,`birth_date` date
-,`birth_code` varchar(16)
-,`nameday_month` int(11)
-,`nameday_day` int(11)
-,`language` varchar(3)
-,`sex` enum('male','female','unknown')
-,`jersey_number` varchar(255)
-,`password2` varchar(255)
-,`gdpr_accepted_at` datetime
-,`gdpr_revoked_at` datetime
-,`last_read_news` timestamp
-,`email` varchar(50)
-);
-DROP TABLE IF EXISTS `v_users`;
-
 CREATE VIEW `v_users`  AS 
 SELECT `u`.`id` AS `id`, `u`.`created_at` AS `created_at`, `u`.`user_name` AS `user_name`, `u`.`password` AS `password`, `u`.`can_login` AS `can_login`, `u`.`last_login` AS `last_login`, `u`.`status` AS `status`, `u`.`roles` AS `roles`, `u`.`first_name` AS `first_name`, `u`.`last_name` AS `last_name`, `u`.`call_name` AS `call_name`, `u`.`editable_call_name` AS `editable_call_name`, `u`.`email_name` AS `email_name`, `u`.`street` AS `street`, `u`.`city` AS `city`, `u`.`zipcode` AS `zipcode`, `u`.`phone` AS `phone`, `u`.`phone2` AS `phone2`, `u`.`icq` AS `icq`, `u`.`account_number` AS `account_number`, `u`.`birth_date` AS `birth_date`, `u`.`birth_code` AS `birth_code`, `u`.`nameday_month` AS `nameday_month`, `u`.`nameday_day` AS `nameday_day`, `u`.`language` AS `language`, `u`.`sex` AS `sex`, `u`.`jersey_number` AS `jersey_number`, `u`.`password2` AS `password2`, `u`.`gdpr_accepted_at` AS `gdpr_accepted_at`, `u`.`gdpr_revoked_at` AS `gdpr_revoked_at`, `u`.`last_read_news` AS `last_read_news`, `e`.`email` AS `email` FROM (`users` `u` left join `usr_mails` `e` on(((`e`.`user_id` = `u`.`id`) and (`e`.`type` = 'DEF')))) ;
 
@@ -849,10 +813,10 @@ ALTER TABLE `status_sets`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `usr_mails`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 
 ALTER TABLE `attend_history`
