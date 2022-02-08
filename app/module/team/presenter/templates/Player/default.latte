@@ -191,7 +191,7 @@
                             <div class="tab-pane fade" id="role" role="tabpanel">
                                 {foreach $allRoles as $role}
                                     {var $hasRole = in_array($role->code,$player->getRoles())}
-                                    <button name="roles[{$role->code}]" n:class="btn,$role->class,$hasRole ? active" style="min-width:69px" data-role="{$role->code}" data-value="{implode(',', $player->getRoles())}" onclick="checkRole(this)">{$role->caption}</button>
+                                    <button name="roles[{$role->code}]" class="btn btn-outline-{$role->class} {if $hasRole}active{/if}" style="min-width:69px" data-role="{$role->code}" data-value="{implode(',', $player->getRoles())}" onclick="checkRole(this)">{$role->caption}</button>
                                 {/foreach}
 
                             </div>
