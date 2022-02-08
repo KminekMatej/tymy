@@ -98,7 +98,7 @@ class MigrationManager
             $this->saveMigrationsCache();
         }
         $data = [
-            "migration_from" => $mig->getMigratingFrom(),
+            "migration_from" => $mig->getMigratingFrom() ?: "0",
             "migration" => $mig->getMigration(),
             "time" => $mig->getTime() ?: 0,
             "result" => $mig->getResult() ? Migration::RESULT_OK : Migration::RESULT_ERROR
