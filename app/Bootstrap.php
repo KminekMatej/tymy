@@ -31,8 +31,8 @@ class Bootstrap
         $configurator = new Configurator();
 
         try {   // debug.local.neon contains either true, to generally enable debug, or array of IP addresses
-            $debugFile = ROOT_DIR . '/app/config/debug.local.neon';
-            $debug = file_exists($debugFile) ? Neon::decode(file_get_contents(__DIR__ . '/config/debug.local.neon')) : false;
+            $debugFile = TEAM_DIR . '/local/debug.neon';
+            $debug = file_exists($debugFile) ? Neon::decode(file_get_contents($debugFile)) : false;
         } catch (Exception $exc) {
             $debug = false;
         }
@@ -48,8 +48,8 @@ class Bootstrap
             ->addDirectory(__DIR__)
             ->register();
 
-        $configurator->addConfig(__DIR__ . '/config/config.neon');
-        $configurator->addConfig(__DIR__ . '/config/config.local.neon');
+        $configurator->addConfig(TEAM_DIR . '/app/config/config.neon');
+        $configurator->addConfig(TEAM_DIR . '/local/config.neon');
 
         $configurator->addParameters(["team" => getenv("team") ?: substr($_SERVER["HTTP_HOST"], 0, strpos($_SERVER["HTTP_HOST"], "."))]);
 
