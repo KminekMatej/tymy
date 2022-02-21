@@ -7,10 +7,10 @@ use Nette;
 use Nette\Application\UI\Form;
 use Nette\Application\UI\Multiplier;
 use Nette\Utils\DateTime;
+use Tymy\Module\Attendance\Manager\StatusSetManager;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Event\Manager\EventManager;
 use Tymy\Module\Event\Manager\EventTypeManager;
-use Tymy\Module\Event\Model\Event;
 use Tymy\Module\Event\Model\EventType;
 use Tymy\Module\Permission\Model\Permission;
 
@@ -19,17 +19,19 @@ class FormFactory
     use Nette\SmartObject;
 
     private EventTypeManager $eventTypeManager;
+    private StatusSetManager $statusSetManager;
     private EventManager $eventManager;
     private Translator $translator;
 
-    public function __construct(EventTypeManager $eventTypeManager, EventManager $eventManager, Translator $translator)
+    public function __construct(EventTypeManager $eventTypeManager, EventManager $eventManager, Translator $translator, StatusSetManager $statusSetManager)
     {
         $this->eventTypeManager = $eventTypeManager;
         $this->eventManager = $eventManager;
         $this->translator = $translator;
+        $this->statusSetManager = $statusSetManager;
     }
 
-        /**
+    /**
      * @return Form
      */
     public function createEventLineForm(array $eventTypesList, array $userPermissions, array $onSuccess): Form
@@ -90,5 +92,24 @@ class FormFactory
           return new Multiplier(function ($id) use ($eventTypes, $permissions, $onSuccess) {
 
           }); */
+    }
+
+    public function createStatusForm(array $statusSets, array $onSuccess)
+    {
+        $form = new Form();
+        $form->onSuccess[] = $onSuccess;
+
+        return $form;
+    }
+
+    public function createStatusSetForm(array $onSuccess): Multiplier
+    {
+        return new Multiplier(function (string $statusSetId) use ($onSuccess) {
+                $statusSet = $this->statusSetManager->getById(intval($statusSetId));
+                $form = new Form();
+                $form->addText("name", $this->translator->translate("settings.team"))->setValue($statusSet->getName())->setRequired();
+                $form->onSuccess[] = $onSuccess;
+                return $form;
+            });
     }
 }
