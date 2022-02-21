@@ -8,6 +8,8 @@ use Nette\Application\UI\Form;
 use Nette\Application\UI\Multiplier;
 use Nette\Utils\DateTime;
 use Tymy\Module\Attendance\Manager\StatusSetManager;
+use Tymy\Module\Attendance\Model\Status;
+use Tymy\Module\Attendance\Model\StatusSet;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Event\Manager\EventManager;
 use Tymy\Module\Event\Manager\EventTypeManager;
@@ -105,9 +107,32 @@ class FormFactory
     public function createStatusSetForm(array $onSuccess): Multiplier
     {
         return new Multiplier(function (string $statusSetId) use ($onSuccess) {
+                /* @var $statusSet StatusSet */
                 $statusSet = $this->statusSetManager->getById(intval($statusSetId));
                 $form = new Form();
                 $form->addText("name", $this->translator->translate("settings.team"))->setValue($statusSet->getName())->setRequired();
+                $form->addSubmit("save")->setHtmlAttribute("title", $this->translator->translate("common.save"));
+
+                foreach ($statusSet->getStatuses() as $status) {
+                    /* @var $status Status */
+                    $form->addText("status_{$status->getId()}_caption", $this->translator->translate("common.name"))
+                        ->setValue($status->getCaption())
+                        ->setHtmlAttribute("placeholder", $this->translator->translate("common.name"))
+                        ->setRequired()
+                        ->setMaxLength(50);
+                    $form->addText("status_{$status->getId()}_code", $this->translator->translate("status.code"))
+                        ->setValue($status->getCode())
+                        ->setHtmlAttribute("placeholder", $this->translator->translate("status.code"))
+                        ->setHtmlAttribute("size", "5")
+                        ->setRequired()
+                        ->setMaxLength(3);
+                    $form->addText("status_{$status->getId()}_color", $this->translator->translate("status.color"))
+                        ->setValue($status->getColor())
+                        ->setHtmlAttribute("placeholder", $this->translator->translate("status.color"))
+                        ->setRequired()
+                        ->setMaxLength(6)
+                        ->setHtmlAttribute("type", "color");
+                }
                 $form->onSuccess[] = $onSuccess;
                 return $form;
             });
