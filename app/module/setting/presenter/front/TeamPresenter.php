@@ -6,6 +6,7 @@ use Nette\Application\UI\Form;
 use stdClass;
 use Tymy\Module\Attendance\Model\Status;
 use Tymy\Module\Event\Model\EventType;
+use Tymy\Module\Team\Manager\TeamManager;
 
 class TeamPresenter extends SettingBasePresenter
 {
@@ -19,7 +20,7 @@ class TeamPresenter extends SettingBasePresenter
         $form->addText("name", $this->translator->translate("team.name"))->setValue($team->getName());
         $form->addText("sport", $this->translator->translate("team.sport"))->setValue($team->getSport());
         $form->addSelect("defaultLanguage", $this->translator->translate("team.defaultLanguage"), ["CZ" => "Česky", "EN" => "English", "FR" => "Le français", "PL" => "Polski"])->setValue($team->getDefaultLanguageCode() ?: "CZ");
-        $form->addSelect("skin", $this->translator->translate("team.defaultSkin"), $this->supplier->getAllSkins())->setValue($team->getSkin());
+        $form->addSelect("skin", $this->translator->translate("team.defaultSkin"), TeamManager::SKINS)->setValue($team->getSkin());
         $form->addMultiSelect("requiredFields", $this->translator->translate("team.requiredFields"), $this->userManager->getAllFields()["ALL"])->setValue($this->team->getRequiredFields());
 
         foreach ($eventTypes as $etype) {
@@ -27,9 +28,9 @@ class TeamPresenter extends SettingBasePresenter
             $form->addText("eventColor_" . $etype->getCode(), $etype->getCaption())->setAttribute("data-toggle", "colorpicker")->setAttribute("data-color", $etype->getColor())->setValue($etype->getColor());
         }
 
-        foreach ($statusList as $status) {
+        foreach ($statusList as $code => $status) {
             /* @var $status Status */
-            $form->addText("statusColor_" . $status["code"], $status["caption"])->setAttribute("data-toggle", "colorpicker")->setAttribute("data-color", $status->getColor())->setValue($status->getColor());
+            $form->addText("statusColor_$code", $status->getCaption())->setAttribute("data-toggle", "colorpicker")->setAttribute("data-color", $status->getColor())->setValue($status->getColor());
         }
 
         $form->addSubmit("save");
