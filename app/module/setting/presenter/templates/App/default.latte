@@ -18,16 +18,16 @@
                         
                         <tr><th>{label skin}:</th><td>{input skin, class => 'form-control w-25'}</td></tr>
                         
-                        <tr><th>{_settings.appVersion}:</th><td><a href="https://github.com/KminekMatej/tymy/releases/tag/{$version->version}" target="_blank">{$version->version}</a></td></tr>
-                        <tr><th>{_settings.released}:</th><td>{$version->date|date:'j.n.Y G:i'}</td></tr>
+                        <tr><th>{_settings.appVersion}:</th><td><a n:tag-if="$version->getName() != 'master'" href="https://github.com/KminekMatej/tymy/releases/tag/{$version->getName()}" target="_blank">{$version->getName()}</a></td></tr>
+                        <tr><th>{_settings.released}:</th><td>{$version->getDateTime()|date:\Tymy\Module\Core\Model\BaseModel::DATETIME_CZECH_NO_SECS_FORMAT}</td></tr>
                         <tr><th>{_settings.changeList}:</th><td>
                                 <div>
-                                    <a href="https://github.com/KminekMatej/tymy/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aclosed%20updated%3A{$previousPatchVersion->year}-{sprintf('%02d', $previousPatchVersion->month)}-{sprintf('%02d', $previousPatchVersion->day)}T{sprintf('%02d', $previousPatchVersion->hour)}%3A{sprintf('%02d', $previousPatchVersion->minute)}%3A{sprintf('%02d', $previousPatchVersion->second)}Z..{$version->year}-{sprintf('%02d', $version->month)}-{sprintf('%02d', $version->day)}T{sprintf('%02d', $version->hour)}%3A{sprintf('%02d', $version->minute)}%3A{sprintf('%02d', $version->second)}Z" target="_blank">{_settings.here}</a> 
-                                    ({_settings.fromPreviousVersion} {$previousPatchVersion->version})
+                                    <a href="https://github.com/KminekMatej/tymy/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aclosed%20updated%3A{$previousPatchVersion->getDatetime()|date:\Tymy\Module\Core\Model\BaseModel::DATETIME_ISO_FORMAT|escapeUrl}..{$version->getDatetime()|date:\Tymy\Module\Core\Model\BaseModel::DATETIME_ISO_FORMAT|escapeUrl}" target="_blank">{_settings.here}</a> 
+                                    ({_settings.fromPreviousVersion} {$previousPatchVersion->getName()})
                                 </div>
                                 <div>
-                                    <a href="https://github.com/KminekMatej/tymy/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aclosed%20updated%3A{$firstMinorVersion->year}-{sprintf('%02d', $firstMinorVersion->month)}-{sprintf('%02d', $firstMinorVersion->day)}T{sprintf('%02d', $firstMinorVersion->hour)}%3A{sprintf('%02d', $firstMinorVersion->minute)}%3A{sprintf('%02d', $firstMinorVersion->second)}Z..{$version->year}-{sprintf('%02d', $version->month)}-{sprintf('%02d', $version->day)}T{sprintf('%02d', $version->hour)}%3A{sprintf('%02d', $version->minute)}%3A{sprintf('%02d', $version->second)}Z" target="_blank">{_settings.here}</a> 
-                                    ({_settings.fromVersion} {$firstMinorVersion->version})
+                                    <a href="https://github.com/KminekMatej/tymy/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aclosed%20updated%3A{$firstMinorVersion->getDatetime()|date:\Tymy\Module\Core\Model\BaseModel::DATETIME_ISO_FORMAT|escapeUrl}..{$version->getDatetime()|date:\Tymy\Module\Core\Model\BaseModel::DATETIME_ISO_FORMAT|escapeUrl}" target="_blank">{_settings.here}</a> 
+                                    ({_settings.fromVersion} {$firstMinorVersion->getName()})
                                 </div>
                             </td></tr>
                         <tr><th>{_settings.authors}:</th><td><a href="mailto:matej@penzion-rataje.eu">Matěj Kmínek</a> (GUI) & <a href="mailto:admin@tymy.cz">Petr Medek</a> (Tymy app backend)</td></tr>

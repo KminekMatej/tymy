@@ -39,20 +39,21 @@ class AppPresenter extends SettingBasePresenter
 
     public function renderDefault()
     {
-        $currentVersion = $this->supplier->getVersion(0);
+        $currentVersion = $this->getCurrentVersion();
         $this->template->version = $currentVersion;
         $previousPatch = null;
         $firstMinor = null;
-        foreach ($this->supplier->getVersions() as $version) {
-            if (empty($previousPatch) && ($currentVersion->major != $version->major || $currentVersion->minor != $version->minor || $currentVersion->patch != $version->patch)) {
+        foreach ($this->getVersions() as $version) {
+            if (empty($previousPatch) && ($currentVersion->getMajor() != $version->getMajor() || $currentVersion->getMinor() != $version->getMinor() || $currentVersion->getPatch() != $version->getPatch())) {
                 $previousPatch = $version;
             }
-            if ($currentVersion->major == $version->major && $currentVersion->minor == $version->minor && $version->patch == 0) {
+
+            if (!isset($firstMinor) && $version->getPatch() == 0) {
                 $firstMinor = $version;
             }
         }
         if ($previousPatch === null) {
-            $previousPatch = $this->supplier->getVersion(count($this->supplier->getVersions()));
+            $previousPatch = array_pop($this->getVersions());
         }
         $this->template->previousPatchVersion = $previousPatch;
         $this->template->firstMinorVersion = $firstMinor;
