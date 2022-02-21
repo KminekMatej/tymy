@@ -132,10 +132,6 @@ class AuthorizationManager implements IAuthorizator
             }
         }
 
-        if ($privilege->getType() == "SYS" && $privilege->getName() == "IS_AMDIN") {
-            return $this->isAdmin($role);
-        }
-
         $permission = $this->getPermission($privilege->getType(), $privilege->getName());
         if (!$permission) {
             //\Tracy\Debugger::log("No permission");
