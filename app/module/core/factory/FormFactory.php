@@ -127,7 +127,7 @@ class FormFactory
                         ->setRequired()
                         ->setMaxLength(3);
                     $form->addText("status_{$status->getId()}_color", $this->translator->translate("status.color"))
-                        ->setValue($status->getColor())
+                        ->setValue("#" . $status->getColor())
                         ->setHtmlAttribute("placeholder", $this->translator->translate("status.color"))
                         ->setRequired()
                         ->setMaxLength(6)
