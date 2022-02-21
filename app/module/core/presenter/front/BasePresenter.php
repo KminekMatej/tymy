@@ -45,7 +45,12 @@ abstract class BasePresenter extends RootPresenter
         $this->template->team = $this->teamManager->getTeam();
 
         $this->template->wwwDir = ROOT_DIR . "/www";
-        $this->template->skin = $this->skin = $this->getUser()->getIdentity()->getData()["skin"] ?? $this->team->getSkin();
+        if ($this->getUser()->isLoggedIn()) {
+            $this->skin = $this->getUser()->getIdentity()->getData()["skin"];
+        } else {
+            $this->skin = $this->team->getSkin();
+        }
+        $this->template->skin = $this->skin;
 
         $this->template->appver = $this->getCurrentVersion()->getName();
 
