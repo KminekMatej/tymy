@@ -19,7 +19,15 @@ use Tymy\Module\Team\Model\Team;
  */
 class TeamManager extends BaseManager
 {
-    public const DEFAULT_SKIN = "hell-boy";
+    public const SKIN_HELLBOY = "hell-boy";
+    public const SKIN_SILVER_SURFER = "silver-surfer";
+    public const SKIN_BLACK_PANTHER = "black-panther";
+    public const DEFAULT_SKIN = self::SKIN_HELLBOY;
+    public const SKINS = [
+        self::SKIN_HELLBOY => "Hellboy",
+        self::SKIN_SILVER_SURFER => "Silver surfer",
+        self::SKIN_BLACK_PANTHER => "Black panther",
+    ];
 
     private string $teamFolder;
 
