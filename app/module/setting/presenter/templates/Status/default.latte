@@ -1,0 +1,54 @@
+{import $componentsDir . '/secured.latte'}
+
+{block styles}
+{include parent}
+<link rel='stylesheet' href="{$basePath}/skins/{$skin}/css/table-xs.css?ver={$appver}" />
+{/block}
+
+{block navbar}
+{control navbar}
+{/block}
+
+{block content}
+<div class="container-fluid settings">
+    <div class="row">
+        <div class="col">
+            <div class="card sh-box my-3">
+                <div class="card-header">
+                    <h4>{_settings.status|2}</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table table-xs table-hover">
+                        <tr>
+                            <th></th>
+                            <th>{_common.name}</th>
+                            <th></th>
+                        </tr>
+                        <tr n:foreach="$statusSets as $s">
+                            {dump $s}
+                            {var $ssid = $s->getId()}
+                            {form statusSetForm-$ssid}
+                                <td>
+                                    <a href="{plink :Setting:Status:detail $s->getWebName()}" class="btn btn-sm btn-light btn-light-bordered"  title="{_common.edit}" style="margin-right: 2px">
+                                        <i class="fa fa-external-link-alt" aria-hidden="true"></i>
+                                    </a>
+                                </td>
+                                <td>{input name, class => 'form-control form-control-sm'}</td>
+                                <td class="btn-group" role="group" n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('IS_ADMIN'))">
+                                    <button class="btn btn-sm btn-primary" href="#" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
+                                    <button class="btn btn-sm btn-danger" href="#" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                </td>
+                            {/form}
+                        </tr>
+                    </table>
+                </div>
+                <div class="card-footer text-right" n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('IS_ADMIN'))">
+                    <a class="btn btn-lg btn-success" href="{plink :Setting:Status:New}" onclick="btnRotate($(this), true)" title="{_common.new}">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
