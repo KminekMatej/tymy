@@ -14,23 +14,35 @@ class StatusSet extends BaseModel
 {
     public const TABLE = "status_sets";
 
-    private ?string $name = null;
+    private string $name;
+    private string $webname;
     private array $statuses = [];
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function setName(?string $name)
+    public function getWebname(): string
     {
-        $this->name = $name;
-        return $this;
+        return $this->webname;
     }
 
     public function getStatuses(): array
     {
         return $this->statuses;
+    }
+
+    public function setName(string $name)
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    public function setWebname(string $webname)
+    {
+        $this->webname = $webname;
+        return $this;
     }
 
     public function setStatuses(array $statuses)
@@ -62,6 +74,7 @@ class StatusSet extends BaseModel
     public function jsonSerialize()
     {
         return parent::jsonSerialize() + [
+            "webname" => $this->getWebname(),
             "statuses" => $this->arrayToJson($this->statuses)
         ];
     }

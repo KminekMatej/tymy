@@ -4,6 +4,7 @@ namespace Tymy\Module\Attendance\Manager;
 
 use Nette\Database\IRow;
 use Nette\Utils\FileSystem;
+use Nette\Utils\Strings;
 use Tymy\Module\Attendance\Mapper\StatusSetMapper;
 use Tymy\Module\Attendance\Model\Attendance;
 use Tymy\Module\Attendance\Model\Status;
@@ -36,6 +37,8 @@ class StatusSetManager extends BaseManager
     {
         /* @var $statusSet StatusSet */
         $statusSet = parent::map($row, $force);
+
+        $statusSet->setWebname($statusSet->getId() . "-" . Strings::webalize($statusSet->getName()));
 
         foreach ($row->related(Status::TABLE, "set_id") as $statusRow) {
             $statusSet->addStatus($this->statusManager->map($statusRow));
