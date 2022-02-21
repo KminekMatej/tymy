@@ -37,12 +37,19 @@ class TeamPresenter extends SettingBasePresenter
 
         $form->onSuccess[] = function (Form $form, stdClass $values) {
             $teamData = $this->teamManager->getTeam();
-            if ($teamData->getName() != $values->name || $teamData->getSport() != $values->sport || $teamData->getSkin() != $values->skin || $teamData->getDefaultLanguageCode() != $values->defaultLanguage) {
+            if ($teamData->getName() != $values->name ||
+                $teamData->getSport() != $values->sport ||
+                $teamData->getSkin() != $values->skin ||
+                $teamData->getDefaultLanguageCode() != $values->defaultLanguage ||
+                array_diff($values->requiredFields, $teamData->getRequiredFields()) || array_diff($teamData->getRequiredFields(), $values->requiredFields)
+            ) {
+
                 $this->teamManager->update([
                     "name" => $values->name,
                     "sport" => $values->sport,
                     "skin" => $values->skin,
                     "defaultLanguageCode" => $values->defaultLanguage,
+                    "requiredFields" => join(",", $values->requiredFields),
                     ], $teamData->getId());
             }
 

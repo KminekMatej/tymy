@@ -38,6 +38,7 @@ class TeamMapper extends BaseMapper
             Field::string()->withColumn("required_fields")->setProperty("requiredFields"),
             Field::string()->withColumn("tariff_until")->setProperty("tariffUntil"),
             Field::string()->withColumn("tariff_payment")->setProperty("tariffPayment"),
+            Field::string()->withColumn("required_fields")->setProperty("requiredFields"),
         ];
     }
 }
