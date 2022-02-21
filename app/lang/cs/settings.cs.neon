@@ -19,7 +19,7 @@ canDelete: Mazat může
 canTop: Topovat může
 order: Pořadí
 access: Přístup
-status: Stav
+status: Stav|Statusy
 type: Typ
 here: zde
 eventColors: Barvy událostí
