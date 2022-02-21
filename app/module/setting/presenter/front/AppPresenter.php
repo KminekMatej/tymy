@@ -9,6 +9,7 @@ use Tymy\Module\Event\Manager\EventTypeManager;
 use Tymy\Module\Permission\Manager\PermissionManager;
 use Tymy\Module\Poll\Manager\OptionManager;
 use Tymy\Module\Poll\Manager\PollManager;
+use Tymy\Module\User\Manager\UserManager;
 
 class AppPresenter extends SettingBasePresenter
 {
@@ -17,6 +18,9 @@ class AppPresenter extends SettingBasePresenter
 
     /** @inject */
     public PollManager $pollManager;
+
+    /** @inject */
+    public UserManager $userManager;
 
     /** @inject */
     public OptionManager $optionManager;
@@ -65,6 +69,11 @@ class AppPresenter extends SettingBasePresenter
         $form = new Form();
         $form->addSelect("skin", "Skin", $this->supplier->getAllSkins())->setValue($this->skin);
         $form->addSubmit("save");
+
+        $form->onSuccess[] = function (Form $form, \stdClass $values) {
+            $this->userManager->update(["skin" => $values->skin], $this->user->getId());
+        };
+
         return $form;
     }
 }
