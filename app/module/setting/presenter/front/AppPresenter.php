@@ -72,6 +72,7 @@ class AppPresenter extends SettingBasePresenter
 
         $form->onSuccess[] = function (Form $form, \stdClass $values) {
             $this->userManager->update(["skin" => $values->skin], $this->user->getId());
+            $this->user->getIdentity()->skin = $values->skin;
         };
 
         return $form;
