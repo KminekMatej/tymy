@@ -3,7 +3,6 @@
 namespace Tymy\Module\Setting\Presenter\Front;
 
 use Nette\Application\UI\Form;
-use stdClass;
 use Tymy\Module\Attendance\Manager\StatusManager;
 use Tymy\Module\Event\Manager\EventManager;
 use Tymy\Module\Event\Manager\EventTypeManager;
