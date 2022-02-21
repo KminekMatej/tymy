@@ -39,7 +39,7 @@ class InPresenter extends BasePresenter
                 }
             }
             if (!is_null($this->user->getIdentity())) {
-                Debugger::log($this->user->getIdentity()->data["callName"] . "@" . $this->supplier->getTym() . " logged in");
+                Debugger::log($this->user->getIdentity()->data["callName"] . "@" . $this->team->getSysName() . " logged in");
             }
             $this->redirect(':Core:Default:');
         });
@@ -63,7 +63,7 @@ class InPresenter extends BasePresenter
                 }
             }
             if (!is_null($this->user->getIdentity())) {
-                Debugger::log($this->user->getIdentity()->data["callName"] . "@" . $this->supplier->getTym() . " logged in using transfer key");
+                Debugger::log($this->user->getIdentity()->data["callName"] . "@" . $this->team->getSysName() . " logged in using transfer key");
             }
             $this->redirect(':Core:Default:');
         }
