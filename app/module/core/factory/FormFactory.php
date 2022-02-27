@@ -165,9 +165,9 @@ class FormFactory
                     ->setHtmlAttribute("type", "color")
                     ->setRequired();
                 
-                $form->addSelect("planStatusSet", $this->translator->translate("status.planStatus"), $ssList)
+                $form->addSelect("preStatusSet", $this->translator->translate("status.preStatus"), $ssList)
                     ->setValue($eventType->getPreStatusSetId());
-                $form->addSelect("resultStatusSet", $this->translator->translate("status.resultStatus"), $ssList)
+                $form->addSelect("postStatusSet", $this->translator->translate("status.postStatus"), $ssList)
                     ->setValue($eventType->getPostStatusSetId());
         
                 

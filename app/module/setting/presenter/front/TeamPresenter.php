@@ -71,7 +71,7 @@ class TeamPresenter extends SettingBasePresenter
         $this->eventTypeManager->updateByArray(intval($values->id), [
             "code" => $values->code,
             "caption" => $values->caption,
-            "color" => $values->color,
+            "color" => ltrim($values->color, " #"),
             "pre_status_set" => $values->preStatusSet,
             "post_status_set" => $values->postStatusSet,
         ]);

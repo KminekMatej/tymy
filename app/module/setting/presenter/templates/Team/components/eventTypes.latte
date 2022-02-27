@@ -25,10 +25,10 @@
                         {input color, class => 'form-control form-control-sm'}
                     </td>
                     <td>
-                        {input planStatusSet, class => 'form-control form-control-sm'}
+                        {input preStatusSet, class => 'form-control form-control-sm'}
                     </td>
                     <td>
-                        {input resultStatusSet, class => 'form-control form-control-sm'}
+                        {input postStatusSet, class => 'form-control form-control-sm'}
                     </td>
 
                     <td class="btn-group" role="group" n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('TEAM_UPDATE'))">
