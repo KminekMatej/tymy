@@ -31,5 +31,6 @@ canView-sm: Vidět
 canPlan-sm: Přihlásit
 canResult-sm: Zadat
 displayHistory: Zobrazit historii
+eventType: Typ události|Typy událostí
 errors:
     eventNotExists: Událost %id% neexistuje

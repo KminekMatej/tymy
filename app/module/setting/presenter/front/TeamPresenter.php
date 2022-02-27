@@ -3,17 +3,15 @@
 namespace Tymy\Module\Setting\Presenter\Front;
 
 use Nette\Application\UI\Form;
-use stdClass;
 use Tymy\Module\Attendance\Manager\StatusSetManager;
 use Tymy\Module\Attendance\Model\StatusSet;
 use Tymy\Module\Core\Factory\FormFactory;
-use Tymy\Module\Event\Model\EventType;
-use Tymy\Module\Team\Manager\TeamManager;
 
 class TeamPresenter extends SettingBasePresenter
 {
     /** @inject */
     public StatusSetManager $statusSetManager;
+
     /** @inject */
     public FormFactory $formFactory;
 
@@ -22,12 +20,12 @@ class TeamPresenter extends SettingBasePresenter
         $this->template->statusSets = $this->statusSetManager->getList();
     }
 
-    public function createComponentStatusSetForm()
+    public function createComponentStatusSetForm(): Form
     {
         return $this->formFactory->createStatusSetForm([$this, 'statusFormSuccess']);
     }
 
-    public function statusFormSuccess(Form $form, $values)
+    public function statusFormSuccess(Form $form, $values): void
     {
         if (empty($values["id"])) {
             return;
@@ -52,49 +50,31 @@ class TeamPresenter extends SettingBasePresenter
         $this->redirect(":Setting:Team:");
     }
 
-    public function createComponentTeamConfigForm()
+    public function createComponentTeamConfigForm(): Form
     {
-        $eventTypes = $this->eventTypeManager->getList();
-        $team = $this->teamManager->getTeam();
+        return $this->formFactory->createStatusSetForm([$this, 'eventTypeFormSuccess']);
+    }
 
-        $form = new Form();
-        $form->addText("name", $this->translator->translate("team.name"))->setValue($team->getName());
-        $form->addText("sport", $this->translator->translate("team.sport"))->setValue($team->getSport());
-        $form->addSelect("defaultLanguage", $this->translator->translate("team.defaultLanguage"), ["CZ" => "Česky", "EN" => "English", "FR" => "Le français", "PL" => "Polski"])->setValue($team->getDefaultLanguageCode() ?: "CZ");
-        $form->addSelect("skin", $this->translator->translate("team.defaultSkin"), TeamManager::SKINS)->setValue($team->getSkin());
-        $form->addMultiSelect("requiredFields", $this->translator->translate("team.requiredFields"), $this->userManager->getAllFields()["ALL"])->setValue($this->team->getRequiredFields());
+    public function eventTypeFormSuccess(Form $form, $values): void
+    {
+        $teamData = $this->teamManager->getTeam();
+        if ($teamData->getName() != $values->name ||
+            $teamData->getSport() != $values->sport ||
+            $teamData->getSkin() != $values->skin ||
+            $teamData->getDefaultLanguageCode() != $values->defaultLanguage ||
+            array_diff($values->requiredFields, $teamData->getRequiredFields()) || array_diff($teamData->getRequiredFields(), $values->requiredFields)
+        ) {
 
-        foreach ($eventTypes as $etype) {
-            /* @var $etype EventType */
-            $form->addText("eventColor_" . $etype->getCode(), $etype->getCaption())
-                ->setAttribute("type", "color")
-                ->setAttribute("data-color", $etype->getColor())
-                ->setValue('#' . $etype->getColor());
+            $this->teamManager->update([
+                "name" => $values->name,
+                "sport" => $values->sport,
+                "skin" => $values->skin,
+                "defaultLanguageCode" => $values->defaultLanguage,
+                "requiredFields" => join(",", $values->requiredFields),
+                ], $teamData->getId());
         }
 
-        $form->addSubmit("save");
-
-        $form->onSuccess[] = function (Form $form, stdClass $values) {
-            $teamData = $this->teamManager->getTeam();
-            if ($teamData->getName() != $values->name ||
-                $teamData->getSport() != $values->sport ||
-                $teamData->getSkin() != $values->skin ||
-                $teamData->getDefaultLanguageCode() != $values->defaultLanguage ||
-                array_diff($values->requiredFields, $teamData->getRequiredFields()) || array_diff($teamData->getRequiredFields(), $values->requiredFields)
-            ) {
-
-                $this->teamManager->update([
-                    "name" => $values->name,
-                    "sport" => $values->sport,
-                    "skin" => $values->skin,
-                    "defaultLanguageCode" => $values->defaultLanguage,
-                    "requiredFields" => join(",", $values->requiredFields),
-                    ], $teamData->getId());
-            }
-
-            $this->flashMessage($this->translator->translate("common.alerts.configSaved"));
-            $this->redirect(":Setting:Team:");
-        };
-        return $form;
+        $this->flashMessage($this->translator->translate("common.alerts.configSaved"));
+        $this->redirect(":Setting:Team:");
     }
 }

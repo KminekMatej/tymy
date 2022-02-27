@@ -15,6 +15,7 @@ use Tymy\Module\Event\Manager\EventManager;
 use Tymy\Module\Event\Manager\EventTypeManager;
 use Tymy\Module\Event\Model\EventType;
 use Tymy\Module\Permission\Model\Permission;
+use Tymy\Module\Team\Manager\TeamManager;
 
 class FormFactory
 {
@@ -23,6 +24,7 @@ class FormFactory
     private EventTypeManager $eventTypeManager;
     private StatusSetManager $statusSetManager;
     private EventManager $eventManager;
+    private TeamManager $teamManager;
     private Translator $translator;
 
     public function __construct(EventTypeManager $eventTypeManager, EventManager $eventManager, Translator $translator, StatusSetManager $statusSetManager)
@@ -96,14 +98,6 @@ class FormFactory
           }); */
     }
 
-    public function createStatusForm(array $statusSets, array $onSuccess)
-    {
-        $form = new Form();
-        $form->onSuccess[] = $onSuccess;
-
-        return $form;
-    }
-
     public function createStatusSetForm(array $onSuccess): Multiplier
     {
         return new Multiplier(function (string $statusSetId) use ($onSuccess) {
@@ -137,5 +131,32 @@ class FormFactory
                 $form->onSuccess[] = $onSuccess;
                 return $form;
             });
+    }
+    
+    public function createTeamConfigForm(array $onSuccess): Form
+    {
+        $eventTypes = $this->eventTypeManager->getList();
+        $team = $this->teamManager->getTeam();
+
+        $form = new Form();
+        $form->addText("name", $this->translator->translate("team.name"))->setValue($team->getName());
+        $form->addText("sport", $this->translator->translate("team.sport"))->setValue($team->getSport());
+        $form->addSelect("defaultLanguage", $this->translator->translate("team.defaultLanguage"), ["CZ" => "Česky", "EN" => "English", "FR" => "Le français", "PL" => "Polski"])->setValue($team->getDefaultLanguageCode() ?: "CZ");
+        $form->addSelect("skin", $this->translator->translate("team.defaultSkin"), TeamManager::SKINS)->setValue($team->getSkin());
+        $form->addMultiSelect("requiredFields", $this->translator->translate("team.requiredFields"), $this->userManager->getAllFields()["ALL"])->setValue($this->team->getRequiredFields());
+
+        foreach ($eventTypes as $etype) {
+            /* @var $etype EventType */
+            $form->addText("eventColor_" . $etype->getCode(), $etype->getCaption())
+                ->setAttribute("type", "color")
+                ->setAttribute("data-color", $etype->getColor())
+                ->setValue('#' . $etype->getColor());
+        }
+
+        $form->addSubmit("save");
+
+        $form->onSuccess[] = $onSuccess;
+
+        return $form;
     }
 }
