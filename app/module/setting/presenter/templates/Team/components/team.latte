@@ -1,0 +1,26 @@
+<div class="card sh-box my-2">
+    {form teamConfigForm}
+        <div class="card-header">
+            <h4>{_settings.teamSettings}</h4>
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <tr><th>{label name /}</th><td>{input name, class => 'form-control w-25'}</td></tr>
+                <tr><th>{label sport /}</th><td>{input sport, class => 'form-control w-25'}</td></tr>
+                <tr><th>{label defaultLanguage /}</th><td>{input defaultLanguage, class => 'form-control w-25'}</td></tr>
+                <tr><th>{label skin /}</th><td>{input skin, class => 'form-control w-25'}</td></tr>
+                <tr><th>{label requiredFields /}</th><td>{input requiredFields, class => 'form-control w-50'}</td></tr>
+                <tr><th>{_settings.eventColors}</th>
+                    <td>
+                        <div class="row">
+                            <div class="col-2" n:foreach="$eventTypes as $eventType">{label 'eventColor_' . $eventType->getCode() /}{input 'eventColor_' . $eventType->getCode(), class => 'form-control'}</div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="card-footer text-right">
+            <button n:name="save" class="btn btn-lg btn-outline-primary" title="{_common.save}" onclick="return $(this).find('svg[data-fa-i2svg]').addClass('fa-spin')"><i class="fa fa-save" aria-hidden="true"></i></button>
+        </div>
+    {/form}
+</div>

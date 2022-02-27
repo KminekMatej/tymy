@@ -4,16 +4,57 @@ namespace Tymy\Module\Setting\Presenter\Front;
 
 use Nette\Application\UI\Form;
 use stdClass;
-use Tymy\Module\Attendance\Model\Status;
+use Tymy\Module\Attendance\Manager\StatusSetManager;
+use Tymy\Module\Attendance\Model\StatusSet;
+use Tymy\Module\Core\Factory\FormFactory;
 use Tymy\Module\Event\Model\EventType;
 use Tymy\Module\Team\Manager\TeamManager;
 
 class TeamPresenter extends SettingBasePresenter
 {
+    /** @inject */
+    public StatusSetManager $statusSetManager;
+    /** @inject */
+    public FormFactory $formFactory;
+
+    public function renderDefault()
+    {
+        $this->template->statusSets = $this->statusSetManager->getList();
+    }
+
+    public function createComponentStatusSetForm()
+    {
+        return $this->formFactory->createStatusSetForm([$this, 'statusFormSuccess']);
+    }
+
+    public function statusFormSuccess(Form $form, $values)
+    {
+        if (empty($values["id"])) {
+            return;
+        }
+
+        //update status name 
+        $this->statusSetManager->updateByArray(intval($values->id), ["name" => $values->name]);
+
+        //update statuses
+        /* @var $statusSet StatusSet */
+        $statusSet = $this->statusSetManager->getById(intval($values->id));
+
+        foreach ($statusSet->getStatuses() as $status) {
+            $this->statusManager->updateByArray($status->getId(), [
+                "caption" => $values->{"status_{$status->getId()}_caption"},
+                "code" => $values->{"status_{$status->getId()}_code"},
+                "color" => ltrim($values->{"status_{$status->getId()}_color"}, " #"),
+            ]);
+        }
+
+        $this->flashMessage($this->translator->translate("common.alerts.configSaved"));
+        $this->redirect(":Setting:Status:");
+    }
+
     public function createComponentTeamConfigForm()
     {
         $eventTypes = $this->eventTypeManager->getList();
-        $statusList = $this->statusManager->getByStatusCode();
         $team = $this->teamManager->getTeam();
 
         $form = new Form();
@@ -25,12 +66,10 @@ class TeamPresenter extends SettingBasePresenter
 
         foreach ($eventTypes as $etype) {
             /* @var $etype EventType */
-            $form->addText("eventColor_" . $etype->getCode(), $etype->getCaption())->setAttribute("data-toggle", "colorpicker")->setAttribute("data-color", $etype->getColor())->setValue($etype->getColor());
-        }
-
-        foreach ($statusList as $code => $status) {
-            /* @var $status Status */
-            $form->addText("statusColor_$code", $status->getCaption())->setAttribute("data-toggle", "colorpicker")->setAttribute("data-color", $status->getColor())->setValue($status->getColor());
+            $form->addText("eventColor_" . $etype->getCode(), $etype->getCaption())
+                ->setAttribute("type", "color")
+                ->setAttribute("data-color", $etype->getColor())
+                ->setValue('#' . $etype->getColor());
         }
 
         $form->addSubmit("save");
