@@ -59,8 +59,7 @@
 
 
                                 <td class="btn-group" role="group" n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('IS_ADMIN'))">
-                                    {input save, class => 'btn btn-sm btn-primary'}
-                                    <button class="btn btn-sm btn-primary" href="#" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
+                                    <button type="submit" n:name="save" title="{_common.save}" class="btn btn-sm btn-primary"><i class="fa fa-save" aria-hidden="true"></i></button>
                                     <button class="btn btn-sm btn-danger" href="#" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></button>
                                 </td>
                             {/form}
