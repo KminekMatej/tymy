@@ -110,6 +110,7 @@ class FormFactory
                 /* @var $statusSet StatusSet */
                 $statusSet = $this->statusSetManager->getById(intval($statusSetId));
                 $form = new Form();
+                $form->addHidden("id", $statusSetId);
                 $form->addText("name", $this->translator->translate("settings.team"))->setValue($statusSet->getName())->setRequired();
                 $form->addSubmit("save")->setHtmlAttribute("title", $this->translator->translate("common.save"));
 
