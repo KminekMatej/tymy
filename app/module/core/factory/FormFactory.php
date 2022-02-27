@@ -16,6 +16,7 @@ use Tymy\Module\Event\Manager\EventTypeManager;
 use Tymy\Module\Event\Model\EventType;
 use Tymy\Module\Permission\Model\Permission;
 use Tymy\Module\Team\Manager\TeamManager;
+use Tymy\Module\User\Manager\UserManager;
 
 class FormFactory
 {
@@ -25,12 +26,15 @@ class FormFactory
     private StatusSetManager $statusSetManager;
     private EventManager $eventManager;
     private TeamManager $teamManager;
+    private UserManager $userManager;
     private Translator $translator;
 
-    public function __construct(EventTypeManager $eventTypeManager, EventManager $eventManager, Translator $translator, StatusSetManager $statusSetManager)
+    public function __construct(EventTypeManager $eventTypeManager, EventManager $eventManager, Translator $translator, StatusSetManager $statusSetManager, TeamManager $teamManager, UserManager $userManager)
     {
         $this->eventTypeManager = $eventTypeManager;
         $this->eventManager = $eventManager;
+        $this->teamManager = $teamManager;
+        $this->userManager = $userManager;
         $this->translator = $translator;
         $this->statusSetManager = $statusSetManager;
     }
@@ -132,6 +136,32 @@ class FormFactory
                 return $form;
             });
     }
+
+    public function createEventTypeForm(array $onSuccess): Multiplier
+    {
+        return new Multiplier(function (string $eventTypeId) use ($onSuccess) {
+                /* @var $eventType EventType */
+                $eventType = $this->eventTypeManager->getById(intval($eventTypeId));
+                $form = new Form();
+                $form->addHidden("id", $eventTypeId);
+                $form->addText("code", $this->translator->translate("status.code"))
+                    ->setValue($eventType->getCode())
+                    ->setHtmlAttribute("size", "5")
+                    ->setRequired()
+                    ->setMaxLength(3);
+                $form->addText("caption", $this->translator->translate("common.name"))
+                    ->setValue($eventType->getCaption())
+                    ->setRequired();
+                $form->addText("color", $this->translator->translate("status.color"))
+                    ->setValue("#" . $eventType->getColor())
+                    ->setMaxLength(6)
+                    ->setHtmlAttribute("type", "color")
+                    ->setRequired();
+                $form->addSubmit("save")->setHtmlAttribute("title", $this->translator->translate("common.save"));
+                $form->onSuccess[] = $onSuccess;
+                return $form;
+            });
+    }
     
     public function createTeamConfigForm(array $onSuccess): Form
     {
@@ -143,7 +173,7 @@ class FormFactory
         $form->addText("sport", $this->translator->translate("team.sport"))->setValue($team->getSport());
         $form->addSelect("defaultLanguage", $this->translator->translate("team.defaultLanguage"), ["CZ" => "Česky", "EN" => "English", "FR" => "Le français", "PL" => "Polski"])->setValue($team->getDefaultLanguageCode() ?: "CZ");
         $form->addSelect("skin", $this->translator->translate("team.defaultSkin"), TeamManager::SKINS)->setValue($team->getSkin());
-        $form->addMultiSelect("requiredFields", $this->translator->translate("team.requiredFields"), $this->userManager->getAllFields()["ALL"])->setValue($this->team->getRequiredFields());
+        $form->addMultiSelect("requiredFields", $this->translator->translate("team.requiredFields"), $this->userManager->getAllFields()["ALL"])->setValue($team->getRequiredFields());
 
         foreach ($eventTypes as $etype) {
             /* @var $etype EventType */

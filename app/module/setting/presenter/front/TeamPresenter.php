@@ -3,6 +3,7 @@
 namespace Tymy\Module\Setting\Presenter\Front;
 
 use Nette\Application\UI\Form;
+use Nette\Application\UI\Multiplier;
 use Tymy\Module\Attendance\Manager\StatusSetManager;
 use Tymy\Module\Attendance\Model\StatusSet;
 use Tymy\Module\Core\Factory\FormFactory;
@@ -20,9 +21,19 @@ class TeamPresenter extends SettingBasePresenter
         $this->template->statusSets = $this->statusSetManager->getList();
     }
 
-    public function createComponentStatusSetForm(): Form
+    public function createComponentStatusSetForm(): Multiplier
     {
         return $this->formFactory->createStatusSetForm([$this, 'statusFormSuccess']);
+    }
+    
+    public function createComponentTeamConfigForm(): Form
+    {
+        return $this->formFactory->createTeamConfigForm([$this, 'teamConfigFormSuccess']);
+    }
+    
+    public function createComponentEventTypeForm(): Multiplier
+    {
+        return $this->formFactory->createEventTypeForm([$this, 'eventTypeFormSuccess']);
     }
 
     public function statusFormSuccess(Form $form, $values): void
@@ -50,12 +61,26 @@ class TeamPresenter extends SettingBasePresenter
         $this->redirect(":Setting:Team:");
     }
 
-    public function createComponentTeamConfigForm(): Form
+    public function eventTypeFormSuccess(Form $form, $values): void
     {
-        return $this->formFactory->createStatusSetForm([$this, 'eventTypeFormSuccess']);
+        if (empty($values["id"])) {
+            return;
+        }
+
+        //update eventTypes
+        $this->eventTypeManager->updateByArray(intval($values->id), [
+            "code" => $values->code,
+            "caption" => $values->caption,
+            "color" => $values->color,
+            "pre_status_set" => $values->preStatusSet,
+            "post_status_set" => $values->postStatusSet,
+        ]);
+
+        $this->flashMessage($this->translator->translate("common.alerts.configSaved"));
+        $this->redirect(":Setting:Team:");
     }
 
-    public function eventTypeFormSuccess(Form $form, $values): void
+    public function teamConfigFormSuccess(Form $form, $values): void
     {
         $teamData = $this->teamManager->getTeam();
         if ($teamData->getName() != $values->name ||

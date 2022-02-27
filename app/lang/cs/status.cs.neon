@@ -2,3 +2,5 @@ status: Status|Statusy
 statusSettings: Nastavení statusů
 code: Kód
 color: Barva
+planStatus: Plánovací status-set
+resultStatus: Výsledný status-set

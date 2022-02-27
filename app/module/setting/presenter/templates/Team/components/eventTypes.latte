@@ -1,0 +1,44 @@
+<div class="card sh-box my-3">
+    <div class="card-header">
+        <h4>{_event.eventTypes, 2}</h4>
+    </div>
+    <div class="card-body">
+        <table class="table table-xs table-hover">
+            <tr>
+                <th>{_status.code}</th>
+                <th>{_common.name}</th>
+                <th>{_status.planStatus}</th>
+                <th>{_status.resultStatus}</th>
+                <th></th>
+            </tr>
+            <tr n:foreach="$eventTypes as $et">
+                {var $etid = $et->getId()}
+                {form eventTypeForm-$etid}
+                    <td style="width: 200px">
+                        {input code, class => 'form-control form-control-sm'}
+                    </td>
+                    <td style="width: 200px">
+                        {input caption, class => 'form-control form-control-sm'}
+                    </td>
+                    <td style="width: 200px">
+                        {input planStatusSet, class => 'form-control form-control-sm'}
+                    </td>
+                    <td style="width: 200px">
+                        {input resultStatusSet, class => 'form-control form-control-sm'}
+                    </td>
+
+                    <td class="btn-group" role="group" n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('TEAM_UPDATE'))">
+                        <button type="submit" n:name="save" title="{_common.save}" class="btn btn-sm btn-primary"><i class="fa fa-save" aria-hidden="true"></i></button>
+                        <button class="btn btn-sm btn-danger" href="#" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                    </td>
+                {/form}
+            </tr>
+        </table>
+    </div>
+    <div class="card-footer text-right" n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('TEAM_UPDATE'))">
+        {*<a class="btn btn-lg btn-success" href="{plink :Setting:Status:New}" onclick="btnRotate($(this), true)" title="{_common.new}">
+            <i class="fa fa-plus" aria-hidden="true"></i> // TODO ADD POSSIBILITY TO CREATE NEW STATUS
+        </a>*}
+    </div>
+
+</div>
