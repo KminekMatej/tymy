@@ -5,7 +5,6 @@
     <div class="card-body">
         <table class="table table-xs table-hover">
             <tr>
-                <th></th>
                 <th>{_common.name}</th>
                 <th>{_status.status, 2}</th>
                 <th></th>
@@ -13,11 +12,6 @@
             <tr n:foreach="$statusSets as $s">
                 {var $ssid = $s->getId()}
                 {form statusSetForm-$ssid}
-                    <td style="width: 50px">
-                        <a href="{plink :Setting:Status:detail $s->getWebName()}" class="btn btn-sm btn-light btn-light-bordered"  title="{_common.edit}" style="margin-right: 2px">
-                            <i class="fa fa-external-link-alt" aria-hidden="true"></i>
-                        </a>
-                    </td>
                     <td style="width: 200px">{input name, class => 'form-control form-control-sm'}</td>
                     <td>
                         <div class="row">
@@ -43,7 +37,7 @@
 
 
 
-                    <td class="btn-group" role="group" n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('IS_ADMIN'))">
+                    <td class="btn-group" role="group" n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('TEAM_UPDATE'))">
                         <button type="submit" n:name="save" title="{_common.save}" class="btn btn-sm btn-primary"><i class="fa fa-save" aria-hidden="true"></i></button>
                         <button class="btn btn-sm btn-danger" href="#" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></button>
                     </td>
@@ -51,10 +45,10 @@
             </tr>
         </table>
     </div>
-    <div class="card-footer text-right" n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('IS_ADMIN'))">
-        <a class="btn btn-lg btn-success" href="{plink :Setting:Status:New}" onclick="btnRotate($(this), true)" title="{_common.new}">
-            <i class="fa fa-plus" aria-hidden="true"></i>
-        </a>
+    <div class="card-footer text-right" n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('TEAM_UPDATE'))">
+        {*<a class="btn btn-lg btn-success" href="{plink :Setting:Status:New}" onclick="btnRotate($(this), true)" title="{_common.new}">
+            <i class="fa fa-plus" aria-hidden="true"></i> // TODO ADD POSSIBILITY TO CREATE NEW STATUS
+        </a>*}
     </div>
 
 </div>

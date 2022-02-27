@@ -49,7 +49,7 @@ class TeamPresenter extends SettingBasePresenter
         }
 
         $this->flashMessage($this->translator->translate("common.alerts.configSaved"));
-        $this->redirect(":Setting:Status:");
+        $this->redirect(":Setting:Team:");
     }
 
     public function createComponentTeamConfigForm()
