@@ -139,7 +139,14 @@ class FormFactory
 
     public function createEventTypeForm(array $onSuccess): Multiplier
     {
-        return new Multiplier(function (string $eventTypeId) use ($onSuccess) {
+        $ssList = [];
+
+        foreach ($this->statusSetManager->getIdList() as $statusSet) {
+            /* @var $statusSet StatusSet */
+            $ssList[$statusSet->getId()] = $statusSet->getName();
+        }
+
+        return new Multiplier(function (string $eventTypeId) use ($onSuccess, $ssList) {
                 /* @var $eventType EventType */
                 $eventType = $this->eventTypeManager->getById(intval($eventTypeId));
                 $form = new Form();
@@ -157,6 +164,13 @@ class FormFactory
                     ->setMaxLength(6)
                     ->setHtmlAttribute("type", "color")
                     ->setRequired();
+                
+                $form->addSelect("planStatusSet", $this->translator->translate("status.planStatus"), $ssList)
+                    ->setValue($eventType->getPreStatusSetId());
+                $form->addSelect("resultStatusSet", $this->translator->translate("status.resultStatus"), $ssList)
+                    ->setValue($eventType->getPostStatusSetId());
+        
+                
                 $form->addSubmit("save")->setHtmlAttribute("title", $this->translator->translate("common.save"));
                 $form->onSuccess[] = $onSuccess;
                 return $form;

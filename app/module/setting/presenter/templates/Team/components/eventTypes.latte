@@ -7,6 +7,7 @@
             <tr>
                 <th>{_status.code}</th>
                 <th>{_common.name}</th>
+                <th>{_status.color}</th>
                 <th>{_status.planStatus}</th>
                 <th>{_status.resultStatus}</th>
                 <th></th>
@@ -17,13 +18,16 @@
                     <td style="width: 200px">
                         {input code, class => 'form-control form-control-sm'}
                     </td>
-                    <td style="width: 200px">
+                    <td>
                         {input caption, class => 'form-control form-control-sm'}
                     </td>
                     <td style="width: 200px">
+                        {input color, class => 'form-control form-control-sm'}
+                    </td>
+                    <td>
                         {input planStatusSet, class => 'form-control form-control-sm'}
                     </td>
-                    <td style="width: 200px">
+                    <td>
                         {input resultStatusSet, class => 'form-control form-control-sm'}
                     </td>
 
