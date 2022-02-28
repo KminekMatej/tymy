@@ -160,10 +160,4 @@ class RouterFactory
 
         return $router;
     }
-
-    public function addModuleRoutes(array $moduleRoutes): RouterFactory
-    {
-        $this->moduleRoutes = array_merge($this->moduleRoutes, $moduleRoutes);
-        return $this;
-    }
 }
