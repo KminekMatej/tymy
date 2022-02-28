@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "60f6f489a3657eb8d765eb7b82f12b4d",
+    "content-hash": "a49282e953da0d41a83a772d7145c199",
     "packages": [
         {
             "name": "brick/math",
@@ -3780,12 +3780,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "8859e9c63b1ae36a9d21e07605e926659437c445"
+                "reference": "f09e86f62bb42bd202a38e24e4d764b4d4bf7344"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/8859e9c63b1ae36a9d21e07605e926659437c445",
-                "reference": "8859e9c63b1ae36a9d21e07605e926659437c445",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/f09e86f62bb42bd202a38e24e4d764b4d4bf7344",
+                "reference": "f09e86f62bb42bd202a38e24e4d764b4d4bf7344",
                 "shasum": ""
             },
             "require": {
@@ -3837,7 +3837,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-02-05T13:25:13+00:00"
+            "time": "2022-02-28T09:11:11+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -3845,12 +3845,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "7caf9262b096b3d3546b3939993cc8970727bd86"
+                "reference": "a0d8a355be1de4b54f851a30035d660d28879d80"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/7caf9262b096b3d3546b3939993cc8970727bd86",
-                "reference": "7caf9262b096b3d3546b3939993cc8970727bd86",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/a0d8a355be1de4b54f851a30035d660d28879d80",
+                "reference": "a0d8a355be1de4b54f851a30035d660d28879d80",
                 "shasum": ""
             },
             "require": {
@@ -3893,7 +3893,7 @@
                 "source": "https://github.com/squizlabs/PHP_CodeSniffer",
                 "wiki": "https://github.com/squizlabs/PHP_CodeSniffer/wiki"
             },
-            "time": "2022-01-17T02:05:49+00:00"
+            "time": "2022-02-22T22:19:11+00:00"
         }
     ],
     "aliases": [],

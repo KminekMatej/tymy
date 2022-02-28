@@ -13,14 +13,6 @@ class TestAuthenticator implements Nette\Security\IAuthenticator
     private $status;
     private $arr;
 
-    /** @var Supplier */
-    private $supplier;
-
-    public function __construct(Supplier $supplier)
-    {
-        $this->supplier = $supplier;
-    }
-
     /**
      * Performs an authentication.
      * @return Nette\Security\Identity
@@ -35,7 +27,6 @@ class TestAuthenticator implements Nette\Security\IAuthenticator
             "tym" => "testteam",
             "sessionKey" => "dsfbglsdfbg13546",
             "hash" => "123hash",
-            "tapi_config" => $this->supplier->getTapi_config(),
             "login" => $username
             ]);
         return new Nette\Security\Identity($this->id, $this->status, $this->arr);

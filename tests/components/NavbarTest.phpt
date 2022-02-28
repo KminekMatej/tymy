@@ -51,9 +51,6 @@ class NavbarTest extends TestCase {
     /** @var \App\Model\Supplier */
     protected $supplier;
     
-    /** @var \App\Model\TapiAuthenticator */
-    protected $tapiAuthenticator;
-    
     /** @var \App\Model\TestAuthenticator */
     protected $testAuthenticator;
     
@@ -76,18 +73,14 @@ class NavbarTest extends TestCase {
         $tapi_config["root"] = $GLOBALS["testedTeam"]["root"];
         
         $this->supplier->setTapi_config($tapi_config);
-        $this->tapiAuthenticator = new \App\Model\TapiAuthenticator($this->supplier);
-        $this->tapiAuthenticator->setTapiService($this->tapiService);
         $this->testAuthenticator = new \App\Model\TestAuthenticator($this->supplier);
     }
     
     protected function userTapiAuthenticate($username, $password){
-        $this->user->setAuthenticator($this->tapiAuthenticator);
         $this->user->login($username, $password);
     }
     
     protected function userTestAuthenticate($username, $password){
-        $this->user->setAuthenticator($this->testAuthenticator);
         $this->user->login($username, $password);
     }
     

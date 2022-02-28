@@ -15,9 +15,6 @@ abstract class IPresenterTest extends \Tester\TestCase
     /** @var \App\Model\Supplier */
     protected $supplier;
 
-    /** @var \App\Model\TapiAuthenticator */
-    protected $tapiAuthenticator;
-
     /** @var TapiService */
     protected $tapiService;
 
@@ -46,9 +43,7 @@ abstract class IPresenterTest extends \Tester\TestCase
         $tapi_config["root"] = $GLOBALS["testedTeam"]["root"];
 
         $this->supplier->setTapi_config($tapi_config);
-        $this->tapiAuthenticator = new \App\Model\TapiAuthenticator($this->supplier);
-        $this->tapiAuthenticator->setTapiService($this->tapiService);
-        $this->testAuthenticator = new \App\Model\TestAuthenticator($this->supplier);
+        $this->testAuthenticator = new \App\Model\TestAuthenticator();
 
         $this->presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
         if ($this->getPresenterName() != "undefined") {
@@ -57,12 +52,12 @@ abstract class IPresenterTest extends \Tester\TestCase
         }
 
 
-        return parent::setUp();
+        parent::setUp();
     }
 
     protected function tearDown()
     {
-        return parent::tearDown();
+        parent::tearDown();
     }
 
     protected function getPresenterName()
@@ -73,7 +68,6 @@ abstract class IPresenterTest extends \Tester\TestCase
 
     protected function userTapiAuthenticate($username, $password)
     {
-        $this->user->setAuthenticator($this->tapiAuthenticator);
         $this->user->login($username, $password);
     }
 
