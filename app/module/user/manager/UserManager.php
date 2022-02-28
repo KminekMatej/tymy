@@ -10,6 +10,7 @@ use Nette\Database\Table\ActiveRow;
 use Nette\Database\Table\Selection;
 use Nette\Http\Request;
 use Nette\InvalidArgumentException;
+use Nette\Security\User as UserNette;
 use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
 use Tracy\Debugger;
@@ -49,13 +50,14 @@ class UserManager extends BaseManager
     private TeamManager $teamManager;
     private Translator $translator;
     private ?User $userModel = null;
+    private UserNette $netteUser;
     private array $userFields;
     private array $userCounts;
 
     /** @var SimpleUser[] */
     private array $simpleUserCache = [];
 
-    public function __construct(ManagerFactory $managerFactory, MailService $mailService, PermissionManager $permissionManager, AuthenticationManager $authenticationManager, Request $request, Translator $translator, TeamManager $teamManager)
+    public function __construct(ManagerFactory $managerFactory, MailService $mailService, PermissionManager $permissionManager, AuthenticationManager $authenticationManager, Request $request, Translator $translator, TeamManager $teamManager, UserNette $netteUser)
     {
         parent::__construct($managerFactory);
         $this->mailService = $mailService;
@@ -64,6 +66,7 @@ class UserManager extends BaseManager
         $this->translator = $translator;
         $this->request = $request;
         $this->teamManager = $teamManager;
+        $this->netteUser = $netteUser;
     }
 
     /**
@@ -639,7 +642,14 @@ class UserManager extends BaseManager
 
         $this->updateByArray($resourceId, $data);
 
-        return $this->getById($resourceId);
+        /* @var $updatedUser User */
+        $updatedUser = $this->getById($resourceId);
+
+        if ($this->netteUser->isLoggedIn() && $this->netteUser->getId() == $resourceId) {
+            $this->netteUser->getIdentity()->skin = $updatedUser->getSkin(); //update skin automatically if changed
+        }
+
+        return $updatedUser;
     }
 
     /**
