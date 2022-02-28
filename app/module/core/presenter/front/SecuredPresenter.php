@@ -76,6 +76,24 @@ class SecuredPresenter extends BasePresenter
         }
     }
 
+    public function beforeRender()
+    {
+        parent::beforeRender();
+
+        $userData = $this->getUser()->getIdentity()->getData();
+        if (array_key_exists("language", $userData)) {
+            $this->setLanguage($userData["language"]);
+        }
+
+        if ($userData["skin"]) {//set user defined skin instead of team one after login
+            $this->template->skin = $this->skin = $userData["skin"];
+            Debugger::barDump($this->skin, "Setting skin of user");
+        }
+
+        $this->setAccessibleSettings();
+        $this->setLevelCaptions(["0" => ["caption" => $this->translator->translate("common.mainPage"), "link" => $this->link(":Core:Default:")]]);
+    }
+
     protected function startup()
     {
         parent::startup();
@@ -86,18 +104,6 @@ class SecuredPresenter extends BasePresenter
             }
             $this->redirect(':Sign:In:');
         }
-
-        $userData = $this->getUser()->getIdentity()->getData();
-        if (array_key_exists("language", $userData)) {
-            $this->setLanguage($userData["language"]);
-        }
-
-        if ($userData["skin"]) {//set user defined skin instead of team one after login
-            $this->template->skin = $this->skin = $userData["skin"];
-        }
-
-        $this->setAccessibleSettings();
-        $this->setLevelCaptions(["0" => ["caption" => $this->translator->translate("common.mainPage"), "link" => $this->link(":Core:Default:")]]);
     }
 
     protected function createComponentNavbar()

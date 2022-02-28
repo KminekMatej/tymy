@@ -37,12 +37,9 @@ abstract class BasePresenter extends RootPresenter
         $this->template->team = $this->teamManager->getTeam();
 
         $this->template->wwwDir = ROOT_DIR . "/www";
-        if ($this->getUser()->isLoggedIn()) {
-            $this->skin = $this->getUser()->getIdentity()->getData()["skin"];
-        } else {
-            $this->skin = $this->team->getSkin();
-        }
-        $this->template->skin = $this->skin;
+
+        $this->template->skin = $this->skin = $this->team->getSkin();   //on BasePresenter, set skin from team. Skin of user is added on SecuredPresenter after login
+        Debugger::barDump($this->skin, "Setting skin of team");
 
         $this->template->appver = $this->getCurrentVersion()->getName();
 
