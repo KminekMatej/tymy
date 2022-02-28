@@ -61,7 +61,7 @@ class OptionPresenter extends SecuredPresenter
         //if creating multiple options (standard use), call special function
         try {
             $created = $this->manager->createMultiple($this->requestData, $resourceId);
-        } catch (Exception $exc) {
+        } catch (\Exception $exc) {
             $this->handleException($exc);
         }
 
