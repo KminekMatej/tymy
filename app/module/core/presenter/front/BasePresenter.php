@@ -19,6 +19,12 @@ abstract class BasePresenter extends RootPresenter
 
     protected string $skin;
 
+    protected function startup()
+    {
+        parent::startup();
+        $this->skin = $this->team->getSkin();   //on BasePresenter, set skin from team. Skin of user is added on SecuredPresenter after login
+    }
+
     public function beforeRender()
     {
         parent::beforeRender();
@@ -33,11 +39,11 @@ abstract class BasePresenter extends RootPresenter
         $this->template->js = Debugger::$productionMode ? "min.js" : "js";
         $this->template->css = Debugger::$productionMode ? "min.css" : "css";
 
-        $this->template->team = $this->teamManager->getTeam();
+        $this->template->team = $this->team;
 
         $this->template->wwwDir = ROOT_DIR . "/www";
 
-        $this->template->skin = $this->skin = $this->team->getSkin();   //on BasePresenter, set skin from team. Skin of user is added on SecuredPresenter after login
+        $this->template->skin = $this->skin;
 
         $this->template->appver = $this->getCurrentVersion()->getName();
 

@@ -21,7 +21,7 @@ class TeamManager extends BaseManager
     public const SKIN_HELLBOY = "hell-boy";
     public const SKIN_SILVER_SURFER = "silver-surfer";
     public const SKIN_BLACK_PANTHER = "black-panther";
-    public const DEFAULT_SKIN = self::SKIN_HELLBOY;
+    public const DEFAULT_SKIN = self::SKIN_BLACK_PANTHER;
     public const SKINS = [
         self::SKIN_HELLBOY => "Hellboy",
         self::SKIN_SILVER_SURFER => "Silver surfer",
