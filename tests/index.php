@@ -1,5 +1,7 @@
 <?php
 
+// phpcs:disable PSR1.Files.SideEffects
+
 header("Content-Type: text/plain");
 runTest("setup_DEV");
 runTest("setup_MONKEYS");
