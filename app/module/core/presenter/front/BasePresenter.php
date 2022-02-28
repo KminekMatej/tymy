@@ -7,7 +7,6 @@ use Tracy\Debugger;
 use Tymy\Bootstrap;
 use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Core\Presenter\RootPresenter;
-
 use const ROOT_DIR;
 
 /**
@@ -39,7 +38,6 @@ abstract class BasePresenter extends RootPresenter
         $this->template->wwwDir = ROOT_DIR . "/www";
 
         $this->template->skin = $this->skin = $this->team->getSkin();   //on BasePresenter, set skin from team. Skin of user is added on SecuredPresenter after login
-        Debugger::barDump($this->skin, "Setting skin of team");
 
         $this->template->appver = $this->getCurrentVersion()->getName();
 

@@ -46,6 +46,8 @@ class SecuredPresenter extends BasePresenter
 
     /** @inject */
     public TeamManager $teamManager;
+    
+    protected User $tymyUser;
 
     /** @inject */
     public MultiaccountManager $multiaccountManager;
@@ -80,14 +82,13 @@ class SecuredPresenter extends BasePresenter
     {
         parent::beforeRender();
 
-        $userData = $this->getUser()->getIdentity()->getData();
-        if (array_key_exists("language", $userData)) {
-            $this->setLanguage($userData["language"]);
+        $this->tymyUser = $this->userManager->getById($this->getUser()->getId());
+        if ($this->tymyUser->getLanguage()) {
+            $this->setLanguage($this->tymyUser->getLanguage());
         }
 
-        if ($userData["skin"]) {//set user defined skin instead of team one after login
-            $this->template->skin = $this->skin = $userData["skin"];
-            Debugger::barDump($this->skin, "Setting skin of user");
+        if ($this->tymyUser->getSkin()) {//set user defined skin instead of team one after login
+            $this->template->skin = $this->skin = $this->tymyUser->getSkin();
         }
 
         $this->setAccessibleSettings();
