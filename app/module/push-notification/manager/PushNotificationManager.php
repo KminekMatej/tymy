@@ -123,10 +123,11 @@ class PushNotificationManager extends BaseManager
      * @param PushNotification $notification Push notification object to be sent. Can be generated using NotificationGenerator
      * @param int $userId ID of user to send Push notification
      * @param bool $flush Instant flush message
+     * @return void
      */
-    public function notifyUser(PushNotification $notification, int $userId)
+    public function notifyUser(PushNotification $notification, int $userId): void
     {
-        return $this->notifyUsers($notification, [$userId]);
+        $this->notifyUsers($notification, [$userId]);
     }
 
     /**
