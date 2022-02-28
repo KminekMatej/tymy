@@ -2,9 +2,9 @@
 
 namespace Tymy\Module\Team\Presenter\Front;
 
-use Tapi\UserResource;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Permission\Model\Privilege;
+use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\User\Model\User;
 
 class PlayerPresenter extends SecuredPresenter
