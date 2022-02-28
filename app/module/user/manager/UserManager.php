@@ -642,14 +642,7 @@ class UserManager extends BaseManager
 
         $this->updateByArray($resourceId, $data);
 
-        /* @var $updatedUser User */
-        $updatedUser = $this->getById($resourceId);
-
-        if ($this->netteUser->isLoggedIn() && $this->netteUser->getId() == $resourceId) {
-            $this->netteUser->getIdentity()->skin = $updatedUser->getSkin(); //update skin automatically if changed
-        }
-
-        return $updatedUser;
+        return $this->getById($resourceId);
     }
 
     /**
