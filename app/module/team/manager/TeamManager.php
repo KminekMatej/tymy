@@ -2,8 +2,7 @@
 
 namespace Tymy\Module\Team\Manager;
 
-use Nette\Database\IRow;
-use Nette\Database\Table\ActiveRow;
+use Nette\NotImplementedException;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
@@ -145,14 +144,17 @@ class TeamManager extends BaseManager
 
     public function create(array $data, ?int $resourceId = null): BaseModel
     {
+        throw new NotImplementedException("Cannot create team");
     }
 
     public function delete(int $resourceId, ?int $subResourceId = null): int
     {
+        throw new NotImplementedException("Cannot create team");
     }
 
     public function read(int $resourceId, ?int $subResourceId = null): BaseModel
     {
+        throw new NotImplementedException("Cannot create team");
     }
 
     public function update(array $data, int $resourceId, ?int $subResourceId = null): BaseModel
