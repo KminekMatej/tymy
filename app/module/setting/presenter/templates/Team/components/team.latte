@@ -10,13 +10,6 @@
                 <tr><th>{label defaultLanguage /}</th><td>{input defaultLanguage, class => 'form-control w-25'}</td></tr>
                 <tr><th>{label skin /}</th><td>{input skin, class => 'form-control w-25'}</td></tr>
                 <tr><th>{label requiredFields /}</th><td>{input requiredFields, class => 'form-control w-50'}</td></tr>
-                <tr><th>{_settings.eventColors}</th>
-                    <td>
-                        <div class="row">
-                            <div class="col-2" n:foreach="$eventTypes as $eventType">{label 'eventColor_' . $eventType->getCode() /}{input 'eventColor_' . $eventType->getCode(), class => 'form-control'}</div>
-                        </div>
-                    </td>
-                </tr>
             </table>
         </div>
         <div class="card-footer text-right">
