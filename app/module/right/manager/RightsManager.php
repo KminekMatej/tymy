@@ -2,6 +2,7 @@
 
 namespace Tymy\Module\Right\Manager;
 
+use Nette\NotImplementedException;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Permission\Model\Permission;
@@ -80,17 +81,21 @@ class RightManager extends BaseManager
 
     public function create(array $data, ?int $resourceId = null): BaseModel
     {
+        throw new NotImplementedException("Not implemented yet");
     }
 
     public function delete(int $resourceId, ?int $subResourceId = null): int
     {
+        throw new NotImplementedException("Not implemented yet");
     }
 
     public function read(int $resourceId, ?int $subResourceId = null): BaseModel
     {
+        throw new NotImplementedException("Not implemented yet");
     }
 
     public function update(array $data, int $resourceId, ?int $subResourceId = null): BaseModel
     {
+        throw new NotImplementedException("Not implemented yet");
     }
 }
