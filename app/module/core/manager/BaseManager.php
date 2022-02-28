@@ -36,6 +36,8 @@ abstract class BaseManager
 
     /** @var int[] */
     private array $allIdList = [];
+    /** @var int[] */
+    private array $lastIdList = [];
     protected ?string $idCol = "id"; //default id column name
 
     public function __construct(ManagerFactory $managerFactory)
@@ -360,8 +362,6 @@ abstract class BaseManager
         } catch (PDOException $exc) {
             $e = DBException::from($exc, DBException::TYPE_DELETE);
             $e->withIds($this->database->table($e->fkTable)->where($e->failingField, $id)->fetchPairs(null, "id"));
-            $e->fkTable = $this->getModuleFromTable($e->fkTable);
-            $e->relatedTable = $this->getModuleFromTable($e->relatedTable);
             throw $e;
         }
 
@@ -606,12 +606,12 @@ abstract class BaseManager
      */
     protected function filterToArray(string $filterString): array
     {
-        $filters = explode("~", $filterString);
-        $fParts = null;
-
-        if (empty($filters)) {
+        if (empty($filterString)) {
             return [];
         }
+
+        $filters = explode("~", $filterString);
+        $fParts = null;
 
         $conditions = [];
         foreach ($filters as $filter) {
@@ -643,11 +643,11 @@ abstract class BaseManager
      */
     protected function orderToArray(string $orderString): array
     {
-        $orders = explode("~", $orderString);
-
-        if (empty($orders)) {
+        if (empty($orderString)) {
             return [];
         }
+
+        $orders = explode("~", $orderString);
 
         $conditions = [];
         foreach ($orders as $order) {
@@ -691,5 +691,10 @@ abstract class BaseManager
         }
 
         return null;
+    }
+
+    public function getLastIdList(): array
+    {
+        return $this->lastIdList;
     }
 }

@@ -195,7 +195,7 @@ class Timer
         foreach ($sums as $name => $time) {
             if ($line) {
                 Debugger::log(str_replace("_NEXTTIMERNAME_", $name, $line), "timer");
-                self::addServerTime("sum:" . $previousName, $name, $previousTime);
+                self::addServerTime("sum:" . $previousName, $name, $previousTime ?? 0.0);
             }
             $timePrecentage = round(($timer["time"] / $timeWholeApp) * 100, 2);
             $line = "Timer '$name' -> _NEXTTIMERNAME_ ... " . self::toMs($time) . " [$timePrecentage %]";
@@ -206,7 +206,7 @@ class Timer
         if ($line) {
             $logTxt = str_replace("_NEXTTIMERNAME_", "end", $line);
             Debugger::log($logTxt, "timer");
-            self::addServerTime("sum:" . $previousName, "end", $previousTime);
+            self::addServerTime("sum:" . $previousName, "end", $previousTime ?? 0.0);
             self::$dumps["timer_sumpoints"][] = $logTxt;
         }
     }

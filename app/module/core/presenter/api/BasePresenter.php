@@ -58,8 +58,8 @@ class BasePresenter extends RootPresenter
         parent::startup();
 
         if (!$this->requestData && !empty($this->getHttpRequest()->getRawBody())) {
-            $ctHeader = explode(";", $this->getHttpRequest()->getHeader("Content-Type"));
-            if (!empty($ctHeader) && $ctHeader[0] == "application/x-www-form-urlencoded") {
+            $contentType = $this->getHttpRequest()->getHeader("Content-Type") ? explode(";", $this->getHttpRequest()->getHeader("Content-Type")) : null;
+            if (!empty($contentType) && $contentType[0] == "application/x-www-form-urlencoded") {
                 $this->decodeUrlEncodedData();
             } else {
                 $this->decodeJsonData();
@@ -104,44 +104,44 @@ class BasePresenter extends RootPresenter
     {
         try {
             $record = $this->manager->read($resourceId, $subResourceId);
-        } catch (Exception $exc) {
+        } catch (\Exception $exc) {
             $this->handleException($exc);
         }
 
-        $this->respondOk($record->jsonSerialize());
+        $this->respondOk($record->jsonSerialize()); /* @phpstan-ignore-line */
     }
 
     protected function requestPost($resourceId)
     {
         try {
             $created = $this->manager->create($this->requestData, $resourceId);
-        } catch (Exception $exc) {
+        } catch (\Exception $exc) {
             $this->handleException($exc);
         }
 
-        $this->respondOkCreated($created->jsonSerialize());
+        $this->respondOkCreated($created->jsonSerialize()); /* @phpstan-ignore-line */
     }
 
     protected function requestPut($resourceId, $subResourceId)
     {
         try {
             $updated = $this->manager->update($this->requestData, $resourceId, $subResourceId);
-        } catch (Exception $exc) {
+        } catch (\Exception $exc) {
             $this->handleException($exc);
         }
 
-        $this->respondOk($updated->jsonSerialize());
+        $this->respondOk($updated->jsonSerialize()); /* @phpstan-ignore-line */
     }
 
     protected function requestDelete($resourceId, $subResourceId)
     {
         try {
             $deletedId = $this->manager->delete($resourceId, $subResourceId);
-        } catch (Exception $exc) {
+        } catch (\Exception $exc) {
             $this->handleException($exc);
         }
 
-        $this->respondDeleted($deletedId);
+        $this->respondDeleted($deletedId); /* @phpstan-ignore-line */
     }
 
     /**
@@ -229,7 +229,7 @@ class BasePresenter extends RootPresenter
      */
     protected function loadResource($resourceId, BaseManager $manager)
     {
-        if (!isset($resourceId)) {
+        if (empty($resourceId)) {
             return null;
         }
 
@@ -251,7 +251,7 @@ class BasePresenter extends RootPresenter
      */
     protected function loadSubResource($subResourceId, BaseManager $manager)
     {
-        if (!isset($subResourceId)) {
+        if (empty($subResourceId)) {
             return null;
         }
 

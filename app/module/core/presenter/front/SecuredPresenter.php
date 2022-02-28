@@ -120,24 +120,22 @@ class SecuredPresenter extends BasePresenter
     /**
      * Smart pagination script
      * @link https://stackoverflow.com/questions/163809/smart-pagination-algorithm
-     * @param int $data Total count of items
-     * @param int $limit Number of items per page
-     * @param int $current Number of current page
-     * @param int $adjacents Number of shown links
-     * @return type
+     * @param int $totalCount Total count of items
+     * @param int $perPage Number of items per page
+     * @param int $currentPage Number of current page
+     * @param int $shownCount Number of shown links
+     * @return array
      */
-    protected function pagination($data, $limit = null, $current = null, $adjacents = null)
+    protected function pagination(int $totalCount, int $perPage, int $currentPage, int $shownCount): array
     {
-        $result = array();
+        if ($totalCount == 0) {
+            return [];
+        }
 
-        if (isset($data, $limit) === true) {
-            $result = range(1, ceil($data / $limit));
+        $result = range(1, ceil($totalCount / $perPage));
 
-            if (isset($current, $adjacents) === true) {
-                if (($adjacents = floor($adjacents / 2) * 2 + 1) >= 1) {
-                    $result = array_slice($result, max(0, min(count($result) - $adjacents, intval($current) - ceil($adjacents / 2))), $adjacents);
-                }
-            }
+        if (($shownCount = floor($shownCount / 2) * 2 + 1) >= 1) {
+            $result = array_slice($result, max(0, min(count($result) - $shownCount, intval($currentPage) - ceil($shownCount / 2))), $shownCount);
         }
 
         return $result;

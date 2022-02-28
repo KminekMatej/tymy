@@ -121,7 +121,7 @@ class NavbarControl extends Control
         $file = $values['file'];
 
         if ($file->isOk()) {
-            $file->move(FileManager::DOWNLOAD_DIR . '/' . $file_name);
+            $file->move(FileManager::DOWNLOAD_DIR . '/' . $file->getUntrustedName());
         }
     }
 
