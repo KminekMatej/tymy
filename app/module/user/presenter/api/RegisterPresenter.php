@@ -28,10 +28,10 @@ class RegisterPresenter extends BasePresenter
             $registeredUser = $this->manager->register($this->requestData);
         } catch (InvalidArgumentException $exc) {
             $this->respondBadRequest($exc->getMessage());
-        } catch (Exception $exc) {
+        } catch (\Exception $exc) {
             $this->handleException($exc);
         }
 
-        $this->respondOkCreated($registeredUser->jsonSerialize());
+        $this->respondOkCreated($registeredUser->jsonSerialize()); /* @phpstan-ignore-line */
     }
 }
