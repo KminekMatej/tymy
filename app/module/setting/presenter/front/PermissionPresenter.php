@@ -119,6 +119,8 @@ class PermissionPresenter extends SettingBasePresenter
      */
     private function composePermissionData(array $changes): array
     {
+        $output = [];
+
         if (array_key_exists("name", $changes)) {
             $output["name"] = $changes["name"];
         }
