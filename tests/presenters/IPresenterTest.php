@@ -69,7 +69,7 @@ abstract class IPresenterTest extends \Tester\TestCase
         $this->user->login($username, $password);
     }
 
-    function testSignInFailsRedirects()
+    public function testSignInFailsRedirects()
     {
         if (in_array($this->getPresenterName(), ["Sign","undefined"])) {
             return;
