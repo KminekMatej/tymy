@@ -36,6 +36,6 @@ class HistoryPresenter extends SecuredPresenter
             $this->handleException($exc);
         }
 
-        $this->respondOk($this->arrayToJson($records));
+        $this->respondOk($this->arrayToJson($records));/* @phpstan-ignore-line */
     }
 }

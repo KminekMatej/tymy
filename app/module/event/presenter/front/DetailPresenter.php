@@ -6,13 +6,10 @@
  */
 namespace Tymy\Module\Event\Presenter\Front;
 
-use Tymy\Module\Attendance\Manager\StatusManager;
+use Tymy\Module\Attendance\Manager\HistoryManager;
 use Tymy\Module\Attendance\Model\Attendance;
 use Tymy\Module\Attendance\Model\Status;
-use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
-use Tymy\Module\Event\Manager\EventTypeManager;
 use Tymy\Module\Event\Model\Event;
-use Tymy\Module\User\Manager\UserManager;
 use Tymy\Module\User\Model\User;
 
 /**
@@ -22,6 +19,9 @@ use Tymy\Module\User\Model\User;
  */
 class DetailPresenter extends EventBasePresenter
 {
+    /* @inject */
+    public HistoryManager $historyManager;
+
     public function renderDefault(string $resource)
     {
         $this->template->cptNotDecidedYet = $this->translator->translate('event.notDecidedYet');
