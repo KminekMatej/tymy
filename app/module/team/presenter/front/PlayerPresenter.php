@@ -9,6 +9,7 @@ use Tymy\Module\User\Model\User;
 
 class PlayerPresenter extends SecuredPresenter
 {
+
     public function beforeRender()
     {
         parent::beforeRender();
@@ -16,6 +17,7 @@ class PlayerPresenter extends SecuredPresenter
 
         $allFields = $this->userManager->getAllFields();
         $this->template->addFilter('errorsCount', function ($player, $tabName) use ($allFields) {
+            $errFields = [];
             switch ($tabName) {
                 case "osobni-udaje":
                     $errFields = array_intersect(array_keys($allFields["PERSONAL"]), $this->team->getRequiredFields(), $player->getErrFields());

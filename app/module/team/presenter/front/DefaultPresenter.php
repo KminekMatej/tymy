@@ -15,6 +15,7 @@ class DefaultPresenter extends SecuredPresenter
 
         $allFields = $this->userManager->getAllFields();
         $this->template->addFilter('errorsCount', function ($player, $tabName) use ($allFields) {
+            $errFields = [];
             switch ($tabName) {
                 case "osobni-udaje":
                     $errFields = array_intersect(array_keys($allFields["PERSONAL"]), $this->team->getRequiredFields(), $player->getErrFields());
