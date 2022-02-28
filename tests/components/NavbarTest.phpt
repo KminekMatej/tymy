@@ -7,15 +7,16 @@
 
 namespace Test;
 
+use App\Model\TestAuthenticator;
 use Nette;
-use Tester\Assert;
-use Tester\TestCase;
-use Tester\Environment;
-use Tester\DomQuery;
 use Tapi\EventListResource;
-use Tapi\PollListResource;
 use Tapi\NoteListResource;
+use Tapi\PollListResource;
 use Tapi\TapiService;
+use Tester\Assert;
+use Tester\DomQuery;
+use Tester\Environment;
+use Tester\TestCase;
 
 $container = require __DIR__ . '/../bootstrap.php';
 
@@ -48,10 +49,7 @@ class NavbarTest extends TestCase {
     /** @var \Nette\Security\User */
     protected $user;
     
-    /** @var \App\Model\Supplier */
-    protected $supplier;
-    
-    /** @var \App\Model\TestAuthenticator */
+    /** @var TestAuthenticator */
     protected $testAuthenticator;
     
     /** @var TapiService */
@@ -60,20 +58,13 @@ class NavbarTest extends TestCase {
     function __construct(Nette\DI\Container $container) {
         $this->container = $container;
         $this->user = $this->container->getByType('Nette\Security\User');
-        $this->supplier = $this->container->getByType('App\Model\Supplier');
         $this->discussionList = $this->container->getByType('Tapi\DiscussionListResource');
         $this->pollList = $this->container->getByType('Tapi\PollListResource');
         $this->noteList = $this->container->getByType('Tapi\NoteListResource');
         $this->eventList = $this->container->getByType('Tapi\EventListResource');
         $this->userList = $this->container->getByType('Tapi\UserListResource');
         $this->tapiService = $this->container->getByType('Tapi\TapiService');
-        
-        $tapi_config = $this->supplier->getTapi_config();
-        $tapi_config["tym"] = $GLOBALS["testedTeam"]["team"];
-        $tapi_config["root"] = $GLOBALS["testedTeam"]["root"];
-        
-        $this->supplier->setTapi_config($tapi_config);
-        $this->testAuthenticator = new \App\Model\TestAuthenticator($this->supplier);
+        $this->testAuthenticator = new TestAuthenticator();
     }
     
     protected function userTapiAuthenticate($username, $password){

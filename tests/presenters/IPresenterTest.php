@@ -12,9 +12,6 @@ use Tapi\TapiService;
  */
 abstract class IPresenterTest extends \Tester\TestCase
 {
-    /** @var \App\Model\Supplier */
-    protected $supplier;
-
     /** @var TapiService */
     protected $tapiService;
 
@@ -35,14 +32,9 @@ abstract class IPresenterTest extends \Tester\TestCase
 
     protected function setUp()
     {
-        $this->supplier = $this->container->getByType('App\Model\Supplier');
         $this->user = $this->container->getByType('Nette\Security\User');
         $this->tapiService = $this->container->getByType('Tapi\TapiService');
-        $tapi_config = $this->supplier->getTapi_config();
-        $tapi_config["tym"] = $GLOBALS["testedTeam"]["team"];
-        $tapi_config["root"] = $GLOBALS["testedTeam"]["root"];
 
-        $this->supplier->setTapi_config($tapi_config);
         $this->testAuthenticator = new \App\Model\TestAuthenticator();
 
         $this->presenterFactory = $this->container->getByType('Nette\Application\IPresenterFactory');
