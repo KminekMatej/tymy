@@ -62,6 +62,6 @@ class PostPresenter extends SecuredPresenter
             $this->handleException($exc);
         }
 
-        $this->respondOk($posts->jsonSerialize());
+        $this->respondOk($posts->jsonSerialize()); /* @phpstan-ignore-line */
     }
 }
