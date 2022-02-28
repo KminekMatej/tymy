@@ -2,6 +2,7 @@
 
 namespace Tymy\Module\Multiaccount\Manager;
 
+use Nette\NotImplementedException;
 use Nette\Utils\DateTime;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
@@ -43,12 +44,12 @@ class MultiaccountManager extends BaseManager
 
     public function canEdit($entity, $userId): bool
     {
-        //todo
+        return false;   //there is actually no entity
     }
 
     public function canRead($entity, $userId): bool
     {
-        //todo
+        return false;   //there is actually no entity
     }
 
     public function getAllowedReaders(BaseModel $record): array
@@ -139,7 +140,7 @@ class MultiaccountManager extends BaseManager
 
     public function update(array $data, int $resourceId, ?int $subResourceId = null): BaseModel
     {
-        //unused
+        throw new NotImplementedException("Not implemented yet");
     }
 
     public function delete($resourceId, ?int $subResourceId = null): int
