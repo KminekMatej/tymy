@@ -5,8 +5,9 @@
 namespace Tymy\Module\Autotest\Event;
 
 use Tymy\Bootstrap;
-use Tymy\Module\Event\Model\Event;
+use Tymy\Module\Autotest\Entity\Assert;
 use Tymy\Module\Autotest\RequestCase;
+use Tymy\Module\Event\Model\Event;
 
 require getenv("ROOT_DIR") . '/app/Bootstrap.php';
 $container = Bootstrap::boot();

@@ -354,11 +354,4 @@ class RequestMockFactory
             }
         }
     }
-
-
-    /** @deprecated */
-    public function createHttpRequest(): Request
-    {
-        return $this->fromGlobals();
-    }
 }

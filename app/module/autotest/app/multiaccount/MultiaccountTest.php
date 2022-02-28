@@ -2,7 +2,7 @@
 
 // phpcs:disable PSR1.Files.SideEffects
 
-namespace Tymy\Module\Autotest\Debt;
+namespace Tymy\Module\Autotest\Multiaccount;
 
 use Tymy\Bootstrap;
 use Tymy\Module\Autotest\Entity\Assert;
@@ -99,18 +99,17 @@ class MultiaccountTest extends RequestCase
 
     public function createRecord()
     {
-        //unused
+        return []; //unused
     }
 
     public function mockRecord()
     {
-        //unused
+        return []; //unused
     }
-
 
     protected function mockChanges(): array
     {
-        //unused
+        return []; //unused
     }
 }
 

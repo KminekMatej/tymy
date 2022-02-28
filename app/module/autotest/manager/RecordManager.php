@@ -111,7 +111,7 @@ class RecordManager
     /** @return int $recordId */
     public function createStatusSet(?array $data = null, ?array $changes = null): int
     {
-        return $this->createRecord("attendanceStatusSet", $data ?: $this->mockStatusSet($statusSetId), $changes, "id");
+        return $this->createRecord("attendanceStatusSet", $data ?: $this->mockStatusSet(), $changes, "id");
     }
 
     public function mockAttendance(int $eventId, $pre = true, $post = false)

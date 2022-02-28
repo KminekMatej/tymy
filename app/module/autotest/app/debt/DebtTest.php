@@ -102,7 +102,7 @@ class DebtTest extends RequestCase
             }
             $found = false;
         }
-        if (!$found) {
+        if (isset($debt) && !$found) {
             Assert::equal($debt["id"], $recordId, "Debt id $recordId not found in list");
         }
 
@@ -120,7 +120,7 @@ class DebtTest extends RequestCase
             }
             $found = false;
         }
-        if (!$found) {
+        if (isset($debt) && !$found) {
             Assert::equal($debt["id"], $recordId, "Debt id $recordId not found in users list");
         }
 

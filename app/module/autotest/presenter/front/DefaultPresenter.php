@@ -98,7 +98,7 @@ class DefaultPresenter extends BasePresenter
 
         try {
             $output = $this->testsManager->runTests($folder);
-        } catch (Exception $exc) {
+        } catch (\Exception $exc) {
             $this->handleException($exc);
         }
 
