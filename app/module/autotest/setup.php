@@ -10,7 +10,6 @@ use Tymy\Module\Autotest\Manager\TestsManager;
  */
 
 if (isset($runner)) {
-
     $runner->setEnvironmentVariable("ROOT_DIR", ROOT_DIR);
     $runner->setEnvironmentVariable("TEAM_DIR", TEAM_DIR);
     $runner->setEnvironmentVariable("AUTOTEST", true);

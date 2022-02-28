@@ -9,7 +9,6 @@ use Tymy\Module\User\Model\User;
 
 class PlayerPresenter extends SecuredPresenter
 {
-
     public function beforeRender()
     {
         parent::beforeRender();

@@ -20,7 +20,7 @@ class Version
     public function __construct(string $name, ?DateTime $datetime)
     {
         $this->name = $name;
-        $this->datetime = $datetime ?: new DateTime;
+        $this->datetime = $datetime ?: new DateTime();
         if ($name == "master") {
             $this->major = "?";
             $this->minor = "?";

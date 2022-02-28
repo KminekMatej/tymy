@@ -25,12 +25,12 @@ class TeamPresenter extends SettingBasePresenter
     {
         return $this->formFactory->createStatusSetForm([$this, 'statusFormSuccess']);
     }
-    
+
     public function createComponentTeamConfigForm(): Form
     {
         return $this->formFactory->createTeamConfigForm([$this, 'teamConfigFormSuccess']);
     }
-    
+
     public function createComponentEventTypeForm(): Multiplier
     {
         return $this->formFactory->createEventTypeForm([$this, 'eventTypeFormSuccess']);
@@ -42,7 +42,7 @@ class TeamPresenter extends SettingBasePresenter
             return;
         }
 
-        //update status name 
+        //update status name
         $this->statusSetManager->updateByArray(intval($values->id), ["name" => $values->name]);
 
         //update statuses
@@ -83,13 +83,13 @@ class TeamPresenter extends SettingBasePresenter
     public function teamConfigFormSuccess(Form $form, $values): void
     {
         $teamData = $this->teamManager->getTeam();
-        if ($teamData->getName() != $values->name ||
+        if (
+            $teamData->getName() != $values->name ||
             $teamData->getSport() != $values->sport ||
             $teamData->getSkin() != $values->skin ||
             $teamData->getDefaultLanguageCode() != $values->defaultLanguage ||
             array_diff($values->requiredFields, $teamData->getRequiredFields()) || array_diff($teamData->getRequiredFields(), $values->requiredFields)
         ) {
-
             $this->teamManager->update([
                 "name" => $values->name,
                 "sport" => $values->sport,

@@ -217,7 +217,7 @@ class DefaultPresenter extends SecuredPresenter
                 "usedSpace" => $this->folderSize(FileManager::DOWNLOAD_DIR),
             ];
             \Tracy\Debugger::barDump(FileManager::DOWNLOAD_DIR);
-            
+
             $this->loadFileTypeSizes(FileManager::DOWNLOAD_DIR);
             file_put_contents($cachedSizeFile, \json_encode($this->fileStats));
         }
