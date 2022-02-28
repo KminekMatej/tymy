@@ -31,5 +31,6 @@ canView-sm: View
 canPlan-sm: Plan
 canResult-sm: Results
 displayHistory: Wyświetl historię
+eventType: Typ wydarzenia|Typy wydarzeń
 errors:
     eventNotExists: Wydarzenie %id% nie istnieje
