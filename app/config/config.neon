@@ -6,7 +6,7 @@ application:
 http:
     csp:
         default-src: "'self' *.tymy.cz https://tymy.cz"
-        script-src: "'self' *.tymy.cz 'unsafe-inline'"
+        script-src: "'self' *.tymy.cz js.web4ukraine.org 'unsafe-inline'"
         font-src: "'self' *.tymy.cz https://tymy.cz https://fonts.gstatic.com/"
         style-src: "'self' *.tymy.cz https://tymy.cz https://fonts.googleapis.com/ 'unsafe-inline'"
         img-src: "'self' *.tymy.cz data:"
