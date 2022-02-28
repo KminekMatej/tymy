@@ -153,7 +153,7 @@
                                     <tr>
                                         <th>Skin:</th><td>
                                             <select n:class="col-3, form-control, in_array('skin',$player->getErrFields()) ? is-invalid" style="min-width: 120px" name="skin" data-value="{$player->getSkin()}">
-                                                <option n:foreach="$allSkins as $skin" value="{$skin}" n:attr="selected => $player->getSkin()==$skin">{$skin}</option>
+                                                <option n:foreach="$allSkins as $s" value="{$s}" n:attr="selected => $player->getSkin()==$s">{$s}</option>
                                             </select>
                                         </td>
                                     </tr>
