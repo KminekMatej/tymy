@@ -12,7 +12,9 @@ use Nette\Http\Request;
 use Nette\InvalidArgumentException;
 use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
+use Tracy\Debugger;
 use Tymy\Module\Authentication\Manager\AuthenticationManager;
+use Tymy\Module\Core\Exception\MissingInputException;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
@@ -109,7 +111,7 @@ class UserManager extends BaseManager
         if (empty($userId)) {
             return $this->user->isInRole(User::ROLE_SUPER);
         } else {
-            return $this->database->table($this->getTable())->where("id", $userId)->where("roles LIKE %?%", UserEntity::ROLE_SUPER)->count("id") > 0;
+            return $this->database->table($this->getTable())->where("id", $userId)->where("roles LIKE %?%", User::ROLE_SUPER)->count("id") > 0;
         }
     }
 
@@ -342,7 +344,7 @@ class UserManager extends BaseManager
      */
     public function register(array $array): User
     {
-        \Tracy\Debugger::barDump($array);
+        Debugger::barDump($array);
         $this->allowRegister($array);
 
         $array["status"] = "INIT";
