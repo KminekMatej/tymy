@@ -8,6 +8,7 @@ use Nette\Security\AuthenticationException;
 use Nette\Security\IAuthenticator;
 use Nette\Security\Identity;
 use Nette\Security\IIdentity;
+use Nette\Security\SimpleIdentity;
 use Nette\Utils\DateTime;
 use Tracy\Debugger;
 use Tymy\Module\Core\Manager\Responder;
@@ -95,7 +96,7 @@ class AuthenticationManager implements IAuthenticator
             $user->setGhost(true);
         }
 
-        return new Identity($user->getId(), $user->getRoles(), $user->jsonSerialize());
+        return new SimpleIdentity($user->getId(), $user->getRoles(), $user->jsonSerialize());
     }
 
     /**
