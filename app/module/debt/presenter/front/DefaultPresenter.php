@@ -8,9 +8,9 @@ use QrCode\QRcode;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Debt\Model\Debt;
 
-use const QR_ECLEVEL_H;
-
 use function iban_set_checksum;
+
+use const QR_ECLEVEL_H;
 
 /**
  * Description of DebtPresenter
