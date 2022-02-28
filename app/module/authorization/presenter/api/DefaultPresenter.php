@@ -37,10 +37,10 @@ class DefaultPresenter extends BasePresenter
     {
         try {
             $rights = $this->AuthorizationManager->getListUserAllowed($this->userManager->getById($userId));
-        } catch (Exception $exc) {
+        } catch (\Exception $exc) {
             $this->handleException($exc);
         }
 
-        $this->respondOk($rights);
+        $this->respondOk($rights); /* @phpstan-ignore-line */
     }
 }
