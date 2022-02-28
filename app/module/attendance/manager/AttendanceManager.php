@@ -5,6 +5,7 @@ namespace Tymy\Module\Attendance\Manager;
 use Exception;
 use Nette\Database\IRow;
 use Nette\Database\Table\ActiveRow;
+use Nette\NotImplementedException;
 use Nette\Utils\DateTime;
 use PDOException;
 use Tymy\Module\Attendance\Mapper\AttendanceMapper;
@@ -321,17 +322,17 @@ class AttendanceManager extends BaseManager
 
     public function delete(int $resourceId, ?int $subResourceId = null): int
     {
-        //cannot delete attendance, once it been set
+        throw new NotImplementedException("Cannot delete attendance, once it been set");
     }
 
     public function read(int $resourceId, ?int $subResourceId = null): BaseModel
     {
-        //attendance can be read only along with event
+        throw new NotImplementedException("Attendance can be read only along with event");
     }
 
     public function update(array $data, int $resourceId, ?int $subResourceId = null): BaseModel
     {
-        //update si performed only during POST request
+        throw new NotImplementedException("Update is performed only during POST request");
     }
 
     /**

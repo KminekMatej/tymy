@@ -2,12 +2,10 @@
 
 namespace Tymy\Module\Attendance\Manager;
 
-use Nette\Database\Table\ActiveRow;
 use Nette\Utils\FileSystem;
 use Nette\Utils\Image;
-use Tracy\Debugger;
-use Tracy\ILogger;
 use Tymy\Module\Attendance\Mapper\StatusMapper;
+use Tymy\Module\Attendance\Model\Attendance;
 use Tymy\Module\Attendance\Model\Status;
 use Tymy\Module\Attendance\Model\StatusSet;
 use Tymy\Module\Core\Factory\ManagerFactory;

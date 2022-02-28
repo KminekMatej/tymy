@@ -81,7 +81,8 @@ class HistoryManager extends BaseManager
      */
     public function canRead($entity, $userId): bool
     {
-        return $this->allowRead($entity->getEventId());
+        /* @var $entity Event */
+        return $entity->getViewRightName() ? $this->user->isAllowed($this->user->getId(), Privilege::USR($entity->getViewRightName())) : true;
     }
 
     protected function allowRead(?int $recordId = null): void
