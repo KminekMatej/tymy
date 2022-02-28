@@ -133,12 +133,12 @@ class PollManager extends BaseManager
 
     public function canEdit($entity, $userId): bool
     {
-        //todo
+        return $this->user->isAllowed($userId, Privilege::SYS("ASK.VOTE_UPDATE"));
     }
 
     public function canRead($entity, $userId): bool
     {
-        //todo
+        return true;
     }
 
     protected function allowCreate(?array &$data = null): void

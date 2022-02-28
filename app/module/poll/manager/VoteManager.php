@@ -2,6 +2,7 @@
 
 namespace Tymy\Module\Poll\Manager;
 
+use Nette\NotImplementedException;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
@@ -158,7 +159,7 @@ class VoteManager extends BaseManager
 
     public function delete(int $resourceId, ?int $subResourceId = null): int
     {
-        //todo
+        throw new NotImplementedException("Not implemented yet");
     }
 
     public function getAllowedReaders(BaseModel $record): array
@@ -168,11 +169,11 @@ class VoteManager extends BaseManager
 
     public function read(int $resourceId, ?int $subResourceId = null): BaseModel
     {
-        //todo
+        throw new NotImplementedException("Not implemented yet");
     }
 
     public function update(array $data, int $resourceId, ?int $subResourceId = null): BaseModel
     {
-        //todo
+        throw new NotImplementedException("Not implemented yet");
     }
 }
