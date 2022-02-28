@@ -58,7 +58,7 @@ class AppPresenter extends SettingBasePresenter
             }
         }
         if ($previousPatch === null) {
-            $previousPatch = array_pop($this->getVersions());
+            $previousPatch = $version;  //latest version
         }
         $this->template->previousPatchVersion = $previousPatch;
         $this->template->firstMinorVersion = $firstMinor;
