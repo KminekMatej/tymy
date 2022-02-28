@@ -150,7 +150,7 @@
                                                 <a href="{plink :Team:Player: $usr->getWebName()}">
                                                     <img src="{$usr->getPictureUrl()}" class="figure-img img-fluid rounded" alt="{$usr->getFullName()}" />
                                                     <figcaption class="figure-caption">{$usr->getDisplayName()}</figcaption>
-                                                    <figcaption n:ifset="$event->getAttendance()[$usr->getId()]" class="figure-caption" style="font-size: 70%; display: inline-block">{$usr->getPreDescription()}</figcaption>
+                                                    <figcaption n:ifset="$event->getAttendance()[$usr->getId()]" class="figure-caption" style="font-size: 70%; display: inline-block">{$event->getAttendance()[$usr->getId()]->getPreDescription()}</figcaption>
                                                 </a>
                                                 <div n:class="btn-group,result,$resultsClosed ? d-none" role="group" aria-label="{_event.attendanceResult}" n:if="$event->getCanResult() && $event->getInPast()">
                                                     <button type="button" class="btn btn-sm btn-outline-danger" onclick="ncame(this)" title="{_event.notArrived,1}"><i class="fa fa-times" aria-hidden="true"></i></button>
