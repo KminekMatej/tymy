@@ -126,7 +126,7 @@
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="live" role="tabpanel">
                             <figure class="figure text-center" style="width: 100px" n:foreach="$liveUsers as $live">
-                                <a href="{plink :Team:Player: $live->getWebName()}" title="{$live->getCallName()}">
+                                <a href="{plink :Team:Player: $live->getId()}" title="{$live->getCallName()}">
                                     <img src="{$live->getPictureUrl()}" class="figure-img img-fluid rounded user_pic" alt="{$live->getCallName()}" />
                                     <figcaption class="figure-caption">{$live->getCallName()}</figcaption>
                                 </a>
