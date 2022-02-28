@@ -10,7 +10,6 @@ use Nette\Database\Table\ActiveRow;
 use Nette\Security\User;
 use Nette\Utils\DateTime;
 use PDOException;
-use Tymy\Module\Core\Model\Supplier;
 use Tymy\Module\Core\Exception\DBException;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Model\BaseModel;
@@ -34,7 +33,6 @@ abstract class BaseManager
     protected Explorer $database;
     protected Responder $responder;
     protected User $user;
-    protected Supplier $supplier;
 
     /** @var int[] */
     private array $allIdList = [];
@@ -48,7 +46,6 @@ abstract class BaseManager
         $this->teamSysName = $managerFactory->teamSysName;
         $this->responder = $managerFactory->responder;
         $this->user = $managerFactory->user;
-        $this->supplier = $managerFactory->supplier;
     }
 
     /** @return Field[] */

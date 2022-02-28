@@ -2,18 +2,11 @@
 
 namespace Tymy\Module\Core\Presenter\Front;
 
-use Kdyby\Translation\Translator;
-use Nette\Application\Request;
-use Nette\Application\Response;
 use Nette\Utils\DateTime;
 use Tracy\Debugger;
 use Tymy\Bootstrap;
 use Tymy\Module\Core\Exception\TymyResponse;
-use Tymy\Module\Core\Model\Supplier;
 use Tymy\Module\Core\Presenter\RootPresenter;
-use Tymy\Module\Team\Manager\TeamManager;
-use Tymy\Module\Team\Model\Team;
-
 use const ROOT_DIR;
 
 /**
@@ -24,8 +17,6 @@ abstract class BasePresenter extends RootPresenter
     /** @persistent */
     public $locale;
 
-    /** @inject */
-    public Supplier $supplier;
     protected string $skin;
 
     public function beforeRender()

@@ -3,12 +3,14 @@
 namespace Tymy\Module\Setting\Presenter\Front;
 
 use Nette\Application\UI\Form;
+use stdClass;
 use Tymy\Module\Attendance\Manager\StatusManager;
 use Tymy\Module\Event\Manager\EventManager;
 use Tymy\Module\Event\Manager\EventTypeManager;
 use Tymy\Module\Permission\Manager\PermissionManager;
 use Tymy\Module\Poll\Manager\OptionManager;
 use Tymy\Module\Poll\Manager\PollManager;
+use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\User\Manager\UserManager;
 
 class AppPresenter extends SettingBasePresenter
@@ -61,16 +63,16 @@ class AppPresenter extends SettingBasePresenter
         $this->template->previousPatchVersion = $previousPatch;
         $this->template->firstMinorVersion = $firstMinor;
 
-        $this->template->allSkins = $this->supplier->getAllSkins();
+        $this->template->allSkins = TeamManager::SKINS;
     }
 
     public function createComponentUserConfigForm()
     {
         $form = new Form();
-        $form->addSelect("skin", "Skin", $this->supplier->getAllSkins())->setValue($this->skin);
+        $form->addSelect("skin", "Skin", TeamManager::SKINS)->setValue($this->skin);
         $form->addSubmit("save");
 
-        $form->onSuccess[] = function (Form $form, \stdClass $values) {
+        $form->onSuccess[] = function (Form $form, stdClass $values) {
             $this->userManager->update(["skin" => $values->skin], $this->user->getId());
             $this->user->getIdentity()->skin = $values->skin;
         };

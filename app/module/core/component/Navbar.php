@@ -8,7 +8,6 @@ use Nette\Application\UI\Form;
 use Nette\Http\FileUpload;
 use Nette\Security\User;
 use Nette\Utils\DateTime;
-use Tymy\Module\Core\Model\Supplier;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Debt\Manager\DebtManager;
 use Tymy\Module\Discussion\Manager\DiscussionManager;
@@ -28,7 +27,6 @@ use Tymy\Module\User\Manager\UserManager;
 class NavbarControl extends Control
 {
     private SecuredPresenter $presenter;
-    private Supplier $supplier;
     private array $accessibleSettings;
     private PollManager $pollManager;
     private DiscussionManager $discussionManager;
@@ -51,7 +49,6 @@ class NavbarControl extends Control
         $this->debtManager = $debtManager;
         $this->userManager = $userManager;
         $this->multiaccountManager = $multiaccountManager;
-        $this->supplier = $presenter->supplier;
         $this->user = $user;
         $this->teamManager = $teamManager;
         $this->accessibleSettings = $this->presenter->getAccessibleSettings();

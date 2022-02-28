@@ -9,7 +9,6 @@ use PDOException;
 use Tracy\Debugger;
 use Tymy\Module\Admin\Entity\Migration;
 use Tymy\Module\Core\Model\BaseModel;
-use Tymy\Module\Core\Model\Supplier;
 
 /**
  * Description of MigrationManager
@@ -24,15 +23,13 @@ class MigrationManager
     private const REGEX_BASE = "\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-base.sql";
 
     private Explorer $teamDatabase;
-    private Supplier $supplier;
     private array $log = [];
     private bool $tableExists;
     private array $migrationsCache = [];
 
-    public function __construct(Explorer $teamDatabase, Supplier $supplier)
+    public function __construct(Explorer $teamDatabase)
     {
         $this->teamDatabase = $teamDatabase;
-        $this->supplier = $supplier;
     }
 
     private function migrationTableExists(): bool

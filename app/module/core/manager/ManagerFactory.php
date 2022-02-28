@@ -4,9 +4,7 @@ namespace Tymy\Module\Core\Factory;
 
 use Nette\Database\Explorer;
 use Nette\Security\User;
-use Tymy\Module\Core\Model\Supplier;
 use Tymy\Module\Core\Manager\Responder;
-use Tymy\Module\PushNotification\Service\NotificationService;
 
 /**
  * Description of ManagerFactory
@@ -18,17 +16,15 @@ class ManagerFactory
     public Explorer $mainDatabase;
     public Explorer $teamDatabase;
     public Responder $responder;
-    public Supplier $supplier;
     public User $user;
     public string $teamSysName;
 
-    public function __construct(Explorer $mainDatabase, Explorer $teamDatabase, string $teamSysName, Responder $responder, User $user, Supplier $supplier)
+    public function __construct(Explorer $mainDatabase, Explorer $teamDatabase, string $teamSysName, Responder $responder, User $user)
     {
         $this->mainDatabase = $mainDatabase;
         $this->teamDatabase = $teamDatabase;
         $this->teamSysName = $teamSysName;
         $this->responder = $responder;
         $this->user = $user;
-        $this->supplier = $supplier;
     }
 }

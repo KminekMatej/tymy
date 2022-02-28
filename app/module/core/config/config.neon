@@ -1,5 +1,4 @@
 services:
-    Supplier: Tymy\Module\Core\Model\Supplier(%appConfig%)
     ManagerFactory: Tymy\Module\Core\Factory\ManagerFactory(@database.main.context, @database.team.context, %team%)
     Responder: Tymy\Module\Core\Manager\Responder
     StringsManager: Tymy\Module\Core\Manager\StringsManager(@database.main.context)
