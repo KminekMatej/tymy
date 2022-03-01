@@ -27,6 +27,9 @@ ALTER TABLE `ask_votes` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY 
 ALTER TABLE `ask_votes` ADD UNIQUE (`quest_id`, `user_id`, `item_id`);
 
 ALTER TABLE `ask_votes` ADD FOREIGN KEY (`quest_id`) REFERENCES `ask_quests`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+DELETE FROM `ask_votes` WHERE `user_id` NOT IN (SELECT `id` FROM `users`);
+
 ALTER TABLE `ask_votes` ADD FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `ask_votes` ADD FOREIGN KEY (`usr_mod`) REFERENCES `users`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
