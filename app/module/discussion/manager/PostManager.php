@@ -271,8 +271,6 @@ class PostManager extends BaseManager
      */
     private function getPostsFromDiscussion(int $discussionId, int $page = 1, $inBBCode = true, ?string $search = null, ?int $searchUserId = null): ?array
     {
-        $this->allowDiscussion($discussionId);
-
         $this->inBbCode = $inBBCode;
         $offset = ($page - 1) * self::POSTS_PER_PAGE;
 
@@ -298,10 +296,12 @@ class PostManager extends BaseManager
         $params[] = $page == 1 ? $this->getFirstPageSize() : self::POSTS_PER_PAGE;
         $query[] = "OFFSET ?";
         $params[] = $offset;
+        
+        $posts = $this->mapAll($this->database->query(join(" ", $query), ...$params)->fetchAll());
 
         $this->markAllAsRead($this->user->getId(), $discussionId);
 
-        return $this->mapAll($this->database->query(join(" ", $query), ...$params)->fetchAll());
+        return $posts;
     }
 
     /**
