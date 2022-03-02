@@ -49,7 +49,7 @@ class FormFactory
 
         foreach ($eventTypesList as $eventType) {
             /* @var $eventType EventType */
-            $eventTypes[$eventType->getCode()] = $eventType->getCaption();
+            $eventTypes[$eventType->getId()] = $eventType->getCaption();
         }
 
         foreach ($userPermissions as $userPermission) {
@@ -61,7 +61,7 @@ class FormFactory
 
         //     $id = $form->addHidden("id", $id);
 
-        $type = $form->addSelect("type", null, $eventTypes)->setRequired();
+        $type = $form->addSelect("eventTypeId", null, $eventTypes)->setRequired();
         $caption = $form->addText("caption")->setRequired();
         $description = $form->addTextArea("description", null, null, 1);
         $start = $form->addText("startTime")->setHtmlType("datetime-local")->setValue((new DateTime("+ 24 hours"))->format(BaseModel::DATETIME_ISO_NO_SECS_FORMAT))->setRequired();
