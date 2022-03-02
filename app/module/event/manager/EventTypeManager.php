@@ -47,14 +47,14 @@ class EventTypeManager extends BaseManager
         $eventType = parent::map($row, $force);
 
         if ($eventType->getPreStatusSetId()) {
-            $statusRows = $this->database->table(Status::TABLE)->where("set_id", $eventType->getPreStatusSetId())->order("id")->fetchAll();
+            $statusRows = $this->database->table(Status::TABLE)->where("status_set_id", $eventType->getPreStatusSetId())->order("id")->fetchAll();
             foreach ($statusRows as $sRow) {
                 $eventType->addPreStatusSet($this->statusManager->map($sRow));
             }
         }
 
         if ($eventType->getPostStatusSetId()) {
-            $statusRows = $this->database->table(Status::TABLE)->where("set_id", $eventType->getPostStatusSetId())->order("id")->fetchAll();
+            $statusRows = $this->database->table(Status::TABLE)->where("status_set_id", $eventType->getPostStatusSetId())->order("id")->fetchAll();
             foreach ($statusRows as $sRow) {
                 $eventType->addPostStatusSet($this->statusManager->map($sRow));
             }

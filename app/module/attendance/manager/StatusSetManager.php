@@ -102,7 +102,7 @@ class StatusSetManager extends BaseManager
      */
     public function isUsed(int $statusSetId): bool
     {
-        $codes = $this->database->table(Status::TABLE)->where("set_id", $statusSetId)->fetchPairs(null, "code");
+        $codes = $this->database->table(Status::TABLE)->where("status_set_id", $statusSetId)->fetchPairs(null, "code");
 
         return $this->database->table(Attendance::TABLE)->whereOr([
                     "pre_status IN (?)" => $codes,
