@@ -222,9 +222,9 @@ class AttendanceManager extends BaseManager
      */
     private function allowPreStatus(int $eventId, string $preStatus): bool
     {
-        $allowedCodes = $this->database->query("SELECT statuses.code FROM statuses "
-                        . "LEFT JOIN status_sets ON status_sets.id=statuses.set_id "
-                        . "LEFT JOIN event_types ON event_types.pre_status_set=status_sets.id "
+        $allowedCodes = $this->database->query("SELECT status.code FROM status "
+                        . "LEFT JOIN status_set ON status_set.id=status.status_set_id "
+                        . "LEFT JOIN event_types ON event_types.pre_status_set_id=status_set.id "
                         . "LEFT JOIN events ON events.event_type_id=event_types.id WHERE events.id=?", $eventId)->fetchPairs(null, "code");
 
         return is_array($allowedCodes) && in_array($preStatus, $allowedCodes);
@@ -240,9 +240,9 @@ class AttendanceManager extends BaseManager
      */
     private function allowPostStatus(int $eventId, string $postStatus): bool
     {
-        $allowedCodes = $this->database->query("SELECT statuses.code FROM statuses "
-                        . "LEFT JOIN status_sets ON status_sets.id=statuses.set_id "
-                        . "LEFT JOIN event_types ON event_types.post_status_set=status_sets.id "
+        $allowedCodes = $this->database->query("SELECT status.code FROM status "
+                        . "LEFT JOIN status_set ON status_set.id=status.status_set_id "
+                        . "LEFT JOIN event_types ON event_types.post_status_set_id=status_set.id "
                         . "LEFT JOIN events ON events.event_type_id=event_types.id WHERE events.id=?", $eventId)->fetchPairs(null, "code");
 
         return is_array($allowedCodes) && in_array($postStatus, $allowedCodes);

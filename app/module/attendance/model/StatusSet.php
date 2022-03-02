@@ -12,7 +12,7 @@ use Tymy\Module\Core\Model\BaseModel;
  */
 class StatusSet extends BaseModel
 {
-    public const TABLE = "status_sets";
+    public const TABLE = "status_set";
 
     private string $name;
     private string $webname;

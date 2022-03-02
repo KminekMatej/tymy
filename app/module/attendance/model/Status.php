@@ -13,7 +13,7 @@ use Tymy\Module\Core\Model\BaseModel;
  */
 class Status extends BaseModel
 {
-    public const TABLE = "statuses";
+    public const TABLE = "status";
     public const MODULE = "attendance";
 
     private string $code;

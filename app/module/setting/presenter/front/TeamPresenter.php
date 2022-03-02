@@ -72,8 +72,8 @@ class TeamPresenter extends SettingBasePresenter
             "code" => $values->code,
             "caption" => $values->caption,
             "color" => ltrim($values->color, " #"),
-            "pre_status_set" => $values->preStatusSet,
-            "post_status_set" => $values->postStatusSet,
+            "preStatusSetId" => $values->preStatusSet,
+            "postStatusSetId" => $values->postStatusSet,
         ]);
 
         $this->flashMessage($this->translator->translate("common.alerts.configSaved"));
