@@ -99,6 +99,19 @@ class StatusManager extends BaseManager
     {
         return $this->database->table(Status::TABLE)->select("DISTINCT(code) AS codes")->fetchPairs(null, "codes");
     }
+    
+    /**
+     * Get all pre and post statuses by corresponding event type id
+     * @param int $eventTypeId
+     * @return array In the form of ["pre" => [..array of Status objects..], "post" => [..array of Status objects..]]
+     */
+    public function getByEventTypeId(int $eventTypeId): array
+    {
+        return [
+            StatusSet::PRE => $this->mapAll($this->database->table(Status::TABLE)->where(".status_set:event_types(pre_status_set).id", $eventTypeId)->fetchAll()),
+            StatusSet::POST => $this->mapAll($this->database->table(Status::TABLE)->where(".status_set:event_types(post_status_set).id", $eventTypeId)->fetchAll()),
+        ];
+    }
 
     /**
      * Get all status unique status codes
