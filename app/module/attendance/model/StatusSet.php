@@ -14,7 +14,7 @@ class StatusSet extends BaseModel
 {
     public const TABLE = "status_set";
     public const PRE = "pre";
-    public const POST = "pre";
+    public const POST = "post";
 
     private string $name;
     private string $webname;
