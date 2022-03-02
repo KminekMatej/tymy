@@ -1,5 +1,6 @@
 function prependHttp(url) {
-    if(url.trim() == "") return "";
+    if (url.trim() == "")
+        return "";
     if (!/^(?:f|ht)tps?\:\/\//.test(url)) {
         url = "http://" + url;
     }
@@ -13,11 +14,11 @@ function map() {
 
 function link() {
     var link = $("INPUT[name='link']").val();
-    if(link != "")
+    if (link != "")
         window.open(prependHttp(link), "_blank");
 }
 
-function duplicateLastRow(){
+function duplicateLastRow() {
     var table = $("DIV.settings TABLE");
     var lastRow = table.find("TR:last");
     var newRow = lastRow.clone();
@@ -64,17 +65,16 @@ function duplicateEventRow(timePeriod) {
     lastRow.find("INPUT[name=startTime]").val(startTime.format("YYYY-MM-DDTHH:mm"));
     lastRow.find("INPUT[name=endTime]").val(endTime.format("YYYY-MM-DDTHH:mm"));
     lastRow.find("INPUT[name=closeTime]").val(closeTime.format("YYYY-MM-DDTHH:mm"));
-    
-    lastRow.find("INPUT, TEXTAREA, SELECT").each(function(){
+
+    lastRow.find("INPUT, TEXTAREA, SELECT").each(function () {
         var name = $(this).attr("name");
         $(this).attr("id", formId + '-' + name + '-' + rowIndex);
-        $(this).attr("name", name + '-' + rowIndex);
     });
 }
 
-function removeRow(elm){
+function removeRow(elm) {
     var row = $(elm).closest("TR");
-    if(!row.is(':nth-child(2)') || row.closest("TABLE").find("TR").length > 2){
+    if (!row.is(':nth-child(2)') || row.closest("TABLE").find("TR").length > 2) {
         row.data("data-binder").destroy();
         row.remove();
     }
