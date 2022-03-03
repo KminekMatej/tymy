@@ -27,8 +27,6 @@ class DetailPresenter extends EventBasePresenter
     public function renderDefault(string $resource)
     {
         $this->template->cptNotDecidedYet = $this->translator->translate('event.notDecidedYet');
-        $this->template->cptArrived = $this->translator->translate('event.arrived', 2);
-        $this->template->cptNotArrived = $this->translator->translate('event.notArrived', 2);
 
         $eventId = $this->parseIdFromWebname($resource);
         /* @var $event Event */
