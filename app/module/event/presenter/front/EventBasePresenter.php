@@ -62,7 +62,7 @@ class EventBasePresenter extends SecuredPresenter
             }
         });
 
-        $this->template->statusList = $this->statusManager->getList();
+        $this->template->statusList = $this->statusManager->getIdList();
     }
 
     /**
