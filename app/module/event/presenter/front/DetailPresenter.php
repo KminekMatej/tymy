@@ -6,9 +6,11 @@
  */
 namespace Tymy\Module\Event\Presenter\Front;
 
+use Tracy\Debugger;
 use Tymy\Module\Attendance\Manager\HistoryManager;
 use Tymy\Module\Attendance\Model\Attendance;
 use Tymy\Module\Attendance\Model\Status;
+use Tymy\Module\Attendance\Model\StatusSet;
 use Tymy\Module\Event\Model\Event;
 use Tymy\Module\User\Model\User;
 
@@ -19,7 +21,7 @@ use Tymy\Module\User\Model\User;
  */
 class DetailPresenter extends EventBasePresenter
 {
-    /* @inject */
+    /** @inject */
     public HistoryManager $historyManager;
 
     public function renderDefault(string $resource)
@@ -32,63 +34,55 @@ class DetailPresenter extends EventBasePresenter
         /* @var $event Event */
         $event = $this->eventManager->getById($eventId);
         $eventTypes = $this->eventTypeManager->getIndexedList();
-        $users = $this->userManager->getList();
 
         $this->setLevelCaptions(["2" => ["caption" => $event->getCaption(), "link" => $this->link(":Event:Detail:", $event->getId() . "-" . $event->getWebName())]]);
 
-        //array keys are pre-set for sorting purposes
-        $attArray = [];
-        $attArray["POST"] = [];
-        $attArray["POST"]["YES"] = [];
-        $attArray["POST"]["NO"] = [];
-        $attArray["PRE"] = [];
-        foreach ($this->statusManager->getList() as $status) {
-            /* @var $status Status */
-            $attArray["PRE"][$status->getCode()] = [];
-        }
-        $attArray["PRE"]["UNKNOWN"] = [];
-
         $this->template->resultsClosed = false;
-        foreach ($event->getAttendance() as $attendance) {
-            /* @var $attendance Attendance */
-            if (!array_key_exists($attendance->getUserId(), $users)) {
-                continue;
-            }
 
-            if ($attendance->getPostStatus() !== null) {  //some attendance result has been aready filled, do not show buttons on default
-                $this->template->resultsClosed = true;
-            }
-
-            /* @var $user User */
-            $user = $users[$attendance->getUserId()];
-            if ($user->getStatus() != User::STATUS_PLAYER) {
-                continue; // display only players on event detail
-            }
-
-            $gender = $user->getGender();
-            //$user->preDescription = $attendance->preDescription;
-            $mainKey = "PRE";
-            $secondaryKey = $attendance->getPreStatus();
-            if ($attendance->getPostStatus() != "UNKNOWN") {
-                $mainKey = "POST";
-                $secondaryKey = $attendance->getPostStatus();
-            }
-            if (!array_key_exists($secondaryKey, $attArray[$mainKey])) {
-                $attArray[$mainKey][$secondaryKey] = [];
-            }
-            if (!array_key_exists($gender, $attArray[$mainKey][$secondaryKey])) {
-                $attArray[$mainKey][$secondaryKey][$gender] = [];
-            }
-            $attArray[$mainKey][$secondaryKey][$gender][$attendance->getUserId()] = $user;
-        }
-
-        $this->template->allUsers = $attArray;
+        $this->template->attendances = $this->loadEventAttendance($event);
         $this->template->event = $event;
         $this->template->eventTypes = $eventTypes;
         $this->template->eventType = $eventTypes[$event->getType()];
         $eventCaptions = $this->getEventCaptions($event, $eventTypes);
         $this->template->myPreStatusCaption = $eventCaptions["myPreStatusCaption"];
         $this->template->myPostStatusCaption = $eventCaptions["myPostStatusCaption"];
+    }
+    
+    /**
+     * Compose attendance array to be easily used on template
+     * @param Event $event
+     * @return array
+     */
+    private function loadEventAttendance(Event $event): array
+    {
+        $attendances = [];
+        //return array, first key is attendance type (PRE, POST), then code (YES/NO/LAT), then gender (male/female/unknown), then user
+        $usersWithAttendance = [];
+        foreach ($event->getAttendance() as $attendance) {
+            /* @var $attendance Attendance */
+            $statusId = $attendance->getPostStatusId() ?: $attendance->getPreStatusId();
+            $gender = $attendance->getUser()->getGender();
+
+            if (!array_key_exists($statusId, $attendances)) {//init code
+                $attendances[$statusId] = [];
+            }
+            if (!array_key_exists($gender, $attendances[$statusId])) {//init gender
+                $attendances[$statusId][$gender] = [];
+            }
+
+            $attendances[$statusId][$gender][] = $attendance->getUser();
+            $usersWithAttendance[] = $attendance->getUser()->getId();
+        }
+
+        //add all other players ad not decided yet
+        $users = $this->userManager->getByStatus(User::STATUS_PLAYER);
+        foreach ($users as $user) {
+            if (in_array($user->getId(), $usersWithAttendance)) {
+                continue;   //user has already filled its attendance
+            }
+            $attendances["unknown"][$user->getGender()][] = $user;
+        }
+        return $attendances;
     }
 
     private function getEventCaptions($event, $eventTypes)
