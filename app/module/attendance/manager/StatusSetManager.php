@@ -40,7 +40,7 @@ class StatusSetManager extends BaseManager
 
         $statusSet->setWebname($statusSet->getId() . "-" . Strings::webalize($statusSet->getName()));
 
-        foreach ($row->related(Status::TABLE, "set_id") as $statusRow) {
+        foreach ($row->related(Status::TABLE) as $statusRow) {
             $statusSet->addStatus($this->statusManager->map($statusRow));
         }
 
