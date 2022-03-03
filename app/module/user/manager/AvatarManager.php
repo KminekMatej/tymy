@@ -79,10 +79,8 @@ class AvatarManager
      */
     public function uploadAvatarImage(Image $image, int $type, int $userId): void
     {
-        $abbr = $image->typeToExtension($type);
         $this->allowUpload($userId);
-        $folder = sprintf($this->userPicFolder, $this->teamManager->getTeam()->getSysName());
-        $image->resize(self::WIDTH, self::HEIGHT);
-        $image->save("$folder/$userId.$abbr");
+
+        $image->resize(self::WIDTH, self::HEIGHT)->save(TEAM_DIR . "/user_pics/$userId.{$image->typeToExtension($type)}");
     }
 }
