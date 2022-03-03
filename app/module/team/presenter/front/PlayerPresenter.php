@@ -149,7 +149,7 @@ class PlayerPresenter extends SecuredPresenter
         if ($file->isImage() && $file->isOk()) {
             $type = null;
             $image = Image::fromFile($file->getTemporaryFile(), $type);
-            $this->avatarManager->uploadAvatarImage($image, $type, $userId);
+            $this->avatarManager->uploadAvatarImage($image, $type, $this->user->getId());
             $this->flashMessage($this->translator->translate("common.alerts.avatarSaved"), "success");
             $this->redrawControl("flashes");
             $this->redrawControl("player-header");
