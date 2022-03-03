@@ -91,12 +91,14 @@ class AuthenticationManager implements IAuthenticator
 
         /* @var $user User */
         $user = $userManager->map($row);
+        $userData = $user->jsonSerialize();
 
         if ($ghost) {
             $user->setGhost(true);
+            $userData["ghost"] = true;
         }
 
-        return new SimpleIdentity($user->getId(), $user->getRoles(), $user->jsonSerialize());
+        return new SimpleIdentity($user->getId(), $user->getRoles(), $userData);
     }
 
     /**
