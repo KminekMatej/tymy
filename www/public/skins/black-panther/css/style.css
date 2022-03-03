@@ -127,8 +127,8 @@ form .error {
 }
 
 IMG.user_pic{
-    min-width: 40px;
-    min-height: 50px;
+    width: 40px;
+    height: auto;
 }
 
 NAV LI.nav-item SPAN.navbar-text{
