@@ -296,10 +296,12 @@ class PostManager extends BaseManager
         $params[] = $page == 1 ? $this->getFirstPageSize() : self::POSTS_PER_PAGE;
         $query[] = "OFFSET ?";
         $params[] = $offset;
-        
+
         $posts = $this->mapAll($this->database->query(join(" ", $query), ...$params)->fetchAll());
 
-        $this->markAllAsRead($this->user->getId(), $discussionId);
+        if (!$this->user->getIdentity()->ghost) {
+            $this->markAllAsRead($this->user->getId(), $discussionId);
+        }
 
         return $posts;
     }
