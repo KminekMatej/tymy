@@ -231,3 +231,17 @@ IMG.skin-logo{
 .debt.sent{
     color: #ffbd00;
 }
+
+/* btn-xs - extending bootstrap */
+
+.btn-xs, .btn-group-xs > .btn {
+  padding: 0.2rem 0.4rem;
+  font-size: 0.7rem;
+  line-height: 1.2;
+  border-radius: 0.16rem;
+}
+
+.btn-xs + .dropdown-toggle-split, .btn-group-xs > .btn + .dropdown-toggle-split {
+  padding-right: 0.3rem;
+  padding-left: 0.3rem;
+}
