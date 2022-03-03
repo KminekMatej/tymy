@@ -35,7 +35,7 @@ class DetailPresenter extends EventBasePresenter
 
         $this->setLevelCaptions(["2" => ["caption" => $event->getCaption(), "link" => $this->link(":Event:Detail:", $event->getId() . "-" . $event->getWebName())]]);
 
-        $this->template->resultsClosed = false;
+        $this->template->resultsClosed = false; //initially this is false, toggled by javascript
 
         $this->template->attendances = $this->loadEventAttendance($event);
         $this->template->event = $event;
