@@ -52,18 +52,35 @@ class AvatarManager
         }
     }
 
-    public function uploadProfileImage(string $base64Image, int $userId)
+    /**
+     * Upload avatar from base64 string
+     * @param string $base64Image
+     * @param int $userId
+     * @return void
+     */
+    public function uploadAvatarBase64(string $base64Image, int $userId): void
     {
-        $this->allowUpload($userId);
-
         $imgParts = [];
         preg_match(BaseModel::B64_REGEX, $base64Image, $imgParts);
         if (!is_array($imgParts) || count($imgParts) != 4 || $imgParts[1] != "image") {
             $this->responder->E400_BAD_REQUEST("Base 64 error");
         }
-        $abbr = $imgParts[2];
         $imgB64 = $imgParts[3];
-        $image = Image::fromString(base64_decode($imgB64));
+        $type = null;
+        $image = Image::fromString(base64_decode($imgB64), $type);
+        $this->uploadAvatarImage($image, $type, $userId);
+    }
+
+    /**
+     * Upload avatar from Image
+     * @param Image $image
+     * @param int $userId
+     * @return void
+     */
+    public function uploadAvatarImage(Image $image, int $type, int $userId): void
+    {
+        $abbr = $image->typeToExtension($type);
+        $this->allowUpload($userId);
         $folder = sprintf($this->userPicFolder, $this->teamManager->getTeam()->getSysName());
         $image->resize(self::WIDTH, self::HEIGHT);
         $image->save("$folder/$userId.$abbr");

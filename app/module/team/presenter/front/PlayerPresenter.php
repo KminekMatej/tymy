@@ -2,13 +2,19 @@
 
 namespace Tymy\Module\Team\Presenter\Front;
 
+use Nette\Http\FileUpload;
+use Nette\Utils\Image;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\Team\Manager\TeamManager;
+use Tymy\Module\User\Manager\AvatarManager;
 use Tymy\Module\User\Model\User;
 
 class PlayerPresenter extends SecuredPresenter
 {
+    /** @inject */
+    public AvatarManager $avatarManager;
+    
     public function beforeRender()
     {
         parent::beforeRender();
@@ -138,10 +144,12 @@ class PlayerPresenter extends SecuredPresenter
     {
         $bind = $this->getRequest()->getPost();
         $files = $this->getRequest()->getFiles();
+        /* @var $file FileUpload */
         $file = $files["files"][0];
         if ($file->isImage() && $file->isOk()) {
-            $avatarB64 = 'data:' . mime_content_type($file->getTemporaryFile()) . ';base64,' . base64_encode(file_get_contents($file->getTemporaryFile()));
-            $this->userManager->uploadAvatar($bind["id"], $avatarB64);
+            $type = null;
+            $image = Image::fromFile($file->getTemporaryFile(), $type);
+            $this->avatarManager->uploadAvatarImage($image, $type, $userId);
             $this->flashMessage($this->translator->translate("common.alerts.avatarSaved"), "success");
             $this->redrawControl("flashes");
             $this->redrawControl("player-header");
