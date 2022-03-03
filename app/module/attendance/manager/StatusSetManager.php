@@ -102,12 +102,12 @@ class StatusSetManager extends BaseManager
      */
     public function isUsed(int $statusSetId): bool
     {
-        $codes = $this->database->table(Status::TABLE)->where("status_set_id", $statusSetId)->fetchPairs(null, "code");
+        $ids = $this->database->table(Status::TABLE)->where("status_set_id", $statusSetId)->fetchPairs(null, "id");
 
         return $this->database->table(Attendance::TABLE)->whereOr([
-                    "pre_status IN (?)" => $codes,
-                    "post_status IN (?)" => $codes,
-                ])->count() > 0;
+                "pre_status_id IN (?)" => $ids,
+                "post_status_id IN (?)" => $ids,
+            ])->count() > 0;
     }
 
     public function canEdit($entity, $userId): bool

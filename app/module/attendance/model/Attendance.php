@@ -20,10 +20,12 @@ class Attendance extends BaseModel implements JsonSerializable
 
     private int $userId;
     private int $eventId;
+    private ?int $preStatusId = null;
     private ?string $preStatus = null;
     private ?string $preDescription = null;
     private ?int $preUserMod = null;
     private ?DateTime $preDatMod = null;
+    private ?int $postStatusId = null;
     private ?string $postStatus = null;
     private ?string $postDescription = null;
     private ?int $postUserMod = null;
@@ -38,6 +40,11 @@ class Attendance extends BaseModel implements JsonSerializable
     public function getEventId(): int
     {
         return $this->eventId;
+    }
+
+    public function getPreStatusId(): ?int
+    {
+        return $this->preStatusId;
     }
 
     public function getPreStatus(): ?string
@@ -58,6 +65,11 @@ class Attendance extends BaseModel implements JsonSerializable
     public function getPreDatMod(): ?DateTime
     {
         return $this->preDatMod;
+    }
+
+    public function getPostStatusId(): ?int
+    {
+        return $this->postStatusId;
     }
 
     public function getPostStatus(): ?string
@@ -97,6 +109,12 @@ class Attendance extends BaseModel implements JsonSerializable
         return $this;
     }
 
+    public function setPreStatusId(?int $preStatusId)
+    {
+        $this->preStatusId = $preStatusId;
+        return $this;
+    }
+
     public function setPreStatus(?string $preStatus)
     {
         $this->preStatus = $preStatus;
@@ -118,6 +136,12 @@ class Attendance extends BaseModel implements JsonSerializable
     public function setPreDatMod(?DateTime $preDatMod)
     {
         $this->preDatMod = $preDatMod;
+        return $this;
+    }
+
+    public function setPostStatusId(?int $postStatusId)
+    {
+        $this->postStatusId = $postStatusId;
         return $this;
     }
 
@@ -164,5 +188,13 @@ class Attendance extends BaseModel implements JsonSerializable
     public function getTable(): string
     {
         return self::TABLE;
+    }
+
+    public function jsonSerialize()
+    {
+        return parent::jsonSerialize() + [
+            "preStatus" => $this->preStatus,
+            "postStatus" => $this->postStatus,
+        ];
     }
 }

@@ -68,19 +68,6 @@ class StatusManager extends BaseManager
     }
 
     /**
-     * Check if this status code is used in some attendance
-     * @param string $statusCode
-     * @return bool
-     */
-    public function isUsed(string $statusCode): bool
-    {
-        return $this->database->table(Attendance::TABLE)->whereOr([
-                    "pre_status" => $statusCode,
-                    "post_status" => $statusCode,
-                ])->count() > 0;
-    }
-
-    /**
      * Compose and return correct folder of status set, using its ID
      *
      * @param int $statusSetId

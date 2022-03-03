@@ -11,6 +11,7 @@ use PDOException;
 use Tymy\Module\Attendance\Mapper\AttendanceMapper;
 use Tymy\Module\Attendance\Model\Attendance;
 use Tymy\Module\Attendance\Model\History;
+use Tymy\Module\Attendance\Model\Status;
 use Tymy\Module\Core\Exception\DBException;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
@@ -82,12 +83,20 @@ class AttendanceManager extends BaseManager
      */
     public function map(?IRow $row, bool $force = false): ?BaseModel
     {
+        /* @var $row ActiveRow */
         if (!$row) {
             return null;
         }
 
         /* @var $attendance Attendance */
         $attendance = parent::map($row, $force);
+
+        if ($attendance->getPreStatusId()) {
+            $attendance->setPreStatus($row->ref(Status::TABLE, "pre_status_id")->code);
+        }
+        if ($attendance->getPostStatusId()) {
+            $attendance->setPostStatus($row->ref(Status::TABLE, "post_status_id")->code);
+        }
 
         $attendance->setUser($this->userManager->getSimpleUser($attendance->getUserId()));
 

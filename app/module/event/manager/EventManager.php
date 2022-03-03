@@ -87,7 +87,7 @@ class EventManager extends BaseManager
             $model->setAttendancePending(true);
         }
 
-        $invertColors = !$myAttendance || empty($myAttendance->pre_status);
+        $invertColors = !$myAttendance || empty($myAttendance->pre_status_id);
         $model->setBackgroundColor($invertColors ? 'white' : $eventColor);
         $model->setBorderColor($eventColor);
         $model->setTextColor($invertColors ? $eventColor : '');
