@@ -13,23 +13,23 @@
 {include parent}
 <style type="text/css">
     {foreach $statusList as $status}
-        .attendance{$status->getCode()} {
+        .attendance{$status->getCode()}, .statusBtn{$status->getId()} {
             color: #{$status->getColor()};
             border-color: #{$status->getColor()};
             background-color: transparent;
             background-image: none;
         }
-        .attendance{$status->getCode()}.active {
+        .attendance{$status->getCode()}.active, .statusBtn{$status->getId()}.active {
             color: #fff;
             border-color: #{$status->getColor()};
             background-color: #{$status->getColor()};
         }
-        .attendance{$status->getCode()}:hover {
+        .attendance{$status->getCode()}:hover, .statusBtn{$status->getId()}:hover {
             color: #fff;
             border-color: #{$status->getColor()};
             background-color: #{$status->getColor()};
         }
-        .attendance{$status->getCode()}:not(:disabled):not(.disabled).active {
+        .attendance{$status->getCode()}:not(:disabled):not(.disabled).active, .statusBtn{$status->getId()}:not(:disabled):not(.disabled).active {
             color: #fff;
             border-color: #{$status->getColor()};
             background-color: #{$status->getColor()};
@@ -72,9 +72,7 @@
                         <div class="col-lg-8 d-flex flex-column-reverse align-items-center">
                             <div class="custom-container btn-group input-group pb-2" role="group" aria-label="Attendace setup container" id="action-{$event->getId()}">
                                 <input type="text" class="form-control custom-btn-sm" title="{_note.note,1}" name="preStatusDesc" value="{$event->getMyAttendance() ? $event->getMyAttendance()->getPreDescription() : ''}" />
-                                {foreach $eventType->getPreStatusSet() as $preStatus}
-                                    <button onclick="updateAttendance(this, {link attendance! $event->getId(), $preStatus->getCode()})" class="btn custom-btn-sm {$event->getMyAttendance(),$event->getType(),$preStatus->getCode(),$event->getCanPlan(),$event->getCloseTime()|prestatusClass}">{$preStatus->getCaption()}</button>
-                                {/foreach}
+                                <button n:foreach="$eventType->getPreStatusSet() as $preStatus" onclick="updateAttendance(this, {link attendance! $event->getId(), $preStatus->getCode()})" class="btn custom-btn-sm {$event->getMyAttendance(),$event->getType(),$preStatus->getCode(),$event->getCanPlan(),$event->getCloseTime()|prestatusClass}">{$preStatus->getCaption()}</button>
                             </div>
                             {snippet attendanceWarning}
                                 <div class="alert alert-danger" n:if="$event->getAttendancePending()"><i class="fa fa-arrow-down" aria-hidden="true"></i> {_event.attendanceNotFilled} ! <i class="fa fa-arrow-down" aria-hidden="true"></i></div>
@@ -154,8 +152,11 @@
                                                 <figcaption class="figure-caption">{$usr->getCallName()}</figcaption>
                                                 <figcaption n:ifset="$event->getAttendance()[$usr->getId()]" class="figure-caption" style="font-size: 70%; display: inline-block">{$event->getAttendance()[$usr->getId()]->getPreDescription()}</figcaption>
                                             </a>
-                                            <div n:class="btn-group,result,$resultsClosed ? d-none" role="group" aria-label="{_event.attendanceResult}" n:if="$event->getCanResult() && $event->getInPast()">
-                                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="ncame(this)" title="{_event.notArrived,1}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                            <div n:class="btn-group-vertical,result,$resultsClosed ? d-none" role="group" aria-label="{_event.attendanceResult}" n:if="$event->getCanResult() && $event->getInPast()">
+
+                                                <button n:foreach="$eventType->getPostStatusSet() as $postStatus" class="btn btn-xs statusBtn{$postStatus->getId()}" data-status-id="{$postStatus->getId()}" onclick="togglePostStatus(this)" title="{$postStatus->getCaption()}">{$postStatus->getCaption()}</button>
+                                                {*
+                                                <button type="button" class="btn btn-sm btn-outline-danger" title="{_event.notArrived,1}"><i class="fa fa-times" aria-hidden="true"></i></button>
                                                 <button type="button" class="btn btn-sm btn-outline-success" onclick="came(this)" title="{_event.arrived,1}"><i class="fa fa-check" aria-hidden="true"></i></button>
                                             </div>
                                         </figure>

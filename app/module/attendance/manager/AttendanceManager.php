@@ -148,18 +148,18 @@ class AttendanceManager extends BaseManager
 
     protected function allowCreate(?array &$data = null): void
     {
-        $preEntered = isset($data["preStatus"]);
-        $postEntered = isset($data["postStatus"]);
+        $preStatus = $data["preStatusId"] ?? $data["preStatus"] ?? null;
+        $postStatus = $data["postStatusId"] ?? $data["postStatus"] ?? null;
 
-        if (!$preEntered && !$postEntered) {
+        if (!$preStatus && !$postStatus) {
             $this->respondBadRequest("Event pre or post status in attendance entry must be provided");
         }
 
-        if ($preEntered) {
-            $this->allowPreStatus($data["eventId"], $data["preStatus"]);
+        if ($preStatus) {
+            $this->allowPreStatus($data["eventId"], $preStatus);
         }
-        if ($postEntered) {
-            $this->allowPostStatus($data["eventId"], $data["postStatus"]);
+        if ($postStatus) {
+            $this->allowPostStatus($data["eventId"], $postStatus);
         }
 
         unset($data["preUserMod"]); //these values an be set only programatically
@@ -168,12 +168,12 @@ class AttendanceManager extends BaseManager
         unset($data["postDatMod"]);
 
         $now = new DateTime();
-        if ($preEntered) {
+        if ($preStatus) {
             $data["preUserMod"] = $this->user->getId();
             $data["preDatMod"] = $now;
         }
 
-        if ($postEntered) {
+        if ($postStatus) {
             // this is result entry, check rights
             $this->allowSetResult();
 
@@ -226,17 +226,19 @@ class AttendanceManager extends BaseManager
      * (Check using event_type and so on)
      *
      * @param int $eventId
-     * @param string $preStatus
-     * @return type
+     * @param int|string $preStatus Either id or code
+     * @return bool
      */
-    private function allowPreStatus(int $eventId, string $preStatus): bool
+    private function allowPreStatus(int $eventId, mixed $preStatus): bool
     {
-        $allowedCodes = $this->database->query("SELECT status.code FROM status "
-                        . "LEFT JOIN status_set ON status_set.id=status.status_set_id "
-                        . "LEFT JOIN event_types ON event_types.pre_status_set_id=status_set.id "
-                        . "LEFT JOIN events ON events.event_type_id=event_types.id WHERE events.id=?", $eventId)->fetchPairs(null, "code");
+        $field = is_numeric($preStatus) ? "id" : "code";
 
-        return is_array($allowedCodes) && in_array($preStatus, $allowedCodes);
+        $allowedStatuses = $this->database->query("SELECT status.$field FROM status "
+                . "LEFT JOIN status_set ON status_set.id=status.status_set_id "
+                . "LEFT JOIN event_types ON event_types.pre_status_set_id=status_set.id "
+                . "LEFT JOIN events ON events.event_type_id=event_types.id WHERE events.id=?", $eventId)->fetchPairs(null, $field);
+
+        return is_array($allowedStatuses) && in_array($preStatus, $allowedStatuses);
     }
 
     /**
@@ -244,29 +246,42 @@ class AttendanceManager extends BaseManager
      * (Check using event_type and so on)
      *
      * @param int $eventId
-     * @param string $postStatus
+     * @param int $postStatus Either id or code
      * @return bool
      */
-    private function allowPostStatus(int $eventId, string $postStatus): bool
+    private function allowPostStatus(int $eventId, mixed $postStatus): bool
     {
-        $allowedCodes = $this->database->query("SELECT status.code FROM status "
-                        . "LEFT JOIN status_set ON status_set.id=status.status_set_id "
-                        . "LEFT JOIN event_types ON event_types.post_status_set_id=status_set.id "
-                        . "LEFT JOIN events ON events.event_type_id=event_types.id WHERE events.id=?", $eventId)->fetchPairs(null, "code");
+        $field = is_numeric($postStatus) ? "id" : "code";
 
-        return is_array($allowedCodes) && in_array($postStatus, $allowedCodes);
+        $allowedStatuses = $this->database->query("SELECT status.$field FROM status "
+                . "LEFT JOIN status_set ON status_set.id=status.status_set_id "
+                . "LEFT JOIN event_types ON event_types.post_status_set_id=status_set.id "
+                . "LEFT JOIN events ON events.event_type_id=event_types.id WHERE events.id=?", $eventId)->fetchPairs(null, $field);
+
+        return is_array($allowedStatuses) && in_array($postStatus, $allowedStatuses);
     }
 
-    private function createHistory(int $userId, int $eventId, string $preStatusTo, ?string $preDescTo = null, ?string $preStatusFrom = null, ?string $preDescFrom = null)
+    /**
+     * Create row of attendance history
+     *
+     * @param int $userId
+     * @param int $eventId
+     * @param int $statusIdTo
+     * @param string|null $preDescTo
+     * @param int|null $statusIdFrom
+     * @param string|null $preDescFrom
+     * @return ActiveRow
+     */
+    private function createHistory(int $userId, int $eventId, int $statusIdTo, ?string $preDescTo = null, ?int $statusIdFrom = null, ?string $preDescFrom = null): ActiveRow
     {
-        $this->historyManager->createByArray([
+        return $this->historyManager->createByArray([
             "updatedById" => $this->user->getId(),
             "updatedAt" => new DateTime(),
             "userId" => $userId,
             "eventId" => $eventId,
-            "preStatusFrom" => $preStatusFrom,
+            "statusIdFrom" => $statusIdFrom,
             "preDescFrom" => $preDescFrom,
-            "preStatusTo" => $preStatusTo,
+            "statusIdTo" => $statusIdTo,
             "preDescTo" => $preDescTo,
             "type" => History::TYPE_USER_ATTENDANCE_ENTRY,
         ]);
@@ -295,17 +310,16 @@ class AttendanceManager extends BaseManager
         $this->allowCreate($data); //allowCreate checks right for both creating and updating already created attendance
         if (!$existingAttendance) {
             $created = $this->createByArray($data);
-            if ($created && isset($data["preStatus"])) {
-                $this->createHistory($data["userId"], $data["eventId"], $data["preStatus"], $data["preDescription"] ?? null);
+            if ($created && isset($data["preStatusId"])) {
+                $this->createHistory($data["userId"], $data["eventId"], $data["preStatusId"], $data["preDescription"] ?? null);
             }
-            return $this->getByEventUserId($data["eventId"], $data["userId"]);
         } else {
             $updated = $this->updateByArray($data["eventId"], $data);
-            if ($updated && isset($data["preStatus"])) {
-                $this->createHistory($data["userId"], $data["eventId"], $data["preStatus"], $data["preDescription"] ?? null, $existingAttendance->getPreStatus(), $existingAttendance->getPreDescription());
+            if ($updated && isset($data["preStatusId"])) {
+                $this->createHistory($data["userId"], $data["eventId"], $data["preStatusId"], $data["preDescription"] ?? null, $existingAttendance->getPreStatusId(), $existingAttendance->getPreDescription());
             }
-            return $this->getByEventUserId($data["eventId"], $data["userId"]);
         }
+        return $this->getByEventUserId($data["eventId"], $data["userId"]);
     }
 
     /**
