@@ -14,7 +14,7 @@ use Tymy\Module\User\Model\SimpleUser;
  */
 class History extends BaseModel
 {
-    public const TABLE = "attend_history";
+    public const TABLE = "attendance_history";
     public const MODULE = "event";
     public const TYPE_USER_ATTENDANCE_ENTRY = "UAE";
 

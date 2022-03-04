@@ -20,7 +20,7 @@ TRUNCATE `ask_items`;
 TRUNCATE `ask_quests`;
 TRUNCATE `ask_votes`;
 TRUNCATE `attendance`;
-TRUNCATE `attend_history`;
+TRUNCATE `attendance_history`;
 TRUNCATE `debt`;
 TRUNCATE `discussions`;
 TRUNCATE `download`;

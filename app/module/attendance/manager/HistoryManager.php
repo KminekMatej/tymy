@@ -100,7 +100,7 @@ class HistoryManager extends BaseManager
 
     public function getEventHistory($eventId): array
     {
-        return $this->mapAll($this->database->query("SELECT `attend_history`.* FROM `attend_history` LEFT JOIN `users` ON `attend_history`.`user_id` = `users`.`id` WHERE (`event_id` = ?) AND (`users`.`status` != 'DELETED') ORDER BY `dat_mod` DESC", $eventId)->fetchAll());
+        return $this->mapAll($this->database->query("SELECT `".History::TABLE."`.* FROM `".History::TABLE."` LEFT JOIN `users` ON `".History::TABLE."`.`user_id` = `users`.`id` WHERE (`event_id` = ?) AND (`users`.`status` != 'DELETED') ORDER BY `dat_mod` DESC", $eventId)->fetchAll());
     }
 
     public function create(array $data, ?int $resourceId = null): BaseModel
