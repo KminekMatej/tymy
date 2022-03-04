@@ -20,11 +20,9 @@ class HistoryMapper extends BaseMapper
             Field::string()->withColumn("dat_mod")->setProperty("updatedAt"),
             Field::int()->withColumn("usr_mod")->setProperty("updatedById"),
             Field::int()->withColumn("status_id_from")->setProperty("statusIdFrom"),
-            Field::int()->withColumn("status_id_to")->setProperty("statusIdTo"),
-            Field::string()->withColumn("pre_status_to", true)->setProperty("preStatusTo"),
+            Field::int()->withColumn("status_id_to", true)->setProperty("statusIdTo"),
             Field::string()->withColumn("pre_desc_to")->setProperty("preDescTo"),
             Field::string()->withColumn("entry_type")->setProperty("entryType"),
-            Field::string()->withColumn("pre_status_from")->setProperty("preStatusFrom"),
             Field::string()->withColumn("pre_desc_from")->setProperty("preDescFrom"),
         ];
     }
