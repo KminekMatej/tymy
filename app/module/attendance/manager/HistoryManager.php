@@ -7,12 +7,14 @@ use Nette\Database\Table\ActiveRow;
 use Nette\NotImplementedException;
 use Tymy\Module\Attendance\Mapper\HistoryMapper;
 use Tymy\Module\Attendance\Model\History;
+use Tymy\Module\Attendance\Model\Status;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Event\Model\Event;
 use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Manager\UserManager;
+use Tymy\Module\User\Model\User;
 
 /**
  * Description of HistoryManager
@@ -102,9 +104,19 @@ class HistoryManager extends BaseManager
         }
     }
 
-    public function getEventHistory($eventId): array
+    /**
+     * Load all history records for users which are not DELETED
+     *
+     * @param int $eventId
+     * @return History[]
+     */
+    public function getEventHistory(int $eventId): array
     {
-        return $this->mapAll($this->database->query("SELECT `".History::TABLE."`.* FROM `".History::TABLE."` LEFT JOIN `users` ON `".History::TABLE."`.`user_id` = `users`.`id` WHERE (`event_id` = ?) AND (`users`.`status` != 'DELETED') ORDER BY `dat_mod` DESC", $eventId)->fetchAll());
+        return $this->mapAll($this->database->table(History::TABLE)
+                    ->where("event_id", $eventId)
+                    ->where(User::TABLE . ".status != ?", User::STATUS_DELETED)
+                    ->order("dat_mod DESC")
+                    ->fetchAll());
     }
 
     public function create(array $data, ?int $resourceId = null): BaseModel
