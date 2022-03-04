@@ -23,9 +23,11 @@ class History extends BaseModel
     private DateTime $updatedAt;
     private ?int $updatedById = null;
     private string $entryType;
-    private ?string $preStatusFrom = null;
+    private ?int $statusIdFrom = null;  //null if this is the first set
+    private ?string $preStatusFrom = null;  //null if this is the first set
     private ?string $preDescFrom = null;
-    private ?string $preStatusTo = null;
+    private int $statusIdTo;
+    private string $preStatusTo;
     private ?string $preDescTo = null;
     private SimpleUser $user;
     private ?SimpleUser $updatedBy = null;
@@ -55,6 +57,11 @@ class History extends BaseModel
         return $this->entryType;
     }
 
+    public function getStatusIdFrom(): ?int
+    {
+        return $this->statusIdFrom;
+    }
+
     public function getPreStatusFrom(): ?string
     {
         return $this->preStatusFrom;
@@ -63,6 +70,11 @@ class History extends BaseModel
     public function getPreDescFrom(): ?string
     {
         return $this->preDescFrom;
+    }
+
+    public function getStatusIdTo(): int
+    {
+        return $this->statusIdTo;
     }
 
     public function getPreStatusTo(): ?string
@@ -115,6 +127,12 @@ class History extends BaseModel
         return $this;
     }
 
+    public function setStatusIdFrom(?int $statusIdFrom)
+    {
+        $this->statusIdFrom = $statusIdFrom;
+        return $this;
+    }
+
     public function setPreStatusFrom(?string $preStatusFrom)
     {
         $this->preStatusFrom = $preStatusFrom;
@@ -124,6 +142,12 @@ class History extends BaseModel
     public function setPreDescFrom(?string $preDescFrom)
     {
         $this->preDescFrom = $preDescFrom;
+        return $this;
+    }
+
+    public function setStatusIdTo(int $statusIdTo)
+    {
+        $this->statusIdTo = $statusIdTo;
         return $this;
     }
 
@@ -169,6 +193,8 @@ class History extends BaseModel
     public function jsonSerialize()
     {
         return parent::jsonSerialize() + [
+            "preStatusFrom" => $this->getPreStatusFrom(),
+            "preStatusTo" => $this->getPreStatusTo(),
             "user" => $this->user->jsonSerialize(),
             "updatedBy" => $this->updatedBy ? $this->updatedBy->jsonSerialize() : null,
         ];

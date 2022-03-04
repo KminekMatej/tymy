@@ -52,6 +52,10 @@ class HistoryManager extends BaseManager
             $history->setUpdatedBy($this->userManager->getSimpleUser($history->getUpdatedById()));
         }
 
+        $history->setPreStatusTo($row->ref(Status::TABLE, "status_id_to")->code);
+        if ($history->getStatusIdFrom()) {
+            $history->setPreStatusFrom($row->ref(Status::TABLE, "status_id_from")->code);
+        }
 
         return $history;
     }
