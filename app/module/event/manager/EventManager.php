@@ -131,9 +131,7 @@ class EventManager extends BaseManager
             Filter::addFilter($selector, $this->filterToArray($filter));
         }
 
-        if ($limit) {
-            $selector->limit($limit, $offset ?: 0);
-        }
+        $selector->limit($limit ?: 200, $offset ?: 0);
 
         $selector->order(Order::toString($this->orderToArray($order ?: "startTime__desc")));
 
