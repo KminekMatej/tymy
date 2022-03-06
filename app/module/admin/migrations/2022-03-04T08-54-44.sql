@@ -37,6 +37,8 @@ LEFT JOIN `events` ON `events`.`event_type_id`=`event_types`.`id`
 WHERE `events`.`id`=`attendance_history`.`event_id` AND `status`.`code`=`attendance_history`.`pre_status_to`
 );
 
+DELETE FROM `attendance_history` WHERE `status_id_to` = 0;
+
 ALTER TABLE `attendance_history` 
 ADD FOREIGN KEY (`status_id_from`) REFERENCES `status`(`id`) ON DELETE CASCADE ON UPDATE CASCADE,
 ADD FOREIGN KEY (`status_id_to`) REFERENCES `status`(`id`) ON DELETE CASCADE ON UPDATE CASCADE,
