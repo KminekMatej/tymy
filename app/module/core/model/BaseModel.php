@@ -12,7 +12,7 @@ use Nette\Utils\DateTime;
  */
 abstract class BaseModel implements JsonSerializable
 {
-    public const DATE_FORMAT = "c";
+    public const DATE_FORMAT = "Y-m-d\TH:i:s.000\Z";
     public const TIME_FORMAT = "H:i:s";
     public const DATEINTERVAL_NO_SECS_FORMAT = "%H:%I";
     public const TIME_NO_SECS_FORMAT = "H:i";
@@ -82,7 +82,7 @@ abstract class BaseModel implements JsonSerializable
         foreach ($this->getScheme() as $field) {
             $getField = "get" . ucfirst($field->getProperty());
             $output = $this->$getField();
-            $value = $output instanceof DateTime ? $output->format(self::DATE_FORMAT) : $output;
+            $value = $output instanceof DateTime ? (clone $output)->setTimezone(new \DateTimeZone('UTC'))->format(self::DATE_FORMAT) : $output;
             if ($field->getAlias()) {
                 $ret[$field->getAlias()] = $value;
             } else {
