@@ -229,7 +229,7 @@ class AttendanceManager extends BaseManager
      * @param int|string $preStatus Either id or code
      * @return bool
      */
-    private function allowPreStatus(int $eventId, mixed $preStatus): bool
+    private function allowPreStatus(int $eventId, $preStatus): bool
     {
         $field = is_numeric($preStatus) ? "id" : "code";
 
@@ -249,7 +249,7 @@ class AttendanceManager extends BaseManager
      * @param int $postStatus Either id or code
      * @return bool
      */
-    private function allowPostStatus(int $eventId, mixed $postStatus): bool
+    private function allowPostStatus(int $eventId, $postStatus): bool
     {
         $field = is_numeric($postStatus) ? "id" : "code";
 
