@@ -300,7 +300,11 @@ abstract class RequestCase extends TestCase
             }
 
             Assert::hasKey($key, $new);
-            Assert::equal($value, $new[$key], "Error on `$key` field");
+            if (strtotime($new[$key])) {
+                Assert::equal(new DateTime($value, new \DateTimeZone("UTC")), (new DateTime($new[$key], new \DateTimeZone("UTC")))->modify("+ 1 hour"), "Error on `$key` datetime field");
+            } else {
+                Assert::equal($value, $new[$key], "Error on `$key` field");
+            }
         }
     }
 
