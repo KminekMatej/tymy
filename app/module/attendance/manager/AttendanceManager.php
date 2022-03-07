@@ -156,10 +156,16 @@ class AttendanceManager extends BaseManager
         }
 
         if ($preStatus) {
-            $this->allowPreStatus($data["eventId"], $preStatus);
+            $data["preStatusId"] = $this->getPreStatusId($data["eventId"], $preStatus);
+            if (!$data["preStatusId"]) {
+                $this->responder->E4008_CHILD_NOT_RELATED_TO_PARENT("Status", $preStatus, Event::MODULE, $data["eventId"]);
+            }
         }
         if ($postStatus) {
-            $this->allowPostStatus($data["eventId"], $postStatus);
+            $data["postStatusId"] = $this->getPostStatusId($data["eventId"], $postStatus);
+            if (!$data["postStatusId"]) {
+                $this->responder->E4008_CHILD_NOT_RELATED_TO_PARENT("Status", $postStatus, Event::MODULE, $data["eventId"]);
+            }
         }
 
         unset($data["preUserMod"]); //these values an be set only programatically
@@ -222,43 +228,57 @@ class AttendanceManager extends BaseManager
     }
 
     /**
-     * Check if supplied PRE status can be assigned to this eventId
+     * Check if supplied PRE status can be assigned to this eventId and if can, return correct preStatusId (transforming code to id)
      * (Check using event_type and so on)
      *
      * @param int $eventId
      * @param int|string $preStatus Either id or code
-     * @return bool
+     * @return int|null Return correct statusId or null for invalid code
      */
-    private function allowPreStatus(int $eventId, $preStatus): bool
+    private function getPreStatusId(int $eventId, $preStatus): ?int
     {
-        $field = is_numeric($preStatus) ? "id" : "code";
-
-        $allowedStatuses = $this->database->query("SELECT status.$field FROM status "
+        $allowedStatuses = $this->database->query("SELECT status.id, status.code FROM status "
                 . "LEFT JOIN status_set ON status_set.id=status.status_set_id "
                 . "LEFT JOIN event_types ON event_types.pre_status_set_id=status_set.id "
-                . "LEFT JOIN events ON events.event_type_id=event_types.id WHERE events.id=?", $eventId)->fetchPairs(null, $field);
+                . "LEFT JOIN events ON events.event_type_id=event_types.id WHERE events.id=?", $eventId)->fetchPairs("id", "code");
 
-        return is_array($allowedStatuses) && in_array($preStatus, $allowedStatuses);
+        if (is_numeric($preStatus) && array_key_exists(intval($preStatus), $allowedStatuses)) { //preStatus is ID
+            return intval($preStatus);
+        }
+
+        //preStatus is code - return and fill statusId automatically
+        if (in_array($preStatus, $allowedStatuses)) {
+            return intval(array_flip($allowedStatuses)[$preStatus]);
+        }
+
+        return null;
     }
 
     /**
-     * Check if supplied POST status can be assigned to this eventId
+     * Check if supplied POST status can be assigned to this eventId and if can, return correct postStatusId (transforming code to id)
      * (Check using event_type and so on)
      *
      * @param int $eventId
      * @param int $postStatus Either id or code
-     * @return bool
+     * @return int|null Return correct statusId or null for invalid code
      */
-    private function allowPostStatus(int $eventId, $postStatus): bool
+    private function getPostStatusId(int $eventId, $postStatus): ?int
     {
-        $field = is_numeric($postStatus) ? "id" : "code";
-
-        $allowedStatuses = $this->database->query("SELECT status.$field FROM status "
+        $allowedStatuses = $this->database->query("SELECT status.id, status.code FROM status "
                 . "LEFT JOIN status_set ON status_set.id=status.status_set_id "
                 . "LEFT JOIN event_types ON event_types.post_status_set_id=status_set.id "
-                . "LEFT JOIN events ON events.event_type_id=event_types.id WHERE events.id=?", $eventId)->fetchPairs(null, $field);
+                . "LEFT JOIN events ON events.event_type_id=event_types.id WHERE events.id=?", $eventId)->fetchPairs("id", "code");
 
-        return is_array($allowedStatuses) && in_array($postStatus, $allowedStatuses);
+        if (is_numeric($postStatus) && array_key_exists(intval($postStatus), $allowedStatuses)) { //postStatus is ID
+            return intval($postStatus);
+        }
+
+        //postStatus is code - return and fill statusId automatically
+        if (in_array($postStatus, $allowedStatuses)) {
+            return intval(array_flip($allowedStatuses)[$postStatus]);
+        }
+
+        return null;
     }
 
     /**
@@ -319,6 +339,9 @@ class AttendanceManager extends BaseManager
                 $this->createHistory($data["userId"], $data["eventId"], $data["preStatusId"], $data["preDescription"] ?? null, $existingAttendance->getPreStatusId(), $existingAttendance->getPreDescription());
             }
         }
+
+        unset($this->myAttendances); //clear cache
+
         return $this->getByEventUserId($data["eventId"], $data["userId"]);
     }
 
