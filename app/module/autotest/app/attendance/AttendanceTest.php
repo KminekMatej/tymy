@@ -44,8 +44,10 @@ class AttendanceTest extends RequestCase
         $this->request($this->getBasePath(), "POST", $mocked)->expect(200, "array");
 
         $eventData = $this->request("event/{$this->eventId}")->expect(200, "array")->getData();
-        Assert::equal($mocked["preStatus"], $eventData["myAttendance"]["preStatus"]);
-        Assert::equal($mocked["preDescription"], $eventData["myAttendance"]["preDescription"]);
+
+        Assert::hasKey("myAttendance", $eventData, print_r($eventData, true));
+        Assert::equal($mocked["preStatus"], $eventData["myAttendance"]["preStatus"], print_r($eventData, true));
+        Assert::equal($mocked["preDescription"], $eventData["myAttendance"]["preDescription"], print_r($eventData, true));
 
         $eventHistoryData = $this->request("event/{$this->eventId}/history")->expect(200, "array")->getData();
         $lastHistory = array_pop($eventHistoryData);
