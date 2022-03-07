@@ -4,6 +4,7 @@ namespace Tymy\Module\Discussion\Manager;
 
 use Nette\Database\IRow;
 use Nette\Database\Table\ActiveRow;
+use Nette\Database\Table\Selection;
 use Nette\Utils\Strings;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
@@ -114,7 +115,7 @@ class DiscussionManager extends BaseManager
             FROM `discussions` 
             LEFT JOIN `ds_read` ON `discussions`.`id` = `ds_read`.`ds_id` AND
             (`ds_read`.`ds_id`=`discussions`.`id`) AND (`ds_read`.`user_id` = ?) 
-            WHERE `discussions`.`id` = ?", $this->user->getId(), $id)->fetch());
+            WHERE `discussions`.`id` = ? ORDER BY `discussions`.`order_flag` ASC", $this->user->getId(), $id)->fetch());
     }
 
     /**
@@ -162,7 +163,7 @@ class DiscussionManager extends BaseManager
             LEFT JOIN `ds_read` ON `discussions`.`id` = `ds_read`.`ds_id` AND
             (`ds_read`.`ds_id`=`discussions`.`id`) AND (`ds_read`.`user_id` = ?) 
             WHERE ($readPermsQ `discussions`.`read_rights` IS NULL OR
-            TRIM(`discussions`.`read_rights`) = '')";
+            TRIM(`discussions`.`read_rights`) = '') ORDER BY `discussions`.`order_flag` ASC";
         $selector = empty($readPerms) ? $this->database->query($query, $userId) : $this->database->query($query, $userId, $readPerms ?: "");
         return $this->mapAll($selector->fetchAll());
     }
@@ -184,7 +185,7 @@ class DiscussionManager extends BaseManager
             FROM `discussions` 
             LEFT JOIN `ds_read` ON `discussions`.`id` = `ds_read`.`ds_id` AND
             (`ds_read`.`ds_id`=`discussions`.`id`) AND (`ds_read`.`user_id` = ?) 
-            WHERE 1";
+            WHERE 1 ORDER BY `discussions`.`order_flag` ASC";
         return $this->mapAll($this->database->query($query, $this->user->getId())->fetchAll());
     }
 
