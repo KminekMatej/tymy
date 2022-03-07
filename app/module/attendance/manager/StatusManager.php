@@ -75,7 +75,7 @@ class StatusManager extends BaseManager
      */
     public function getStatusSetFolder(int $statusSetId): string
     {
-        return $this->teamManager->getTeamFolder() . "/attend_pics/$statusSetId";
+        return TEAM_DIR . "/attend_pics/$statusSetId";
     }
 
     /**
@@ -163,7 +163,7 @@ class StatusManager extends BaseManager
         $image = Image::fromString(base64_decode($imgB64));
 
         $image->resize(self::ICON_WIDTH, self::ICON_HEIGHT);
-
+var_dump($this->getStatusSetFolder($statusSetId) . "/$code.png");
         $image->save($this->getStatusSetFolder($statusSetId) . "/$code.png");
     }
 

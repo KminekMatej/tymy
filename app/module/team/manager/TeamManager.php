@@ -67,15 +67,6 @@ class TeamManager extends BaseManager
     }
 
     /**
-     * Get folder of currently logged team
-     * @return string
-     */
-    public function getTeamFolder(): string
-    {
-        return sprintf($this->teamFolder, $this->getTeam()->getSysName());
-    }
-
-    /**
      * Get team by its sysname
      * @param string $sysname
      * @return Team|null
