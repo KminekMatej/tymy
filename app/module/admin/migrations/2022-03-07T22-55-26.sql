@@ -14,7 +14,11 @@
 -- UP:
 -- commands that updates database shall be written here:
 
+DROP VIEW IF EXISTS `v_users`;
+
 RENAME TABLE `users` TO `user`;
+
+CREATE VIEW v_user AS SELECT u.*, e.email FROM user u LEFT JOIN usr_mails e ON e.user_id = u.id AND e.type='DEF';
 
 -- DOWN:
 -- commands that reverts updates from UP section shall be written here:
