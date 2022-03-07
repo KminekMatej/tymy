@@ -8,8 +8,8 @@
 
 /** PURGE SECTION */
 SET FOREIGN_KEY_CHECKS=0;
-DELETE FROM `users` WHERE `id`>1;
-ALTER TABLE `users` auto_increment = 2; #keep just admin there
+DELETE FROM `user` WHERE `id`>1;
+ALTER TABLE `user` auto_increment = 2; #keep just admin there
 DELETE FROM `usr_mails` WHERE `id`>1;
 ALTER TABLE `usr_mails` auto_increment = 2; #keep just admin there
 
@@ -49,7 +49,7 @@ SET FOREIGN_KEY_CHECKS=1;
 
 /** IMPORT SECTION */
 
-INSERT INTO `users` (`user_name`, `password`, `can_login`, `status`, `roles`, `first_name`, `last_name`, `call_name`, `editable_call_name`, `email_name`,`language`, `sex`, `gdpr_accepted_at`, `last_read_news`) VALUES
+INSERT INTO `user` (`user_name`, `password`, `can_login`, `status`, `roles`, `first_name`, `last_name`, `call_name`, `editable_call_name`, `email_name`,`language`, `sex`, `gdpr_accepted_at`, `last_read_news`) VALUES
 ('autotest_admin',  'f4ad5b4e691802fca51711dede771a36', 'YES', 'PLAYER', 'SUPER,USR,ATT', 'Autotest', 'admin', 'autotest-admin', 'NO', 'autotest-admin', 'CZ', 'MALE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 ('autotest_user',   '58d26e9a3381ace5e682dc26bf780dd4', 'YES', 'PLAYER', '', 'Autotest', 'user', 'autotest-user', 'NO', 'autotest-user', 'CZ', 'MALE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 ('autotest_member',  '58d26e9a3381ace5e682dc26bf780dd4', 'YES', 'MEMBER', '', 'Autotest', 'member', 'autotest-member', 'NO', 'autotest-member', 'CZ', 'MALE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
