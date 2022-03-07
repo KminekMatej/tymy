@@ -14,10 +14,10 @@ use Tymy\Module\User\Mapper\UserMapper;
  */
 class User extends BaseModel
 {
-    public const TABLE = "users";
+    public const TABLE = "user";
     public const TABLE_MAILS = "usr_mails";
     public const TABLE_PWD_RESET = "pwd_reset";
-    public const VIEW = "v_users";
+    public const VIEW = "v_user";
     public const MODULE = "user";
     public const ROLE_SUPER = "SUPER";
     public const ROLE_USER = "USR";

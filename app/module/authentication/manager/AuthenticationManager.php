@@ -24,7 +24,7 @@ use Tymy\Module\User\Model\User;
  */
 class AuthenticationManager implements IAuthenticator
 {
-    public const TABLE = "users";
+    public const TABLE = "user";
     public const HASH_LIMIT = 13;  //to be able to allow first 20 md5 hashes to pass, this constant needs to be 13
 
     private Responder $responder;
