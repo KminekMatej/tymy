@@ -152,7 +152,7 @@ class EventTypeManager extends BaseManager
     public function getByCode(string $code): ?ActiveRow
     {
         $typeRow = $this->database->table($this->getTable())->where("code", $code)->fetch();
-        return $typeRow ? $typeRow->id : null;
+        return $typeRow ? $typeRow : null;
     }
 
     /**
