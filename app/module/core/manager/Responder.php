@@ -22,8 +22,8 @@ use Tymy\Module\User\Model\User;
 class Responder
 {
     private Application $application;
-    public RootPresenter $presenter;
-    public RootPresenter $presenterMock;
+    public ?RootPresenter $presenter = null;
+    public ?RootPresenter $presenterMock = null;
     public Translator $translator;
     private int $httpCode = Response::S403_FORBIDDEN;
 
