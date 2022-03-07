@@ -86,7 +86,7 @@ class UserTest extends RequestCase
         //test unknown username
         $this->request("login/skdfjbsdsfk/$pwdHash")->expect(401);
 
-        for ($index = 0; $index <= 19; $index++) {//20 hashes shall success
+        for ($index = 1; $index <= 20; $index++) {//20 hashes shall success
             $pwdHash = md5($pwdHash);
             $this->request("login/$username/$pwdHash")->expect(200, "array");
         }
