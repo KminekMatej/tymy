@@ -167,7 +167,7 @@ class StatusManager extends BaseManager
         $image = Image::fromString(base64_decode($imgB64));
 
         $image->resize(self::ICON_WIDTH, self::ICON_HEIGHT);
-var_dump($this->getStatusSetFolder($statusSetId) . "/$code.png");
+
         $image->save($this->getStatusSetFolder($statusSetId) . "/$code.png");
     }
 
