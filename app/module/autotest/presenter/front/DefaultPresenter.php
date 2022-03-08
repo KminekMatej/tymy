@@ -109,7 +109,7 @@ class DefaultPresenter extends BasePresenter
 
     public function runTests($folder = "")
     {
-        $requestLogFile = ROOT_DIR . '/log/requests.log';
+        $requestLogFile = TEAM_DIR . "/log_autotest/requests.log";
         if (file_exists($requestLogFile)) {
             unlink($requestLogFile);
         }
