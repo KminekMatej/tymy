@@ -5,12 +5,11 @@ namespace Tymy\Module\Autotest\Presenter\Front;
 use Nette\Http\UrlScript;
 use Nette\Utils\DateTime;
 use SimpleXMLElement;
-use Swoole\MySQL\Exception;
 use Tracy\Debugger;
 use Tymy\Bootstrap;
 use Tymy\Module\Autotest\Manager\TestsManager;
 use Tymy\Module\Core\Presenter\Api\BasePresenter;
-use const ROOT_DIR;
+use const TEAM_DIR;
 
 class DefaultPresenter extends BasePresenter
 {
