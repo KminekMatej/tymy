@@ -23,12 +23,12 @@ class Permission extends BaseModel
     private string $name;
     private string $webname;
     private ?string $caption = null;
-    private ?array $allowedRoles = null;
-    private ?array $revokedRoles = null;
-    private ?array $allowedStatuses = null;
-    private ?array $revokedStatuses = null;
-    private ?array $allowedUsers = null;
-    private ?array $revokedUsers = null;
+    public ?array $allowedRoles = null;
+    public ?array $revokedRoles = null;
+    public ?array $allowedStatuses = null;
+    public ?array $revokedStatuses = null;
+    public ?array $allowedUsers = null;
+    public ?array $revokedUsers = null;
     private ?DateTime $updatedAt = null;
     private ?int $updatedById = null;
     private bool $meAllowed = false;
