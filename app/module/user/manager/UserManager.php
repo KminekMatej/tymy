@@ -188,7 +188,7 @@ class UserManager extends BaseManager
      */
     public function updateLastReadNews(int $userId): void
     {
-        $this->database->query("UPDATE `users` SET `last_read_news`=? WHERE (`id` = ?)", new DateTime(), $userId);
+        $this->database->table(User::TABLE)->where("id", $userId)->update("last_read_news", new DateTime());
     }
 
     public function updateByArray(int $id, array $array)
