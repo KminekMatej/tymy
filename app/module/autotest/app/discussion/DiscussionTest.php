@@ -61,10 +61,10 @@ class DiscussionTest extends RequestCase
             Assert::hasKey("newPosts", $response);
             Assert::hasKey("numberOfPosts", $response);
             Assert::hasKey("newInfo", $response);
-            Assert::type("array", $response->newInfo);
-            Assert::hasKey("discussionId", $response->newInfo);
-            Assert::hasKey("newsCount", $response->newInfo);
-            Assert::hasKey("lastVisit", $response->newInfo);
+            Assert::type("array", $response["newInfo"]);
+            Assert::hasKey("discussionId", $response["newInfo"]);
+            Assert::hasKey("newsCount", $response["newInfo"]);
+            Assert::hasKey("lastVisit", $response["newInfo"]);
         }
     }
 
