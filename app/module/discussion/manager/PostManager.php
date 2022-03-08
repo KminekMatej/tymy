@@ -411,8 +411,12 @@ class PostManager extends BaseManager
      */
     public function stickPost(int $postId, int $discussionId, bool $stick = true): void
     {
-        $this->update([
+        $updates = [
             "sticky" => $stick
-                ], $discussionId, $postId);
+        ];
+        $this->allowDiscussion($discussionId);
+        $this->allowUpdate($postId, $updates);
+
+        $this->update($updates, $discussionId, $postId);
     }
 }
