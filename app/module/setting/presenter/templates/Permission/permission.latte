@@ -95,7 +95,7 @@
                                 <div class="row" n:foreach="$allowances as $key => $allowance" data-class="{$key}">
                                     <div class="col-2"><strong>{$allowance}</strong></div>
                                     <div class="col-10">
-                                        <img n:foreach="$users as $usr" {if $key == 'allowed'}style="display: none"{/if} data-rule="{$allowance}" data-status="{$usr->getStatus()}" data-roles="{join(',', $usr->getRoles())}" data-id="{$usr->getId()}" class="border rounded user" src="{$usr->getPictureUrl()}" />
+                                        <img n:foreach="$users as $usr" {if $key == 'allowed'}style="display: none"{/if} data-rule="{$allowance}" data-status="{$usr->getStatus()}" data-roles="{join(',', $usr->getRoles())}" data-id="{$usr->getId()}" class="border rounded user usrImg" src="{$usr->getPictureUrl()}" />
                                     </div>
                                 </div>
                             </td>
