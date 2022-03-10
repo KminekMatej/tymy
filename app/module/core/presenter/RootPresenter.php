@@ -85,6 +85,6 @@ abstract class RootPresenter extends Presenter
     protected function getCurrentVersion(): Version
     {
         $cvName = basename(dirname(readlink(TEAM_DIR . "/app"), 1));
-        return $cvName == "master" ? new Version($cvName, null) : $this->getVersions()[$cvName];
+        return $cvName == "master" ? new Version($cvName, null) : ($this->getVersions()[$cvName] ?? new Version($cvName, null));
     }
 }
