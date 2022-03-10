@@ -271,7 +271,15 @@ abstract class RequestCase extends TestCase
         }
     }
 
-    public function assertObjectEquality($original, $new, $skip = null)
+    /**
+     * Assert that all props of two objects are equal.
+     * WARNING: Datetime, sent in local timezone are stored to DB in local timezone, but API responds them in UTC timezone
+     *
+     * @param type $original
+     * @param type $new
+     * @param type $skip
+     */
+    public function assertObjectEquality(array $original, array $new, $skip = null)
     {
         foreach ($original as $key => $value) {
             if ($skip && ((is_array($skip) && in_array($key, $skip)) || $key == $skip)) {
@@ -279,7 +287,14 @@ abstract class RequestCase extends TestCase
             }
 
             Assert::hasKey($key, $new);
-            Assert::equal($value, $new[$key], "Error on `$key` field");
+            
+            $newDateTime = $new[$key] && !empty($new[$key]) && is_string($new[$key]) ? DateTime::createFromFormat(BaseModel::DATE_FORMAT, $new[$key], "UTC") : null;
+            if($newDateTime){
+                $oldDateTime = DateTime::createFromFormat(BaseModel::DATE_FORMAT, $value);
+                Assert::true($oldDateTime==$newDateTime, "Error on `$key` datetime field"); //comparing by equal fails due to different timezones
+            } else {
+                Assert::equal($value, $new[$key], "Error on `$key` field");
+            }
         }
     }
 
