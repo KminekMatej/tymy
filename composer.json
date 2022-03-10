@@ -24,7 +24,7 @@
     "require-dev": {
         "nette/tester": "^2.0",
         "squizlabs/php_codesniffer": "* 4.0.x-dev",
-        "phpstan/phpstan": "^1.4"
+        "phpstan/phpstan": "^1"
     },
     "minimum-stability": "stable",
     "config": {
