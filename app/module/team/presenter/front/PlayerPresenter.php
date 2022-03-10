@@ -105,7 +105,7 @@ class PlayerPresenter extends SecuredPresenter
 
         $this->flashMessage($this->translator->translate("common.alerts.userAdded", null, ["fullname" => $createdPlayer->getDisplayName()]), "success");
 
-        $this->redirect("Team:player", $createdPlayer->getWebName());
+        $this->redirect(":Team:Player:", $createdPlayer->getWebName());
     }
 
     public function handleEdit()
@@ -137,7 +137,7 @@ class PlayerPresenter extends SecuredPresenter
         $bind = $this->getRequest()->getPost();
         $this->userManager->delete($bind["id"]);
         $this->flashMessage($this->translator->translate("common.alerts.userSuccesfullyDeleted"), "success");
-        $this->redirect('Team:');
+        $this->redirect(':Team:Default:');
     }
 
     public function handleUpload()
