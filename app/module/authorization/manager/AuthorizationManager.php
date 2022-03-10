@@ -37,6 +37,11 @@ class AuthorizationManager implements IAuthorizator
 
         return $this->userCache[$userId];
     }
+    
+    public function dropPermissionCache()
+    {
+        $this->permissionCache = [];
+    }
 
     /**
      * Maps one active row to object

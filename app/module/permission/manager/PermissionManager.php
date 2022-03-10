@@ -5,6 +5,8 @@ namespace Tymy\Module\Permission\Manager;
 use Nette\Database\IRow;
 use Nette\Database\Table\Selection;
 use Nette\Utils\Strings;
+use Tymy\Module\Authorization\Manager\AuthorizationManager;
+use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Permission\Mapper\PermissionMapper;
@@ -20,6 +22,13 @@ use Tymy\Module\User\Model\User;
 class PermissionManager extends BaseManager
 {
     private ?Permission $permission = null;
+    private AuthorizationManager $authorizationManager;
+
+    public function __construct(ManagerFactory $managerFactory, AuthorizationManager $authorizationManager)
+    {
+        parent::__construct($managerFactory);
+        $this->authorizationManager = $authorizationManager;
+    }
 
     protected function getClassName(): string
     {
@@ -262,6 +271,8 @@ class PermissionManager extends BaseManager
 
         $createdRow = parent::createByArray($data);
 
+        $this->authorizationManager->dropPermissionCache();
+
         return $this->map($createdRow);
     }
 
@@ -270,6 +281,8 @@ class PermissionManager extends BaseManager
         $this->allowDelete($resourceId);
 
         $deleted = parent::deleteRecord($resourceId);
+
+        $this->authorizationManager->dropPermissionCache();
 
         return $deleted ? $resourceId : null;
     }
@@ -288,6 +301,8 @@ class PermissionManager extends BaseManager
         $this->transformArrayToString($data);
 
         parent::updateByArray($resourceId, $data);
+
+        $this->authorizationManager->dropPermissionCache();
 
         return $this->getById($resourceId);
     }
