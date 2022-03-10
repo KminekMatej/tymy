@@ -16,7 +16,7 @@
                 <div class="card-body">
                     <table class="table">
                         
-                        <tr><th>{label skin}:</th><td>{input skin, class => 'form-control w-25'}</td></tr>
+                        <tr><th>{label skin /}:</th><td>{input skin, class => 'form-control w-25'}</td></tr>
                         
                         <tr><th>{_settings.appVersion}:</th><td><a n:tag-if="$version->getName() != 'master'" href="https://github.com/KminekMatej/tymy/releases/tag/{$version->getName()}" target="_blank">{$version->getName()}</a></td></tr>
                         <tr><th>{_settings.released}:</th><td>{$version->getDateTime()|date:\Tymy\Module\Core\Model\BaseModel::DATETIME_CZECH_NO_SECS_FORMAT}</td></tr>
