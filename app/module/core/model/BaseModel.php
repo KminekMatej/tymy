@@ -82,7 +82,7 @@ abstract class BaseModel implements JsonSerializable
         foreach ($this->getScheme() as $field) {
             $getField = "get" . ucfirst($field->getProperty());
             $output = $this->$getField();
-            $value = $output instanceof DateTime ? (clone $output)->setTimezone(new \DateTimeZone('UTC'))->format(self::DATE_FORMAT) : $output;
+            $value = $output instanceof DateTime ? (clone $output)->format(self::DATE_FORMAT) : $output;
             if ($field->getAlias()) {
                 $ret[$field->getAlias()] = $value;
             } else {
