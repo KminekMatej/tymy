@@ -317,7 +317,9 @@ class UserManager extends BaseManager
     public function checkCredentials(Team $team, string $username, string $password): ?int
     {
         $dbName = $team->getDbName();
-        $userRow = $this->database->query("SELECT * FROM $dbName.{$this->getTable()} WHERE user_name = ?", $username)->fetch();
+        $tables = $this->database->query("SHOW TABLES FROM $dbName")->fetchPairs();
+        $userTbl = in_array("user", $tables) ? "user" : "users";
+        $userRow = $this->database->query("SELECT * FROM $dbName.$userTbl WHERE user_name = ?", $username)->fetch();
 
         if (!$userRow) {
             return false;
