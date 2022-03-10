@@ -193,6 +193,7 @@ class Attendance extends BaseModel implements JsonSerializable
     public function jsonSerialize()
     {
         return parent::jsonSerialize() + [
+            "user" => $this->user->jsonSerialize(),
             "preStatus" => $this->preStatus,
             "postStatus" => $this->postStatus,
         ];
