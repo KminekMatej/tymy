@@ -60,8 +60,11 @@ class EventManager extends BaseManager
         /* @var $event Event */
         $event = parent::map($row, $force);
 
-        $event->setType($row->ref(EventType::TABLE, "event_type_id")->code);
-
+        /* @var $eventType EventType */
+        $eventType = $this->eventTypeManager->map($row->ref(EventType::TABLE, "event_type_id"));
+        $event->setEventType($eventType);
+        $event->setType($eventType->getCode());
+        
         $event->setInPast($row->start_time < $this->now);
         $event->setInFuture($row->start_time > $this->now);
 
