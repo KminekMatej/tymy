@@ -9,6 +9,7 @@ use Nette\Application\Request;
 use Nette\Application\Responses\JsonResponse;
 use Nette\Application\Responses\TextResponse;
 use Nette\Application\UI\Presenter;
+use Nette\Database\Explorer;
 use Nette\DI\Container;
 use Nette\Http\Request as Request2;
 use Nette\Http\RequestFactory;
@@ -25,9 +26,9 @@ use Tymy\Module\Autotest\Entity\Assert;
 use Tymy\Module\Core\Manager\Responder;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Router\RouteList;
-
 use const TEAM_DIR;
 use const TEST_DIR;
+use function GuzzleHttp\json_encode;
 
 /**
  * Envelope class for all api testing classes
@@ -39,6 +40,7 @@ abstract class RequestCase extends TestCase
     public const REGEX_JSON_DATE = '#^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}#';
 
     protected JsonResponse $jsonResponse;
+    protected Explorer $database;
     protected Container $container;
     protected User $user;
     protected array $config;
@@ -65,6 +67,7 @@ abstract class RequestCase extends TestCase
         $this->requestFactory = $this->container->getService("http.requestFactory");
         $this->presenterFactory = $this->container->getService("application.presenterFactory");
         $this->responder = $this->container->getService("Responder");
+        $this->database = $this->container->getService("database.team.explorer");
         $this->routeList = $this->container->getService("router");
         $this->config = Neon::decode(file_get_contents(TEST_DIR . '/autotest.records.map.neon'));
         $this->moduleConfig = isset($this->config[$this->getModule()]) ? $this->config[$this->getModule()] : [];

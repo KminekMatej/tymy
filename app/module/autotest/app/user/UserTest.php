@@ -21,6 +21,16 @@ $container = Bootstrap::boot();
  */
 class UserTest extends RequestCase
 {
+    private $inited = false;
+
+    private function init()
+    {
+        if(!$this->inited){
+            $this->database->table(User::TABLE)->where("id > ?", 6)->where("status", "INIT")->delete();
+            $this->inited = true;
+        }
+    }
+
     public function getModule(): string
     {
         return User::MODULE;
@@ -169,6 +179,7 @@ class UserTest extends RequestCase
 
     public function testRegister()
     {
+        $this->init();
         $this->user->logout();
 
         $regData = $this->mockRegData();
@@ -197,6 +208,7 @@ class UserTest extends RequestCase
 
     public function testRegisterFailure()
     {
+        $this->init();
         $this->user->logout();
         $rand = rand(0, 10000);
 
