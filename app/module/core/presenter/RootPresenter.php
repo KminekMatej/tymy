@@ -42,6 +42,8 @@ abstract class RootPresenter extends Presenter
 
         $this->team = $this->teamManager->getTeam();
         $this->setLanguage($this->team->getDefaultLanguageCode());
+        $timezoneName = str_replace("Europe/Paris", "Europe/Prague", timezone_name_from_abbr("", $this->team->getTimeZone() * 3600, false));//get tz name from hours of shift but dont display paris, display prague ;)
+        date_default_timezone_set($timezoneName);
         $this->teamCache = new Cache($this->cacheStorage, $this->team->getSysName());
     }
 
