@@ -38,6 +38,7 @@ WHERE `events`.`id`=`attendance_history`.`event_id` AND `status`.`code`=`attenda
 );
 
 DELETE FROM `attendance_history` WHERE `status_id_to` = 0;
+UPDATE `attendance_history` SET `usr_mod` = NULL WHERE `usr_mod` NOT IN (SELECT `id` FROM `users` WHERE 1);
 
 ALTER TABLE `attendance_history` 
 ADD FOREIGN KEY (`status_id_from`) REFERENCES `status`(`id`) ON DELETE CASCADE ON UPDATE CASCADE,
