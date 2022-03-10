@@ -41,7 +41,7 @@ class Bootstrap
 
         $configurator->enableTracy($autotestMode ? TEAM_DIR . '/log_autotest' : TEAM_DIR . '/log');
 
-        $configurator->setTimeZone('Europe/Prague');
+        $configurator->setTimeZone('UTC');
         $configurator->setTempDirectory($autotestMode ? TEAM_DIR . '/temp_autotest' : TEAM_DIR . '/temp');
 
         $configurator->createRobotLoader()
