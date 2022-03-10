@@ -167,6 +167,6 @@ class EventTypeManager extends BaseManager
             $this->colorList = $this->database->table($this->getTable())->fetchPairs("id", "color");
         }
 
-        return $this->colorList[$eventTypeId];
+        return $this->colorList[$eventTypeId] ?? "d8dee4";
     }
 }
