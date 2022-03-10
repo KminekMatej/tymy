@@ -13,12 +13,12 @@ ALTER TABLE `user` auto_increment = 2; #keep just admin there
 DELETE FROM `usr_mails` WHERE `id`>1;
 ALTER TABLE `usr_mails` auto_increment = 2; #keep just admin there
 
-DELETE FROM `statuses` WHERE `id`>11;
-ALTER TABLE `statuses` auto_increment = 12; #keep factory deault statuses there
+DELETE FROM `status` WHERE `id`>11;
+ALTER TABLE `status` auto_increment = 12; #keep factory deault statuses there
 
 TRUNCATE `ask_items`;
-TRUNCATE `ask_quests`;
 TRUNCATE `ask_votes`;
+TRUNCATE `ask_quests`;
 TRUNCATE `attendance`;
 TRUNCATE `attendance_history`;
 TRUNCATE `debt`;
@@ -42,8 +42,6 @@ TRUNCATE `reports`;
 TRUNCATE `rep_columns`;
 TRUNCATE `rights`;
 TRUNCATE `settings`;
-TRUNCATE `pwd_reset`;
-TRUNCATE `pwd_reset`;
 
 SET FOREIGN_KEY_CHECKS=1;
 
@@ -86,7 +84,7 @@ INSERT INTO `rights` (`id`, `right_type`, `name`, `caption`, `a_roles`, `r_roles
 (20, 'USR', 'ADMINONLY', 'SUPER roles only', 'SUPER', NULL, NULL, NULL, NULL, NULL, CURRENT_TIMESTAMP, NULL),
 (21, 'USR', 'MAINADMIN', 'Only user id 1 - superadmin', NULL, NULL, NULL, NULL, '1', NULL, CURRENT_TIMESTAMP, NULL);
 
-INSERT INTO `event_types` (`id`, `code`, `caption`, `pre_status_set`, `post_status_set`, `mandatory`, `dat_mod`, `usr_mod`) VALUES
+INSERT INTO `event_types` (`id`, `code`, `caption`, `pre_status_set_id`, `post_status_set_id`, `mandatory`, `dat_mod`, `usr_mod`) VALUES
 (1, 'TRA', 'Trénink', 1, 3, 'FREE', CURRENT_TIMESTAMP, 0),
 (2, 'RUN', 'Běhání', 1, 3, 'FREE', CURRENT_TIMESTAMP, 0),
 (3, 'MEE', 'Schůze', 1, 3, 'WARN', CURRENT_TIMESTAMP, 0),
