@@ -30,7 +30,6 @@ abstract class BasePresenter extends RootPresenter
         parent::beforeRender();
         $this->template->componentsDir = Bootstrap::MODULES_DIR . "/core/presenter/templates/components";
         $this->template->setTranslator($this->translator);
-        date_default_timezone_set('Europe/Prague');
 
         $this->template->locale = $this->translator->getLocale();
 
