@@ -44,6 +44,7 @@ class Event extends BaseModel
     private string $backgroundColor = 'blue';
     private string $borderColor = 'blue';
     private string $textColor = 'blue';
+    private EventType $eventType;
 
     public function getCaption(): string
     {
@@ -173,6 +174,11 @@ class Event extends BaseModel
     public function getTextColor(): string
     {
         return $this->textColor;
+    }
+
+    public function getEventType(): EventType
+    {
+        return $this->eventType;
     }
 
     public function setCaption(string $caption)
@@ -326,6 +332,12 @@ class Event extends BaseModel
         $this->textColor = $textColor;
     }
 
+    public function setEventType(EventType $eventType)
+    {
+        $this->eventType = $eventType;
+        return $this;
+    }
+
     public function addAttendance(Attendance $attendance)
     {
         $this->attendance[] = $attendance;
@@ -357,6 +369,7 @@ class Event extends BaseModel
             "canResult" => $this->getCanResult(),
             "inPast" => $this->getInPast(),
             "inFuture" => $this->getInFuture(),
+            "eventType" => $this->getEventType()->jsonSerialize(),
         ];
 
         if ($this->getMyAttendance()) {   //set myAttendance property only if there is some
