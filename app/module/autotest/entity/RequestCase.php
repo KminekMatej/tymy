@@ -38,42 +38,18 @@ abstract class RequestCase extends TestCase
 {
     public const REGEX_JSON_DATE = '#^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}#';
 
-    /** @var JsonResponse */
-    protected $jsonResponse;
-
-    /** @var Container */
-    protected $container;
-
-    /** @var User */
-    protected $user;
-    protected $curl;
-
-    /** @var array */
-    protected $config;
-
-    /** @var array */
-    protected $moduleConfig;
-
-    /** @var RecordManager */
-    protected $recordManager;
-
-    /** @var RouteList */
-    private $routeList;
-
-    /** @var Request2 */
-    private $httpRequest;
-
-    /** @var RequestFactory */
-    private $requestFactory;
-
-    /** @var PresenterFactory */
-    private $presenterFactory;
-
-    /** @var AuthenticationManager */
-    protected $authenticationManager;
-
-    /** @var Responder */
-    protected $responder;
+    protected JsonResponse $jsonResponse;
+    protected Container $container;
+    protected User $user;
+    protected array $config;
+    protected array $moduleConfig;
+    protected RecordManager $recordManager;
+    private RouteList $routeList;
+    private Request2 $httpRequest;
+    private RequestFactory $requestFactory;
+    private PresenterFactory $presenterFactory;
+    protected AuthenticationManager $authenticationManager;
+    protected Responder $responder;
 
     /** @var RequestLog[] */
     private array $logs = [];
