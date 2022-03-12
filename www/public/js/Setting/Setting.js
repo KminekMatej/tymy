@@ -37,9 +37,9 @@ function duplicateEventRow(timePeriod) {
     var rowIndex = table.find("TR").length - 1;
 
     var type = lastRow.find("SELECT[name=type]").val();
-    var startTime = moment(lastRow.find("INPUT[name=startTime]").val());
-    var endTime = moment(lastRow.find("INPUT[name=endTime]").val());
-    var closeTime = moment(lastRow.find("INPUT[name=closeTime]").val());
+    var startTime = moment(lastRow.find("INPUT[data-name=startTime]").val());
+    var endTime = moment(lastRow.find("INPUT[data-name=endTime]").val());
+    var closeTime = moment(lastRow.find("INPUT[data-name=closeTime]").val());
 
     duplicateLastRow();
 
@@ -61,14 +61,15 @@ function duplicateEventRow(timePeriod) {
             break;
     }
     lastRow = table.find("TR:last");
-    lastRow.find("SELECT[name=type]").val(type);
-    lastRow.find("INPUT[name=startTime]").val(startTime.format("YYYY-MM-DDTHH:mm"));
-    lastRow.find("INPUT[name=endTime]").val(endTime.format("YYYY-MM-DDTHH:mm"));
-    lastRow.find("INPUT[name=closeTime]").val(closeTime.format("YYYY-MM-DDTHH:mm"));
+    lastRow.find("SELECT[data-name=type]").val(type);
+    lastRow.find("INPUT[data-name=startTime]").val(startTime.format("YYYY-MM-DDTHH:mm"));
+    lastRow.find("INPUT[data-name=endTime]").val(endTime.format("YYYY-MM-DDTHH:mm"));
+    lastRow.find("INPUT[data-name=closeTime]").val(closeTime.format("YYYY-MM-DDTHH:mm"));
 
     lastRow.find("INPUT, TEXTAREA, SELECT").each(function () {
-        var name = $(this).attr("name");
+        var name = $(this).attr("name").split("-")[0];
         $(this).attr("id", formId + '-' + name + '-' + rowIndex);
+        $(this).attr("name", name + '-' + rowIndex);
     });
 }
 

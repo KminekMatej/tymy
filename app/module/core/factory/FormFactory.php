@@ -61,17 +61,17 @@ class FormFactory
 
         //     $id = $form->addHidden("id", $id);
 
-        $type = $form->addSelect("eventTypeId", null, $eventTypes)->setRequired();
-        $caption = $form->addText("caption")->setRequired();
-        $description = $form->addTextArea("description", null, null, 1);
-        $start = $form->addText("startTime")->setHtmlType("datetime-local")->setValue((new DateTime("+ 24 hours"))->format(BaseModel::DATETIME_ISO_NO_SECS_FORMAT))->setRequired();
-        $end = $form->addText("endTime")->setHtmlType("datetime-local")->setValue((new DateTime("+ 25 hours"))->format(BaseModel::DATETIME_ISO_NO_SECS_FORMAT))->setRequired();
-        $close = $form->addText("closeTime")->setHtmlType("datetime-local")->setValue((new DateTime("+ 23 hours"))->format(BaseModel::DATETIME_ISO_NO_SECS_FORMAT))->setRequired();
-        $place = $form->addText("place");
-        $link = $form->addText("link");
-        $canView = $form->addSelect("canView", null, $permissions)->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
-        $canPlan = $form->addSelect("canPlan", null, $permissions)->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
-        $canResult = $form->addSelect("canResult", null, $permissions)->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
+        $type = $form->addSelect("eventTypeId", null, $eventTypes)->setHtmlAttribute("data-name", "eventTypeId")->setRequired();
+        $caption = $form->addText("caption")->setHtmlAttribute("data-name", "caption")->setRequired();
+        $description = $form->addTextArea("description", null, null, 1)->setHtmlAttribute("data-name", "description");
+        $start = $form->addText("startTime")->setHtmlAttribute("data-name", "startTime")->setHtmlType("datetime-local")->setValue((new DateTime("+ 24 hours"))->format(BaseModel::DATETIME_ISO_NO_SECS_FORMAT))->setRequired();
+        $end = $form->addText("endTime")->setHtmlAttribute("data-name", "endTime")->setHtmlType("datetime-local")->setValue((new DateTime("+ 25 hours"))->format(BaseModel::DATETIME_ISO_NO_SECS_FORMAT))->setRequired();
+        $close = $form->addText("closeTime")->setHtmlAttribute("data-name", "closeTime")->setHtmlType("datetime-local")->setValue((new DateTime("+ 23 hours"))->format(BaseModel::DATETIME_ISO_NO_SECS_FORMAT))->setRequired();
+        $place = $form->addText("place")->setHtmlAttribute("data-name", "place");
+        $link = $form->addText("link")->setHtmlAttribute("data-name", "link");
+        $canView = $form->addSelect("canView", null, $permissions)->setHtmlAttribute("data-name", "canView")->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
+        $canPlan = $form->addSelect("canPlan", null, $permissions)->setHtmlAttribute("data-name", "canPlan")->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
+        $canResult = $form->addSelect("canResult", null, $permissions)->setHtmlAttribute("data-name", "canResult")->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
 
         /* if (is_numeric($id)) {
           /* @var $event Event */

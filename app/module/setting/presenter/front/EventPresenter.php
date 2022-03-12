@@ -5,7 +5,6 @@ namespace Tymy\Module\Setting\Presenter\Front;
 use Nette\Application\UI\Form;
 use Nette\Utils\DateTime;
 use stdClass;
-use Tracy\Debugger;
 use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Core\Factory\FormFactory;
 use Tymy\Module\Event\Manager\EventManager;
@@ -101,7 +100,6 @@ class EventPresenter extends SettingBasePresenter
 
         foreach ($binders as &$bind) {
             $this->normalizeDates($bind["changes"]);
-            Debugger::barDump($bind["changes"]);
             $this->eventManager->create($bind["changes"]);
         }
 
@@ -162,9 +160,9 @@ class EventPresenter extends SettingBasePresenter
             $baseKey = array_key_first((array) $values);
             $data = $form->getHttpData();
 
-            $i = 1;
+            $i = 0;
             while (true) {
-                $nextKey = $baseKey . "-" . $i;
+                $nextKey = $i > 0 ? $baseKey . "-" . $i : $baseKey;
 
                 if (!array_key_exists($nextKey, $data)) {
                     break;
@@ -172,7 +170,8 @@ class EventPresenter extends SettingBasePresenter
                 //this row exists
                 $nextItem = [];
                 foreach ((array) $values as $name => $value) {
-                    $nextItem[$name] = $data["$name-$i"];
+                    $nextName = $i > 0 ? $name . "-" . $i : $name;
+                    $nextItem[$name] = $data[$nextName];
                 }
                 $items[] = $nextItem;
                 $i++;
