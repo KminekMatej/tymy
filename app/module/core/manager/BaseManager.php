@@ -10,13 +10,16 @@ use Nette\Database\Table\ActiveRow;
 use Nette\Security\User;
 use Nette\Utils\DateTime;
 use PDOException;
+use Tracy\Debugger;
 use Tymy\Module\Core\Exception\DBException;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Core\Model\Filter;
 use Tymy\Module\Core\Model\Order;
+use Tymy\Module\Team\Model\Team;
 use Tymy\Module\User\Model\User as UserEntity;
+use const ROOT_DIR;
 
 /**
  * Description of BaseManager
