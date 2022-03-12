@@ -116,6 +116,6 @@ class DetailPresenter extends EventBasePresenter
     private function loadEventHistory($eventId)
     {
         $this->template->histories = $this->historyManager->getEventHistory($eventId);
-        $this->template->emptyStatus = (object) ["code" => "", "caption" => "Nezadáno"];
+        $this->template->emptyStatus = (new Status())->setCode("")->setCaption($this->translator->translate('team.unknownSex'));
     }
 }
