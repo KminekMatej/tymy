@@ -7,6 +7,7 @@ use Nette\Application\UI\Form;
 use Nette\NotImplementedException;
 use Tracy\Debugger;
 use Tymy\Module\Authentication\Manager\AuthenticationManager;
+use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Presenter\Front\BasePresenter;
 use Tymy\Module\Sign\Form\SignInFormFactory;
 
@@ -28,6 +29,7 @@ class InPresenter extends BasePresenter
             try {
                 $this->user->setExpiration('20 minutes');
                 $r = $this->user->login($values->name, $values->password);
+                BaseManager::logg($this->team, "{$values->name} application login");
             } catch (Nette\Security\AuthenticationException $exc) {
                 switch ($exc->getMessage()) {
                     case "Login not approved":
