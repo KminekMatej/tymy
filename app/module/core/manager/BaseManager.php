@@ -50,6 +50,21 @@ abstract class BaseManager
         $this->user = $managerFactory->user;
     }
 
+    /**
+     * Exception safe global team log
+     * @param Team $team
+     * @param string $log
+     * @return void
+     */
+    public static function logg(Team $team, string $log): void
+    {
+        try {
+            Debugger::log("[{$team->getSysName()}] $log", ROOT_DIR . "../../teamlog");
+        } catch (Exception $exc) {
+            //do nothing
+        }
+    }
+
     /** @return Field[] */
     abstract protected function getScheme(): array;
 
