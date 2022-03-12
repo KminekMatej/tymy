@@ -156,7 +156,6 @@ class EventPresenter extends SettingBasePresenter
     {
         try {
             //load inputs until there are any more rows
-            $items = [(array) $values];
             $baseKey = array_key_first((array) $values);
             $data = $form->getHttpData();
 
