@@ -14,6 +14,8 @@
 -- UP:
 -- commands that updates database shall be written here:
 
+DELETE FROM `ds_items` WHERE `ds_id` NOT IN (SELECT `id` FROM `discussions` WHERE 1 )
+
 ALTER TABLE `ds_items` ADD FOREIGN KEY (`ds_id`) REFERENCES `discussions`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 
