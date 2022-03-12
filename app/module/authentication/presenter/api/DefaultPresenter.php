@@ -26,7 +26,7 @@ class DefaultPresenter extends BasePresenter
         try {
             $this->user->login($this->requestData["login"] ?? $username, $this->requestData["password"] ?? $password);
             $this->user->setExpiration('+ 14 days');
-                BaseManager::logg($this->team, "{$values->name} API login");
+                BaseManager::logg($this->team, "{$this->requestData["login"]} API login");
         } catch (AuthenticationException $e) {
             $this->responder->E401_UNAUTHORIZED("Not logged in");
         }
