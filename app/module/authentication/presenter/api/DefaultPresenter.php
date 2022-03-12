@@ -3,6 +3,7 @@
 namespace Tymy\Module\Authentication\Presenter\Api;
 
 use Nette\Security\AuthenticationException;
+use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Presenter\Api\BasePresenter;
 use Tymy\Module\Multiaccount\Manager\MultiaccountManager;
 use Tymy\Module\User\Manager\UserManager;
@@ -25,6 +26,7 @@ class DefaultPresenter extends BasePresenter
         try {
             $this->user->login($this->requestData["login"] ?? $username, $this->requestData["password"] ?? $password);
             $this->user->setExpiration('+ 14 days');
+                BaseManager::logg($this->team, "{$values->name} API login");
         } catch (AuthenticationException $e) {
             $this->responder->E401_UNAUTHORIZED("Not logged in");
         }
