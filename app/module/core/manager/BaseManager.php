@@ -62,9 +62,9 @@ abstract class BaseManager
     public static function logg(Team $team, string $log): void
     {
         try {
-            Debugger::log("[{$team->getSysName()}] $log", ROOT_DIR . "../../teamlog");
+            Debugger::log("[{$team->getSysName()}] $log", "../../../teamlog");
         } catch (Exception $exc) {
-            //do nothing
+            Debugger::log($exc->getMessage());
         }
     }
 
