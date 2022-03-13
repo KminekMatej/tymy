@@ -142,19 +142,17 @@
                                     {case "VIDEO"}
                                     {var $fileClass = 'fa-file-video'}
                                     {var $fileColor = 'text-dark'}
-                                    {case "xls"}
-                                    {case "xlsx"}
+                                    {case "xls", "xlsx"}
                                     {var $fileClass = 'fa-file-excel'}
                                     {var $fileColor = 'text-success'}
+                                    {dump $fileClass}
                                     {case "pdf"}
                                     {var $fileClass = 'fa-file-pdf'}
                                     {var $fileColor = 'text-primary'}
-                                    {case "doc"}
-                                    {case "docx"}
+                                    {case "doc", "docx"}
                                     {var $fileClass = 'fa-file-word'}
                                     {var $fileColor = 'text-primary'}
-                                    {case "ppt"}
-                                    {case "pptx"}
+                                    {case "ppt", "pptx"}
                                     {var $fileClass = 'fa-file-powerpoint'}
                                     {var $fileColor = 'text-danger'}
                                     {case "DOCUMENT"}
