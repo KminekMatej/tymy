@@ -17,7 +17,7 @@ class DefaultPresenter extends SecuredPresenter
 
     public function actionDefault(?string $resource = null)
     {
-        $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("poll.poll", 2), "link" => $this->link(":Poll:Default:")]]);
+        $this->addBreadcrumb($this->translator->translate("poll.poll", 2), $this->link(":Poll:Default:"));
         if ($resource) {
             $this->setView("poll");
         }
@@ -34,7 +34,7 @@ class DefaultPresenter extends SecuredPresenter
         $poll = $this->pollManager->getById($this->parseIdFromWebname($resource));
         $this->template->users = $this->userManager->getIdList();
 
-        $this->setLevelCaptions(["2" => ["caption" => $poll->getCaption(), "link" => $this->link(":Poll:Default:", $poll->getWebName())]]);
+        $this->addBreadcrumb($poll->getCaption(), $this->link(":Poll:Default:", $poll->getWebName()));
 
         $this->template->poll = $poll;
         $this->template->radioLayout = $poll->getMinItems() == 1 && $poll->getMaxItems() == 1;

@@ -22,7 +22,7 @@ class EventPresenter extends SettingBasePresenter
     public function beforeRender()
     {
         parent::beforeRender();
-        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("event.event", 2), "link" => $this->link(":Setting:Event:")]]);
+        $this->addBreadcrumb($this->translator->translate("event.event", 2), $this->link(":Setting:Event:"));
     }
 
     public function actionDefault(?string $resource = null, int $page = 1)
@@ -48,9 +48,7 @@ class EventPresenter extends SettingBasePresenter
     {
         $this->allowPermission('EVE_CREATE');
 
-        $this->setLevelCaptions([
-            "3" => ["caption" => $this->translator->translate("event.new", 2)]
-        ]);
+        $this->addBreadcrumb($this->translator->translate("event.new", 2));
         $this->template->events = [
                 (new Event())
                 ->setId(-1)
@@ -77,7 +75,7 @@ class EventPresenter extends SettingBasePresenter
             $this->redirect(':Setting:Event:');
         }
 
-        $this->setLevelCaptions(["3" => ["caption" => $eventObj->getCaption(), "link" => $this->link(":Setting:Event:", $eventObj->getWebName())]]);
+        $this->addBreadcrumb($eventObj->getCaption(), $this->link(":Setting:Event:", $eventObj->getWebName()));
         $this->template->event = $eventObj;
     }
 

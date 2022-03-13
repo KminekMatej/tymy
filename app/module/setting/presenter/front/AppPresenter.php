@@ -39,7 +39,7 @@ class AppPresenter extends SettingBasePresenter
     public function beforeRender()
     {
         parent::beforeRender();
-        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("settings.application"), "link" => $this->link(":Setting:App:")]]);
+        $this->addBreadcrumb($this->translator->translate("settings.application"), $this->link(":Setting:App:"));
     }
 
     public function renderDefault()

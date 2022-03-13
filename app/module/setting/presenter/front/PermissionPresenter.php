@@ -17,7 +17,7 @@ class PermissionPresenter extends SettingBasePresenter
     {
         parent::beforeRender();
         $this->allowPermission('IS_ADMIN');
-        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("permission.permission", 2), "link" => $this->link(":Setting:Permission:")]]);
+        $this->addBreadcrumb($this->translator->translate("permission.permission", 2), $this->link(":Setting:Permission:"));
     }
 
     public function actionDefault(?string $resource = null)
@@ -31,9 +31,7 @@ class PermissionPresenter extends SettingBasePresenter
     {
         $this->allowPermission("IS_ADMIN");
 
-        $this->setLevelCaptions([
-            "3" => ["caption" => $this->translator->translate("permission.newPermission")]
-        ]);
+        $this->addBreadcrumb($this->translator->translate("permission.newPermission"));
 
         $users = $this->userManager->getIdList();
 
@@ -64,9 +62,7 @@ class PermissionPresenter extends SettingBasePresenter
             $this->redirect(':Setting:Event:');
         }
 
-        $this->setLevelCaptions([
-            "3" => ["caption" => $permission->getName(), "link" => $this->link(":Setting:Permission:", $permission->getWebname())]
-        ]);
+        $this->addBreadcrumb($permission->getName(), $this->link(":Setting:Permission:", $permission->getWebname()));
 
         $users = $this->userManager->getIdList();
 

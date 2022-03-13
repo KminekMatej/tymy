@@ -42,7 +42,7 @@ class SettingBasePresenter extends SecuredPresenter
         $this->template->userPermissions = $this->userPermissions;
         $this->template->systemPermissions = $this->permissionManager->getByType(Permission::TYPE_SYSTEM);
 
-        $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("settings.setting", 2), "link" => $this->link(":Setting:Default:")]]);
+        $this->addBreadcrumb($this->translator->translate("settings.setting", 2), $this->link(":Setting:Default:"));
     }
 
     /**

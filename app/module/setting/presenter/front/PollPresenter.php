@@ -26,7 +26,7 @@ class PollPresenter extends SettingBasePresenter
     public function beforeRender()
     {
         parent::beforeRender();
-        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("poll.poll", 2), "link" => $this->link(":Setting:Poll:")]]);
+        $this->addBreadcrumb($this->translator->translate("poll.poll", 2), $this->link(":Setting:Poll:"));
     }
 
     public function renderDefault()
@@ -38,10 +38,7 @@ class PollPresenter extends SettingBasePresenter
     {
         $this->allowPermission('ASK.VOTE_UPDATE');
 
-        $this->setLevelCaptions([
-            "2" => ["caption" => $this->translator->translate("poll.poll", 2), "link" => $this->link(":Setting:Poll:")],
-            "3" => ["caption" => $this->translator->translate("poll.new")]
-        ]);
+        $this->addBreadcrumb($this->translator->translate("poll.new"));
 
         $this->template->polls = [(new Poll())
                 ->setId(-1)
@@ -72,7 +69,7 @@ class PollPresenter extends SettingBasePresenter
         if (count($pollObj->getOptions()) == 0) {
             $pollObj->setOptions([(new Option())->setId(-1)->setPollId($pollId)->setCaption("")->setType("TEXT")]);
         }
-        $this->setLevelCaptions(["3" => ["caption" => $pollObj->getCaption(), "link" => $this->link(":Setting:Poll:", $pollObj->getWebName())]]);
+        $this->addBreadcrumb($pollObj->getCaption(), $this->link(":Setting:Poll:", $pollObj->getWebName()));
         $this->template->poll = $pollObj;
     }
 

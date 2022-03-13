@@ -28,7 +28,7 @@ class DiscussionPresenter extends SecuredPresenter
     public function beforeRender()
     {
         parent::beforeRender();
-        $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("discussion.discussion", 2), "link" => $this->link(":Discussion:Default:")]]);
+        $this->addBreadcrumb($this->translator->translate("discussion.discussion", 2), $this->link(":Discussion:Default:"));
     }
 
     public function renderDefault(string $discussion, int $page = 1, ?string $search = null, string $suser = "all", ?string $jump2date = null)
@@ -48,7 +48,7 @@ class DiscussionPresenter extends SecuredPresenter
         //set users
         $this->template->userList = $this->userManager->getIdList();
 
-        $this->setLevelCaptions(["2" => ["caption" => $d->getCaption(), "link" => $this->link(":Discussion:Discussion:", [$d->getWebName()])]]);
+        $this->addBreadcrumb($d->getCaption(), $this->link(":Discussion:Discussion:", [$d->getWebName()]));
 
         $this->template->userId = $this->getUser()->getId();
         $this->template->discussionPosts = $discussionPosts;

@@ -30,7 +30,7 @@ class DefaultPresenter extends SecuredPresenter
     public function beforeRender()
     {
         parent::beforeRender();
-        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("file.file", 2), "link" => $this->link(":File:Default:")]]);
+        $this->addBreadcrumb($this->translator->translate("file.file", 2), $this->link(":File:Default:"));
         $this->initFileStats();
 
         $this->template->addFilter('filesize', function ($sizeInBytes) {
@@ -69,7 +69,7 @@ class DefaultPresenter extends SecuredPresenter
         foreach ($folderParts as $folderPart) {
             $parentFolder = $folderLink;
             $folderLink .= "$folderPart";
-            $this->setLevelCaptions([$i => ["caption" => $folderPart, "link" => $this->link(":File:Default:", $folderLink)]]);
+            $this->addBreadcrumb($folderPart, $this->link(":File:Default:", $folderLink));
             $folderLink .= "/";
             $i++;
         }

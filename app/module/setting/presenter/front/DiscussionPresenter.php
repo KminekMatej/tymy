@@ -12,10 +12,15 @@ class DiscussionPresenter extends SettingBasePresenter
             $this->setView("discussion");
         }
     }
-
-    public function renderDefault()
+    
+    public function beforeRender()
     {
-        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("discussion.discussion", 2), "link" => $this->link(":Setting:Discussion:")]]);
+        parent::beforeRender();
+        $this->addBreadcrumb($this->translator->translate("discussion.discussion", 2), $this->link(":Setting:Discussion:"));
+    }
+
+        public function renderDefault()
+    {
         $this->template->isNew = false;
         $discussions = $this->discussionManager->getList();
         $this->template->discussions = $discussions;
@@ -26,14 +31,12 @@ class DiscussionPresenter extends SettingBasePresenter
     {
         $this->allowPermission("DSSETUP");
 
-        $this->setLevelCaptions([
-            "2" => ["caption" => $this->translator->translate("discussion.discussion", 2), "link" => $this->link(":Setting:Discussion:")],
-            "3" => ["caption" => $this->translator->translate("discussion.new")]
-        ]);
+        $this->addBreadcrumb($this->translator->translate("discussion.new"));
+
         $this->template->isNew = true;
         $this->template->discussion = (new Discussion())
-                ->setId(-1)
-                ->setCaption("")
+            ->setId(-1)
+            ->setCaption("")
                 ->setDescription("")
                 ->setPublicRead("YES")
                 ->setEditablePosts("YES")
@@ -52,7 +55,7 @@ class DiscussionPresenter extends SettingBasePresenter
             $this->flashMessage($this->translator->translate("discussion.errors.discussionNotExists", null, ['id' => $resource]), "danger");
             $this->redirect(':Setting:Event:');
         }
-        $this->setLevelCaptions(["3" => ["caption" => $discussionObj->getCaption(), "link" => $this->link(":Setting:Discussion:", $discussionObj->getWebName())]]);
+        $this->addBreadcrumb($discussionObj->getCaption(), $this->link(":Setting:Discussion:", $discussionObj->getWebName()));
         $this->template->isNew = false;
         $this->template->discussion = $discussionObj;
     }

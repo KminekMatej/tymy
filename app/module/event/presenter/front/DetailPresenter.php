@@ -33,7 +33,7 @@ class DetailPresenter extends EventBasePresenter
         $event = $this->eventManager->getById($eventId);
         $eventTypes = $this->eventTypeManager->getIndexedList();
 
-        $this->setLevelCaptions(["2" => ["caption" => $event->getCaption(), "link" => $this->link(":Event:Detail:", $event->getId() . "-" . $event->getWebName())]]);
+        $this->addBreadcrumb($event->getCaption(), $this->link(":Event:Detail:", $event->getId() . "-" . $event->getWebName()));
 
         $this->template->resultsClosed = false; //initially this is false, toggled by javascript
 

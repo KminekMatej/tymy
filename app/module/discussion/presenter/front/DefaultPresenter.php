@@ -26,7 +26,7 @@ class DefaultPresenter extends SecuredPresenter
     public function beforeRender()
     {
         parent::beforeRender();
-        $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("discussion.discussion", 2), "link" => $this->link("Discussion:")]]);
+        $this->addBreadcrumb($this->translator->translate("discussion.discussion", 2), "link" => $this->link("Discussion:")]]);
     }
 
     public function renderDefault()

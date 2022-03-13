@@ -38,33 +38,33 @@ class DefaultPresenter extends SecuredPresenter
     public function startup()
     {
         parent::startup();
-        $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("team.team", 1), "link" => $this->link(":Team:Default:")]]);
+        $this->addBreadcrumb($this->translator->translate("team.team", 1), $this->link(":Team:Default:"));
     }
 
     public function actionPlayers()
     {
-        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("team.PLAYER", 2), "link" => $this->link(":Team:Default:players")]]);
+        $this->addBreadcrumb($this->translator->translate("team.PLAYER", 2), $this->link(":Team:Default:players"));
         $this->userType = "PLAYER";
         $this->setView('default');
     }
 
     public function actionMembers()
     {
-        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("team.MEMBER", 2), "link" => $this->link(":Team:Default:members")]]);
+        $this->addBreadcrumb($this->translator->translate("team.MEMBER", 2), $this->link(":Team:Default:members"));
         $this->userType = "MEMBER";
         $this->setView('default');
     }
 
     public function actionSicks()
     {
-        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("team.SICK", 2), "link" => $this->link(":Team:Default:sicks")]]);
+        $this->addBreadcrumb($this->translator->translate("team.SICK", 2), $this->link(":Team:Default:sicks"));
         $this->userType = "SICK";
         $this->setView('default');
     }
 
     public function actionInits()
     {
-        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("team.INIT", 2), "link" => $this->link(":Team:Default:inits")]]);
+        $this->addBreadcrumb($this->translator->translate("team.INIT", 2), $this->link(":Team:Default:inits"));
         $this->userType = "INIT";
         $this->setView('default');
     }
@@ -113,6 +113,6 @@ class DefaultPresenter extends SecuredPresenter
         ksort($jerseyList);
 
         $this->template->jerseyList = $jerseyList;
-        $this->setLevelCaptions(["2" => ["caption" => $this->translator->translate("team.jersey", 2), "link" => $this->link(":Team:Default:jerseys")]]);
+        $this->addBreadcrumb($this->translator->translate("team.jersey", 2), $this->link(":Team:Default:jerseys"));
     }
 }

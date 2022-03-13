@@ -63,19 +63,13 @@ class SecuredPresenter extends BasePresenter
     {
         return $this->levelCaptions;
     }
-
-    public function setLevelCaptions($levelCaptions)
+    
+    public function addBreadcrumb(string $caption, ?string $link = null): void
     {
-        if (!is_array($levelCaptions)) {
-            return false;
-        }
-        foreach ($levelCaptions as $level => $caption) {
-            $this->levelCaptions[$level] = $caption;
-        }
-
-        for ($index = max(array_keys($levelCaptions)) + 1; $index < count($this->levelCaptions); $index++) {
-            unset($this->levelCaptions[$index]);
-        }
+        $this->levelCaptions[] = [
+            "caption" => $caption,
+            "link" => $link,
+        ];
     }
 
     public function beforeRender()
@@ -92,7 +86,7 @@ class SecuredPresenter extends BasePresenter
         }
 
         $this->setAccessibleSettings();
-        $this->setLevelCaptions(["0" => ["caption" => $this->translator->translate("common.mainPage"), "link" => $this->link(":Core:Default:")]]);
+        $this->addBreadcrumb($this->translator->translate("common.mainPage"), $this->link(":Core:Default:"));
     }
 
     protected function startup()

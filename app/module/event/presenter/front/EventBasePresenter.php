@@ -31,7 +31,7 @@ class EventBasePresenter extends SecuredPresenter
     {
         parent::beforeRender();
 
-        $this->setLevelCaptions(["1" => ["caption" => $this->translator->translate("event.attendance", 2), "link" => $this->link(":Event:Default:")]]);
+        $this->addBreadcrumb($this->translator->translate("event.attendance", 2), $this->link(":Event:Default:"));
 
         $this->template->addFilter('genderTranslate', function ($gender) {
             switch ($gender) {
