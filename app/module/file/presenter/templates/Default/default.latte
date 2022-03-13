@@ -168,7 +168,7 @@
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <i class="fas mr-2 font-24 {$fileClass} {$fileColor}"></i>
-                                            <a n:class="$fileColor ? font-weight-bold" href="{$basePath}/download{$folder}{basename($file)}" target="_blank">{basename($file)}</a>
+                                            <a n:class="$fileColor ? font-weight-bold" href="{$basePath}/download{$folder}/{basename($file)}" target="_blank">{basename($file)}</a>
                                         </div>
                                     </td>
                                     <td>{filesize($file)|filesize}</td>
