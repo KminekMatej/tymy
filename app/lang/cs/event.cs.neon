@@ -16,6 +16,7 @@ attendanceNotFilled: Nemáš vyplněnou docházku
 notDecidedYet: Nerozhodnutí
 arrived: Přišel|Přišli
 notArrived: Nepřišel|Nepřišli
+attendanceView: Přehled docházky
 attendanceResult: Výsledná docházka
 setAttendanceResult: Zadat výslednou docházku
 saveAttendanceResult: Uložit výslednou docházku

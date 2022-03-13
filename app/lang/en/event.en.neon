@@ -16,6 +16,7 @@ attendanceNotFilled: No attendance filled
 notDecidedYet: Not-decided
 arrived: Arrived|Arrived
 notArrived: Not-arrived|Not-arrived
+attendanceView: Attendance view
 attendanceResult: Attendance result
 setAttendanceResult: Enter attendance result
 saveAttendanceResult: Save attendance result

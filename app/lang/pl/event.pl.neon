@@ -16,6 +16,7 @@ attendanceNotFilled: Nie masz wypełnionej deklaracji obecności!
 notDecidedYet: Niezdecydowany
 arrived: Przyszedł/Przyszła|Przyszli
 notArrived: Nie przyszedł/Nie przyszła|Nie przyszli
+attendanceView: Widok obecności
 attendanceResult: Lista obecności
 setAttendanceResult: Wypełnij listę obecności
 saveAttendanceResult: Zapisz listę obecności
