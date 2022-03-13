@@ -28,6 +28,8 @@ use Tymy\Module\User\Manager\UserManager;
  */
 class EventManager extends BaseManager
 {
+    public const EVENTS_PER_PAGE = 20;
+
     private PermissionManager $permissionManager;
     private AttendanceManager $attendanceManager;
     private EventTypeManager $eventTypeManager;
