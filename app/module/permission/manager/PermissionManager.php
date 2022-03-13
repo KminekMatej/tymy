@@ -147,28 +147,28 @@ class PermissionManager extends BaseManager
         $params = [];
         if (!empty($roles)) {
             foreach ($roles as $allowedRole) {
-                $conditions[] = "a_roles LIKE ?";
-                $params[] = "%$allowedRole%";
+                $conditions[] = "FIND_IN_SET(?, a_roles) > 0";
+                $params[] = "$allowedRole";
             }
         }
 
-        $conditions[] = "a_statuses LIKE ?";
-        $params[] = "%$status%";
+        $conditions[] = "FIND_IN_SET(?, a_statuses) > 0";
+        $params[] = "$status";
 
-        $conditions[] = "a_users LIKE ?";
-        $params[] = "%$userId%";
+        $conditions[] = "FIND_IN_SET(?, a_users) > 0";
+        $params[] = "$userId";
 
         $selector->where("(" . join(") OR (", $conditions) . ")", ...$params);
 
         //add revokes
         if (!empty($roles)) {
             foreach ($roles as $revokedRole) {
-                $selector->where("(r_roles NOT LIKE ? OR r_roles IS NULL)", "%$revokedRole%");
+                $selector->where("(FIND_IN_SET(?, r_roles) = 0 OR r_roles IS NULL)", "$revokedRole");
             }
         }
 
-        $selector->where("r_statuses NOT LIKE ? OR r_statuses IS NULL", "%$status%");
-        $selector->where("r_users NOT LIKE ? OR r_users IS NULL", "%$userId%");
+        $selector->where("FIND_IN_SET(?, r_statuses) = 0 OR r_statuses IS NULL", "$status");
+        $selector->where("FIND_IN_SET(?, r_users) = 0 OR r_users IS NULL", "$userId");
 
         if ($type) {
             $selector->where("right_type", $type);
