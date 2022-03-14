@@ -88,7 +88,7 @@ class AuthorizationManager implements IAuthorizator
             }
         }
 
-        return $this->permissionCache[$type][$name];
+        return $this->permissionCache[$type][$name] ?? null;
     }
 
     /**
