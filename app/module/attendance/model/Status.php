@@ -19,6 +19,7 @@ class Status extends BaseModel
     private string $code;
     private string $color = "d9ff00";
     private ?string $caption = null;
+    private ?string $icon = null;
     private int $statusSetId;
     private ?int $updatedById = null;
     private ?DateTime $updatedAt = null;
@@ -36,6 +37,11 @@ class Status extends BaseModel
     public function getCaption(): ?string
     {
         return $this->caption;
+    }
+
+    public function getIcon(): ?string
+    {
+        return $this->icon;
     }
 
     public function getStatusSetId(): int
@@ -68,6 +74,12 @@ class Status extends BaseModel
     public function setCaption(?string $caption)
     {
         $this->caption = $caption;
+        return $this;
+    }
+
+    public function setIcon(?string $icon)
+    {
+        $this->icon = $icon;
         return $this;
     }
 
