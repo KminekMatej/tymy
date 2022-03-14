@@ -4,6 +4,7 @@ namespace Tymy\Module\Team\Presenter\Front;
 
 use Nette\Http\FileUpload;
 use Nette\Utils\Image;
+use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\Team\Manager\TeamManager;
@@ -14,7 +15,7 @@ class PlayerPresenter extends SecuredPresenter
 {
     /** @inject */
     public AvatarManager $avatarManager;
-    
+
     public function beforeRender()
     {
         parent::beforeRender();
@@ -58,18 +59,18 @@ class PlayerPresenter extends SecuredPresenter
         if ($player) {  //new player based on another user
             $user = $this->userManager->getById($this->parseIdFromWebname($player));
             $newPlayer = $user->setId(null)
-                    ->setStatus("PLAYER")
-                    ->setEmail("")
-                    ->setPictureUrl("");
+                ->setStatus("PLAYER")
+                ->setEmail("")
+                ->setPictureUrl("");
         } else {    //brand new player
             $newPlayer = (new User())
-                    ->setLanguage($team->getDefaultLanguageCode())
-                    ->setCanLogin(true)
-                    ->setCanEditCallName(true)
-                    ->setStatus("PLAYER")
-                    ->setGender("UNKNOWN")
-                    ->setIsNew(true)
-                    ->setErrFields($errFls);
+                ->setLanguage($team->getDefaultLanguageCode())
+                ->setCanLogin(true)
+                ->setCanEditCallName(true)
+                ->setStatus("PLAYER")
+                ->setGender("UNKNOWN")
+                ->setIsNew(true)
+                ->setErrFields($errFls);
         }
 
         $this->addBreadcrumb($this->translator->translate("common.new"));
@@ -101,7 +102,12 @@ class PlayerPresenter extends SecuredPresenter
         /* @todo Finish proper validation on new player, make sure that password and email fields are filled */
 
         /* @var $createdPlayer User */
-        $createdPlayer = $this->userManager->create($bind["changes"]);
+        try {
+            $createdPlayer = $this->userManager->create($bind["changes"]);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+
 
         $this->flashMessage($this->translator->translate("common.alerts.userAdded", null, ["fullname" => $createdPlayer->getDisplayName()]), "success");
 
@@ -115,7 +121,12 @@ class PlayerPresenter extends SecuredPresenter
             $bind["changes"]["roles"] = [];
         }
 
-        $this->userManager->update($bind["changes"], $bind["id"]);
+        try {
+            $this->userManager->update($bind["changes"], $bind["id"]);
+        } catch (TymyResponse $tResp) {
+            $this->handleTymyResponse($tResp);
+            $this->redirect('this');
+        }
 
         $this->flashMessage($this->translator->translate("common.alerts.configSaved"), "success");
         $this->redrawControl("flashes");
@@ -135,7 +146,13 @@ class PlayerPresenter extends SecuredPresenter
             return;
         }
         $bind = $this->getRequest()->getPost();
-        $this->userManager->delete($bind["id"]);
+        try {
+            $this->userManager->delete($bind["id"]);
+        } catch (TymyResponse $tResp) {
+            $this->handleTymyResponse($tResp);
+            $this->redirect('this');
+        }
+
         $this->flashMessage($this->translator->translate("common.alerts.userSuccesfullyDeleted"), "success");
         $this->redirect(':Team:Default:');
     }
@@ -149,7 +166,13 @@ class PlayerPresenter extends SecuredPresenter
         if ($file->isImage() && $file->isOk()) {
             $type = null;
             $image = Image::fromFile($file->getTemporaryFile(), $type);
-            $this->avatarManager->uploadAvatarImage($image, $type, $this->user->getId());
+            try {
+                $this->avatarManager->uploadAvatarImage($image, $type, $this->user->getId());
+            } catch (TymyResponse $tResp) {
+                $this->handleTymyResponse($tResp);
+                $this->redirect('this');
+            }
+
             $this->flashMessage($this->translator->translate("common.alerts.avatarSaved"), "success");
             $this->redrawControl("flashes");
             $this->redrawControl("player-header");
