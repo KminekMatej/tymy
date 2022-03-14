@@ -57,18 +57,20 @@
                             <tr>
                                 <th>Člen</th>
                                 <th n:foreach="$events as $event" class="text-center">
-                                    <div class="event-caption-oneline">{$event->getCaption()}</div>
-                                    <div>{$event->getStartTime()|date:\Tymy\Module\Core\Model\BaseModel::DAY_CZECH_FORMAT}</div>
+                                    <a href="{plink :Event:Detail: $event->getWebName()}">
+                                        <div class="event-caption-oneline">{$event->getCaption()}</div>
+                                        <div>{$event->getStartTime()|date:\Tymy\Module\Core\Model\BaseModel::DAY_CZECH_FORMAT}</div>
+                                    </a>
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr n:foreach="$users as $usr">
-                                <th scope="row">{$usr->getDisplayName()}</th>
+                                <th scope="row"><a href="{plink :Team:Player: $usr->getWebName()}">{$usr->getDisplayName()}</a></th>
                                     {foreach $events as $event}
                                         {var $userAttendance = $event->getAttendance()[$usr->getId()] ?? null}
                                         {var $status = $userAttendance ? ($statusList[$userAttendance->getPostStatusId() ?: $userAttendance->getPreStatusId()]) : null}
-                                    <td n:class="text-center, $status ? statusCell . $status->getId()" title="{$usr->getDisplayName()}, {$event->getCaption()} {$event->getStartTime()|date:\Tymy\Module\Core\Model\BaseModel::DAY_CZECH_FORMAT}: {if $status}{$status->getCaption()}{else}{_team.unknownSex}{/if}">
+                                    <td n:class="text-center, $status ? statusCell . $status->getId(), 'eventCol-' . $event->getId()" title="{$usr->getDisplayName()}, {$event->getCaption()} {$event->getStartTime()|date:\Tymy\Module\Core\Model\BaseModel::DAY_CZECH_FORMAT}: {if $status}{$status->getCaption()}{else}{_team.unknownSex}{/if}">
                                         {if $status}
                                             {$status->getCaption()}
                                         {/if}
