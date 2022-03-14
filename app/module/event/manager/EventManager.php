@@ -9,6 +9,7 @@ use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
 use Tymy\Module\Attendance\Manager\AttendanceManager;
 use Tymy\Module\Core\Factory\ManagerFactory;
+use Tymy\Module\Core\Helper\ArrayHelper;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Model\Filter;
@@ -28,7 +29,7 @@ use Tymy\Module\User\Manager\UserManager;
  */
 class EventManager extends BaseManager
 {
-    public const EVENTS_PER_PAGE = 20;
+    public const EVENTS_PER_PAGE = 15;
 
     private PermissionManager $permissionManager;
     private AttendanceManager $attendanceManager;
@@ -124,6 +125,45 @@ class EventManager extends BaseManager
     }
 
     /**
+     * Get year events for event report. Also autodetects page to show if no page is specified
+     *
+     * @param int $userId
+     * @param int $year
+     * @param int|null $page
+     * @return array [
+      "page" => (int),    //number of current page. Either supplied or auto detected
+      "totalCount" => (int), //total number of events for given year (needed for pagination script)
+      "events" => array , //Event[]
+      ]
+     */
+    public function getYearEvents(int $userId, int $year, ?int $page = null): array
+    {
+        $yearEventsSelector = $this->selectUserEvents($userId)->where("start_time LIKE ?", "$year-%");
+
+        if (!$page) {//if page is not set, we should autodetect proper page according to current date
+            $eventsBeforeToday = $yearEventsSelector
+                ->where("start_time < ?", new DateTime())
+                ->count("id");
+
+            $page = intval(floor($eventsBeforeToday / EventManager::EVENTS_PER_PAGE)) + 1;
+        }
+
+        $totalCount = $yearEventsSelector->count("id");
+
+        $offset = ($page - 1) * EventManager::EVENTS_PER_PAGE;
+        
+        $events = $this->mapAll($yearEventsSelector->order("start_time ASC")->limit(EventManager::EVENTS_PER_PAGE, $offset)->fetchAll());
+        $this->addAttendances($events);
+
+        return [
+            "page" => $page,
+            "totalCount" => $totalCount,
+            "lastPage" => ceil($totalCount / EventManager::EVENTS_PER_PAGE),
+            "events" => $events,
+        ];
+    }
+
+    /**
      * Get array of event objects which user is allowed to view
      * @param int $userId
      * @return Event[]
@@ -136,24 +176,29 @@ class EventManager extends BaseManager
             Filter::addFilter($selector, $this->filterToArray($filter));
         }
 
-        $selector->limit($limit ?: 200, $offset ?: 0);
+        $selector->order(Order::toString($this->orderToArray($order ?: "startTime__desc")))
+            ->limit($limit ?: 200, $offset ?: 0);
 
-        $selector->order(Order::toString($this->orderToArray($order ?: "startTime__desc")));
+        $events = $this->mapAll($selector->fetchAll());
 
-        $allRows = $selector->fetchAll();
-
-        $eventIds = array_column($allRows, "id");
-        $attendances = $this->attendanceManager->getByEvents($eventIds);
-
-        $events = [];
-        foreach ($allRows as $row) {
-            /* @var $event Event */
-            $event = $this->map($row);
-            $event->setAttendance($attendances[$event->getId()] ?? []);
-            $events[] = $event;
-        }
+        $this->addAttendances($events);
 
         return $events;
+    }
+
+    /**
+     * Load attendances from database and automatically adds all of them to input array of events
+     * @param array $events
+     * @return void
+     */
+    private function addAttendances(array &$events): void
+    {
+        $eventIds = ArrayHelper::entityIds($events);
+        $attendances = $this->attendanceManager->getByEvents($eventIds);
+        foreach ($events as $event) {
+            /* @var $event Event */
+            $event->setAttendance($attendances[$event->getId()] ?? []);
+        }
     }
 
     /**

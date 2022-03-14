@@ -1,0 +1,95 @@
+{import $componentsDir . '/secured.latte'}
+
+{block navbar}
+{control navbar}
+{/block}
+
+{block scripts}
+{include parent}
+<script src="{$publicPath}/js/Event/EventAttendanceSet.js?ver={$appver}"></script>
+{/block}
+
+{block styles}
+{include parent}
+<style type="text/css">
+    TBODY > TR > TD {
+        opacity: 0.7;
+    }
+    TBODY > TR:hover > TD {
+        opacity: 1;
+        font-weight: bold;
+    }
+    {foreach $statusList as $status}
+        .statusCell{$status->getId()} {
+            color: #{$status->getColor()};
+            border-color: #{$status->getColor()};
+            background-color: transparent;
+            background-image: none;
+        }
+        .statusCell{$status->getId()}.active {
+            color: #fff;
+            border-color: #{$status->getColor()};
+            background-color: #{$status->getColor()};
+        }
+        .statusCell{$status->getId()}:hover {
+            color: #fff;
+            border-color: #{$status->getColor()};
+            background-color: #{$status->getColor()};
+        }
+        .statusCell{$status->getId()}:not(:disabled):not(.disabled).active {
+            color: #fff;
+            border-color: #{$status->getColor()};
+            background-color: #{$status->getColor()};
+        }
+    {/foreach}
+</style>
+{/block}
+
+{block content}
+
+<div class="container-fluid report">
+    <div class="row">
+        <div class="col my-3">
+            <div class="card sh-box">
+                <div class="card-body">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Člen</th>
+                                <th n:foreach="$events as $event" class="text-center">
+                                    <div class="event-caption-oneline">{$event->getCaption()}</div>
+                                    <div>{$event->getStartTime()|date:\Tymy\Module\Core\Model\BaseModel::DAY_CZECH_FORMAT}</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr n:foreach="$users as $usr">
+                                <th scope="row">{$usr->getDisplayName()}</th>
+                                    {foreach $events as $event}
+                                        {var $userAttendance = $event->getAttendance()[$usr->getId()] ?? null}
+                                        {var $status = $userAttendance ? ($statusList[$userAttendance->getPostStatusId() ?: $userAttendance->getPreStatusId()]) : null}
+                                    <td n:class="text-center, $status ? statusCell . $status->getId()" title="{$usr->getDisplayName()}, {$event->getCaption()} {$event->getStartTime()|date:\Tymy\Module\Core\Model\BaseModel::DAY_CZECH_FORMAT}: {if $status}{$status->getCaption()}{else}{_team.unknownSex}{/if}">
+                                        {if $status}
+                                            {$status->getCaption()}
+                                        {/if}
+                                    </td>
+                                {/foreach}
+                            </tr>
+                        </tbody>
+                            
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        <li n:class="$currentPage == 1 ? disabled, page-item"><a class="page-link" href="{plink :Event:Report: $year,$currentPage-1}">{_common.navigationBlock.previous}</a></li>
+                        <li n:foreach="$pagination as $page" n:class="$currentPage == $page ? active, page-item"><a class="page-link" href="{plink :Event:Report: $year,$page}">{$page}</a></li>
+                        <li n:class="$currentPage == $lastPage ? disabled, page-item"><a class="page-link" href="{plink :Event:Report: $year,$currentPage+1}">{_common.navigationBlock.next}</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+</div>
