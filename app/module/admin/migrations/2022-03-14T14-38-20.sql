@@ -14,7 +14,7 @@
 -- UP:
 -- commands that updates database shall be written here:
 
-ALTER TABLE `status` ADD `icon` VARCHAR(16) NULL DEFAULT NULL AFTER `color`;
+ALTER TABLE `status` ADD `icon` VARCHAR(32) NULL DEFAULT NULL AFTER `color`;
 UPDATE `status` SET `icon` = 'far fa-check-circle' WHERE `code` = 'YES';
 UPDATE `status` SET `icon` = 'far fa-times-circle' WHERE `code` = 'NO';
 UPDATE `status` SET `icon` = 'fas fa-running' WHERE `code` = 'LAT';
