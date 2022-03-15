@@ -7,6 +7,7 @@ use Nette\Database\Table\ActiveRow;
 use Nette\NotImplementedException;
 use Tymy\Module\Attendance\Manager\StatusManager;
 use Tymy\Module\Attendance\Model\Status;
+use Tymy\Module\Attendance\Model\StatusSet;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
@@ -46,18 +47,13 @@ class EventTypeManager extends BaseManager
         /* @var $row ActiveRow */
         $eventType = parent::map($row, $force);
 
-        if ($eventType->getPreStatusSetId()) {
-            $statusRows = $this->database->table(Status::TABLE)->where("status_set_id", $eventType->getPreStatusSetId())->order("id")->fetchAll();
-            foreach ($statusRows as $sRow) {
-                $eventType->addPreStatusSet($this->statusManager->map($sRow));
-            }
-        }
+        $statuses = $this->statusManager->getByEventTypeId($row->id);
 
+        if ($eventType->getPreStatusSetId()) {
+            $eventType->setPreStatusSet($statuses[StatusSet::PRE]);
+        }
         if ($eventType->getPostStatusSetId()) {
-            $statusRows = $this->database->table(Status::TABLE)->where("status_set_id", $eventType->getPostStatusSetId())->order("id")->fetchAll();
-            foreach ($statusRows as $sRow) {
-                $eventType->addPostStatusSet($this->statusManager->map($sRow));
-            }
+            $eventType->setPostStatusSet($statuses[StatusSet::POST]);
         }
 
         return $eventType;
