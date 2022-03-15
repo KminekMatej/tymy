@@ -80,31 +80,6 @@ class EventPresenter extends SettingBasePresenter
         $this->template->event = $eventObj;
     }
 
-    public function handleEventsEdit()
-    {
-        $this->allowPermission('EVE_UPDATE');
-
-        $post = $this->getRequest()->getPost();
-        $binders = $post["binders"];
-        foreach ($binders as $bind) {
-            $this->editEvent($bind);
-        }
-    }
-
-    public function handleEventsCreate()
-    {
-        $this->allowPermission('EVE_CREATE');
-
-        $binders = $this->getRequest()->getPost()["binders"];
-
-        foreach ($binders as &$bind) {
-            $this->normalizeDates($bind["changes"]);
-            $this->eventManager->create($bind["changes"]);
-        }
-
-        //$this->redirect(':Setting:Event:');
-    }
-
     private function normalizeDates(array &$data)
     {
         foreach (["startTime", "endTime", "closeTime"] as $timeKey) {
@@ -114,32 +89,10 @@ class EventPresenter extends SettingBasePresenter
         }
     }
 
-    public function handleEventEdit()
-    {
-        $this->editEvent($this->getRequest()->getPost());
-    }
-
     public function handleEventDelete()
     {
         $bind = $this->getRequest()->getPost();
         $this->eventManager->delete($bind["id"]);
-    }
-
-    private function editEvent($bind)
-    {
-        if (array_key_exists("startTime", $bind["changes"])) {
-            $bind["changes"]["startTime"] = gmdate("Y-m-d\TH:i:s\Z", strtotime($bind["changes"]["startTime"]));
-        }
-
-        if (array_key_exists("endTime", $bind["changes"])) {
-            $bind["changes"]["endTime"] = gmdate("Y-m-d\TH:i:s\Z", strtotime($bind["changes"]["endTime"]));
-        }
-
-        if (array_key_exists("closeTime", $bind["changes"])) {
-            $bind["changes"]["closeTime"] = gmdate("Y-m-d\TH:i:s\Z", strtotime($bind["changes"]["closeTime"]));
-        }
-
-        $this->eventManager->update($bind["changes"], $bind["id"]);
     }
 
     public function createComponentNewEventForm()
