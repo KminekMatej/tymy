@@ -106,11 +106,26 @@ class StatusManager extends BaseManager
     {
         if (!array_key_exists($eventTypeId, $this->simpleCache)) {
             $this->simpleCache[$eventTypeId] = [
-                StatusSet::PRE => $this->mapAll($this->database->table(Status::TABLE)->where(".status_set:event_types(pre_status_set).id", $eventTypeId)->fetchAll()),
-                StatusSet::POST => $this->mapAll($this->database->table(Status::TABLE)->where(".status_set:event_types(post_status_set).id", $eventTypeId)->fetchAll()),
+                
+                StatusSet::PRE => $this->mapAllWithCode($this->database->table(Status::TABLE)->where(".status_set:event_types(pre_status_set).id", $eventTypeId)->fetchPairs("code")),
+                StatusSet::POST => $this->mapAllWithCode($this->database->table(Status::TABLE)->where(".status_set:event_types(post_status_set).id", $eventTypeId)->fetchAll()),
             ];
         }
         return $this->simpleCache[$eventTypeId];
+    }
+
+    /**
+     * Map all rows to array of statuses where key is status code
+     * @param ActiveRow[] $rows
+     * @return Status[]
+     */
+    public function mapAllWithCode(array $rows): array
+    {
+        $ret = [];
+        foreach ($rows as $row) {
+            $ret[$row->code] = $this->map($row);
+        }
+        return $ret;
     }
 
     /**
