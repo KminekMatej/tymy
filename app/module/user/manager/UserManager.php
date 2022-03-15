@@ -385,8 +385,8 @@ class UserManager extends BaseManager
         $params = [];
         if (!empty($permission->getAllowedRoles())) {
             foreach ($permission->getAllowedRoles() as $allowedRole) {
-                $conditions[] = "roles LIKE ?";
-                $params[] = "%$allowedRole%";
+                $conditions[] = "FIND_IN_SET(?, roles) > 0";
+                $params[] = $allowedRole;
             }
         }
         if (!empty($permission->getAllowedStatuses())) {
@@ -402,7 +402,7 @@ class UserManager extends BaseManager
         //add revokes
         if (!empty($permission->getRevokedRoles())) {
             foreach ($permission->getRevokedRoles() as $revokedRole) {
-                $usersSelector->where("roles NOT LIKE ?", "%$revokedRole%");
+                $usersSelector->where("FIND_IN_SET(?, roles) = 0", $revokedRole);
             }
         }
         if (!empty($permission->getRevokedStatuses())) {
