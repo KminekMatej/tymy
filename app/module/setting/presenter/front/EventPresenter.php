@@ -3,6 +3,7 @@
 namespace Tymy\Module\Setting\Presenter\Front;
 
 use Nette\Application\UI\Form;
+use Nette\Application\UI\Multiplier;
 use Nette\Utils\DateTime;
 use stdClass;
 use Tymy\Module\Core\Exception\TymyResponse;
@@ -141,16 +142,39 @@ class EventPresenter extends SettingBasePresenter
         $this->eventManager->update($bind["changes"], $bind["id"]);
     }
 
-    public function createComponentEventLineForm()
+    public function createComponentNewEventForm()
     {
         return $this->formFactory->createEventLineForm(
-            $this->eventTypes,
-            $this->userPermissions,
-            [$this, "eventLineFormSuccess"]
+                $this->eventTypes,
+                $this->userPermissions,
+                [$this, "newEventFormSuccess"]
         );
     }
 
-    public function eventLineFormSuccess(Form $form, stdClass $values)
+    public function createComponentEventForm()
+    {
+        return new Multiplier(function (string $eventId) {
+                $event = $this->eventManager->getById(intval($eventId));
+
+                return $this->formFactory->createEventLineForm(
+                    $this->eventTypes,
+                    $this->userPermissions,
+                    [$this, "eventFormSuccess"],
+                    $event
+                );
+            });
+    }
+
+    public function eventFormSuccess(Form $form, stdClass $values)
+    {
+        try {
+            $this->eventManager->update((array) $values, $values->id);
+        } catch (TymyResponse $tResp) {
+            $this->handleTymyResponse($tResp);
+        }
+    }
+
+    public function newEventFormSuccess(Form $form, stdClass $values)
     {
         try {
             //load inputs until there are any more rows

@@ -1,13 +1,8 @@
-    {import $componentsDir . '/secured.latte'}
-
-{block scripts}
-{include parent}
-<script src="{$publicPath}/js/Binder.js?ver={$appver}"></script>
-{/block}
+{import $componentsDir . '/secured.latte'}
 
 {block styles}
 {include parent}
-<link rel='stylesheet' href="{$basePath}/skins/{$skin}/css/table-xs.css?ver={$appver}" />
+<link rel='stylesheet' href="{$publicPath}/skins/{$skin}/css/table-xs.css?ver={$appver}" />
 {/block}
 
 {block navbar}
@@ -24,61 +19,74 @@
                 </div>
                 <div class="card-body">
                     <table class="table table-xs table-hover">
-                        <tr>
-                            <th></th>
-                            <th>{_settings.type}</th>
-                            <th>{_settings.title}</th>
-                            <th>{_settings.description}</th>
-                            <th>{_event.start}</th>
-                            <th>{_event.end}</th>
-                            <th>{_event.close}</th>
-                            <th>{_event.place}</th>
-                            <th>{_common.link}</th>
-                            <th>{_event.canView-sm}</th>
-                            <th>{_event.canPlan-sm}</th>
-                            <th>{_event.canResult-sm}</th>
-                            <th></th>
-                        </tr>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>{_settings.type}</th>
+                                <th>{_settings.title}</th>
+                                <th>{_settings.description}</th>
+                                <th>{_event.start}</th>
+                                <th>{_event.end}</th>
+                                <th>{_event.close}</th>
+                                <th>{_event.place}</th>
+                                <th>{_common.link}</th>
+                                <th>{_event.canView-sm}</th>
+                                <th>{_event.canPlan-sm}</th>
+                                <th>{_event.canResult-sm}</th>
+                                <th></th>
+                            </tr>
+                        </thead>
                         {if $events}
-                        <tr n:foreach="$events as $event" data-binder-id="{$event->getId()}">
-                            <td>
-                                <a href="{plink :Setting:Event: $event->getWebName()}" class="btn btn-sm btn-light btn-light-bordered"  title="{_common.edit}" style="margin-right: 2px">
-                                    <i class="fa fa-external-link-alt" aria-hidden="true"></i>
-                                </a>
-                            </td>
-                            <td>
-                                <span class="badge" style="background-color: #{$eventTypes[$event->getType()]->getColor()}">{$event->getType()}</span>
-                            </td>
-                            <td><input type="text" name="caption" data-value="{$event->getCaption()}" value="{$event->getCaption()}" class="form-control form-control-sm" style="max-width: 100px;" required/></td>
-                            <td><textarea name="description" data-value="{$event->getDescription()}" rows="1" class="form-control form-control-sm">{$event->getDescription()}</textarea></td>
-                            <td><input type="text" name="startTime" data-value="{$event->getStartTime()|date:'d.m.Y H:i'}" value="{$event->getStartTime()|date:'d.m.Y H:i'}" class="form-control form-control-sm" style="-webkit-flex-direction:row; max-width: 175px;" required placeholder="dd.mm.rrrr hh:mm"/></td>
-                            <td><input type="text" name="endTime" data-value="{$event->getEndTime()|date:'d.m.Y H:i'}" value="{$event->getEndTime()|date:'d.m.Y H:i'}" class="form-control form-control-sm" style="-webkit-flex-direction:row; max-width: 175px;" required placeholder="dd.mm.rrrr hh:mm"/></td>
-                            <td><input type="text" name="closeTime" data-value="{$event->getCloseTime()|date:'d.m.Y H:i'}" value="{$event->getCloseTime()|date:'d.m.Y H:i'}" class="form-control form-control-sm" style="-webkit-flex-direction:row; max-width: 175px;" required placeholder="dd.mm.rrrr hh:mm"/></td>
-                            <td><input type="text" name="place" data-value="{$event->getPlace()}" value="{$event->getPlace()}" class="form-control form-control-sm"/></td>
-                            <td><input type="text" name="link" data-value="{$event->getLink()}" value="{$event->getLink()}" class="form-control form-control-sm"/></td>
-                            <td>
-                                <select name="viewRightName" data-value="{$event->getViewRightName()}" class="form-control form-control-sm">
-                                    <option value="">-- {_common.everyone} --</option>
-                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $event->getViewRightName() == $userPermission->getName()">{$userPermission->getCaption()}</option>
-                                </select>
-                            </td>
-                            <td>
-                                <select name="planRightName" data-value="{$event->getPlanRightName()}" class="form-control form-control-sm">
-                                    <option value="">-- {_common.everyone} --</option>
-                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $event->getPlanRightName() == $userPermission->getName()">{$userPermission->getCaption()}</option>
-                                </select>
-                            </td>
-                            <td>
-                                <select name="resultRightName" data-value="{$event->getResultRightName()}" class="form-control form-control-sm">
-                                    <option value="">-- {_common.everyone} --</option>
-                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $event->getResultRightName() == $userPermission->getName()">{$userPermission->getCaption()}</option>
-                                </select>
-                            </td>
-                            <td class="btn-group" role="group">
-                                <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_UPDATE'))" href="{link eventEdit!}" class="btn btn-sm btn-primary binder-save-btn" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
-                                <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_DELETE'))" href="{link eventDelete!}" class="btn btn-sm btn-danger binder-delete-btn" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></button>
-                            </td>
-                        </tr>
+                            {foreach $events as $event}
+                                {var $eventId = $event->getId()}
+                                {form eventForm-$eventId}
+                                    <tr>
+                                        <td>
+                                            <a href="{plink :Setting:Event: $event->getWebName()}" class="btn btn-sm btn-light btn-light-bordered"  title="{_common.edit}" style="margin-right: 2px">
+                                                <i class="fa fa-external-link-alt" aria-hidden="true"></i>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            {input eventTypeId, class=> 'form-control form-control-sm'}
+                                        </td>
+                                        <td>
+                                            {input caption, class=> 'form-control form-control-sm mw-100'}
+                                        </td>
+                                        <td>
+                                            {input description, class=> 'form-control form-control-sm'}
+                                        </td>
+                                        <td>
+                                            {input startTime, class=> 'form-control form-control-sm'}
+                                        </td>
+                                        <td>
+                                            {input endTime, class=> 'form-control form-control-sm'}
+                                        </td>
+                                        <td>
+                                            {input closeTime, class=> 'form-control form-control-sm'}
+                                        </td>
+                                        <td>
+                                            {input place, class=> 'form-control form-control-sm'}
+                                        </td>
+                                        <td>
+                                            {input link, class=> 'form-control form-control-sm'}
+                                        </td>
+                                        <td>
+                                            {input canView, class=> 'form-control form-control-sm'}
+                                        </td>
+                                        <td>
+                                            {input canPlan, class=> 'form-control form-control-sm'}
+                                        </td>
+                                        <td>
+                                            {input canResult, class=> 'form-control form-control-sm'}
+                                        </td>
+                                        <td class="btn-group" role="group">
+                                            <button n:name="save" n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_UPDATE'))" href="{link eventEdit!}" class="btn btn-sm btn-primary" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
+                                            <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_DELETE'))" href="{link eventDelete!}" class="btn btn-sm btn-danger" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                        </td>
+                                    </tr>
+                                {/form}
+                            {/foreach}
+                            </tbody>
                         {/if}
                     </table>
                 </div>
@@ -86,9 +94,7 @@
                     <a n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_CREATE'))" class="btn btn-lg btn-success" href="{plink :Setting:Event:New}" onclick="btnRotate($(this), true)" title="{_common.save}" style="margin-right: 10px">
                         <i class="fa fa-plus" aria-hidden="true"></i>
                     </a>
-                    <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_UPDATE'))" class="btn btn-lg btn-primary binder-save-all-btn" href="{link eventsEdit!}" title="{_common.saveAll}"><i class="fa fa-save" aria-hidden="true"></i></button>
                 </div>
-                
             </div>
         </div>
     </div>
