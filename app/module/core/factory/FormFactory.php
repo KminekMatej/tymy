@@ -13,6 +13,7 @@ use Tymy\Module\Attendance\Model\StatusSet;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Event\Manager\EventManager;
 use Tymy\Module\Event\Manager\EventTypeManager;
+use Tymy\Module\Event\Model\Event;
 use Tymy\Module\Event\Model\EventType;
 use Tymy\Module\Permission\Model\Permission;
 use Tymy\Module\Team\Manager\TeamManager;
@@ -42,7 +43,7 @@ class FormFactory
     /**
      * @return Form
      */
-    public function createEventLineForm(array $eventTypesList, array $userPermissions, array $onSuccess): Form
+    public function createEventLineForm(array $eventTypesList, array $userPermissions, array $onSuccess, ?Event $event = null): Form
     {
         $permissions = [];
         $eventTypes = [];
@@ -73,33 +74,25 @@ class FormFactory
         $canPlan = $form->addSelect("canPlan", null, $permissions)->setHtmlAttribute("data-name", "canPlan")->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
         $canResult = $form->addSelect("canResult", null, $permissions)->setHtmlAttribute("data-name", "canResult")->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
 
-        /* if (is_numeric($id)) {
-          /* @var $event Event */
-        /*    $event = $this->eventManager->getById($id);
-          if ($event) {
-          $type->setValue($event->getType());
-          $caption->setValue($event->getCaption());
-          $description->setValue($event->getDescription());
-          $start->setValue($event->getStartTime());
-          $end->setValue($event->getEndTime());
-          $close->setValue($event->getCloseTime());
-          $place->setValue($event->getPlace());
-          $link->setValue($event->getLink());
-          $canView->setValue($event->getCanView());
-          $canPlan->setValue($event->getCanPlan());
-          $canResult->setValue($event->getCanResult());
-          }
-          } */
+        if ($event) {
+            $form->addHidden("id", $event->getId());
+            $type->setValue($event->getEventTypeId());
+            $caption->setValue($event->getCaption());
+            $description->setValue($event->getDescription());
+            $start->setValue($event->getStartTime()->format(BaseModel::DATETIME_ISO_FORMAT));
+            $end->setValue($event->getEndTime()->format(BaseModel::DATETIME_ISO_FORMAT));
+            $close->setValue($event->getCloseTime()->format(BaseModel::DATETIME_ISO_FORMAT));
+            $place->setValue($event->getPlace());
+            $link->setValue($event->getLink());
+            $canView->setValue($event->getViewRightName());
+            $canPlan->setValue($event->getPlanRightName());
+            $canResult->setValue($event->getResultRightName());
+        }
 
         $form->addSubmit("save")->setHtmlAttribute("title", $this->translator->translate("common.saveAll"));
         $form->onSuccess[] = $onSuccess;
 
         return $form;
-
-        /*
-          return new Multiplier(function ($id) use ($eventTypes, $permissions, $onSuccess) {
-
-          }); */
     }
 
     public function createStatusSetForm(array $onSuccess): Multiplier
