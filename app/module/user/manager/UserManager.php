@@ -388,6 +388,9 @@ class UserManager extends BaseManager
                 $conditions[] = "FIND_IN_SET(?, roles) > 0";
                 $params[] = $allowedRole;
             }
+            //administrator is allowed event if its not exactly specified
+            $conditions[] = "FIND_IN_SET(?, roles) > 0";
+            $params[] = User::ROLE_SUPER;
         }
         if (!empty($permission->getAllowedStatuses())) {
             $conditions[] = "status IN ?";
