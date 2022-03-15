@@ -25,6 +25,7 @@ class StatusManager extends BaseManager
 
     private ?Status $status = null;
     private TeamManager $teamManager;
+    private array $simpleCache = [];
 
     public function __construct(ManagerFactory $managerFactory, TeamManager $teamManager)
     {
@@ -51,6 +52,11 @@ class StatusManager extends BaseManager
     public function canRead($entity, $userId): bool
     {
         return true;
+    }
+
+    private function dropSimpleCache(): void
+    {
+        $this->simpleCache = [];
     }
 
     protected function allowCreate(?array &$data = null): void
@@ -98,10 +104,13 @@ class StatusManager extends BaseManager
      */
     public function getByEventTypeId(int $eventTypeId): array
     {
-        return [
-            StatusSet::PRE => $this->mapAll($this->database->table(Status::TABLE)->where(".status_set:event_types(pre_status_set).id", $eventTypeId)->fetchAll()),
-            StatusSet::POST => $this->mapAll($this->database->table(Status::TABLE)->where(".status_set:event_types(post_status_set).id", $eventTypeId)->fetchAll()),
-        ];
+        if (!array_key_exists($eventTypeId, $this->simpleCache)) {
+            $this->simpleCache[$eventTypeId] = [
+                StatusSet::PRE => $this->mapAll($this->database->table(Status::TABLE)->where(".status_set:event_types(pre_status_set).id", $eventTypeId)->fetchAll()),
+                StatusSet::POST => $this->mapAll($this->database->table(Status::TABLE)->where(".status_set:event_types(post_status_set).id", $eventTypeId)->fetchAll()),
+            ];
+        }
+        return $this->simpleCache[$eventTypeId];
     }
 
     /**
@@ -189,6 +198,8 @@ class StatusManager extends BaseManager
             $this->saveStatusImage($data["statusSetId"], $data["code"], $data["image"]);
         }
 
+        $this->dropSimpleCache();
+
         return $this->map($createdRow);
     }
 
@@ -203,6 +214,8 @@ class StatusManager extends BaseManager
         if ($deleted) {
             FileSystem::delete($this->getStatusSetFolder($this->status->getStatusSetId()) . "/{$this->status->getCode()}.png");
         }
+
+        $this->dropSimpleCache();
 
         return $deleted;
     }
@@ -234,6 +247,8 @@ class StatusManager extends BaseManager
             $statusSetId = $data["statusSetId"] ?? $this->status->getStatusSetId();
             $this->saveStatusImage($statusSetId, $code, $data["image"]);
         }
+
+        $this->dropSimpleCache();
 
         return $this->getById($resourceId);
     }
