@@ -3,6 +3,8 @@
     <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-calendar" aria-hidden="true"></i> {_event.attendance,2}</a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
         <a class="dropdown-item" href="{plink :Event:Default:}">{_common.allOfThem}</a>
+        <a class="dropdown-item" href="{plink :Event:Report:}">{_event.attendanceView}</a>
+        <div class="dropdown-divider"></div>
         {ifset $events}
             <a n:foreach="$events as $ev" class="dropdown-item" href="{plink :Event:Detail: $ev->getWebName()}">
                 {if $ev->getAttendancePending()}<span class="badge badge-danger"><i class="fa fa-info" aria-hidden="true"></i></span>{/if}
