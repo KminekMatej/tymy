@@ -56,7 +56,7 @@
                         <thead>
                             <tr>
                                 <th>Člen</th>
-                                <th n:foreach="$events as $event" class="text-center">
+                                <th n:foreach="$events as $event" class="text-center" colspan="3">
                                     <a href="{plink :Event:Detail: $event->getWebName()}">
                                         <div class="event-caption-oneline">{$event->getCaption()}</div>
                                         <div>{$event->getStartTime()|date:\Tymy\Module\Core\Model\BaseModel::DAY_CZECH_FORMAT}</div>
@@ -67,14 +67,14 @@
                         <tbody>
                             <tr n:foreach="$users as $usr">
                                 <th scope="row"><a href="{plink :Team:Player: $usr->getWebName()}">{$usr->getDisplayName()}</a></th>
-                                    {foreach $events as $event}
-                                        {var $userAttendance = $event->getAttendance()[$usr->getId()] ?? null}
-                                        {var $status = $userAttendance ? ($statusList[$userAttendance->getPostStatusId() ?: $userAttendance->getPreStatusId()]) : null}
-                                    <td n:class="text-center, $status ? statusCell . $status->getId(), 'eventCol-' . $event->getId()" title="{$usr->getDisplayName()}, {$event->getCaption()} {$event->getStartTime()|date:\Tymy\Module\Core\Model\BaseModel::DAY_CZECH_FORMAT}: {if $status}{$status->getCaption()}{else}{_team.unknownSex}{/if}">
-                                        {if $status}
-                                            {$status->getCaption()}
-                                        {/if}
-                                    </td>
+                                {foreach $events as $event}
+                                    {var $userAttendance = $event->getAttendance()[$usr->getId()] ?? null}
+                                    {var $title = $usr->getDisplayName() . ', ' . $event->getCaption() . ' ' . ($event->getStartTime()|date:\Tymy\Module\Core\Model\BaseModel::DAY_CZECH_FORMAT) . ':'}
+                                    {var $preStatus = $userAttendance ? ($statusList[$userAttendance->getPreStatusId()] ?? null) : null}
+                                    {var $postStatus = $userAttendance ? ($statusList[$userAttendance->getPostStatusId()] ?? null) : null}
+                                    <td style="border-right: 0px; text-align: right; min-width: 50px;" title="{$title} {if $preStatus}{$preStatus->getCaption()}{else}{_team.unknownSex}{/if}"><i n:if="$preStatus" class="{$preStatus->getIcon()}" style="color: {$preStatus->getColor()}"></i></td>
+                                    <td class="px-0 border-left-0 border-right-0"><i n:if="$preStatus && $postStatus" class="fas fa-angle-right"></i></td>
+                                    <td style="border-left: 0px; text-align: left; min-width: 50px;" title="{$title} {if $postStatus}{$postStatus->getCaption()}{else}{_team.unknownSex}{/if}"><i n:if="$postStatus" class="{$postStatus->getIcon()}" style="color: {$postStatus->getColor()}"></i></td>
                                 {/foreach}
                             </tr>
                         </tbody>
@@ -88,6 +88,13 @@
                         <li n:class="$currentPage == 1 ? disabled, page-item"><a class="page-link" href="{plink :Event:Report: $year,$currentPage-1}">{_common.navigationBlock.previous}</a></li>
                         <li n:foreach="$pagination as $page" n:class="$currentPage == $page ? active, page-item"><a class="page-link" href="{plink :Event:Report: $year,$page}">{$page}</a></li>
                         <li n:class="$currentPage == $lastPage ? disabled, page-item"><a class="page-link" href="{plink :Event:Report: $year,$currentPage+1}">{_common.navigationBlock.next}</a></li>
+                    </ul>
+                </nav>
+                <nav aria-label="Year navigation">
+                    <ul class="pagination justify-content-center">
+                        <li n:class="$year == $firstYear ? disabled, page-item"><a class="page-link" href="{plink :Event:Report: $year-1,1}">{_common.navigationBlock.previous}</a></li>
+                        <li n:foreach="$years as $yr" n:class="$year == $yr ? active, page-item"><a class="page-link" href="{plink :Event:Report: $yr,1}">{$yr}</a></li>
+                        <li n:class="$year == $lastYear ? disabled, page-item"><a class="page-link" href="{plink :Event:Report: $year+1,1}">{_common.navigationBlock.next}</a></li>
                     </ul>
                 </nav>
             </div>

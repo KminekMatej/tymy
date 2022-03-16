@@ -21,12 +21,17 @@ class ReportPresenter extends EventBasePresenter
         $this->addBreadcrumb($this->translator->translate("event.attendanceView"), $this->link(":Event:Report:", [$year, $page]));
 
         $yearEvents = $this->eventManager->getYearEvents($this->user->getId(), $year, $page);
+        
+        $years = range($yearEvents["firstYear"], $yearEvents["lastYear"]);
 
         $this->template->events = $yearEvents["events"];
         $this->template->year = $year;
         $this->template->currentPage = $yearEvents["page"];
         $this->template->lastPage = $yearEvents["lastPage"];
         $this->template->pagination = $this->pagination($yearEvents["totalCount"], EventManager::EVENTS_PER_PAGE, $yearEvents["page"], 5);
+        $this->template->years = $years;
+        $this->template->firstYear = $yearEvents["firstYear"];
+        $this->template->lastYear = $yearEvents["lastYear"];
         $this->template->users = $this->userManager->getByStatus(User::STATUS_PLAYER);
     }
 }

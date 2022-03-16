@@ -149,6 +149,7 @@ class EventManager extends BaseManager
         }
 
         $totalCount = $yearEventsSelector->count("id");
+        $lastDates = $this->selectUserEvents($userId)->select("MAX(start_time) AS latestDate, MIN(start_time) AS lowestDate")->fetch();
 
         $offset = ($page - 1) * EventManager::EVENTS_PER_PAGE;
         
@@ -158,6 +159,8 @@ class EventManager extends BaseManager
         return [
             "page" => $page,
             "totalCount" => $totalCount,
+            "firstYear" => $lastDates->lowestDate->format("Y"),
+            "lastYear" => $lastDates->latestDate->format("Y"),
             "lastPage" => ceil($totalCount / EventManager::EVENTS_PER_PAGE),
             "events" => $events,
         ];
