@@ -80,15 +80,6 @@ class EventPresenter extends SettingBasePresenter
         $this->template->event = $eventObj;
     }
 
-    private function normalizeDates(array &$data)
-    {
-        foreach (["startTime", "endTime", "closeTime"] as $timeKey) {
-            if (isset($data[$timeKey])) {
-                $data[$timeKey] = new DateTime($data[$timeKey]);
-            }
-        }
-    }
-
     public function handleEventDelete()
     {
         $bind = $this->getRequest()->getPost();
@@ -124,6 +115,10 @@ class EventPresenter extends SettingBasePresenter
             $this->eventManager->update((array) $values, $values->id);
         } catch (TymyResponse $tResp) {
             $this->handleTymyResponse($tResp);
+        }
+
+        if (!$this->isAjax()) {
+            $this->redirect("this");
         }
     }
 
