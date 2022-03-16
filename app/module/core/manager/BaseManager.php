@@ -670,7 +670,10 @@ abstract class BaseManager
         $conditions = [];
         foreach ($orders as $order) {
             $oParts = explode("__", $order);
-            if (count($oParts) !== 2) {
+            if (count($oParts) == 1) {
+                //only field name is specified, for instance "startTime" - add DESC as default
+                $oParts[1] = "DESC";
+            } elseif (count($oParts) !== 2) {
                 continue;
             }
 
