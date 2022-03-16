@@ -28,6 +28,13 @@
                                             {input status_{$statusId}_code, class => 'form-control form-control-sm status-code'}
                                             {input status_{$statusId}_caption, class => 'form-control form-control-sm status-caption'}
                                             {input status_{$statusId}_color, class => 'form-control form-control-sm status-color'}
+                                            {input status_{$statusId}_icon}
+
+                                            <button type="button" class="btn btn-sm iconpicker" data-iconpicker-input="INPUT#iconpicker-{$statusId}" data-iconpicker-preview="i#iconpreview-{$statusId}">
+                                                <i id="iconpreview-{$statusId}" class="{$status->getIcon()}"></i>
+                                            </button>
+                                            
+                                            
                                         </div>
                                     </div>
                                 </div>

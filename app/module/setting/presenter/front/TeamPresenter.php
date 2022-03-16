@@ -54,6 +54,7 @@ class TeamPresenter extends SettingBasePresenter
                 "caption" => $values->{"status_{$status->getId()}_caption"},
                 "code" => $values->{"status_{$status->getId()}_code"},
                 "color" => ltrim($values->{"status_{$status->getId()}_color"}, " #"),
+                "icon" => $values->{"status_{$status->getId()}_icon"},
             ]);
         }
 

@@ -7,18 +7,24 @@
 {block styles}
 {include parent}
 <link rel="stylesheet" href="{$publicPath}/resources/bootstrap4-multiselect/css/BsMultiSelect.{$css}?ver={$appver}" />
+<link rel="stylesheet" href="{$publicPath}/resources/fa-iconpicker/iconpicker-1.5.0.css?ver={$appver}" />
 <link rel="stylesheet" href="{$publicPath}/resources/colorpicker/css/colorpicker.{$css}?ver={$appver}" />
 {/block}
 
 {block scripts}
+<script type="text/javascript">
+    // Notice how this gets configured before we load Font Awesome
+    window.FontAwesomeConfig = {autoReplaceSvg: false}
+</script>
 {include parent}
 <script src="{$publicPath}/resources/bootstrap4-multiselect/js/BsMultiSelect.{$js}?ver={$appver}"></script>
+<script src="{$publicPath}/resources/fa-iconpicker/iconpicker-1.5.0.js?ver={$appver}"></script>
 <script src="{$publicPath}/resources/colorpicker/js/colorpicker.js?ver={$appver}"></script>
 {/block}
 
 {block content}
 <div class="container settings">
-     
+
     <div class="row">
         <div class="col">
             {include 'components/team.latte'}
