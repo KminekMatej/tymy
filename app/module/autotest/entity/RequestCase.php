@@ -168,9 +168,17 @@ abstract class RequestCase extends TestCase
 
         $changedData = $this->request($this->getBasePath() . "/" . $recordId, "PUT", $changes)->expect(200);
 
-        foreach ($changes as $key => $changed) {
-            Assert::hasKey($key, $changedData->getData(), "Output key [$key] missing");
-            Assert::equal($changed, $changedData->getData()[$key], "Output key [$key] mismatch (expected $changed, returned " . $changedData->getData()[$key] . ")");
+        foreach ($changes as $key => $value) {
+            $new = $changedData->getData();
+            Assert::hasKey($key, $new, "Output key [$key] missing");
+
+            $newDateTime = $new[$key] && !empty($new[$key]) && is_string($new[$key]) ? DateTime::createFromFormat(BaseModel::DATE_FORMAT, $new[$key], "UTC") : null;
+            if ($newDateTime) {
+                $oldDateTime = DateTime::createFromFormat(BaseModel::DATE_FORMAT, $value);
+                Assert::true($oldDateTime == $newDateTime, "Error on `$key` datetime field"); //comparing by equal fails due to different timezones
+            } else {
+                Assert::equal($value, $new[$key], "Output key [$key] mismatch (expected $value, returned " . $new[$key] . ")");
+            }
         }
     }
 

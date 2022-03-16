@@ -4,11 +4,12 @@
 
 namespace Tymy\Module\Autotest\Debt;
 
-use Tymy\Bootstrap;
 use Nette\Utils\DateTime;
-use Tymy\Module\Debt\Model\Debt;
+use Tymy\Bootstrap;
 use Tymy\Module\Autotest\Entity\Assert;
 use Tymy\Module\Autotest\RequestCase;
+use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Debt\Model\Debt;
 
 require getenv("ROOT_DIR") . '/app/Bootstrap.php';
 $container = Bootstrap::boot();
@@ -72,7 +73,7 @@ class DebtTest extends RequestCase
         Assert::equal($origData->getData()["amount"], $chResponse->getData()["amount"]);//amount didnt change
         $this->request($this->getBasePath() . "/" . $recordId, "PUT", ["paymentSent" => new DateTime()])->expect(200, "array");
         $debtData = $this->request($this->getBasePath() . "/" . $recordId)->expect(200, "array");
-        Assert::equal($debtData->getData()["paymentSent"], $this->toJsonDate(new DateTime()));//amount didnt change
+        Assert::datetimeEquals($this->toJsonDate(new DateTime()), $debtData->getData()["paymentSent"]);
         $this->request($this->getBasePath() . "/" . $recordId, "DELETE")->expect(403);
 
         //back to admin, which can mark the debt as paymentReceived and then delete it
@@ -130,7 +131,7 @@ class DebtTest extends RequestCase
         $this->request($this->getBasePath() . "/" . $recordId, "PUT", ["paymentSent" => $now])->expect(200, "array");
         sleep(1);//sleep for one second, to make sure that current datetime is now different than $now variable. So we can check that the paymentSent would be actually changed if something changes it
         $debtData = $this->request($this->getBasePath() . "/" . $recordId)->expect(200, "array");
-        Assert::equal($debtData->getData()["paymentSent"], $this->toJsonDate($now));//amount didnt change
+        Assert::datetimeEquals($this->toJsonDate($now), $debtData->getData()["paymentSent"]);
         $this->request($this->getBasePath() . "/" . $recordId, "DELETE")->expect(403);
 
         //another admin can mark it as paymentReceived
