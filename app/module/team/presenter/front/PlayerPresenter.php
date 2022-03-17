@@ -58,8 +58,7 @@ class PlayerPresenter extends SecuredPresenter
 
         if ($player) {  //new player based on another user
             $user = $this->userManager->getById($this->parseIdFromWebname($player));
-            $newPlayer = $user->setId(null)
-                ->setStatus("PLAYER")
+            $newPlayer = $user->setStatus("PLAYER")
                 ->setEmail("")
                 ->setPictureUrl("");
         } else {    //brand new player
@@ -104,10 +103,10 @@ class PlayerPresenter extends SecuredPresenter
         /* @var $createdPlayer User */
         try {
             $createdPlayer = $this->userManager->create($bind["changes"]);
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
+        } catch (TymyResponse $tResp) {
+            $this->handleTymyResponse($tResp);
+            $this->redirect("this");
         }
-
 
         $this->flashMessage($this->translator->translate("common.alerts.userAdded", null, ["fullname" => $createdPlayer->getDisplayName()]), "success");
 
