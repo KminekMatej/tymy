@@ -29,13 +29,13 @@ class MultiaccountPresenter extends SettingBasePresenter
         $form->addText("username", $this->translator->translate("sign.username"));
         $form->addPassword("password", $this->translator->translate("sign.password"));
         $form->addSubmit("save");
-        $multiaccountManager = $this->multiaccountManager;
-        $form->onSuccess[] = function (Form $form, stdClass $values) use ($multiaccountManager) {
+
+        $form->onSuccess[] = function (Form $form, stdClass $values) {
             /* @var $multiaccountManager MultiaccountManager */
-            $multiaccountManager->create([
+            $this->multiaccountManager->create([
                 "login" => $values->username,
                 "password" => $values->password,
-                    ], $values->sysName);
+                ], $values->sysName);
 
             $this->flashMessage($this->translator->translate("common.alerts.multiaccountAdded", null, ["team" => $values->sysName]));
             $this->redirect(":Setting:Multiaccount:");
