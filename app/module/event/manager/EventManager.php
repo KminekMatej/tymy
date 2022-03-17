@@ -141,14 +141,14 @@ class EventManager extends BaseManager
         $yearEventsSelector = $this->selectUserEvents($userId)->where("start_time LIKE ?", "$year-%");
 
         if (!$page) {//if page is not set, we should autodetect proper page according to current date
-            $eventsBeforeToday = $yearEventsSelector
+            $eventsBeforeToday = (clone $yearEventsSelector)
                 ->where("start_time < ?", new DateTime())
                 ->count("id");
 
             $page = intval(floor($eventsBeforeToday / EventManager::EVENTS_PER_PAGE)) + 1;
         }
 
-        $totalCount = $yearEventsSelector->count("id");
+        $totalCount = (clone $yearEventsSelector)->count("id");
         $lastDates = $this->selectUserEvents($userId)->select("MAX(start_time) AS latestDate, MIN(start_time) AS lowestDate")->fetch();
 
         $offset = ($page - 1) * EventManager::EVENTS_PER_PAGE;
