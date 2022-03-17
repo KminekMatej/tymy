@@ -71,11 +71,15 @@ class InPresenter extends BasePresenter
         }
     }
 
-    /** @todo */
-    private function tkLogin($tk)
+    /**
+     * Validate transfer key and log user if its valid
+     * @param string $tk
+     * @return void
+     */
+    private function tkLogin(string $tk): void
     {
         $this->user->logout(true);
-        throw new NotImplementedException();
-        $this->user->login($this->authenticationManager->tkAuthenticate($tk));
+
+        $this->user->login("tk|$tk");
     }
 }
