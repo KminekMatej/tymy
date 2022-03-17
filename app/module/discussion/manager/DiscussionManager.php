@@ -162,7 +162,7 @@ class DiscussionManager extends BaseManager
             FROM `discussions` 
             LEFT JOIN `ds_read` ON `discussions`.`id` = `ds_read`.`ds_id` AND
             (`ds_read`.`ds_id`=`discussions`.`id`) AND (`ds_read`.`user_id` = ?) 
-            WHERE ($readPermsQ `discussions`.`read_rights` IS NULL OR
+            WHERE `discussions`.`status` = 'ACTIVE' AND ($readPermsQ `discussions`.`read_rights` IS NULL OR
             TRIM(`discussions`.`read_rights`) = '') ORDER BY `discussions`.`order_flag` ASC";
         $selector = empty($readPerms) ? $this->database->query($query, $userId) : $this->database->query($query, $userId, $readPerms ?: "");
         return $this->mapAll($selector->fetchAll());
