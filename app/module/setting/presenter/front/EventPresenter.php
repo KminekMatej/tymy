@@ -89,9 +89,9 @@ class EventPresenter extends SettingBasePresenter
     public function createComponentNewEventForm()
     {
         return $this->formFactory->createEventLineForm(
-            $this->eventTypes,
-            $this->userPermissions,
-            [$this, "newEventFormSuccess"]
+                $this->eventTypes,
+                $this->userPermissions,
+                [$this, "newEventFormSuccess"]
         );
     }
 
@@ -106,7 +106,7 @@ class EventPresenter extends SettingBasePresenter
                     [$this, "eventFormSuccess"],
                     $event
                 );
-        });
+            });
     }
 
     public function eventFormSuccess(Form $form, stdClass $values)
@@ -130,6 +130,8 @@ class EventPresenter extends SettingBasePresenter
             $data = $form->getHttpData();
 
             $i = 0;
+            $items = [];
+
             while (true) {
                 $nextKey = $i > 0 ? $baseKey . "-" . $i : $baseKey;
 
@@ -150,10 +152,10 @@ class EventPresenter extends SettingBasePresenter
             foreach ($items as $item) {
                 $createdEvents[] = $this->eventManager->createByArray($item);
             }
-
-            $this->redirect(':Setting:Event:');
         } catch (TymyResponse $tResp) {
             $this->handleTymyResponse($tResp);
         }
+
+        $this->redirect('this');
     }
 }
