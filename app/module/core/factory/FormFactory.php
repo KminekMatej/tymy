@@ -84,9 +84,16 @@ class FormFactory
             $close->setValue($event->getCloseTime()->format(BaseModel::DATETIME_ISO_FORMAT));
             $place->setValue($event->getPlace());
             $link->setValue($event->getLink());
-            $canView->setValue($event->getViewRightName());
-            $canPlan->setValue($event->getPlanRightName());
-            $canResult->setValue($event->getResultRightName());
+            if(!empty($event->getViewRightName())){
+                $canView->setValue($event->getViewRightName());
+            }
+            if(!empty($event->getPlanRightName())){
+                $canPlan->setValue($event->getPlanRightName());
+            }
+            
+            if(!empty($event->getResultRightName())){
+                $canResult->setValue($event->getResultRightName());
+            }
         }
 
         $form->addSubmit("save")->setHtmlAttribute("title", $this->translator->translate("common.saveAll"));
