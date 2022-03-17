@@ -40,52 +40,53 @@
                             {foreach $events as $event}
                                 {var $eventId = $event->getId()}
                                 {form eventForm-$eventId}
-                                    <tr>
-                                        <td>
-                                            <a href="{plink :Setting:Event: $event->getWebName()}" class="btn btn-sm btn-light btn-light-bordered"  title="{_common.edit}" style="margin-right: 2px">
-                                                <i class="fa fa-external-link-alt" aria-hidden="true"></i>
-                                            </a>
-                                        </td>
-                                        <td>
-                                            {input eventTypeId, class=> 'form-control form-control-sm'}
-                                        </td>
-                                        <td>
-                                            {input caption, class=> 'form-control form-control-sm mw-100'}
-                                        </td>
-                                        <td>
-                                            {input description, class=> 'form-control form-control-sm'}
-                                        </td>
-                                        <td>
-                                            {input startTime, class=> 'form-control form-control-sm'}
-                                        </td>
-                                        <td>
-                                            {input endTime, class=> 'form-control form-control-sm'}
-                                        </td>
-                                        <td>
-                                            {input closeTime, class=> 'form-control form-control-sm'}
-                                        </td>
-                                        <td>
-                                            {input place, class=> 'form-control form-control-sm'}
-                                        </td>
-                                        <td>
-                                            {input link, class=> 'form-control form-control-sm'}
-                                        </td>
-                                        <td>
-                                            {input canView, class=> 'form-control form-control-sm'}
-                                        </td>
-                                        <td>
-                                            {input canPlan, class=> 'form-control form-control-sm'}
-                                        </td>
-                                        <td>
-                                            {input canResult, class=> 'form-control form-control-sm'}
-                                        </td>
-                                        <td class="btn-group" role="group">
-                                            <button n:name="save" n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_UPDATE'))" class="btn btn-sm btn-primary" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
-                                            <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_DELETE'))" href="{link eventDelete!}" class="btn btn-sm btn-danger" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></button>
-                                        </td>
-                                    </tr>
-                                {/form}
-                            {/foreach}
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <a href="{plink :Setting:Event: $event->getWebName()}" class="btn btn-sm btn-light btn-light-bordered"  title="{_common.edit}" style="margin-right: 2px">
+                                                    <i class="fa fa-external-link-alt" aria-hidden="true"></i>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                {input eventTypeId, class=> 'form-control form-control-sm'}
+                                            </td>
+                                            <td>
+                                                {input caption, class=> 'form-control form-control-sm mw-100'}
+                                            </td>
+                                            <td>
+                                                {input description, class=> 'form-control form-control-sm'}
+                                            </td>
+                                            <td>
+                                                {input startTime, class=> 'form-control form-control-sm'}
+                                            </td>
+                                            <td>
+                                                {input endTime, class=> 'form-control form-control-sm'}
+                                            </td>
+                                            <td>
+                                                {input closeTime, class=> 'form-control form-control-sm'}
+                                            </td>
+                                            <td>
+                                                {input place, class=> 'form-control form-control-sm'}
+                                            </td>
+                                            <td>
+                                                {input link, class=> 'form-control form-control-sm'}
+                                            </td>
+                                            <td>
+                                                {input canView, class=> 'form-control form-control-sm'}
+                                            </td>
+                                            <td>
+                                                {input canPlan, class=> 'form-control form-control-sm'}
+                                            </td>
+                                            <td>
+                                                {input canResult, class=> 'form-control form-control-sm'}
+                                            </td>
+                                            <td class="btn-group" role="group">
+                                                <button n:name="save" n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_UPDATE'))" class="btn btn-sm btn-primary" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
+                                                <a n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_DELETE'))" href="{link eventDelete! $event->getId()}" class="btn btn-sm btn-danger ajax" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></a>
+                                            </td>
+                                        </tr>
+                                    {/form}
+                                {/foreach}
                             </tbody>
                         {/if}
                     </table>

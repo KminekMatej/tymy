@@ -80,10 +80,10 @@ class EventPresenter extends SettingBasePresenter
         $this->template->event = $eventObj;
     }
 
-    public function handleEventDelete()
+    public function handleEventDelete(int $eventId)
     {
-        $bind = $this->getRequest()->getPost();
-        $this->eventManager->delete($bind["id"]);
+        $this->eventManager->delete($eventId);
+        $this->redirect("this");
     }
 
     public function createComponentNewEventForm()
