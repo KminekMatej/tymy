@@ -168,7 +168,7 @@ class DiscussionManager extends BaseManager
         return $this->mapAll($selector->fetchAll());
     }
 
-    public function getList(?array $idList = null, string $idField = "id", ?int $limit = null, ?int $offset = null): array
+    public function getList(?array $idList = null, string $idField = "id", ?int $limit = null, ?int $offset = null, ?string $order = null): array
     {
         $query = "
             SELECT `discussions`.*, `ds_read`.`last_date` AS `lastVisit`, 

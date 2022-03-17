@@ -37,7 +37,7 @@ class EventPresenter extends SettingBasePresenter
     {
         $limit = Event::PAGING_EVENTS_PER_PAGE;
         $offset = ($page - 1) * $limit;
-        $this->template->events = $this->eventManager->getList(null, "id", $limit, $offset); // get all events
+        $this->template->events = $this->eventManager->getList(null, "id", $limit, $offset, "start_time DESC"); // get all events
         $allEventsCount = $this->eventManager->countAllEvents();
         $this->template->eventsCount = $allEventsCount;
         $this->template->currentPage = $page;

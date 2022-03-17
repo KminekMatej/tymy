@@ -893,7 +893,7 @@ class UserManager extends BaseManager
         return $this->userFields;
     }
     
-    public function getList(?array $idList = null, string $idField = "id", ?int $limit = null, ?int $offset = null): array
+    public function getList(?array $idList = null, string $idField = "id", ?int $limit = null, ?int $offset = null, ?string $order = null): array
     {
         $rows = $this->database->table($this->getTable())->where("status != ?", User::STATUS_DELETED);
         if ($idList !== null) {

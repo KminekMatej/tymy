@@ -236,9 +236,12 @@ abstract class BaseManager
      *
      * @return BaseModel[]
      */
-    public function getList(?array $idList = null, string $idField = "id", ?int $limit = null, ?int $offset = null): array
+    public function getList(?array $idList = null, string $idField = "id", ?int $limit = null, ?int $offset = null, ?string $order = null): array
     {
         $rows = $this->database->table($this->getTable());
+        if ($order !== null) {
+            $rows->order($order);
+        }
         if ($idList !== null) {
             $rows->where($idField, $idList);
         }

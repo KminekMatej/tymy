@@ -16,7 +16,7 @@ use Tymy\Module\Right\Model\Right;
  */
 class RightManager extends BaseManager
 {
-    public function getList($idList = null, $idField = "id", ?int $limit = null, ?int $offset = null): array
+    public function getList($idList = null, $idField = "id", ?int $limit = null, ?int $offset = null, ?string $order = null): array
     {
         return $this->mapAll($this->database->query("SELECT " . Permission::TABLE . ".*  FROM " . Right::TABLE
                                 . " LEFT JOIN " . Permission::TABLE . " ON " . Right::TABLE . ".right_type=" . Permission::TABLE . ".right_type AND " . Right::TABLE . ".right_name=" . Permission::TABLE . ".name"
