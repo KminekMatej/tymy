@@ -100,17 +100,17 @@ class PlayerPresenter extends SecuredPresenter
         }
         /* @todo Finish proper validation on new player, make sure that password and email fields are filled */
 
-        /* @var $createdPlayer User */
         try {
+            /* @var $createdPlayer User */
             $createdPlayer = $this->userManager->create($bind["changes"]);
         } catch (TymyResponse $tResp) {
             $this->handleTymyResponse($tResp);
             $this->redirect("this");
         }
 
-        $this->flashMessage($this->translator->translate("common.alerts.userAdded", null, ["fullname" => $createdPlayer->getDisplayName()]), "success");
+        $this->flashMessage($this->translator->translate("common.alerts.userAdded", null, ["fullname" => $createdPlayer->getDisplayName()]), "success"); /* @phpstan-ignore-line */
 
-        $this->redirect(":Team:Player:", $createdPlayer->getWebName());
+        $this->redirect(":Team:Player:", $createdPlayer->getWebName()); /* @phpstan-ignore-line */
     }
 
     public function handleEdit()
