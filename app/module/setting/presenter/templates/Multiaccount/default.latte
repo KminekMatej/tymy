@@ -15,7 +15,7 @@
                 </div>
                 <div class="card-body">
                     <table class="table" n:if="$multiaccounts">
-                        <tr n:foreach="$multiaccounts as $ma">
+                        <tr n:foreach="$multiaccounts as $ma" n:if="$ma->sysName !== $team->getSysName()">
                             <th>{$ma->name}</th>
                             <td>{$ma->sysName}.tymy.cz</td>
                             <td><a class="btn btn-sm btn-danger binder-delete-btn" n:href="multiaccountRemove! $ma->sysName" title="Smazat"><i class="fa fa-times" aria-hidden="true"></i></a>
