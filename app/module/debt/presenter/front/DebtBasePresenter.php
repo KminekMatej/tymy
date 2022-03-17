@@ -23,7 +23,7 @@ class DebtBasePresenter extends SecuredPresenter
     public function beforeRender()
     {
         parent::beforeRender();
-        $this->addBreadcrumb($this->translator->translate("debt.debt", 2),  $this->link(":Debt:Default:"));
+        $this->addBreadcrumb($this->translator->translate("debt.debt", 2), $this->link(":Debt:Default:"));
     }
 
     /**

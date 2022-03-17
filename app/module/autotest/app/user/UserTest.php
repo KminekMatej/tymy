@@ -25,7 +25,7 @@ class UserTest extends RequestCase
 
     private function init()
     {
-        if(!$this->inited){
+        if (!$this->inited) {
             $this->database->table(User::TABLE)->where("id > ?", 6)->where("status", "INIT")->delete();
             $this->inited = true;
         }

@@ -12,14 +12,14 @@ class DiscussionPresenter extends SettingBasePresenter
             $this->setView("discussion");
         }
     }
-    
+
     public function beforeRender()
     {
         parent::beforeRender();
         $this->addBreadcrumb($this->translator->translate("discussion.discussion", 2), $this->link(":Setting:Discussion:"));
     }
 
-        public function renderDefault()
+    public function renderDefault()
     {
         $this->template->isNew = false;
         $discussions = $this->discussionManager->getList();

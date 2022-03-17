@@ -67,7 +67,7 @@ class EventManager extends BaseManager
         $eventType = $this->eventTypeManager->map($row->ref(EventType::TABLE, "event_type_id"));
         $event->setEventType($eventType);
         $event->setType($eventType->getCode());
-        
+
         $event->setInPast($row->start_time < $this->now);
         $event->setInFuture($row->start_time > $this->now);
 
@@ -152,7 +152,7 @@ class EventManager extends BaseManager
         $lastDates = $this->selectUserEvents($userId)->select("MAX(start_time) AS latestDate, MIN(start_time) AS lowestDate")->fetch();
 
         $offset = ($page - 1) * EventManager::EVENTS_PER_PAGE;
-        
+
         $events = $this->mapAll($yearEventsSelector->order("start_time ASC")->limit(EventManager::EVENTS_PER_PAGE, $offset)->fetchAll());
         $this->addAttendances($events);
 

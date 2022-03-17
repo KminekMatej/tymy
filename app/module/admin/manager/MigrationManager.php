@@ -370,7 +370,7 @@ class MigrationManager
 
         $migrationTableExists = in_array("migration", $tables);
         if ($migrationTableExists) {
-            if($this->teamDatabase->table("migration")->where("result", "OK")->count("id") == 0){   //migration table exists, but not containing any migration, so its some bloat, remove the table and continue
+            if ($this->teamDatabase->table("migration")->where("result", "OK")->count("id") == 0) {   //migration table exists, but not containing any migration, so its some bloat, remove the table and continue
                 $this->teamDatabase->query("DROP TABLE IF EXISTS `migration`;")->fetch();
                 $migrationTableExists = false;
             } else {

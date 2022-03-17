@@ -26,7 +26,7 @@ class Assert extends \Tester\Assert
         self::hasKey("message", $response->getData(), $description);
         self::equal($expected, $response->getData()["code"], $description);
     }
-    
+
     public static function datetimeEquals(string $expected, string $actual): void
     {
         $newDateTime = DateTime::createFromFormat(BaseModel::DATE_FORMAT, $actual, "UTC");

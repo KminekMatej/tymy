@@ -46,7 +46,7 @@ class SecuredPresenter extends BasePresenter
 
     /** @inject */
     public TeamManager $teamManager;
-    
+
     protected User $tymyUser;
 
     /** @inject */
@@ -63,7 +63,7 @@ class SecuredPresenter extends BasePresenter
     {
         return $this->levelCaptions;
     }
-    
+
     public function addBreadcrumb(string $caption, ?string $link = null): void
     {
         $this->levelCaptions[] = [

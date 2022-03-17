@@ -19,6 +19,7 @@ use Tymy\Module\Core\Model\Filter;
 use Tymy\Module\Core\Model\Order;
 use Tymy\Module\Team\Model\Team;
 use Tymy\Module\User\Model\User as UserEntity;
+
 use const ROOT_DIR;
 
 /**

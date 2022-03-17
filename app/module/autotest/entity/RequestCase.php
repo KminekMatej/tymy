@@ -26,9 +26,9 @@ use Tymy\Module\Autotest\Entity\Assert;
 use Tymy\Module\Core\Manager\Responder;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Router\RouteList;
+
 use const TEAM_DIR;
 use const TEST_DIR;
-use function GuzzleHttp\json_encode;
 
 /**
  * Envelope class for all api testing classes
@@ -295,11 +295,11 @@ abstract class RequestCase extends TestCase
             }
 
             Assert::hasKey($key, $new);
-            
+
             $newDateTime = $new[$key] && !empty($new[$key]) && is_string($new[$key]) ? DateTime::createFromFormat(BaseModel::DATE_FORMAT, $new[$key], "UTC") : null;
-            if($newDateTime){
+            if ($newDateTime) {
                 $oldDateTime = DateTime::createFromFormat(BaseModel::DATE_FORMAT, $value);
-                Assert::true($oldDateTime==$newDateTime, "Error on `$key` datetime field"); //comparing by equal fails due to different timezones
+                Assert::true($oldDateTime == $newDateTime, "Error on `$key` datetime field"); //comparing by equal fails due to different timezones
             } else {
                 Assert::equal($value, $new[$key], "Error on `$key` field");
             }

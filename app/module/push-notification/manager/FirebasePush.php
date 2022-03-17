@@ -7,8 +7,6 @@ use Tracy\ILogger;
 use Tymy\Module\PushNotification\Model\PushNotification;
 use Tymy\Module\Team\Manager\TeamManager;
 
-use function GuzzleHttp\json_encode;
-
 /**
  * Description of AndroidPush
  *

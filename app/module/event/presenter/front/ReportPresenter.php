@@ -21,7 +21,7 @@ class ReportPresenter extends EventBasePresenter
         $this->addBreadcrumb($this->translator->translate("event.attendanceView"), $this->link(":Event:Report:", [$year, $page]));
 
         $yearEvents = $this->eventManager->getYearEvents($this->user->getId(), $year, $page);
-        
+
         $years = range($yearEvents["firstYear"], $yearEvents["lastYear"]);
 
         $this->template->events = $yearEvents["events"];

@@ -21,8 +21,8 @@ use Tymy\Module\User\Manager\UserManager;
 
 class FormFactory
 {
-
     use Nette\SmartObject;
+
     private EventTypeManager $eventTypeManager;
     private StatusSetManager $statusSetManager;
     private EventManager $eventManager;
@@ -84,14 +84,14 @@ class FormFactory
             $close->setValue($event->getCloseTime()->format(BaseModel::DATETIME_ISO_FORMAT));
             $place->setValue($event->getPlace());
             $link->setValue($event->getLink());
-            if(!empty($event->getViewRightName())){
+            if (!empty($event->getViewRightName())) {
                 $canView->setValue($event->getViewRightName());
             }
-            if(!empty($event->getPlanRightName())){
+            if (!empty($event->getPlanRightName())) {
                 $canPlan->setValue($event->getPlanRightName());
             }
-            
-            if(!empty($event->getResultRightName())){
+
+            if (!empty($event->getResultRightName())) {
                 $canResult->setValue($event->getResultRightName());
             }
         }
@@ -112,34 +112,34 @@ class FormFactory
                 $form->addText("name", $this->translator->translate("settings.team"))->setValue($statusSet->getName())->setRequired();
                 $form->addSubmit("save")->setHtmlAttribute("title", $this->translator->translate("common.save"));
 
-                foreach ($statusSet->getStatuses() as $status) {
-                    /* @var $status Status */
-                    $form->addText("status_{$status->getId()}_caption", $this->translator->translate("common.name"))
-                        ->setValue($status->getCaption())
-                        ->setHtmlAttribute("placeholder", $this->translator->translate("common.name"))
-                        ->setRequired()
-                        ->setMaxLength(50);
-                    $form->addText("status_{$status->getId()}_code", $this->translator->translate("status.code"))
-                        ->setValue($status->getCode())
-                        ->setHtmlAttribute("placeholder", $this->translator->translate("status.code"))
-                        ->setHtmlAttribute("size", "5")
-                        ->setRequired()
-                        ->setMaxLength(3);
-                    $form->addText("status_{$status->getId()}_color", $this->translator->translate("status.color"))
-                        ->setValue("#" . $status->getColor())
-                        ->setHtmlAttribute("placeholder", $this->translator->translate("status.color"))
-                        ->setRequired()
-                        ->setMaxLength(6)
-                        ->setHtmlAttribute("type", "color");
-                    $form->addText("status_{$status->getId()}_icon", $this->translator->translate("status.icon"))
-                        ->setValue($status->getIcon())
-                        ->setHtmlAttribute("id", "iconpicker-{$status->getId()}")
-                        ->setHtmlAttribute("data-toggle", "dropdown")
-                        ->setHtmlAttribute("type", "hidden");
-                }
+            foreach ($statusSet->getStatuses() as $status) {
+                /* @var $status Status */
+                $form->addText("status_{$status->getId()}_caption", $this->translator->translate("common.name"))
+                    ->setValue($status->getCaption())
+                    ->setHtmlAttribute("placeholder", $this->translator->translate("common.name"))
+                    ->setRequired()
+                    ->setMaxLength(50);
+                $form->addText("status_{$status->getId()}_code", $this->translator->translate("status.code"))
+                    ->setValue($status->getCode())
+                    ->setHtmlAttribute("placeholder", $this->translator->translate("status.code"))
+                    ->setHtmlAttribute("size", "5")
+                    ->setRequired()
+                    ->setMaxLength(3);
+                $form->addText("status_{$status->getId()}_color", $this->translator->translate("status.color"))
+                    ->setValue("#" . $status->getColor())
+                    ->setHtmlAttribute("placeholder", $this->translator->translate("status.color"))
+                    ->setRequired()
+                    ->setMaxLength(6)
+                    ->setHtmlAttribute("type", "color");
+                $form->addText("status_{$status->getId()}_icon", $this->translator->translate("status.icon"))
+                    ->setValue($status->getIcon())
+                    ->setHtmlAttribute("id", "iconpicker-{$status->getId()}")
+                    ->setHtmlAttribute("data-toggle", "dropdown")
+                    ->setHtmlAttribute("type", "hidden");
+            }
                 $form->onSuccess[] = $onSuccess;
                 return $form;
-            });
+        });
     }
 
     public function createEventTypeForm(array $onSuccess): Multiplier
@@ -178,7 +178,7 @@ class FormFactory
                 $form->addSubmit("save")->setHtmlAttribute("title", $this->translator->translate("common.save"));
                 $form->onSuccess[] = $onSuccess;
                 return $form;
-            });
+        });
     }
 
     public function createTeamConfigForm(array $onSuccess): Form

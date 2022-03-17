@@ -9,7 +9,6 @@ use Tymy\Module\Setting\Presenter\Front\SettingBasePresenter;
 
 class MultiaccountPresenter extends SettingBasePresenter
 {
-
     public function renderDefault()
     {
         $this->addBreadcrumb($this->translator->translate("settings.multiaccount", 1), $this->link(":Setting:Multiaccount:"));

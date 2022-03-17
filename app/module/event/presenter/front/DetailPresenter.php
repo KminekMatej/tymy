@@ -45,7 +45,7 @@ class DetailPresenter extends EventBasePresenter
         $this->template->myPreStatusCaption = $eventCaptions["myPreStatusCaption"];
         $this->template->myPostStatusCaption = $eventCaptions["myPostStatusCaption"];
     }
-    
+
     /**
      * Compose attendance array to be easily used on template
      * @param Event $event

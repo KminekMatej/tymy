@@ -13,8 +13,6 @@ use Tymy\Module\PushNotification\Model\PushNotification;
 use Tymy\Module\PushNotification\Model\Subscriber;
 use Tymy\Module\Team\Manager\TeamManager;
 
-use function GuzzleHttp\json_encode;
-
 /**
  * Description of ApplePush
  *
