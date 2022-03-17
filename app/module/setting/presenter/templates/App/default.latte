@@ -18,7 +18,7 @@
                         
                         <tr><th>{label skin /}:</th><td>{input skin, class => 'form-control w-25'}</td></tr>
                         
-                        <tr><th>{_settings.appVersion}:</th><td><a n:tag-if="$version->getName() != 'master'" href="https://github.com/KminekMatej/tymy/releases/tag/{$version->getName()}" target="_blank">{$version->getName()}</a></td></tr>
+                        <tr><th>{_settings.appVersion}:</th><td class="text-success">{$version->getName()}</td></tr>
                         <tr><th>{_settings.released}:</th><td>{$version->getDateTime()|date:\Tymy\Module\Core\Model\BaseModel::DATETIME_CZECH_NO_SECS_FORMAT}</td></tr>
                         <tr><th>{_settings.changeList}:</th><td>
                                 <div>
@@ -30,7 +30,13 @@
                                     ({_settings.fromVersion} {$firstMinorVersion->getName()})
                                 </div>
                             </td></tr>
-                        <tr><th>{_settings.authors}:</th><td><a href="mailto:matej@penzion-rataje.eu">Matěj Kmínek</a> (2017+) & <a href="mailto:admin@tymy.cz">Petr Medek</a> ( -> 2017)</td></tr>
+                        <tr><th>{_settings.authors}:</th>
+                            <td>
+                                <div><a href="mailto:matej@penzion-rataje.eu">Matěj Kmínek</a> (2017+)</div>
+                                <div><a href="mailto:admin@tymy.cz">Petr Medek</a> ( -> 2017)</div>
+                                <div><a href="mailto:frankie@praguedevils.org">František Fencl</a> (iOS app)</div>
+                            </td>
+                        </tr>
                         <tr><th>{_settings.reportBug}:</th><td><a href="https://github.com/KminekMatej/tymy/issues/new" target="_blank">GitHub</a> {_common.or} <a href="mailto:admin@tymy.cz">{_team.email}</a></td></tr>
                     </table>
                     <div class="text-center mb-4"><a href="http://www.tymy.cz" target="blank"><img src="{$basePath}/images/logo/tymy_logo_white_250.png" alt="" title="Tymy.CZ - Portál pro váš tým" class="mr-2" /></a></div>
