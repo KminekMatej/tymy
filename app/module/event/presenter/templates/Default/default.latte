@@ -95,7 +95,7 @@
                                 <div n:class="row, mb-2, $ev->getInPast() ? evnt-past, $ev->getInPast() ? collapse">
                                     <div class="col">
                                         <div class="btn-group input-group px-0" role="group" aria-label="Basic example" id="action-{$ev->getId()}">
-                                            <input type="text" class="form-control form-control-sm" style="min-width: 130px" title="{_note.note,1}" name="preStatusDesc" value="{$ev->getMyAttendance() ? $ev->getMyAttendance()->getPreDescription() : null}" />
+                                            <input type="text" class="form-control form-control-sm" style="min-width: 130px" title="{_note.note,1}" placeholder="{_note.note,1}" name="preStatusDesc" value="{$ev->getMyAttendance() ? $ev->getMyAttendance()->getPreDescription() : null}" />
                                             {foreach $eventTypes[$ev->getType()]->getPreStatusSet() as $preStatus}
                                                 <button onclick="updateAttendance(this, {link attendance! $ev->getId(), $preStatus->getCode()})" class="btn btn-sm {$ev->getMyAttendance(),$ev->getType(),$preStatus->getCode(),$ev->getCanPlan(),$ev->getCloseTime()|prestatusClass}">{$preStatus->getCaption()}</button>
                                             {/foreach}
