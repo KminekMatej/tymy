@@ -57,7 +57,7 @@ class AppPresenter extends SettingBasePresenter
                 $firstMinor = $version;
             }
         }
-        if ($previousPatch === null) {
+        if ($previousPatch === null && isset($version)) {
             $previousPatch = $version;  //latest version
         }
         $this->template->previousPatchVersion = $previousPatch;
