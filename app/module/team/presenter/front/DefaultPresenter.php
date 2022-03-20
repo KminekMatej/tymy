@@ -96,21 +96,24 @@ class DefaultPresenter extends SecuredPresenter
         foreach ($allPlayers as $player) {
             /* @var $player User */
             if ($player->getJerseyNumber() != "") {
-                if ($player->getJerseyNumber() < $min) {
-                    $min = $player->getJerseyNumber();
+                $jNumber = intval($player->getJerseyNumber());
+                if ($jNumber < $min && $jNumber > -100) {
+                    $min = $jNumber;
                 }
-                if ($player->getJerseyNumber() > $max) {
-                    $max = $player->getJerseyNumber();
+                if ($jNumber > $max && $jNumber < 10000) {//limit 10000 top
+                    $max = $jNumber;
                 }
                 $jerseyList[$player->getJerseyNumber()][] = $player;
             }
         }
+        \Tracy\Debugger::barDump($max);
         for ($i = $min; $i <= $max + 10; $i++) {
             if (!array_key_exists($i, $jerseyList)) {
                 $jerseyList[$i] = null;
             }
         }
         ksort($jerseyList);
+        \Tracy\Debugger::barDump($jerseyList);
 
         $this->template->jerseyList = $jerseyList;
         $this->addBreadcrumb($this->translator->translate("team.jersey", 2), $this->link(":Team:Default:jerseys"));
