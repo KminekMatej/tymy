@@ -106,14 +106,12 @@ class DefaultPresenter extends SecuredPresenter
                 $jerseyList[$player->getJerseyNumber()][] = $player;
             }
         }
-        \Tracy\Debugger::barDump($max);
         for ($i = $min; $i <= $max + 10; $i++) {
             if (!array_key_exists($i, $jerseyList)) {
                 $jerseyList[$i] = null;
             }
         }
         ksort($jerseyList);
-        \Tracy\Debugger::barDump($jerseyList);
 
         $this->template->jerseyList = $jerseyList;
         $this->addBreadcrumb($this->translator->translate("team.jersey", 2), $this->link(":Team:Default:jerseys"));
