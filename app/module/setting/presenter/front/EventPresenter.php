@@ -83,7 +83,7 @@ class EventPresenter extends SettingBasePresenter
     public function handleEventDelete(int $eventId)
     {
         $this->eventManager->delete($eventId);
-        $this->redirect("this");
+        $this->redirect(':Setting:Event:');
     }
 
     public function createComponentNewEventForm()
