@@ -51,6 +51,10 @@ class PostManager extends BaseManager
     {
         $this->discussion = $this->loadRecord($discussionId, $this->discussionManager);
 
+        if (!$this->discussion) {
+            $this->respondNotFound(Discussion::MODULE, $discussionId);
+        }
+
         if (!$this->discussion->getCanRead()) {
             $this->responder->E4001_VIEW_NOT_PERMITTED(Discussion::MODULE, $discussionId);
         }
@@ -83,6 +87,10 @@ class PostManager extends BaseManager
 
     protected function allowRead(?int $recordId = null): void
     {
+        if (!$recordId) {
+            $this->respondBadRequest();
+        }
+
         $this->post = $this->loadRecord($recordId);
         if ($this->post->getDiscussionId() !== $this->discussion->getId()) {
             $this->respondNotFound();
@@ -94,6 +102,10 @@ class PostManager extends BaseManager
 
     protected function allowUpdate(?int $recordId = null, ?array &$data = null): void
     {
+        if (!$recordId) {
+            $this->respondBadRequest();
+        }
+
         $this->post = $this->loadRecord($recordId);
 
         if (!$this->post) {
