@@ -64,16 +64,7 @@ class VoteManager extends BaseManager
             $vote["pollId"] = $this->poll->getId();
         }
 
-        $voteUserId = $voteUserId ?? $this->user->getId();
-
-        foreach ($data as &$vote) {
-            $vote["userId"] = $voteUserId;
-
-            //transform booleanValue to YES/NO based on truthfullness
-            if (!empty($vote["booleanValue"])) {
-                $vote["booleanValue"] = $vote["booleanValue"] ? "TRUE" : "FALSE";
-            }
-        }
+        $vote["userId"] = $voteUserId ?? $this->user->getId();
 
         //check this user can vote
         if ($voteUserId === $this->user->getId() && !$this->poll->getCanVote()) {
