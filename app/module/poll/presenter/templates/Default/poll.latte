@@ -27,34 +27,34 @@
                             <span n:if="$poll->getMaxItems()" class="badge badge-warning"><strong>{_poll.maxItems}: {$poll->getMaxItems()}</strong></span>
                             <span n:class="badge,$poll->getChangeableVotes() ? badge-success : badge-danger"><strong>{if $poll->getChangeableVotes()}{_poll.changeableVotes}{else}{_poll.unchangeableVotes}{/if}</strong></span>
                             <span n:class="badge,$poll->getAnonymousResults() ? badge-success : badge-danger"><strong>{if $poll->getAnonymousResults()}{_poll.anonymousResults}{else}{_poll.nonanonymousResults}{/if}</strong></span>
-                            {if $poll->getShowResults() == 'AFTER_VOTE'}
-                                {if $poll->getVoted()}
-                                    {var $resultsClass = 'badge-success'}
-                                    {var $resultsDesc = $resultsDisplayed}
-                                {else}
-                                    {var $resultsClass = 'badge-info'}
-                                    {var $resultsDesc = $resultsDisplayedAfterVote}
-                                {/if}
-                            {elseif $poll->getShowResults() == 'NEVER'}
-                                {if $poll->getCanSeeResults() == TRUE && $poll->getCreatedById() == $user->getId()}
-                                    {var $resultsClass = 'badge-danger'}
-                                    {var $resultsDesc = $resultsToYouOnly}
-                                {else}
-                                    {var $resultsClass = 'badge-danger'}
-                                    {var $resultsDesc = $resultsAreSecret}
-                                {/if}
-                            {elseif $poll->getShowResults() == 'ALWAYS'}
-                                {var $resultsClass = 'badge-success'}
-                                {var $resultsDesc = $resultsDisplayed}
-                            {elseif $poll->getShowResults() == 'WHEN_CLOSED'}
-                                {if $poll->getStatus() == 'CLOSED'}
-                                    {var $resultsClass = 'badge-success'}
-                                    {var $resultsDesc = $resultsDisplayed}
-                                {else}
-                                    {var $resultsClass = 'badge-info'}
-                                    {var $resultsDesc = $resultsDisplayedWhenClosed}
-                                {/if}
-                            {/if}
+                                    {if $poll->getShowResults() == 'AFTER_VOTE'}
+                                        {if $poll->getVoted()}
+                                            {var $resultsClass = 'badge-success'}
+                                            {var $resultsDesc = $resultsDisplayed}
+                                        {else}
+                                            {var $resultsClass = 'badge-info'}
+                                            {var $resultsDesc = $resultsDisplayedAfterVote}
+                                        {/if}
+                                    {elseif $poll->getShowResults() == 'NEVER'}
+                                        {if $poll->getCanSeeResults() == TRUE && $poll->getCreatedById() == $user->getId()}
+                                            {var $resultsClass = 'badge-danger'}
+                                            {var $resultsDesc = $resultsToYouOnly}
+                                        {else}
+                                            {var $resultsClass = 'badge-danger'}
+                                            {var $resultsDesc = $resultsAreSecret}
+                                        {/if}
+                                    {elseif $poll->getShowResults() == 'ALWAYS'}
+                                        {var $resultsClass = 'badge-success'}
+                                        {var $resultsDesc = $resultsDisplayed}
+                                    {elseif $poll->getShowResults() == 'WHEN_CLOSED'}
+                                        {if $poll->getStatus() == 'CLOSED'}
+                                            {var $resultsClass = 'badge-success'}
+                                            {var $resultsDesc = $resultsDisplayed}
+                                        {else}
+                                            {var $resultsClass = 'badge-info'}
+                                            {var $resultsDesc = $resultsDisplayedWhenClosed}
+                                        {/if}
+                                    {/if}
                             <span class="badge {$resultsClass}">{$resultsDesc}</span>
                         </div>
                     </div>
@@ -88,7 +88,7 @@
     </div>
 
     <div class="row" n:snippet="poll-results">
-    {*SHOW RESULTS ONLY UNDER SPECIFIC CONDITIONS*}
+        {*SHOW RESULTS ONLY UNDER SPECIFIC CONDITIONS*}
         <div n:if="$poll->getCanSeeResults()" class="col my-3">
             <div class="card sh-box text-white bg-dark">
                 <div class="card-header border-bottom-0">
@@ -100,18 +100,18 @@
                             <th>{_common.user}</th>
                             <th n:foreach="$poll->getOptions() as $option">{$option->getCaption()}</th>
                         </tr>
-                        <tr n:foreach="$poll->getOrderedVotes() as $userId => $vote" data-vote n:attr="data-gender => !$poll->getAnonymousResults() ? $users[$userId]->gender, data-status => !$poll->getAnonymousResults() ? $users[$userId]->getStatus()">
+                        <tr n:foreach="$poll->getOrderedVotes() as $userId => $vote" data-vote n:attr="data-gender => !$poll->getAnonymousResults() ? $users[$userId]->getGender(), data-status => !$poll->getAnonymousResults() ? $users[$userId]->getStatus()">
                             <th>
                                 <a n:if="!$poll->getAnonymousResults()" href="{plink :Team:Player: $users[$userId]->getWebName()}">{$users[$userId]->getDisplayName()}</a>
                                 <a n:if="$poll->getAnonymousResults()">Anonym</a>
                             </th>
-                                {foreach $poll->getOptions() as $option}
+                            {foreach $poll->getOptions() as $option}
                                 {ifset $vote[$option->getId()]}
                                     <td n:if="$vote[$option->getId()]->getNumericValue()" data-option-type="{$option->getType()}" data-option-id="{$option->getId()}" data-option-value="{$vote[$option->getId()]->getNumericValue()}">{$vote[$option->getId()]->getNumericValue()}</td>
                                     <td n:if="$vote[$option->getId()]->getStringValue()" data-option-type="{$option->getType()}" data-option-id="{$option->getId()}" data-option-value="{$vote[$option->getId()]->getStringValue()}">{$vote[$option->getId()]->getStringValue()}</td>
                                     <td n:if="$vote[$option->getId()]->getBooleanValue() && $radioLayout" data-option-type="{$option->getType()}" data-option-id="{$option->getId()}" data-option-value="true"><span n:class="badge, badge-warning">{$option->getCaption()}</span></td>
                                     <td n:if="$vote[$option->getId()]->getBooleanValue() && !$radioLayout" data-option-type="{$option->getType()}" data-option-id="{$option->getId()}" data-option-value="{$vote[$option->getId()]->getBooleanValue() ? 'true' : 'false'}"><span n:class="badge, $vote[$option->getId()]->getBooleanValue() ? 'badge-success' : 'badge-danger' ">{if $vote[$option->getId()]->getBooleanValue()}{_common.yes|upper}{else}{_common.no|upper}{/if}</span></td>
-                                {else}
+                                    {else}
                                     <td data-option-type="{$option->getType()}" data-option-id="{$option->getId()}" data-option-value></td>
                                 {/ifset}
                             {/foreach}

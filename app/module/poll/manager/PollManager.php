@@ -76,7 +76,21 @@ class PollManager extends BaseManager
         $voteRows = $row->related(Vote::TABLE, "quest_id")->fetchAll();
 
         if (!empty($voteRows)) {
-            $poll->setVotes($this->voteManager->mapAll($voteRows));
+            $votes = $this->voteManager->mapAll($voteRows);
+            $myVotes = [];
+            $orderedVotes = [];
+
+            foreach ($votes as $vote) {
+                /* @var $vote Vote */
+                if (!$poll->getAnonymousResults() && $vote->getUserId() == $this->user->getId()) {
+                    $myVotes[$vote->getOptionId()] = $vote;
+                }
+                $orderedVotes[$vote->getUserId()][$vote->getOptionId()] = $vote;
+            }
+
+            $poll->setVotes($votes);
+            $poll->setOrderedVotes($orderedVotes);
+            $poll->setMyVotes($myVotes);
         }
 
         if ($poll->getStatus() == Poll::STATUS_OPENED && $poll->getCanVote() && !$poll->getVoted()) {

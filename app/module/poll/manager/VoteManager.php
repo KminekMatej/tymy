@@ -71,7 +71,7 @@ class VoteManager extends BaseManager
 
             //transform booleanValue to YES/NO based on truthfullness
             if (!empty($vote["booleanValue"])) {
-                $vote["booleanValue"] = $vote["booleanValue"] ? "YES" : "NO";
+                $vote["booleanValue"] = $vote["booleanValue"] ? "TRUE" : "FALSE";
             }
         }
 
@@ -158,7 +158,7 @@ class VoteManager extends BaseManager
             $createdVotes[] = $this->map($this->createByArray($vote));
         }
 
-        return $createdVotes;
+        return array_shift($createdVotes);
     }
 
     public function delete(int $resourceId, ?int $subResourceId = null): int
