@@ -155,10 +155,6 @@
                                             <div n:class="btn-group-vertical,result,$resultsClosed ? d-none" role="group" aria-label="{_event.attendanceResult}" n:if="$event->getCanResult() && $event->getInPast()">
 
                                                 <button n:foreach="$eventType->getPostStatusSet() as $postStatus" class="btn btn-xs statusBtn{$postStatus->getId()}" data-status-id="{$postStatus->getId()}" onclick="togglePostStatus(this)" title="{$postStatus->getCaption()}">{$postStatus->getCaption()}</button>
-                                                {*
-                                                <button type="button" class="btn btn-sm btn-outline-danger" title="{_event.notArrived,1}"><i class="fa fa-times" aria-hidden="true"></i></button>
-                                                <button type="button" class="btn btn-sm btn-outline-success" onclick="came(this)" title="{_event.arrived,1}"><i class="fa fa-check" aria-hidden="true"></i></button>
-                                                *}
                                             </div>
                                         </figure>
                                     </div>

@@ -46,7 +46,7 @@
 
                     <td class="btn-group" role="group" n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('TEAM_UPDATE'))">
                         <button type="submit" n:name="save" title="{_common.save}" class="btn btn-sm btn-primary"><i class="fa fa-save" aria-hidden="true"></i></button>
-                        <button class="btn btn-sm btn-danger" href="#" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                        <button class="btn btn-sm btn-danger" href="#" title="{_common.delete}"><i class="far fa-trash-can" aria-hidden="true"></i></button>
                     </td>
                 {/form}
             </tr>

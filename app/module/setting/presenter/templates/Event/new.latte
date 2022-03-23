@@ -76,7 +76,7 @@
                                     {input canResult, class=> 'form-control form-control-sm'}
                                 </td>
                                 <td class="btn-group" role="group">
-                                    <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_CREATE'))" class="btn btn-sm btn-outline-danger" title="{_common.delete}" onclick="removeRow(this)"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                    <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_CREATE'))" class="btn btn-sm btn-outline-danger" title="{_common.delete}" onclick="removeRow(this)"><i class="far fa-trash-can" aria-hidden="true"></i></button>
                                 </td>
                             </tr>
                         </table>
