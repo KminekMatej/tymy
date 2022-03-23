@@ -124,7 +124,7 @@ abstract class BaseManager
      * @param ActiveRow|false $row
      * @return BaseModel
      */
-    public function map(?IRow $row, bool $force = false): ?BaseModel
+    public function map(?IRow $row, bool $force = false, ?array $scheme = null): ?BaseModel
     {
         if (!$row) {
             return null;
@@ -134,7 +134,7 @@ abstract class BaseManager
 
         $object = new $class();
 
-        foreach ($this->getScheme() as $field) {
+        foreach ($scheme ?: $this->getScheme() as $field) {
             $setField = "set" . ucfirst($field->getProperty());
             $column = $field->getColumn();
 
@@ -154,7 +154,7 @@ abstract class BaseManager
      * @param array $rows
      * @return BaseModel[]
      */
-    public function mapAll(array $rows): array
+    public function mapAll(array $rows, ?array $scheme = null): array
     {
         $ret = [];
         $this->lastIdList = [];
@@ -162,7 +162,7 @@ abstract class BaseManager
             if ($this->idCol) {
                 $this->lastIdList[$row->{$this->idCol}] = $row->{$this->idCol};
             }
-            $ret[] = $this->map($row);
+            $ret[] = $this->map($row, $scheme);
         }
         return $ret;
     }
