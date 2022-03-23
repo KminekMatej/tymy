@@ -65,7 +65,7 @@ class DefaultPresenter extends SecuredPresenter
         }
         $this->redrawControl("poll-results");
         $this->redrawNavbar();
-
+        \Tracy\Debugger::barDump($votes);
         $this->voteManager->setPoll($poll)->create($votes, $pollId);
     }
 }

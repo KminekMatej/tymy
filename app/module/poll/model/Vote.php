@@ -89,7 +89,7 @@ class Vote extends BaseModel
         return $this;
     }
 
-    public function setBooleanValue(mixed $booleanValue)
+    public function setBooleanValue($booleanValue)
     {
         switch (true) {
             case is_string($booleanValue):
