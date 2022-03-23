@@ -46,10 +46,12 @@ class DefaultPresenter extends SecuredPresenter
         $this->template->resultsDisplayedWhenClosed = $this->translator->translate("poll.resultsDisplayedWhenClosed");
     }
 
-    public function handleVote($pollId)
+    public function handleVote(int $pollId): void
     {
         $votes = [];
         $post = $this->getRequest()->getPost();
+        $poll = $this->pollManager->getById($pollId);
+        
         foreach ($post as $optId => $opt) {
             if (!array_key_exists("value", $opt)) {
                 continue;
@@ -64,6 +66,6 @@ class DefaultPresenter extends SecuredPresenter
         $this->redrawControl("poll-results");
         $this->redrawNavbar();
 
-        $this->voteManager->create($votes, $pollId);
+        $this->voteManager->setPoll($poll)->create($votes, $pollId);
     }
 }

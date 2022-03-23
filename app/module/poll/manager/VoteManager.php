@@ -35,6 +35,12 @@ class VoteManager extends BaseManager
         return VoteMapper::scheme();
     }
 
+    public function setPoll(?Poll $poll = null)
+    {
+        $this->poll = $poll;
+        return $this;
+    }
+
     protected function allowCreate(?array &$data = null): void
     {
         //check consistency of userId and pollId (same user, same poll)
@@ -140,8 +146,6 @@ class VoteManager extends BaseManager
 
     public function create(array $data, ?int $resourceId = null): BaseModel
     {
-        $this->poll = $this->getById($resourceId);
-
         if (empty($this->poll)) {
             $this->responder->E4005_OBJECT_NOT_FOUND(Poll::MODULE, $resourceId);
         }
