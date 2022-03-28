@@ -103,6 +103,10 @@ class EventManager extends BaseManager
     {
         $event = parent::getById($id);
 
+        if (!$event) {
+            return null;
+        }
+
         $attendances = $this->attendanceManager->getByEvents([$event->getId()]);
 
         $event->setAttendance($attendances[$event->getId()] ?? []);
