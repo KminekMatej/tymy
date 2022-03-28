@@ -27,7 +27,6 @@ class Discussion extends BaseModel
     private ?string $deleteRightName = null;
     private ?string $stickyRightName = null;
     private bool $publicRead = false;
-    private string $status;
     private bool $editablePosts = false;
     private ?int $order = null;
     private bool $canRead = false;
@@ -92,11 +91,6 @@ class Discussion extends BaseModel
     public function getPublicRead(): bool
     {
         return $this->publicRead;
-    }
-
-    public function getStatus(): string
-    {
-        return $this->status;
     }
 
     public function getEditablePosts(): bool
@@ -205,12 +199,6 @@ class Discussion extends BaseModel
         return $this;
     }
 
-    public function setStatus(string $status)
-    {
-        $this->status = $status;
-        return $this;
-    }
-
     public function setEditablePosts(string $editablePosts)
     {
         $this->editablePosts = $editablePosts == "YES";
@@ -294,6 +282,7 @@ class Discussion extends BaseModel
     {
         return parent::jsonSerialize() +
                 [
+                    "status" => "ACTIVE",   /** @deprecated DELETED statuses discussions has been deleted */
                     "canRead" => $this->getCanRead(),
                     "canWrite" => $this->getCanWrite(),
                     "canDelete" => $this->getCanDelete(),

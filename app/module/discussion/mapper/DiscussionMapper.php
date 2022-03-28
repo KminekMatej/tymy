@@ -27,7 +27,6 @@ class DiscussionMapper extends BaseMapper
             Field::string()->withColumn("del_rights")->setProperty("deleteRightName"),
             Field::string()->withColumn("sticky_rights")->setProperty("stickyRightName"),
             Field::int()->withColumn("public_read")->setProperty("publicRead"),
-            Field::string()->withPropertyAndColumn("status"),
             Field::int()->withColumn("can_modify")->setProperty("editablePosts"),
             Field::int()->withColumn("order_flag")->setProperty("order"),
         ];
