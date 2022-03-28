@@ -14,7 +14,7 @@
 -- UP:
 -- commands that updates database shall be written here:
 
-DELETE * FROM `discussions` WHERE `status` = 'DELETED';
+DELETE FROM `discussions` WHERE `status` = 'DELETED';
 ALTER TABLE `discussions` DROP `status`;
 
 -- DOWN:
