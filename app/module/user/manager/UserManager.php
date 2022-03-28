@@ -40,8 +40,16 @@ class UserManager extends BaseManager
     public const MAX_PWD_REQUESTS = 3;
     private const FIELDS_PERSONAL = ["gender", "firstName", "lastName", "phone", "email", "birthDate", "nameDayMonth", "nameDayDay", "language"];
     private const FIELDS_LOGIN = ["callName", "canEditCallName", "login", "password", "canLogin"];
+    private const FIELDS_UI = ["skin"];
     private const FIELDS_TEAMINFO = ["status", "jerseyNumber"];
     private const FIELDS_ADDRESS = ["street", "city", "zipCode"];
+    private const TABS = [
+        "PERSONAL" => self::FIELDS_PERSONAL,
+        "LOGIN" => self::FIELDS_LOGIN,
+        "UI" => self::FIELDS_UI,
+        "TEAMINFO" => self::FIELDS_TEAMINFO,
+        "ADDRESS" => self::FIELDS_ADDRESS,
+    ];
 
     private MailService $mailService;
     private Request $request;
@@ -857,29 +865,17 @@ class UserManager extends BaseManager
         $this->userFields = [
             "PERSONAL" => [],
             "LOGIN" => [],
+            "UI" => [],
             "TEAMINFO" => [],
             "ADDRESS" => [],
             "ALL" => []
         ];
-        foreach (self::FIELDS_PERSONAL as $field) {
-            $caption = $this->translator->translate("team." . $field);
-            $this->userFields["PERSONAL"][$field] = $caption;
-            $this->userFields["ALL"][$field] = $caption;
-        }
-        foreach (self::FIELDS_LOGIN as $field) {
-            $caption = $this->translator->translate("team." . $field);
-            $this->userFields["LOGIN"][$field] = $this->translator->translate("team." . $field);
-            $this->userFields["ALL"][$field] = $caption;
-        }
-        foreach (self::FIELDS_TEAMINFO as $field) {
-            $caption = $this->translator->translate("team." . $field);
-            $this->userFields["TEAMINFO"][$field] = $this->translator->translate("team." . $field);
-            $this->userFields["ALL"][$field] = $caption;
-        }
-        foreach (self::FIELDS_ADDRESS as $field) {
-            $caption = $this->translator->translate("team." . $field);
-            $this->userFields["ADDRESS"][$field] = $this->translator->translate("team." . $field);
-            $this->userFields["ALL"][$field] = $caption;
+        foreach (self::TABS as $tabName => $fields) {
+            foreach ($fields as $field) {
+                $caption = $this->translator->translate("team." . $field);
+                $this->userFields[$tabName][$field] = $caption;
+                $this->userFields["ALL"][$field] = $caption;
+            }
         }
         return $this->userFields;
     }

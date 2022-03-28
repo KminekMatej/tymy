@@ -23,6 +23,9 @@ class DefaultPresenter extends SecuredPresenter
                 case "prihlaseni":
                     $errFields = array_intersect(array_keys($allFields["LOGIN"]), $this->team->getRequiredFields(), $player->getErrFields());
                     break;
+                case "ui":
+                    $errFields = array_intersect(array_keys($allFields["UI"]), $this->team->getRequiredFields(), $player->getErrFields());
+                    break;
                 case "tymove-info":
                     $errFields = array_intersect(array_keys($allFields["TEAMINFO"]), $this->team->getRequiredFields(), $player->getErrFields());
                     break;

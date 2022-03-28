@@ -30,13 +30,6 @@
         <tr>
             <th>{_team.canLogin}:</th><td><input name="canLogin" data-value="{$player->getCanLogin()}" type="checkbox" n:attr='checked => $player->getCanLogin()' class="form-control from-control-lg form-check col-6" /></td>
         </tr>
-        <tr>
-            <th>Skin:</th><td>
-                <select n:class="col-3, form-control, in_array('skin',$player->getErrFields()) ? is-invalid" style="min-width: 120px" name="skin" data-value="{$player->getSkin()}">
-                    <option n:foreach="$allSkins as $s => $sCaption" value="{$s}" n:attr="selected => $player->getSkin()==$s">{$sCaption}</option>
-                </select>
-            </td>
-        </tr>
     </table>
 </div>
 {include parent}
