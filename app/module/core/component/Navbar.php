@@ -51,7 +51,6 @@ class NavbarControl extends Control
         $this->multiaccountManager = $multiaccountManager;
         $this->user = $user;
         $this->teamManager = $teamManager;
-        $this->accessibleSettings = $this->presenter->getAccessibleSettings();
         $this->translator = $this->presenter->translator;
     }
 
@@ -127,7 +126,7 @@ class NavbarControl extends Control
 
     private function initSettings(): void
     {
-        $this->template->accessibleSettings = $this->accessibleSettings;
+        $this->template->accessibleSettings = $this->presenter->getAccessibleSettings();
     }
 
     public function render()
@@ -149,12 +148,14 @@ class NavbarControl extends Control
         $this->initDebts();
         $this->initFiles();
 
+            \Tracy\Debugger::barDump([$this->template->accessibleSettings, $this->presenter->getAccessibleSettings()], "In render");
         $this->template->render();
     }
 
     public function handleRefresh()
     {
         if ($this->parent->isAjax()) {
+            \Tracy\Debugger::barDump($this->template, "In refresh");
             $this->redrawControl('nav');
         } else {
             $this->parent->redirect('this');
