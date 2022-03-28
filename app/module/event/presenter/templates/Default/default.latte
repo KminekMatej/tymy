@@ -10,11 +10,30 @@
 <link rel='stylesheet' href="{$basePath}/skins/{$skin}/css/fullcalendar.css?ver={$appver}" />
 <style type="text/css">
     {foreach $statusList as $status}
-    .attendance{$status->getCode()} { color: #{$status->getColor()}; border-color: #{$status->getColor()}; background-color: transparent; background-image: none; }
-    .attendance{$status->getCode()}.active { color: #fff; border-color: #{$status->getColor()}; background-color: #{$status->getColor()}; }
-    .attendance{$status->getCode()}:hover { color: #fff; border-color: #{$status->getColor()}; background-color: #{$status->getColor()}; }
-    .attendance{$status->getCode()}:not(:disabled):not(.disabled).active { color: #fff; border-color: #{$status->getColor()}; background-color: #{$status->getColor()}; }
-    BUTTON.disabled { cursor: auto }
+        .attendance{$status->getCode()} {
+            color: #{$status->getColor()};
+            border-color: #{$status->getColor()};
+            background-color: transparent;
+            background-image: none;
+        }
+        .attendance{$status->getCode()}.active {
+            color: #fff;
+            border-color: #{$status->getColor()};
+            background-color: #{$status->getColor()};
+        }
+        .attendance{$status->getCode()}:hover {
+            color: #fff;
+            border-color: #{$status->getColor()};
+            background-color: #{$status->getColor()};
+        }
+        .attendance{$status->getCode()}:not(:disabled):not(.disabled).active {
+            color: #fff;
+            border-color: #{$status->getColor()};
+            background-color: #{$status->getColor()};
+        }
+        BUTTON.disabled {
+            cursor: auto
+        }
     {/foreach}
 </style>
 {/block}
@@ -30,42 +49,42 @@
             locale: locale,
             height: 500,
             fixedWeekCount: false,
-            events: function(start, end, timezone, callback) {
+            events: function (start, end, timezone, callback) {
                 var events = [];
-                {foreach $events as $evnt}
-                    events.push({l}id: {$evnt->getId()}, title: {$evnt->getCaption()},start: {$evnt->getStartTime()|date:\Tymy\Module\Core\Model\BaseModel::DATETIME_ISO_FORMAT},end: {$evnt->getEndTime()|date:\Tymy\Module\Core\Model\BaseModel::DATETIME_ISO_FORMAT},backgroundColor: {$evnt->getBackgroundColor()},borderColor: {$evnt->getBorderColor()},textColor: {$evnt->getTextColor()},url: {plink ':Event:Detail:', $evnt->getWebName()}{r});
-                {/foreach}
-                callback(events);
-            },
-            eventRender: function (event, element) {
-                element.find('.fc-title').attr("title", event.description);
-                if (event.end && event.end.isBefore())
-                    element.addClass("past");
-            },
-            header: {
-                left: 'title',
-                center: '',
-                right: 'today month,basicWeek,basicDay prev,next'
-            },
-            viewRender: function () {
-                loadAgenda({plink :Event:Default:});
-            },
-            loading: function (isLoading, view) {
-                if (isLoading) {
-                    $('#calendar DIV.fc-header-toolbar BUTTON.fc-prev-button').prop('disabled', true);
-                    $('#calendar DIV.fc-header-toolbar BUTTON.fc-next-button').prop('disabled', true);
-                } else {
-                    $('#calendar DIV.fc-header-toolbar BUTTON.fc-prev-button').prop('disabled', false);
-                    $('#calendar DIV.fc-header-toolbar BUTTON.fc-next-button').prop('disabled', false);
-                }
-            }
-        });
-        $('#calendar DIV.fc-header-toolbar').addClass("card-header");
-        $('#calendar DIV.fc-button-group').addClass("btn-group");
-        $('#calendar DIV.fc-header-toolbar BUTTON').each(function () {
-            $(this).addClass("btn btn-light btn-light-bordered");
-        });
-    });
+    {foreach $events as $evnt}
+                events.push({l}id: {$evnt->getId()}, title: {$evnt->getCaption()}, start: {$evnt->getStartTime()|date:\Tymy\Module\Core\Model\BaseModel::DATETIME_ISO_FORMAT}, end: {$evnt->getEndTime()|date:\Tymy\Module\Core\Model\BaseModel::DATETIME_ISO_FORMAT}, backgroundColor: {$evnt->getBackgroundColor()}, borderColor: {$evnt->getBorderColor()}, textColor: {$evnt->getTextColor()}, url: {plink ':Event:Detail:', $evnt->getWebName()}{r});
+    {/foreach}
+                                callback(events);
+                            },
+                            eventRender: function (event, element) {
+                                element.find('.fc-title').attr("title", event.description);
+                                if (event.end && event.end.isBefore())
+                                    element.addClass("past");
+                            },
+                            header: {
+                                left: 'title',
+                                center: '',
+                                right: 'today month,basicWeek,basicDay prev,next'
+                            },
+                            viewRender: function () {
+                                loadAgenda({plink :Event:Default:});
+                            },
+                            loading: function (isLoading, view) {
+                                if (isLoading) {
+                                    $('#calendar DIV.fc-header-toolbar BUTTON.fc-prev-button').prop('disabled', true);
+                                    $('#calendar DIV.fc-header-toolbar BUTTON.fc-next-button').prop('disabled', true);
+                                } else {
+                                    $('#calendar DIV.fc-header-toolbar BUTTON.fc-prev-button').prop('disabled', false);
+                                    $('#calendar DIV.fc-header-toolbar BUTTON.fc-next-button').prop('disabled', false);
+                                }
+                            }
+                        });
+                        $('#calendar DIV.fc-header-toolbar').addClass("card-header");
+                        $('#calendar DIV.fc-button-group').addClass("btn-group");
+                        $('#calendar DIV.fc-header-toolbar BUTTON').each(function () {
+                            $(this).addClass("btn btn-light btn-light-bordered");
+                        });
+                    });
 </script>
 {/block}
 
@@ -94,8 +113,10 @@
                                 </div>
                                 <div n:class="row, mb-2, $ev->getInPast() ? evnt-past, $ev->getInPast() ? collapse">
                                     <div class="col">
+                                        <input n:if="count($eventTypes[$ev->getType()]->getPreStatusSet()) >= 4" type="text" class="form-control form-control-sm" style="min-width: 130px" title="{_note.note,1}" placeholder="{_note.note,1}" name="preStatusDesc" value="{$ev->getMyAttendance() ? $ev->getMyAttendance()->getPreDescription() : null}" />
+
                                         <div class="btn-group input-group px-0" role="group" aria-label="Basic example" id="action-{$ev->getId()}">
-                                            <input type="text" class="form-control form-control-sm" style="min-width: 130px" title="{_note.note,1}" placeholder="{_note.note,1}" name="preStatusDesc" value="{$ev->getMyAttendance() ? $ev->getMyAttendance()->getPreDescription() : null}" />
+                                            <input n:if="count($eventTypes[$ev->getType()]->getPreStatusSet()) < 4" type="text" class="form-control form-control-sm" style="min-width: 130px" title="{_note.note,1}" placeholder="{_note.note,1}" name="preStatusDesc" value="{$ev->getMyAttendance() ? $ev->getMyAttendance()->getPreDescription() : null}" />
                                             {foreach $eventTypes[$ev->getType()]->getPreStatusSet() as $preStatus}
                                                 <button onclick="updateAttendance(this, {link attendance! $ev->getId(), $preStatus->getCode()})" class="btn btn-sm {$ev->getMyAttendance(),$ev->getType(),$preStatus->getCode(),$ev->getCanPlan(),$ev->getCloseTime()|prestatusClass}">{$preStatus->getCaption()}</button>
                                             {/foreach}
