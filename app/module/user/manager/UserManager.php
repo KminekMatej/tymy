@@ -554,6 +554,12 @@ class UserManager extends BaseManager
             }
         }
 
+        foreach (["canEditCallName", "canLogin", "hideDiscDesc"] as $name) {
+            if (array_key_exists($name, $data)) {
+                $data[$name] = $this->toBool($data[$name]);
+            }
+        }
+
         if (array_key_exists("email", $data) && $this->getIdByEmail($data["email"]) !== $this->userModel->getId()) {
             //changing mail to already existing one
             $this->responder->E4002_EDIT_NOT_PERMITTED(User::MODULE, $recordId);
@@ -643,7 +649,7 @@ class UserManager extends BaseManager
     public function update(array $data, int $resourceId, ?int $subResourceId = null): BaseModel
     {
         $this->allowUpdate($resourceId, $data);
-
+        Debugger::barDump($data);
         $this->updateByArray($resourceId, $data);
 
         return $this->getById($resourceId);

@@ -722,4 +722,18 @@ abstract class BaseManager
     {
         return $this->lastIdList;
     }
+
+    /**
+     * Retype various boolean stored variables like YES, ANO etc. to proper boolean value
+     * @param mixed $value
+     * @return bool
+     */
+    protected function toBool($value): bool
+    {
+        if (is_string($value)) {
+            return in_array(strtolower($value), ["yes", "true", "ano"]);
+        }
+
+        return (bool) $value;
+    }
 }

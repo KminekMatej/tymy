@@ -84,6 +84,8 @@ class SecuredPresenter extends BasePresenter
         if ($this->tymyUser->getSkin()) {//set user defined skin instead of team one after login
             $this->template->skin = $this->skin = $this->tymyUser->getSkin();
         }
+        
+        $this->template->tymyUser = $this->tymyUser;
 
         $this->setAccessibleSettings();
         $this->addBreadcrumb($this->translator->translate("common.mainPage"), $this->link(":Core:Default:"));
