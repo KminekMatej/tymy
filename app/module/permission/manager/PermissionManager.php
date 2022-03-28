@@ -257,8 +257,19 @@ class PermissionManager extends BaseManager
             "revokedUsers",
         ];
         foreach ($inputsToProcess as $input) {
-            if (array_key_exists($input, $data) && !empty($data[$input] && is_array($data[$input]))) {
-                $data[$input] = join(",", $data[$input]);
+            if (array_key_exists($input, $data) && is_array($data[$input])) {
+                    $data[$input] = join(",", $data[$input]);
+            }
+        }
+
+        //when there is revoked set, set allowed to be cleared. If revoked is not set, 
+        foreach (["Roles", "Statuses", "Users"] as $Appendix) {
+            $allowedKey = "allowed$Appendix";
+            $revokedKey = "revoked$Appendix";
+            if (array_key_exists($revokedKey, $data)) {   //if there is some revokation set, clear allowed
+                $data[$allowedKey] = null;
+            } elseif (array_key_exists($allowedKey, $data)) {
+                $data[$revokedKey] = null;
             }
         }
     }
@@ -299,7 +310,7 @@ class PermissionManager extends BaseManager
         $this->allowUpdate($resourceId, $data);
 
         $this->transformArrayToString($data);
-
+        \Tracy\Debugger::barDump($data);
         parent::updateByArray($resourceId, $data);
 
         $this->authorizationManager->dropPermissionCache();
