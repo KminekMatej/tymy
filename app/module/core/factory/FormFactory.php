@@ -18,6 +18,7 @@ use Tymy\Module\Event\Model\EventType;
 use Tymy\Module\Permission\Model\Permission;
 use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\User\Manager\UserManager;
+use Tymy\Module\User\Model\User;
 
 class FormFactory
 {
@@ -205,6 +206,70 @@ class FormFactory
 
         $form->onSuccess[] = $onSuccess;
 
+        return $form;
+    }
+    
+    public function createUserConfigForm(array $onSuccess, ?User $user): Form
+    {
+        $form = new Form();
+        
+        $genderList = [
+            "MALE" => $this->translator->translate("team.male", 1),
+            "FEMALE" => $this->translator->translate("team.female", 1),
+        ];
+        
+        $gender = $form->addSelect("gender", $this->translator->translate("team.gender"), $genderList)->setCaption($this->translator->translate("common.chooseSex", 1) . " ↓");
+        $firstName = $form->addText("firstName", $this->translator->translate("team.firstName"));
+        
+        
+        
+        /*
+         * <tr>
+            <th>{_team.firstName}:</th><td><input name="firstName" data-value="{$player->getFirstName()}" type="text" value="{$player->getFirstName()}" n:class="col-6, form-control, in_array('firstName',$player->getErrFields()) ? is-invalid" /></td>
+        </tr>
+        <tr>
+            <th>{_team.lastName}:</th><td><input name="lastName" data-value="{$player->getLastName()}" type="text" value="{$player->getLastName()}" n:class="col-6, form-control, in_array('lastName',$player->getErrFields()) ? is-invalid" /></td>
+        </tr>
+        <tr>
+            <th>{_team.phone}:</th><td><input name="phone" data-value="{$player->getPhone()}" type="text" value="{$player->getPhone()}" n:class="col-6, form-control, in_array('phone',$player->getErrFields()) ? is-invalid" /></td>
+        </tr>
+        <tr>
+            <th>{_team.email}:</th><td><div class="input-group"><input name="email" data-value="{$player->getEmail()}" type="text" value="{$player->getEmail()}" n:class="col-6, form-control, in_array('email',$player->getErrFields()) ? is-invalid" style="min-width: 200px"/><div class="input-group-append"><span class="input-group-text"><a n:tag-if="$player->getEmail() != ''" href="mailto:{$player->getEmail()}"><i class="fa fa-envelope" aria-hidden="true"></i></a></span></div></div></td>
+        </tr>
+        <tr>
+            <th>{_team.birthDate}:</th><td><input name="birthDate" data-value="{$player->getBirthDate()}" type="date" value="{$player->getBirthDate()}" n:class="col-6, form-control, in_array('birthDate',$player->getErrFields()) ? is-invalid" /></td>
+        </tr>
+        <tr>
+            <th>{_team.nameDayMonth}:</th><td>
+                <select n:class="col-3, form-control, in_array('nameDayMonth',$player->getErrFields()) ? is-invalid" style="min-width: 160px" name="nameDayMonth" data-value="{$player->getNameDayMonth() == 0 ? '' : $player->getNameDayMonth()}">
+                    <option value="">{_team.chooseMonth} ↓</option>
+                    <option n:for="$m=1; $m<=12; $m++" value="{$m}" n:attr="selected => $player->getNameDayMonth()==$m">{$m|monthName}</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th>{_team.nameDayDay}:</th><td><input name="nameDayDay" data-value="{$player->getNameDayDay()}" type="number" value="{$player->getNameDayDay()}" min="1" max="31" n:class="col-2, form-control, in_array('nameDayDay',$player->getErrFields()) ? is-invalid" style="min-width: 160px" /></td>
+        </tr>
+        <tr>
+            <th>{_team.language}:</th>
+            <td>
+                <select n:class="col-3, form-control, in_array('language',$player->getErrFields()) ? is-invalid"  style="min-width: 120px" name="language" data-value="{$player->getLanguage()}">
+                    <option value="CZ" n:attr="selected => $player->getLanguage()=='CZ'">Česky</option>
+                    <option value="EN" n:attr="selected => $player->getLanguage()=='EN'">English</option>
+                    <option value="FR" n:attr="selected => $player->getLanguage()=='FR'">Le français</option>
+                    <option value="PL" n:attr="selected => $player->getLanguage()=='PL'">Polski</option>
+                </select>
+            </td>
+        </tr>
+         */
+        if ($user) {
+            $gender->setValue($user->getGender());
+        }
+
+        $form->onSuccess[] = $onSuccess;
+        
+        $form->addSubmit("save");
+        
         return $form;
     }
 }
