@@ -107,8 +107,8 @@ class StatusManager extends BaseManager
         if (!array_key_exists($eventTypeId, $this->simpleCache)) {
             $this->simpleCache[$eventTypeId] = [
 
-                StatusSet::PRE => $this->mapAllWithCode($this->database->table(Status::TABLE)->where(".status_set:event_types(pre_status_set).id", $eventTypeId)->fetchPairs("code")),
-                StatusSet::POST => $this->mapAllWithCode($this->database->table(Status::TABLE)->where(".status_set:event_types(post_status_set).id", $eventTypeId)->fetchAll()),
+                StatusSet::PRE => $this->mapAllWithCode($this->database->table(Status::TABLE)->where(".status_set:event_types(pre_status_set).id", $eventTypeId)->order("id")->fetchPairs("code")),
+                StatusSet::POST => $this->mapAllWithCode($this->database->table(Status::TABLE)->where(".status_set:event_types(post_status_set).id", $eventTypeId)->order("id")->fetchAll()),
             ];
         }
         return $this->simpleCache[$eventTypeId];
