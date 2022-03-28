@@ -59,6 +59,7 @@ defaultSkin: Default skin
 name: Name
 sport: Sport
 defaultLanguage: Default language
+hideDiscDesc: Hide discussion description
 errors:
     imgFileCorrupted: "File is not a pictute, or is corrupted"
 alerts:

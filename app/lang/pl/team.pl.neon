@@ -59,6 +59,7 @@ defaultSkin: Domyślny skin
 name: Nazwa drużyny
 sport: Sport
 defaultLanguage: Domyślny język
+hideDiscDesc: Ukryj opis dyskusji
 errors:
     imgFileCorrupted: "Plik nie jest obrazkiem, lub jest uszkodzony"
 alerts:

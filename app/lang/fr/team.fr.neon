@@ -59,6 +59,7 @@ defaultSkin: Peau par défaut
 name: "Nom de l'équipe"
 sport: Sport
 defaultLanguage: Langage par défaut
+hideDiscDesc: Masquer la description de la discussion
 errors:
     imgFileCorrupted: "Le fichier n'est pas une image ou il est endommagé"
 alerts:

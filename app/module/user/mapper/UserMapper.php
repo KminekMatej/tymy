@@ -44,6 +44,7 @@ class UserMapper extends BaseMapper
             Field::datetime()->withColumn("gdpr_revoked_at")->setProperty("gdprRevoked")->setChangeable(false),
             Field::datetime()->withColumn("last_read_news")->setProperty("lastReadNews")->setChangeable(false),
             Field::string()->withPropertyAndColumn("skin"),
+            Field::int()->withColumn("hide_disc_desc")->setProperty("hideDiscDesc"),
         ];
     }
 }

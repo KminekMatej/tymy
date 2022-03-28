@@ -60,6 +60,7 @@ defaultSkin: Výchozí skin
 name: Název týmu
 sport: Sport
 defaultLanguage: Výchozí jazyk
+hideDiscDesc: Skrýt popisky diskusí
 errors:
     imgFileCorrupted: "Soubor není obrázek, nebo je poškozený"
 alerts:

@@ -73,6 +73,7 @@ class User extends BaseModel
     private array $errFields = [];
     private ?string $webName = null;
     private ?string $skin = null;
+    private bool $hideDiscDesc = false;
 
     public function getLogin(): string
     {
@@ -241,6 +242,11 @@ class User extends BaseModel
     public function getSkin(): string
     {
         return $this->skin ?: TeamManager::DEFAULT_SKIN;
+    }
+
+    public function getHideDiscDesc(): bool
+    {
+        return $this->hideDiscDesc;
     }
 
     public function setLogin(string $login)
@@ -487,6 +493,12 @@ class User extends BaseModel
     public function setSkin(?string $skin = null)
     {
         $this->skin = $skin;
+        return $this;
+    }
+
+    public function setHideDiscDesc(bool $hideDiscDesc)
+    {
+        $this->hideDiscDesc = $hideDiscDesc;
         return $this;
     }
 
