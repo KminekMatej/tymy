@@ -496,9 +496,9 @@ class User extends BaseModel
         return $this;
     }
 
-    public function setHideDiscDesc(bool $hideDiscDesc)
+    public function setHideDiscDesc(int $hideDiscDesc)
     {
-        $this->hideDiscDesc = $hideDiscDesc;
+        $this->hideDiscDesc = $hideDiscDesc ? true : false;
         return $this;
     }
 
