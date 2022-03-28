@@ -4,6 +4,8 @@ namespace Tymy\Module\Core\Manager;
 
 use Nette\Database\Explorer;
 use Nette\Security\User;
+use Tracy\Debugger;
+use Tracy\ILogger;
 use Tymy\Module\Team\Manager\TeamManager;
 
 /**
@@ -60,8 +62,12 @@ class StringsManager
      */
     public function translateBy(string $domain, string $code, ...$parameters): string
     {
-        $value = $this->database->table(self::TABLE)->where("domain", $domain)->where("code", $code)->where("language", $this->getLc())->limit(1)->fetch()->value;
+        $translation = $this->database->table(self::TABLE)->where("domain", $domain)->where("code", $code)->where("language", $this->getLc())->limit(1)->fetch();
 
-        return sprintf($value, ...$parameters);
+        if (!$translation) {
+            Debugger::log("Missing translation: $domain.$code", ILogger::ERROR);
+        }
+
+        return $translation ? sprintf($translation->value, ...$parameters) : "Missing translation: $domain.$code";
     }
 }
