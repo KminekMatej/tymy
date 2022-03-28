@@ -1,0 +1,25 @@
+{block player-header}
+<li class="nav-item">
+    {var $cnt = ($player,'adresa'|errorsCount)}
+    <a class="flex-sm-fill text-sm-center nav-link" data-toggle="tab" href="#adresa" role="tab">{_team.address} <span n:if="$cnt > 0" class="badge badge-pill badge-danger">{$cnt}</span></a>
+</li>
+{include parent}
+{/block}
+
+{block player-content}
+<div class="tab-pane fade" id="adresa" role="tabpanel">
+    <table class="table">
+        <tr>
+            <th>{_team.street}:</th><td><input name="street" data-value="{$player->getStreet()}" type="text" value="{$player->getStreet()}" n:class="col-6, form-control, in_array('street',$player->getErrFields()) ? is-invalid" /></td>
+        </tr>
+        <tr>
+            <th>{_team.city}:</th><td><input name="city" data-value="{$player->getCity()}" type="text" value="{$player->getCity()}" n:class="col-6, form-control, in_array('city',$player->getErrFields()) ? is-invalid" /></td>
+        </tr>
+        <tr>
+            <th>{_team.zipCode}:</th><td><input name="zipCode" data-value="{$player->getZipCode()}" type="text" value="{$player->getZipCode()}" n:class="col-3, form-control, in_array('zipCode',$player->getErrFields()) ? is-invalid" /></td>
+        </tr>
+    </table>
+
+</div>
+{include parent}
+{/block}

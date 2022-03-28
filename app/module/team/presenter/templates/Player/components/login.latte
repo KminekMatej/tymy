@@ -1,0 +1,43 @@
+{block player-header}
+<li class="nav-item">
+    {var $cnt = ($player,'prihlaseni'|errorsCount)}
+    <a class="flex-sm-fill text-sm-center nav-link" data-toggle="tab" href="#prihlaseni" role="tab">{_team.loginData} <span n:if="$cnt > 0" class="badge badge-pill badge-danger">{$cnt}</span></a>
+</li>
+{include parent}
+{/block}
+
+{block player-content}
+<div class="tab-pane fade" id="prihlaseni" role="tabpanel">
+    <table class="table">
+        <tr>
+            <th>{_team.dateOfRegistration}:</th><td>{$player->getCreatedAt()|date:'j.n.Y G:i'}</td>
+        </tr>
+        <tr>
+            <th>{_team.callName}:</th><td><input name="callName" data-value="{$player->getCallName()}" type="text" value="{$player->getCallName()}" n:class="col-6, form-control, in_array('callName',$player->getErrFields()) ? is-invalid" /></td>
+        </tr>
+        <tr>
+            <th>{_team.canEditCallName}:</th><td><input name="canEditCallName" data-value="{$player->getCanEditCallName()}" type="checkbox" n:attr='checked => $player->getCanEditCallName()' class="form-control form-check col-6" /></td>
+        </tr>
+        <tr>
+            <th>{_team.login}:</th><td><input name="login" data-value="{$player->getLogin()}" type="text" value="{$player->getLogin()}" n:class="col-6, form-control, in_array('login',$player->getErrFields()) ? is-invalid" /></td>
+        </tr>
+        <tr>
+            <th>{_team.password}:</th><td><input name="password" data-value="" type="password" value="" class="form-control col-6" data-validation-field2="password-check"/></td>
+        </tr>
+        <tr>
+            <th>{_team.newPasswordAgain}:</th><td><input name="password-check" type="password" value="" class="form-control col-6" /></td>
+        </tr>
+        <tr>
+            <th>{_team.canLogin}:</th><td><input name="canLogin" data-value="{$player->getCanLogin()}" type="checkbox" n:attr='checked => $player->getCanLogin()' class="form-control from-control-lg form-check col-6" /></td>
+        </tr>
+        <tr>
+            <th>Skin:</th><td>
+                <select n:class="col-3, form-control, in_array('skin',$player->getErrFields()) ? is-invalid" style="min-width: 120px" name="skin" data-value="{$player->getSkin()}">
+                    <option n:foreach="$allSkins as $s => $sCaption" value="{$s}" n:attr="selected => $player->getSkin()==$s">{$sCaption}</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+</div>
+{include parent}
+{/block}
