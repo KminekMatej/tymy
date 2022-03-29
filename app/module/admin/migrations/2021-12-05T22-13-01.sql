@@ -31,6 +31,7 @@ ALTER TABLE `ask_votes` ADD FOREIGN KEY (`quest_id`) REFERENCES `ask_quests`(`id
 DELETE FROM `ask_votes` WHERE `user_id` NOT IN (SELECT `id` FROM `users`);
 
 ALTER TABLE `ask_votes` ADD FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+UPDATE `ask_votes` SET `usr_mod`=NULL WHERE `usr_mod` NOT IN (SELECT `id` FROM `users`);
 ALTER TABLE `ask_votes` ADD FOREIGN KEY (`usr_mod`) REFERENCES `users`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- DOWN:
