@@ -322,7 +322,7 @@ class PermissionManager extends BaseManager
      * Drop allowed*** inputs in requestData if there are some revoked**** set.
      * If no revokes are detected, then it drops allowed inputs
      */
-    private function precedenceCheck(array $data): void
+    private function precedenceCheck(array &$data): void
     {
         // make sure that revoked takes precedence before allowed - so drop anything allowed when something is set to revoked
         if (isset($data["revokedRoles"])) {
