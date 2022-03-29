@@ -93,7 +93,7 @@ class RecordManager
     /** @return int $recordId */
     public function createPermission(?array $data = null, ?array $changes = null): int
     {
-        return $this->createRecord(Permission::MODULE, $data ?: $this->mockPermission(), $changes, "id");
+        return $this->createRecord(Permission::MODULE, $data ?: $this->mockPermission(), $changes, "id", ["allowedRoles", "allowedStatuses", "allowedUsers"]);//we are sending revocations, so there will not be any allowances
     }
 
     /** @return int $recordId */
