@@ -90,3 +90,5 @@ INSERT INTO `event_types` (`id`, `code`, `caption`, `pre_status_set_id`, `post_s
 (3, 'MEE', 'Schůze', 1, 3, 'WARN', CURRENT_TIMESTAMP, 0),
 (4, 'TOU', 'Turnaj', 2, 4, 'WARN', CURRENT_TIMESTAMP, 0),
 (5, 'CMP', 'Soustředění', 2, 4, 'WARN', CURRENT_TIMESTAMP, 0);
+
+DELETE FROM `tymy_cz`.`multi_accounts` WHERE `team_id` = 1132;
