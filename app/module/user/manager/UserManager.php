@@ -325,8 +325,7 @@ class UserManager extends BaseManager
     public function checkCredentials(Team $team, string $username, string $password): ?int
     {
         $userId = file_get_contents("https://tymy.cz/api/check-credentials?username={$username}&teamId={$team->getId()}&password={$password}");    //this request is accessible from localhost only
-
-        return $userId ?? null;
+        return $userId && $userId !== "null" ? $userId : null;
     }
 
     /**
