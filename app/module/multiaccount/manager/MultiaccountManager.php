@@ -73,6 +73,8 @@ class MultiaccountManager extends BaseManager
     {
         //create new multi account
         $targetTeam = $this->teamManager->getBySysname($resourceId);
+        $sourceTeam = $this->teamManager->getTeam();
+        $sourceUserId = $this->user->getId();
 
         if (!$targetTeam) {
             $this->respondNotFound();
@@ -96,46 +98,56 @@ class MultiaccountManager extends BaseManager
             $this->respondUnauthorized();
         }
 
-        $accountId = $this->getAccountId();
+        $sourceAccountId = $this->getAccountId();
 
         $existingAccountRow = $this->mainDatabase->table($this->getTable())
             ->where("user_id", $userId)
             ->where("team_id", $targetTeam->getId())
             ->fetch();
 
-        $existingAccountId = $existingAccountRow ? $existingAccountRow->account_id : null;
+        $targetAccountId = $existingAccountRow ? $existingAccountRow->account_id : null;
 
-        if ($accountId && $existingAccountId == $accountId) {
+        if ($sourceAccountId && $targetAccountId == $sourceAccountId) {
             $this->responder->E400_BAD_REQUEST("Target team already exists in your multiaccount");
         }
-
-        if ($existingAccountId) { //there is already some account id for this user on target team, so - merge these two account ids into one
-            $this->mainDatabase->table($this->getTable())->where("account_id", $existingAccountId)->update([
-                "account_id" => $accountId,
-            ]);
-
-            return $targetTeam;
-        }
-
-        if (empty($accountId)) {
-            //get next accountId
-            $accountId = $this->mainDatabase->table($this->getTable())->select("MAX(account_id) + 1 AS nextId")->fetch()->nextId;
-
-            //create reord for this database
-            $inserted = $this->mainDatabase->table($this->getTable())->insert([
-                "account_id" => $accountId,
-                "user_id" => $this->user->getId(),
-                "team_id" => $this->teamManager->getTeam()->getId(),
+        
+        //four scenarios can happen now:
+        
+        if($targetAccountId && !$sourceAccountId){  //1) target team already has account, but source team doesnt (add source team id into target team account)
+            $this->addTeamUnderAccount($sourceTeam->getId(), $sourceUserId, $targetAccountId);
+        } elseif(!$targetAccountId && $sourceAccountId){ //2) target team doesnt have account, but source team does (add target team into existing account id)
+            $this->addTeamUnderAccount($targetTeam->getId(), $userId, $sourceAccountId);
+        } elseif(!$targetAccountId && !$sourceAccountId) {    //3) no multiaccount exists (CREATE NEW)
+            $accountId = $this->addTeamUnderAccount($sourceTeam->getId(), $sourceUserId);
+            $this->addTeamUnderAccount($targetTeam->getId(), $userId, $accountId);
+        } else { //4) both of them already exists (MERGE strategy)
+            $this->mainDatabase->table($this->getTable())->where("account_id", $targetAccountId)->update([
+                "account_id" => $sourceAccountId,
             ]);
         }
-
-        $inserted = $this->mainDatabase->table($this->getTable())->insert([
-            "account_id" => $accountId,
-            "user_id" => $userId,
-            "team_id" => $targetTeam->getId(),
-        ]);
 
         return $targetTeam;
+    }
+
+    /**
+     * Add team underneath account id
+     * @param int $teamId
+     * @param int|null $accountId
+     * @return int
+     */
+    private function addTeamUnderAccount(int $teamId, int $userId, ?int $accountId = null): int
+    {
+        if (!$accountId) {
+            $accountId = $this->mainDatabase->table($this->getTable())->select("MAX(account_id) + 1 AS nextId")->fetch()->nextId;
+        }
+
+        $this->mainDatabase->table($this->getTable())->insert([
+            "account_id" => $accountId,
+            "user_id" => $userId,
+            "team_id" => $teamId,
+        ]);
+        
+        return $accountId;
     }
 
     public function update(array $data, int $resourceId, ?int $subResourceId = null): BaseModel
