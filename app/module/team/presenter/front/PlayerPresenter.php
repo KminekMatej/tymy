@@ -144,9 +144,6 @@ class PlayerPresenter extends SecuredPresenter
 
     public function handleDelete()
     {
-        if (!$this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("USR_UPDATE"))) {
-            return;
-        }
         $bind = $this->getRequest()->getPost();
         try {
             $this->userManager->delete($bind["id"]);
