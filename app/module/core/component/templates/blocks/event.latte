@@ -4,13 +4,13 @@
     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
         <a class="dropdown-item" href="{plink :Event:Default:}">{_common.allOfThem}</a>
         <a class="dropdown-item" href="{plink :Event:Report:}">{_event.attendanceView}</a>
-        <div class="dropdown-divider"></div>
-        {ifset $events}
+        {if !empty($events)}
+            <div class="dropdown-divider"></div>
             <a n:foreach="$events as $ev" class="dropdown-item" href="{plink :Event:Detail: $ev->getWebName()}">
                 {if $ev->getAttendancePending()}<span class="badge badge-danger"><i class="fa fa-info" aria-hidden="true"></i></span>{/if}
                 <span style="color: #{$eventTypes[$ev->getType()]->getColor()}" n:if="array_key_exists($ev->getType(), $eventTypes)">{$ev->getStartTime()|date:'j.n.'} - {$ev->getCaption()}</span>
                 <span n:if="!array_key_exists($ev->getType(), $eventTypes)">{$ev->getStartTime()|date:'j.n.'} - {$ev->getCaption()}</span>
             </a>
-        {/ifset}
+        {/if}
     </div>
 </li>
