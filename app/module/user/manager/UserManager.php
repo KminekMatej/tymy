@@ -511,7 +511,14 @@ class UserManager extends BaseManager
 
     protected function allowDelete(?int $recordId): void
     {
-        $this->respondNotAllowed();
+        $this->userModel = $this->getById($recordId);
+        if (empty($this->userModel)) {
+            $this->respondNotFound();
+        }
+
+        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("USR_UPDATE"))) {
+            $this->responder->E4004_DELETE_NOT_PERMITTED(User::MODULE, $recordId);
+        }
     }
 
     protected function allowRead(?int $recordId = null): void

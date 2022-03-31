@@ -152,7 +152,7 @@ class PlayerPresenter extends SecuredPresenter
             $this->redirect('this');
         }
 
-        $this->flashMessage($this->translator->translate("common.alerts.userSuccesfullyDeleted"), "success");
+        $this->flashMessage($this->translator->translate("common.alerts.userSuccesfullyDeleted") . " ({$bind["id"]})", "success");
         $this->redirect(':Team:Default:');
     }
 
