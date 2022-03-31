@@ -156,6 +156,6 @@ class EventPresenter extends SettingBasePresenter
             $this->handleTymyResponse($tResp);
         }
 
-        $this->redirect('this');
+        $this->redirect(':Setting:Event:');
     }
 }
