@@ -39,9 +39,9 @@ class Status extends BaseModel
         return $this->caption;
     }
 
-    public function getIcon(): ?string
+    public function getIcon(): string
     {
-        return $this->icon;
+        return $this->icon ?? 'fa-solid fa-question fa-beat-fade';
     }
 
     public function getStatusSetId(): int
