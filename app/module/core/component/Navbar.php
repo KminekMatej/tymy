@@ -148,7 +148,6 @@ class NavbarControl extends Control
         $this->initDebts();
         $this->initFiles();
 
-            \Tracy\Debugger::barDump([$this->template->accessibleSettings, $this->presenter->getAccessibleSettings()], "In render");
         $this->template->render();
     }
 
