@@ -45,7 +45,11 @@
 
 <script>
     $(document).ready(function () {
+        var defaultView = (localStorage.getItem("fcDefaultView") !== null ? localStorage.getItem("fcDefaultView") : "month"); 
+        var defaultStartDate = (localStorage.getItem("fcDefaultStartDate") !== null ? localStorage.getItem("fcDefaultStartDate") : moment()); 
+
         $('#calendar').fullCalendar({
+            defaultView: defaultView, 
             locale: locale,
             height: 500,
             fixedWeekCount: false,
@@ -66,8 +70,11 @@
                                 center: '',
                                 right: 'today month,basicWeek,basicDay prev,next'
                             },
-                            viewRender: function () {
+                            viewRender: function (view) {
                                 loadAgenda({plink :Event:Default:});
+                                localStorage.setItem("fcDefaultView", view.name);
+                                localStorage.setItem("fcDefaultStartDate", view.intervalStart);
+                                localStorage.setItem("fcDefaultEndDate", view.intervalEnd);
                             },
                             loading: function (isLoading, view) {
                                 if (isLoading) {
@@ -79,6 +86,8 @@
                                 }
                             }
                         });
+        
+                        $('#calendar').fullCalendar('gotoDate', defaultStartDate); 
                         $('#calendar DIV.fc-header-toolbar').addClass("card-header");
                         $('#calendar DIV.fc-button-group').addClass("btn-group");
                         $('#calendar DIV.fc-header-toolbar BUTTON').each(function () {

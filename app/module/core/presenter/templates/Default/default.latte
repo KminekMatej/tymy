@@ -17,7 +17,10 @@
 <script src="{$publicPath}/resources/fullcalendar/locale/{$locale}.js?ver={$appver}"></script>
 <script>
     $(document).ready(function () {
+        var defaultView = (localStorage.getItem("fcDefaultView") !== null ? localStorage.getItem("fcDefaultView") : "month"); 
+        var defaultStartDate = (localStorage.getItem("fcDefaultStartDate") !== null ? localStorage.getItem("fcDefaultStartDate") : moment()); 
         $('#calendar').fullCalendar({
+            defaultView: defaultView, 
             locale: locale,
             contentHeight: 350,
             fixedWeekCount: false,
@@ -33,6 +36,11 @@
                 center: '',
                 right: 'today prev,next'
             },
+            viewRender: function (view) {
+                localStorage.setItem("fcDefaultView", view.name);
+                localStorage.setItem("fcDefaultStartDate", view.intervalStart);
+                localStorage.setItem("fcDefaultEndDate", view.intervalEnd);
+            },
             loading: function (isLoading, view) {
                 if (isLoading) {
                     $('#calendar DIV.fc-header-toolbar BUTTON.fc-prev-button').prop('disabled', true);
@@ -43,6 +51,7 @@
                 }
             }
         });
+        $('#calendar').fullCalendar('gotoDate', defaultStartDate); 
         $('#calendar DIV.fc-header-toolbar').addClass("card-header");
         $('#calendar DIV.fc-button-group').addClass("btn-group");
         $('#calendar DIV.fc-header-toolbar BUTTON').each(function () {
