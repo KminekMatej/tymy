@@ -47,7 +47,7 @@ function updateAttendance(btn, purl) {
     var id = $(btn).closest("DIV.btn-group").attr("id");
     $("DIV.btn-group#" + id + " BUTTON").removeClass("active");
     $(btn).addClass("active");
-    var note = $("DIV.btn-group#" + id + " INPUT").val() ? $("DIV.btn-group#" + id + " INPUT").val() : "";
+    var note = $("INPUT#preStatusDesc-" + id + "").val() ? $("INPUT#preStatusDesc-" + id + "").val() : "";
     disableActionRow(id, true);
     $.nette.ajax({
         url: purl + "&desc=" + note,
