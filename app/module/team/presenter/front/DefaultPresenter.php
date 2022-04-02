@@ -86,7 +86,7 @@ class DefaultPresenter extends SecuredPresenter
             $this->flashMessage($this->translator->translate("common.alerts.nobodyFound") . "!");
         }
 
-        $this->template->userType = $this->userType;
+        $this->template->userType = $this->userType ?? null;
         $this->template->users = $users;
         $this->template->allMails = join(",", $allMails);
     }
