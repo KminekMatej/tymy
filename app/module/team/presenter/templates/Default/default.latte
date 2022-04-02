@@ -12,7 +12,7 @@
             <div class="settings-bar"><a href="mailto:{$allMails}" class="btn btn-outline-light" title="{_team.newMailToAll}" role="button" aria-pressed="true"><i class="fa fa-envelope" aria-hidden="true"></i></a></div>
         </div>
     </div>
-    <div class="row">
+    <div class="row" n:snippet="userList">
         {if $users}
             <div n:foreach="$users as $u" class="col-md-3 my-2">
                 <div class="card sh-box set-box">
@@ -33,7 +33,12 @@
                         </div>
                     </a>
                     <div class="btnbox">
-                        <a href="mailto:{$u->getEmail()}" n:if="$u->getEmail()" class="btn btn-sm btn-light btn-light-bordered" title="{_team.newMailTo} {$u->getEmail()}" role="button" aria-pressed="true"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+                        {if $userType == 'INIT'}
+                            <a n:href="approve! $u->getId()" class="btn btn-sm ajax btn-outline-primary" title="{_team.approveAsPlayer}"><i class="fa fa-check" aria-hidden="true"></i></a>
+                            <a n:href="delete! $u->getId()" class="btn btn-sm btn-outline-danger" title="{_common.delete}" onclick="return confirm({_discussion.alerts.confirmDeletePost})"><i class="fa fa-times" aria-hidden="true"></i></a>
+                        {else}
+                            <a href="mailto:{$u->getEmail()}" n:if="$u->getEmail()" class="btn btn-sm btn-light btn-light-bordered" title="{_team.newMailTo} {$u->getEmail()}" role="button" aria-pressed="true"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+                        {/if}
                     </div>
                 </div>
             </div>

@@ -86,6 +86,7 @@ class DefaultPresenter extends SecuredPresenter
             $this->flashMessage($this->translator->translate("common.alerts.nobodyFound") . "!");
         }
 
+        $this->template->userType = $this->userType;
         $this->template->users = $users;
         $this->template->allMails = join(",", $allMails);
     }
@@ -118,5 +119,31 @@ class DefaultPresenter extends SecuredPresenter
 
         $this->template->jerseyList = $jerseyList;
         $this->addBreadcrumb($this->translator->translate("team.jersey", 2), $this->link(":Team:Default:jerseys"));
+    }
+    
+    public function handleApprove(int $userId)
+    {
+        try {
+            $this->userManager->update(["status" => User::STATUS_PLAYER], $userId);
+        } catch (TymyResponse $tResp) {
+            $this->handleTymyResponse($tResp);
+            $this->redirect('this');
+        }
+
+        $this->redrawControl("userList");
+        $this->redrawNavbar();
+    }
+    
+    public function handleDelete(int $userId)
+    {
+        try {
+            $this->userManager->delete($userId);
+        } catch (TymyResponse $tResp) {
+            $this->handleTymyResponse($tResp);
+            $this->redirect('this');
+        }
+
+        $this->redrawControl("userList");
+        $this->redrawNavbar();
     }
 }

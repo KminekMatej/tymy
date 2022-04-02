@@ -75,10 +75,12 @@ class NavbarControl extends Control
 
     private function initPlayers(): void
     {
+        /* @var $me \Tymy\Module\User\Model\User */
+        $me = $this->userManager->getById($this->user->getId());
         $users = $this->userManager->getList();
         $this->template->counts = $this->userManager->getCounts($users);
-        $this->template->playersWarnings = $this->userManager->getWarnings($users);
-        $this->template->me = $this->userManager->getById($this->user->getId());
+        $this->template->playersWarnings = $me->getWarnings();
+        $this->template->me = $me;
     }
 
     private function initPolls(): void

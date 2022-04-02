@@ -60,6 +60,7 @@ name: Nazwa drużyny
 sport: Sport
 defaultLanguage: Domyślny język
 hideDiscDesc: Ukryj opis dyskusji
+approveAsPlayer: Zatwierdź jako gracz
 errors:
     imgFileCorrupted: "Plik nie jest obrazkiem, lub jest uszkodzony"
 alerts:

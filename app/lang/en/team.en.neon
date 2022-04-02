@@ -60,6 +60,7 @@ name: Name
 sport: Sport
 defaultLanguage: Default language
 hideDiscDesc: Hide discussion description
+approveAsPlayer: Approve as player
 errors:
     imgFileCorrupted: "File is not a pictute, or is corrupted"
 alerts:

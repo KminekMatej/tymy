@@ -61,6 +61,7 @@ name: Název týmu
 sport: Sport
 defaultLanguage: Výchozí jazyk
 hideDiscDesc: Skrýt popisky diskusí
+approveAsPlayer: Schválit jako hráče
 errors:
     imgFileCorrupted: "Soubor není obrázek, nebo je poškozený"
 alerts:
