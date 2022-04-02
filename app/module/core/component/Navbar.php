@@ -80,6 +80,7 @@ class NavbarControl extends Control
         $users = $this->userManager->getList();
         $this->template->counts = $this->userManager->getCounts($users);
         $this->template->playersWarnings = $me->getWarnings();
+        $this->template->inits = $this->user->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('SEE_INITS')) ? $this->template->counts["INIT"] : 0;
         $this->template->me = $me;
     }
 

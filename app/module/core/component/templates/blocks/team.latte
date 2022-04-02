@@ -1,5 +1,7 @@
 <li class="nav-item dropdown" name="team">
-    {if $playersWarnings > 0}<span class="badge badge-pill badge-danger badge-new">{$playersWarnings}</span>{/if}
+    {if ($playersWarnings + $inits) > 0}
+        <span class="badge badge-pill {if $playersWarnings > 0}badge-danger{else}badge-primary{/if} badge-new">{$playersWarnings + $inits}</span>
+    {/if}
     <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-users" aria-hidden="true"></i> {_team.team,1}</a>    
     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
         <a class="dropdown-item" href="{plink :Team:Player: $me->getWebName()}">{$me->getDisplayName()} <span class="badge badge-danger" n:if="$me->getWarnings()">{$me->getWarnings()}</span></a>
