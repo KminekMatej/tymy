@@ -2,11 +2,11 @@
 
 namespace Tymy\Module\Core\Service;
 
+use Kdyby\Translation\Translator;
 use Nette\Application\LinkGenerator;
 use Nette\Application\UI\ITemplateFactory;
 use Nette\Mail\Mailer;
 use Nette\Mail\Message;
-use Tracy\Debugger;
 use Tymy\Module\Core\Manager\StringsManager;
 use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\Team\Model\Team;
@@ -22,6 +22,7 @@ class MailService
     public const ROBOT_EMAIL_FROM_S = "robot@%s.tymy.cz";
 
     private TeamManager $teamManager;
+    private Translator $translator;
     private Team $team;
     private string $teamDomain;
     private LinkGenerator $linkGenerator;
@@ -29,13 +30,14 @@ class MailService
     private Mailer $mailSender;
     private StringsManager $stringsManager;
 
-    public function __construct(TeamManager $teamManager, LinkGenerator $linkGenerator, ITemplateFactory $templateFactory, Mailer $mailer, StringsManager $stringsManager)
+    public function __construct(TeamManager $teamManager, LinkGenerator $linkGenerator, ITemplateFactory $templateFactory, Mailer $mailer, StringsManager $stringsManager, Translator $translator)
     {
         $this->teamManager = $teamManager;
         $this->linkGenerator = $linkGenerator;
         $this->templateFactory = $templateFactory;
         $this->mailSender = $mailer;
         $this->stringsManager = $stringsManager;
+        $this->translator = $translator;
     }
 
     private function startup()
@@ -58,22 +60,33 @@ class MailService
         $this->startup();
         $body = $this->stringsManager->translateBy("register", "reg_mail_body_5s", $login, $firstName, $lastName, $email, $note);
         $subject = $this->teamDomain . ": " . $this->stringsManager->translateBy("register", "reg_mail_subj", $this->teamDomain);
-        $this->sendMail($nameTo, $emailTo, $body, $subject);
+        $this->sendMail($nameTo, $emailTo, $body, $subject, $email);
     }
 
-    public function mailLoginApproved(string $name, string $email)
+    /**
+     * Send email to user that his registration has been approved
+     * @param string $name
+     * @param string $email
+     * @return void
+     */
+    public function mailLoginApproved(string $name, string $email): void
     {
         $this->startup();
-        $body = $this->stringsManager->translateBy("register", "allow_mail_body_1s", $this->teamDomain);
-        $subject = $this->stringsManager->translateBy("profile", "allow_mail_subj", $this->teamDomain);
+        $body = $this->translator->translate("team.registrationApproved", $this->teamDomain);
+        $subject = $this->translator->translate("team.registrationApprovedSubject", $this->teamDomain);
         $this->sendMail($name, $email, $body, $subject);
     }
 
-    public function mailLoginDenied(string $name, string $email)
+    /**
+     * Send email to user that his registration has been denied
+     * @param string $name
+     * @param string $email
+     */
+    public function mailLoginDenied(string $name, string $email): void
     {
         $this->startup();
-        $body = $this->stringsManager->translateBy("profile", "deny_mail_body_1s", $this->teamDomain);
-        $subject = $this->stringsManager->translateBy("profile", "deny_mail_subj", $this->teamDomain);
+        $body = $this->translator->translate("team.registrationDenied", $this->teamDomain);
+        $subject = $this->translator->translate("team.registrationDeniedSubject", $this->teamDomain);
         $this->sendMail($name, $email, $body, $subject);
     }
 
@@ -85,13 +98,17 @@ class MailService
         $this->sendMail($name, $email, $body, $subject);
     }
 
-    private function sendMail(string $name, string $email, string $body, string $subject = null)
+    private function sendMail(string $name, string $email, string $body, ?string $subject = null, ?string $replyTo = null): void
     {
         $mail = new Message();
         $mail->setFrom(sprintf(self::ROBOT_EMAIL_FROM_S, $this->team->getSysName()), $this->team->getSysName())
-                ->addTo($email, $name)
-                ->setSubject($subject)
-                ->setBody($body);
+            ->addTo($email, $name)
+            ->setSubject($subject)
+            ->setBody($body);
+
+        if ($replyTo) {
+            $mail->addReplyTo($replyTo);
+        }
 
         $this->mailSender->send($mail);
     }
