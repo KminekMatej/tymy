@@ -74,6 +74,7 @@ alerts:
     multiaccountRemoved: Zespół %team% został usunięty
     userAdded: Użytkownik %fullname% został pomyślnie dodany
     debtAdded: Dług stworzony
+    automail: Nie odpowiadaj na tę wiadomość, ponieważ została wygenerowana automatycznie.
 months:
     january: Styczeń    
     february: Luty

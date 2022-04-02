@@ -66,3 +66,7 @@ errors:
     imgFileCorrupted: "Soubor není obrázek, nebo je poškozený"
 alerts:
     signOffNeeded: Došlo ke změně jazyka - změna se projeví až po přihlášení a odhlášení
+    registrationApprovedSubject: Registrace do %s povolena
+    registrationDeniedSubject: Registrace do %s zamítnua
+    registrationApproved: Byl Vám udělen přístup do aplikace %s. Nyní se můžete přihlásit
+    registrationDenied: Byl Vám zamítnut přístup do aplikace %s

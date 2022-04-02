@@ -74,6 +74,7 @@ alerts:
     multiaccountRemoved: Team %team% succesfully removed
     userAdded: User %fullname% succesfully added
     debtAdded: Debt created
+    automail: "Don't respond at this message, since its been generated automatically."
 months:
     january: January
     february: February

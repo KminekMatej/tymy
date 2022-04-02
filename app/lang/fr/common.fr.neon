@@ -74,6 +74,7 @@ alerts:
     multiaccountRemoved: "L'équipe %team% enlevée avec succès Team %team% succesfully added"
     userAdded: Utilisateur %fullname% ajouté avec succès
     debtAdded: Dette créée
+    automail: Ne répondez pas à ce message, il a été généré automatiquement.
 months:
     january: Janvier
     february: Février

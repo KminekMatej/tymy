@@ -65,3 +65,7 @@ errors:
     imgFileCorrupted: "Le fichier n'est pas une image ou il est endommagé"
 alerts:
     signOffNeeded: Language changed - please logout & login for language to change
+    registrationApprovedSubject: Inscription à %s approuvée
+    registrationDeniedSubject: Inscription à %s refusée
+    registrationApproved: Votre inscription à %s a été approuvée. Vous pouvez vous connecter maintenant
+    registrationDenied: Votre inscription à %s a été refusée

@@ -74,6 +74,7 @@ alerts:
     multiaccountRemoved: Tým %team% byl odebrán
     userAdded: Uživatel %fullname% byl přidán
     debtAdded: Dluh byl přidán
+    automail: Tento email byl automaticky vygenerován. Prosím neodpovídejte.
 months:
     january: Leden
     february: Únor

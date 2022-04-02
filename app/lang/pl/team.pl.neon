@@ -65,3 +65,7 @@ errors:
     imgFileCorrupted: "Plik nie jest obrazkiem, lub jest uszkodzony"
 alerts:
     signOffNeeded: Language changed - please logout & login for language to change
+    registrationApprovedSubject: Rejestracja do %s zatwierdzona
+    registrationDeniedSubject: Rejestracja do %s odrzucona
+    registrationApproved: Twoja rejestracja do %s została zatwierdzona. Możesz się teraz zalogować
+    registrationDenied: Twoja rejestracja w %s została odrzucona

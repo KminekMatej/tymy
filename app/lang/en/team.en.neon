@@ -65,3 +65,7 @@ errors:
     imgFileCorrupted: "File is not a pictute, or is corrupted"
 alerts:
     signOffNeeded: Language changed - please logout & login for language to change
+    registrationApprovedSubject: Registration to %s approved
+    registrationDeniedSubject: Registration to %s denied
+    registrationApproved: Your registration to %s has been approved. You can login now
+    registrationDenied: Your registration to %s has been denied
