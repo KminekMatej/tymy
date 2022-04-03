@@ -15,7 +15,7 @@
 
 {block content}
 
-<div class="container poll" n:attr="data-min-items => $poll->getMinItems() ?: 0, data-max-items=> $poll->getMaxItems() ?: 999" data-show-results="{$poll->getShowResults()}" data-radio-layout="{$radioLayout ? 'true' : 'false'}">
+<div class="container-fluid container-md poll" n:attr="data-min-items => $poll->getMinItems() ?: 0, data-max-items=> $poll->getMaxItems() ?: 999" data-show-results="{$poll->getShowResults()}" data-radio-layout="{$radioLayout ? 'true' : 'false'}">
     <div class="row">
         <div class="col my-3">
             <div class="card sh-box">

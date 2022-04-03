@@ -21,7 +21,7 @@
 {block newpost}
 {control newPost $discussionPosts, $search, $suser}
 {/block}
-<div class="container discussion" n:snippet="discussion">
+<div class="container-fluid container-md discussion" n:snippet="discussion">
     {foreach $discussionPosts->getPosts() as $item}
         {if $item->getCreatedById() == $userId}
             {include 'components/mine-post.latte', item => $item}
@@ -30,7 +30,7 @@
         {/if}
     {/foreach}
 </div>
-<div class="container navigation">
+<div class="container-fluid container-md navigation">
     <div class="row">
         <div class="col">
             <nav aria-label="Page navigation">
