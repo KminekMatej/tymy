@@ -45,8 +45,8 @@
 
 <script>
     $(document).ready(function () {
-        var defaultView = (localStorage.getItem("fcDefaultView") !== null ? localStorage.getItem("fcDefaultView") : "month"); 
-        var defaultStartDate = (localStorage.getItem("fcDefaultStartDate") !== null ? localStorage.getItem("fcDefaultStartDate") : moment()); 
+        var defaultView = (localStorage.getItem("fcDefaultView") != null ? localStorage.getItem("fcDefaultView") : "month"); 
+        var defaultStartDate = (localStorage.getItem("fcDefaultStartDate") != null ? localStorage.getItem("fcDefaultStartDate") : moment()); 
 
         $('#calendar').fullCalendar({
             defaultView: defaultView, 
