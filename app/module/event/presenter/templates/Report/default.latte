@@ -95,7 +95,7 @@
                                 <td>
                                     {foreach $userStats as $statusId => $count}
                                         {var $status = $statusList[$statusId]}
-                                        <div title="{$status->getCaption()}">
+                                        <div style="min-width: 60px; font-size: 9pt;" title="{$status->getCaption()}">
                                             {$count}x <i n:if="$status" class="{$status->getIcon()}" style="color: {$status->getColor()}"></i>
                                         </div>
                                     {/foreach}
@@ -106,7 +106,7 @@
                                 <td n:foreach="$events as $event" colspan="3">
                                     {foreach $eventStats[$event->getId()] as $statusId => $count}
                                         {var $status = $statusList[$statusId]}
-                                        <div title="{$status->getCaption()}">
+                                        <div style="min-width: 60px; font-size: 9pt;" title="{$status->getCaption()}">
                                             {$count}x <i n:if="$status" class="{$status->getIcon()}" style="color: {$status->getColor()}"></i>
                                         </div>
                                     {/foreach}
