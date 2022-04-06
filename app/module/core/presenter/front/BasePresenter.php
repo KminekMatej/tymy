@@ -40,6 +40,7 @@ abstract class BasePresenter extends RootPresenter
         $this->template->css = Debugger::$productionMode ? "min.css" : "css";
 
         $this->template->team = $this->team;
+        Debugger::barDump($this->team);
 
         $this->template->wwwDir = ROOT_DIR . "/www";
 
