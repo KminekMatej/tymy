@@ -566,9 +566,11 @@ class UserManager extends BaseManager
             }
         }
 
-        if (array_key_exists("email", $data) && $this->getIdByEmail($data["email"]) !== $this->userModel->getId()) {
-            //changing mail to already existing one
-            $this->responder->E4002_EDIT_NOT_PERMITTED(User::MODULE, $recordId);
+        if (array_key_exists("email", $data)) {
+            $userIdWithThatEmail = $this->getIdByEmail($data["email"]);
+            if ($userIdWithThatEmail && $userIdWithThatEmail !== $this->userModel->getId()) { //changing mail to already existing one
+                $this->responder->E4002_EDIT_NOT_PERMITTED(User::MODULE, $recordId);
+            }
         }
 
         //changing user status from deleted?
