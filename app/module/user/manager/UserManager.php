@@ -347,7 +347,6 @@ class UserManager extends BaseManager
      */
     public function register(array $array): User
     {
-        Debugger::barDump($array);
         $this->allowRegister($array);
 
         $array["status"] = "INIT";
@@ -544,19 +543,19 @@ class UserManager extends BaseManager
         if (!$canEditFull) {
             //editing myself - cannot edit roles, canEditCallName, status, login and callName (when user cannot edit callName)
             if (isset($data["roles"]) && $data["roles"] !== $this->userModel->getRoles()) {
-                $this->responder->E4002_EDIT_NOT_PERMITTED(User::MODULE, $recordId);
+                $this->responder->E403_FORBIDDEN("Changing roles is forbidden");
             }
             if (isset($data["canEditCallName"]) && $data["canEditCallName"] !== $this->userModel->getCanEditCallName()) {
-                $this->responder->E4002_EDIT_NOT_PERMITTED(User::MODULE, $recordId);
+                $this->responder->E403_FORBIDDEN("Changing canEditCallName is forbidden");
             }
             if (isset($data["status"]) && $data["status"] !== $this->userModel->getStatus()) {
-                $this->responder->E4002_EDIT_NOT_PERMITTED(User::MODULE, $recordId);
+                $this->responder->E403_FORBIDDEN("Changing status is forbidden");
             }
             if (isset($data["login"]) && $data["login"] !== $this->userModel->getLogin()) {
-                $this->responder->E4002_EDIT_NOT_PERMITTED(User::MODULE, $recordId);
+                $this->responder->E403_FORBIDDEN("Changing login is forbidden");
             }
             if (isset($data["callName"]) && !$this->userModel->getCanEditCallName()) {
-                $this->responder->E4002_EDIT_NOT_PERMITTED(User::MODULE, $recordId);
+                $this->responder->E403_FORBIDDEN("Editing call name forbidden");
             }
         }
 
@@ -569,7 +568,7 @@ class UserManager extends BaseManager
         if (array_key_exists("email", $data)) {
             $userIdWithThatEmail = $this->getIdByEmail($data["email"]);
             if ($userIdWithThatEmail && $userIdWithThatEmail !== $this->userModel->getId()) { //changing mail to already existing one
-                $this->responder->E4002_EDIT_NOT_PERMITTED(User::MODULE, $recordId);
+                $this->responder->E403_FORBIDDEN("This e-mail already exists");
             }
         }
 
