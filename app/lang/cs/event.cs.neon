@@ -31,6 +31,8 @@ canResult: Zadat výsledky může
 canView-sm: Vidět
 canPlan-sm: Přihlásit
 canResult-sm: Zadat
+plan: Plán
+result: Výsledek
 displayHistory: Zobrazit historii
 eventType: Typ události|Typy událostí
 errors:
