@@ -4,6 +4,7 @@ namespace Tymy\Module\Setting\Presenter\Front;
 
 use Nette\Application\UI\Form;
 use stdClass;
+use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Multiaccount\Manager\MultiaccountManager;
 use Tymy\Module\Setting\Presenter\Front\SettingBasePresenter;
 
@@ -17,8 +18,13 @@ class MultiaccountPresenter extends SettingBasePresenter
 
     public function handleMultiaccountRemove($team)
     {
-        $this->multiaccountManager->delete($team);
-        $this->flashMessage($this->translator->translate("common.alerts.multiaccountRemoved", null, ['team' => $team]), "success");
+        try {
+            $this->multiaccountManager->delete($team);
+            $this->flashMessage($this->translator->translate("common.alerts.multiaccountRemoved", null, ['team' => $team]), "success");
+        } catch (TymyResponse $tResp) {
+            $this->handleTymyResponse($tResp);
+        }
+
         $this->redirect(":Setting:Multiaccount:");
     }
 
@@ -31,13 +37,17 @@ class MultiaccountPresenter extends SettingBasePresenter
         $form->addSubmit("save");
 
         $form->onSuccess[] = function (Form $form, stdClass $values) {
-            /* @var $multiaccountManager MultiaccountManager */
-            $this->multiaccountManager->create([
-                "login" => $values->username,
-                "password" => $values->password,
-                ], $values->sysName);
+            try {
+                /* @var $multiaccountManager MultiaccountManager */
+                $this->multiaccountManager->create([
+                    "login" => $values->username,
+                    "password" => $values->password,
+                    ], $values->sysName);
 
-            $this->flashMessage($this->translator->translate("common.alerts.multiaccountAdded", null, ["team" => $values->sysName]));
+                $this->flashMessage($this->translator->translate("common.alerts.multiaccountAdded", null, ["team" => $values->sysName]));
+            } catch (TymyResponse $tResp) {
+                $this->handleTymyResponse($tResp);
+            }
             $this->redirect(":Setting:Multiaccount:");
         };
         return $form;
