@@ -56,9 +56,9 @@
                         <thead>
                             <tr>
                                 <th>{_team.PLAYER, 2}</th>
-                                    {var $eventStats = []}
+                                    {var $eventStats = ['plan' => [], 'result' => []]}
                                 <th n:foreach="$events as $event" class="text-center" colspan="3">
-                                    {var $eventStats[$event->getId()] = []}
+                                    {var $eventStats['plan'][$event->getId()] = $eventStats['result'][$event->getId()] = []}
                                     <a href="{plink :Event:Detail: $event->getWebName()}">
                                         <div class="event-caption-oneline">{$event->getCaption()}</div>
                                         <div>{$event->getStartTime()|date:\Tymy\Module\Core\Model\BaseModel::DAY_CZECH_FORMAT}</div>
@@ -70,7 +70,7 @@
                         <tbody>
                             <tr n:foreach="$users as $usr">
                                 <th scope="row"><a href="{plink :Team:Player: $usr->getWebName()}">{$usr->getDisplayName()}</a></th>
-                                    {var $userStats = []}
+                                    {var $userStats = ['plan' => [], 'result' => []]}
                                     {foreach $events as $event}
                                         {var $userAttendance = $event->getAttendance()[$usr->getId()] ?? null}
                                         {var $title = $usr->getDisplayName() . ', ' . $event->getCaption() . ' ' . ($event->getStartTime()|date:\Tymy\Module\Core\Model\BaseModel::DAY_CZECH_FORMAT) . ':'}
@@ -79,23 +79,32 @@
                                             {var $preStatus = $statusList[$userAttendance->getPreStatusId()] ?? null}
                                             {var $postStatus = $statusList[$userAttendance->getPostStatusId()] ?? null}
                                             {if $preStatus}
-                                                {php $userStats[$userAttendance->getPreStatusId()] = isset($userStats[$userAttendance->getPreStatusId()]) ? $userStats[$userAttendance->getPreStatusId()] + 1 : 1}
-                                                {php $eventStats[$event->getId()][$userAttendance->getPreStatusId()] = isset($eventStats[$event->getId()][$userAttendance->getPreStatusId()]) ? $eventStats[$event->getId()][$userAttendance->getPreStatusId()] + 1 : 1}
+                                                {php $userStats['plan'][$userAttendance->getPreStatusId()] = isset($userStats['plan'][$userAttendance->getPreStatusId()]) ? $userStats['plan'][$userAttendance->getPreStatusId()] + 1 : 1}
+                                                {php $eventStats['plan'][$event->getId()][$userAttendance->getPreStatusId()] = isset($eventStats['plan'][$event->getId()][$userAttendance->getPreStatusId()]) ? $eventStats['plan'][$event->getId()][$userAttendance->getPreStatusId()] + 1 : 1}
                                             {/if}
                                             {if $postStatus}
-                                                {php $userStats[$userAttendance->getPostStatusId()] = isset($userStats[$userAttendance->getPostStatusId()]) ? $userStats[$userAttendance->getPostStatusId()] + 1 : 1}
-                                                {php $eventStats[$event->getId()][$userAttendance->getPostStatusId()] = isset($eventStats[$event->getId()][$userAttendance->getPostStatusId()]) ? $eventStats[$event->getId()][$userAttendance->getPostStatusId()] + 1 : 1}
+                                                {php $userStats['result'][$userAttendance->getPostStatusId()] = isset($userStats['result'][$userAttendance->getPostStatusId()]) ? $userStats['result'][$userAttendance->getPostStatusId()] + 1 : 1}
+                                                {php $eventStats['result'][$event->getId()][$userAttendance->getPostStatusId()] = isset($eventStats['result'][$event->getId()][$userAttendance->getPostStatusId()]) ? $eventStats['result'][$event->getId()][$userAttendance->getPostStatusId()] + 1 : 1}
                                             {/if}
                                         {/if}
 
-                                    <td style="border-right: 0px; text-align: right; min-width: 50px;" title="{$title} {if $preStatus}{$preStatus->getCaption()}{else}{_team.unknownSex}{/if}"><i n:if="$preStatus" class="{$preStatus->getIcon()}" style="color: {$preStatus->getColor()}"></i></td>
+                                    <td class="planBox" title="{$title} {if $preStatus}{$preStatus->getCaption()}{else}{_team.unknownSex}{/if}"><i n:if="$preStatus" class="{$preStatus->getIcon()}" style="color: {$preStatus->getColor()}"></i></td>
                                     <td class="px-0 border-left-0 border-right-0"><i n:if="$preStatus && $postStatus" class="fas fa-angle-right"></i></td>
-                                    <td style="border-left: 0px; text-align: left; min-width: 50px;" title="{$title} {if $postStatus}{$postStatus->getCaption()}{else}{_team.unknownSex}{/if}"><i n:if="$postStatus" class="{$postStatus->getIcon()}" style="color: {$postStatus->getColor()}"></i></td>
+                                    <td class="resultBox" title="{$title} {if $postStatus}{$postStatus->getCaption()}{else}{_team.unknownSex}{/if}"><i n:if="$postStatus" class="{$postStatus->getIcon()}" style="color: {$postStatus->getColor()}"></i></td>
                                     {/foreach}
-                                <td>
-                                    {foreach $userStats as $statusId => $count}
+                                <td class="planBox sumCol">
+                                    {foreach $userStats['plan'] as $statusId => $count}
                                         {var $status = $statusList[$statusId]}
-                                        <div style="min-width: 60px; font-size: 9pt;" title="{$status->getCaption()}">
+                                        <div title="{_event.plan}: {$status->getCaption()}">
+                                            {$count}x <i n:if="$status" class="{$status->getIcon()}" style="color: {$status->getColor()}"></i>
+                                        </div>
+                                    {/foreach}
+                                </td>
+                                <td class="px-0 border-left-0 border-right-0"><i class="fas fa-angle-right"></i></td>
+                                <td class="resultBox sumCol">
+                                    {foreach $userStats['result'] as $statusId => $count}
+                                        {var $status = $statusList[$statusId]}
+                                        <div title="{_event.result}: {$status->getCaption()}">
                                             {$count}x <i n:if="$status" class="{$status->getIcon()}" style="color: {$status->getColor()}"></i>
                                         </div>
                                     {/foreach}
@@ -103,14 +112,25 @@
                             </tr>
                             <tr>
                                 <th scope="row">⅀</th>
-                                <td n:foreach="$events as $event" colspan="3">
-                                    {foreach $eventStats[$event->getId()] as $statusId => $count}
-                                        {var $status = $statusList[$statusId]}
-                                        <div style="min-width: 60px; font-size: 9pt;" title="{$status->getCaption()}">
-                                            {$count}x <i n:if="$status" class="{$status->getIcon()}" style="color: {$status->getColor()}"></i>
-                                        </div>
-                                    {/foreach}
-                                </td>
+                                    {foreach $events as $event}
+                                    <td class="planBox sumRow">
+                                        {foreach $eventStats['plan'][$event->getId()] as $statusId => $count}
+                                            {var $status = $statusList[$statusId]}
+                                            <div title="{_event.plan}: {$status->getCaption()}">
+                                                {$count}x <i n:if="$status" class="{$status->getIcon()}" style="color: {$status->getColor()}"></i>
+                                            </div>
+                                        {/foreach}
+                                    </td>
+                                    <td class="px-0 border-left-0 border-right-0"><i class="fas fa-angle-right"></i></td>
+                                    <td class="resultBox sumRow">
+                                        {foreach $eventStats['result'][$event->getId()] as $statusId => $count}
+                                            {var $status = $statusList[$statusId]}
+                                            <div title="{_event.result}: {$status->getCaption()}">
+                                                {$count}x <i n:if="$status" class="{$status->getIcon()}" style="color: {$status->getColor()}"></i>
+                                            </div>
+                                        {/foreach}
+                                    </td>
+                                {/foreach}
                                 <td></td>
                             </tr>
                         </tbody>
