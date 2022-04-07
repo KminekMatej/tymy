@@ -84,7 +84,13 @@ class PlayerPresenter extends SecuredPresenter
     public function renderDefault($player)
     {
         /* @var $user User */
-        $user = $this->userManager->getById($this->parseIdFromWebname($player));
+        $userId = $this->parseIdFromWebname($player);
+        $user = $this->userManager->getById($userId);
+
+        if (!$user) {
+            $this->flashMessage($this->translator->translate("common.alerts.userNotFound", null, ['id' => $userId]), "danger");
+            $this->redirect(':Team:Default:');
+        }
 
         $this->addBreadcrumb($user->getDisplayName(), $this->link(":Team:Player:", $user->getWebName()));
 
