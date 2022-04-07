@@ -361,6 +361,9 @@ class UserManager extends BaseManager
         $allAdmins = $this->getUsersWithPrivilege(Privilege::SYS("USR_UPDATE"));
 
         foreach ($allAdmins as $admin) {
+            if(empty($admin->getEmail())){  //skip admins without email
+                continue;
+            }
             /* @var $admin User */
             $this->mailService->mailUserRegistered($admin->getCallName(), $admin->getEmail(), $registeredUser->getLogin(), $registeredUser->getEmail(), $registeredUser->getFirstName(), $registeredUser->getLastName(), $array["note"] ?? null);
         }
