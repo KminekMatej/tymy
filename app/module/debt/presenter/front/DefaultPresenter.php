@@ -62,6 +62,7 @@ class DefaultPresenter extends DebtBasePresenter
 
         $paymentString = $this->generateQRCodeString($payeeCallName, $payeeMail, $debt->getPayeeAccountNumber(), $debt->getAmount(), $debt->getVarcode(), $debt->getCaption(), $debt->getCurrencyIso(), $debt->getCountryIso());
         QRcode::png($paymentString, false, QR_ECLEVEL_H, 4, 4); /* @phpstan-ignore-line */
+        $this->terminate();
     }
 
     public function renderNew()
