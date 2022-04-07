@@ -31,6 +31,12 @@ class DetailPresenter extends EventBasePresenter
         $eventId = $this->parseIdFromWebname($resource);
         /* @var $event Event */
         $event = $this->eventManager->getById($eventId);
+
+        if (!$event) {
+            $this->flashMessage($this->translator->translate("event.errors.eventNotExists", null, ['id' => $eventId]), "danger");
+            $this->redirect(':Event:Default:');
+        }
+
         $eventTypes = $this->eventTypeManager->getIndexedList();
 
         $this->addBreadcrumb($event->getCaption(), $this->link(":Event:Detail:", $event->getId() . "-" . $event->getWebName()));
