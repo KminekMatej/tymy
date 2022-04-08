@@ -20,28 +20,28 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-8">
+                        <div class="col-12 col-lg-8">
                             <table class="table">
                                 <tr>
-                                    <th>{_settings.title}:</th><td><input name="caption" data-value="{$debt->getCaption()}" type="text" value="{$debt->getCaption()}" {if !$debt->getCanEdit()}readonly{/if} n:class="col-6, form-control" /></td>
+                                    <th>{_settings.title}:</th><td><input name="caption" data-value="{$debt->getCaption()}" type="text" value="{$debt->getCaption()}" {if !$debt->getCanEdit()}readonly{/if} n:class="col, col-md-6, form-control" /></td>
                                 </tr>
                                 <tr>
                                     <th>{_debt.debtorId}:</th><td>
-                                        <select n:class="col-6, form-control"  style="min-width: 120px" name="debtorId" data-value="{$debt->getDebtorId()}" {if !$debt->getCanEdit()}readonly disabled{/if}>
+                                        <select n:class="col, col-md-6, form-control"  style="min-width: 120px" name="debtorId" data-value="{$debt->getDebtorId()}" {if !$debt->getCanEdit()}readonly disabled{/if}>
                                             <option n:foreach="$userListWithTeam as $debtor" value="{$debtor->getId()}" n:attr="selected => $debtor->getId()==$debt->getDebtorId()">{$debtor->getDisplayName()}</option>
                                         </select>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>{_debt.payeeId}:</th><td>
-                                        <select n:class="col-6, form-control"  style="min-width: 120px" name="payeeId" data-value="{$debt->getPayeeId()}" {if !$debt->getCanEdit()}readonly disabled{/if}>
+                                        <select n:class="col, col-md-6, form-control"  style="min-width: 120px" name="payeeId" data-value="{$debt->getPayeeId()}" {if !$debt->getCanEdit()}readonly disabled{/if}>
                                             <option n:foreach="$payeeList as $payee" value="{$payee->getId()}" n:attr="selected => $payee->getId()==$debt->getPayeeId()">{$payee->getDisplayName()}</option>
                                         </select>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>{_debt.amount}:</th><td>
-                                        <div class="input-group col-6 px-0">
+                                        <div class="input-group col col-md-6 px-0">
                                             <input name="amount" data-value="{$debt->getAmount()}" type="number" value="{$debt->getAmount()}" {if !$debt->getCanEdit()}readonly{/if} class="form-control" />
                                             <select class="form-control" name="currencyIso" data-value="{$debt->getCurrencyIso()}" {if !$debt->getCanEdit()}readonly disabled{/if}>
                                                 <option n:foreach="\Tymy\Module\Debt\Model\Debt::CURRENCIES as $iso => $caption" value="{$iso}" n:attr="selected => $iso==$debt->getCurrencyIso()">{$caption}</option>
@@ -51,10 +51,10 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>{_debt.debtDate}:</th><td><input name="debtDate" data-value="{$debt->getDebtDate()|date:\Tymy\Module\Core\Model\BaseModel::DATE_ENG_FORMAT}" type="date" {if !$debt->getCanEdit()}readonly{/if} value="{$debt->getDebtDate()|date:\Tymy\Module\Core\Model\BaseModel::DATE_ENG_FORMAT}" n:class="col-6, form-control" /></td>
+                                    <th>{_debt.debtDate}:</th><td><input name="debtDate" data-value="{$debt->getDebtDate()|date:\Tymy\Module\Core\Model\BaseModel::DATE_ENG_FORMAT}" type="date" {if !$debt->getCanEdit()}readonly{/if} value="{$debt->getDebtDate()|date:\Tymy\Module\Core\Model\BaseModel::DATE_ENG_FORMAT}" n:class="col, col-md-6, form-control" /></td>
                                 </tr>
                                 <tr>
-                                    <th>{_debt.accountNumber}:</th><td><input name="payeeAccountNumber" data-value="{$debt->getPayeeAccountNumber()}" type="text" {if !$debt->getCanEdit()}readonly{/if} value="{$debt->getPayeeAccountNumber()}" n:class="col-6, form-control" /></td>
+                                    <th>{_debt.accountNumber}:</th><td><input name="payeeAccountNumber" data-value="{$debt->getPayeeAccountNumber()}" type="text" {if !$debt->getCanEdit()}readonly{/if} value="{$debt->getPayeeAccountNumber()}" n:class="col, col-md-6, form-control" /></td>
                                 </tr>
                                 <tr>
                                     <th>{_debt.country}:</th><td>
@@ -64,17 +64,17 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>{_debt.varcode}:</th><td><input name="varcode" data-value="{$debt->getVarcode()}" type="text" value="{$debt->getVarcode()}" {if !$debt->getCanEdit()}readonly{/if} n:class="col-6, form-control" /></td>
+                                    <th>{_debt.varcode}:</th><td><input name="varcode" data-value="{$debt->getVarcode()}" type="text" value="{$debt->getVarcode()}" {if !$debt->getCanEdit()}readonly{/if} n:class="col, col-md-6, form-control" /></td>
                                 </tr>
                                 <tr>
-                                    <th>{_debt.paymentReceived}:</th><td><input name="paymentReceived" data-value="{$debt->getPaymentReceived()|date:\Tymy\Module\Core\Model\BaseModel::DATE_ENG_FORMAT}" type="date" value="{$debt->getPaymentReceived()|date:\Tymy\Module\Core\Model\BaseModel::DATE_ENG_FORMAT}" {if !$debt->getCanEdit()}readonly{/if} n:class="col-6, form-control" /></td>
+                                    <th>{_debt.paymentReceived}:</th><td><input name="paymentReceived" data-value="{$debt->getPaymentReceived()|date:\Tymy\Module\Core\Model\BaseModel::DATE_ENG_FORMAT}" type="date" value="{$debt->getPaymentReceived()|date:\Tymy\Module\Core\Model\BaseModel::DATE_ENG_FORMAT}" {if !$debt->getCanEdit()}readonly{/if} n:class="col, col-md-6, form-control" /></td>
                                 </tr>
                                 <tr>
-                                    <th>{_debt.paymentSend}:</th><td><input name="paymentSent" {if $debt->getCanSetSentDate()}data-value="{$debt->getPaymentSent()|date:\Tymy\Module\Core\Model\BaseModel::DATE_ENG_FORMAT}"{/if} type="date" value="{$debt->getPaymentSent()|date:\Tymy\Module\Core\Model\BaseModel::DATE_ENG_FORMAT}" n:class="col-6, form-control" {if !$debt->getCanSetSentDate()}readonly{/if} /></td>
+                                    <th>{_debt.paymentSend}:</th><td><input name="paymentSent" {if $debt->getCanSetSentDate()}data-value="{$debt->getPaymentSent()|date:\Tymy\Module\Core\Model\BaseModel::DATE_ENG_FORMAT}"{/if} type="date" value="{$debt->getPaymentSent()|date:\Tymy\Module\Core\Model\BaseModel::DATE_ENG_FORMAT}" n:class="col, col-md-6, form-control" {if !$debt->getCanSetSentDate()}readonly{/if} /></td>
                                 </tr>
                             </table>
                         </div>
-                        <div class="col-4">
+                        <div class="col-12 col-lg-4">
                             <img src="{plink :Debt:Default:img $debt->getWebName()}" class="border" />
                         </div>
                     </div>
