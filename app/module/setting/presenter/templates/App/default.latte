@@ -23,11 +23,11 @@
                         <tr><th>{_settings.changeList}:</th><td>
                                 <div>
                                     <a href="https://github.com/KminekMatej/tymy/issues?q=is%3Aissue+milestone%3A{$version->getName()}" target="_blank">{_settings.here}</a> 
-                                    ({_settings.fromPreviousVersion} {$previousPatchVersion->getName()})
+                                    <span n:if="$previousPatchVersion">({_settings.fromPreviousVersion} {$previousPatchVersion->getName()})</span>
                                 </div>
-                                <div>
+                                <div n:if="$firstMinorVersion">
                                     <a href="https://github.com/KminekMatej/tymy/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aclosed%20updated%3A{$firstMinorVersion->getDatetime()|date:\Tymy\Module\Core\Model\BaseModel::DATETIME_ISO_FORMAT|escapeUrl}..{$version->getDatetime()|date:\Tymy\Module\Core\Model\BaseModel::DATETIME_ISO_FORMAT|escapeUrl}" target="_blank">{_settings.here}</a> 
-                                    ({_settings.fromVersion} {$firstMinorVersion->getName()})
+                                    <span>({_settings.fromVersion} {$firstMinorVersion->getName()})</span>
                                 </div>
                             </td></tr>
                         <tr><th>{_settings.authors}:</th>

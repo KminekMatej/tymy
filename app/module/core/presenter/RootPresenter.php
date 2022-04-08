@@ -84,7 +84,12 @@ abstract class RootPresenter extends Presenter
      */
     protected function getCurrentVersion(): Version
     {
-        $cvName = basename(dirname(readlink(TEAM_DIR . "/app"), 1));
+        if (is_link(TEAM_DIR . "/app")) {
+            $cvName = basename(dirname(readlink(TEAM_DIR . "/app"), 1));
+        } else {
+            $cvName = shell_exec("git rev-parse --abbrev-ref HEAD");
+        }
+
         return $cvName == "master" ? new Version($cvName, null) : ($this->getVersions()[$cvName] ?? new Version($cvName, null));
     }
 }
