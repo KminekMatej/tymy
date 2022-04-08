@@ -73,8 +73,8 @@
                             viewRender: function (view) {
                                 loadAgenda({plink :Event:Default:});
                                 localStorage.setItem("fcDefaultView", view.name);
-                                localStorage.setItem("fcDefaultStartDate", view.intervalStart);
-                                localStorage.setItem("fcDefaultEndDate", view.intervalEnd);
+                                localStorage.setItem("fcDefaultStartDate", view.currentRange.start.format());
+                                localStorage.setItem("fcDefaultEndDate", view.currentRange.end.format());
                             },
                             loading: function (isLoading, view) {
                                 if (isLoading) {
