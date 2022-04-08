@@ -3,6 +3,28 @@
     Author     : kminekmatej
 */
 
+DIV#cke_addPost .cke_inner .cke_top .cke_toolbox #cke_18,
+DIV#cke_addPost .cke_inner .cke_top .cke_toolbox #cke_25,
+DIV#cke_addPost .cke_inner .cke_top .cke_toolbox #cke_28,
+DIV#cke_addPost .cke_inner .cke_top .cke_toolbox #cke_31,
+DIV#cke_addPost .cke_inner .cke_top .cke_toolbox #cke_35,
+DIV#cke_addPost .cke_inner .cke_bottom
+{
+    display: none;
+}
+
+@media (min-width: 576px) {
+    DIV#cke_addPost .cke_inner .cke_top .cke_toolbox #cke_18,
+    DIV#cke_addPost .cke_inner .cke_top .cke_toolbox #cke_25,
+    DIV#cke_addPost .cke_inner .cke_top .cke_toolbox #cke_28,
+    DIV#cke_addPost .cke_inner .cke_top .cke_toolbox #cke_31,
+    DIV#cke_addPost .cke_inner .cke_top .cke_toolbox #cke_35,
+    DIV#cke_addPost .cke_inner .cke_bottom
+    {
+        display: block;
+    }
+}
+
 .addPost[data-postId=''] BUTTON#editPost{
     display: none;
 }
