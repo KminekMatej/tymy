@@ -15,7 +15,7 @@ class Order
     public function __construct(string $column, string $order)
     {
         $this->column = $column;
-        $this->order = $order == "ASC" ? "ASC" : "DESC";
+        $this->order = strtoupper($order) == "ASC" ? "ASC" : "DESC";
     }
 
     public function getColumn(): string
