@@ -27,8 +27,7 @@
                     </div>
                     <div class="col-3 px-0 text-right">
                         <button onclick="updatePost({plink :Discussion:Discussion:editpost $discussion->getDiscussion()->getId()})" type="button" class="btn btn-warning mx-1" id="editPost" n:if="$discussion->getDiscussion()->getCanWrite()">{_common.edit}</button>    
-                        <button onclick="addPost({plink :Discussion:Discussion:newpost $discussion->getDiscussion()->getId()})" type="button" class="btn btn-primary" n:if="$discussion->getDiscussion()->getCanWrite()">{_common.insert}</button>    
-
+                        <button onclick="addPost({plink :Discussion:Discussion:newpost $discussion->getDiscussion()->getId()})" type="button" class="btn btn-primary" id="insertPost" n:if="$discussion->getDiscussion()->getCanWrite()">{_common.insert}</button>
                     </div>
                 </form>
             </div>
