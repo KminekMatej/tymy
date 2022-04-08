@@ -22,7 +22,7 @@
                         </div>
                         <span class="mr-auto">
                             <input type="submit" value="{_common.search}" class="form-control btn btn-outline-success mr-sm-2">
-                            <a n:if="$search || $suser" href="{plink :Discussion:Discussion: $discussion->getDiscussion()->getWebName()}" class="btn btn-outline-secondary" title="{_common.refresh}" onclick="$(this).children('i').addClass('fa-spin')"><i class="fa fa-sync" aria-hidden="true"></i></a>
+                            <a n:if="$search" href="{plink :Discussion:Discussion: $discussion->getDiscussion()->getWebName()}" class="btn btn-outline-secondary" title="{_common.refresh}" onclick="$(this).children('i').addClass('fa-spin')"><i class="fa fa-sync" aria-hidden="true"></i></a>
                         </span>
                         <button onclick="updatePost({plink :Discussion:Discussion:editpost $discussion->getDiscussion()->getId()})" type="button" class="btn btn-warning mx-1" id="editPost" n:if="$discussion->getDiscussion()->getCanWrite()">{_common.edit}</button>    
                         <button onclick="addPost({plink :Discussion:Discussion:newpost $discussion->getDiscussion()->getId()})" type="button" class="btn btn-primary" n:if="$discussion->getDiscussion()->getCanWrite()">{_common.insert}</button>    
