@@ -402,11 +402,12 @@ class EventManager extends BaseManager
      * @param int $userId
      * @param DateTime $from
      * @param DateTime $until
+     * @param string|null $order
      * @return Event[]
      */
-    public function getEventsInterval(int $userId, DateTime $from, DateTime $until)
+    public function getEventsInterval(int $userId, DateTime $from, DateTime $until, ?string $order = null)
     {
-        return $this->getListUserAllowed($userId, $this->getIntervalFilter($from, $until));
+        return $this->getListUserAllowed($userId, $this->getIntervalFilter($from, $until), $order);
     }
 
     /**

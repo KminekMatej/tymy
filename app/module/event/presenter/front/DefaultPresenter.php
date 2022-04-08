@@ -25,7 +25,7 @@ class DefaultPresenter extends EventBasePresenter
             $dateTimeFrom = (new DateTime($date))->modify("- 6 months");
         }
 
-        $events = $this->eventManager->getEventsInterval($this->user->getId(), $dateTimeFrom, $dateTimeUntil);
+        $events = $this->eventManager->getEventsInterval($this->user->getId(), $dateTimeFrom, $dateTimeUntil, "startTime__asc");
 
         $this->template->agendaFrom = $dateTimeFrom->format(BaseModel::YEAR_MONTH);
         $this->template->agendaTo = $dateTimeUntil->format(BaseModel::YEAR_MONTH);

@@ -2,6 +2,9 @@
 
 namespace Tymy\Module\Team\Manager;
 
+use Nette\Database\IRow;
+use Nette\Database\Table\ActiveRow;
+use Nette\Http\Request;
 use Nette\NotImplementedException;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
@@ -29,12 +32,29 @@ class TeamManager extends BaseManager
     ];
 
     private string $teamFolder;
+    private Request $httpRequest;
 
-    public function __construct(string $teamFolder, ManagerFactory $managerFactory)
+    public function __construct(string $teamFolder, ManagerFactory $managerFactory, Request $httpRequest)
     {
         parent::__construct($managerFactory);
         $this->database = $this->mainDatabase;
         $this->teamFolder = $teamFolder;
+        $this->httpRequest = $httpRequest;
+    }
+
+    public function map(?IRow $row, $force = false): ?BaseModel
+    {
+        if (!$row) {
+            return null;
+        }
+
+        /* @var $team Team */
+        /* @var $row ActiveRow */
+        $team = parent::map($row, $force);
+
+        $team->setExtendedSysName(str_replace(".tymy.cz", "", $this->httpRequest->getUrl()->getHost()));
+
+        return $team;
     }
 
     public function mapSimple($row): SimpleTeam

@@ -6,3 +6,28 @@
 DIV.event-caption-oneline{
     font-size: 0.7rem;
 }
+
+DIV.container-fluid.report {
+    font-size: 10pt;
+}
+
+TD.planBox{
+    border-right: 0px;
+    text-align: right;
+}
+
+TD.resultBox{
+    border-left: 0px;
+    text-align: left;
+}
+
+TD.sumCol{
+    font-size: 9pt;
+    padding: 0.45rem!important;
+    min-width: 50px;
+}
+
+TD.sumRow{
+    font-size: 9pt;
+    padding: 0.45rem!important;
+}

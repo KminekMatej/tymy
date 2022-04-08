@@ -31,6 +31,8 @@ canResult: Can enter results
 canView-sm: View
 canPlan-sm: Plan
 canResult-sm: Results
+plan: Plan
+result: Result
 displayHistory: Display history
 eventType: Event type|Event types
 errors:

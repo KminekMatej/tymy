@@ -380,6 +380,7 @@ class UserTest extends RequestCase
             "nameDayMonth" => 7,
             "nameDayDay" => 15,
             "accountNumber" => "987654321/0300",
+            "email" => (string)rand(100, 200000) . "_emailtest.tymy.cz",
         ];
     }
 }

@@ -59,7 +59,7 @@ class ApplePush
             "Authorization: Bearer {$token->toString()}",
         ];
 
-        $pushNotification->addParam("team", $team->getSysName());
+        $pushNotification->addParam("team", $team->getExtendedSysName());
 
         $payloadJSON = json_encode([
             'aps' => [

@@ -45,8 +45,8 @@
 
 <script>
     $(document).ready(function () {
-        var defaultView = (localStorage.getItem("fcDefaultView") !== null ? localStorage.getItem("fcDefaultView") : "month"); 
-        var defaultStartDate = (localStorage.getItem("fcDefaultStartDate") !== null ? localStorage.getItem("fcDefaultStartDate") : moment()); 
+        var defaultView = (localStorage.getItem("fcDefaultView") != null ? localStorage.getItem("fcDefaultView") : "month"); 
+        var defaultStartDate = (localStorage.getItem("fcDefaultStartDate") != null ? moment(localStorage.getItem("fcDefaultStartDate")) : moment()); 
 
         $('#calendar').fullCalendar({
             defaultView: defaultView, 
@@ -73,8 +73,8 @@
                             viewRender: function (view) {
                                 loadAgenda({plink :Event:Default:});
                                 localStorage.setItem("fcDefaultView", view.name);
-                                localStorage.setItem("fcDefaultStartDate", view.intervalStart);
-                                localStorage.setItem("fcDefaultEndDate", view.intervalEnd);
+                                localStorage.setItem("fcDefaultStartDate", view.currentRange.start.format());
+                                localStorage.setItem("fcDefaultEndDate", view.currentRange.end.format());
                             },
                             loading: function (isLoading, view) {
                                 if (isLoading) {

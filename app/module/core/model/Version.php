@@ -21,15 +21,15 @@ class Version
     {
         $this->name = $name;
         $this->datetime = $datetime ?: new DateTime();
-        if ($name == "master") {
-            $this->major = "?";
-            $this->minor = "?";
-            $this->patch = "?";
+        $vData = explode(".", $name);
+        if (count($vData) === 3 && is_numeric($vData[0]) && is_numeric($vData[1]) && is_numeric($vData[2])) {
+            $this->major = intval($vData[0]);
+            $this->minor = intval($vData[1]);
+            $this->patch = intval($vData[2]);
         } else {
-            $parts = explode(".", $name);
-            $this->major = $parts[0];
-            $this->minor = $parts[1];
-            $this->patch = $parts[2];
+            $this->major = $name;
+            $this->minor = "0";
+            $this->patch = "0";
         }
     }
 

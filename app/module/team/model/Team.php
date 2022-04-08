@@ -18,6 +18,8 @@ class Team extends BaseModel
     public const MODULE = "team";
 
     private string $sysName;
+    /** @var string Like sysName, but extended with dev or prod postfixes if being run on dev/prod instance */
+    private string $extendedSysName;
     private string $name;
     private string $dbName;
 
@@ -45,6 +47,11 @@ class Team extends BaseModel
     public function getSysName(): string
     {
         return $this->sysName;
+    }
+
+    public function getExtendedSysName(): string
+    {
+        return $this->extendedSysName;
     }
 
     public function getName(): string
@@ -162,6 +169,12 @@ class Team extends BaseModel
     public function setSysName(string $sysName)
     {
         $this->sysName = $sysName;
+        return $this;
+    }
+
+    public function setExtendedSysName(string $extendedSysName)
+    {
+        $this->extendedSysName = $extendedSysName;
         return $this;
     }
 
