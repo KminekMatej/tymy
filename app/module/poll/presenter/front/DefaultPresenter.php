@@ -17,10 +17,15 @@ class DefaultPresenter extends SecuredPresenter
 
     public function actionDefault(?string $resource = null)
     {
-        $this->addBreadcrumb($this->translator->translate("poll.poll", 2), $this->link(":Poll:Default:"));
         if ($resource) {
             $this->setView("poll");
         }
+    }
+
+    public function beforeRender()
+    {
+        parent::beforeRender();
+        $this->addBreadcrumb($this->translator->translate("poll.poll", 2), $this->link(":Poll:Default:"));
     }
 
     public function renderDefault()
