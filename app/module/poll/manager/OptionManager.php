@@ -99,7 +99,7 @@ class OptionManager extends BaseManager
 
         $this->allowDelete($subResourceId);
 
-        return parent::deleteRecord($resourceId);
+        return parent::deleteRecord($subResourceId);
     }
 
     public function getAllowedReaders(BaseModel $record): array
