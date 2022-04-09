@@ -118,9 +118,9 @@ class OptionManager extends BaseManager
 
         $this->allowUpdate($subResourceId);
 
-        parent::updateByArray($resourceId, $data);
+        parent::updateByArray($subResourceId, $data);
 
-        return $this->getById($resourceId);
+        return $this->getById($subResourceId);
     }
 
     /**
