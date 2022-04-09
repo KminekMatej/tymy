@@ -1,5 +1,5 @@
 /* 
-    Created on : 8. 4. 2022, 21:33:09
+    Created on : 8.4.2022, 22:46
     Author     : kminekmatej
 */
 
@@ -7,7 +7,8 @@ DIV#cke_addPost .cke_inner .cke_top .cke_toolbox #cke_18,
 DIV#cke_addPost .cke_inner .cke_top .cke_toolbox #cke_25,
 DIV#cke_addPost .cke_inner .cke_top .cke_toolbox #cke_28,
 DIV#cke_addPost .cke_inner .cke_top .cke_toolbox #cke_31,
-DIV#cke_addPost .cke_inner .cke_top .cke_toolbox #cke_35
+DIV#cke_addPost .cke_inner .cke_top .cke_toolbox #cke_35,
+DIV#cke_addPost .cke_inner .cke_bottom
 {
     display: none;
 }
@@ -17,8 +18,17 @@ DIV#cke_addPost .cke_inner .cke_top .cke_toolbox #cke_35
     DIV#cke_addPost .cke_inner .cke_top .cke_toolbox #cke_25,
     DIV#cke_addPost .cke_inner .cke_top .cke_toolbox #cke_28,
     DIV#cke_addPost .cke_inner .cke_top .cke_toolbox #cke_31,
-    DIV#cke_addPost .cke_inner .cke_top .cke_toolbox #cke_35
+    DIV#cke_addPost .cke_inner .cke_top .cke_toolbox #cke_35,
+    DIV#cke_addPost .cke_inner .cke_bottom
     {
         display: block;
     }
+}
+
+.addPost[data-postId=''] BUTTON#editPost{
+    display: none;
+}
+
+.addPost:not([data-postId='']) BUTTON#insertPost{
+    display: none;
 }

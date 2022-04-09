@@ -12,7 +12,6 @@
     {var $partUcPath = "{$wwwDir}/public/js/{$module}/{$partUc}.js"}
     {var $partScript = "{$publicPath}/js/{$module}/{$part}.js"}
     {var $partUcScript = "{$publicPath}/js/{$module}/{$partUc}.js"}
-    {var $scriptPath = ucFirst($part)}
     {* Include scripts for whole module / presenter / view, if they exist *}
     <script src="{$partScript}?ver={$appver}" n:if="file_exists($partPath)"></script>
     <script src="{$partUcScript}?ver={$appver}" n:if="file_exists($partUcPath)"></script>
@@ -27,12 +26,19 @@
 
 {foreach [strtolower($presenterParts[0]), strtolower($presenterParts[1]), strtolower($presenter->getView())] as $part}
     {var $partUc = ucFirst($part)}
+    {var $commonPartPath = "{$wwwDir}/public/skins/common/css/{$module}/{$part}.css"}
+    {var $commonPartUcPath = "{$wwwDir}/public/skins/common/css/{$module}/{$partUc}.css"}
+    {var $commonPartScript = "{$publicPath}/skins/common/css/{$module}/{$part}.css"}
+    {var $commonPartUcScript = "{$publicPath}/skins/common/css/{$module}/{$partUc}.css"}
+
     {var $partPath = "{$wwwDir}/public/skins/{$skin}/css/{$module}/{$part}.css"}
     {var $partUcPath = "{$wwwDir}/public/skins/{$skin}/css/{$module}/{$partUc}.css"}
     {var $partScript = "{$publicPath}/skins/{$skin}/css/{$module}/{$part}.css"}
     {var $partUcScript = "{$publicPath}/skins/{$skin}/css/{$module}/{$partUc}.css"}
-    {var $scriptPath = ucFirst($part)}
+
     {* Include styles for whole module / presenter / view, if they exist *}
+    <link rel="stylesheet" href="{$commonPartScript}?ver={$appver}" n:if="file_exists($commonPartPath)" />
+    <link rel="stylesheet" href="{$commonPartUcScript}?ver={$appver}" n:if="file_exists($commonPartUcPath)" />
     <link rel="stylesheet" href="{$partScript}?ver={$appver}" n:if="file_exists($partPath)" />
     <link rel="stylesheet" href="{$partUcScript}?ver={$appver}" n:if="file_exists($partUcPath)" />
 {/foreach}

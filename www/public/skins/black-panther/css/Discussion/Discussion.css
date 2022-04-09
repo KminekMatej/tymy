@@ -12,10 +12,6 @@
     border-top-width: 0px;
 }
 
-.addPost[data-postId=''] BUTTON#editPost{
-    display: none;
-}
-
 DIV.container.discussion{
     padding-top: 20px;
     padding-bottom: 20px;

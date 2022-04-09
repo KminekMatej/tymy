@@ -64,7 +64,7 @@
 
 {block content}
 
-<div class="container homepage">
+<div class="container-fluid container-md homepage">
     <div class="row mt-2" n:if="!empty($notices)">
         <div class="col">
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -86,7 +86,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col"><h4 class="card-title">{_discussion.discussion, 2}</h4></div>
-                        <div class="col col-md-auto">
+                        <div class="col col-md-auto text-right">
                             <button class="btn btn-sm btn-light btn-light-bordered refresh" title="{_common.refresh}" onclick="refresh()" data-href="{link navbar:refresh!}"><i class="fa fa-sync" aria-hidden="true"></i></button>
                         </div>
                     </div>

@@ -4,6 +4,38 @@
 
 namespace QrCode;
 
+use Exception;
+use const MAX_STRUCTURED_SYMBOLS;
+use const N1;
+use const N2;
+use const N3;
+use const N4;
+use const QR_CACHE_DIR;
+use const QR_CACHEABLE;
+use const QR_DEFAULT_MASK;
+use const QR_ECLEVEL_H;
+use const QR_ECLEVEL_L;
+use const QR_ECLEVEL_M;
+use const QR_ECLEVEL_Q;
+use const QR_FIND_BEST_MASK;
+use const QR_FIND_FROM_RANDOM;
+use const QR_IMAGE;
+use const QR_LOG_DIR;
+use const QR_MODE_8;
+use const QR_MODE_AN;
+use const QR_MODE_KANJI;
+use const QR_MODE_NUL;
+use const QR_MODE_NUM;
+use const QR_MODE_STRUCTURE;
+use const QR_PNG_MAXIMUM_SIZE;
+use const QRCAP_EC;
+use const QRCAP_REMINDER;
+use const QRCAP_WIDTH;
+use const QRCAP_WORDS;
+use const QRSPEC_VERSION_MAX;
+use const QRSPEC_WIDTH_MAX;
+use const STRUCTURE_HEADER_BITS;
+
 /*
  * PHP QR Code encoder
  *
@@ -978,7 +1010,7 @@ class QRimage
         $image = self::image($frame, $pixelPerPoint, $outerFrame);
 
         if ($filename === false) {
-            Header("Content-type: image/png");
+            header("Content-type: image/png");
             ImagePng($image);
         } else {
             if ($saveandprint === true) {
@@ -999,7 +1031,7 @@ class QRimage
         $image = self::image($frame, $pixelPerPoint, $outerFrame);
 
         if ($filename === false) {
-            Header("Content-type: image/jpeg");
+            header("Content-type: image/jpeg");
             ImageJpeg($image, null, $q);
         } else {
             ImageJpeg($image, $filename, $q);

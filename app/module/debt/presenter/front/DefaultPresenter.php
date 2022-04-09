@@ -2,15 +2,15 @@
 
 namespace Tymy\Module\Debt\Presenter\Front;
 
+use Nette\Application\Responses\TextResponse;
 use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
 use QrCode\QRcode;
+use Tracy\Debugger;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Debt\Model\Debt;
-
-use function iban_set_checksum;
-
 use const QR_ECLEVEL_H;
+use function iban_set_checksum;
 
 /**
  * Description of DebtPresenter
@@ -61,6 +61,9 @@ class DefaultPresenter extends DebtBasePresenter
         $payeeMail = $debt->getPayeeId() ? $userList[$debt->getPayeeId()]->getEmail() : "";
 
         $paymentString = $this->generateQRCodeString($payeeCallName, $payeeMail, $debt->getPayeeAccountNumber(), $debt->getAmount(), $debt->getVarcode(), $debt->getCaption(), $debt->getCurrencyIso(), $debt->getCountryIso());
+        if(!$paymentString){
+            $this->sendResponse(new TextResponse("Insufficient data to create QR code"));
+        }
         QRcode::png($paymentString, false, QR_ECLEVEL_H, 4, 4); /* @phpstan-ignore-line */
         $this->terminate();
     }
@@ -94,6 +97,7 @@ class DefaultPresenter extends DebtBasePresenter
 
     private function generateQRCodeString($payeeCallName, $payeeEmail, $accountNumber, $amount, $varcode, $message, $currencyISO = "CZK", $countryISO = "CZ")
     {
+        Debugger::barDump(func_get_args());
         $accPrefix = null;
         $accountNumberBody = $accountNumber;
 

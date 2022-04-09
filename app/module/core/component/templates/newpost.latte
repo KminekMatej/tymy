@@ -1,4 +1,4 @@
-<div class="container my-2">
+<div class="container-fluid container-md my-2">
     <div class="row justify-content-md-center" n:if="$discussion->getDiscussion()->getCanWrite()">
         <div class="col-md-10">
             <textarea style="width:100%;" id="addPost">
@@ -7,27 +7,29 @@
         </div>
     </div>
     <div class="row justify-content-md-center">
-        <div class="col-md-10">
+        <div class="col col-md-10">
             <div class="addPost" data-postId>
-                    <form action="{plink :Discussion:Discussion: $discussion->getDiscussion()->getWebName()}" method="GET" class="form-inline">
+                <form action="{plink :Discussion:Discussion: $discussion->getDiscussion()->getWebName()}" method="GET" class="form-inline">
+                    <div class="col-9 px-0">
                         <div class="input-group">
                             <input class="form-control" type="text" name="search" placeholder="{_discussion.postBlock.enterSearchTerms}" value="{$search}">
-                            <select class="form-control custom-select mr-sm-2" name="suser">
+                            <select class="form-control custom-select" name="suser">
                                 <option  n:attr="selected => !$suser || $suser == 'all'" value="all">{_common.everyone}</option>
                                 {foreach $userList as $key => $type}
                                     <option disabled style="color: #d14836; font-weight: bold ">*** {_team.$key,2} ***</option>
                                     <option n:foreach="$type as $pickUser" value="{$pickUser->getId()}" n:attr="selected => $pickUser->getId() == $suser">{$pickUser->getCallName()}</option>
                                 {/foreach}
                             </select>
+                            <button type="submit" class="form-control btn btn-outline-success mr-sm-2 rounded-right" title="{_common.search}" style="max-width: 50px"><i class="fa-solid fa-magnifying-glass"></i></button>
+                            <a n:if="$search" href="{plink :Discussion:Discussion: $discussion->getDiscussion()->getWebName()}" class="btn btn-outline-secondary ml-1" title="{_common.refresh}" onclick="$(this).children('i').addClass('fa-spin')">
+                                <i class="fa fa-ban" aria-hidden="true"></i></a>
                         </div>
-                        <span class="mr-auto">
-                            <input type="submit" value="{_common.search}" class="form-control btn btn-outline-success mr-sm-2">
-                            <a n:if="$search" href="{plink :Discussion:Discussion: $discussion->getDiscussion()->getWebName()}" class="btn btn-outline-secondary" title="{_common.refresh}" onclick="$(this).children('i').addClass('fa-spin')"><i class="fa fa-sync" aria-hidden="true"></i></a>
-                        </span>
+                    </div>
+                    <div class="col-3 px-0 text-right">
                         <button onclick="updatePost({plink :Discussion:Discussion:editpost $discussion->getDiscussion()->getId()})" type="button" class="btn btn-warning mx-1" id="editPost" n:if="$discussion->getDiscussion()->getCanWrite()">{_common.edit}</button>    
-                        <button onclick="addPost({plink :Discussion:Discussion:newpost $discussion->getDiscussion()->getId()})" type="button" class="btn btn-primary" n:if="$discussion->getDiscussion()->getCanWrite()">{_common.insert}</button>    
-                    </form>
+                        <button onclick="addPost({plink :Discussion:Discussion:newpost $discussion->getDiscussion()->getId()})" type="button" class="btn btn-primary" id="insertPost" n:if="$discussion->getDiscussion()->getCanWrite()">{_common.insert}</button>
+                    </div>
+                </form>
             </div>
         </div>
-    </div>
-</div>         
+    </div>         
