@@ -160,7 +160,7 @@
 <div n:if="!empty($requests)">
     <p><hr /></p>
     <h2 onclick="toggle('requestList')"><a href="#">► Provedené requesty:</a></h2>
-    <pre id="requestList" style="display: none"><div n:foreach="$requests as $request"><span style="color: #cccccc">{$iterator->counter}:</span> {$request|noescape|colorize}</div></pre>
+    <pre id="requestList" style="display: none"><div n:foreach="$requests as $request"><span style="color: #cccccc">{$iterator->counter}:</span> {$request|colorize|noescape}</div></pre>
 </div>
 
 </html>
