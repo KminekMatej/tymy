@@ -2,6 +2,7 @@
 
 namespace Tymy\Module\Poll\Presenter\Front;
 
+use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Poll\Manager\PollManager;
 use Tymy\Module\Poll\Manager\VoteManager;
@@ -56,7 +57,7 @@ class DefaultPresenter extends SecuredPresenter
         $votes = [];
         $post = $this->getRequest()->getPost();
         $poll = $this->pollManager->getById($pollId);
-        
+
         foreach ($post as $optId => $opt) {
             if (!array_key_exists("value", $opt)) {
                 continue;
@@ -70,7 +71,11 @@ class DefaultPresenter extends SecuredPresenter
         }
         $this->redrawControl("poll-results");
         $this->redrawNavbar();
-        \Tracy\Debugger::barDump($votes);
-        $this->voteManager->setPoll($poll)->create($votes, $pollId);
+
+        try {
+            $this->voteManager->setPoll($poll)->create($votes, $pollId);
+        } catch (TymyResponse $tResp) {
+            $this->handleTymyResponse($tResp);
+        }
     }
 }
