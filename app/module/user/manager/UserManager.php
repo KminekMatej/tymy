@@ -355,7 +355,6 @@ class UserManager extends BaseManager
 
         $array["status"] = "INIT";
         $array["callName"] = $array["login"];
-        $array["canLogin"] = false; //user cannot login after registration
 
         $createdRow = $this->createByArray($array);
 
