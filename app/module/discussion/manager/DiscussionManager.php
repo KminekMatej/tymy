@@ -272,6 +272,12 @@ class DiscussionManager extends BaseManager
 
     public function update(array $data, int $resourceId, ?int $subResourceId = null): BaseModel
     {
+        foreach (["publicRead", "editablePosts"] as $field) {
+            if (array_key_exists($field, $data)) {
+                $data[$field] = parent::toBool($data[$field]);
+            }
+        }
+
         $this->allowUpdate($resourceId);
 
         parent::updateByArray($resourceId, $data);
