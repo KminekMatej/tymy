@@ -102,7 +102,7 @@ class MailService
     {
         $mail = new Message();
         $mail->setFrom(sprintf(self::ROBOT_EMAIL_FROM_S, $this->team->getSysName()), $this->team->getSysName())
-            ->addTo($email, $name)
+            ->addTo(trim($email), $name)
             ->setSubject($subject)
             ->setBody($body);
 
