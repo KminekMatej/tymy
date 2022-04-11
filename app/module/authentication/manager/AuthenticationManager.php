@@ -73,12 +73,12 @@ class AuthenticationManager implements IAuthenticator
             throw new AuthenticationException($this->translator->translate("team.alerts.authenticationFailed"), self::INVALID_CREDENTIAL);
         }
 
-        if (!$row->can_login) {
-            throw new AuthenticationException($this->translator->translate("team.alerts.loginForbidden"), self::NOT_APPROVED);
-        }
-
         if ($row->status == User::STATUS_INIT) {
             throw new AuthenticationException($this->translator->translate("team.alerts.loginNotApproved"), self::NOT_APPROVED);
+        }
+
+        if (!$row->can_login) {
+            throw new AuthenticationException($this->translator->translate("team.alerts.loginForbidden"), self::NOT_APPROVED);
         }
 
         if ($ghost) {
