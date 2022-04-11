@@ -99,10 +99,10 @@ class VoteManager extends BaseManager
             }
         }
 
-        if ($poll->getMinItems() && $answers < $poll->getMinItems()) {
+        if ($poll->getMinItems() && $poll->getMinItems() > 0 && $answers < $poll->getMinItems()) {
             $this->respondBadRequest("Number of answers ($answers) must be greater than poll min limit ({$poll->getMinItems()}).");
         }
-        if ($poll->getMaxItems() && $answers > $poll->getMaxItems()) {
+        if ($poll->getMaxItems() && $poll->getMaxItems() > 0 && $answers > $poll->getMaxItems()) {
             $this->respondBadRequest("Number of answers ($answers) mustn't be greater than poll max limit ({$poll->getMaxItems()}).");
         }
     }

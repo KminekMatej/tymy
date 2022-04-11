@@ -33,11 +33,11 @@ function updatePoll(btn, purl) {
         }
     });
     
-    if(voteCount > maxItems){
+    if(voteCount > maxItems && maxItems > 0){
         $("DIV.poll DIV.card-body").prepend("<div class='alert alert-danger' role='alert'><strong>"+translate.common.error+"!</strong> "+translate.poll.maxItemsOverflow+" ("+maxItems+")!</div>");
         return;
     }
-    if(voteCount < minItems){
+    if(voteCount < minItems && minItems > 0){
         $("DIV.poll DIV.card-body").prepend("<div class='alert alert-danger' role='alert'><strong>"+translate.common.error+"!</strong> "+translate.poll.notEnoughItems+" ("+minItems+")!</div>");
         return;
     }
