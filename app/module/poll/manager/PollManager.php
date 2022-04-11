@@ -173,8 +173,6 @@ class PollManager extends BaseManager
         if (!isset($data["maxItems"])) {
             $data["maxItems"] = -1;
         }
-        $data["anonymousResults"] = isset($data["anonymousResults"]) && $data["anonymousResults"] == true ? "YES" : "NO";
-        $data["changeableVotes"] = isset($data["changeableVotes"]) && $data["changeableVotes"] == false ? "NO" : "YES";
         $data["showResults"] = $data["showResults"] ?? Poll::RESULTS_NEVER;
         $data["status"] = $data["status"] ?? Poll::STATUS_DESIGN;
         $data["orderFlag"] = $data["orderFlag"] ?? 0;
@@ -216,6 +214,8 @@ class PollManager extends BaseManager
 
     public function create(array $data, ?int $resourceId = null): BaseModel
     {
+        parent::toBoolData($data, ["anonymousResults", "changeableVotes"]);
+
         $this->allowCreate($data);
 
         return $this->map($this->createByArray($data));
@@ -246,11 +246,7 @@ class PollManager extends BaseManager
 
     public function update(array $data, int $resourceId, ?int $subResourceId = null): BaseModel
     {
-        foreach (["anonymousResults", "changeableVotes"] as $field) {
-            if (array_key_exists($field, $data)) {
-                $data[$field] = parent::toBool($data[$field]);
-            }
-        }
+        parent::toBoolData($data, ["anonymousResults", "changeableVotes"]);
 
         $this->poll = $this->getById($resourceId);
 

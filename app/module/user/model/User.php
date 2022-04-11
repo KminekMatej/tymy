@@ -255,15 +255,15 @@ class User extends BaseModel
         return $this;
     }
 
-    public function setCanLogin(string $canLogin)
+    public function setCanLogin($canLogin)
     {
-        $this->canLogin = $canLogin == "YES" ? true : false;
+        $this->canLogin = $canLogin ? true : false;
         return $this;
     }
 
-    public function setCanEditCallName(string $canEditCallName)
+    public function setCanEditCallName($canEditCallName)
     {
-        $this->canEditCallName = $canEditCallName == "YES" ? true : false;
+        $this->canEditCallName = $canEditCallName ? true : false;
         return $this;
     }
 

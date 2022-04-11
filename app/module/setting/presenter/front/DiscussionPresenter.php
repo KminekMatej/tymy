@@ -38,8 +38,8 @@ class DiscussionPresenter extends SettingBasePresenter
             ->setId(-1)
             ->setCaption("")
                 ->setDescription("")
-                ->setPublicRead("YES")
-                ->setEditablePosts("YES")
+                ->setPublicRead(true)
+                ->setEditablePosts(true)
                 ->setOrder(0);
 
         $this->setView("discussion");

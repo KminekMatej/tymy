@@ -203,6 +203,8 @@ class UserManager extends BaseManager
 
     public function updateByArray(int $id, array $array)
     {
+        parent::toBoolData($array, ["anonymousResults", "changeableVotes"]);
+
         /* @var $userModel User */
         $userModel = $this->getById($id);
 
@@ -564,12 +566,6 @@ class UserManager extends BaseManager
             }
         }
 
-        foreach (["canEditCallName", "canLogin", "hideDiscDesc"] as $name) {
-            if (array_key_exists($name, $data)) {
-                $data[$name] = $this->toBool($data[$name]);
-            }
-        }
-
         if (array_key_exists("email", $data)) {
             $userIdWithThatEmail = $this->getIdByEmail($data["email"]);
             if ($userIdWithThatEmail && $userIdWithThatEmail !== $this->userModel->getId()) { //changing mail to already existing one
@@ -639,6 +635,8 @@ class UserManager extends BaseManager
 
     public function create(array $data, ?int $resourceId = null): BaseModel
     {
+        parent::toBoolData($data, ["canEditCallName", "canLogin", "hideDiscDesc"]);
+
         $this->allowCreate($data);
 
         return $this->map($this->createByArray($data));
@@ -660,8 +658,10 @@ class UserManager extends BaseManager
 
     public function update(array $data, int $resourceId, ?int $subResourceId = null): BaseModel
     {
+        parent::toBoolData($data, ["canEditCallName", "canLogin", "hideDiscDesc"]);
+
         $this->allowUpdate($resourceId, $data);
-        Debugger::barDump($data);
+
         $this->updateByArray($resourceId, $data);
 
         return $this->getById($resourceId);

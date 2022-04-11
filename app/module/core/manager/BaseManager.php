@@ -724,6 +724,21 @@ abstract class BaseManager
     }
 
     /**
+     * Change all fields in input $data array to proper bool value (if the fields are correctly specified)
+     * @param array $data
+     * @param array $fields
+     * @return void
+     */
+    protected function toBoolData(array &$data, array $fields): void
+    {
+        foreach ($fields as $field) {
+            if (array_key_exists($field, $data)) {
+                $data[$field] = parent::toBool($data[$field]);
+            }
+        }
+    }
+
+    /**
      * Retype various boolean stored variables like YES, ANO etc. to proper boolean value
      * @param mixed $value
      * @return bool
