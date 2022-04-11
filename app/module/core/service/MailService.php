@@ -107,7 +107,7 @@ class MailService
             ->setBody($body);
 
         if ($replyTo) {
-            $mail->addReplyTo($replyTo);
+            $mail->addReplyTo(trim($replyTo));
         }
 
         $this->mailSender->send($mail);
