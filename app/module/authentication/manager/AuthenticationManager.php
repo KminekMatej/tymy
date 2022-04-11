@@ -2,11 +2,11 @@
 
 namespace Tymy\Module\Authentication\Manager;
 
+use Kdyby\Translation\Translator;
 use Nette\Database\Explorer;
 use Nette\DI\Container;
 use Nette\Security\AuthenticationException;
 use Nette\Security\IAuthenticator;
-use Nette\Security\Identity;
 use Nette\Security\IIdentity;
 use Nette\Security\SimpleIdentity;
 use Nette\Utils\DateTime;
@@ -31,7 +31,7 @@ class AuthenticationManager implements IAuthenticator
     private Explorer $mainDatabase;
     private Explorer $teamDatabase;
     private Container $container;
-    private \Kdyby\Translation\Translator $translator;
+    private Translator $translator;
     private string $teamSysName;
     private array $ghosts;
 
