@@ -246,6 +246,12 @@ class PollManager extends BaseManager
 
     public function update(array $data, int $resourceId, ?int $subResourceId = null): BaseModel
     {
+        foreach (["anonymousResults", "changeableVotes"] as $field) {
+            if (array_key_exists($field, $data)) {
+                $data[$field] = parent::toBool($data[$field]);
+            }
+        }
+
         $this->poll = $this->getById($resourceId);
 
         $this->allowUpdate($resourceId);

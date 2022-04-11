@@ -256,7 +256,7 @@ class Poll extends BaseModel
 
     public function setChangeableVotes(string $changeableVotes)
     {
-        $this->changeableVotes = $changeableVotes == "YES";
+        $this->changeableVotes = $changeableVotes ? true : false;
         return $this;
     }
 
@@ -267,9 +267,9 @@ class Poll extends BaseModel
         return $this;
     }
 
-    public function setAnonymousResults(string $anonymousResults)
+    public function setAnonymousResults($anonymousResults)
     {
-        $this->anonymousResults = $anonymousResults == "YES";
+        $this->anonymousResults = $anonymousResults ? true : false;
         return $this;
     }
 
