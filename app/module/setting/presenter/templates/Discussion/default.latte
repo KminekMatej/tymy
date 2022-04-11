@@ -71,8 +71,8 @@
                                 </select>
                             </td>
 
-                            <td class="text-center"><label class="custom-control custom-checkbox"><input name="publicRead" type="checkbox" n:attr="data-value => $d->getPublicRead(), checked => $d->getPublicRead()" class="form-control form-control-sm custom-control-input" /><span class="custom-control-label"></span></label></td>
-                            <td class="text-center"><label class="custom-control custom-checkbox"><input name="editablePosts" type="checkbox" n:attr="data-value => $d->getEditablePosts(), checked => $d->getEditablePosts()" class="form-control form-control-sm custom-control-input" /><span class="custom-control-label"></span></label></td>
+                            <td class="text-center"><label class="custom-control custom-checkbox"><input name="publicRead" type="checkbox" data-value="{$d->getPublicRead() ? 1 : 0}" n:attr="checked => $d->getPublicRead()" class="form-control form-control-sm custom-control-input" /><span class="custom-control-label"></span></label></td>
+                            <td class="text-center"><label class="custom-control custom-checkbox"><input name="editablePosts" type="checkbox" data-value="{$d->getEditablePosts() ? 1 : 0}" n:attr="checked => $d->getEditablePosts()" class="form-control form-control-sm custom-control-input" /><span class="custom-control-label"></span></label></td>
                             <td><input name="order" data-value="{$d->getOrder()}" type="number" value="{$d->getOrder()}" class="form-control form-control-sm" style="max-width: 60px;"/></td>
                             <td class="btn-group" role="group" n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('DSSETUP'))">
                                 <button class="btn btn-sm btn-primary binder-save-btn" href="{link discussionEdit!}" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
