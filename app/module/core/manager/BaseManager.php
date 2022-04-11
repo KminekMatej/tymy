@@ -733,7 +733,7 @@ abstract class BaseManager
     {
         foreach ($fields as $field) {
             if (array_key_exists($field, $data)) {
-                $data[$field] = parent::toBool($data[$field]);
+                $data[$field] = $this->toBool($data[$field]);
             }
         }
     }
