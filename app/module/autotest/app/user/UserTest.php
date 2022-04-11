@@ -4,11 +4,12 @@
 
 namespace Tymy\Module\Autotest\User;
 
+use Nette\Security\AuthenticationException;
 use Tymy\Bootstrap;
-use Tymy\Module\User\Model\User;
 use Tymy\Module\Autotest\Entity\Assert;
 use Tymy\Module\Autotest\RequestCase;
 use Tymy\Module\Autotest\SimpleResponse;
+use Tymy\Module\User\Model\User;
 
 require getenv("ROOT_DIR") . '/app/Bootstrap.php';
 $container = Bootstrap::boot();
@@ -190,8 +191,31 @@ class UserTest extends RequestCase
 
         $registeredData = $this->request($this->getBasePath() . "/register", "POST", $regData)->expect(201)->getData();
 
-        $this->authorizeAdmin();
+        //user is in INIT state now and thus cannot login
+        Assert::exception(function () use ($regData) {
+            $this->user->login($regData["login"], $regData["password"]);
+        }, AuthenticationException::class, "Uživatel nebyl doposud schválen administrátory");
 
+        //now approve user by admin
+        $this->authorizeAdmin();
+        $this->request($this->getBasePath() . "/" . $registeredData["id"], "PUT", ["status" => User::STATUS_PLAYER]);
+        
+        $this->user->logout();
+
+        //now the login should work
+        $this->user->login($regData["login"], $regData["password"]);
+
+        //so lets forbid user to log in again
+        $this->authorizeAdmin();
+        $this->request($this->getBasePath() . "/" . $registeredData["id"], "PUT", ["canLogin" => false]);
+        $this->user->logout();
+
+        Assert::exception(function () use ($regData) {
+            $this->user->login($regData["login"], $regData["password"]);
+        }, AuthenticationException::class, "Uživatel nemá povolené přihlášení");
+
+        //everything done, now delete that user
+        $this->authorizeAdmin();
         $this->deleteRecord($registeredData["id"]);
     }
 
