@@ -33,6 +33,7 @@ class TeamManager extends BaseManager
 
     private string $teamFolder;
     private Request $httpRequest;
+    private Team $team;
 
     public function __construct(string $teamFolder, ManagerFactory $managerFactory, Request $httpRequest)
     {
@@ -98,7 +99,10 @@ class TeamManager extends BaseManager
 
     public function getTeam(): Team
     {
-        return $this->getBySysname($this->teamSysName);
+        if (!isset($this->team)) {
+            $this->team = $this->getBySysname($this->teamSysName);
+        }
+        return $this->team;
     }
 
     public function getTeamSimple(): SimpleTeam
@@ -148,6 +152,10 @@ class TeamManager extends BaseManager
 
     protected function allowUpdate(?int $recordId = null, ?array &$data = null): void
     {
+        if ($recordId !== $this->getTeam()->getId()) {
+            $this->respondForbidden();
+        }
+
         if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("TEAM_UPDATE"))) {
             $this->respondForbidden();
         }
