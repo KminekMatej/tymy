@@ -30,7 +30,6 @@
                             <th>{_settings.status}</th>
                             <th title="{_poll.minItems}">{_poll.min}</th>
                             <th title="{_poll.maxItems}">{_poll.max}</th>
-                            <th title="{_poll.displayInMainMenu}">{_common.menu}</th>
                             <th title="{_poll.anonymousVotes}">{_poll.anonym}</th>
                             <th title="{_poll.setChangeableVotes}">{_poll.changeOfVotes}</th>
                             <th>{_poll.displayResults}</th>
@@ -53,7 +52,6 @@
                             <td><input type="number" name="minItems" data-validation-field2="maxItems" min="0" data-value="{$poll->getMinItems()}" value="{$poll->getMinItems()}" class="form-control form-control-sm" style="max-width: 70px;" required/></td>
                             <td><input type="number" name="maxItems" data-validation-field2="minItems" min="0" data-value="{$poll->getMaxItems()}" value="{$poll->getMaxItems()}" class="form-control form-control-sm" style="max-width: 70px;" required/></td>
 
-                            <td class="text-center"><label class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" name="mainMenu" n:attr="data-value => $poll->getMainMenu(), checked => $poll->getMainMenu()" class="form-control form-control-sm custom-control-input" /><span class="custom-control-label"></span></label></td>
                             <td class="text-center"><label class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" name="anonymousResults" n:attr="data-value => $poll->getAnonymousResults(), checked => $poll->getAnonymousResults()" class="form-control form-control-sm custom-control-input" /><span class="custom-control-label"></span></label></td>
                             <td class="text-center"><label class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" name="changeableVotes" n:attr="data-value => $poll->getChangeableVotes(), checked => $poll->getChangeableVotes()" class="form-control form-control-sm custom-control-input" /><span class="custom-control-label"></span></label></td>
                             <td>

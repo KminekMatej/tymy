@@ -47,7 +47,6 @@ class PollPresenter extends SettingBasePresenter
                 ->setStatus("DESIGN")
                 ->setMinItems(1)
                 ->setMaxItems(99)
-                ->setMainMenu("")
                 ->setAnonymousResults("")
                 ->setChangeableVotes("")
                 ->setShowResults("NEVER")

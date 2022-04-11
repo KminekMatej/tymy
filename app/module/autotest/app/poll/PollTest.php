@@ -137,9 +137,6 @@ class PollTest extends RequestCase
     public function testMenu()
     {
         $polls = $this->request($this->getBasePath() . "/menu")->expect(200, "array")->getData();//poll doesnt exist
-        foreach ($polls as $poll) {
-            Assert::true($poll["mainMenu"]);
-        }
 
         $this->request($this->getBasePath() . "/menu", "POST")->expect(405);
         $this->request($this->getBasePath() . "/menu", "PUT")->expect(405);
@@ -154,7 +151,6 @@ class PollTest extends RequestCase
         Assert::equal("New poll", $createdData["caption"]);
         Assert::equal(-1, $createdData["minItems"]);
         Assert::equal(-1, $createdData["maxItems"]);
-        Assert::equal(false, $createdData["mainMenu"]);
         Assert::equal(false, $createdData["anonymousResults"]);
         Assert::equal(true, $createdData["changeableVotes"]);
         Assert::equal("NEVER", $createdData["showResults"]);
@@ -198,7 +194,6 @@ class PollTest extends RequestCase
     {
         return [
             "caption" => "Autotest changed poll " . rand(0, 1000),
-            "mainMenu" => false,
             "status" => "OPENED",
         ];
     }

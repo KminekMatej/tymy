@@ -34,7 +34,7 @@ class Poll extends BaseModel
     private int $minItems;
     private int $maxItems;
     private bool $changeableVotes;
-    private bool $mainMenu;
+    private bool $mainMenu;/** @deprecated since 2.2.4 */
     private bool $anonymousResults;
     private string $showResults;
     private string $status;
@@ -108,6 +108,7 @@ class Poll extends BaseModel
         return $this->changeableVotes;
     }
 
+    /** @deprecated since 2.2.4 */
     public function getMainMenu(): bool
     {
         return $this->mainMenu;
@@ -259,6 +260,7 @@ class Poll extends BaseModel
         return $this;
     }
 
+    /** @deprecated since 2.2.4 */
     public function setMainMenu(string $mainMenu)
     {
         $this->mainMenu = $mainMenu == "YES";

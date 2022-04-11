@@ -173,7 +173,6 @@ class PollManager extends BaseManager
         if (!isset($data["maxItems"])) {
             $data["maxItems"] = -1;
         }
-        $data["mainMenu"] = isset($data["mainMenu"]) && $data["mainMenu"] == true ? "YES" : "NO";
         $data["anonymousResults"] = isset($data["anonymousResults"]) && $data["anonymousResults"] == true ? "YES" : "NO";
         $data["changeableVotes"] = isset($data["changeableVotes"]) && $data["changeableVotes"] == false ? "NO" : "YES";
         $data["showResults"] = $data["showResults"] ?? Poll::RESULTS_NEVER;
@@ -281,9 +280,18 @@ class PollManager extends BaseManager
      */
     public function getListMenu(): array
     {
-        return array_filter($this->getListUserAllowed(), function (Poll $poll) {
-            return $poll->getMainMenu() && ($poll->getCanVote() || $poll->getCanSeeResults() || $poll->getCanAlienVote());
-        });
+        $userPermissions = $this->permissionManager->getUserAllowedPermissionNames($this->userManager->getById($this->user->getId()), Permission::TYPE_USER);
+
+        $selector = $this->database->table($this->getTable())
+            ->where("status != ?", "DESIGN");   //in menu there are not polls in DESIGN status
+
+        if (!empty($userPermissions)) {
+            $selector->where("vote_rights IS NULL OR vote_rights = '' OR vote_rights IN ?", $userPermissions);
+        } else {
+            $selector->where("vote_rights IS NULL OR vote_rights = ''");
+        }
+
+        return $this->mapAll($selector->fetchAll());
     }
 
     /**

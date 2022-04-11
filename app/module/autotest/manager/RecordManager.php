@@ -209,7 +209,6 @@ class RecordManager
         return [
             "caption" => "Autotest poll " . rand(0, 1000),
             "changeableVotes" => true,
-            "mainMenu" => true,
             "anonymousResults" => false,
             "showResults" => "ALWAYS",
             "status" => "DESIGN",
