@@ -69,3 +69,5 @@ alerts:
     registrationDeniedSubject: Registration to %s denied
     registrationApproved: Your registration to %s has been approved. You can login now
     registrationDenied: Your registration to %s has been denied
+    loginNotApproved: User not allowed to sign in
+    authenticationFailed: Login or password mismatch

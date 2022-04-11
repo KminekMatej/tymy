@@ -69,3 +69,5 @@ alerts:
     registrationDeniedSubject: Rejestracja do %s odrzucona
     registrationApproved: Twoja rejestracja do %s została zatwierdzona. Możesz się teraz zalogować
     registrationDenied: Twoja rejestracja w %s została odrzucona
+    loginNotApproved: Użytkownik nie może się zalogować
+    authenticationFailed: Niezgodność loginu lub hasła

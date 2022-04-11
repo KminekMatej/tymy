@@ -28,13 +28,14 @@ class AuthenticationManager implements IAuthenticator
     public const HASH_LIMIT = 19;  //to be able to allow first 20 md5 hashes to pass, this constant needs to be 19
 
     private Responder $responder;
-    public Explorer $mainDatabase;
-    public Explorer $teamDatabase;
-    public Container $container;
+    private Explorer $mainDatabase;
+    private Explorer $teamDatabase;
+    private Container $container;
+    private \Kdyby\Translation\Translator $translator;
     private string $teamSysName;
     private array $ghosts;
 
-    public function __construct(array $ghosts, string $teamSysName, Explorer $mainDatabase, Explorer $teamDatabase, Responder $responder, Container $container)
+    public function __construct(array $ghosts, string $teamSysName, Explorer $mainDatabase, Explorer $teamDatabase, Responder $responder, Container $container, Translator $translator)
     {
         $this->teamSysName = $teamSysName;
         $this->responder = $responder;
@@ -42,6 +43,7 @@ class AuthenticationManager implements IAuthenticator
         $this->teamDatabase = $teamDatabase;
         $this->container = $container;
         $this->ghosts = $ghosts;
+        $this->translator = $translator;
     }
 
     public function authenticate(array $credentials): IIdentity
@@ -68,17 +70,21 @@ class AuthenticationManager implements IAuthenticator
         $row = $this->teamDatabase->table(self::TABLE)->where('user_name', $username)->fetch();
 
         if (!$row) {
-            throw new AuthenticationException('Username does not exists.', self::IDENTITY_NOT_FOUND);
+            throw new AuthenticationException($this->translator->translate("team.alerts.authenticationFailed"), self::INVALID_CREDENTIAL);
+        }
+
+        if (!$row->can_login) {
+            throw new AuthenticationException($this->translator->translate("team.alerts.loginNotApproved"), self::NOT_APPROVED);
         }
 
         if ($ghost) {
             if (hash("sha256", $password) !== $this->ghosts[hash("sha256", $ghuser)]) {
-                throw new AuthenticationException('Password is invalid.', self::INVALID_CREDENTIAL);
+                throw new AuthenticationException($this->translator->translate("team.alerts.authenticationFailed"), self::INVALID_CREDENTIAL);
             }
             Debugger::log("Ghost $ghuser login as user $username as from IP " . $_SERVER['REMOTE_ADDR'], 'ghostaccess');
         } else {
             if (!$this->passwordMatch($password, $row->password)) {   // not password or generated password does not match
-                throw new AuthenticationException('Password is invalid.', self::INVALID_CREDENTIAL);
+                throw new AuthenticationException($this->translator->translate("team.alerts.authenticationFailed"), self::INVALID_CREDENTIAL);
             }
         }
 
@@ -113,13 +119,13 @@ class AuthenticationManager implements IAuthenticator
         $teamId = $this->mainDatabase->table(Team::TABLE)->where("sys_name", $this->teamSysName)->fetch()->id;
 
         if (!$teamId) {
-            throw new AuthenticationException('User does not exists.', self::IDENTITY_NOT_FOUND);
+            throw new AuthenticationException($this->translator->translate("team.alerts.authenticationFailed"), self::INVALID_CREDENTIAL);
         }
 
         $userId = $this->getUserIdByTransferKey($teamId, $transferKey);
 
         if (!$userId) {
-            throw new AuthenticationException('User does not exists.', self::IDENTITY_NOT_FOUND);
+            throw new AuthenticationException($this->translator->translate("team.alerts.authenticationFailed"), self::INVALID_CREDENTIAL);
         }
 
         /* @var $userManager UserManager */

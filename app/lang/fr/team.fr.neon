@@ -69,3 +69,5 @@ alerts:
     registrationDeniedSubject: Inscription à %s refusée
     registrationApproved: Votre inscription à %s a été approuvée. Vous pouvez vous connecter maintenant
     registrationDenied: Votre inscription à %s a été refusée
+    loginNotApproved: "L'utilisateur n'est pas autorisé à se connecter"
+    authenticationFailed: Niezgodność loginu lub hasła

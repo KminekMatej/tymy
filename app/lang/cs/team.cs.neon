@@ -70,3 +70,5 @@ alerts:
     registrationDeniedSubject: Registrace do %s zamítnua
     registrationApproved: Byl Vám udělen přístup do aplikace %s. Nyní se můžete přihlásit
     registrationDenied: Byl Vám zamítnut přístup do aplikace %s
+    loginNotApproved: Uživatel nemá povolené přihlášení
+    authenticationFailed: Login či heslo jsou chybné
