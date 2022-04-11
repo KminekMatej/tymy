@@ -48,11 +48,11 @@ SET FOREIGN_KEY_CHECKS=1;
 /** IMPORT SECTION */
 
 INSERT INTO `user` (`user_name`, `password`, `can_login`, `status`, `roles`, `first_name`, `last_name`, `call_name`, `editable_call_name`, `email_name`,`language`, `sex`, `gdpr_accepted_at`, `last_read_news`) VALUES
-('autotest_admin',  'f4ad5b4e691802fca51711dede771a36', 'YES', 'PLAYER', 'SUPER,USR,ATT', 'Autotest', 'admin', 'autotest-admin', 'NO', 'autotest-admin', 'CZ', 'MALE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('autotest_user',   '58d26e9a3381ace5e682dc26bf780dd4', 'YES', 'PLAYER', '', 'Autotest', 'user', 'autotest-user', 'NO', 'autotest-user', 'CZ', 'MALE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('autotest_member',  '58d26e9a3381ace5e682dc26bf780dd4', 'YES', 'MEMBER', '', 'Autotest', 'member', 'autotest-member', 'NO', 'autotest-member', 'CZ', 'MALE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('autotest_init',  '58d26e9a3381ace5e682dc26bf780dd4', 'YES', 'INIT', '', 'Autotest', 'init', 'autotest-init', 'NO', 'autotest-init', 'CZ', 'MALE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('autotest_sick',  '58d26e9a3381ace5e682dc26bf780dd4', 'YES', 'SICK', '', 'Autotest', 'sick', 'autotest-sick', 'NO', 'autotest-sick', 'CZ', 'MALE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+('autotest_admin',  'f4ad5b4e691802fca51711dede771a36', 1, 'PLAYER', 'SUPER,USR,ATT', 'Autotest', 'admin', 'autotest-admin', 0, 'autotest-admin', 'CZ', 'MALE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('autotest_user',   '58d26e9a3381ace5e682dc26bf780dd4', 1, 'PLAYER', '', 'Autotest', 'user', 'autotest-user', 0, 'autotest-user', 'CZ', 'MALE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('autotest_member',  '58d26e9a3381ace5e682dc26bf780dd4', 1, 'MEMBER', '', 'Autotest', 'member', 'autotest-member', 0, 'autotest-member', 'CZ', 'MALE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('autotest_init',  '58d26e9a3381ace5e682dc26bf780dd4', 1, 'INIT', '', 'Autotest', 'init', 'autotest-init', 0, 'autotest-init', 'CZ', 'MALE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('autotest_sick',  '58d26e9a3381ace5e682dc26bf780dd4', 1, 'SICK', '', 'Autotest', 'sick', 'autotest-sick', 0, 'autotest-sick', 'CZ', 'MALE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 INSERT INTO `usr_mails`(`user_id`, `email`, `type`) VALUES 
 (2,'admin@autotest.tymy.cz','DEF'),
