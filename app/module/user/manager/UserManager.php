@@ -85,9 +85,11 @@ class UserManager extends BaseManager
      */
     public function getSimpleUser(int $userId): SimpleUser
     {
-        if (!array_key_exists($userId, $this->simpleUserCache)) {
-            $userRow = $this->database->table($this->getTable())->get($userId);
-            $this->simpleUserCache[$userId] = new SimpleUser($userRow->id, $userRow->user_name, $userRow->call_name, $this->getPictureUrl($userRow->id), ($userRow->sex == "FEMALE" ? "FEMALE" : "MALE"), $userRow->status);
+        if (empty($this->simpleUserCache) || !array_key_exists($userId, $this->simpleUserCache)) {
+            $allRows = $this->database->table($this->getTable())->fetchAll();
+            foreach ($allRows as $userRow) {
+                $this->simpleUserCache[$userRow->id] = new SimpleUser($userRow->id, $userRow->user_name, $userRow->call_name, $this->getPictureUrl($userRow->id), ($userRow->sex == "FEMALE" ? "FEMALE" : "MALE"), $userRow->status);
+            }
         }
 
         return $this->simpleUserCache[$userId];
