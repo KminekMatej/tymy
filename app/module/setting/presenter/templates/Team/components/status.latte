@@ -11,7 +11,7 @@
             </tr>
             <tr n:foreach="$statusSets as $s">
                 {var $ssid = $s->getId()}
-                {form statusSetForm-$ssid}
+                {form "statusSetForm-$ssid"}
                     <td style="width: 200px">{input name, class => 'form-control form-control-sm'}</td>
                     <td>
                         <div class="row">

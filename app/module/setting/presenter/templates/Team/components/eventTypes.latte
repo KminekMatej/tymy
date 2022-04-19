@@ -14,7 +14,7 @@
             </tr>
             <tr n:foreach="$eventTypes as $et">
                 {var $etid = $et->getId()}
-                {form eventTypeForm-$etid}
+                {form "eventTypeForm-$etid"}
                     <td style="width: 200px">
                         {input code, class => 'form-control form-control-sm'}
                     </td>
