@@ -168,8 +168,8 @@ class EventType extends BaseModel
     public function jsonSerialize()
     {
         return parent::jsonSerialize() + [
-            "preStatusSet" => $this->arrayToJson($this->preStatusSet),
-            "postStatusSet" => $this->arrayToJson($this->postStatusSet),
+            "preStatusSet" => $this->arrayToJson(array_values($this->preStatusSet)),
+            "postStatusSet" => $this->arrayToJson(array_values($this->postStatusSet)),
         ];
     }
 }
