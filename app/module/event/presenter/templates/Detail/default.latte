@@ -87,8 +87,8 @@
                             <div class="col-lg-10">
                                 <table class="table table-hover table-sm tymy-event-history">
                                     <tr n:foreach="$histories as $history">
-                                        {var $prestatusFrom = empty($history->getPreStatusFrom()) ? $emptyStatus : $eventType->getPreStatusSet()[$history->getPreStatusFrom()]}
-                                        {var $prestatusTo = empty($history->getPreStatusTo()) ? $emptyStatus : $eventType->getPreStatusSet()[$history->getPreStatusTo()]}
+                                        {var $prestatusFrom = empty($history->getPreStatusFrom()) ? $emptyStatus : ($eventType->getPreStatusSet()[$history->getPreStatusFrom()] ?? $emptyStatus)}
+                                        {var $prestatusTo = empty($history->getPreStatusTo()) ? $emptyStatus : ($eventType->getPreStatusSet()[$history->getPreStatusTo()] ?? $emptyStatus)}
                                         <th scope="row">
                                             <figure class="figure text-center" style="width: 100px; margin-bottom: 0px">
                                                 <a href="{plink :Team:Player: $history->getUser()->getId()}">
