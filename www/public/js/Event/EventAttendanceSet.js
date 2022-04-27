@@ -1,16 +1,8 @@
-function genderCame(elm) {
+function genderToggle(elm, statusId) {
     var area = $(elm).closest("DIV.col-2").next("DIV.col-10");
     clearCheck(area);
-    area.find("FIGURE BUTTON.btn-outline-success").each(function () {
-        attendanceToggler(true, this);
-    });
-}
-
-function genderNCame(elm) {
-    var area = $(elm).closest("DIV.col-2").next("DIV.col-10");
-    clearCheck(area);
-    area.find("FIGURE BUTTON.btn-outline-danger").each(function () {
-        attendanceToggler(false, this);
+    area.find("FIGURE BUTTON.statusBtn" + statusId).each(function () {
+        $(this).addClass("active");
     });
 }
 

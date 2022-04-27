@@ -115,8 +115,8 @@
                                         <h6 style="font-weight: bold">{$gender|genderTranslate} ({count($genders)}):</h6>
 
                                         <div n:class="btn-group,result,$resultsClosed ? d-none" role="group" aria-label="{_event.attendanceResult} ({$gender|genderTranslate})" n:if="$event->getCanResult() && $event->getInPast()">
-                                            <button n:foreach="$eventType->getPostStatusSet() as $postStatus" class="btn btn-xs statusBtn{$postStatus->getId()}" title="{$postStatus->getCaption()}" onclick="genderToggle(this)">
-                                                <i class="{$postStatus->getIcon()}" style="color: {$postStatus->getColor()}"></i>
+                                            <button n:foreach="$eventType->getPostStatusSet() as $postStatus" class="btn btn-xs statusBtn{$postStatus->getId()}" title="{$postStatus->getCaption()}" onclick="genderToggle(this, {$postStatus->getId()})">
+                                                <i class="{$postStatus->getIcon()}"></i>
                                             </button>
                                         </div>
                                     </div>
@@ -130,7 +130,7 @@
                                                 </a>
                                             </div>
                                             <div n:class="btn-group,result,$resultsClosed ? d-none" role="group" aria-label="{_event.attendanceResult}" n:if="$event->getCanResult() && $event->getInPast()">
-                                                <button n:foreach="$eventType->getPostStatusSet() as $postStatus" class="btn btn-xs statusBtn{$postStatus->getId()}" data-status-id="{$postStatus->getId()}" onclick="togglePostStatus(this)" title="{$postStatus->getCaption()}"><i class="{$postStatus->getIcon()}" style="color: {$postStatus->getColor()}"></i></button>
+                                                <button n:foreach="$eventType->getPostStatusSet() as $postStatus" class="btn btn-xs statusBtn{$postStatus->getId()}" data-status-id="{$postStatus->getId()}" onclick="togglePostStatus(this)" title="{$postStatus->getCaption()}"><i class="{$postStatus->getIcon()}"></i></button>
                                             </div>
                                         </figure>
                                     </div>
