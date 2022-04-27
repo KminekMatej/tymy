@@ -11,34 +11,7 @@
 
 {block styles}
 {include parent}
-<style type="text/css">
-    {foreach $statusList as $status}
-        .attendance{$status->getCode()}, .statusBtn{$status->getId()} {
-            color: #{$status->getColor()};
-            border-color: #{$status->getColor()};
-            background-color: transparent;
-            background-image: none;
-        }
-        .attendance{$status->getCode()}.active, .statusBtn{$status->getId()}.active {
-            color: #fff;
-            border-color: #{$status->getColor()};
-            background-color: #{$status->getColor()};
-        }
-        .attendance{$status->getCode()}:hover, .statusBtn{$status->getId()}:hover {
-            color: #fff;
-            border-color: #{$status->getColor()};
-            background-color: #{$status->getColor()};
-        }
-        .attendance{$status->getCode()}:not(:disabled):not(.disabled).active, .statusBtn{$status->getId()}:not(:disabled):not(.disabled).active {
-            color: #fff;
-            border-color: #{$status->getColor()};
-            background-color: #{$status->getColor()};
-        }
-        BUTTON.disabled {
-            cursor: auto
-        }
-    {/foreach}
-</style>
+{include $componentsDir . '/statusColors.latte', statusList: $statusList}
 {/block}
 
 {block content}
@@ -75,7 +48,7 @@
                             {/snippet}
                             <input type="text" class="form-control custom-btn-sm" title="{_note.note,1}" id="preStatusDesc-action-{$event->getId()}" placeholder="{_note.note,1}" name="preStatusDesc" value="{$event->getMyAttendance() ? $event->getMyAttendance()->getPreDescription() : ''}" />
                             <div class="custom-container btn-group input-group pt-2" role="group" aria-label="Attendace setup container" id="action-{$event->getId()}">
-                                <button n:foreach="$eventType->getPreStatusSet() as $preStatus" onclick="updateAttendance(this, {link attendance! $event->getId(), $preStatus->getCode()})" class="btn custom-btn-sm {$event->getMyAttendance(),$event->getType(),$preStatus->getCode(),$event->getCanPlan(),$event->getCloseTime()|prestatusClass}">{$preStatus->getCaption()}</button>
+                                <button n:foreach="$eventType->getPreStatusSet() as $preStatus" onclick="updateAttendance(this, {link attendance! $event->getId(), $preStatus->getCode()})" class="btn custom-btn-sm {$event->getMyAttendance(),$preStatus->getId(),$event->getCanPlan(),$event->getCloseTime()|prestatusClass}">{$preStatus->getCaption()}</button>
                             </div>
                         </div>
                     </div>

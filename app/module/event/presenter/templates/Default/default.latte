@@ -8,34 +8,7 @@
 {include parent}
 <link rel='stylesheet' href="{$publicPath}/resources/fullcalendar/fullcalendar.{$css}?ver={$appver}" />
 <link rel='stylesheet' href="{$basePath}/skins/{$skin}/css/fullcalendar.css?ver={$appver}" />
-<style type="text/css">
-    {foreach $statusList as $status}
-        .attendance{$status->getCode()} {
-            color: #{$status->getColor()};
-            border-color: #{$status->getColor()};
-            background-color: transparent;
-            background-image: none;
-        }
-        .attendance{$status->getCode()}.active {
-            color: #fff;
-            border-color: #{$status->getColor()};
-            background-color: #{$status->getColor()};
-        }
-        .attendance{$status->getCode()}:hover {
-            color: #fff;
-            border-color: #{$status->getColor()};
-            background-color: #{$status->getColor()};
-        }
-        .attendance{$status->getCode()}:not(:disabled):not(.disabled).active {
-            color: #fff;
-            border-color: #{$status->getColor()};
-            background-color: #{$status->getColor()};
-        }
-        BUTTON.disabled {
-            cursor: auto
-        }
-    {/foreach}
-</style>
+{include $componentsDir . '/statusColors.latte', statusList: $statusList}
 {/block}
 
 {block scripts}
@@ -127,7 +100,7 @@
                                         <div class="btn-group input-group px-0" role="group" aria-label="Basic example" id="action-{$ev->getId()}">
                                             <input n:if="count($eventTypes[$ev->getType()]->getPreStatusSet()) < 4" id="preStatusDesc-action-{$ev->getId()}" type="text" class="form-control form-control-sm" style="min-width: 130px" title="{_note.note,1}" placeholder="{_note.note,1}" name="preStatusDesc" value="{$ev->getMyAttendance() ? $ev->getMyAttendance()->getPreDescription() : null}" />
                                             {foreach $eventTypes[$ev->getType()]->getPreStatusSet() as $preStatus}
-                                                <button onclick="updateAttendance(this, {link attendance! $ev->getId(), $preStatus->getCode()})" class="btn btn-sm {$ev->getMyAttendance(),$ev->getType(),$preStatus->getCode(),$ev->getCanPlan(),$ev->getCloseTime()|prestatusClass}">{$preStatus->getCaption()}</button>
+                                                <button onclick="updateAttendance(this, {link attendance! $ev->getId(), $preStatus->getCode()})" class="btn btn-sm {$ev->getMyAttendance(),$preStatus->getId(),$ev->getCanPlan(),$ev->getCloseTime()|prestatusClass}">{$preStatus->getCaption()}</button>
                                             {/foreach}
                                         </div>
                                     </div>

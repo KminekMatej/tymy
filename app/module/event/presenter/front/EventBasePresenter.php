@@ -44,21 +44,19 @@ class EventBasePresenter extends SecuredPresenter
             }
         });
 
-        $eventTypes = $this->eventTypeManager->getIndexedList();
-
-        $this->template->addFilter("prestatusClass", function (?Attendance $myAttendance, $eventType, $code, $canPlan, $startTime) use ($eventTypes) {
-            $myPreStatus = empty($myAttendance) || empty($myAttendance->getPreStatus()) || $myAttendance->getPreStatus() == "UNKNOWN" || !array_key_exists($myAttendance->getPreStatus(), $eventTypes[$eventType]->getPreStatusSet()) ? "not-set" : $eventTypes[$eventType]->getPreStatusSet()[$myAttendance->getPreStatus()]->getCode();
-            $myPostStatus = empty($myAttendance) || empty($myAttendance->getPostStatus()) || $myAttendance->getPostStatus() == "UNKNOWN" || !array_key_exists($myAttendance->getPostStatus(), $eventTypes[$eventType]->getPostStatusSet()) ? "not-set" : $eventTypes[$eventType]->getPostStatusSet()[$myAttendance->getPostStatus()]->getCode();
+        $this->template->addFilter("prestatusClass", function (?Attendance $myAttendance, $statusId, $canPlan, $startTime) {
+            $myPreStatusId = $myAttendance ? $myAttendance->getPreStatusId() : null;
+            $myPostStatusId = $myAttendance ? $myAttendance->getPostStatusId() : null;
 
             if (!$canPlan) {
-                return $code == $myPostStatus && $myPostStatus != "not-set" ? "attendance$code disabled active" : "btn-outline-secondary disabled";
+                return $statusId == $myPostStatusId && $myPostStatusId ? "statusBtn$statusId disabled active" : "btn-outline-secondary disabled";
             }
             if (strtotime($startTime) > strtotime(date("c"))) { // pokud podminka plati, akce je budouci
-                return $code == $myPreStatus ? "attendance$code active" : "attendance$code";
-            } elseif ($myPostStatus == "not-set") { // akce uz byla, post status nevyplnen
-                return $code == $myPreStatus && $myPreStatus != "not-set" ? "attendance$code disabled active" : "btn-outline-secondary disabled";
+                return $statusId == $myPreStatusId ? "statusBtn$statusId active" : "statusBtn$statusId";
+            } elseif (is_null($myPostStatusId)) { // akce uz byla, post status nevyplnen
+                return $statusId == $myPreStatusId && !is_null($myPreStatusId) ? "statusBtn$statusId disabled active" : "btn-outline-secondary disabled";
             } else {
-                return $code == $myPostStatus && $myPostStatus != "not-set" ? "attendance$code disabled active" : "btn-outline-secondary disabled";
+                return $statusId == $myPostStatusId && !is_null($myPostStatusId) ? "statusBtn$statusId disabled active" : "btn-outline-secondary disabled";
             }
         });
 
