@@ -35,6 +35,7 @@ class Event extends BaseModel
     private ?string $webName = null;
     private bool $canView = true;
     private bool $canPlan = false;
+    private bool $canPlanOthers = false;
     private bool $canResult = false;
     private bool $inPast = false;
     private bool $inFuture = false;
@@ -129,6 +130,11 @@ class Event extends BaseModel
     public function getCanPlan(): bool
     {
         return $this->canPlan;
+    }
+
+    public function getCanPlanOthers(): bool
+    {
+        return $this->canPlanOthers;
     }
 
     public function getCanResult(): bool
@@ -283,6 +289,12 @@ class Event extends BaseModel
         return $this;
     }
 
+    public function setCanPlanOthers(bool $canPlanOthers)
+    {
+        $this->canPlanOthers = $canPlanOthers;
+        return $this;
+    }
+
     public function setCanResult(bool $canResult)
     {
         $this->canResult = $canResult;
@@ -366,6 +378,7 @@ class Event extends BaseModel
             "attendance" => $this->arrayToJson(array_values($this->getAttendance())),
             "canView" => $this->getCanView(),
             "canPlan" => $this->getCanPlan(),
+            "canPlanOthers" => $this->getCanPlanOthers(),
             "canResult" => $this->getCanResult(),
             "inPast" => $this->getInPast(),
             "inFuture" => $this->getInFuture(),
