@@ -42,8 +42,8 @@ class DetailPresenter extends EventBasePresenter
         $this->addBreadcrumb($event->getCaption(), $this->link(":Event:Detail:", $event->getId() . "-" . $event->getWebName()));
 
         //results are closed if there is some attendance filled, in the UI its toggled by javascript
-        $this->template->resultsClosed = !empty(array_filter(ArrayHelper::entityFields("postStatusId", $event->getAttendance())));
-
+        $this->template->resultsClosed = !empty(array_filter(ArrayHelper::entityFields("postStatusId", $event->getAttendance()))) || !$event->getCanResult() || !$event->getInPast();
+    
         $this->template->attendances = $this->loadEventAttendance($event);
         $this->template->event = $event;
         $this->template->eventTypes = $eventTypes;
