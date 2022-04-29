@@ -378,9 +378,9 @@ class MigrationManager
             }
         }
 
-        $usersTableExists = in_array("users", $tables);
-        if ($usersTableExists) {
-            $usersColumns = $this->teamDatabase->query("SHOW COLUMNS FROM users")->fetchPairs();
+        $userTable = in_array("users", $tables) ? "users" : (in_array("user", $tables) ? "user" : null);
+        if ($userTable) {
+            $usersColumns = $this->teamDatabase->query("SHOW COLUMNS FROM $userTable")->fetchPairs();
             $usersHasBirthcodeField = array_key_exists("birth_code", $usersColumns);
         } else {
             $usersHasBirthcodeField = false;
