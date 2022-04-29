@@ -56,4 +56,11 @@ function resultsToggle(show) {
             $(this).addClass("d-none");
     });
 
+    if (show) {
+        $(".cancel-btn").removeClass("d-none");
+        $(".results-btn").addClass("d-none");
+    } else {
+        $(".cancel-btn").addClass("d-none");
+        $(".results-btn").removeClass("d-none");
+    }
 }
