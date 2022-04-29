@@ -140,7 +140,7 @@
                     </div>
                 </div>
                 <div class="card-footer text-right" n:if="$event->getCanResult() && $event->getInPast()">
-                    <button class="btn btn-lg btn-light btn-light-bordered" n:if="$resultsClosed" onclick="resultsToggle(true)" title="{_event.setAttendanceResult}"><i class="fa fa-user-circle" aria-hidden="true"></i></button>
+                    <button class="btn btn-lg btn-light btn-light-bordered" n:if="$resultsClosed" onclick="resultsToggle(true)" title="{_event.setAttendanceResult}"><i class="fa fa-list-check" aria-hidden="true"></i></button>
                     <button n:class="btn,btn-lg,btn-outline-primary,result,update,$resultsClosed ? d-none" onclick="saveAttendanceResults(this, {link attendanceResult! $event->getId()})" title="{_event.saveAttendanceResult}"><i class="fa fa-save" aria-hidden="true"></i></button>
                 </div>
             </div>
