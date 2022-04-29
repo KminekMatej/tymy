@@ -156,13 +156,13 @@ class AttendanceManager extends BaseManager
         }
 
         if ($preStatus) {
-            $data["preStatusId"] = $this->getPreStatusId($data["eventId"], $preStatus);
+            $data["preStatusId"] = is_numeric($preStatus) ? $preStatus : $this->getPreStatusId($data["eventId"], $preStatus);
             if (!$data["preStatusId"]) {
                 $this->responder->E4008_CHILD_NOT_RELATED_TO_PARENT("Status", $preStatus, Event::MODULE, $data["eventId"]);
             }
         }
         if ($postStatus) {
-            $data["postStatusId"] = $this->getPostStatusId($data["eventId"], $postStatus);
+            $data["postStatusId"] = is_numeric($postStatus) ? $postStatus : $this->getPostStatusId($data["eventId"], $postStatus);
             if (!$data["postStatusId"]) {
                 $this->responder->E4008_CHILD_NOT_RELATED_TO_PARENT("Status", $postStatus, Event::MODULE, $data["eventId"]);
             }

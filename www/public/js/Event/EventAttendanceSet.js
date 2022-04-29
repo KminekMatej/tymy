@@ -64,3 +64,20 @@ function resultsToggle(show) {
         $(".results-btn").removeClass("d-none");
     }
 }
+
+function planToggle(show) {
+    $(".plan-others").each(function () {
+        if (show) {
+            $(this).removeClass("d-none");
+        } else
+            $(this).addClass("d-none");
+    });
+
+    if (show) {
+        $(".cancel-btn").removeClass("d-none");
+        $(".plan-btn").addClass("d-none");
+    } else {
+        $(".cancel-btn").addClass("d-none");
+        $(".plan-btn").removeClass("d-none");
+    }
+}
