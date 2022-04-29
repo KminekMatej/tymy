@@ -20,6 +20,7 @@ attendanceView: Widok obecności
 attendanceResult: Lista obecności
 setAttendanceResult: Wypełnij listę obecności
 saveAttendanceResult: Zapisz listę obecności
+setPlanOthers: Ustaw obecność innych
 goToEvents: Przejdź do wydarzeń
 openInNewWindow: Otwórz w nowej karcie
 duplicateEventDay: Skopiuj ostatnie wydarzenie i przesuń datę o 1 dzień

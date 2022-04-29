@@ -20,6 +20,7 @@ attendanceView: Přehled docházky
 attendanceResult: Výsledná docházka
 setAttendanceResult: Zadat výslednou docházku
 saveAttendanceResult: Uložit výslednou docházku
+setPlanOthers: Zadat plány ostatních
 goToEvents: Přejít na události
 openInNewWindow: Zobrazit v novém okně
 duplicateEventDay: Duplikovat poslední událost a posunout časy o 1 den

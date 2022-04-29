@@ -20,6 +20,7 @@ attendanceView: Vue de présence
 attendanceResult: Résultats de présence
 setAttendanceResult: Entrer les résultats de présence
 saveAttendanceResult: Enregistrer les résultats de présence
+setPlanOthers: Définir la présence des autres
 goToEvents: Voir les événements
 openInNewWindow: Ouvrir dans une nouvelle fenêtre
 duplicateEventDay: Dupliquer le dernier événement et le déplacer de 1 jour

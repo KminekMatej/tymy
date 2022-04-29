@@ -20,6 +20,7 @@ attendanceView: Attendance view
 attendanceResult: Attendance result
 setAttendanceResult: Enter attendance result
 saveAttendanceResult: Save attendance result
+setPlanOthers: Set others attendance
 goToEvents: Go to events
 openInNewWindow: Open in new window
 duplicateEventDay: Duplicate last event and shif times by one day
