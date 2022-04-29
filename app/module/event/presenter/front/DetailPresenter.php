@@ -10,7 +10,7 @@ use Tracy\Debugger;
 use Tymy\Module\Attendance\Manager\HistoryManager;
 use Tymy\Module\Attendance\Model\Attendance;
 use Tymy\Module\Attendance\Model\Status;
-use Tymy\Module\Attendance\Model\StatusSet;
+use Tymy\Module\Core\Helper\ArrayHelper;
 use Tymy\Module\Event\Model\Event;
 use Tymy\Module\User\Model\User;
 
@@ -41,7 +41,8 @@ class DetailPresenter extends EventBasePresenter
 
         $this->addBreadcrumb($event->getCaption(), $this->link(":Event:Detail:", $event->getId() . "-" . $event->getWebName()));
 
-        $this->template->resultsClosed = false; //initially this is false, toggled by javascript
+        //results are closed if there is some attendance filled, in the UI its toggled by javascript
+        $this->template->resultsClosed = !empty(array_filter(ArrayHelper::entityFields("postStatusId", $event->getAttendance())));
 
         $this->template->attendances = $this->loadEventAttendance($event);
         $this->template->event = $event;
