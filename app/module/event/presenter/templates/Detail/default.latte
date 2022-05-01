@@ -112,7 +112,7 @@
                             <div n:class="tab-pane, fade, $iterator->first ? show, $iterator->first ? active, player-list" id="{$caption|webalize}" role="tabpanel">
                                 <div n:if="count($genders)>0" n:foreach="$genders as $gender => $usrs" class="row my-2">
                                     <div class="col-2 player-heading">
-                                        <h6 style="font-weight: bold">{$gender|genderTranslate} ({count($genders)}):</h6>
+                                        <h6 style="font-weight: bold">{$gender|genderTranslate} ({count($usrs)}):</h6>
 
                                         <div n:class="btn-group,result,$resultsClosed ? d-none" role="group" aria-label="{_event.attendanceResult} ({$gender|genderTranslate})" n:if="$event->getCanResult() && $event->getInPast()">
                                             <button n:foreach="$eventType->getPostStatusSet() as $postStatus" class="btn btn-xs statusBtn{$postStatus->getId()}" title="{$postStatus->getCaption()}" onclick="genderToggle(this, {$postStatus->getId()})">
