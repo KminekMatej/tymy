@@ -1,2 +1,3 @@
 services:
     FileManager: Tymy\Module\File\Handler\FileManager
+    FileRouter: Tymy\Module\File\Router\Router
