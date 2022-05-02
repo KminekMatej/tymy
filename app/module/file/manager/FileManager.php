@@ -3,11 +3,10 @@
 namespace Tymy\Module\File\Handler;
 
 use Nette\Http\FileUpload;
-use Nette\NotImplementedException;
 use Nette\Security\User;
 use Tracy\Debugger;
+use Tracy\ILogger;
 use Tymy\Module\Core\Manager\Responder;
-
 use const TEAM_DIR;
 
 /**
@@ -57,7 +56,7 @@ class FileManager
         $targetFile = self::DOWNLOAD_DIR . "/$folder/" . $file->getSanitizedName();
 
         if (!$file->move($targetFile)) {
-            Debugger::barDump("File saving failed [$targetFile]");
+            Debugger::log("File saving failed [$targetFile]", ILogger::ERROR);
         }
 
         return $targetFile;
