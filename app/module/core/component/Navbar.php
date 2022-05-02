@@ -157,7 +157,6 @@ class NavbarControl extends Control
     public function handleRefresh()
     {
         if ($this->parent->isAjax()) {
-            \Tracy\Debugger::barDump($this->template, "In refresh");
             $this->redrawControl('nav');
         } else {
             $this->parent->redirect('this');
