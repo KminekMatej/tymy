@@ -88,7 +88,7 @@ class UserManager extends BaseManager
         if (empty($this->simpleUserCache) || !array_key_exists($userId, $this->simpleUserCache)) {
             $allRows = $this->database->table($this->getTable())->fetchAll();
             foreach ($allRows as $userRow) {
-                $this->simpleUserCache[$userRow->id] = new SimpleUser($userRow->id, $userRow->user_name, $userRow->call_name, $this->getPictureUrl($userRow->id), ($userRow->sex == "FEMALE" ? "FEMALE" : "MALE"), $userRow->status);
+                $this->simpleUserCache[$userRow->id] = new SimpleUser($userRow->id, $userRow->user_name, $userRow->call_name, $this->getPictureUrl($userRow->id), (strtoupper($userRow->sex) == "FEMALE" ? "FEMALE" : "MALE"), $userRow->status);
             }
         }
 
