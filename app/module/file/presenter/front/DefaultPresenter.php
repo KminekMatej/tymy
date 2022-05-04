@@ -60,7 +60,7 @@ class DefaultPresenter extends SecuredPresenter
 
     public function renderDefault(string $folder = "/")
     {
-        $folderNoSeparators = trim($folder, "/");
+        $folderSanitized= "/" . trim($folder, "/");
         $i = 3;
         $folderLink = "";
         $parentFolder = "";
@@ -90,12 +90,13 @@ class DefaultPresenter extends SecuredPresenter
         $this->template->redPercent = $red;
         $this->template->locale = $this->translator->getLocale();
 
-        $this->template->folder = $folderNoSeparators;
+        $this->template->folder = $folderSanitized;
+        $this->template->folderSlashed = rtrim($folderSanitized, "/") . "/";
         array_pop($folderParts);
         $this->template->parentFolder = join("/", $folderParts);
 
         $this->template->fileTypes = $this->fileStats["fileTypes"];
-        $this->template->contents = $this->getContents("/" . $folderNoSeparators);
+        $this->template->contents = $this->getContents($folderSanitized);
     }
 
     public function createComponentNewFolderForm()

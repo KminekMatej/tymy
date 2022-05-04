@@ -3,11 +3,11 @@
     <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-folder-open" aria-hidden="true"></i> {_file.file,2}</a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
         <button n:if="empty($files)" class="dropdown-item disabled" type="button"> - {_file.noFile} - </button>
-        {foreach $files as $file}
-            <a class="dropdown-item" href="{$baseUrl}/download{$file}" target="_blank">
+        {foreach $files as $fileEnc => $file}
+            <a class="dropdown-item" href="{plink :File:Download: filename: $fileEnc}" target="_blank">
                 <span>{ltrim($file, '/')}</span>
             </a>
-            {breakIf $iterator->counter == 5}
+            {breakIf $iterator->counter == 15}
         {/foreach}
 
         <div class="dropdown-divider"></div>

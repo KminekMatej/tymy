@@ -16,11 +16,11 @@ class DownloadPresenter extends SecuredPresenter
 
     public function actionDefault(string $filename, string $folder = "/")
     {
-        $folderNoSeparators = trim($folder, "/");
-        $fullpath = FileManager::DOWNLOAD_DIR . "/$folderNoSeparators/$filename";
+        $folderSlashed = rtrim($folder, "/") . "/";
+        $fullpath = FileManager::DOWNLOAD_DIR . $folderSlashed . \Tymy\Module\Core\Helper\StringHelper::urldecode($filename);
 
         if (!file_exists($fullpath)) {
-            $this->flashMessage("File $folderNoSeparators/$filename not found", 'warning');
+            $this->flashMessage("File $fullpath not found", 'warning');
             $this->redirect(":File:Default:");
         }
 

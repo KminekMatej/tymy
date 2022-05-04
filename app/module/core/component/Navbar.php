@@ -8,6 +8,7 @@ use Nette\Application\UI\Form;
 use Nette\Http\FileUpload;
 use Nette\Security\User;
 use Nette\Utils\DateTime;
+use Tymy\Module\Core\Helper\StringHelper;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Debt\Manager\DebtManager;
 use Tymy\Module\Discussion\Manager\DiscussionManager;
@@ -15,9 +16,11 @@ use Tymy\Module\Event\Manager\EventManager;
 use Tymy\Module\Event\Manager\EventTypeManager;
 use Tymy\Module\File\Handler\FileManager;
 use Tymy\Module\Multiaccount\Manager\MultiaccountManager;
+use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\Poll\Manager\PollManager;
 use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\User\Manager\UserManager;
+use Tymy\Module\User\Model\User as User2;
 
 /**
  * Description of Navbar
@@ -75,12 +78,12 @@ class NavbarControl extends Control
 
     private function initPlayers(): void
     {
-        /* @var $me \Tymy\Module\User\Model\User */
+        /* @var $me User2 */
         $me = $this->userManager->getById($this->user->getId());
         $users = $this->userManager->getList();
         $this->template->counts = $this->userManager->getCounts($users);
         $this->template->playersWarnings = $me->getWarnings();
-        $this->template->inits = $this->user->isAllowed($this->user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('SEE_INITS')) ? $this->template->counts["INIT"] : 0;
+        $this->template->inits = $this->user->isAllowed($this->user->getId(), Privilege::SYS('SEE_INITS')) ? $this->template->counts["INIT"] : 0;
         $this->template->me = $me;
     }
 
@@ -101,9 +104,12 @@ class NavbarControl extends Control
 
     private function initFiles(): void
     {
-        $this->template->files = array_map(function ($path) {
-            return str_replace(FileManager::DOWNLOAD_DIR, "", $path);
-        }, glob(FileManager::DOWNLOAD_DIR . "/*.*"));
+        $files = [];
+        foreach (glob(FileManager::DOWNLOAD_DIR . "/*.*") as $file) {
+            $basename = basename($file);
+            $files[StringHelper::urlencode($basename)] = $basename;
+        }
+        $this->template->files = $files;
     }
 
     public function createComponentFileUploadForm(): Form
