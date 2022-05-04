@@ -21,7 +21,7 @@
 {block newpost}
 {control newPost $discussionPosts, $search, $suser}
 {/block}
-<div class="container-fluid container-md discussion" n:snippet="discussion">
+<div class="container-fluid container-md discussion mt-2" n:snippet="discussion">
     {foreach $discussionPosts->getPosts() as $item}
         {if $item->getCreatedById() == $userId}
             {include 'components/mine-post.latte', item => $item}
