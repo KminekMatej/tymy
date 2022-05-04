@@ -1,8 +1,8 @@
 {*TODO: enphasize sticky post and new posts*}
     
 <div n:class="row,post,post-other,$item->getSticky() ? post-sticky,$item->getNewPost() ? post-new" id="row-{$item->getId()}">
-    <div class="col-2 col-lg-1 avatar text-center">
-        <img src="{$item->getCreatedBy()->getPictureUrl()}" />
+    <div class="col-2 col-lg-1 text-center">
+        <img class="avatar" src="{$item->getCreatedBy()->getPictureUrl()}" />
     </div>
     <div class="col-10 col-lg-11 content">
         <div class="arrow-left"></div>

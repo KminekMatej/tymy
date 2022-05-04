@@ -278,9 +278,16 @@ class UserManager extends BaseManager
         }
     }
 
-    private function getPictureUrl(int $userId)
+    /**
+     * Get url of users avatar.
+     * Hint: appends file modification time, so the image gets dropped from browser cache after avatar upload
+     * @param int $userId
+     * @return string
+     */
+    private function getPictureUrl(int $userId): string
     {
-        return "/user_pics/$userId.png";
+        $lastMod = filemtime(TEAM_DIR . "/user_pics/$userId.png") ?: 0;
+        return "/user_pics/$userId.png?lastmod=$lastMod";
     }
 
     /**

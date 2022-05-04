@@ -126,11 +126,6 @@ form .error {
     background-color: green;
 }
 
-IMG.user_pic{
-    width: 40px;
-    height: auto;
-}
-
 NAV LI.nav-item SPAN.navbar-text{
     padding-right: .5rem;
     padding-left: .5rem;
@@ -278,4 +273,10 @@ IMG.skin-logo{
 .btn-xs + .dropdown-toggle-split, .btn-group-xs > .btn + .dropdown-toggle-split {
   padding-right: 0.3rem;
   padding-left: 0.3rem;
+}
+
+IMG.avatar {
+    border-radius: 2px;
+    width: 40px;
+    height: auto;
 }

@@ -23,12 +23,8 @@ DIV.post{
     margin-bottom: 5px;
 }
 
-DIV.post .avatar{
-    padding-top: 10px;
-}
-
-DIV.post .avatar IMG{
-    border-radius: 2px;
+DIV.post IMG.avatar{
+    margin-top: 10px;
 }
 
 DIV.post .header{
