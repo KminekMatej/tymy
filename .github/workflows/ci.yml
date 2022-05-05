@@ -12,6 +12,7 @@ jobs:
       steps:
         - name: "Checkout"
           uses: actions/checkout@v2
+          run: composer install --dev
           
         - name: "PHPStan"
           run: vendor/bin/phpstan
@@ -22,6 +23,7 @@ jobs:
       steps:
         - name: "Checkout"
           uses: actions/checkout@v2
+          run: composer install --dev
           
         - name: "PHPCs"
           run: vendor/bin/phpcs
