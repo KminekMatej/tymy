@@ -286,7 +286,12 @@ class UserManager extends BaseManager
      */
     private function getPictureUrl(int $userId): string
     {
-        $lastMod = filemtime(TEAM_DIR . "/user_pics/$userId.png") ?: 0;
+        $lastMod = 0;
+        $filename = TEAM_DIR . "/user_pics/$userId.png";
+        if (file_exists($filename)) {
+            $lastMod = filemtime($filename) ?: 0;
+        }
+
         return "/user_pics/$userId.png?lastmod=$lastMod";
     }
 
