@@ -7,7 +7,7 @@ on:
 jobs:
   phpstan:
       name: PHPStan Static Analysis
-      runs-on: php-alpine:latest
+      runs-on: self-hosted
       
       steps:
         - name: "Checkout"
@@ -17,7 +17,7 @@ jobs:
           run: vendor/bin/phpstan
   phpcs:
       name: PHP Code Sniffer
-      runs-on: php-alpine:latest
+      runs-on: self-hosted
       
       steps:
         - name: "Checkout"
