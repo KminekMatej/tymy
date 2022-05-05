@@ -2,6 +2,7 @@
 
 namespace Tymy\Module\Team\Presenter\Front;
 
+use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\User\Model\User;
 
