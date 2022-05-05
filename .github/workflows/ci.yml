@@ -14,5 +14,4 @@ jobs:
           uses: actions/checkout@v2
           
         - name: "PHPStan"
-        - run: |
-            vendor/bin/phpstan      
+          run: vendor/bin/phpstan
