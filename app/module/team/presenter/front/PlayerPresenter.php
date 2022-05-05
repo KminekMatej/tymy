@@ -167,8 +167,8 @@ class PlayerPresenter extends SecuredPresenter
         $bind = $this->getRequest()->getPost();
         $files = $this->getRequest()->getFiles();
         /* @var $file FileUpload */
-        $file = $files["files"][0];
-        if ($file->isImage() && $file->isOk()) {
+        $file = $files["files"][0] ?? null;
+        if ($file && $file->isImage() && $file->isOk()) {
             $type = null;
             $image = Image::fromFile($file->getTemporaryFile(), $type);
             try {
