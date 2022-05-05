@@ -15,3 +15,13 @@ jobs:
           
         - name: "PHPStan"
           run: vendor/bin/phpstan
+  phpcs:
+      name: PHP Code Sniffer
+      runs-on: php-alpine:latest
+      
+      steps:
+        - name: "Checkout"
+          uses: actions/checkout@v2
+          
+        - name: "PHPCs"
+          run: vendor/bin/phpcs
