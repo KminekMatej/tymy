@@ -1,0 +1,12 @@
+name: Tymy.CZ CI
+
+on: [push]
+
+jobs:
+  phpstan:
+    - name: PHPStan Static Analysis
+      runs-on: php-alpine:latest
+      uses: php-actions/phpstan@v2
+      with:
+        memory_limit: 256M
+      
