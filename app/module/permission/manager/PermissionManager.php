@@ -262,7 +262,7 @@ class PermissionManager extends BaseManager
             }
         }
 
-        //when there is revoked set, set allowed to be cleared. If revoked is not set, 
+        //when there is revoked set, set allowed to be cleared. If revoked is not set,
         foreach (["Roles", "Statuses", "Users"] as $Appendix) {
             $allowedKey = "allowed$Appendix";
             $revokedKey = "revoked$Appendix";

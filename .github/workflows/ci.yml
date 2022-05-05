@@ -1,0 +1,22 @@
+name: Tymy.CZ CI
+
+on:
+  push:
+
+jobs:
+  static-analysis:
+      name: Static analysis
+      runs-on: self-hosted
+      
+      steps:
+        - name: "Checkout"
+          uses: actions/checkout@v2
+          
+        - name: "Compose"
+          run: composer install --dev
+          
+        - name: "PHPCs"
+          run: vendor/bin/phpcs
+          
+        - name: "PHPStan"
+          run: vendor/bin/phpstan

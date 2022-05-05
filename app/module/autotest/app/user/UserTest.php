@@ -199,7 +199,7 @@ class UserTest extends RequestCase
         //now approve user by admin
         $this->authorizeAdmin();
         $this->request($this->getBasePath() . "/" . $registeredData["id"], "PUT", ["status" => User::STATUS_PLAYER]);
-        
+
         $this->user->logout();
 
         //now the login should work

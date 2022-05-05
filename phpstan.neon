@@ -2,7 +2,6 @@ parameters:
     level: 1
     paths:
         - app
-        - bin
         - tests
     excludePaths:
         - app/components/phpqrcode.php

@@ -208,21 +208,21 @@ class FormFactory
 
         return $form;
     }
-    
+
     public function createUserConfigForm(array $onSuccess, ?User $user): Form
     {
         $form = new Form();
-        
+
         $genderList = [
             "MALE" => $this->translator->translate("team.male", 1),
             "FEMALE" => $this->translator->translate("team.female", 1),
         ];
-        
+
         $gender = $form->addSelect("gender", $this->translator->translate("team.gender"), $genderList)->setCaption($this->translator->translate("common.chooseSex", 1) . " ↓");
         $firstName = $form->addText("firstName", $this->translator->translate("team.firstName"));
-        
-        
-        
+
+
+
         /*
          * <tr>
             <th>{_team.firstName}:</th><td><input name="firstName" data-value="{$player->getFirstName()}" type="text" value="{$player->getFirstName()}" n:class="col-6, form-control, in_array('firstName',$player->getErrFields()) ? is-invalid" /></td>
@@ -267,9 +267,9 @@ class FormFactory
         }
 
         $form->onSuccess[] = $onSuccess;
-        
+
         $form->addSubmit("save");
-        
+
         return $form;
     }
 }
