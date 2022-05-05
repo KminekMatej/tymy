@@ -91,8 +91,8 @@ class ApplePush
 
             $response = curl_exec($ch);
             $info = curl_getinfo($ch);
-            Debugger::barDump([$headers, $payloadJSON, $response, $info], "Notifying apple device {$subscriber->getSubscription()}");
-            if ($response !== true || $info["http_code"] !== 200) {
+
+            if ($response === false || $info["http_code"] !== 200) {
                 $decodedResponse = json_decode($response);
                 $errorReason = $decodedResponse->reason ?? null;
                 switch ($errorReason) {
