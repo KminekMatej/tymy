@@ -89,9 +89,9 @@ class EventPresenter extends SettingBasePresenter
     public function createComponentNewEventForm()
     {
         return $this->formFactory->createEventLineForm(
-                $this->eventTypes,
-                $this->userPermissions,
-                [$this, "newEventFormSuccess"]
+            $this->eventTypes,
+            $this->userPermissions,
+            [$this, "newEventFormSuccess"]
         );
     }
 
@@ -106,7 +106,7 @@ class EventPresenter extends SettingBasePresenter
                     [$this, "eventFormSuccess"],
                     $event
                 );
-            });
+        });
     }
 
     public function eventFormSuccess(Form $form, stdClass $values)

@@ -110,14 +110,14 @@ class MultiaccountManager extends BaseManager
         if ($sourceAccountId && $targetAccountId == $sourceAccountId) {
             $this->responder->E400_BAD_REQUEST("Target team already exists in your multiaccount");
         }
-        
+
         //four scenarios can happen now:
-        
-        if($targetAccountId && !$sourceAccountId){  //1) target team already has account, but source team doesnt (add source team id into target team account)
+
+        if ($targetAccountId && !$sourceAccountId) {  //1) target team already has account, but source team doesnt (add source team id into target team account)
             $this->addTeamUnderAccount($sourceTeam->getId(), $sourceUserId, $targetAccountId);
-        } elseif(!$targetAccountId && $sourceAccountId){ //2) target team doesnt have account, but source team does (add target team into existing account id)
+        } elseif (!$targetAccountId && $sourceAccountId) { //2) target team doesnt have account, but source team does (add target team into existing account id)
             $this->addTeamUnderAccount($targetTeam->getId(), $userId, $sourceAccountId);
-        } elseif(!$targetAccountId && !$sourceAccountId) {    //3) no multiaccount exists (CREATE NEW)
+        } elseif (!$targetAccountId && !$sourceAccountId) {    //3) no multiaccount exists (CREATE NEW)
             $accountId = $this->addTeamUnderAccount($sourceTeam->getId(), $sourceUserId);
             $this->addTeamUnderAccount($targetTeam->getId(), $userId, $accountId);
         } else { //4) both of them already exists (MERGE strategy)
@@ -146,7 +146,7 @@ class MultiaccountManager extends BaseManager
             "user_id" => $userId,
             "team_id" => $teamId,
         ]);
-        
+
         return $accountId;
     }
 

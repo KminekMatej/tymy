@@ -7,6 +7,7 @@ use Nette\Security\User;
 use Tracy\Debugger;
 use Tracy\ILogger;
 use Tymy\Module\Core\Manager\Responder;
+
 use const TEAM_DIR;
 
 /**

@@ -9,7 +9,6 @@ namespace Tymy\Module\Core\Helper;
  */
 class StringHelper
 {
-
     /**
      * Encode url, along with dots and hyphens
      * @param string $input

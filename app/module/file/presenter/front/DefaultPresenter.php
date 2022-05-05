@@ -7,6 +7,7 @@ use Nette\Utils\DateTime;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\File\Handler\FileManager;
 use Tymy\Module\Team\Manager\TeamManager;
+
 use const TEAM_DIR;
 
 /**
@@ -60,7 +61,7 @@ class DefaultPresenter extends SecuredPresenter
 
     public function renderDefault(string $folder = "/")
     {
-        $folderSanitized= "/" . trim($folder, "/");
+        $folderSanitized = "/" . trim($folder, "/");
         $i = 3;
         $folderLink = "";
         $parentFolder = "";

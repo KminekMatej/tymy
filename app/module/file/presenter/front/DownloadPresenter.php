@@ -13,7 +13,6 @@ use Tymy\Module\File\Handler\FileManager;
  */
 class DownloadPresenter extends SecuredPresenter
 {
-
     public function actionDefault(string $filename, string $folder = "/")
     {
         $folderSlashed = rtrim($folder, "/") . "/";

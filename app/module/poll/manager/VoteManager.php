@@ -94,9 +94,11 @@ class VoteManager extends BaseManager
         }
         $answers = 0;
         foreach ($votes as $vote) {
-            if ( (isset($vote["booleanValue"]) && !is_null($vote["booleanValue"]))
-                || !empty($vote["stringValue"]) 
-                || !empty($vote["numericValue"])) {
+            if (
+                (isset($vote["booleanValue"]) && !is_null($vote["booleanValue"]))
+                || !empty($vote["stringValue"])
+                || !empty($vote["numericValue"])
+            ) {
                 $answers++;
             }
         }

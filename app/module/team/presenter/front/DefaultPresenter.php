@@ -121,7 +121,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->template->jerseyList = $jerseyList;
         $this->addBreadcrumb($this->translator->translate("team.jersey", 2), $this->link(":Team:Default:jerseys"));
     }
-    
+
     public function handleApprove(int $userId)
     {
         try {
@@ -134,7 +134,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->redrawControl("userList");
         $this->redrawNavbar();
     }
-    
+
     public function handleDelete(int $userId)
     {
         try {
