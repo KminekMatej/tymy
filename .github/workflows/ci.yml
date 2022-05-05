@@ -5,21 +5,8 @@ on:
   pull_request:
 
 jobs:
-  phpstan:
-      name: PHPStan Static Analysis
-      runs-on: self-hosted
-      
-      steps:
-        - name: "Checkout"
-          uses: actions/checkout@v2
-          
-        - name: "Compose"
-          run: composer install --dev
-          
-        - name: "PHPStan"
-          run: vendor/bin/phpstan
-  phpcs:
-      name: PHP Code Sniffer
+  static-analysis:
+      name: Static analysis
       runs-on: self-hosted
       
       steps:
@@ -31,3 +18,6 @@ jobs:
           
         - name: "PHPCs"
           run: vendor/bin/phpcs
+          
+        - name: "PHPStan"
+          run: vendor/bin/phpstan
