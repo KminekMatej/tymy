@@ -222,11 +222,11 @@ class PostManager extends BaseManager
     public function getById(int $id, bool $force = false): ?BaseModel
     {
         return $this->map($this->database->query("
-            SELECT `ds_items`.*, IF(`ds_read`.`last_date`<`ds_items`.`insert_date`,1,0) AS 'newPost' 
-            FROM `ds_items` 
-            LEFT JOIN `ds_read` ON `ds_read`.`ds_id`=`ds_items`.`ds_id` AND `ds_read`.`user_id`=? 
-            WHERE (`ds_items`.`id` = ?)
-            ORDER BY `ds_items`.`sticky` DESC, `ds_items`.`insert_date` 
+            SELECT `discussion_post`.*, IF(`discussion_read`.`last_date`<`discussion_post`.`insert_date`,1,0) AS 'newPost' 
+            FROM `discussion_post` 
+            LEFT JOIN `discussion_read` ON `discussion_read`.`ds_id`=`discussion_post`.`ds_id` AND `discussion_read`.`user_id`=? 
+            WHERE (`discussion_post`.`id` = ?)
+            ORDER BY `discussion_post`.`sticky` DESC, `discussion_post`.`insert_date` 
             DESC LIMIT " . self::POSTS_PER_PAGE, $this->user->getId(), $id)->fetch());
     }
 
@@ -288,22 +288,22 @@ class PostManager extends BaseManager
 
         $query = [];
         $params = [];
-        $query[] = "SELECT `ds_items`.*, IF(`ds_read`.`last_date`<`ds_items`.`insert_date`,1,0) AS 'newPost'";
-        $query[] = "FROM `ds_items`";
-        $query[] = "LEFT JOIN `ds_read` ON `ds_read`.`ds_id`=`ds_items`.`ds_id` AND `ds_read`.`user_id`=?";
+        $query[] = "SELECT `discussion_post`.*, IF(`discussion_read`.`last_date`<`discussion_post`.`insert_date`,1,0) AS 'newPost'";
+        $query[] = "FROM `discussion_post`";
+        $query[] = "LEFT JOIN `discussion_read` ON `discussion_read`.`ds_id`=`discussion_post`.`ds_id` AND `discussion_read`.`user_id`=?";
         $params[] = $this->user->getId();
-        $query[] = "WHERE (`ds_items`.`ds_id` = ?)";
+        $query[] = "WHERE (`discussion_post`.`ds_id` = ?)";
         $params[] = $discussionId;
         if (!empty($search)) {
             $query[] = "AND `item` LIKE ?";
             $params[] = "%$search%";
         }
         if (!empty($searchUserId)) {
-            $query[] = "AND `ds_read`.`user_id` = ?";
+            $query[] = "AND `discussion_read`.`user_id` = ?";
             $params[] = $searchUserId;
         }
 
-        $query[] = "ORDER BY `ds_items`.`sticky` DESC, `ds_items`.`insert_date` DESC";
+        $query[] = "ORDER BY `discussion_post`.`sticky` DESC, `discussion_post`.`insert_date` DESC";
         $query[] = "LIMIT ?";
         $params[] = $page == 1 ? $this->getFirstPageSize() : self::POSTS_PER_PAGE;
         $query[] = "OFFSET ?";

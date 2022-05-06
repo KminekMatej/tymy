@@ -101,21 +101,21 @@ class DiscussionManager extends BaseManager
     public function getById(int $id, bool $force = false): ?BaseModel
     {
         return $this->map($this->database->query("
-            SELECT `discussions`.*, `ds_read`.`last_date` AS `lastVisit`, 
+            SELECT `discussion`.*, `discussion_read`.`last_date` AS `lastVisit`, 
             (
-                SELECT COUNT(`ds_items`.`id`) 
-                FROM `ds_items` 
-                WHERE `ds_items`.`insert_date` > `ds_read`.`last_date` AND `ds_items`.`ds_id` = `discussions`.`id`
+                SELECT COUNT(`discussion_post`.`id`) 
+                FROM `discussion_post` 
+                WHERE `discussion_post`.`insert_date` > `discussion_read`.`last_date` AND `discussion_post`.`ds_id` = `discussion`.`id`
             ) AS `newInfo`, 
             (
-                SELECT COUNT(`ds_items`.`id`) 
-                FROM `ds_items` 
-                WHERE `ds_items`.`ds_id` = `discussions`.`id`
+                SELECT COUNT(`discussion_post`.`id`) 
+                FROM `discussion_post` 
+                WHERE `discussion_post`.`ds_id` = `discussion`.`id`
             ) AS `numberOfPosts` 
-            FROM `discussions` 
-            LEFT JOIN `ds_read` ON `discussions`.`id` = `ds_read`.`ds_id` AND
-            (`ds_read`.`ds_id`=`discussions`.`id`) AND (`ds_read`.`user_id` = ?) 
-            WHERE `discussions`.`id` = ? ORDER BY `discussions`.`order_flag` ASC", $this->user->getId(), $id)->fetch());
+            FROM `discussion` 
+            LEFT JOIN `discussion_read` ON `discussion`.`id` = `discussion_read`.`ds_id` AND
+            (`discussion_read`.`ds_id`=`discussion`.`id`) AND (`discussion_read`.`user_id` = ?) 
+            WHERE `discussion`.`id` = ? ORDER BY `discussion`.`order_flag` ASC", $this->user->getId(), $id)->fetch());
     }
 
     /**
@@ -146,24 +146,24 @@ class DiscussionManager extends BaseManager
     public function getListUserAllowed($userId)
     {
         $readPerms = $this->permissionManager->getUserAllowedPermissionNames($this->userManager->getById($this->user->getId()), Permission::TYPE_USER);
-        $readPermsQ = empty($readPerms) ? "" : "`discussions`.`read_rights` IN (?) OR";
+        $readPermsQ = empty($readPerms) ? "" : "`discussion`.`read_rights` IN (?) OR";
         $query = "
-            SELECT `discussions`.*, `ds_read`.`last_date` AS `lastVisit`, 
+            SELECT `discussion`.*, `discussion_read`.`last_date` AS `lastVisit`, 
             (
-                SELECT COUNT(`ds_items`.`id`) 
-                FROM `ds_items` 
-                WHERE `ds_items`.`insert_date` > `ds_read`.`last_date` AND `ds_items`.`ds_id` = `discussions`.`id`
+                SELECT COUNT(`discussion_post`.`id`) 
+                FROM `discussion_post` 
+                WHERE `discussion_post`.`insert_date` > `discussion_read`.`last_date` AND `discussion_post`.`ds_id` = `discussion`.`id`
             ) AS `newInfo`, 
             (
-                SELECT COUNT(`ds_items`.`id`) 
-                FROM `ds_items` 
-                WHERE `ds_items`.`ds_id` = `discussions`.`id`
+                SELECT COUNT(`discussion_post`.`id`) 
+                FROM `discussion_post` 
+                WHERE `discussion_post`.`ds_id` = `discussion`.`id`
             ) AS `numberOfPosts` 
-            FROM `discussions` 
-            LEFT JOIN `ds_read` ON `discussions`.`id` = `ds_read`.`ds_id` AND
-            (`ds_read`.`ds_id`=`discussions`.`id`) AND (`ds_read`.`user_id` = ?) 
-            WHERE ($readPermsQ `discussions`.`read_rights` IS NULL OR
-            TRIM(`discussions`.`read_rights`) = '') ORDER BY `discussions`.`order_flag` ASC";
+            FROM `discussion` 
+            LEFT JOIN `discussion_read` ON `discussion`.`id` = `discussion_read`.`ds_id` AND
+            (`discussion_read`.`ds_id`=`discussion`.`id`) AND (`discussion_read`.`user_id` = ?) 
+            WHERE ($readPermsQ `discussion`.`read_rights` IS NULL OR
+            TRIM(`discussion`.`read_rights`) = '') ORDER BY `discussion`.`order_flag` ASC";
         $selector = empty($readPerms) ? $this->database->query($query, $userId) : $this->database->query($query, $userId, $readPerms ?: "");
         return $this->mapAll($selector->fetchAll());
     }
@@ -171,21 +171,21 @@ class DiscussionManager extends BaseManager
     public function getList(?array $idList = null, string $idField = "id", ?int $limit = null, ?int $offset = null, ?string $order = null): array
     {
         $query = "
-            SELECT `discussions`.*, `ds_read`.`last_date` AS `lastVisit`, 
+            SELECT `discussion`.*, `discussion_read`.`last_date` AS `lastVisit`, 
             (
-                SELECT COUNT(`ds_items`.`id`) 
-                FROM `ds_items` 
-                WHERE `ds_items`.`insert_date` > `ds_read`.`last_date` AND `ds_items`.`ds_id` = `discussions`.`id`
+                SELECT COUNT(`discussion_post`.`id`) 
+                FROM `discussion_post` 
+                WHERE `discussion_post`.`insert_date` > `discussion_read`.`last_date` AND `discussion_post`.`ds_id` = `discussion`.`id`
             ) AS `newInfo`, 
             (
-                SELECT COUNT(`ds_items`.`id`) 
-                FROM `ds_items` 
-                WHERE `ds_items`.`ds_id` = `discussions`.`id`
+                SELECT COUNT(`discussion_post`.`id`) 
+                FROM `discussion_post` 
+                WHERE `discussion_post`.`ds_id` = `discussion`.`id`
             ) AS `numberOfPosts` 
-            FROM `discussions` 
-            LEFT JOIN `ds_read` ON `discussions`.`id` = `ds_read`.`ds_id` AND
-            (`ds_read`.`ds_id`=`discussions`.`id`) AND (`ds_read`.`user_id` = ?) 
-            WHERE 1 ORDER BY `discussions`.`order_flag` ASC";
+            FROM `discussion` 
+            LEFT JOIN `discussion_read` ON `discussion`.`id` = `discussion_read`.`ds_id` AND
+            (`discussion_read`.`ds_id`=`discussion`.`id`) AND (`discussion_read`.`user_id` = ?) 
+            WHERE 1 ORDER BY `discussion`.`order_flag` ASC";
         return $this->mapAll($this->database->query($query, $this->user->getId())->fetchAll());
     }
 

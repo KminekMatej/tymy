@@ -14,8 +14,8 @@ use Tymy\Module\User\Model\SimpleUser;
  */
 class Post extends BaseModel
 {
-    public const TABLE = "ds_items";
-    public const TABLE_READ = "ds_read";
+    public const TABLE = "discussion_post";
+    public const TABLE_READ = "discussion_read";
     public const MODULE = "discussion";
 
     private int $discussionId;

@@ -13,7 +13,7 @@ use Tymy\Module\Discussion\Mapper\DiscussionMapper;
  */
 class Discussion extends BaseModel
 {
-    public const TABLE = "discussions";
+    public const TABLE = "discussion";
     public const MODULE = "discussion";
 
     private ?int $createdById = null;
