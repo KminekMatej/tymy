@@ -16,6 +16,7 @@ class Post extends BaseModel
 {
     public const TABLE = "discussion_post";
     public const TABLE_READ = "discussion_read";
+    public const TABLE_REACTION = "discussion_post_reaction";
     public const MODULE = "discussion";
 
     private int $discussionId;

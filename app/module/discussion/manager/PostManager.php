@@ -431,4 +431,48 @@ class PostManager extends BaseManager
 
         $this->update($updates, $discussionId, $postId);
     }
+
+    /**
+     * Create new reaction to a discussion post or update existing reaction
+     * @param int $postId
+     * @param int $userId
+     * @param string $reaction
+     * @return void
+     */
+    public function react(int $postId, int $userId, string $reaction): void
+    {
+        if (empty($reaction)) {
+            return;
+        }
+
+        //check if there is some reaction already
+
+        $reactionChar = substr($reaction, 0, 1);
+        
+        $reactionRow = $this->database->table(Post::TABLE_REACTION)
+            ->where("user_id", $userId)
+            ->where("discussion_post_id", $postId)
+            ->fetch();
+
+        if ($reactionRow) {
+            if ($reactionRow->reaction == $reactionChar) { //no change in reaction, just return
+                return;
+            }
+
+            //there is some reaction change, perform update
+            $this->database->table(Post::TABLE_REACTION)
+                ->where("user_id", $userId)
+                ->where("discussion_post_id", $postId)
+                ->update([
+                    "reaction" => $reactionChar,
+                    "created" => new DateTime(), //simulate reaction on
+            ]);
+        } else { //create new reaction
+            $this->database->table(Post::TABLE_REACTION)->insert([
+                "user_id" => $userId,
+                "discussion_post_id" => $postId,
+                "reaction" => $reactionChar,
+                ]);
+        }
+    }
 }
