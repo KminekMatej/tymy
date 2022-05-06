@@ -18,6 +18,8 @@ RENAME TABLE `discussions` TO `discussion`;
 RENAME TABLE `ds_items` TO `discussion_post`;
 RENAME TABLE `ds_read` TO `discussion_read`;
 
+ALTER TABLE `discussion_post` CHANGE `ds_id` `discussion_id` INT(11) NOT NULL;
+ALTER TABLE `discussion_read` CHANGE `ds_id` `discussion_id` INT(11) NOT NULL;
 
 -- DOWN:
 -- commands that reverts updates from UP section shall be written here:

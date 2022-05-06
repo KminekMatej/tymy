@@ -224,7 +224,7 @@ class PostManager extends BaseManager
         return $this->map($this->database->query("
             SELECT `discussion_post`.*, IF(`discussion_read`.`last_date`<`discussion_post`.`insert_date`,1,0) AS 'newPost' 
             FROM `discussion_post` 
-            LEFT JOIN `discussion_read` ON `discussion_read`.`ds_id`=`discussion_post`.`ds_id` AND `discussion_read`.`user_id`=? 
+            LEFT JOIN `discussion_read` ON `discussion_read`.`discussion_id`=`discussion_post`.`discussion_id` AND `discussion_read`.`user_id`=? 
             WHERE (`discussion_post`.`id` = ?)
             ORDER BY `discussion_post`.`sticky` DESC, `discussion_post`.`insert_date` 
             DESC LIMIT " . self::POSTS_PER_PAGE, $this->user->getId(), $id)->fetch());
@@ -290,9 +290,9 @@ class PostManager extends BaseManager
         $params = [];
         $query[] = "SELECT `discussion_post`.*, IF(`discussion_read`.`last_date`<`discussion_post`.`insert_date`,1,0) AS 'newPost'";
         $query[] = "FROM `discussion_post`";
-        $query[] = "LEFT JOIN `discussion_read` ON `discussion_read`.`ds_id`=`discussion_post`.`ds_id` AND `discussion_read`.`user_id`=?";
+        $query[] = "LEFT JOIN `discussion_read` ON `discussion_read`.`discussion_id`=`discussion_post`.`discussion_id` AND `discussion_read`.`user_id`=?";
         $params[] = $this->user->getId();
-        $query[] = "WHERE (`discussion_post`.`ds_id` = ?)";
+        $query[] = "WHERE (`discussion_post`.`discussion_id` = ?)";
         $params[] = $discussionId;
         if (!empty($search)) {
             $query[] = "AND `item` LIKE ?";
@@ -342,7 +342,7 @@ class PostManager extends BaseManager
     private function getPageNumberFromDate(int $dicussionId, int $newPosts, DateTime $jumpDate): int
     {
         $firstPageSize = $this->getFirstPageSize($newPosts);
-        $postCountBeforeDate = $this->database->table($this->getTable())->where("ds_id", $dicussionId)->where("insert_date > ?", $jumpDate)->count("id");
+        $postCountBeforeDate = $this->database->table($this->getTable())->where("discussion_id", $dicussionId)->where("insert_date > ?", $jumpDate)->count("id");
         if ($postCountBeforeDate <= 0) {
             return 1;
         }
@@ -359,7 +359,7 @@ class PostManager extends BaseManager
     public function countPosts(int $discussionId, ?string $search = null, ?int $searchUserId = null)
     {
         $selector = $this->database->table($this->getTable())
-                ->where("ds_id", $discussionId);
+                ->where("discussion_id", $discussionId);
 
         if (!empty($search)) {
             $selector->where("item LIKE ?", "%$search%");
@@ -396,7 +396,7 @@ class PostManager extends BaseManager
     private function markAllAsRead(int $userId, int $discussionId): void
     {
         $selector = $this->database->table(Post::TABLE_READ)
-            ->where("ds_id", $discussionId)
+            ->where("discussion_id", $discussionId)
             ->where("user_id", $userId);
 
         if ($selector->count()) {
@@ -407,7 +407,7 @@ class PostManager extends BaseManager
             $this->database->table(Post::TABLE_READ)
                 ->insert([
                     "last_date" => Explorer::literal("NOW()"),
-                    "ds_id" => $discussionId,
+                    "discussion_id" => $discussionId,
                     "user_id" => $userId,
             ]);
         }

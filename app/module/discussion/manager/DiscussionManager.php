@@ -105,16 +105,16 @@ class DiscussionManager extends BaseManager
             (
                 SELECT COUNT(`discussion_post`.`id`) 
                 FROM `discussion_post` 
-                WHERE `discussion_post`.`insert_date` > `discussion_read`.`last_date` AND `discussion_post`.`ds_id` = `discussion`.`id`
+                WHERE `discussion_post`.`insert_date` > `discussion_read`.`last_date` AND `discussion_post`.`discussion_id` = `discussion`.`id`
             ) AS `newInfo`, 
             (
                 SELECT COUNT(`discussion_post`.`id`) 
                 FROM `discussion_post` 
-                WHERE `discussion_post`.`ds_id` = `discussion`.`id`
+                WHERE `discussion_post`.`discussion_id` = `discussion`.`id`
             ) AS `numberOfPosts` 
             FROM `discussion` 
-            LEFT JOIN `discussion_read` ON `discussion`.`id` = `discussion_read`.`ds_id` AND
-            (`discussion_read`.`ds_id`=`discussion`.`id`) AND (`discussion_read`.`user_id` = ?) 
+            LEFT JOIN `discussion_read` ON `discussion`.`id` = `discussion_read`.`discussion_id` AND
+            (`discussion_read`.`discussion_id`=`discussion`.`id`) AND (`discussion_read`.`user_id` = ?) 
             WHERE `discussion`.`id` = ? ORDER BY `discussion`.`order_flag` ASC", $this->user->getId(), $id)->fetch());
     }
 
@@ -152,16 +152,16 @@ class DiscussionManager extends BaseManager
             (
                 SELECT COUNT(`discussion_post`.`id`) 
                 FROM `discussion_post` 
-                WHERE `discussion_post`.`insert_date` > `discussion_read`.`last_date` AND `discussion_post`.`ds_id` = `discussion`.`id`
+                WHERE `discussion_post`.`insert_date` > `discussion_read`.`last_date` AND `discussion_post`.`discussion_id` = `discussion`.`id`
             ) AS `newInfo`, 
             (
                 SELECT COUNT(`discussion_post`.`id`) 
                 FROM `discussion_post` 
-                WHERE `discussion_post`.`ds_id` = `discussion`.`id`
+                WHERE `discussion_post`.`discussion_id` = `discussion`.`id`
             ) AS `numberOfPosts` 
             FROM `discussion` 
-            LEFT JOIN `discussion_read` ON `discussion`.`id` = `discussion_read`.`ds_id` AND
-            (`discussion_read`.`ds_id`=`discussion`.`id`) AND (`discussion_read`.`user_id` = ?) 
+            LEFT JOIN `discussion_read` ON `discussion`.`id` = `discussion_read`.`discussion_id` AND
+            (`discussion_read`.`discussion_id`=`discussion`.`id`) AND (`discussion_read`.`user_id` = ?) 
             WHERE ($readPermsQ `discussion`.`read_rights` IS NULL OR
             TRIM(`discussion`.`read_rights`) = '') ORDER BY `discussion`.`order_flag` ASC";
         $selector = empty($readPerms) ? $this->database->query($query, $userId) : $this->database->query($query, $userId, $readPerms ?: "");
@@ -175,16 +175,16 @@ class DiscussionManager extends BaseManager
             (
                 SELECT COUNT(`discussion_post`.`id`) 
                 FROM `discussion_post` 
-                WHERE `discussion_post`.`insert_date` > `discussion_read`.`last_date` AND `discussion_post`.`ds_id` = `discussion`.`id`
+                WHERE `discussion_post`.`insert_date` > `discussion_read`.`last_date` AND `discussion_post`.`discussion_id` = `discussion`.`id`
             ) AS `newInfo`, 
             (
                 SELECT COUNT(`discussion_post`.`id`) 
                 FROM `discussion_post` 
-                WHERE `discussion_post`.`ds_id` = `discussion`.`id`
+                WHERE `discussion_post`.`discussion_id` = `discussion`.`id`
             ) AS `numberOfPosts` 
             FROM `discussion` 
-            LEFT JOIN `discussion_read` ON `discussion`.`id` = `discussion_read`.`ds_id` AND
-            (`discussion_read`.`ds_id`=`discussion`.`id`) AND (`discussion_read`.`user_id` = ?) 
+            LEFT JOIN `discussion_read` ON `discussion`.`id` = `discussion_read`.`discussion_id` AND
+            (`discussion_read`.`discussion_id`=`discussion`.`id`) AND (`discussion_read`.`user_id` = ?) 
             WHERE 1 ORDER BY `discussion`.`order_flag` ASC";
         return $this->mapAll($this->database->query($query, $this->user->getId())->fetchAll());
     }
