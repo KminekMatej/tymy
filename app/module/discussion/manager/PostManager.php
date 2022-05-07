@@ -477,22 +477,26 @@ class PostManager extends BaseManager
     }
 
     /**
-     * Create new reaction to a discussion post or update existing reaction
+     * Create new reaction or delete existing one to a discussion post or update existing reaction
      * @param int $postId
      * @param int $userId
-     * @param string $reaction
+     * @param string|null $reaction Null to delete reaction
      * @return void
      */
-    public function react(int $postId, int $userId, string $reaction): void
+    public function react(int $postId, int $userId, ?string $reaction = null): void
     {
-        if (empty($reaction)) {
+        if (empty($reaction)) { //if reaction is null, delete any existing one
+            $this->database->table(Post::TABLE_REACTION)
+                ->where("user_id", $userId)
+                ->where("discussion_post_id", $postId)
+                ->delete();
+
             return;
         }
 
         //check if there is some reaction already
-
         $reactionChar = substr($reaction, 0, 1);
-        
+
         $reactionRow = $this->database->table(Post::TABLE_REACTION)
             ->where("user_id", $userId)
             ->where("discussion_post_id", $postId)
@@ -516,7 +520,7 @@ class PostManager extends BaseManager
                 "user_id" => $userId,
                 "discussion_post_id" => $postId,
                 "reaction" => $reactionChar,
-                ]);
+            ]);
         }
     }
 }
