@@ -27,6 +27,7 @@ class Post extends BaseModel
     private ?int $updatedById = null;
     private bool $sticky = false;
     private bool $newPost = false;
+    private array $reactions = [];
     private string $createdAtStr;
     private ?string $updatedAtStr = null;
     private SimpleUser $createdBy;
@@ -69,6 +70,11 @@ class Post extends BaseModel
     public function getNewPost(): bool
     {
         return $this->newPost;
+    }
+
+    public function getReactions(): array
+    {
+        return $this->reactions;
     }
 
     public function getCreatedAtStr(): string
@@ -134,6 +140,12 @@ class Post extends BaseModel
         return $this;
     }
 
+    public function setReactions(array $reactions)
+    {
+        $this->reactions = $reactions;
+        return $this;
+    }
+
     public function setCreatedAtStr(string $createdAtStr)
     {
         $this->createdAtStr = $createdAtStr;
@@ -171,6 +183,7 @@ class Post extends BaseModel
     {
         return parent::jsonSerialize() + [
             "newPost" => $this->getNewPost(),
+            "reactions" => $this->getReactions(),
             "createdAtStr" => $this->getCreatedAtStr(),
             "updatedAtStr" => $this->getUpdatedAtStr(),
             "createdBy" => $this->getCreatedBy()->jsonSerialize(),

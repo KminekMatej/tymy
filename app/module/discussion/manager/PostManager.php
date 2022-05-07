@@ -4,6 +4,7 @@ namespace Tymy\Module\Discussion\Manager;
 
 use Nette\Database\Explorer;
 use Nette\Database\IRow;
+use Nette\Database\Table\ActiveRow;
 use Nette\Utils\DateTime;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
@@ -37,6 +38,7 @@ class PostManager extends BaseManager
     private bool $inBbCode = true;
     private ?Discussion $discussion;
     private ?Post $post;
+    private array $reactionsCache;
 
     public function __construct(ManagerFactory $managerFactory, DiscussionManager $discussionManager, UserManager $userManager, PushNotificationManager $pushNotificationManager, NotificationGenerator $notificationGenerator)
     {
@@ -148,7 +150,49 @@ class PostManager extends BaseManager
             $post->setUpdatedAtStr($post->getUpdatedAt()->format(BaseModel::DATETIME_CZECH_NO_SECS_FORMAT));
         }
 
+        /* @var $row ActiveRow */
+        $post->setReactions($this->getReactions($post->getId()));
+
         return $post;
+    }
+
+    /**
+     * Load aray of reactions to a certain posts.
+     * @param int $postId
+     * @return array in the form of ["utf8mb4smiley" => [1,2,4]] .. where 1,2,4 are user ids, reacting with this smile
+     */
+    private function getReactions(int $postId): array
+    {
+        if (!isset($this->reactionsCache)) {
+            $this->reactionsCache = $this->database->table(Post::TABLE_REACTION)
+                ->select("id")
+                ->select("discussion_post_id")
+                ->select("GROUP_CONCAT(user_id,'|',reaction) AS reactions")
+                ->group("discussion_post_id")
+                ->fetchPairs("discussion_post_id");
+        }
+
+        if (!array_key_exists($postId, $this->reactionsCache)) {
+            return [];
+        }
+
+        $postReactions = [];
+        foreach (explode(",", $this->reactionsCache[$postId]["reactions"]) as $reactionString) {
+            if (empty(trim($reactionString))) {
+                continue;
+            }
+            $reactionData = explode("|", $reactionString);
+            $userId = $reactionData[0];
+            $reaction = $reactionData[1];
+
+            if (!isset($postReactions[$reaction])) {
+                $postReactions[$reaction] = [];
+            }
+
+            $postReactions[$reaction][] = intval($userId);
+        }
+
+        return $postReactions;
     }
 
     public function create(array $data, ?int $resourceId = null): Post
