@@ -39,6 +39,21 @@ class PostPresenter extends SecuredPresenter
         }
     }
 
+    public function actionReact($resourceId, $subResourceId)
+    {
+        if (!is_string($this->requestData) && !is_null($this->requestData)) {
+            $this->respondBadRequest("Reaction must be string or empty");
+        }
+
+        try {
+            $this->manager->react($resourceId, $subResourceId, $this->user->getId(), $this->requestData);
+        } catch (Exception $exc) {
+            $this->handleException($exc);
+        }
+
+        $this->respondOk();
+    }
+
     public function actionMode($resourceId, $subResourceId, $mode)
     {
         if ($this->getRequest()->getMethod() !== "GET") {

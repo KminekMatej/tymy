@@ -478,13 +478,17 @@ class PostManager extends BaseManager
 
     /**
      * Create new reaction or delete existing one to a discussion post or update existing reaction
+     * @param int $discussionId
      * @param int $postId
      * @param int $userId
      * @param string|null $reaction Null to delete reaction
      * @return void
      */
-    public function react(int $postId, int $userId, ?string $reaction = null): void
+    public function react(int $discussionId, int $postId, int $userId, ?string $reaction = null): void
     {
+        $this->allowDiscussion($discussionId);
+        $this->allowRead($postId);
+
         if (empty($reaction)) { //if reaction is null, delete any existing one
             $this->database->table(Post::TABLE_REACTION)
                 ->where("user_id", $userId)
