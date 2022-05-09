@@ -41,12 +41,18 @@ class PostPresenter extends SecuredPresenter
 
     public function actionReact($resourceId, $subResourceId)
     {
+        if (!in_array($this->getRequest()->getMethod(), ["POST", "DELETE"])) {
+            $this->respondNotAllowed();
+        }
+
+        $remove = $this->getRequest()->getMethod() == "DELETE";
+
         if (!is_string($this->requestData) && !is_null($this->requestData)) {
             $this->respondBadRequest("Reaction must be string or empty");
         }
 
         try {
-            $this->manager->react($resourceId, $subResourceId, $this->user->getId(), $this->requestData);
+            $this->manager->react($resourceId, $subResourceId, $this->user->getId(), $this->requestData, $remove);
         } catch (Exception $exc) {
             $this->handleException($exc);
         }

@@ -42,12 +42,12 @@ class DiscussionPresenter extends SecuredPresenter
         });
     }
 
-    public function handleReact(int $postId, ?string $reaction)
+    public function handleReact(int $postId, string $reaction, bool $remove = false)
     {
         /* @var $post Post */
         $post = $this->postManager->getById($postId);
 
-        $this->postManager->react($post->getDiscussionId(), $postId, $this->user->getId(), $reaction);
+        $this->postManager->react($post->getDiscussionId(), $postId, $this->user->getId(), $reaction, $remove);
 
         if (!$this->isAjax()) {
             $this->redirect('this');

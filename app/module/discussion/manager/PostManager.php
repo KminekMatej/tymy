@@ -481,18 +481,20 @@ class PostManager extends BaseManager
      * @param int $discussionId
      * @param int $postId
      * @param int $userId
-     * @param string|null $reaction Null to delete reaction
+     * @param string $reaction
+     * @param bool $remove
      * @return void
      */
-    public function react(int $discussionId, int $postId, int $userId, ?string $reaction = null): void
+    public function react(int $discussionId, int $postId, int $userId, string $reaction, bool $remove = false): void
     {
         $this->allowDiscussion($discussionId);
         $this->allowRead($postId);
 
-        if (empty($reaction)) { //if reaction is null, delete any existing one
+        if ($remove) { //handle removal of this reaction
             $this->database->table(Post::TABLE_REACTION)
                 ->where("user_id", $userId)
                 ->where("discussion_post_id", $postId)
+                ->where("reaction", $reaction)
                 ->delete();
 
             return;
@@ -502,31 +504,23 @@ class PostManager extends BaseManager
             return;
         }
 
-        //check if there is some reaction already
+        //check if there is this reaction already
         $reactionRow = $this->database->table(Post::TABLE_REACTION)
             ->where("user_id", $userId)
             ->where("discussion_post_id", $postId)
+            ->where("reaction", $reaction)
             ->fetch();
 
         if ($reactionRow) {
-            if ($reactionRow->reaction == $reaction) { //no change in reaction, just return
-                return;
-            }
-
-            //there is some reaction change, perform update
-            $this->database->table(Post::TABLE_REACTION)
-                ->where("user_id", $userId)
-                ->where("discussion_post_id", $postId)
-                ->update([
-                    "reaction" => $reaction,
-                    "created" => new DateTime(), //simulate reaction on
-            ]);
-        } else { //create new reaction
-            $this->database->table(Post::TABLE_REACTION)->insert([
-                "user_id" => $userId,
-                "discussion_post_id" => $postId,
-                "reaction" => $reaction,
-            ]);
+            //this reaction already exists - dont do anything
+            return;
         }
+
+        //create new reaction
+        $this->database->table(Post::TABLE_REACTION)->insert([
+            "user_id" => $userId,
+            "discussion_post_id" => $postId,
+            "reaction" => $reaction,
+        ]);
     }
 }
