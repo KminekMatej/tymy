@@ -19,7 +19,7 @@ CREATE TABLE `discussion_post_reaction` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `user_id` int(11) NOT NULL,
   `discussion_post_id` int(11) NOT NULL,
-  `reaction` varchar(4) CHARACTER SET utf8mb4 NOT NULL
+  `reaction` varchar(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
