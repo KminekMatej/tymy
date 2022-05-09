@@ -7,6 +7,7 @@ use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Discussion\Manager\DiscussionManager;
 use Tymy\Module\Discussion\Manager\PostManager;
+use Tymy\Module\Discussion\Model\Post;
 use Tymy\Module\User\Manager\UserManager;
 
 /**
@@ -29,6 +30,28 @@ class DiscussionPresenter extends SecuredPresenter
     {
         parent::beforeRender();
         $this->addBreadcrumb($this->translator->translate("discussion.discussion", 2), $this->link(":Discussion:Default:"));
+
+        $this->template->addFilter('myReaction', function (Post $post) {
+            foreach ($post->getReactions() as $emoji => $userIds) {
+                if (in_array($this->user->getId(), $userIds)) {
+                    return $emoji;
+                }
+            }
+
+            return null;
+        });
+    }
+
+    public function handleReact(int $postId, ?string $reaction)
+    {
+        /* @var $post Post */
+        $post = $this->postManager->getById($postId);
+
+        $this->postManager->react($post->getDiscussionId(), $postId, $this->user->getId(), $reaction);
+
+        if (!$this->isAjax()) {
+            $this->redirect('this');
+        }
     }
 
     public function renderDefault(string $discussion, int $page = 1, ?string $search = null, string $suser = "all", ?string $jump2date = null)

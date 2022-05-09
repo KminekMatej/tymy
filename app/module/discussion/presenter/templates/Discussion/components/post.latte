@@ -1,10 +1,10 @@
 {*TODO: enphasize sticky post and new posts*}
-    
+
 <div n:class="row,post,post-other,$item->getSticky() ? post-sticky,$item->getNewPost() ? post-new" id="row-{$item->getId()}">
     <div class="col-2 col-lg-1 text-center">
         <img class="avatar" src="{$item->getCreatedBy()->getPictureUrl()}" />
     </div>
-    <div class="col-10 col-lg-11 content">
+    <div class="col-10 col-lg-11 content pb-2">
         <div class="arrow-left"></div>
         <div class="row header">
             <div class="col-8 created-by">
@@ -22,11 +22,26 @@
                 {$item->getPost()|noescape}
             {/if}
         </div>
-        <div class="edit-bar btn-group btn-group-sm float-md-right" role="group">
-            <a n:if="$discussionPosts->getDiscussion()->getCanStick()" n:class="btn,btn-sm,$item->getSticky() ? active,$item->getSticky() ? btn-dark:btn-light,!$item->getSticky() ? btn-light-bordered" href="{plink :Discussion:Discussion:stickPost $item->getId(), $discussionPosts->getDiscussion()->getId(), $item->getSticky() ? false : true}" title="{if $item->getSticky()}{_discussion.unpin}{else}{_discussion.pin}{/if}"><i class="fa fa-thumbtack" aria-hidden="true"></i></a>
-            <button class="btn btn-sm btn-light btn-light-bordered clipboard-btn" data-clipboard-target="DIV.post#row-{$item->getId()} DIV.text" title="{_common.copyToClipboard}"><i class="far fa-copy" aria-hidden="true"></i></button>
-            <button n:if="$discussionPosts->getDiscussion()->getEditablePosts() && $item->getCreatedById() == $user->getId()" class="btn btn-sm btn-light btn-light-bordered" onclick="loadPost({$item->getId()})" title="{_common.edit} / {_common.copy}"><i class="far fa-edit" aria-hidden="true"></i></button>
-            <a n:if="$discussionPosts->getDiscussion()->getCanDelete() || ($discussionPosts->getDiscussion()->getEditablePosts() && $item->getCreatedById() == $user->getId()) " onclick="return confirm({_discussion.alerts.confirmDeletePost})" class="btn btn-sm btn-light btn-light-bordered delete ajax" href="{plink deletePost! $item->getId(), $discussionPosts->getDiscussion()->getId(), $currentPage}" title="{_common.delete}"><i class="far fa-trash-can" aria-hidden="true"></i></a>
+
+        {var $myReaction = ($item|myReaction)}
+        <div class="reaction-bar d-flex align-items-end">
+            {*always displayed content: *}
+            <a href="{if $emoji == $myReaction}#{else}{plink react! $item->getId(), $emoji} {/if}" class="badge badge-light ajax my-1 mr-1 border {if $emoji == $myReaction}border-primary{/if}" n:foreach="$item->getReactions() as $emoji => $userIds">
+                {var $usrCount = count($userIds)}
+                {$emoji} 
+                <span n:if="$usrCount > 1">{$usrCount}</span>                
+            </a>
         </div>
+        <div class="edit-bar btn-group btn-group-sm float-md-right" role="group">
+            <div class="hidden-bar">
+                <a n:class="btn,btn-sm,btn-light,btn-light-bordered,$myReaction ? active" href="{plink :Discussion:Discussion:stickPost $item->getId(), $discussionPosts->getDiscussion()->getId(), $item->getSticky() ? false : true}" title="{if $item->getSticky()}{_discussion.unpin}{else}{_discussion.pin}{/if}">
+                    {$myReaction}
+                </a>
+                <a n:if="$discussionPosts->getDiscussion()->getCanStick()" n:class="btn,btn-sm,$item->getSticky() ? active,$item->getSticky() ? btn-dark:btn-light,!$item->getSticky() ? btn-light-bordered" href="{plink :Discussion:Discussion:stickPost $item->getId(), $discussionPosts->getDiscussion()->getId(), $item->getSticky() ? false : true}" title="{if $item->getSticky()}{_discussion.unpin}{else}{_discussion.pin}{/if}"><i class="fa fa-thumbtack" aria-hidden="true"></i></a>
+                <button class="btn btn-sm btn-light btn-light-bordered clipboard-btn" data-clipboard-target="DIV.post#row-{$item->getId()} DIV.text" title="{_common.copyToClipboard}"><i class="far fa-copy" aria-hidden="true"></i></button>
+                <button n:if="$discussionPosts->getDiscussion()->getEditablePosts() && $item->getCreatedById() == $user->getId()" class="btn btn-sm btn-light btn-light-bordered" onclick="loadPost({$item->getId()})" title="{_common.edit} / {_common.copy}"><i class="far fa-edit" aria-hidden="true"></i></button>
+                <a n:if="$discussionPosts->getDiscussion()->getCanDelete() || ($discussionPosts->getDiscussion()->getEditablePosts() && $item->getCreatedById() == $user->getId()) " onclick="return confirm({_discussion.alerts.confirmDeletePost})" class="btn btn-sm btn-light btn-light-bordered delete ajax" href="{plink deletePost! $item->getId(), $discussionPosts->getDiscussion()->getId(), $currentPage}" title="{_common.delete}"><i class="far fa-trash-can" aria-hidden="true"></i></a>
+            </div>
+        </div>        
     </div>
 </div>
