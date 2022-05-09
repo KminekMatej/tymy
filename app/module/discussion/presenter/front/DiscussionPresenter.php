@@ -52,6 +52,8 @@ class DiscussionPresenter extends SecuredPresenter
         if (!$this->isAjax()) {
             $this->redirect('this');
         }
+
+        $this->sendPayload();   //terminate to avoid jumping into render function
     }
 
     public function renderDefault(string $discussion, int $page = 1, ?string $search = null, string $suser = "all", ?string $jump2date = null)
