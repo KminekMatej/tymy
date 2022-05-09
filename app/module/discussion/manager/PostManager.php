@@ -498,16 +498,18 @@ class PostManager extends BaseManager
             return;
         }
 
-        //check if there is some reaction already
-        $reactionChar = substr($reaction, 0, 1);
+        if (mb_strlen($reaction) !== 1) { //pass only emojis
+            return;
+        }
 
+        //check if there is some reaction already
         $reactionRow = $this->database->table(Post::TABLE_REACTION)
             ->where("user_id", $userId)
             ->where("discussion_post_id", $postId)
             ->fetch();
 
         if ($reactionRow) {
-            if ($reactionRow->reaction == $reactionChar) { //no change in reaction, just return
+            if ($reactionRow->reaction == $reaction) { //no change in reaction, just return
                 return;
             }
 
@@ -516,14 +518,14 @@ class PostManager extends BaseManager
                 ->where("user_id", $userId)
                 ->where("discussion_post_id", $postId)
                 ->update([
-                    "reaction" => $reactionChar,
+                    "reaction" => $reaction,
                     "created" => new DateTime(), //simulate reaction on
             ]);
         } else { //create new reaction
             $this->database->table(Post::TABLE_REACTION)->insert([
                 "user_id" => $userId,
                 "discussion_post_id" => $postId,
-                "reaction" => $reactionChar,
+                "reaction" => $reaction,
             ]);
         }
     }
