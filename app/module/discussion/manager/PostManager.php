@@ -505,13 +505,13 @@ class PostManager extends BaseManager
         }
 
         //check if there is this reaction already
-        $reactionRow = $this->database->table(Post::TABLE_REACTION)
+        $reactionsCnt = $this->database->table(Post::TABLE_REACTION)
             ->where("user_id", $userId)
             ->where("discussion_post_id", $postId)
             ->where("reaction", $reaction)
-            ->fetch();
+            ->count('id');
 
-        if ($reactionRow) {
+        if ($reactionsCnt) {
             //this reaction already exists - dont do anything
             return;
         }
