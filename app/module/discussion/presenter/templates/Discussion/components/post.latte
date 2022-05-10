@@ -26,16 +26,23 @@
         {var $myReaction = ($item|myReaction)}
         <div class="reaction-bar d-flex align-items-end">
             {*always displayed content: *}
-            <a href="{if $emoji == $myReaction}#{else}{plink react! $item->getId(), $emoji} {/if}" class="badge badge-light ajax my-1 mr-1 border {if $emoji == $myReaction}border-primary{/if}" n:foreach="$item->getReactions() as $emoji => $userIds">
-                {var $usrCount = count($userIds)}
-                {$emoji} 
-                <span n:if="$usrCount > 1">{$usrCount}</span>                
-            </a>
+            {foreach $item->getReactions() as $emoji => $userIds}
+                {var $mine = in_array($user->getId(), $userIds)}
+                <a href="{plink react! $item->getId(), $emoji, $mine}" class="badge badge-light ajax my-1 mr-1 border {if $mine}border-primary{/if}" onclick="react({$item->getId()}, {$emoji}, {$mine})">
+                    {var $usrCount = count($userIds)}
+                    <span class="emoji">{$emoji}</span>
+                    <span class="emoji-count" style="{if $usrCount == 1}display: none{/if}">{$usrCount}</span>                
+                </a>
+            {/foreach}
         </div>
         <div class="edit-bar btn-group btn-group-sm float-md-right" role="group">
             <div class="hidden-bar">
-                <a n:class="btn,btn-sm,btn-light,btn-light-bordered,$myReaction ? active" href="{plink :Discussion:Discussion:stickPost $item->getId(), $discussionPosts->getDiscussion()->getId(), $item->getSticky() ? false : true}" title="{if $item->getSticky()}{_discussion.unpin}{else}{_discussion.pin}{/if}">
-                    {$myReaction}
+                <a href="{plink react! $item->getId(), ($myReaction ?: '👍'), ($myReaction ? true : false)}" 
+                   data-default-href="{plink react! $item->getId(), '👍', true}" 
+                   onclick="react({$item->getId()}, {$myReaction ?: '👍'}, {$myReaction ? 1 : 0})" 
+                   data-default-onclick="react({$item->getId()}, '👍', 1)"
+                   n:class="ajax,btn,btn-sm,btn-light,btn-light-bordered,like-btn,$myReaction ? border-primary">
+                    {$myReaction ?: '👍'}
                 </a>
                 <a n:if="$discussionPosts->getDiscussion()->getCanStick()" n:class="btn,btn-sm,$item->getSticky() ? active,$item->getSticky() ? btn-dark:btn-light,!$item->getSticky() ? btn-light-bordered" href="{plink :Discussion:Discussion:stickPost $item->getId(), $discussionPosts->getDiscussion()->getId(), $item->getSticky() ? false : true}" title="{if $item->getSticky()}{_discussion.unpin}{else}{_discussion.pin}{/if}"><i class="fa fa-thumbtack" aria-hidden="true"></i></a>
                 <button class="btn btn-sm btn-light btn-light-bordered clipboard-btn" data-clipboard-target="DIV.post#row-{$item->getId()} DIV.text" title="{_common.copyToClipboard}"><i class="far fa-copy" aria-hidden="true"></i></button>
