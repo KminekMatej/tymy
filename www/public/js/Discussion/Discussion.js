@@ -1,3 +1,15 @@
+$(function () {
+    $(".emoji-toggler").each(function () {
+        $(this).popover({
+            content: function () {
+                // Get the content from the hidden sibling.
+                return $('#emoji-card').html();
+            },
+            html: true,
+            placement: 'auto',
+        });
+    });
+});
 
 function addPost(url) {
     $("DIV.addPost BUTTON").prop("disabled", true);
@@ -13,7 +25,7 @@ function addPost(url) {
 
 function loadPost(postId) {
     var text = $("DIV.post#row-" + postId + " DIV.text").html();
-    $("DIV.addPost").attr("data-postId",postId);
+    $("DIV.addPost").attr("data-postId", postId);
     CKEDITOR.instances.addPost.setData(text);
     smoothScroll('addPost');
 }
@@ -29,7 +41,7 @@ function updatePost(url) {
         },
     }).done(function () {
         $("DIV.addPost BUTTON").prop("disabled", false);
-        $("DIV.addPost").attr("data-postId","");
+        $("DIV.addPost").attr("data-postId", "");
         CKEDITOR.instances.addPost.setData('');
     });
 }
@@ -49,7 +61,7 @@ function deletePost(id, url) {
             'postId': id,
         },
     }).done(function () {
-        
+
     });
 }
 
@@ -64,7 +76,7 @@ function stickPost(url, postId, sticky) {
         },
     }).done(function () {
         $("DIV.addPost BUTTON").prop("disabled", false);
-        $("DIV.addPost").attr("data-postId","");
+        $("DIV.addPost").attr("data-postId", "");
         smoothScroll('addPost');
     });
 }
