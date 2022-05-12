@@ -32,3 +32,18 @@ DIV#cke_addPost .cke_inner .cke_bottom
 .addPost:not([data-postId='']) BUTTON#insertPost{
     display: none;
 }
+
+.emoji-tab{
+    height: 300px;
+    max-height: 300px;
+    overflow: auto;
+}
+
+.emoji-icon {
+    padding: 5px;
+}
+
+.emoji-icon:hover {
+    background-color: #f1f1f1;
+    text-decoration: none;
+}

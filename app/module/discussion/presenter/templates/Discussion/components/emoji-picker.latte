@@ -1,0 +1,51 @@
+<div class="card" style="width: 380px" id="emoji-card">
+    <div class="card-body p-0">
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" id="smiley-tab" data-toggle="tab" href="#emojitab-smiley" role="tab" aria-controls="home" aria-selected="true">😀</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="animals-tab" data-toggle="tab" href="#emojitab-animals" role="tab" aria-controls="home">🐻</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="food-tab" data-toggle="tab" href="#emojitab-food" role="tab" aria-controls="home">🍔</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="sport-tab" data-toggle="tab" href="#emojitab-sport" role="tab" aria-controls="home">⚽</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="travel-tab" data-toggle="tab" href="#emojitab-travel" role="tab" aria-controls="home">🚖</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="object-tab" data-toggle="tab" href="#emojitab-object" role="tab" aria-controls="home">💡</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="symbol-tab" data-toggle="tab" href="#emojitab-symbol" role="tab" aria-controls="home">❤</a>
+            </li>
+        </ul>
+        <div class="tab-content" id="emojiTabs">
+            <div class="tab-pane fade show active emoji-tab" id="emojitab-smiley" role="tabpanel" aria-labelledby="smiley-tab">
+                {include 'emoji/smiley.latte'}
+            </div>
+            <div class="tab-pane fade emoji-tab" id="emojitab-animals" role="tabpanel" aria-labelledby="animals-tab">
+                {include 'emoji/animals.latte'}
+            </div>
+            <div class="tab-pane fade emoji-tab" id="emojitab-food" role="tabpanel" aria-labelledby="food-tab">
+                {include 'emoji/food.latte'}
+            </div>
+           <div class="tab-pane fade emoji-tab" id="emojitab-sport" role="tabpanel" aria-labelledby="sport-tab">
+                {include 'emoji/sport.latte'}
+            </div>
+            <div class="tab-pane fade emoji-tab" id="emojitab-travel" role="tabpanel" aria-labelledby="travel-tab">
+                {include 'emoji/travel.latte'}
+            </div>
+            <div class="tab-pane fade emoji-tab" id="emojitab-object" role="tabpanel" aria-labelledby="object-tab">
+                {include 'emoji/object.latte'}
+            </div>
+            <div class="tab-pane fade emoji-tab" id="emojitab-symbol" role="tabpanel" aria-labelledby="symbol-tab">
+                {include 'emoji/symbol.latte'}
+            </div>
+        </div>
+
+    </div>
+</div>
