@@ -21,6 +21,10 @@ function refresh(timer) {
                 setTimeout(function(){refresh(timer);}, timer);
             }
             homepageRefresh();
+
+            if (typeof togglePopovers === "function") {
+                togglePopovers();
+            }
         }
     });
 }
