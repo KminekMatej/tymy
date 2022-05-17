@@ -25,11 +25,16 @@ class DiscussionPresenter extends SecuredPresenter
 
     /** @inject */
     public UserManager $userManager;
+    
+    private array $userList;
 
     public function beforeRender()
     {
         parent::beforeRender();
         $this->addBreadcrumb($this->translator->translate("discussion.discussion", 2), $this->link(":Discussion:Default:"));
+
+        //set users
+        $this->template->userList = $this->userList = $this->userManager->getIdList();
 
         $this->template->addFilter('myReaction', function (Post $post) {
             foreach ($post->getReactions() as $emoji => $userIds) {
@@ -40,10 +45,20 @@ class DiscussionPresenter extends SecuredPresenter
 
             return null;
         });
+
+        $this->template->addFilter('displayNames', function (array $userIds) {
+            return join(", ", array_map(function ($userId) {
+                return $this->userList[$userId]->getCallName();
+            }, $userIds));
+        });
     }
 
-    public function handleReact(int $postId, string $reaction, bool $remove = false)
+    public function handleReact(int $postId, ?string $reaction = null, bool $remove = false)
     {
+        if (empty($reaction)) {
+            $this->sendPayload();   //terminate to avoid jumping into render function
+        }
+
         /* @var $post Post */
         $post = $this->postManager->getById($postId);
 
@@ -69,9 +84,6 @@ class DiscussionPresenter extends SecuredPresenter
         $this->template->jump2date = $jump2date;
 
         $discussionPosts = $this->postManager->mode($d->getId(), $page, "html", $search, $suser, $jump2date);
-
-        //set users
-        $this->template->userList = $this->userManager->getIdList();
 
         $this->addBreadcrumb($d->getCaption(), $this->link(":Discussion:Discussion:", [$d->getWebName()]));
 
