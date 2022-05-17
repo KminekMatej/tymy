@@ -23,29 +23,19 @@
             {/if}
         </div>
 
-        {var $myReaction = ($item|myReaction)}
-        <div class="reaction-bar d-flex align-items-end">
-            {*always displayed content: *}
-            {foreach $item->getReactions() as $emoji => $userIds}
-                {var $mine = in_array($user->getId(), $userIds)}
-                <a href="{plink react! $item->getId(), $emoji, $mine}" class="badge badge-light ajax my-1 mr-1 border {if $mine}border-primary{/if}" onclick="react({$item->getId()}, {$emoji}, {$mine})">
-                    {var $usrCount = count($userIds)}
-                    <span class="emoji">{$emoji}</span>
-                    <span class="emoji-count" style="{if $usrCount == 1}display: none{/if}">{$usrCount}</span>                
-                </a>
-            {/foreach}
+        <div class="reaction-bar d-flex align-items-end" data-reaction-url="{plink react! $item->getId()}">
+            <span n:foreach="$item->getReactions() as $emoji => $userIds" 
+                  class="badge badge-light my-1 mr-1 border {if in_array($user->getId(), $userIds)}border-primary{/if}" 
+                  onclick="react(this)"
+                  title="{$userIds|callNames}">
+                {var $usrCount = count($userIds)}
+                <span class="emoji">{$emoji}</span>
+                <span class="emoji-count" style="{if $usrCount == 1}display: none{/if}">{$usrCount}</span>                
+            </span>
         </div>
         <div class="edit-bar btn-group btn-group-sm float-md-right" role="group">
-            <div class="btn-group">
-                <a href="{plink react! $item->getId(), ($myReaction ?: '👍'), ($myReaction ? true : false)}" 
-                   data-default-href="{plink react! $item->getId(), '👍', true}" 
-                   onclick="react({$item->getId()}, {$myReaction ?: '👍'}, {$myReaction ? 1 : 0})" 
-                   data-default-onclick="react({$item->getId()}, '👍', 1)"
-                   n:class="ajax,btn,btn-sm,btn-light,btn-light-bordered,like-btn,$myReaction ? border-primary">
-                    {$myReaction ?: '👍'}
-                </a>
-                <button type="button" class="btn btn-sm btn-light btn-light-bordered emoji-toggler dropdown-toggle dropdown-toggle-split"><span class="sr-only">Toggle Dropdown</span></button>
-            </div>
+            <button class="btn btn-sm btn-light btn-light-bordered emoji-toggler">👍</button>
+            {include 'emoji-picker.latte', rowId => $item->getId()}
             <a n:if="$discussionPosts->getDiscussion()->getCanStick()" n:class="btn,btn-sm,$item->getSticky() ? active,$item->getSticky() ? btn-dark:btn-light,!$item->getSticky() ? btn-light-bordered" href="{plink :Discussion:Discussion:stickPost $item->getId(), $discussionPosts->getDiscussion()->getId(), $item->getSticky() ? false : true}" title="{if $item->getSticky()}{_discussion.unpin}{else}{_discussion.pin}{/if}"><i class="fa fa-thumbtack" aria-hidden="true"></i></a>
             <button class="btn btn-sm btn-light btn-light-bordered clipboard-btn" data-clipboard-target="DIV.post#row-{$item->getId()} DIV.text" title="{_common.copyToClipboard}"><i class="far fa-copy" aria-hidden="true"></i></button>
             <button n:if="$discussionPosts->getDiscussion()->getEditablePosts() && $item->getCreatedById() == $user->getId()" class="btn btn-sm btn-light btn-light-bordered" onclick="loadPost({$item->getId()})" title="{_common.edit} / {_common.copy}"><i class="far fa-edit" aria-hidden="true"></i></button>
