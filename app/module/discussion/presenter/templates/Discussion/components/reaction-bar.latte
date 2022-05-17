@@ -1,0 +1,10 @@
+<div class="reaction-bar d-flex align-items-end" data-reaction-url="{plink react! $item->getId()}">
+    <span n:foreach="$item->getReactions() as $emoji => $userIds" 
+          class="badge badge-light my-1 mr-1 border {if in_array($user->getId(), $userIds)}border-primary{/if}" 
+          onclick="react(this)"
+          title="{$userIds|displayNames}">
+        {var $usrCount = count($userIds)}
+        <span class="emoji">{$emoji}</span>
+        <span class="emoji-count" style="{if $usrCount == 1}display: none{/if}">{$usrCount}</span>                
+    </span>
+</div>
