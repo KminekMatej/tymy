@@ -81,8 +81,8 @@ DIV.post.post-sticky .content{
 
 /* Discussion post settings toolbar styling */
 
-DIV.post .content:hover DIV.edit-bar {
-    display: block;
+DIV.post .content:hover > DIV.edit-bar {
+    display: inline-flex;
 }
 
 DIV.post .content DIV.edit-bar {
@@ -91,7 +91,6 @@ DIV.post .content DIV.edit-bar {
     margin: 1px;
     bottom: 3px;
     right: 3px;
-    z-index: 10;
 }
 
 DIV.post .content DIV.edit-bar BUTTON.btn.delete:hover, A.btn.delete:hover{
