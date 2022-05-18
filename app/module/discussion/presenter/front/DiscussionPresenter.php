@@ -25,7 +25,6 @@ class DiscussionPresenter extends SecuredPresenter
 
     /** @inject */
     public UserManager $userManager;
-    
     private array $userList;
 
     public function beforeRender()
