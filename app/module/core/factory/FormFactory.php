@@ -31,8 +31,10 @@ class FormFactory
     private TeamManager $teamManager;
     private UserManager $userManager;
     private Translator $translator;
+    private PermissionManager $permissionManager;
+    private array $userPermissions;
 
-    public function __construct(EventTypeManager $eventTypeManager, EventManager $eventManager, Translator $translator, StatusSetManager $statusSetManager, TeamManager $teamManager, UserManager $userManager)
+    public function __construct(EventTypeManager $eventTypeManager, EventManager $eventManager, Translator $translator, StatusSetManager $statusSetManager, TeamManager $teamManager, UserManager $userManager, PermissionManager $permissionManager)
     {
         $this->eventTypeManager = $eventTypeManager;
         $this->eventManager = $eventManager;
@@ -40,24 +42,35 @@ class FormFactory
         $this->userManager = $userManager;
         $this->translator = $translator;
         $this->statusSetManager = $statusSetManager;
+        $this->permissionManager = $permissionManager;
+    }
+
+    /**
+     * Get array of user permissions (cached on first call)
+     * @return array in the format of name = caption
+     */
+    private function getUserPermissions(): array
+    {
+        if (!isset($this->userPermissions)) {
+            foreach ($this->permissionManager->getByType(Permission::TYPE_USER) as $userPermission) {
+                /* @var $userPermission Permission */
+                $this->userPermissions[$userPermission->getName()] = $userPermission->getCaption();
+            }
+        }
+
+        return $this->userPermissions;
     }
 
     /**
      * @return Form
      */
-    public function createEventLineForm(array $eventTypesList, array $userPermissions, array $onSuccess, ?Event $event = null): Form
+    public function createEventLineForm(array $eventTypesList, array $onSuccess, ?Event $event = null): Form
     {
-        $permissions = [];
         $eventTypes = [];
 
         foreach ($eventTypesList as $eventType) {
             /* @var $eventType EventType */
             $eventTypes[$eventType->getId()] = $eventType->getCaption();
-        }
-
-        foreach ($userPermissions as $userPermission) {
-            /* @var $userPermission Permission */
-            $permissions[$userPermission->getName()] = $userPermission->getCaption();
         }
 
         $form = new Form();
@@ -72,9 +85,9 @@ class FormFactory
         $close = $form->addText("closeTime")->setHtmlAttribute("data-name", "closeTime")->setHtmlType("datetime-local")->setValue((new DateTime("+ 23 hours"))->format(BaseModel::DATETIME_ISO_NO_SECS_FORMAT))->setRequired();
         $place = $form->addText("place")->setHtmlAttribute("data-name", "place");
         $link = $form->addText("link")->setHtmlAttribute("data-name", "link");
-        $canView = $form->addSelect("canView", null, $permissions)->setHtmlAttribute("data-name", "canView")->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
-        $canPlan = $form->addSelect("canPlan", null, $permissions)->setHtmlAttribute("data-name", "canPlan")->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
-        $canResult = $form->addSelect("canResult", null, $permissions)->setHtmlAttribute("data-name", "canResult")->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
+        $canView = $form->addSelect("canView", null, $this->getUserPermissions())->setHtmlAttribute("data-name", "canView")->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
+        $canPlan = $form->addSelect("canPlan", null, $this->getUserPermissions())->setHtmlAttribute("data-name", "canPlan")->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
+        $canResult = $form->addSelect("canResult", null, $this->getUserPermissions())->setHtmlAttribute("data-name", "canResult")->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
 
         if ($event) {
             $form->addHidden("id", $event->getId());
@@ -239,9 +252,10 @@ class FormFactory
         $anonymousVotes = $form->addCheckbox("anonymousVotes", $this->translator->translate("poll.anonymousVotes"));
         $changeableVotes = $form->addCheckbox("changeableVotes", $this->translator->translate("poll.setChangeableVotes"));
         $displayResults = $form->addSelect("displayResults", $this->translator->translate("poll.displayResults"), $pollResults)->setPrompt($this->translator->translate("common.choose") . " ...");
-        $canVote = $form->addText("canVote", $this->translator->translate("poll.canVote"));
-        $canDisplayResults = $form->addText("canDisplayResults", $this->translator->translate("poll.canDisplayResults"));
-        $canAlienVote = $form->addText("canAlienVote", $this->translator->translate("poll.canAlienVote"));
+        
+        $canVote = $form->addSelect("canVote", $this->translator->translate("poll.canVote"), $this->getUserPermissions())->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
+        $canDisplayResults = $form->addSelect("canDisplayResults", $this->translator->translate("poll.canDisplayResults"), $this->getUserPermissions())->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
+        $canAlienVote = $form->addSelect("canAlienVote", $this->translator->translate("poll.canAlienVote"), $this->getUserPermissions())->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
 
         if ($poll) {
             $caption->setValue($poll->getCaption());
