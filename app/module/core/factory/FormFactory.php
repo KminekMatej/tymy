@@ -237,7 +237,7 @@ class FormFactory
         $maxItems->addRule(Form::MIN, null, $form['minItems']);
 
         $anonymousVotes = $form->addCheckbox("anonymousVotes", $this->translator->translate("poll.anonymousVotes"));
-        $setChangeableVotes = $form->addCheckbox("setChangeableVotes", $this->translator->translate("poll.setChangeableVotes"));
+        $changeableVotes = $form->addCheckbox("changeableVotes", $this->translator->translate("poll.setChangeableVotes"));
         $displayResults = $form->addSelect("displayResults", $this->translator->translate("poll.displayResults"), $pollResults)->setPrompt($this->translator->translate("common.choose") . " ...");
         $canVote = $form->addText("canVote", $this->translator->translate("poll.canVote"));
         $canDisplayResults = $form->addText("canDisplayResults", $this->translator->translate("poll.canDisplayResults"));
@@ -250,7 +250,7 @@ class FormFactory
             $minItems->setValue($poll->getMinItems());
             $maxItems->setValue($poll->getMaxItems());
             $anonymousVotes->setValue($poll->getAnonymousResults());
-            $setChangeableVotes->setValue($poll->getChangeableVotes());
+            $changeableVotes->setValue($poll->getChangeableVotes());
             $displayResults->setValue($poll->getShowResults());
             $canVote->setValue($poll->getCanVote());
             $canDisplayResults->setValue($poll->getCanSeeResults());
