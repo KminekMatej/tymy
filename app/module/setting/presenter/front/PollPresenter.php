@@ -2,6 +2,7 @@
 
 namespace Tymy\Module\Setting\Presenter\Front;
 
+use Nette\Application\UI\Form;
 use Tymy\Module\Poll\Manager\OptionManager;
 use Tymy\Module\Poll\Manager\PollManager;
 use Tymy\Module\Poll\Model\Option;
@@ -145,5 +146,10 @@ class PollPresenter extends SettingBasePresenter
         } else {
             return $this->optionManager->update($bind["changes"], $bind["id"]);
         }
+    }
+    
+    public function createComponentPollForm(): Form
+    {
+        return $this->formFactory->createPollConfigForm([$this, "pollFormSuccess"]);
     }
 }
