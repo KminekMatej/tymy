@@ -232,6 +232,10 @@ class FormFactory
         $status = $form->addSelect("status", $this->translator->translate("settings.status"), $pollStatuses)->setDefaultValue(Poll::STATUS_DESIGN)->setPrompt($this->translator->translate("common.chooseState") . " ...")->setRequired();
         $minItems = $form->addInteger("minItems", $this->translator->translate("poll.minItems"))->setHtmlAttribute("min", 0)->setRequired();
         $maxItems = $form->addInteger("maxItems", $this->translator->translate("poll.maxItems"))->setHtmlAttribute("min", 0)->setRequired();
+
+        $minItems->addRule(Form::MAX, null, $form['maxItems']);
+        $maxItems->addRule(Form::MIN, null, $form['minItems']);
+
         $anonymousVotes = $form->addCheckbox("anonymousVotes", $this->translator->translate("poll.anonymousVotes"));
         $setChangeableVotes = $form->addCheckbox("setChangeableVotes", $this->translator->translate("poll.setChangeableVotes"));
         $displayResults = $form->addSelect("displayResults", $this->translator->translate("poll.displayResults"), $pollResults)->setPrompt($this->translator->translate("common.choose") . " ...");
