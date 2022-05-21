@@ -16,6 +16,7 @@ use Tymy\Module\Event\Manager\EventTypeManager;
 use Tymy\Module\Event\Model\Event;
 use Tymy\Module\Event\Model\EventType;
 use Tymy\Module\Permission\Model\Permission;
+use Tymy\Module\Poll\Model\Poll;
 use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\User\Manager\UserManager;
 use Tymy\Module\User\Model\User;
@@ -205,6 +206,56 @@ class FormFactory
         $form->addSubmit("save");
 
         $form->onSuccess[] = $onSuccess;
+
+        return $form;
+    }
+
+    public function createPollConfigForm(array $onSuccess, ?Poll $poll = null): Form
+    {
+        $form = new Form();
+
+        $pollStatuses = [
+            Poll::STATUS_DESIGN => $this->translator->translate("poll.design"),
+            Poll::STATUS_OPENED => $this->translator->translate("poll.opened"),
+            Poll::STATUS_CLOSED => $this->translator->translate("poll.closed"),
+        ];
+
+        $pollResults = [
+            Poll::RESULTS_ALWAYS => $this->translator->translate("poll.always"),
+            Poll::RESULTS_AFTER_VOTE => $this->translator->translate("poll.afterVote"),
+            Poll::RESULTS_WHEN_CLOSED => $this->translator->translate("poll.whenClosed"),
+            Poll::RESULTS_NEVER => $this->translator->translate("poll.never"),
+        ];
+
+        $caption = $form->addText("caption", $this->translator->translate("settings.title"))->setRequired();
+        $description = $form->addTextArea("description", $this->translator->translate("settings.description"));
+        $status = $form->addSelect("status", $this->translator->translate("settings.status"), $pollStatuses)->setDefaultValue(Poll::STATUS_DESIGN)->setPrompt($this->translator->translate("common.chooseState") . " ...")->setRequired();
+        $minItems = $form->addInteger("minItems", $this->translator->translate("poll.minItems"))->setHtmlAttribute("min", 0)->setRequired();
+        $maxItems = $form->addInteger("maxItems", $this->translator->translate("poll.maxItems"))->setHtmlAttribute("min", 0)->setRequired();
+        $anonymousVotes = $form->addCheckbox("anonymousVotes", $this->translator->translate("poll.anonymousVotes"));
+        $setChangeableVotes = $form->addCheckbox("setChangeableVotes", $this->translator->translate("poll.setChangeableVotes"));
+        $displayResults = $form->addSelect("displayResults", $this->translator->translate("poll.displayResults"), $pollResults)->setPrompt($this->translator->translate("common.choose") . " ...");
+        $canVote = $form->addText("canVote", $this->translator->translate("poll.canVote"));
+        $canDisplayResults = $form->addText("canDisplayResults", $this->translator->translate("poll.canDisplayResults"));
+        $canAlienVote = $form->addText("canAlienVote", $this->translator->translate("poll.canAlienVote"));
+
+        if ($poll) {
+            $caption->setValue($poll->getCaption());
+            $description->setValue($poll->getDescription());
+            $status->setValue($poll->getStatus());
+            $minItems->setValue($poll->getMinItems());
+            $maxItems->setValue($poll->getMaxItems());
+            $anonymousVotes->setValue($poll->getAnonymousResults());
+            $setChangeableVotes->setValue($poll->getChangeableVotes());
+            $displayResults->setValue($poll->getShowResults());
+            $canVote->setValue($poll->getCanVote());
+            $canDisplayResults->setValue($poll->getCanSeeResults());
+            $canAlienVote->setValue($poll->getCanAlienVote());
+        }
+
+        $form->onSuccess[] = $onSuccess;
+
+        $form->addSubmit("save");
 
         return $form;
     }
