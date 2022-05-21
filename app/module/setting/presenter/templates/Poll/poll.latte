@@ -39,8 +39,8 @@
                                 </select>
                             </td></tr>
                         
-                        <tr><th>{_poll.minItems}</th><td><input type="number" name="minItems" data-value="{$poll->getMinItems()}" value="{$poll->getMinItems()}" class="col-6 form-control" required /></td></tr>
-                        <tr><th>{_poll.maxItems}</th><td><input type="number" name="maxItems" data-value="{$poll->getMaxItems()}" value="{$poll->getMaxItems()}" class="col-6 form-control" required /></td></tr>
+                        <tr><th>{_poll.minItems}</th><td><input type="number" name="minItems" data-validation-field2="maxItems" data-value="{$poll->getMinItems()}" value="{$poll->getMinItems()}" class="col-6 form-control" required /></td></tr>
+                        <tr><th>{_poll.maxItems}</th><td><input type="number" name="maxItems" data-validation-field2="minItems" data-value="{$poll->getMaxItems()}" value="{$poll->getMaxItems()}" class="col-6 form-control" required /></td></tr>
                         
                         <tr><th>{_poll.anonymousVotes}</th><td><label class="custom-control custom-checkbox"><input type="checkbox" name="anonymousResults" data-value="{$poll->getAnonymousResults() ? 1 : 0}" n:attr="checked => $poll->getAnonymousResults()" class="col-6 form-control custom-control-input" /><span class="custom-control-label"></span></label></td></tr>
                         <tr><th>{_poll.setChangeableVotes}</th><td><label class="custom-control custom-checkbox"><input type="checkbox" name="changeableVotes" data-value="{$poll->getChangeableVotes() ? 1 : 0}" n:attr="checked => $poll->getChangeableVotes()" class="col-6 form-control custom-control-input" /><span class="custom-control-label"></span></label></td></tr>
