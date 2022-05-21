@@ -3,6 +3,7 @@
 namespace Tymy\Module\Setting\Presenter\Front;
 
 use Tymy\Module\Attendance\Manager\StatusManager;
+use Tymy\Module\Core\Factory\FormFactory;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Event\Manager\EventTypeManager;
 use Tymy\Module\Permission\Manager\PermissionManager;
@@ -24,6 +25,10 @@ class SettingBasePresenter extends SecuredPresenter
 
     /** @inject */
     public StatusManager $statusManager;
+    
+    /** @inject */
+    public FormFactory $formFactory;
+    
     protected array $eventTypes;
     protected array $userPermissions;
 
