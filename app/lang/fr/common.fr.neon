@@ -24,6 +24,7 @@ chooseFile: choisir fichier
 chooseSex: choisir sexe
 chooseType: choisir type
 chooseState: choisir état
+choose: Choisir
 ok: Ok
 yes: oui
 no: Non
