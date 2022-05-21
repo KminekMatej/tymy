@@ -16,6 +16,7 @@ class PollPresenter extends SettingBasePresenter
 
     /** @inject */
     public OptionManager $optionManager;
+    private ?Poll $poll = null;
 
     public function actionDefault(?string $resource = null)
     {
@@ -60,17 +61,17 @@ class PollPresenter extends SettingBasePresenter
 
         //RENDERING POLL DETAIL
         $pollId = $this->parseIdFromWebname($resource);
-        /* @var $pollObj Poll */
-        $pollObj = $this->pollManager->getById($pollId);
-        if ($pollObj == null) {
+        /* @var $this->poll Poll */
+        $this->poll = $this->pollManager->getById($pollId);
+        if ($this->poll == null) {
             $this->flashMessage($this->translator->translate("poll.errors.pollNotExists", null, ['id' => $pollId]), "danger");
             $this->redirect(':Setting:Poll:');
         }
-        if (count($pollObj->getOptions()) == 0) {
-            $pollObj->setOptions([(new Option())->setId(-1)->setPollId($pollId)->setCaption("")->setType("TEXT")]);
+        if (count($this->poll->getOptions()) == 0) {
+            $this->poll->setOptions([(new Option())->setId(-1)->setPollId($pollId)->setCaption("")->setType("TEXT")]);
         }
-        $this->addBreadcrumb($pollObj->getCaption(), $this->link(":Setting:Poll:", $pollObj->getWebName()));
-        $this->template->poll = $pollObj;
+        $this->addBreadcrumb($this->poll->getCaption(), $this->link(":Setting:Poll:", $this->poll->getWebName()));
+        $this->template->poll = $this->poll;
     }
 
     public function handlePollsEdit()
@@ -148,8 +149,8 @@ class PollPresenter extends SettingBasePresenter
         }
     }
     
-    public function createComponentPollForm(): Form
+    public function createComponentPollForm()
     {
-        return $this->formFactory->createPollConfigForm([$this, "pollFormSuccess"]);
+        return $this->formFactory->createPollConfigForm([$this, "pollFormSuccess"], $this->poll);
     }
 }
