@@ -15,6 +15,7 @@ use Tymy\Module\Event\Manager\EventManager;
 use Tymy\Module\Event\Manager\EventTypeManager;
 use Tymy\Module\Event\Model\Event;
 use Tymy\Module\Event\Model\EventType;
+use Tymy\Module\Permission\Manager\PermissionManager;
 use Tymy\Module\Permission\Model\Permission;
 use Tymy\Module\Poll\Model\Poll;
 use Tymy\Module\Team\Manager\TeamManager;
@@ -266,9 +267,15 @@ class FormFactory
             $anonymousVotes->setValue($poll->getAnonymousResults());
             $changeableVotes->setValue($poll->getChangeableVotes());
             $displayResults->setValue($poll->getShowResults());
-            $canVote->setValue($poll->getCanVote());
-            $canDisplayResults->setValue($poll->getCanSeeResults());
-            $canAlienVote->setValue($poll->getCanAlienVote());
+            if ($poll->getVoteRightName()) {
+                $canVote->setValue($poll->getVoteRightName());
+            }
+            if ($poll->getResultRightName()) {
+                $canDisplayResults->setValue($poll->getResultRightName());
+            }
+            if ($poll->getAlienVoteRightName()) {
+                $canAlienVote->setValue($poll->getAlienVoteRightName());
+            }
         }
 
         $form->onSuccess[] = $onSuccess;
