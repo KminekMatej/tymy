@@ -53,6 +53,7 @@ class FormFactory
     private function getUserPermissions(): array
     {
         if (!isset($this->userPermissions)) {
+            $this->userPermissions = [];
             foreach ($this->permissionManager->getByType(Permission::TYPE_USER) as $userPermission) {
                 /* @var $userPermission Permission */
                 $this->userPermissions[$userPermission->getName()] = $userPermission->getCaption();
@@ -280,7 +281,7 @@ class FormFactory
 
         $form->onSuccess[] = $onSuccess;
 
-        $form->addSubmit("save");
+        $form->addSubmit("save")->setHtmlAttribute("title", $this->translator->translate("common.save"));
 
         return $form;
     }
