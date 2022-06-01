@@ -138,6 +138,8 @@ class AuthenticationManager implements IAuthenticator
         /* @var $user User */
         $user = $userManager->getById($userId);
 
+        $this->teamDatabase->table(self::TABLE)->where('id', $userId)->update(["last_login" => new DateTime()]);
+
         return new SimpleIdentity($user->getId(), $user->getRoles(), $user->jsonSerialize());
     }
 
