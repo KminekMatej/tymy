@@ -267,9 +267,9 @@ class FormFactory
             $status->setValue($poll->getStatus())->setHtmlAttribute("data-value", $poll->getStatus());
             $minItems->setValue($poll->getMinItems())->setHtmlAttribute("data-value", $poll->getMinItems());
             $maxItems->setValue($poll->getMaxItems())->setHtmlAttribute("data-value", $poll->getMaxItems());
-            $anonymousVotes->setValue($poll->getAnonymousResults())->setHtmlAttribute("data-value", $poll->getAnonymousResults());
-            $changeableVotes->setValue($poll->getChangeableVotes())->setHtmlAttribute("data-value", $poll->getChangeableVotes());
-            $displayResults->setValue($poll->getShowResults())->setHtmlAttribute("data-value", $poll->getShowResults());
+            $anonymousVotes->setValue($poll->getAnonymousResults())->setHtmlAttribute("data-value", $poll->getAnonymousResults() ? 1 : 0);
+            $changeableVotes->setValue($poll->getChangeableVotes())->setHtmlAttribute("data-value", $poll->getChangeableVotes() ? 1 : 0);
+            $displayResults->setValue($poll->getShowResults())->setHtmlAttribute("data-value", $poll->getShowResults() ? 1 : 0);
             if ($poll->getVoteRightName()) {
                 $canVote->setValue($poll->getVoteRightName())->setHtmlAttribute("data-value", $poll->getVoteRightName());
             }
