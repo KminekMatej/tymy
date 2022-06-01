@@ -25,10 +25,10 @@ class SettingBasePresenter extends SecuredPresenter
 
     /** @inject */
     public StatusManager $statusManager;
-    
+
     /** @inject */
     public FormFactory $formFactory;
-    
+
     protected array $eventTypes;
     protected array $userPermissions;
 
