@@ -385,6 +385,14 @@ LiveForm.setFormProperty = function(form, propertyName, value) {
 	this.forms[form.id][propertyName] = value;
 };
 
+LiveForm.emphasizeIfChanged = function(el){
+    if(el && el.getAttribute("data-value") !== Nette.getEffectiveValue(el) ){//value differs from data-value
+        LiveForm.addClass(el, 'lfv-diff');
+    } else {
+        LiveForm.removeClass(el, 'lfv-diff');
+    }
+};
+
 ////////////////////////////   modified netteForms.js   ///////////////////////////////////
 
 /**
@@ -544,6 +552,7 @@ Nette.validateControl = function(elem, rules, onlyCheck, value, emptyOptional) {
 	}
 	
 	elem = elem.tagName ? elem : elem[0]; // RadioNodeList
+        LiveForm.emphasizeIfChanged(elem);
 	rules = rules || Nette.parseJSON(elem.getAttribute('data-nette-rules'));
 	value = value === undefined ? {value: Nette.getEffectiveValue(elem)} : value;
 
