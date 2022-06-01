@@ -1,0 +1,16 @@
+/*
+Common css commands, included in each skin
+*/
+/* 
+    Created on : 1. 6. 2022, 23:02:21
+    Author     : kminekmatej
+*/
+
+.lfv-diff {
+    font-style: italic;
+    color: #feb20f;
+}
+
+input[type='checkbox'].lfv-diff + .custom-control-label:before {
+    border: 2px solid #feb20f;
+}
