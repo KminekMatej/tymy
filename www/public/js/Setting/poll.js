@@ -1,28 +1,3 @@
-$(document).ready(function () {
-    $("[data-binder-id]").each(function () {
-        $(this).data("data-binder", new Binder({
-            area: this,
-            checkboxValueChecked: 1,
-            checkboxValueUnChecked: 0,
-            deleteConfirmation: translate.common.alerts.confirmDelete,
-            isValid: function (name, value1, value2) {
-                switch (name) {
-                    case "caption":
-                        return value1.trim() != "";
-                    case "minItems":
-                        return !isNaN(value1) && value1 <= value2;
-                    case "maxItems":
-                        return !isNaN(value1) && value1 >= value2;
-                    case "order":
-                        return !isNaN(value1);
-
-                }
-                return true;
-            }
-        }));
-    });
-});
-
 function duplicateLastRow(){
     var lastRow = $("DIV.settings DIV[data-option]:last");
     var newRow = lastRow.clone();
