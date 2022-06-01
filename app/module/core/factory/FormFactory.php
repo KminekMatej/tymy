@@ -248,8 +248,10 @@ class FormFactory
         $minItems = $form->addInteger("minItems", $this->translator->translate("poll.minItems"))->setHtmlAttribute("min", 0)->setRequired();
         $maxItems = $form->addInteger("maxItems", $this->translator->translate("poll.maxItems"))->setHtmlAttribute("min", 0)->setRequired();
 
-        $minItems->addRule(Form::MAX, null, $form['maxItems']);
+        /*$minItems->addRule(Form::MAX, null, $form['maxItems']);
         $maxItems->addRule(Form::MIN, null, $form['minItems']);
+         * Commented out - was causing recursion overflow in live-form-validation
+         */
 
         $anonymousVotes = $form->addCheckbox("anonymousVotes", $this->translator->translate("poll.anonymousVotes"));
         $changeableVotes = $form->addCheckbox("changeableVotes", $this->translator->translate("poll.setChangeableVotes"));
@@ -260,22 +262,22 @@ class FormFactory
         $canAlienVote = $form->addSelect("canAlienVote", $this->translator->translate("poll.canAlienVote"), $this->getUserPermissions())->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
 
         if ($poll) {
-            $caption->setValue($poll->getCaption());
-            $description->setValue($poll->getDescription());
-            $status->setValue($poll->getStatus());
-            $minItems->setValue($poll->getMinItems());
-            $maxItems->setValue($poll->getMaxItems());
-            $anonymousVotes->setValue($poll->getAnonymousResults());
-            $changeableVotes->setValue($poll->getChangeableVotes());
-            $displayResults->setValue($poll->getShowResults());
+            $caption->setValue($poll->getCaption())->setHtmlAttribute("data-value", $poll->getCaption());
+            $description->setValue($poll->getDescription())->setHtmlAttribute("data-value", $poll->getDescription());
+            $status->setValue($poll->getStatus())->setHtmlAttribute("data-value", $poll->getStatus());
+            $minItems->setValue($poll->getMinItems())->setHtmlAttribute("data-value", $poll->getMinItems());
+            $maxItems->setValue($poll->getMaxItems())->setHtmlAttribute("data-value", $poll->getMaxItems());
+            $anonymousVotes->setValue($poll->getAnonymousResults())->setHtmlAttribute("data-value", $poll->getAnonymousResults());
+            $changeableVotes->setValue($poll->getChangeableVotes())->setHtmlAttribute("data-value", $poll->getChangeableVotes());
+            $displayResults->setValue($poll->getShowResults())->setHtmlAttribute("data-value", $poll->getShowResults());
             if ($poll->getVoteRightName()) {
-                $canVote->setValue($poll->getVoteRightName());
+                $canVote->setValue($poll->getVoteRightName())->setHtmlAttribute("data-value", $poll->getVoteRightName());
             }
             if ($poll->getResultRightName()) {
-                $canDisplayResults->setValue($poll->getResultRightName());
+                $canDisplayResults->setValue($poll->getResultRightName())->setHtmlAttribute("data-value", $poll->getResultRightName());
             }
             if ($poll->getAlienVoteRightName()) {
-                $canAlienVote->setValue($poll->getAlienVoteRightName());
+                $canAlienVote->setValue($poll->getAlienVoteRightName())->setHtmlAttribute("data-value", $poll->getAlienVoteRightName());
             }
         }
 
