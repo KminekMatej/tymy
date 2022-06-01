@@ -385,8 +385,17 @@ LiveForm.setFormProperty = function(form, propertyName, value) {
 	this.forms[form.id][propertyName] = value;
 };
 
-LiveForm.emphasizeIfChanged = function(el){
-    if(el && el.getAttribute("data-value") !== Nette.getEffectiveValue(el) ){//value differs from data-value
+LiveForm.emphasizeIfChanged = function (el) {
+    if (typeof el == "undefined" || !el.getAttribute("data-value")) {
+        return;
+    }
+
+    if (el.getAttribute("type") == "checkbox") {
+        val = el.getAttribute("data-value") == "1" ? true : false;
+    } else {
+        val = el.getAttribute("data-value");
+    }
+    if(val !== Nette.getEffectiveValue(el) ){//value differs from data-value
         LiveForm.addClass(el, 'lfv-diff');
     } else {
         LiveForm.removeClass(el, 'lfv-diff');
