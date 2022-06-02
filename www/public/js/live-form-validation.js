@@ -390,6 +390,7 @@ LiveForm.emphasizeIfChanged = function (el) {
         return;
     }
 
+    var changed = false;
     if (el.getAttribute("type") == "checkbox") {
         val = el.getAttribute("data-value") == "1" ? true : false;
     } else {
@@ -397,8 +398,29 @@ LiveForm.emphasizeIfChanged = function (el) {
     }
     if(val !== Nette.getEffectiveValue(el) ){//value differs from data-value
         LiveForm.addClass(el, 'lfv-diff');
+        changed = true;
     } else {
         LiveForm.removeClass(el, 'lfv-diff');
+    }
+
+    //check if whole form contain any changed element
+    if (!changed) { //this iteration did not specifically mark any new item to be changed, bur maybe there are still some other inputs that are currently changed, so check them
+        for (var i in el.form.elements) {
+            elem = el.form.elements[i];
+            if (elem.classList && elem.classList.contains('lfv-diff')) {
+                changed = true;
+                break;
+            }
+        }
+    }
+
+
+    if (changed) {
+        el.form.elements['save'].classList.remove('btn-primary');
+        el.form.elements['save'].classList.add('btn-outline-primary');
+    } else {
+        el.form.elements['save'].classList.add('btn-primary');
+        el.form.elements['save'].classList.remove('btn-outline-primary');
     }
 };
 
