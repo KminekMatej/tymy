@@ -148,9 +148,24 @@ class PollPresenter extends SettingBasePresenter
             return $this->optionManager->update($bind["changes"], $bind["id"]);
         }
     }
-    
+
     public function createComponentPollForm()
     {
-        return $this->formFactory->createPollConfigForm([$this, "pollFormSuccess"], $this->poll);
+        $pollId = $this->getRequest()->getParameter("id");
+        return $this->formFactory->createPollConfigForm([$this, "pollFormSuccess"], ($pollId ? $this->pollManager->getById($pollId) : null));
+    }
+
+    /**
+     * @param Form $form
+     * @param \stdClass $values
+     * @return void
+     */
+    public function pollFormSuccess(Form $form, $values): void
+    {
+        if ($values->id) {
+            $this->pollManager->updateByArray($values->id, (array) $values);
+        } else {
+            $this->pollManager->createByArray((array) $values);
+        }
     }
 }
