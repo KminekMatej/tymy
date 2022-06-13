@@ -41,18 +41,6 @@ class PollPresenter extends SettingBasePresenter
         $this->allowPermission('ASK.VOTE_UPDATE');
 
         $this->addBreadcrumb($this->translator->translate("poll.new"));
-
-        $this->template->polls = [(new Poll())
-                ->setId(-1)
-                ->setCaption("")
-                ->setDescription("")
-                ->setStatus("DESIGN")
-                ->setMinItems(1)
-                ->setMaxItems(99)
-                ->setAnonymousResults("")
-                ->setChangeableVotes("")
-                ->setShowResults("NEVER")
-        ];
     }
 
     public function renderPoll(?string $resource = null)
@@ -152,7 +140,7 @@ class PollPresenter extends SettingBasePresenter
 
     public function createComponentPollForm()
     {
-        $pollId = $this->getRequest()->getParameter("id");
+        $pollId = $this->parseIdFromWebname($this->getRequest()->getParameter("resource"));
         return $this->formFactory->createPollConfigForm([$this, "pollFormSuccess"], ($pollId ? $this->pollManager->getById($pollId) : null));
     }
 
@@ -164,9 +152,13 @@ class PollPresenter extends SettingBasePresenter
     public function pollFormSuccess(Form $form, $values): void
     {
         if ($values->id) {
-            $this->pollManager->updateByArray($values->id, (array) $values);
+            /* @var $updatedPoll Poll */
+            $updatedPoll = $this->pollManager->update((array) $values, $values->id);
+            $this->redirect(':Setting:Poll:', [$updatedPoll->getWebName()]);
         } else {
-            $this->pollManager->createByArray((array) $values);
+            /* @var $createdPoll Poll */
+            $createdPoll = $this->pollManager->create((array) $values);
+            $this->redirect(':Setting:Poll:', [$createdPoll->getWebName()]);
         }
     }
 }

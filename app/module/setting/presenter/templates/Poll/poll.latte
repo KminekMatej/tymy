@@ -1,10 +1,5 @@
 {import $componentsDir . '/secured.latte'}
 
-{block scripts}
-{include parent}
-<script src="{$publicPath}/js/Binder.js?ver={$appver}"></script>
-{/block}
-
 {block styles}
 {include parent}
 <link rel='stylesheet' href="{$basePath}/skins/{$skin}/css/table-xs.css?ver={$appver}" />
@@ -18,7 +13,7 @@
 <div class="container-fluid container-md settings">
     <div class="row">
         <div class="col">
-            <div class="card sh-box my-3" data-binder-id="{$poll->getId()}">
+            <div class="card sh-box my-3">
                 {form pollForm id => $poll->getId()}
                     {input id}
                     <div class="card-header">
