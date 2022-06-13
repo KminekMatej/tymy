@@ -386,23 +386,21 @@ LiveForm.setFormProperty = function(form, propertyName, value) {
 };
 
 LiveForm.emphasizeIfChanged = function (el) {
-    if (typeof el == "undefined" || !el.getAttribute("data-value")) {
-        return;
-    }
-
     var changed = false;
-    if (el.getAttribute("type") == "checkbox") {
-        val = el.getAttribute("data-value") == "1" ? true : false;
-    } else {
-        val = el.getAttribute("data-value");
-    }
-    if(val !== Nette.getEffectiveValue(el) ){//value differs from data-value
-        LiveForm.addClass(el, 'lfv-diff');
-        changed = true;
-    } else {
-        LiveForm.removeClass(el, 'lfv-diff');
-    }
+    if (typeof el != "undefined" && el.getAttribute("data-value")) {
+        if (el.getAttribute("type") == "checkbox") {
+            val = el.getAttribute("data-value") == "1" ? true : false;
+        } else {
+            val = el.getAttribute("data-value");
+        }
+        if (val !== Nette.getEffectiveValue(el)) {//value differs from data-value
+            LiveForm.addClass(el, 'lfv-diff');
+            changed = true;
+        } else {
+            LiveForm.removeClass(el, 'lfv-diff');
+        }
 
+    }
     //check if whole form contain any changed element
     if (!changed) { //this iteration did not specifically mark any new item to be changed, bur maybe there are still some other inputs that are currently changed, so check them
         for (var i in el.form.elements) {
@@ -413,7 +411,6 @@ LiveForm.emphasizeIfChanged = function (el) {
             }
         }
     }
-
 
     if (changed) {
         el.form.elements['save'].classList.remove('btn-primary');
