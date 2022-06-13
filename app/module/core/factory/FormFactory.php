@@ -228,6 +228,7 @@ class FormFactory
     public function createPollConfigForm(array $onSuccess, ?Poll $poll = null): Form
     {
         $form = new Form();
+        $id = $form->addHidden("id");
 
         $pollStatuses = [
             Poll::STATUS_DESIGN => $this->translator->translate("poll.design"),
@@ -262,6 +263,7 @@ class FormFactory
         $canAlienVote = $form->addSelect("canAlienVote", $this->translator->translate("poll.canAlienVote"), $this->getUserPermissions())->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
 
         if ($poll) {
+            $id->setValue($poll->getId());
             $caption->setValue($poll->getCaption())->setHtmlAttribute("data-value", $poll->getCaption());
             $description->setValue($poll->getDescription())->setHtmlAttribute("data-value", $poll->getDescription());
             $status->setValue($poll->getStatus())->setHtmlAttribute("data-value", $poll->getStatus());
