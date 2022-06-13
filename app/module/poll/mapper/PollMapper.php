@@ -25,7 +25,6 @@ class PollMapper extends BaseMapper
             Field::int()->withColumn("min_items")->setProperty("minItems"),
             Field::int()->withColumn("max_items")->setProperty("maxItems"),
             Field::int()->withColumn("changeable_votes")->setProperty("changeableVotes"),
-            Field::int()->withColumn("main_menu")->setProperty("mainMenu"), /** @deprecated since 2.2.4 */
             Field::int()->withColumn("anonymous_results")->setProperty("anonymousResults"),
             Field::string()->withColumn("show_results")->setProperty("showResults"),
             Field::string()->withPropertyAndColumn("status"),

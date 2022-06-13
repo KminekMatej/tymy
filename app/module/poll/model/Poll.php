@@ -30,10 +30,9 @@ class Poll extends BaseModel
     private ?string $caption = null;
     private ?string $description = null;
     private ?string $descriptionHtml = null;
-    private int $minItems;
-    private int $maxItems;
+    private ?int $minItems = null;
+    private ?int $maxItems = null;
     private bool $changeableVotes;
-    private bool $mainMenu;/** @deprecated since 2.2.4 */
     private bool $anonymousResults;
     private string $showResults;
     private string $status;
@@ -92,12 +91,12 @@ class Poll extends BaseModel
         return $this->descriptionHtml;
     }
 
-    public function getMinItems(): int
+    public function getMinItems(): ?int
     {
         return $this->minItems;
     }
 
-    public function getMaxItems(): int
+    public function getMaxItems(): ?int
     {
         return $this->maxItems;
     }
@@ -105,12 +104,6 @@ class Poll extends BaseModel
     public function getChangeableVotes(): bool
     {
         return $this->changeableVotes;
-    }
-
-    /** @deprecated since 2.2.4 */
-    public function getMainMenu(): bool
-    {
-        return $this->mainMenu;
     }
 
     public function getAnonymousResults(): bool
@@ -241,13 +234,13 @@ class Poll extends BaseModel
         return $this;
     }
 
-    public function setMinItems(int $minItems)
+    public function setMinItems(?int $minItems)
     {
         $this->minItems = $minItems;
         return $this;
     }
 
-    public function setMaxItems(int $maxItems)
+    public function setMaxItems(?int $maxItems)
     {
         $this->maxItems = $maxItems;
         return $this;
@@ -256,13 +249,6 @@ class Poll extends BaseModel
     public function setChangeableVotes(string $changeableVotes)
     {
         $this->changeableVotes = $changeableVotes ? true : false;
-        return $this;
-    }
-
-    /** @deprecated since 2.2.4 */
-    public function setMainMenu(string $mainMenu)
-    {
-        $this->mainMenu = $mainMenu == "YES";
         return $this;
     }
 
@@ -408,6 +394,7 @@ class Poll extends BaseModel
             "canVote" => $this->getCanVote(),
             "canAlienVote" => $this->getCanAlienVote(),
             "voted" => $this->getVoted(),
+            "mainMenu" => false, /** @breaking-change-avoid 13.6.2022  */
         ];
     }
 }
