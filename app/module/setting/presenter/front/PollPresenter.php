@@ -95,10 +95,11 @@ class PollPresenter extends SettingBasePresenter
         $this->pollManager->update($bind["changes"], $bind["id"]);
     }
 
-    public function handlePollDelete()
+    public function handlePollDelete(string $resource)
     {
-        $bind = $this->getRequest()->getPost();
-        $this->pollManager->delete($bind["id"]);
+        $pollId = $this->parseIdFromWebname($resource);
+        $this->pollManager->delete($pollId);
+        $this->redirect(':Setting:Poll:');
     }
 
     public function handlePollOptionsEdit($poll)
