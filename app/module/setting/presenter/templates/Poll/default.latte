@@ -41,57 +41,60 @@
                             <th></th>
                         </tr>
                         <tr n:foreach="$polls as $poll" data-binder-id="{$poll->getId()}">
-                            <td>
-                                <a href="{plink :Setting:Poll: $poll->getWebName()}" class="btn btn-sm btn-light btn-light-bordered"  title="{_common.edit}" style="margin-right: 2px">
-                                    <i class="fa fa-external-link-alt" aria-hidden="true"></i>
-                                </a>
-                            </td>
-                            <td><input type="text" name="caption" data-value="{$poll->getCaption()}" value="{$poll->getCaption()}" class="form-control form-control-sm" style="max-width: 100px;" required/></td>
-                            <td><textarea name="description" data-value="{$poll->getDescription()}" rows="1" class="form-control form-control-sm">{$poll->getDescription()}</textarea></td>
-                            <td>
-                                <select name="status" data-value="{$poll->getStatus()}" class="form-control form-control-sm">
-                                    <option value="DESIGN" n:attr="selected => $poll->getStatus() == 'DESIGN'">{_poll.design}</option>
-                                    <option value="OPENED" n:attr="selected => $poll->getStatus() == 'OPENED'">{_poll.opened}</option>
-                                    <option value="CLOSED" n:attr="selected => $poll->getStatus() == 'CLOSED'">{_poll.closed}</option>
-                                </select>
-                            </td>
-                            <td><input type="number" name="minItems" data-validation-field2="maxItems" min="0" data-value="{$poll->getMinItems()}" value="{$poll->getMinItems()}" class="form-control form-control-sm" style="max-width: 70px;" required/></td>
-                            <td><input type="number" name="maxItems" data-validation-field2="minItems" min="0" data-value="{$poll->getMaxItems()}" value="{$poll->getMaxItems()}" class="form-control form-control-sm" style="max-width: 70px;" required/></td>
+                            {form "multiPollForm-{$poll->getId()}"}
+                                <td>
+                                    <a href="{plink :Setting:Poll: $poll->getWebName()}" class="btn btn-sm btn-light btn-light-bordered"  title="{_common.edit}" style="margin-right: 2px">
+                                        <i class="fa fa-external-link-alt" aria-hidden="true"></i>
+                                    </a>
+                                </td>
+                                <td>
+                                    {input caption, class => 'form-control form-control-sm', style => 'max-width: 100px;'}
+                                </td>
+                                <td>
+                                    {input description, class => 'form-control form-control-sm', rows => 1}
+                                </td>
+                                <td>
+                                    {input status, class => 'form-control form-control-sm'}
+                                </td>
+                                <td>
+                                    {input minItems, class => 'form-control form-control-sm', style => 'max-width: 70px;'}
+                                </td>
+                                <td>
+                                    {input maxItems, class => 'form-control form-control-sm', style => 'max-width: 70px;'}
+                                </td>
+                                <td class="text-center">
+                                    <label n:name="anonymousVotes" class="custom-control custom-checkbox custom-control-inline">
+                                        <input n:name="anonymousVotes" class="form-control form-control-sm custom-control-input" />
+                                        <span class="custom-control-label"></span>
+                                    </label>
+                                </td>
+                                <td class="text-center">
+                                    <label n:name="changeableVotes" class="custom-control custom-checkbox custom-control-inline">
+                                        <input n:name="changeableVotes" class="form-control form-control-sm custom-control-input" />
+                                        <span class="custom-control-label"></span>
+                                    </label>
+                                </td>
+                                <td>
+                                    {input displayResults, class => 'form-control form-control-sm'}
+                                </td>
+                                <td>
+                                    {input canVote, class => 'form-control form-control-sm'}
+                                </td>
+                                <td>
+                                    {input canDisplayResults, class => 'form-control form-control-sm'}
+                                </td>
+                                <td>
+                                    {input canAlienVote, class => 'form-control form-control-sm'}
+                                </td>
+                                <td>
+                                    {input orderFlag, class => 'form-control form-control-sm', style => 'max-width: 70px;'}
+                                </td>
 
-                            <td class="text-center"><label class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" name="anonymousResults" data-value="{$poll->getAnonymousResults() ? 1 : 0}" n:attr="checked => $poll->getAnonymousResults()" class="form-control form-control-sm custom-control-input" /><span class="custom-control-label"></span></label></td>
-                            <td class="text-center"><label class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" name="changeableVotes" data-value="{$poll->getChangeableVotes() ? 1 : 0}" n:attr="checked => $poll->getChangeableVotes()" class="form-control form-control-sm custom-control-input" /><span class="custom-control-label"></span></label></td>
-                            <td>
-                                <select name="showResults" data-value="{$poll->getShowResults()}" class="form-control form-control-sm">
-                                    <option value="NEVER" n:attr="selected => $poll->getShowResults() == 'NEVER'">{_poll.never}</option>
-                                    <option value="ALWAYS" n:attr="selected => $poll->getShowResults() == 'ALWAYS'">{_poll.always}</option>
-                                    <option value="AFTER_VOTE" n:attr="selected => $poll->getShowResults() == 'AFTER_VOTE'">{_poll.afterVote}</option>
-                                    <option value="WHEN_CLOSED" n:attr="selected => $poll->getShowResults() == 'WHEN_CLOSED'">{_poll.whenClosed}</option>
-                                </select>
-                            </td>
-                            <td>
-                                <select name="voteRightName" data-value="{$poll->getVoteRightName()}" class="form-control form-control-sm">
-                                    <option value="">-- {_common.everyone} --</option>
-                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $poll->getVoteRightName() == $userPermission->getName()">{$userPermission->getCaption()}</option>
-                                </select>
-                            </td>
-                            <td>
-                                <select name="resultRightName" data-value="{$poll->getVoteRightName()}" class="form-control form-control-sm">
-                                    <option value="">-- {_common.everyone} --</option>
-                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $poll->getResultRightName() == $userPermission->getName()">{$userPermission->getCaption()}</option>
-                                </select>
-                            </td>
-                            <td>
-                                <select name="alienVoteRightName" data-value="{$poll->getVoteRightName()}" class="form-control form-control-sm">
-                                    <option value="">-- {_common.everyone} --</option>
-                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $poll->getAlienVoteRightName() == $userPermission->getName()">{$userPermission->getCaption()}</option>
-                                </select>
-                            </td>
-                            <td><input name="orderFlag" data-value="{$poll->getOrderFlag()}" type="number" value="{$poll->getOrderFlag()}" class="form-control form-control-sm" style="max-width: 70px;"/></td>
-
-                            <td class="btn-group" role="group">
-                                <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))" href="{link pollEdit!}" class="btn btn-sm btn-primary binder-save-btn" title="{_common.save}" style="margin-right: 2px"><i class="fa fa-save" aria-hidden="true"></i></button>
-                                <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))" href="{link pollDelete!}" class="btn btn-sm btn-danger binder-delete-btn" title="{_common.delete}"><i class="far fa-trash-can" aria-hidden="true"></i></button>
-                            </td>
+                                <td class="btn-group" role="group">
+                                    <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))" href="{link pollEdit!}" class="btn btn-sm btn-primary binder-save-btn" title="{_common.save}" style="margin-right: 2px"><i class="fa fa-save" aria-hidden="true"></i></button>
+                                    <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))" href="{link pollDelete!}" class="btn btn-sm btn-danger binder-delete-btn" title="{_common.delete}"><i class="far fa-trash-can" aria-hidden="true"></i></button>
+                                </td>
+                            {/form}
                         </tr>
                     </table>
                 </div>

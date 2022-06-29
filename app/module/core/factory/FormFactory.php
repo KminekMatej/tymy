@@ -261,6 +261,7 @@ class FormFactory
         $canVote = $form->addSelect("canVote", $this->translator->translate("poll.canVote"), $this->getUserPermissions())->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
         $canDisplayResults = $form->addSelect("canDisplayResults", $this->translator->translate("poll.canDisplayResults"), $this->getUserPermissions())->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
         $canAlienVote = $form->addSelect("canAlienVote", $this->translator->translate("poll.canAlienVote"), $this->getUserPermissions())->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
+        $orderFlag = $form->addInteger("orderFlag", $this->translator->translate("settings.order"));
 
         if ($poll) {
             $id->setValue($poll->getId());
@@ -272,6 +273,7 @@ class FormFactory
             $anonymousVotes->setValue($poll->getAnonymousResults())->setHtmlAttribute("data-value", $poll->getAnonymousResults() ? 1 : 0);
             $changeableVotes->setValue($poll->getChangeableVotes())->setHtmlAttribute("data-value", $poll->getChangeableVotes() ? 1 : 0);
             $displayResults->setValue($poll->getShowResults())->setHtmlAttribute("data-value", $poll->getShowResults() ? 1 : 0);
+            $orderFlag->setValue($poll->getOrderFlag())->setHtmlAttribute("data-value", $poll->getOrderFlag());
             if ($poll->getVoteRightName()) {
                 $canVote->setValue($poll->getVoteRightName())->setHtmlAttribute("data-value", $poll->getVoteRightName());
             }

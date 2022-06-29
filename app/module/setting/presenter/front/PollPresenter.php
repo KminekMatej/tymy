@@ -3,6 +3,8 @@
 namespace Tymy\Module\Setting\Presenter\Front;
 
 use Nette\Application\UI\Form;
+use Nette\Application\UI\Multiplier;
+use stdClass;
 use Tymy\Module\Poll\Manager\OptionManager;
 use Tymy\Module\Poll\Manager\PollManager;
 use Tymy\Module\Poll\Model\Option;
@@ -138,15 +140,22 @@ class PollPresenter extends SettingBasePresenter
         }
     }
 
-    public function createComponentPollForm()
+    public function createComponentPollForm(): Form
     {
         $pollId = $this->parseIdFromWebname($this->getRequest()->getParameter("resource"));
         return $this->formFactory->createPollConfigForm([$this, "pollFormSuccess"], ($pollId ? $this->pollManager->getById($pollId) : null));
     }
 
+    public function createComponentMultiPollForm(): Multiplier
+    {
+        return new Multiplier(function ($pollId) {
+                return $this->formFactory->createPollConfigForm([$this, "pollFormSuccess"], $this->pollManager->getById($pollId));
+            });
+    }
+
     /**
      * @param Form $form
-     * @param \stdClass $values
+     * @param stdClass $values
      * @return void
      */
     public function pollFormSuccess(Form $form, $values): void
