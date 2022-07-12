@@ -43,7 +43,6 @@ class SettingBasePresenter extends SecuredPresenter
     {
         parent::beforeRender();
         $this->template->eventTypes = $this->eventTypes;
-        $this->template->statusList = $this->statusManager->getAllStatusCodes();
         $this->template->userPermissions = $this->userPermissions;
         $this->template->systemPermissions = $this->permissionManager->getByType(Permission::TYPE_SYSTEM);
 
