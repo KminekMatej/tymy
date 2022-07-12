@@ -14,3 +14,27 @@ Common css commands, included in each skin
 input[type='checkbox'].lfv-diff + .custom-control-label:before {
     border: 2px solid #feb20f;
 }
+
+.row.table-head{
+    font-weight: bold;
+    background: rgba(0, 0, 0, 0.05);
+    padding: 0.75rem;
+    border-top: 1px solid #dee2e6;
+}
+
+.row.striped{
+    padding: 0.75rem;
+}
+
+.row.striped:nth-child(odd){
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.row.striped:focus,.row.striped:hover{
+    background: rgba(0, 0, 0, 0.075);
+}
+@media (max-width: 767.98px) {
+    row.table-head{
+        display:none;
+    }
+}
