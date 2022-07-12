@@ -5,6 +5,8 @@ namespace Tymy\Module\Setting\Presenter\Front;
 use Nette\Application\UI\Form;
 use Nette\Application\UI\Multiplier;
 use stdClass;
+use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Model\Cell;
 use Tymy\Module\Poll\Manager\OptionManager;
 use Tymy\Module\Poll\Manager\PollManager;
 use Tymy\Module\Poll\Model\Option;
@@ -35,6 +37,29 @@ class PollPresenter extends SettingBasePresenter
 
     public function renderDefault()
     {
+        $this->template->cols = [
+            null,
+            "Id",
+            $this->translator->translate("settings.title"),
+            $this->translator->translate("settings.description"),
+            $this->translator->translate("settings.status"),
+            $this->translator->translate("common.created"),
+        ];
+
+        $this->template->rows = [];
+        foreach ($this->pollManager->getList() as $poll) {
+
+            /* @var $poll Poll */
+            $this->template->rows[] = [
+                Cell::detail($this->link(":Setting:Poll:", [$poll->getWebName()])),
+                $poll->getId(),
+                $poll->getCaption(),
+                $poll->getDescription(),
+                $this->translator->translate("poll." . strtolower($poll->getStatus())),
+                $poll->getCreatedAt()->format(BaseModel::DATE_CZECH_FORMAT) . ", " . $this->userManager->getById($poll->getCreatedById())->getDisplayName(),
+            ];
+        }
+
         $this->template->polls = $this->pollManager->getList();
     }
 

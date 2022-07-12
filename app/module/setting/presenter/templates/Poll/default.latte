@@ -15,7 +15,7 @@
 {/block}
 
 {block content}
-<div class="container-fluid settings">
+<div class="container settings">
     <div class="row">
         <div class="col">
             <div class="card sh-box my-3">
@@ -23,83 +23,9 @@
                     <h4>{_poll.configPolls}</h4>
                 </div>
                 <div class="card-body">
-                    <table class="table table-xs table-hover">
-                        <tr>
-                            <th></th>
-                            <th>{_settings.title}</th>
-                            <th>{_settings.description}</th>
-                            <th>{_settings.status}</th>
-                            <th title="{_poll.minItems}">{_poll.min}</th>
-                            <th title="{_poll.maxItems}">{_poll.max}</th>
-                            <th title="{_poll.anonymousVotes}">{_poll.anonym}</th>
-                            <th title="{_poll.setChangeableVotes}">{_poll.changeOfVotes}</th>
-                            <th>{_poll.displayResults}</th>
-                            <th title="{_poll.canVoteRight}">{_poll.canVote}</th>
-                            <th title="{_poll.canDisplayResultsRight}">{_poll.canDisplayResults}</th>
-                            <th title="{_poll.canAlienVoteRight}">{_poll.canAlienVote}</th>
-                            <th title="{_settings.order}">{_settings.order}</th>
-                            <th></th>
-                        </tr>
-                        <tr n:foreach="$polls as $poll" data-binder-id="{$poll->getId()}">
-                            {form "multiPollForm-{$poll->getId()}"}
-                                <td>
-                                    <a href="{plink :Setting:Poll: $poll->getWebName()}" class="btn btn-sm btn-light btn-light-bordered"  title="{_common.edit}" style="margin-right: 2px">
-                                        <i class="fa fa-external-link-alt" aria-hidden="true"></i>
-                                    </a>
-                                </td>
-                                <td>
-                                    {input caption, class => 'form-control form-control-sm', style => 'max-width: 100px;'}
-                                </td>
-                                <td>
-                                    {input description, class => 'form-control form-control-sm', rows => 1}
-                                </td>
-                                <td>
-                                    {input status, class => 'form-control form-control-sm'}
-                                </td>
-                                <td>
-                                    {input minItems, class => 'form-control form-control-sm', style => 'max-width: 70px;'}
-                                </td>
-                                <td>
-                                    {input maxItems, class => 'form-control form-control-sm', style => 'max-width: 70px;'}
-                                </td>
-                                <td class="text-center">
-                                    <label n:name="anonymousVotes" class="custom-control custom-checkbox custom-control-inline">
-                                        <input n:name="anonymousVotes" class="form-control form-control-sm custom-control-input" />
-                                        <span class="custom-control-label"></span>
-                                    </label>
-                                </td>
-                                <td class="text-center">
-                                    <label n:name="changeableVotes" class="custom-control custom-checkbox custom-control-inline">
-                                        <input n:name="changeableVotes" class="form-control form-control-sm custom-control-input" />
-                                        <span class="custom-control-label"></span>
-                                    </label>
-                                </td>
-                                <td>
-                                    {input displayResults, class => 'form-control form-control-sm'}
-                                </td>
-                                <td>
-                                    {input canVote, class => 'form-control form-control-sm'}
-                                </td>
-                                <td>
-                                    {input canDisplayResults, class => 'form-control form-control-sm'}
-                                </td>
-                                <td>
-                                    {input canAlienVote, class => 'form-control form-control-sm'}
-                                </td>
-                                <td>
-                                    {input orderFlag, class => 'form-control form-control-sm', style => 'max-width: 70px;'}
-                                </td>
-
-                                <td class="btn-group" role="group">
-                                    <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))" href="{link pollEdit!}" class="btn btn-sm btn-primary binder-save-btn" title="{_common.save}" style="margin-right: 2px"><i class="fa fa-save" aria-hidden="true"></i></button>
-                                    <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))" href="{link pollDelete!}" class="btn btn-sm btn-danger binder-delete-btn" title="{_common.delete}"><i class="far fa-trash-can" aria-hidden="true"></i></button>
-                                </td>
-                            {/form}
-                        </tr>
-                    </table>
-                </div>
-                <div class="card-footer text-right">
-                    <a n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))" class="btn btn-lg btn-success" href="{plink :Setting:Poll:new}" onclick="btnRotate($(this), true)" title="{_poll.createPoll}" style="margin-right: 10px">
+                    {include $componentsDir . '/tymy-table.latte'}
+                    <div class="card-footer text-right">
+                        <a n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))" class="btn btn-lg btn-success" href="{plink :Setting:Poll:new}" onclick="btnRotate($(this), true)" title="{_poll.createPoll}" style="margin-right: 10px">
                         <i class="fa fa-plus" aria-hidden="true"></i>
                     </a>
                 </div>
