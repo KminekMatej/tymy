@@ -48,7 +48,6 @@ class PollPresenter extends SettingBasePresenter
 
         $this->template->rows = [];
         foreach ($this->pollManager->getList() as $poll) {
-
             /* @var $poll Poll */
             $this->template->rows[] = [
                 Cell::detail($this->link(":Setting:Poll:", [$poll->getWebName()])),
@@ -173,9 +172,11 @@ class PollPresenter extends SettingBasePresenter
 
     public function createComponentMultiPollForm(): Multiplier
     {
-        return new Multiplier(function ($pollId) {
+        return new Multiplier(
+            function ($pollId) {
                 return $this->formFactory->createPollConfigForm([$this, "pollFormSuccess"], $this->pollManager->getById($pollId));
-            });
+            }
+        );
     }
 
     /**
