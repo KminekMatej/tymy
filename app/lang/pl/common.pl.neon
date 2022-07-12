@@ -35,6 +35,7 @@ day: Dzień
 week: Tydzień
 month: Miesiąc
 name: Nazwa
+created: Utworzony
 navigationBlock:
     first: Pierwsza
     previous: Poprzednia

@@ -35,6 +35,7 @@ day: jour
 week: semaine
 month: moi
 name: Nom
+created: Établi
 navigationBlock:
     first: premier
     previous: précédent

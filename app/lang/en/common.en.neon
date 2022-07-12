@@ -35,6 +35,7 @@ day: Day
 week: Week
 month: Month
 name: Name
+created: Created
 navigationBlock:
     first: First
     previous: Previous
