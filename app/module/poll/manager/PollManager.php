@@ -173,6 +173,9 @@ class PollManager extends BaseManager
         if (!isset($data["maxItems"])) {
             $data["maxItems"] = -1;
         }
+        if ($data["maxItems"] < $data["minItems"]) {
+            $this->respondBadRequest("Max Items must be bigger or equal to Min items");
+        }
         $data["showResults"] = $data["showResults"] ?? Poll::RESULTS_NEVER;
         $data["status"] = $data["status"] ?? Poll::STATUS_DESIGN;
         $data["orderFlag"] = $data["orderFlag"] ?? 0;
