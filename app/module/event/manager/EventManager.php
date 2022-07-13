@@ -164,8 +164,8 @@ class EventManager extends BaseManager
         return [
             "page" => $page,
             "totalCount" => $totalCount,
-            "firstYear" => $lastDates->lowestDate->format("Y"),
-            "lastYear" => $lastDates->latestDate->format("Y"),
+            "firstYear" => $lastDates->lowestDate ? $lastDates->lowestDate->format("Y") : date("Y"),
+            "lastYear" => $lastDates->latestDate ? $lastDates->latestDate->format("Y") : date("Y"),
             "lastPage" => ceil($totalCount / EventManager::EVENTS_PER_PAGE),
             "events" => $events,
         ];
