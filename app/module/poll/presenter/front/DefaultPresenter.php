@@ -52,7 +52,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->template->resultsDisplayedWhenClosed = $this->translator->translate("poll.resultsDisplayedWhenClosed");
     }
 
-    public function handleVote(int $pollId): void
+    public function handleVote(int $pollId, ?int $userId = null): void
     {
         $votes = [];
         $post = $this->getRequest()->getPost();
@@ -65,7 +65,7 @@ class DefaultPresenter extends SecuredPresenter
 
             $votes[] = [
                 "optionId" => $optId,
-                "userId" => $this->user->getId(),
+                "userId" => $userId ?: $this->user->getId(),    //make alien voting possible
                 $opt["type"] => $opt["type"] == "numericValue" ? (int) $opt["value"] : $opt["value"]
             ];
         }

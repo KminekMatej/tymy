@@ -50,6 +50,7 @@ text: Text
 number: Číslo
 bool: Ano / Ne
 new: Nová
+voteAs: Hlasovat za
 alerts:
     succesfullyCreated: Anketa byla úspěšně vytvořena
 errors:

@@ -80,7 +80,19 @@
                     </div>
                 </div>
                 <div class="card-footer text-right" n:if="$poll->getCanVote()">
-                    <button onclick="updatePoll(this, {link vote! $poll->getId()})" class="btn btn-primary">{_poll.vote}</button>
+
+                    <div class="btn-group">
+                        <button onclick="updatePoll(this, {link vote! $poll->getId()})" class="btn btn-primary">{_poll.vote}</button>
+                        {if $poll->getCanAlienVote()}
+                            <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-expanded="false" title="{_poll.voteAs}">
+                                <span class="sr-only">{_poll.voteAs}</span>
+                            </button>
+                            <div class="dropdown-menu">
+                                <a n:foreach="$users as $usr" class="dropdown-item" onclick="updatePoll(this, {link vote! $poll->getId(), $usr->getId()})" href="#">{$usr->getDisplayName()}</a>
+                            </div>
+                        {/if}
+                    </div>
+
                 </div>
             </div>
 

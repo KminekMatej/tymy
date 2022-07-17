@@ -50,6 +50,7 @@ text: Tekst
 number: Liczba
 bool: Tak / Nie
 new: Nowa
+alienVote: Głosuj jako
 alerts:
     succesfullyCreated: Ankieta została pomyślnie utworzona
 errors:

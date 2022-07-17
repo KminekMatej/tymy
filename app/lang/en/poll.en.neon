@@ -50,6 +50,7 @@ text: Text
 number: Number
 bool: Yes / No
 new: New
+voteAs: Vote as
 alerts:
     succesfullyCreated: Poll has been created succesfully
 errors:

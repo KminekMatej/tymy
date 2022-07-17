@@ -50,6 +50,7 @@ text: Texte
 number: Numéro
 bool: Oui/ Non
 new: Nouveau
+voteAs: Votez comme
 alerts:
     succesfullyCreated: Le sondage a été créé avec succès
 errors:

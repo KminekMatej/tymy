@@ -260,7 +260,7 @@ class FormFactory
 
         $canVote = $form->addSelect("canVote", $this->translator->translate("poll.canVote"), $this->getUserPermissions())->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
         $canDisplayResults = $form->addSelect("canDisplayResults", $this->translator->translate("poll.canDisplayResults"), $this->getUserPermissions())->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
-        $canAlienVote = $form->addSelect("canAlienVote", $this->translator->translate("poll.canAlienVote"), $this->getUserPermissions())->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
+        $canAlienVote = $form->addSelect("canAlienVote", $this->translator->translate("poll.canAlienVote"), $this->getUserPermissions())->setPrompt("-- " . $this->translator->translate("common.noone") . " --");
         $orderFlag = $form->addInteger("orderFlag", $this->translator->translate("settings.order"));
 
         if ($poll) {
