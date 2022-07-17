@@ -181,11 +181,9 @@ class PermissionManager extends BaseManager
     {
         $this->allowAdmin();
 
-        $this->checkInputs($data);
+        $data["type"] = Permission::TYPE_USER; //new permissions must always be USR permissions
 
-        if ($data["type"] !== Permission::TYPE_USER) {
-            $this->respondBadRequest("Type must be USR");
-        }
+        $this->checkInputs($data);
 
         if (!empty($this->getByName($data["name"]))) {
             $this->respondBadRequest("Name already used");
