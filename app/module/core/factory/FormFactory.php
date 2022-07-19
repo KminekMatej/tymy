@@ -56,7 +56,7 @@ class FormFactory
             $this->userPermissions = [];
             foreach ($this->permissionManager->getByType(Permission::TYPE_USER) as $userPermission) {
                 /* @var $userPermission Permission */
-                $this->userPermissions[$userPermission->getName()] = $userPermission->getCaption();
+                $this->userPermissions[$userPermission->getName()] = $userPermission->getCaption() ?: $userPermission->getName();
             }
         }
 
@@ -258,9 +258,9 @@ class FormFactory
         $changeableVotes = $form->addCheckbox("changeableVotes", $this->translator->translate("poll.setChangeableVotes"))->setDefaultValue(true);
         $displayResults = $form->addSelect("displayResults", $this->translator->translate("poll.displayResults"), $pollResults)->setPrompt($this->translator->translate("common.choose") . " ...")->setDefaultValue(Poll::RESULTS_NEVER);
 
-        $canVote = $form->addSelect("canVote", $this->translator->translate("poll.canVote"), $this->getUserPermissions())->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
-        $canDisplayResults = $form->addSelect("canDisplayResults", $this->translator->translate("poll.canDisplayResults"), $this->getUserPermissions())->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
-        $canAlienVote = $form->addSelect("canAlienVote", $this->translator->translate("poll.canAlienVote"), $this->getUserPermissions())->setPrompt("-- " . $this->translator->translate("common.noone") . " --");
+        $canVote = $form->addSelect("voteRightName", $this->translator->translate("poll.canVote"), $this->getUserPermissions())->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
+        $canDisplayResults = $form->addSelect("resultRightName", $this->translator->translate("poll.canDisplayResults"), $this->getUserPermissions())->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
+        $canAlienVote = $form->addSelect("alienVoteRightName", $this->translator->translate("poll.canAlienVote"), $this->getUserPermissions())->setPrompt("-- " . $this->translator->translate("common.noone") . " --");
         $orderFlag = $form->addInteger("orderFlag", $this->translator->translate("settings.order"));
 
         if ($poll) {
