@@ -88,27 +88,6 @@ class PollPresenter extends SettingBasePresenter
         $this->template->poll = $this->poll;
     }
 
-    public function handlePollsEdit()
-    {
-        $post = $this->getRequest()->getPost();
-        $binders = $post["binders"];
-        foreach ($binders as $bind) {
-            $this->pollManager->update($bind["changes"], $bind["id"]);
-        }
-    }
-
-    public function handlePollCreate()
-    {
-        $this->pollManager->create($this->getRequest()->getPost()["changes"]);
-        $this->redirect(':Setting:Poll:');
-    }
-
-    public function handlePollEdit()
-    {
-        $bind = $this->getRequest()->getPost();
-        $this->pollManager->update($bind["changes"], $bind["id"]);
-    }
-
     public function handlePollDelete(string $resource)
     {
         $pollId = $this->parseIdFromWebname($resource);
