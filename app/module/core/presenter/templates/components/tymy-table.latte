@@ -30,12 +30,12 @@ $rows = [
 
 *}
 {var $grid = round(12 / count($cols),0)}
-<div class="container-fluid">
+<div class="container-fluid tymy-table">
     <div class="row table-head">
-        <div class="col-md-{$grid}" n:foreach="$cols as $col">{$col}</div>
+        <div class="col col-md-{$grid}" n:foreach="$cols as $col">{$col}</div>
     </div>
     <div class="row striped" n:foreach="$rows as $row">
-        <div class="col-md-{$grid}" n:foreach="$row as $cell">
+        <div class="col col-md-{$grid}" n:foreach="$row as $cell">
             {if is_string($cell)}
                 <span>{$cell}</span>
             {elseif $cell instanceof \Tymy\Module\Core\Model\Cell}
@@ -47,8 +47,8 @@ $rows = [
                             <i class="fa fa-external-link-alt" aria-hidden="true"></i>
                         </a>
                 {/switch}
-                {else}
-                    <span {ifset $cell->class}class="{$cell->class}"{/ifset}>{$cell}</span>
+            {else}
+                <span {ifset $cell->class}class="{$cell->class}"{/ifset}>{$cell}</span>
             {/if}
         </div>
     </div>

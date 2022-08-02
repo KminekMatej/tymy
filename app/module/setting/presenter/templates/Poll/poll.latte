@@ -19,110 +19,97 @@
                     <div class="card-header">
                         <h4>{_poll.editPoll} {$poll->getId()}</h4>
                     </div>
-                    <div class="card-body">
-                        <table class="table">
-                            <tr>
-                                <th>{label caption /}</th>
-                                <td>{input caption, class => 'col-6 form-control'}</td>
-                            </tr>
-                            <tr>
-                                <th>{label description /}</th>
-                                <td>{input description, class => 'col-6 form-control'}</td>
-                            </tr>
-                            <tr>
-                                <th>{label status /}</th>
-                                <td>{input status, class => 'col-6 form-control'}</td>
-                            </tr>
-                            <tr>
-                                <th>{label minItems /}</th>
-                                <td>{input minItems, class => 'col-6 form-control'}</td>
-                            </tr>
-                            <tr>
-                                <th>{label maxItems /}</th>
-                                <td>{input maxItems, class => 'col-6 form-control'}</td>
-                            </tr>
-                            <tr>
-                                <th>{_poll.anonymousVotes}</th>
-                                <td>
-                                    <label n:name="anonymousVotes" class="custom-control custom-checkbox">
-                                        <input n:name="anonymousVotes" class="col-6 form-control custom-control-input" />
-                                        <span class="custom-control-label"></span>
-                                    </label>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>{_poll.setChangeableVotes}</th>
-                                <td>
-                                    <label n:name="changeableVotes" class="custom-control custom-checkbox">
-                                        <input n:name="changeableVotes" class="col-6 form-control custom-control-input" />
-                                        <span class="custom-control-label"></span>
-                                    </label>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>{label displayResults /}</th>
-                                <td>{input displayResults, class => 'col-6 form-control'}</td>
-                            </tr>
-                            <tr>
-                                <th>{label voteRightName /}</th>
-                                <td>{input voteRightName, class => 'col-6 form-control'}</td>
-                            </tr>
-                            <tr>
-                                <th>{label resultRightName /}</th>
-                                <td>{input resultRightName, class => 'col-6 form-control'}</td>
-                            </tr>
-                            <tr>
-                                <th>{label alienVoteRightName /}</th>
-                                <td>{input alienVoteRightName, class => 'col-6 form-control'}</td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="card-footer text-right">
-                        <a href="{link pollDelete!}" type="button" class="btn btn-danger mx-2" title="{_common.delete}"><i class="far fa-trash-can" aria-hidden="true"></i></a>
-                        <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))" n:name="save" class="btn btn-lg btn-primary"><i class="fa fa-save" aria-hidden="true"></i></button>
-                    </div>
-                {/form}
-            </div>
-        </div>
-    </div>
+                    <div class="card-body tymy-table table-bordered">
+                        <div class="row">
+                            <div class="col-12 col-md-6 table-head">{label caption /}</div>
+                            <div class="col-12 col-md-6">{input caption, class => 'col-12 col-md-6 form-control'}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-6 table-head">{label description /}</div>
+                            <div class="col-12 col-md-6">{input description, class => 'col-12 col-md-6 form-control'}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-6 table-head">{label status /}</div>
+                            <div class="col-12 col-md-6">{input status, class => 'col-12 col-md-6 form-control'}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-6 table-head">{label minItems /}</div>
+                            <div class="col-12 col-md-6">{input minItems, class => 'col-12 col-md-6 form-control'}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-6 table-head">{label maxItems /}</div>
+                            <div class="col-12 col-md-6">{input maxItems, class => 'col-12 col-md-6 form-control'}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-6 table-head">{_poll.anonymousVotes}</div>
+                            <div class="col-12 col-md-6">
+                                <label n:name="anonymousVotes" class="custom-control custom-checkbox">
+                                    <input n:name="anonymousVotes" class="col-12 col-md-6 form-control custom-control-input" />
+                                    <span class="custom-control-label"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-6 table-head">{_poll.setChangeableVotes}</div>
+                            <div class="col-12 col-md-6">
+                                <label n:name="changeableVotes" class="custom-control custom-checkbox">
+                                    <input n:name="changeableVotes" class="col-12 col-md-6 form-control custom-control-input" />
+                                    <span class="custom-control-label"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-6 table-head">{label displayResults /}</div>
+                            <div class="col-12 col-md-6">{input displayResults, class => 'col-12 col-md-6 form-control'}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-6 table-head">{label voteRightName /}</div>
+                            <div class="col-12 col-md-6">{input voteRightName, class => 'col-12 col-md-6 form-control'}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-6 table-head">{label resultRightName /}</div>
+                            <div class="col-12 col-md-6">{input resultRightName, class => 'col-12 col-md-6 form-control'}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-6 table-head">{label alienVoteRightName /}</div>
+                            <div class="col-12 col-md-6">{input alienVoteRightName, class => 'col-12 col-md-6 form-control'}</div>
+                        </div>
+                            <div class="row">
+                                {dump $poll->getOptions()}
+                                <div class="col-12 col-md-6 table-head">{_poll.pollItems}</div>
+                                <div class="col-12 col-md-6"><div class="row my-1" n:foreach="$poll->getOptions() as $opt">
+                                        <div class="col-6 input-group">
+                                            <div class="input-group-prepend"><span class="input-group-text">{_poll.itemCaption}:</span></div>
+                                            {input option_caption_{$opt->getId()}, class => 'form-control'}
+                                        </div>
+                                        <div class="col-6 input-group">
+                                            <div class="input-group-prepend"><span class="input-group-text">{_settings.type}:</span></div>
+                                            {input option_type_{$opt->getId()}, class => 'form-control'}
+                                        </div>
+                                    </div>
 
-    <div class="row">
-        <div class="col">
-            <div class="card sh-box my-3">
-                <div class="card-header">
-                    <h4>{_poll.pollItems}</h4>
-                </div>
-                <div class="card-body">
-                    <div class="row my-1" n:foreach="$poll->getOptions() as $opt" data-binder-id="{$opt->getId()}" data-option>
-                        <div class="col-5 input-group">
-                            <div class="input-group-prepend"><span class="input-group-text">{_poll.itemCaption}:</span></div>
-                            <input name="caption" class="form-control" type="text" data-value="{$opt->getCaption()}" value="{$opt->getCaption()}" />
-                        </div>
-                        <div class="col-5 input-group">
-                            <div class="input-group-prepend"><span class="input-group-text">{_settings.type}:</span></div>
-                            <select name="type" class="form-control" data-value="{$opt->getType()}">
-                                <option value="TEXT" n:attr="selected => $opt->getType() == 'TEXT'">{_poll.text}</option>
-                                <option value="NUMBER" n:attr="selected => $opt->getType() == 'NUMBER'">{_poll.number}</option>
-                                <option value="BOOLEAN" n:attr="selected => $opt->getType() == 'BOOLEAN'">{_poll.bool}</option>
-                            </select>
-                        </div>
-                        <div class="col-2 text-right">
-                            <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))" href="{link pollOptionEdit! $poll->getId()}" class="btn btn-sm btn-primary binder-save-btn" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
-                            <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE')) && $opt->getId() != -1" href="{link pollOptionDelete! $poll->getId()}" class="btn btn-sm btn-danger binder-delete-btn" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></button>
-                        </div>
+                                    {*display last empty line - only if there are no options filled yet*}
+                                    <div class="row my-1" n:if="empty($poll->getOptions())">
+                                        <div class="col-5 input-group">
+                                            <div class="input-group-prepend"><span class="input-group-text">{_poll.itemCaption}:</span></div>
+                                            {input option_caption_0, class => 'form-control'}
+                                        </div>
+                                        <div class="col-5 input-group">
+                                            <div class="input-group-prepend"><span class="input-group-text">{_settings.type}:</span></div>
+                                            {input option_type_0, class => 'form-control'}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                     </div>
-                    <div class="row my-3 text-center">
-                        <div class="col">
-                            <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))" class="btn btn-sm btn-outline-success" onclick="createNewRow()" title="{_poll.createItem}">
-                                <i class="fa fa-plus" aria-hidden="true"></i>
-                            </button>
-                        </div>
-                    </div>
+
                 </div>
                 <div class="card-footer text-right">
-
+                    <a href="{link pollDelete!}" type="button" class="btn btn-danger mx-2" title="{_common.delete}"><i class="far fa-trash-can" aria-hidden="true"></i></a>
+                    <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))" n:name="save" class="btn btn-lg btn-primary"><i class="fa fa-save" aria-hidden="true"></i></button>
                 </div>
-            </div>
+            {/form}
         </div>
     </div>
+</div>
 </div>
