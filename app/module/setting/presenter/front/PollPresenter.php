@@ -81,9 +81,6 @@ class PollPresenter extends SettingBasePresenter
             $this->flashMessage($this->translator->translate("poll.errors.pollNotExists", null, ['id' => $pollId]), "danger");
             $this->redirect(':Setting:Poll:');
         }
-        if (count($this->poll->getOptions()) == 0) {
-            $this->poll->setOptions([(new Option())->setId(-1)->setPollId($pollId)->setCaption("")->setType("TEXT")]);
-        }
         $this->addBreadcrumb($this->poll->getCaption(), $this->link(":Setting:Poll:", $this->poll->getWebName()));
         $this->template->poll = $this->poll;
     }
