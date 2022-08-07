@@ -48,6 +48,10 @@ class OptionManager extends BaseManager
 
     protected function allowCreate(?array &$data = null): void
     {
+        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("ASK.VOTE_UPDATE"))) {
+            $this->respondForbidden();
+        }
+
         $this->checkInputs($data);
     }
 
@@ -55,6 +59,10 @@ class OptionManager extends BaseManager
     {
         if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("ASK.VOTE_UPDATE"))) {
             $this->respondForbidden();
+        }
+
+        if (array_key_exists("pollId", $data)) {
+            unset($data["pollId"]); //pollId is not changeable
         }
     }
 
@@ -84,9 +92,7 @@ class OptionManager extends BaseManager
 
     public function create(array $data, ?int $resourceId = null): BaseModel
     {
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("ASK.VOTE_UPDATE"))) {
-            $this->respondForbidden();
-        }
+        $data["pollId"] = $resourceId;
 
         $this->allowCreate($data);
 
@@ -116,7 +122,7 @@ class OptionManager extends BaseManager
     {
         $this->allowPoll($resourceId);
 
-        $this->allowUpdate($subResourceId);
+        $this->allowUpdate($subResourceId, $data);
 
         parent::updateByArray($subResourceId, $data);
 
