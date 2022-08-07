@@ -304,4 +304,32 @@ class ArrayHelper
 
         return $arrays;
     }
+
+    /**
+     * Transform two-dimensional array to key-pair array, using array index to be taken as key and array index to be treated as value.
+     * If both keyIndex and valueIndex are null, returns the input array unchanged
+     *
+     * @param array $inputArray
+     * @param string|null $keyIndex - If null, output array is numerically indexed
+     * @param string|null $valueIndex - If null, returns full item specified by its key
+     * @return array
+     */
+    public static function pairs(array $inputArray, ?string $keyIndex = null, ?string $valueIndex = null): array
+    {
+        if (is_null($keyIndex) && is_null($valueIndex)) {
+            return $inputArray;
+        }
+
+        $pairs = [];
+        foreach ($inputArray as $value) {
+            $extractedValue = is_null($valueIndex) ? $value : $value[$valueIndex];
+
+            if (is_null($keyIndex)) {
+                $pairs[] = $extractedValue;
+            } else {
+                $pairs[$value[$keyIndex]] = $extractedValue;
+            }
+        }
+        return $pairs;
+    }
 }
