@@ -3,13 +3,12 @@
 namespace Tymy\Module\Setting\Presenter\Front;
 
 use Nette\Application\UI\Form;
-use Nette\Application\UI\Multiplier;
 use stdClass;
+use Tymy\Module\Core\Helper\ArrayHelper;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Model\Cell;
 use Tymy\Module\Poll\Manager\OptionManager;
 use Tymy\Module\Poll\Manager\PollManager;
-use Tymy\Module\Poll\Model\Option;
 use Tymy\Module\Poll\Model\Poll;
 use Tymy\Module\Setting\Presenter\Front\SettingBasePresenter;
 
@@ -92,54 +91,6 @@ class PollPresenter extends SettingBasePresenter
         $this->redirect(':Setting:Poll:');
     }
 
-    public function handlePollOptionsEdit($poll)
-    {
-        $post = $this->getRequest()->getPost();
-        $binders = $post["binders"];
-        $pollId = $this->parseIdFromWebname($poll);
-        foreach ($binders as $bind) {
-            $bind["changes"]["pollId"] = $pollId;
-            $this->editPollOption($bind);
-        }
-    }
-
-    public function handlePollOptionCreate($poll)
-    {
-        $pollData = $this->getRequest()->getPost()[1]; // new poll option is always as item 1
-        $pollId = $this->parseIdFromWebname($poll);
-        $pollData["pollId"] = $pollId;
-        $this->optionManager->create($pollData);
-    }
-
-    public function handlePollOptionEdit($poll)
-    {
-        $bind = $this->getRequest()->getPost();
-        $bind["changes"]["pollId"] = $this->parseIdFromWebname($poll);
-        $this->editPollOption($bind);
-    }
-
-    public function handlePollOptionDelete($poll)
-    {
-        $bind = $this->getRequest()->getPost();
-        $bind["pollId"] = $this->parseIdFromWebname($poll);
-        $this->optionManager->delete($bind["pollId"], $bind["id"]);
-    }
-
-    /**
-     * Update or create poll option
-     *
-     * @param array $bind
-     * @return Option Created / updated option
-     */
-    private function editPollOption($bind): Option
-    {
-        if ($bind["id"] == -1) {
-            return $this->optionManager->create($bind["changes"]);
-        } else {
-            return $this->optionManager->update($bind["changes"], $bind["id"]);
-        }
-    }
-
     public function createComponentPollForm(): Form
     {
         $pollId = $this->parseIdFromWebname($this->getRequest()->getParameter("resource"));
@@ -153,14 +104,30 @@ class PollPresenter extends SettingBasePresenter
      */
     public function pollFormSuccess(Form $form, $values): void
     {
-        if ($values->id) {
-            /* @var $updatedPoll Poll */
-            $updatedPoll = $this->pollManager->update((array) $values, $values->id);
-            $this->redirect(':Setting:Poll:', [$updatedPoll->getWebName()]);
-        } else {
-            /* @var $createdPoll Poll */
-            $createdPoll = $this->pollManager->create((array) $values);
-            $this->redirect(':Setting:Poll:', [$createdPoll->getWebName()]);
+        /* @var $poll Poll */
+        $poll = $values->id ?
+            $this->pollManager->update((array) $values, $values->id) :
+            $this->pollManager->create((array) $values);
+
+        $existingOptionIds = ArrayHelper::entityIds($poll->getOptions());
+
+        foreach ($form->getHttpData() as $name => $value) { //get options from http data instead of $values to read also dynamically adde option rows
+            if (preg_match('/option_caption_(\d+)/m', $name, $matches)) {
+                $id = $matches[1];
+                if (in_array($id, $existingOptionIds)) { //existing option
+                    $this->optionManager->update([
+                        "caption" => $value,
+                        "type" => $form->getHttpData()["option_type_$id"] ?? null,
+                        ], $values->id ?? null, $id);
+                } else { //non-existing option, create
+                    $this->optionManager->create([
+                        "caption" => $value,
+                        "type" => $form->getHttpData()["option_type_$id"] ?? null,
+                        ], $values->id ?? null);
+                }
+            }
         }
+
+        $this->redirect(':Setting:Poll:', [$poll->getWebName()]);
     }
 }
