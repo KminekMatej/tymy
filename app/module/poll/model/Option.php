@@ -19,7 +19,7 @@ class Option extends BaseModel
     public const TYPE_BOOLEAN = "BOOLEAN";
 
     private int $pollId;
-    private string $caption;
+    private ?string $caption = null;
     private string $type;
 
     public function getPollId(): int
@@ -27,7 +27,7 @@ class Option extends BaseModel
         return $this->pollId;
     }
 
-    public function getCaption(): string
+    public function getCaption(): ?string
     {
         return $this->caption;
     }
@@ -43,7 +43,7 @@ class Option extends BaseModel
         return $this;
     }
 
-    public function setCaption(string $caption)
+    public function setCaption(?string $caption)
     {
         $this->caption = $caption;
         return $this;

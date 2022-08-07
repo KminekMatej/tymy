@@ -1,11 +1,19 @@
 function duplicateLastOptionRow() {
-    var lastRow = $("DIV.settings DIV.option-row:last");
-    var captionSelector = "INPUT";
+    var templateRow = $("DIV.settings DIV.option-row-template");
+    var idSelector = "INPUT[type=hidden]";
+    var captionSelector = "INPUT[type=text]";
     var valueSelector = "SELECT";
-    var lastCaptionInput = lastRow.find(captionSelector);
-    var lastRowId = parseInt(lastCaptionInput.attr("name").replace("option_caption_", ""));
-    var newRowId = lastRowId + 1;
-    var newRow = lastRow.clone();
+    var newRowId = Math.random().toString(36).slice(2); //some random hash
+    var newRow = templateRow.clone();
+    newRow.removeClass("option-row-template");
+    newRow.removeClass("d-none");
+    newRow.addClass("option-row");
+    newRow.attr("data-row-id", newRowId);
+    newRow.find(idSelector).attr({
+        name: "option_id_" + newRowId,
+        value: newRowId,
+        'data-lfv-message-id': "frm-pollForm-option_type_" + newRowId + "_message",
+    });
     newRow.find(captionSelector).attr({
         name: "option_caption_" + newRowId,
         id: "from-pollForm-option_caption_" + newRowId,
@@ -17,5 +25,12 @@ function duplicateLastOptionRow() {
         'data-lfv-message-id': "frm-pollForm-option_type_" + newRowId + "_message",
     }).next("span").attr("id", "frm-pollForm-option_type_" + newRowId + "_message");
 
-    newRow.insertAfter(lastRow);
+    lastOptionRow = $("DIV.settings DIV.option-row:last");
+    newRow.insertBefore(lastOptionRow.length ? lastOptionRow : $("DIV.settings DIV.option-row-template"));
+}
+
+function removeOptionRow(elm) {
+    var optionRow = $(elm).closest("DIV.option-row");
+    optionRow.find("INPUT[type=hidden]").attr("value", "null");
+    optionRow.addClass("d-none");
 }

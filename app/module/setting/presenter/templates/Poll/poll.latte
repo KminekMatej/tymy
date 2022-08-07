@@ -21,97 +21,107 @@
                     </div>
                     <div class="card-body tymy-table table-bordered">
                         <div class="row">
-                            <div class="col-12 col-md-6 table-head">{label caption /}</div>
-                            <div class="col-12 col-md-6">{input caption, class => 'col-12 col-md-6 form-control'}<span n:ifcontent>{inputError caption}</span></div>
+                            <div class="col-12 col-md-4 table-head">{label caption /}</div>
+                            <div class="col-12 col-md-8">{input caption, class => 'col-12 col-md-6 form-control'}</div>
                         </div>
                         <div class="row">
-                            <div class="col-12 col-md-6 table-head">{label description /}</div>
-                            <div class="col-12 col-md-6">{input description, class => 'col-12 col-md-6 form-control'}<span n:ifcontent>{inputError description}</span></div>
+                            <div class="col-12 col-md-4 table-head">{label description /}</div>
+                            <div class="col-12 col-md-8">{input description, class => 'col-12 col-md-6 form-control'}</div>
                         </div>
                         <div class="row">
-                            <div class="col-12 col-md-6 table-head">{label status /}</div>
-                            <div class="col-12 col-md-6">{input status, class => 'col-12 col-md-6 form-control'}<span n:ifcontent>{inputError status}</span></div>
+                            <div class="col-12 col-md-4 table-head">{label status /}</div>
+                            <div class="col-12 col-md-8">{input status, class => 'col-12 col-md-6 form-control'}</div>
                         </div>
                         <div class="row">
-                            <div class="col-12 col-md-6 table-head">{label minItems /}</div>
-                            <div class="col-12 col-md-6">{input minItems, class => 'col-12 col-md-6 form-control'}<span n:ifcontent>{inputError minItems}</span></div>
+                            <div class="col-12 col-md-4 table-head">{label minItems /}</div>
+                            <div class="col-12 col-md-8">{input minItems, class => 'col-12 col-md-6 form-control'}</div>
                         </div>
                         <div class="row">
-                            <div class="col-12 col-md-6 table-head">{label maxItems /}</div>
-                            <div class="col-12 col-md-6">{input maxItems, class => 'col-12 col-md-6 form-control'}<span n:ifcontent>{inputError maxItems}</span></div>
+                            <div class="col-12 col-md-4 table-head">{label maxItems /}</div>
+                            <div class="col-12 col-md-8">{input maxItems, class => 'col-12 col-md-6 form-control'}</div>
                         </div>
                         <div class="row">
-                            <div class="col-12 col-md-6 table-head">{_poll.anonymousVotes}</div>
-                            <div class="col-12 col-md-6">
+                            <div class="col-12 col-md-4 table-head">{_poll.anonymousVotes}</div>
+                            <div class="col-12 col-md-8">
                                 <label n:name="anonymousVotes" class="custom-control custom-checkbox">
                                     <input n:name="anonymousVotes" class="col-12 col-md-6 form-control custom-control-input" />
                                     <span class="custom-control-label"></span>
-                                </label><span n:ifcontent>{inputError anonymousVotes}</span>
+                                </label>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-12 col-md-6 table-head">{_poll.setChangeableVotes}</div>
-                            <div class="col-12 col-md-6">
+                            <div class="col-12 col-md-4 table-head">{_poll.setChangeableVotes}</div>
+                            <div class="col-12 col-md-8">
                                 <label n:name="changeableVotes" class="custom-control custom-checkbox">
                                     <input n:name="changeableVotes" class="col-12 col-md-6 form-control custom-control-input" />
                                     <span class="custom-control-label"></span>
-                                </label><span n:ifcontent>{inputError changeableVotes}</span>
+                                </label>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-12 col-md-6 table-head">{label displayResults /}</div>
-                            <div class="col-12 col-md-6">{input displayResults, class => 'col-12 col-md-6 form-control'}<span n:ifcontent>{inputError displayResults}</span></div>
+                            <div class="col-12 col-md-4 table-head">{label displayResults /}</div>
+                            <div class="col-12 col-md-8">{input displayResults, class => 'col-12 col-md-6 form-control'}</div>
                         </div>
                         <div class="row">
-                            <div class="col-12 col-md-6 table-head">{label voteRightName /}</div>
-                            <div class="col-12 col-md-6">{input voteRightName, class => 'col-12 col-md-6 form-control'}<span n:ifcontent>{inputError voteRightName}</span></div>
+                            <div class="col-12 col-md-4 table-head">{label voteRightName /}</div>
+                            <div class="col-12 col-md-8">{input voteRightName, class => 'col-12 col-md-6 form-control'}</div>
                         </div>
                         <div class="row">
-                            <div class="col-12 col-md-6 table-head">{label resultRightName /}</div>
-                            <div class="col-12 col-md-6">{input resultRightName, class => 'col-12 col-md-6 form-control'}<span n:ifcontent>{inputError resultRightName}</span></div>
+                            <div class="col-12 col-md-4 table-head">{label resultRightName /}</div>
+                            <div class="col-12 col-md-8">{input resultRightName, class => 'col-12 col-md-6 form-control'}</div>
                         </div>
                         <div class="row">
-                            <div class="col-12 col-md-6 table-head">{label alienVoteRightName /}</div>
-                            <div class="col-12 col-md-6">{input alienVoteRightName, class => 'col-12 col-md-6 form-control'}<span n:ifcontent>{inputError alienVoteRightName}</span></div>
+                            <div class="col-12 col-md-4 table-head">{label alienVoteRightName /}</div>
+                            <div class="col-12 col-md-8">{input alienVoteRightName, class => 'col-12 col-md-6 form-control'}</div>
                         </div>
-                            <div class="row">
-                                <div class="col-12 col-md-6 table-head">{_poll.pollItems}</div>
-                                <div class="col-12 col-md-6">
-                                    <div class="row my-1 option-row" n:foreach="$poll->getOptions() as $opt">
-                                        <div class="col-6 input-group">
-                                            <div class="input-group-prepend"><span class="input-group-text">{_poll.itemCaption}:</span></div>
-                                            {input option_caption_{$opt->getId()}, class => 'form-control'}<span n:ifcontent>{inputError "option_caption_{$opt->getId()}"}</span>
-                                        </div>
-                                        <div class="col-6 input-group">
-                                            <div class="input-group-prepend"><span class="input-group-text">{_settings.type}:</span></div>
-                                            {input option_type_{$opt->getId()}, class => 'form-control'}<span n:ifcontent>{inputError "option_type_{$opt->getId()}"}</span>
-                                        </div>
-                                    </div>
+                        <div class="row">
+                            <div class="col-12 col-md-4 table-head">{_poll.pollItems}</div>
+                            <div class="col-12 col-md-8">
 
-                                    {*display empty line - only if there are no options filled yet*}
-                                    <div class="row my-1 option-row" n:if="empty($poll->getOptions())">
-                                        <div class="col-5 input-group">
-                                            <div class="input-group-prepend"><span class="input-group-text">{_poll.itemCaption}:</span></div>
-                                            {input option_caption_0, class => 'form-control'}<span n:ifcontent>{inputError option_caption_0}</span>
-                                        </div>
-                                        <div class="col-5 input-group">
-                                            <div class="input-group-prepend"><span class="input-group-text">{_settings.type}:</span></div>
-                                            {input option_type_0, class => 'form-control'}<span n:ifcontent>{inputError option_type_0}</span>
-                                        </div>
+                                {*display empty line - as a template for new rows*}
+                                <div class="row my-1 option-row-template d-none" data-row-id="0">
+                                    {input option_id_0}
+                                    <div class="col-6 input-group">
+                                        <div class="input-group-prepend"><span class="input-group-text">{_poll.itemCaption}:</span></div>
+                                        {input option_caption_0, class => 'form-control'}
                                     </div>
+                                    <div class="col-6 input-group">
+                                        <div class="input-group-prepend"><span class="input-group-text">{_settings.type}:</span></div>
+                                        {input option_type_0, class => 'form-control'}
+                                        <button class="btn btn-danger" title="{_poll.createItem}" onclick="removeOptionRow(this)" type="button">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
 
-                                    {*display line with add button*}
-                                    <div class="row my-1">
-                                        <div class="col text-right">
-                                            <button class="btn btn-success" title="{_poll.createItem}" onclick="duplicateLastOptionRow()" type="button">
-                                                <i class="fa fa-plus" aria-hidden="true"></i>
-                                            </button>
-                                        </div>
+                                <div class="row my-1 option-row" n:foreach="$poll->getOptions() as $opt" data-row-id="{$opt->getId()}">
+                                    {input "option_id_{$opt->getId()}"}
+                                    <div class="col-6 input-group">
+                                        <div class="input-group-prepend"><span class="input-group-text">{_poll.itemCaption}:</span></div>
+                                        {input option_caption_{$opt->getId()}, class => 'form-control'}
+                                        <span n:ifcontent>{inputError "option_caption_{$opt->getId()}"}</span>
+                                    </div>
+                                    <div class="col-6 input-group">
+                                        <div class="input-group-prepend"><span class="input-group-text">{_settings.type}:</span></div>
+                                        {input option_type_{$opt->getId()}, class => 'form-control'}
+                                        <button class="btn btn-danger ml-1" title="{_poll.createItem}" onclick="removeOptionRow(this)" type="button">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </button>
+                                        <span n:ifcontent>{inputError "option_type_{$opt->getId()}"}</span>
+                                    </div>
+                                </div>
+
+                                {*display line with add button*}
+                                <div class="row my-1">
+                                    <div class="col text-right">
+                                        <button class="btn btn-success" title="{_poll.createItem}" onclick="duplicateLastOptionRow()" type="button">
+                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
+                        </div>
                     </div>
-
                 </div>
                 <div class="card-footer text-right">
                     <a href="{link pollDelete!}" type="button" class="btn btn-danger mx-2" title="{_common.delete}"><i class="far fa-trash-can" aria-hidden="true"></i></a>

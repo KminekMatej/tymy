@@ -61,7 +61,7 @@ class OptionManager extends BaseManager
             $this->respondForbidden();
         }
 
-        if (array_key_exists("pollId", $data)) {
+        if ($data && array_key_exists("pollId", $data)) {
             unset($data["pollId"]); //pollId is not changeable
         }
     }
@@ -140,6 +140,20 @@ class OptionManager extends BaseManager
         $this->allowPoll($pollId);
 
         return $this->mapAll($this->database->table(Option::TABLE)->where("quest_id", $pollId)->fetchAll());
+    }
+
+    /**
+     * Delete multiple poll options
+     * @param int $pollId
+     * @param array $ids
+     * @return void
+     */
+    public function deleteOptions(int $pollId, array $ids): void
+    {
+        $this->allowPoll($pollId);
+        $this->allowUpdate($pollId);
+
+        $this->database->table($this->getTable())->where("quest_id", $pollId)->where("id", $ids)->delete();
     }
 
     private function allowPoll(int $pollId): void

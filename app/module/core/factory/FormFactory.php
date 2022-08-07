@@ -295,16 +295,17 @@ class FormFactory
             foreach ($poll->getOptions() as $option) {
                 /* @var $option Option */
                 $form->addHidden("option_id_" . $option->getId(), $option->getId());
-
                 $form->addText("option_caption_" . $option->getId(), $this->translator->translate("poll.itemCaption"))->setValue($option->getCaption())->setHtmlAttribute("data-value", $option->getCaption());
-                $form->addSelect("option_type_" . $option->getId(), $this->translator->translate("settings.type"), $optionTypes)->setValue($option->getType())->setHtmlAttribute("data-value", $option->getType());
+                $typeSelector = $form->addSelect("option_type_" . $option->getId(), $this->translator->translate("settings.type"), $optionTypes)
+                    ->setValue($option->getType())
+                    ->setHtmlAttribute("data-value", $option->getType());
             }
         }
 
-        if(!$poll || empty($poll->getOptions())) { //add empty item only for new poll form or if poll doesnt contain any options yet
-            $form->addText("option_caption_0", $this->translator->translate("poll.itemCaption"))->setHtmlAttribute("data-value");
-            $form->addSelect("option_type_0", $this->translator->translate("settings.type"), $optionTypes)->setHtmlAttribute("data-value");
-        }
+        //add template row
+        $form->addHidden("option_id_0", 0);
+        $form->addText("option_caption_0", $this->translator->translate("poll.itemCaption"))->setHtmlAttribute("data-value");
+        $form->addSelect("option_type_0", $this->translator->translate("settings.type"), $optionTypes)->setHtmlAttribute("data-value")->setDefaultValue(Option::TYPE_TEXT);
 
         $form->onSuccess[] = $onSuccess;
 

@@ -110,22 +110,33 @@ class PollPresenter extends SettingBasePresenter
             $this->pollManager->create((array) $values);
 
         $existingOptionIds = ArrayHelper::entityIds($poll->getOptions());
+        $optionsToDel = [];
 
         foreach ($form->getHttpData() as $name => $value) { //get options from http data instead of $values to read also dynamically adde option rows
-            if (preg_match('/option_caption_(\d+)/m', $name, $matches)) {
+            if (preg_match('/option_id_(.+)/m', $name, $matches)) {
                 $id = $matches[1];
-                if (in_array($id, $existingOptionIds)) { //existing option
-                    $this->optionManager->update([
-                        "caption" => $value,
-                        "type" => $form->getHttpData()["option_type_$id"] ?? null,
-                        ], $values->id ?? null, $id);
-                } else { //non-existing option, create
-                    $this->optionManager->create([
-                        "caption" => $value,
-                        "type" => $form->getHttpData()["option_type_$id"] ?? null,
-                        ], $values->id ?? null);
+
+                if ($id === '0') {   //skip template row
+                    continue;
                 }
+                if ($value == 'null') {
+                    $optionsToDel[] = $id;
+                    continue;
+                }
+
+                $optionData = [
+                    "caption" => $form->getHttpData()["option_caption_$id"] ?? null,
+                    "type" => $form->getHttpData()["option_type_$id"] ?? null,
+                ];
+
+                in_array($id, $existingOptionIds) ?
+                        $this->optionManager->update($optionData, $poll->getId(), $id) :
+                        $this->optionManager->create($optionData, $poll->getId());
             }
+        }
+
+        if (!empty($optionsToDel)) {
+            $this->optionManager->deleteOptions($poll->getId(), $optionsToDel);
         }
 
         $this->redirect(':Setting:Poll:', [$poll->getWebName()]);
