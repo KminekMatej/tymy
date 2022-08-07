@@ -22,23 +22,23 @@
                     <div class="card-body tymy-table table-bordered">
                         <div class="row">
                             <div class="col-12 col-md-6 table-head">{label caption /}</div>
-                            <div class="col-12 col-md-6">{input caption, class => 'col-12 col-md-6 form-control'}</div>
+                            <div class="col-12 col-md-6">{input caption, class => 'col-12 col-md-6 form-control'}<span n:ifcontent>{inputError caption}</span></div>
                         </div>
                         <div class="row">
                             <div class="col-12 col-md-6 table-head">{label description /}</div>
-                            <div class="col-12 col-md-6">{input description, class => 'col-12 col-md-6 form-control'}</div>
+                            <div class="col-12 col-md-6">{input description, class => 'col-12 col-md-6 form-control'}<span n:ifcontent>{inputError description}</span></div>
                         </div>
                         <div class="row">
                             <div class="col-12 col-md-6 table-head">{label status /}</div>
-                            <div class="col-12 col-md-6">{input status, class => 'col-12 col-md-6 form-control'}</div>
+                            <div class="col-12 col-md-6">{input status, class => 'col-12 col-md-6 form-control'}<span n:ifcontent>{inputError status}</span></div>
                         </div>
                         <div class="row">
                             <div class="col-12 col-md-6 table-head">{label minItems /}</div>
-                            <div class="col-12 col-md-6">{input minItems, class => 'col-12 col-md-6 form-control'}</div>
+                            <div class="col-12 col-md-6">{input minItems, class => 'col-12 col-md-6 form-control'}<span n:ifcontent>{inputError minItems}</span></div>
                         </div>
                         <div class="row">
                             <div class="col-12 col-md-6 table-head">{label maxItems /}</div>
-                            <div class="col-12 col-md-6">{input maxItems, class => 'col-12 col-md-6 form-control'}</div>
+                            <div class="col-12 col-md-6">{input maxItems, class => 'col-12 col-md-6 form-control'}<span n:ifcontent>{inputError maxItems}</span></div>
                         </div>
                         <div class="row">
                             <div class="col-12 col-md-6 table-head">{_poll.anonymousVotes}</div>
@@ -46,7 +46,7 @@
                                 <label n:name="anonymousVotes" class="custom-control custom-checkbox">
                                     <input n:name="anonymousVotes" class="col-12 col-md-6 form-control custom-control-input" />
                                     <span class="custom-control-label"></span>
-                                </label>
+                                </label><span n:ifcontent>{inputError anonymousVotes}</span>
                             </div>
                         </div>
                         <div class="row">
@@ -55,37 +55,36 @@
                                 <label n:name="changeableVotes" class="custom-control custom-checkbox">
                                     <input n:name="changeableVotes" class="col-12 col-md-6 form-control custom-control-input" />
                                     <span class="custom-control-label"></span>
-                                </label>
+                                </label><span n:ifcontent>{inputError changeableVotes}</span>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-12 col-md-6 table-head">{label displayResults /}</div>
-                            <div class="col-12 col-md-6">{input displayResults, class => 'col-12 col-md-6 form-control'}</div>
+                            <div class="col-12 col-md-6">{input displayResults, class => 'col-12 col-md-6 form-control'}<span n:ifcontent>{inputError displayResults}</span></div>
                         </div>
                         <div class="row">
                             <div class="col-12 col-md-6 table-head">{label voteRightName /}</div>
-                            <div class="col-12 col-md-6">{input voteRightName, class => 'col-12 col-md-6 form-control'}</div>
+                            <div class="col-12 col-md-6">{input voteRightName, class => 'col-12 col-md-6 form-control'}<span n:ifcontent>{inputError voteRightName}</span></div>
                         </div>
                         <div class="row">
                             <div class="col-12 col-md-6 table-head">{label resultRightName /}</div>
-                            <div class="col-12 col-md-6">{input resultRightName, class => 'col-12 col-md-6 form-control'}</div>
+                            <div class="col-12 col-md-6">{input resultRightName, class => 'col-12 col-md-6 form-control'}<span n:ifcontent>{inputError resultRightName}</span></div>
                         </div>
                         <div class="row">
                             <div class="col-12 col-md-6 table-head">{label alienVoteRightName /}</div>
-                            <div class="col-12 col-md-6">{input alienVoteRightName, class => 'col-12 col-md-6 form-control'}</div>
+                            <div class="col-12 col-md-6">{input alienVoteRightName, class => 'col-12 col-md-6 form-control'}<span n:ifcontent>{inputError alienVoteRightName}</span></div>
                         </div>
                             <div class="row">
-                                {dump $poll->getOptions()}
                                 <div class="col-12 col-md-6 table-head">{_poll.pollItems}</div>
                                 <div class="col-12 col-md-6">
                                     <div class="row my-1 option-row" n:foreach="$poll->getOptions() as $opt">
                                         <div class="col-6 input-group">
                                             <div class="input-group-prepend"><span class="input-group-text">{_poll.itemCaption}:</span></div>
-                                            {input option_caption_{$opt->getId()}, class => 'form-control'}
+                                            {input option_caption_{$opt->getId()}, class => 'form-control'}<span n:ifcontent>{inputError "option_caption_{$opt->getId()}"}</span>
                                         </div>
                                         <div class="col-6 input-group">
                                             <div class="input-group-prepend"><span class="input-group-text">{_settings.type}:</span></div>
-                                            {input option_type_{$opt->getId()}, class => 'form-control'}
+                                            {input option_type_{$opt->getId()}, class => 'form-control'}<span n:ifcontent>{inputError "option_type_{$opt->getId()}"}</span>
                                         </div>
                                     </div>
 
@@ -93,11 +92,11 @@
                                     <div class="row my-1 option-row" n:if="empty($poll->getOptions())">
                                         <div class="col-5 input-group">
                                             <div class="input-group-prepend"><span class="input-group-text">{_poll.itemCaption}:</span></div>
-                                            {input option_caption_0, class => 'form-control'}
+                                            {input option_caption_0, class => 'form-control'}<span n:ifcontent>{inputError option_caption_0}</span>
                                         </div>
                                         <div class="col-5 input-group">
                                             <div class="input-group-prepend"><span class="input-group-text">{_settings.type}:</span></div>
-                                            {input option_type_0, class => 'form-control'}
+                                            {input option_type_0, class => 'form-control'}<span n:ifcontent>{inputError option_type_0}</span>
                                         </div>
                                     </div>
 
