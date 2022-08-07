@@ -77,7 +77,8 @@
                             <div class="row">
                                 {dump $poll->getOptions()}
                                 <div class="col-12 col-md-6 table-head">{_poll.pollItems}</div>
-                                <div class="col-12 col-md-6"><div class="row my-1" n:foreach="$poll->getOptions() as $opt">
+                                <div class="col-12 col-md-6">
+                                    <div class="row my-1 option-row" n:foreach="$poll->getOptions() as $opt">
                                         <div class="col-6 input-group">
                                             <div class="input-group-prepend"><span class="input-group-text">{_poll.itemCaption}:</span></div>
                                             {input option_caption_{$opt->getId()}, class => 'form-control'}
@@ -88,8 +89,8 @@
                                         </div>
                                     </div>
 
-                                    {*display last empty line - only if there are no options filled yet*}
-                                    <div class="row my-1" n:if="empty($poll->getOptions())">
+                                    {*display empty line - only if there are no options filled yet*}
+                                    <div class="row my-1 option-row" n:if="empty($poll->getOptions())">
                                         <div class="col-5 input-group">
                                             <div class="input-group-prepend"><span class="input-group-text">{_poll.itemCaption}:</span></div>
                                             {input option_caption_0, class => 'form-control'}
@@ -97,6 +98,15 @@
                                         <div class="col-5 input-group">
                                             <div class="input-group-prepend"><span class="input-group-text">{_settings.type}:</span></div>
                                             {input option_type_0, class => 'form-control'}
+                                        </div>
+                                    </div>
+
+                                    {*display line with add button*}
+                                    <div class="row my-1">
+                                        <div class="col text-right">
+                                            <button class="btn btn-success" title="{_poll.createItem}" onclick="duplicateLastOptionRow()" type="button">
+                                                <i class="fa fa-plus" aria-hidden="true"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
