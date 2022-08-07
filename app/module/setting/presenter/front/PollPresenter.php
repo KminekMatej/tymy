@@ -146,15 +146,6 @@ class PollPresenter extends SettingBasePresenter
         return $this->formFactory->createPollConfigForm([$this, "pollFormSuccess"], ($pollId ? $this->pollManager->getById($pollId) : null));
     }
 
-    public function createComponentMultiPollForm(): Multiplier
-    {
-        return new Multiplier(
-            function ($pollId) {
-                return $this->formFactory->createPollConfigForm([$this, "pollFormSuccess"], $this->pollManager->getById($pollId));
-            }
-        );
-    }
-
     /**
      * @param Form $form
      * @param stdClass $values
