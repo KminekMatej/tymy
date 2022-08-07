@@ -6,7 +6,6 @@ namespace Tymy\Module\Core\Helper;
 
 class CURLHelper
 {
-
     /**
      * Get content from url
      * @param string $url
