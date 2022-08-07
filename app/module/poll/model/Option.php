@@ -14,6 +14,9 @@ class Option extends BaseModel
 {
     public const MODULE = "poll";
     public const TABLE = "ask_items";
+    public const TYPE_NUMBER = "NUMBER";
+    public const TYPE_TEXT = "TEXT";
+    public const TYPE_BOOLEAN = "BOOLEAN";
 
     private int $pollId;
     private string $caption;

@@ -17,6 +17,7 @@ use Tymy\Module\Event\Model\Event;
 use Tymy\Module\Event\Model\EventType;
 use Tymy\Module\Permission\Manager\PermissionManager;
 use Tymy\Module\Permission\Model\Permission;
+use Tymy\Module\Poll\Model\Option;
 use Tymy\Module\Poll\Model\Poll;
 use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\User\Manager\UserManager;
@@ -242,6 +243,11 @@ class FormFactory
             Poll::RESULTS_WHEN_CLOSED => $this->translator->translate("poll.whenClosed"),
             Poll::RESULTS_NEVER => $this->translator->translate("poll.never"),
         ];
+        $optionTypes = [
+            Option::TYPE_TEXT => $this->translator->translate("poll.text"),
+            Option::TYPE_NUMBER => $this->translator->translate("poll.number"),
+            Option::TYPE_BOOLEAN => $this->translator->translate("poll.bool"),
+        ];
 
         $caption = $form->addText("caption", $this->translator->translate("settings.title"))->setRequired();
         $description = $form->addTextArea("description", $this->translator->translate("settings.description"));
@@ -263,6 +269,10 @@ class FormFactory
         $canAlienVote = $form->addSelect("alienVoteRightName", $this->translator->translate("poll.canAlienVote"), $this->getUserPermissions())->setPrompt("-- " . $this->translator->translate("common.noone") . " --");
         $orderFlag = $form->addInteger("orderFlag", $this->translator->translate("settings.order"));
 
+        //add empty item
+        $form->addText("option_caption_0", $this->translator->translate("poll.itemCaption"))->setHtmlAttribute("data-value");
+        $form->addSelect("option_type_0", $this->translator->translate("settings.type"), $optionTypes)->setHtmlAttribute("data-value");
+
         if ($poll) {
             $id->setValue($poll->getId());
             $caption->setValue($poll->getCaption())->setHtmlAttribute("data-value", $poll->getCaption());
@@ -282,6 +292,15 @@ class FormFactory
             }
             if ($poll->getAlienVoteRightName()) {
                 $canAlienVote->setValue($poll->getAlienVoteRightName())->setHtmlAttribute("data-value", $poll->getAlienVoteRightName());
+            }
+
+            //add existing items
+            foreach ($poll->getOptions() as $option) {
+                /* @var $option Option */
+                $form->addHidden("option_id_" . $option->getId(), $option->getId());
+
+                $form->addText("option_caption_" . $option->getId(), $this->translator->translate("poll.itemCaption"))->setValue($option->getCaption())->setHtmlAttribute("data-value", $option->getCaption());
+                $form->addSelect("option_type_" . $option->getId(), $this->translator->translate("settings.type"), $optionTypes)->setValue($option->getType())->setHtmlAttribute("data-value", $option->getType());
             }
         }
 
