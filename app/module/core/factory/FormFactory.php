@@ -269,9 +269,6 @@ class FormFactory
         $canAlienVote = $form->addSelect("alienVoteRightName", $this->translator->translate("poll.canAlienVote"), $this->getUserPermissions())->setPrompt("-- " . $this->translator->translate("common.noone") . " --");
         $orderFlag = $form->addInteger("orderFlag", $this->translator->translate("settings.order"));
 
-        //add empty item
-        $form->addText("option_caption_0", $this->translator->translate("poll.itemCaption"))->setHtmlAttribute("data-value");
-        $form->addSelect("option_type_0", $this->translator->translate("settings.type"), $optionTypes)->setHtmlAttribute("data-value");
 
         if ($poll) {
             $id->setValue($poll->getId());
@@ -302,6 +299,11 @@ class FormFactory
                 $form->addText("option_caption_" . $option->getId(), $this->translator->translate("poll.itemCaption"))->setValue($option->getCaption())->setHtmlAttribute("data-value", $option->getCaption());
                 $form->addSelect("option_type_" . $option->getId(), $this->translator->translate("settings.type"), $optionTypes)->setValue($option->getType())->setHtmlAttribute("data-value", $option->getType());
             }
+        }
+
+        if(!$poll || empty($poll->getOptions())) { //add empty item only for new poll form or if poll doesnt contain any options yet
+            $form->addText("option_caption_0", $this->translator->translate("poll.itemCaption"))->setHtmlAttribute("data-value");
+            $form->addSelect("option_type_0", $this->translator->translate("settings.type"), $optionTypes)->setHtmlAttribute("data-value");
         }
 
         $form->onSuccess[] = $onSuccess;
