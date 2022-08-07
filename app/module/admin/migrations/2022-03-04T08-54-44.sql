@@ -19,6 +19,8 @@ ALTER TABLE `attendance_history` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST, ADD
 ALTER TABLE `attendance_history` ADD `status_id_from` INT NULL DEFAULT NULL AFTER `entry_type`;
 ALTER TABLE `attendance_history` ADD `status_id_to` INT NOT NULL AFTER `pre_desc_from`;
 
+ALTER TABLE `attendance_history` CHANGE `dat_mod` `dat_mod` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
 UPDATE `attendance_history` SET `attendance_history`.`status_id_from`=
 (SELECT `status`.`id`
 FROM `status`
