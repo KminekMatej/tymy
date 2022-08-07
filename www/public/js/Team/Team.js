@@ -70,26 +70,23 @@ function checkRole(btn) {
         $(btn).addClass("active");
 }
 
-function checkPlayer(elm) {
-    
+function checkPlayer() {
     //list all checked emails
     var checked = $(".player-check:checked");
     var mails = [];
     for (const element of checked) {
         var mail = $(element).attr("data-email");
-        if(mail){
+        if (mail) {
             mails.push(mail);
         }
     }
     var cntChecked = checked.length;
-    
-    if(cntChecked > 0){
+
+    if (cntChecked > 0) {
         $("A.mail-picked").removeClass("d-none");
         $("A.mail-picked").find("SPAN.badge").html(cntChecked);
         $("A.mail-picked").attr("href", "mailto:" + mails.join());
     } else {
         $("A.mail-picked").addClass("d-none");
     }
-    
-    
 }
