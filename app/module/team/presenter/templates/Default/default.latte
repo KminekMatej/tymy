@@ -9,7 +9,13 @@
 <div class="container-fluid container-md users">
     <div class="row mt-2">
         <div class="col text-right">
-            <div class="settings-bar"><a href="mailto:{$allMails}" class="btn btn-outline-light" title="{_team.newMailToAll}" role="button" aria-pressed="true"><i class="fa fa-envelope" aria-hidden="true"></i></a></div>
+            <div class="settings-bar">
+                <a href="mailto:{$allMails}" class="btn btn-outline-warning mail-picked d-none" title="{_team.newMailToSelected}" role="button" aria-pressed="true">
+                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                    <span class="badge">15</span>
+                </a>
+                <a href="mailto:{$allMails}" class="btn btn-outline-light" title="{_team.newMailToAll}" role="button" aria-pressed="true"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+            </div>
         </div>
     </div>
     <div class="row" n:snippet="userList">
@@ -32,13 +38,17 @@
                             </div>
                         </div>
                     </a>
-                    <div class="btnbox">
+                    <div class="btnbox d-flex">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input player-check" id="check-{$u->getId()}" onclick="checkPlayer()" data-email="{$u->getEmail()}">
+                            <label class="custom-control-label" for="check-{$u->getId()}"></label>
+                        </div>
+
                         {if $userType == 'INIT'}
-                            <a n:href="approve! $u->getId()" class="btn btn-sm ajax btn-outline-primary" title="{_team.approveAsPlayer}"><i class="fa fa-check" aria-hidden="true"></i></a>
-                            <a n:href="delete! $u->getId()" class="btn btn-sm btn-outline-danger" title="{_common.delete}" onclick="return confirm({_discussion.alerts.confirmDeletePost})"><i class="fa fa-times" aria-hidden="true"></i></a>
-                        {else}
-                            <a href="mailto:{$u->getEmail()}" n:if="$u->getEmail()" class="btn btn-sm btn-light btn-light-bordered" title="{_team.newMailTo} {$u->getEmail()}" role="button" aria-pressed="true"><i class="fa fa-envelope" aria-hidden="true"></i></a>
-                        {/if}
+                            <a n:href="approve! $u->getId()" class="btn btn-xs ajax btn-outline-primary" title="{_team.approveAsPlayer}"><i class="fa fa-check" aria-hidden="true"></i></a>
+                            <a n:href="delete! $u->getId()" class="btn btn-xs btn-outline-danger" title="{_common.delete}" onclick="return confirm({_discussion.alerts.confirmDeletePost})"><i class="fa fa-times" aria-hidden="true"></i></a>
+                            {/if}
+                        <a href="mailto:{$u->getEmail()}" n:if="$u->getEmail()" class="btn btn-xs btn-light btn-light-bordered" title="{_team.newMailTo} {$u->getEmail()}" role="button" aria-pressed="true"><i class="fa fa-envelope" aria-hidden="true"></i></a>
                     </div>
                 </div>
             </div>
