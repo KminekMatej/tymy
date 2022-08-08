@@ -57,7 +57,7 @@
             <th>{_team.email}:</th><td><div class="input-group"><input name="email" data-value="{$player->getEmail()}" type="text" value="{$player->getEmail()}" n:class="col-6, form-control, in_array('email',$player->getErrFields()) ? is-invalid" style="min-width: 200px"/><div class="input-group-append"><span class="input-group-text"><a n:tag-if="$player->getEmail() != ''" href="mailto:{$player->getEmail()}"><i class="fa fa-envelope" aria-hidden="true"></i></a></span></div></div></td>
         </tr>
         <tr>
-            <th>{_team.birthDate}:</th><td><input name="birthDate" data-value="{$player->getBirthDate()->format(\Tymy\Module\Core\Model\BaseModel::DATE_ENG_FORMAT)}" type="date" value="{$player->getBirthDate()->format(\Tymy\Module\Core\Model\BaseModel::DATE_ENG_FORMAT)}" n:class="col-6, form-control, in_array('birthDate',$player->getErrFields()) ? is-invalid" /></td>
+            <th>{_team.birthDate}:</th><td><input name="birthDate" data-value="{$player->getBirthDate() ? $player->getBirthDate()->format(\Tymy\Module\Core\Model\BaseModel::DATE_ENG_FORMAT)}" type="date" value="{$player->getBirthDate() ? $player->getBirthDate()->format(\Tymy\Module\Core\Model\BaseModel::DATE_ENG_FORMAT)}" n:class="col-6, form-control, in_array('birthDate',$player->getErrFields()) ? is-invalid" /></td>
         </tr>
         <tr>
             <th>{_team.nameDayMonth}:</th><td>
