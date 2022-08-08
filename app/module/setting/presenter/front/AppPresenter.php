@@ -5,6 +5,8 @@ namespace Tymy\Module\Setting\Presenter\Front;
 use Nette\Application\UI\Form;
 use stdClass;
 use Tymy\Module\Attendance\Manager\StatusManager;
+use Tymy\Module\Core\Helper\ArrayHelper;
+use Tymy\Module\Core\Helper\CURLHelper;
 use Tymy\Module\Event\Manager\EventManager;
 use Tymy\Module\Event\Manager\EventTypeManager;
 use Tymy\Module\Permission\Manager\PermissionManager;
@@ -64,6 +66,18 @@ class AppPresenter extends SettingBasePresenter
         $this->template->firstMinorVersion = $firstMinor;
 
         $this->template->allSkins = TeamManager::SKINS;
+        $this->getNextMilestone();
+    }
+
+    private function getNextMilestone()
+    {
+        $milestones = CURLHelper::get("https://api.github.com/repos/KminekMatej/tymy/milestones", true);
+        $versions = ArrayHelper::pairs($milestones, "title", "html_url");
+
+        uksort($versions, "version_compare");
+        $nextVersion = array_key_first($versions);
+        $this->template->nextMilestoneVersion = $nextVersion;
+        $this->template->nextMilestoneUrl = $versions[$nextVersion];
     }
 
     public function createComponentUserConfigForm()
