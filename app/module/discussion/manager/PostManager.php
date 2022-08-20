@@ -342,8 +342,8 @@ class PostManager extends BaseManager
             $query[] = "AND `item` LIKE ?";
             $params[] = "%$search%";
         }
-        if (!empty($searchUserId)) {
-            $query[] = "AND `discussion_read`.`user_id` = ?";
+        if ($searchUserId) {
+            $query[] = "AND `discussion_post`.`user_id` = ?";
             $params[] = $searchUserId;
         }
 
