@@ -156,7 +156,10 @@ class DefaultPresenter extends SecuredPresenter
 
         $form->addUpload('upload');
         $form->onError[] = function (Form $form) {
-            $this->presenter->flashMessage(join("\n", $form->errors), "danger");
+            foreach ($form->errors as $error) {
+                $this->presenter->flashMessage($error, "danger");
+            }
+
             $this->presenter->redrawControl("flashes");
         };
 
