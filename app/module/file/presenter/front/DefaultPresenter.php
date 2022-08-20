@@ -9,6 +9,7 @@ use Tracy\Debugger;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\File\Handler\FileManager;
 use Tymy\Module\Team\Manager\TeamManager;
+
 use const TEAM_DIR;
 
 /**
