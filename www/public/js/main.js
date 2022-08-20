@@ -13,6 +13,9 @@ $(document).ready(function () {
             $.each(data.result.files, function (index, file) {
                 $('<p></p>').text(file.name).appendTo(document.body);
             });
+            if (data.result.snippets) {
+                $.nette.ext('snippets').updateSnippets(data.result.snippets);
+            }
         }
     });
 
