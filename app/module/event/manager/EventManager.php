@@ -422,7 +422,7 @@ class EventManager extends BaseManager
         $count = 0;
         foreach ($events as $event) {
             /* @var $event Event */
-            if ($event->getAttendancePending()) {
+            if ($event->getAttendancePending() && $event->getCanPlan()) {
                 $count++;
             }
         }
