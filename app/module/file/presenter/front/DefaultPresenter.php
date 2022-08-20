@@ -2,12 +2,13 @@
 
 namespace Tymy\Module\File\Presenter\Front;
 
+use Exception;
 use Nette\Application\UI\Form;
 use Nette\Utils\DateTime;
+use Tracy\Debugger;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\File\Handler\FileManager;
 use Tymy\Module\Team\Manager\TeamManager;
-
 use const TEAM_DIR;
 
 /**
@@ -17,7 +18,7 @@ use const TEAM_DIR;
  */
 class DefaultPresenter extends SecuredPresenter
 {
-    private const DIR_NAME_REGEX = '([a-zA-Z_\-0-9áčďéěíňóřšťůúýžÁČĎÉĚÍŇÓŘŠŤŮÚÝŽ ]+\.?)*[a-zA-Z_\-0-9áčďéěíňóřšťůúýžÁČĎÉĚÍŇÓŘŠŤŮÚÝŽ ]+';
+    private const DIR_NAME_REGEX = '([a-zA-Z_\/\-0-9áčďéěíňóřšťůúýžÁČĎÉĚÍŇÓŘŠŤŮÚÝŽ ]+\.?)*[a-zA-Z_\/\-0-9áčďéěíňóřšťůúýžÁČĎÉĚÍŇÓŘŠŤŮÚÝŽ ]+';
 
     /** @inject */
     public TeamManager $teamManager;
@@ -154,10 +155,20 @@ class DefaultPresenter extends SecuredPresenter
         $form->addHidden("folder")->addRule(Form::PATTERN_ICASE, $this->translator->translate("file.dirNameError"), self::DIR_NAME_REGEX);
 
         $form->addUpload('upload');
+        $form->onError[] = function (Form $form) {
+            $this->presenter->flashMessage(join("\n", $form->errors), "danger");
+            $this->presenter->redrawControl("flashes");
+        };
 
         $form->onSuccess[] = function (Form $form, $values) {
             $folder = trim($values->folder, "/. ");
-            $this->fileManager->save($values->upload, $folder);
+            try {
+                $this->fileManager->save($values->upload, $folder);
+            } catch (Exception $exc) {
+                $this->presenter->flashMessage($exc->getMessage(), "danger");
+                $this->presenter->redrawControl("flashes");
+            }
+
             $this->reloadFileList($folder);
         };
 
@@ -336,7 +347,7 @@ class DefaultPresenter extends SecuredPresenter
             $this->rrmdir($filepath);
         }
 
-        //$this->reloadFileList($folder);
+        $this->reloadFileList($folder);
     }
 
     private function rrmdir($dir)
