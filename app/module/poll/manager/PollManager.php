@@ -288,8 +288,8 @@ class PollManager extends BaseManager
         $userPermissions = $this->permissionManager->getUserAllowedPermissionNames($this->userManager->getById($this->user->getId()), Permission::TYPE_USER);
 
         $selector = $this->database->table($this->getTable())
-            ->where("status != ?", "DESIGN")
-            ->order("order_flag ASC");   //in menu there are not polls in DESIGN status
+            ->where("status", Poll::STATUS_OPENED)
+            ->order("order_flag ASC");   //display only polls in status OPENED (hide CLOSED and DESIGN)
 
         if (!empty($userPermissions)) {
             $selector->where("vote_rights IS NULL OR vote_rights = '' OR vote_rights IN ?", $userPermissions);
