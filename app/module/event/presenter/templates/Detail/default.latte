@@ -46,7 +46,7 @@
                             {snippet attendanceWarning}
                                 <div class="alert alert-danger" n:if="$event->getAttendancePending()"><i class="fa fa-arrow-down" aria-hidden="true"></i> {_event.attendanceNotFilled} ! <i class="fa fa-arrow-down" aria-hidden="true"></i></div>
                             {/snippet}
-                            <input type="text" class="form-control custom-btn-sm" title="{_note.note,1}" id="preStatusDesc-action-{$event->getId()}" placeholder="{_note.note,1}" name="preStatusDesc" value="{$event->getMyAttendance() ? $event->getMyAttendance()->getPreDescription() : ''}" />
+                            <input type="text" class="form-control custom-btn-sm" title="{_note.note,1}" id="preStatusDesc-action-{$event->getId()}" placeholder="{_note.note,1}" name="preStatusDesc" value="{$event->getMyAttendance() ? $event->getMyAttendance()->getPreDescription() : ''}" data-value="{$event->getMyAttendance() ? $event->getMyAttendance()->getPreDescription() : ''}" onchange="toggleAttButtons(this)" />
                             <div class="custom-container btn-group input-group pt-2" role="group" aria-label="Attendace setup container" id="action-{$event->getId()}">
                                 <button n:foreach="$eventType->getPreStatusSet() as $preStatus" onclick="updateAttendance(this, {link attendance! $event->getId(), $preStatus->getId()})" class="btn custom-btn-sm {$event->getMyAttendance(),$preStatus->getId(),$event->getCanPlan(),$event->getCloseTime()|prestatusClass}">{$preStatus->getCaption()}</button>
                             </div>

@@ -42,7 +42,7 @@ class FileManager
         if (!array_key_exists($mime, $this->getMimeTypes())) {
             //mime not matched
             unlink($file->getTemporaryFile());
-            $this->responder->E403_FORBIDDEN("Uploading this type if forbidden");
+            $this->responder->E403_FORBIDDEN("Uploading type `$mime` is forbidden");
         }
 
         if (!$file->isOk()) {

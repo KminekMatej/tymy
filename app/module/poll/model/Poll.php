@@ -18,6 +18,7 @@ class Poll extends BaseModel
     public const STATUS_DESIGN = "DESIGN";
     public const STATUS_OPENED = "OPENED";
     public const STATUS_CLOSED = "CLOSED";
+    public const STATUS_HIDDEN = "HIDDEN";
     public const RESULTS_NEVER = "NEVER";
     public const RESULTS_ALWAYS = "ALWAYS";
     public const RESULTS_AFTER_VOTE = "AFTER_VOTE";

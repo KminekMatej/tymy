@@ -76,5 +76,18 @@ function togglePast(){
         $("DIV.agenda DIV.card-header svg[data-fa-i2svg]").removeClass("fa-eye");
         $("DIV.agenda DIV.card-header svg[data-fa-i2svg]").addClass("fa-eye-slash");
     }
-    
+
+}
+
+function toggleAttButtons(noteElm) {
+    var originalValue = $(noteElm).attr("data-value");
+    var value = $(noteElm).val();
+    if (value != originalValue) {
+        //value changed, if any attendance button is active, deactivate it
+        var buttons = $(noteElm).next("DIV.btn-group").find("button.active").length > 0 ? $(noteElm).next("DIV.btn-group").find("button.active") : $(noteElm).siblings("button.active");
+        buttons.each(function () {
+            $(this).removeClass("active");
+        });
+
+    }
 }
