@@ -36,5 +36,6 @@ plan: Plan
 result: Wynik
 displayHistory: Wyświetl historię
 eventType: Typ wydarzenia|Typy wydarzeń
+currently: Obecnie w toku
 errors:
     eventNotExists: Wydarzenie %id% nie istnieje
