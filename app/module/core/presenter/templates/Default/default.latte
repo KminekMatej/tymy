@@ -104,6 +104,16 @@
         </div>
     </div>
 
+    {* Display bar with current events *}
+    <div class="row">
+        <div class="col" n:inner-foreach="$currentEvents as $event">
+            <div class="alert alert-info alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                Právě probíhá událost <a n:href=":Event:Detail: $event->getWebName()">{$event->getCaption()}</a>
+            </div>
+        </div>
+    </div>
+
+    {* Display bar with celebrations *}
     <div class="row">
         <div class="col" n:inner-foreach="$users as $usr">
             {var $nameDay = date('m-d', strtotime(date('Y').'-'.$usr->getNameDayMonth().'-'.$usr->getNameDayDay()))}
