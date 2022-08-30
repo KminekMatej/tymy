@@ -195,6 +195,26 @@ class EventManager extends BaseManager
     }
 
     /**
+     * Get currently active events
+     * @param int $userId
+     * @return Event[]
+     */
+    public function getCurrentEvents(int $userId): array
+    {
+        $selector = $this->selectUserEvents($userId)
+            ->where("start_time < NOW()") //has already started
+            ->where("end_time > NOW()") //but has not already ended
+            ->order(Order::toString($this->orderToArray("startTime__desc")))
+            ->limit(5, 0);
+
+        $events = $this->mapAll($selector->fetchAll());
+
+        $this->addAttendances($events);
+
+        return $events;
+    }
+
+    /**
      * Load attendances from database and automatically adds all of them to input array of events
      * @param array $events
      * @return void

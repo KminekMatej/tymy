@@ -89,6 +89,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->template->liveUsers = $this->userManager->getLiveUsers();
         $this->template->discussions = $this->discussionManager->getListUserAllowed($this->user->getId());
         $this->template->users = $this->userManager->getListOrder(null, "id", "last_login DESC");
+        $this->template->currentEvents = $this->eventManager->getCurrentEvents($this->user->getId());
 
         //$this->debtList->postProcessWithUsers($this->userList->getById(), $debts);    //@todo
         $this->template->debts = $this->debtManager->getListUserAllowed();
