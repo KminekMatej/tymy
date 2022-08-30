@@ -33,6 +33,7 @@ notEnoughItems: Minimal items not reached
 design: Design
 opened: Active
 closed: Closed
+hidden: Hidden
 displayInMainMenu: Display in main menu
 never: Never
 always: Always

@@ -235,6 +235,7 @@ class FormFactory
             Poll::STATUS_DESIGN => $this->translator->translate("poll.design"),
             Poll::STATUS_OPENED => $this->translator->translate("poll.opened"),
             Poll::STATUS_CLOSED => $this->translator->translate("poll.closed"),
+            Poll::STATUS_HIDDEN => $this->translator->translate("poll.hidden"),
         ];
 
         $pollResults = [

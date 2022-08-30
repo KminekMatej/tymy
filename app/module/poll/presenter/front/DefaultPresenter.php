@@ -31,7 +31,7 @@ class DefaultPresenter extends SecuredPresenter
 
     public function renderDefault()
     {
-        $this->template->polls = $this->pollManager->getListMenu();
+        $this->template->polls = $this->pollManager->getListUserAllowed();
     }
 
     public function renderPoll(?string $resource = null)

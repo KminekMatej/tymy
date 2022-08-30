@@ -89,7 +89,7 @@ class NavbarControl extends Control
 
     private function initPolls(): void
     {
-        $polls = $this->pollManager->getListMenu();
+        $polls = $this->pollManager->getListUserAllowed();
         $this->template->polls = $polls;
         $this->template->voteWarnings = $this->pollManager->getWarnings($polls);
     }

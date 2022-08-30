@@ -33,6 +33,7 @@ notEnoughItems: "Le nombre minimum de votes n'a pas été atteint"
 design: Design
 opened: Actif
 closed: Clotûré
+hidden: Caché
 displayInMainMenu: Afficher dans le menu principal
 never: Jamais
 always: Toujours

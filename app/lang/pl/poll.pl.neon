@@ -33,6 +33,7 @@ notEnoughItems: Nie osiągnięto jeszcze minimalnej liczby głosów
 design: W budowie
 opened: Aktywna
 closed: Zamknięta
+hidden: Ukryta
 displayInMainMenu: Dodaj do menu głownego
 never: Nigdy
 always: Zawsze

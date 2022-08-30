@@ -261,40 +261,21 @@ class PollManager extends BaseManager
     }
 
     /**
-     * Get list of polls, which currently logged user is allowed to vote in
+     * Get list of polls, which currently logged user is allowed to see
      * @return Poll[]
      */
     public function getListUserAllowed()
     {
         $userPermissions = $this->permissionManager->getUserAllowedPermissionNames($this->userManager->getById($this->user->getId()), Permission::TYPE_USER);
 
-        $selector = $this->database->table($this->getTable())->order("order_flag ASC");
-
-        if (!empty($userPermissions)) {
-            $selector->where("vote_rights IS NULL OR vote_rights = '' OR vote_rights IN ?", $userPermissions);
-        } else {
-            $selector->where("vote_rights IS NULL OR vote_rights = ''");
-        }
-
-        return $this->mapAll($selector->fetchAll());
-    }
-
-    /**
-     * Get list of polls, which are supposed to be seen in menu
-     * @return Poll[]
-     */
-    public function getListMenu(): array
-    {
-        $userPermissions = $this->permissionManager->getUserAllowedPermissionNames($this->userManager->getById($this->user->getId()), Permission::TYPE_USER);
-
         $selector = $this->database->table($this->getTable())
-            ->where("status", Poll::STATUS_OPENED)
-            ->order("order_flag ASC");   //display only polls in status OPENED (hide CLOSED and DESIGN)
+            ->where("status IN (?)", [Poll::STATUS_OPENED, Poll::STATUS_CLOSED])
+            ->order("order_flag ASC");   //display only polls which are not in status DESIGN (display CLOSED and OPENED)
 
         if (!empty($userPermissions)) {
-            $selector->where("vote_rights IS NULL OR vote_rights = '' OR vote_rights IN ?", $userPermissions);
+            $selector->where("result_rights IS NULL OR result_rights = '' OR result_rights IN ?", $userPermissions);
         } else {
-            $selector->where("vote_rights IS NULL OR vote_rights = ''");
+            $selector->where("result_rights IS NULL OR result_rights = ''");
         }
 
         return $this->mapAll($selector->fetchAll());
