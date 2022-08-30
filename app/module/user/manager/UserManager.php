@@ -86,9 +86,9 @@ class UserManager extends BaseManager
     public function getSimpleUser(int $userId): SimpleUser
     {
         if (empty($this->simpleUserCache) || !array_key_exists($userId, $this->simpleUserCache)) {
-            $allRows = $this->database->table($this->getTable())->fetchAll();
+            $allRows = $this->database->table(User::VIEW)->fetchAll();
             foreach ($allRows as $userRow) {
-                $this->simpleUserCache[$userRow->id] = new SimpleUser($userRow->id, $userRow->user_name, $userRow->call_name, $this->getPictureUrl($userRow->id), (strtoupper($userRow->sex) == "FEMALE" ? "FEMALE" : "MALE"), $userRow->status);
+                $this->simpleUserCache[$userRow->id] = new SimpleUser($userRow->id, $userRow->user_name, $userRow->call_name, $this->getPictureUrl($userRow->id), (strtoupper($userRow->sex) == "FEMALE" ? "FEMALE" : "MALE"), $userRow->status, $userRow->email);
             }
         }
 
@@ -103,7 +103,7 @@ class UserManager extends BaseManager
      */
     public function getSimpleUsers(array $userIds): array
     {
-        $userRows = $this->database->table($this->getTable())->where("id", $userIds)->fetchAll();
+        $userRows = $this->database->table(User::VIEW)->where("id", $userIds)->fetchAll();
 
         $simples = [];
         foreach ($userRows as $userRow) {
@@ -111,7 +111,7 @@ class UserManager extends BaseManager
             if (array_key_exists($userId, $this->simpleUserCache)) {
                 $simples[] = $this->simpleUserCache[$userId];
             } else {
-                $this->simpleUserCache[$userId] = new SimpleUser($userRow->id, $userRow->user_name, $userRow->call_name, $this->getPictureUrl($userRow->id), ($userRow->sex == "FEMALE" ? "FEMALE" : "MALE"), $userRow->status);
+                $this->simpleUserCache[$userId] = new SimpleUser($userRow->id, $userRow->user_name, $userRow->call_name, $this->getPictureUrl($userRow->id), ($userRow->sex == "FEMALE" ? "FEMALE" : "MALE"), $userRow->status, $userRow->email);
                 $simples[] = $this->simpleUserCache[$userId];
             }
         }
