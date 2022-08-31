@@ -98,21 +98,24 @@ class UserManager extends BaseManager
     /**
      * Get simple users by array of ids
      *
-     * @param array $userIds
+     * @param array|null $userIds Null returns all users
      * @return SimpleUser[]
      */
-    public function getSimpleUsers(array $userIds): array
+    public function getSimpleUsers(?array $userIds = null): array
     {
-        $userRows = $this->database->table(User::VIEW)->where("id", $userIds)->fetchAll();
+        $selector = $this->database->table(User::VIEW);
+        if ($userIds) {
+            $selector->where("id", $userIds);
+        }
 
         $simples = [];
-        foreach ($userRows as $userRow) {
+        foreach ($selector->fetchAll() as $userRow) {
             $userId = $userRow->id;
             if (array_key_exists($userId, $this->simpleUserCache)) {
-                $simples[] = $this->simpleUserCache[$userId];
+                $simples[$userId] = $this->simpleUserCache[$userId];
             } else {
                 $this->simpleUserCache[$userId] = new SimpleUser($userRow->id, $userRow->user_name, $userRow->call_name, $this->getPictureUrl($userRow->id), ($userRow->sex == "FEMALE" ? "FEMALE" : "MALE"), $userRow->status, $userRow->email);
-                $simples[] = $this->simpleUserCache[$userId];
+                $simples[$userId] = $this->simpleUserCache[$userId];
             }
         }
 

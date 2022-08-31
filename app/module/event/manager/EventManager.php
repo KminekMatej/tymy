@@ -8,6 +8,7 @@ use Nette\Database\Table\Selection;
 use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
 use Tymy\Module\Attendance\Manager\AttendanceManager;
+use Tymy\Module\Attendance\Model\Attendance;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Helper\ArrayHelper;
 use Tymy\Module\Core\Manager\BaseManager;
@@ -108,9 +109,7 @@ class EventManager extends BaseManager
             return null;
         }
 
-        $attendances = $this->attendanceManager->getByEvents([$event->getId()]);
-
-        $event->setAttendance($attendances[$event->getId()] ?? []);
+        $this->addAttendancesToEvent($event);
 
         return $event;
     }
@@ -223,9 +222,42 @@ class EventManager extends BaseManager
     {
         $eventIds = ArrayHelper::entityIds($events);
         $attendances = $this->attendanceManager->getByEvents($eventIds);
-        foreach ($events as $event) {
-            /* @var $event Event */
-            $event->setAttendance($attendances[$event->getId()] ?? []);
+        $allSimpleUsers = $this->userManager->getSimpleUsers();
+
+        foreach ($events as &$event) {
+            $this->addAttendancesToEvent($event, $attendances[$event->getId()] ?? [], $allSimpleUsers);
+        }
+    }
+
+    /**
+     * Add attendance to one event
+     * @param Event $event
+     * @param array|null $eventAttendances Cached attendances - null loads them from database for just this one event
+     * @param array|null $allSimpleUsers Cached all simple users, null loads them from database
+     */
+    private function addAttendancesToEvent(Event $event, ?array $eventAttendances = null, ?array $allSimpleUsers = null)
+    {
+        if ($eventAttendances == null) {
+            $eventAttendances = $this->attendanceManager->getByEvents([$event->getId()])[$event->getId()] ?? [];
+        }
+
+        if ($allSimpleUsers == null) {
+            $allSimpleUsers = $this->userManager->getSimpleUsers();
+        }
+        $allUserIds = array_keys($allSimpleUsers);
+
+        /* @var $event Event */
+        $event->setAttendance($eventAttendances);
+
+        //now add attendances to all users that doesnt have any attendance
+        $remainingUserIds = array_diff($allUserIds, array_keys($eventAttendances));
+        foreach ($remainingUserIds as $remainingUserId) {
+            $event->addAttendance(
+                (new Attendance())
+                    ->setEventId($event->getId())
+                    ->setUserId($remainingUserId)
+                    ->setUser($allSimpleUsers[$remainingUserId])
+            );
         }
     }
 
