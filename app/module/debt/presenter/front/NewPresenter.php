@@ -47,11 +47,13 @@ class NewPresenter extends DebtBasePresenter
     {
         $bind = $this->getRequest()->getPost();
 
-        /* @var $createdDebt Debt */
-        $createdDebt = $this->debtManager->create($bind["changes"]);
-
-        $this->flashMessage($this->translator->translate("common.alerts.debtAdded"), "success");
-
-        $this->redirect(":Debt:Default:", $createdDebt->getWebName());
+        try {
+            /* @var $createdDebt Debt */
+            $createdDebt = $this->debtManager->create($bind["changes"]);
+            $this->flashMessage($this->translator->translate("common.alerts.debtAdded"), "success");
+            $this->redirect(":Debt:Default:", $createdDebt->getWebName());
+        } catch (TymyResponse $tResp) {
+            $this->handleTymyResponse($tResp);
+        }
     }
 }
