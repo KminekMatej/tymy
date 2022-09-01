@@ -29,7 +29,7 @@ class History extends BaseModel
     private int $statusIdTo;
     private string $preStatusTo;
     private ?string $preDescTo = null;
-    private SimpleUser $user;
+    private ?SimpleUser $user = null;
     private ?SimpleUser $updatedBy = null;
 
     public function getEventId(): int
@@ -87,7 +87,7 @@ class History extends BaseModel
         return $this->preDescTo;
     }
 
-    public function getUser(): SimpleUser
+    public function getUser(): ?SimpleUser
     {
         return $this->user;
     }
@@ -163,7 +163,7 @@ class History extends BaseModel
         return $this;
     }
 
-    public function setUser(SimpleUser $user)
+    public function setUser(?SimpleUser $user = null)
     {
         $this->user = $user;
         return $this;
@@ -195,7 +195,7 @@ class History extends BaseModel
         return parent::jsonSerialize() + [
             "preStatusFrom" => $this->getPreStatusFrom(),
             "preStatusTo" => $this->getPreStatusTo(),
-            "user" => $this->user->jsonSerialize(),
+            "user" => $this->user ? $this->user->jsonSerialize() : null,
             "updatedBy" => $this->updatedBy ? $this->updatedBy->jsonSerialize() : null,
         ];
     }

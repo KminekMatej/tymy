@@ -30,7 +30,7 @@ class Post extends BaseModel
     private array $reactions = [];
     private string $createdAtStr;
     private ?string $updatedAtStr = null;
-    private SimpleUser $createdBy;
+    private ?SimpleUser $createdBy = null;
 
     public function getDiscussionId(): int
     {
@@ -87,7 +87,7 @@ class Post extends BaseModel
         return $this->updatedAtStr;
     }
 
-    public function getCreatedBy(): SimpleUser
+    public function getCreatedBy(): ?SimpleUser
     {
         return $this->createdBy;
     }
@@ -158,7 +158,7 @@ class Post extends BaseModel
         return $this;
     }
 
-    public function setCreatedBy(SimpleUser $createdBy)
+    public function setCreatedBy(?SimpleUser $createdBy)
     {
         $this->createdBy = $createdBy;
         return $this;
@@ -186,7 +186,7 @@ class Post extends BaseModel
             "reactions" => $this->getReactions(),
             "createdAtStr" => $this->getCreatedAtStr(),
             "updatedAtStr" => $this->getUpdatedAtStr(),
-            "createdBy" => $this->getCreatedBy()->jsonSerialize(),
+            "createdBy" => $this->getCreatedBy() ? $this->getCreatedBy()->jsonSerialize() : null,
         ];
     }
 }

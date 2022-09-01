@@ -78,12 +78,12 @@ class UserManager extends BaseManager
     }
 
     /**
-     * Get simple user based on his id
+     * Get simple user based on his id or null if hasnt been found
      *
      * @param int $userId
-     * @return SimpleUser
+     * @return SimpleUser|null
      */
-    public function getSimpleUser(int $userId): SimpleUser
+    public function getSimpleUser(int $userId): ?SimpleUser
     {
         if (empty($this->simpleUserCache) || !array_key_exists($userId, $this->simpleUserCache)) {
             $allRows = $this->database->table(User::VIEW)->fetchAll();
@@ -92,7 +92,7 @@ class UserManager extends BaseManager
             }
         }
 
-        return $this->simpleUserCache[$userId];
+        return $this->simpleUserCache[$userId] ?? null;
     }
 
     /**

@@ -30,7 +30,7 @@ class Attendance extends BaseModel implements JsonSerializable
     private ?string $postDescription = null;
     private ?int $postUserMod = null;
     private ?DateTime $postDatMod = null;
-    private SimpleUser $user;
+    private ?SimpleUser $user = null;
 
     public function getUserId(): int
     {
@@ -92,7 +92,7 @@ class Attendance extends BaseModel implements JsonSerializable
         return $this->postDatMod;
     }
 
-    public function getUser(): SimpleUser
+    public function getUser(): ?SimpleUser
     {
         return $this->user;
     }
@@ -169,7 +169,7 @@ class Attendance extends BaseModel implements JsonSerializable
         return $this;
     }
 
-    public function setUser(SimpleUser $user)
+    public function setUser(?SimpleUser $user = null)
     {
         $this->user = $user;
         return $this;
@@ -193,7 +193,7 @@ class Attendance extends BaseModel implements JsonSerializable
     public function jsonSerialize()
     {
         return parent::jsonSerialize() + [
-            "user" => $this->user->jsonSerialize(),
+            "user" => $this->user ? $this->user->jsonSerialize() : null,
             "preStatus" => $this->preStatus,
             "postStatus" => $this->postStatus,
         ];
