@@ -23,7 +23,7 @@
                         <tr>
                             <th>{_settings.changeList}:</th><td>
                                 <div>
-                                    <a href="https://github.com/KminekMatej/tymy/issues?q=is%3Aissue+milestone%3A{$version->getName()}" target="_blank">{_settings.here}</a> 
+                                    <a href="https://github.com/KminekMatej/tymy/issues?q=is%3Aissue+milestone%3A{rtrim($version->getName(), '.0')}" target="_blank">{_settings.here}</a> 
                                     <span n:if="$previousPatchVersion">({_settings.fromPreviousVersion} {$previousPatchVersion->getName()})</span>
                                 </div>
                                 <div n:if="$firstMinorVersion">
