@@ -3,9 +3,9 @@
 namespace Tymy\Module\Setting\Presenter\Front;
 
 use Nette\Utils\Strings;
+use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Permission\Manager\PermissionManager;
 use Tymy\Module\Permission\Model\Permission;
-use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\Setting\Presenter\Front\SettingBasePresenter;
 
 class PermissionPresenter extends SettingBasePresenter
@@ -83,10 +83,14 @@ class PermissionPresenter extends SettingBasePresenter
     public function handlePermissionCreate()
     {
         $bind = $this->getRequest()->getPost();
-        /* @var $createdPermission Permission */
-        $createdPermission = $this->permissionManager->create($this->composePermissionData($bind["changes"]));
-
-        $this->redirect(":Setting:Permission:", [Strings::webalize($createdPermission->getName())]);
+        try {
+            /* @var $createdPermission Permission */
+            $createdPermission = $this->permissionManager->create($this->composePermissionData($bind["changes"]));
+            $this->flashMessage($this->translator->translate("common.alerts.created"), 'success');
+            $this->redirect(":Setting:Permission:", $createdPermission->getWebname());
+        } catch (TymyResponse $tResp) {
+            $this->handleTymyResponse($tResp);
+        }
     }
 
     public function handlePermissionEdit()
@@ -94,18 +98,28 @@ class PermissionPresenter extends SettingBasePresenter
         $bind = $this->getRequest()->getPost();
 
         $data = $this->composePermissionData($bind["changes"]);
-
-        $updatedPermission = $this->permissionManager->update($data, $bind["id"]);
-
-        if (array_key_exists("name", $data)) {   //if name has been changed, redirect to a new name is neccessary
-            $this->redirect(":Setting:Permission:", [Strings::webalize($updatedPermission->getName())]);
+        try {
+            $updatedPermission = $this->permissionManager->update($data, $bind["id"]);
+            $this->flashMessage($this->translator->translate("common.alerts.updated"), 'success');
+            if (array_key_exists("name", $data)) {   //if name has been changed, redirect to a new name is neccessary
+                $this->redirect(":Setting:Permission:", $updatedPermission->getName());
+            }
+        } catch (TymyResponse $tResp) {
+            $this->handleTymyResponse($tResp);
         }
     }
 
     public function handlePermissionDelete()
     {
         $bind = $this->getRequest()->getPost();
-        $this->permissionManager->delete($bind["id"]);
+
+        try {
+            $this->permissionManager->delete($bind["id"]);
+            $this->flashMessage($this->translator->translate("common.alerts.deleted"), 'success');
+            $this->redirect(":Setting:Permission:");
+        } catch (TymyResponse $tResp) {
+            $this->handleTymyResponse($tResp);
+        }
     }
 
     /**
