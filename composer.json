@@ -29,9 +29,6 @@
     "minimum-stability": "stable",
     "config": {
         "discard-changes": true,
-        "secure-http": false,
-        "platform": {
-            "php": "7.4.0"
-        }
+        "secure-http": false
     }
 }
