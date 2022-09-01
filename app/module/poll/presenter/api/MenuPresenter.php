@@ -29,7 +29,7 @@ class MenuPresenter extends SecuredPresenter
 
     private function requestGetMenu()
     {
-        $polls = $this->manager->getListMenu();
+        $polls = $this->manager->getListUserAllowed();
 
         $this->respondOk($this->arrayToJson($polls));
     }
