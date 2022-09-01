@@ -18,6 +18,7 @@ use Tymy\Module\Discussion\Model\Post;
 use Tymy\Module\PushNotification\Manager\NotificationGenerator;
 use Tymy\Module\PushNotification\Manager\PushNotificationManager;
 use Tymy\Module\User\Manager\UserManager;
+
 use function mb_strlen;
 
 /**
