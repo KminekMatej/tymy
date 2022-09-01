@@ -15,14 +15,14 @@ jobs:
         - name: "Compose"
           with:
             php-version: '7.4'
-          run: composer install --dev
+        - run: composer install --dev
           
         - name: "PHPCs"
           with:
             php-version: '7.4'
-          run: vendor/bin/phpcs
+        - run: vendor/bin/phpcs
           
         - name: "PHPStan"
           with:
             php-version: '7.4'
-          run: vendor/bin/phpstan
+        - run: vendor/bin/phpstan
