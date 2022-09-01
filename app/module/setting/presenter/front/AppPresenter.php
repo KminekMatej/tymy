@@ -55,7 +55,7 @@ class AppPresenter extends SettingBasePresenter
                 $previousPatch = $version;
             }
 
-            if (!isset($firstMinor) && $version->getPatch() == 0) {
+            if (!isset($firstMinor) && $version->getMinor() != $currentVersion->getMinor() && $version->getPatch() == 0) {
                 $firstMinor = $version;
             }
         }
