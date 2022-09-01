@@ -8,6 +8,8 @@ newPermission: Utwórz nowe uprawnienie
 createPermission: Utwórz uprawnienie
 editPermission: Edytuj uprawnienia
 results: Wyniki uprawnień
+allowed: Nadany
+revoked: Zaprzeczony
 errors:
     noPermissionExists: Ten kanał nie istnieje
     permissionNotExists: Kanał %id% nie istnieje

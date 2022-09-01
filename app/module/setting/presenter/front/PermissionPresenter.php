@@ -67,8 +67,8 @@ class PermissionPresenter extends SettingBasePresenter
         $users = $this->userManager->getIdList();
 
         $this->template->lastEditedUser = $users[$permission->getUpdatedById()] ?? null;
-        $this->template->allowances = ["allowed" => "Povoleno", "revoked" => "Zakázáno"];
-        $this->template->statuses = ["PLAYER" => "Hráč", "SICK" => "Marod", "MEMBER" => "Člen"];
+        $this->template->allowances = ["allowed" => $this->translator->translate("permission.allowed"), "revoked" => $this->translator->translate("permission.revoked")];
+        $this->template->statuses = ["PLAYER" => $this->translator->translate("team.PLAYER", 1), "SICK" => $this->translator->translate("team.SICK", 1), "MEMBER" => $this->translator->translate("team.MEMBER", 1)];
         $this->template->roles = $this->getAllRoles();
 
         $this->template->rolesRule = empty($permission->getAllowedRoles()) && empty($permission->getRevokedRoles()) ? null : (empty($permission->getRevokedRoles()) ? "allowed" : "revoked");

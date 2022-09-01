@@ -8,6 +8,8 @@ newPermission: Create new permission
 createPermission: Create permission
 editPermission: Edit permission
 results: Permission results
+allowed: Allowed
+revoked: Denied
 errors:
     noPermissionExists: This permission does not exist
     permissionNotExists: Permission %id% not found

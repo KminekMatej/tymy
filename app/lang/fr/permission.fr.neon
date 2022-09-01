@@ -8,6 +8,8 @@ newPermission: Créer une nouvelle autorisation
 createPermission: Créer une autorisation
 editPermission: "Modifier l'autorisation"
 results: "Résultats d'autorisation"
+allowed: Accordé
+revoked: Refusé
 errors:
     noPermissionExists: Aucune autorisation
     permissionNotExists: "Cette autorisation %id% n'existe pas"
