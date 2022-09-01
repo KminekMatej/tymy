@@ -70,6 +70,9 @@ alerts:
     notPermitted: Insufficient permissions
     configSaved: Settings saved
     avatarSaved: Avatar saved
+    created: Created
+    updated: Updated
+    deleted: Deleted
     newsOnTymy: News on Tymy.CZ
     newsOnTymyDescription: Portal has been upgraded since your last visit. What are the latest news?
     newsOnTymyFooter: You can checkout news also on
