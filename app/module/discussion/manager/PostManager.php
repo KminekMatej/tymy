@@ -2,6 +2,7 @@
 
 namespace Tymy\Module\Discussion\Manager;
 
+use Exception;
 use Nette\Database\Explorer;
 use Nette\Database\IRow;
 use Nette\Database\Table\ActiveRow;
@@ -17,6 +18,7 @@ use Tymy\Module\Discussion\Model\Post;
 use Tymy\Module\PushNotification\Manager\NotificationGenerator;
 use Tymy\Module\PushNotification\Manager\PushNotificationManager;
 use Tymy\Module\User\Manager\UserManager;
+use function mb_strlen;
 
 /**
  * Description of PostManager
@@ -256,7 +258,11 @@ class PostManager extends BaseManager
         $this->allowDiscussion($discussionId);
 
         if ($jump2Date) {
-            $page = $this->getPageNumberFromDate($discussionId, $this->discussion->getNewInfo()->getNewsCount(), new DateTime($jump2Date));
+            try {
+                $page = $this->getPageNumberFromDate($discussionId, $this->discussion->getNewInfo()->getNewsCount(), new DateTime($jump2Date)); //sanitize invalid inputs
+            } catch (Exception $exc) {
+                $page = 1;
+            }
         }
 
         $posts = $this->getPostsFromDiscussion($this->discussion->getId(), $page, $mode == "bb", $search, intval($suser));
