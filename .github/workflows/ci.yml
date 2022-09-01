@@ -16,7 +16,7 @@ jobs:
           run: /usr/bin/php7.4 /usr/local/bin/composer install --dev
           
         - name: "PHPCs"
-          run: vendor/bin/phpcs
+          run: /usr/bin/php7.4 vendor/bin/phpcs
           
         - name: "PHPStan"
-          run: vendor/bin/phpstan
+          run: /usr/bin/php7.4 vendor/bin/phpstan
