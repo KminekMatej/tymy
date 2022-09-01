@@ -1,4 +1,13 @@
 permission: Permission|Permissions
+settingsPermissions: Permission settings
+systemPermissions: System permissions
+userPermissions: User permissions
+permitted: Granted
+not-permitted: Denied
+newPermission: Create new permission
+createPermission: Create permission
+editPermission: Edit permission
+results: Permission results
 errors:
     noPermissionExists: This permission does not exist
     permissionNotExists: Permission %id% not found

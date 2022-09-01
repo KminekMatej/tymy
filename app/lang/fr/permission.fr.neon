@@ -1,4 +1,13 @@
 permission: Autorisation|Autorisations
+settingsPermissions: "Paramètres d'autorisation"
+systemPermissions: Autorisations système
+userPermissions: Autorisations utilisateur
+permitted: Accordé
+not-permitted: Refusé
+newPermission: Créer une nouvelle autorisation
+createPermission: Créer une autorisation
+editPermission: "Modifier l'autorisation"
+results: "Résultats d'autorisation"
 errors:
     noPermissionExists: Aucune autorisation
     permissionNotExists: "Cette autorisation %id% n'existe pas"
