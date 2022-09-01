@@ -3,7 +3,7 @@
 namespace Tymy\Module\Debt\Presenter\Front;
 
 use Nette\Utils\DateTime;
-use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Debt\Manager\DebtManager;
 use Tymy\Module\Debt\Model\Debt;
 
