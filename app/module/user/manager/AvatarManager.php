@@ -81,6 +81,6 @@ class AvatarManager
     {
         $this->allowUpload($userId);
 
-        $image->resize(self::WIDTH, self::HEIGHT)->save(TEAM_DIR . "/user_pics/$userId.{$image->typeToExtension($type)}");
+        $image->resize(self::WIDTH, self::HEIGHT)->save(TEAM_DIR . "/user_pics/$userId.png");
     }
 }
