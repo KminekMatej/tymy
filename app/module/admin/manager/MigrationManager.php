@@ -456,6 +456,7 @@ class MigrationManager
             }
         }
 
+        $this->saveMigrationsCache();
         $this->logg("Database migrated in " . Debugger::timer("migration") * 1000 . " ms");
         return true;
     }
