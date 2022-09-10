@@ -16,6 +16,7 @@ appearance: Appearance
 teamData: Team info
 address: Address
 roles: Role|Roles
+export: Export
 profile: Profile
 profilePhoto: Avatar
 male: Man|Men
