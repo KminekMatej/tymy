@@ -99,7 +99,7 @@ class PlayerPresenter extends SecuredPresenter
         $this->template->canUpdate = $this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("USR_UPDATE")) || $this->template->isMe;
 
         $this->template->allRoles = $this->getAllRoles();
-        $this->template->allSkins = TeamManager::SKINS;
+        $this->template->allSkins = $this->teamManager->allSkins;
     }
 
     public function handleCreate()

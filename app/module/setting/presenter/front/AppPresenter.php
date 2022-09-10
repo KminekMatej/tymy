@@ -65,7 +65,7 @@ class AppPresenter extends SettingBasePresenter
         $this->template->previousPatchVersion = $previousPatch;
         $this->template->firstMinorVersion = $firstMinor;
 
-        $this->template->allSkins = TeamManager::SKINS;
+        $this->template->allSkins = $this->teamManager->allSkins;
         $this->getNextMilestone();
     }
 
@@ -83,7 +83,7 @@ class AppPresenter extends SettingBasePresenter
     public function createComponentUserConfigForm()
     {
         $form = new Form();
-        $form->addSelect("skin", "Skin", TeamManager::SKINS)->setValue($this->skin);
+        $form->addSelect("skin", "Skin", $this->teamManager->allSkins)->setValue($this->skin);
         $form->addSubmit("save");
 
         $form->onSuccess[] = function (Form $form, stdClass $values) {
