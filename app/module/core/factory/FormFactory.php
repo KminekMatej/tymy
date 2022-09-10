@@ -20,6 +20,7 @@ use Tymy\Module\Permission\Model\Permission;
 use Tymy\Module\Poll\Model\Option;
 use Tymy\Module\Poll\Model\Poll;
 use Tymy\Module\Team\Manager\TeamManager;
+use Tymy\Module\Team\Model\Team;
 use Tymy\Module\User\Manager\UserManager;
 use Tymy\Module\User\Model\User;
 
@@ -208,7 +209,7 @@ class FormFactory
         $form->addText("name", $this->translator->translate("team.name"))->setValue($team->getName());
         $form->addText("sport", $this->translator->translate("team.sport"))->setValue($team->getSport());
         $form->addSelect("defaultLanguage", $this->translator->translate("team.defaultLanguage"), ["CZ" => "Česky", "EN" => "English", "FR" => "Le français", "PL" => "Polski"])->setValue($team->getDefaultLanguageCode() ?: "CZ");
-        $form->addSelect("skin", $this->translator->translate("team.defaultSkin"), TeamManager::SKINS)->setValue($team->getSkin());
+        $form->addSelect("skin", $this->translator->translate("team.defaultSkin"), $this->teamManager->allSkins)->setValue($team->getSkin());
         $form->addMultiSelect("requiredFields", $this->translator->translate("team.requiredFields"), $this->userManager->getAllFields()["ALL"])->setValue($team->getRequiredFields());
 
         foreach ($eventTypes as $etype) {
@@ -320,56 +321,83 @@ class FormFactory
         $form = new Form();
 
         $genderList = [
+            "UNKNOWN" => $this->translator->translate("common.chooseSex", 1) . " ↓",
             "MALE" => $this->translator->translate("team.male", 1),
             "FEMALE" => $this->translator->translate("team.female", 1),
         ];
 
-        $gender = $form->addSelect("gender", $this->translator->translate("team.gender"), $genderList)->setCaption($this->translator->translate("common.chooseSex", 1) . " ↓");
+        $statusList = [
+            User::STATUS_PLAYER => $this->translator->translate("team.PLAYER"),
+            User::STATUS_SICK => $this->translator->translate("team.SICK"),
+            User::STATUS_MEMBER => $this->translator->translate("team.MEMBER"),
+            User::STATUS_DELETED => $this->translator->translate("team.DELETED"),
+        ];
+
+        $rolesList = [
+            User::ROLE_SUPER => $this->translator->translate("team.administrator"),
+            User::ROLE_USER => $this->translator->translate("team.userAdmin"),
+            User::ROLE_ATTENDANCE => $this->translator->translate("team.attendanceAdmin"),
+        ];
+
+        $months = [];
+        for ($m = 1; $m <= 12; $m++) {
+            $months[$m] = $this->translator->translate("common.months." . strtolower(DateTime::createFromFormat('!m', "$m")->format("F")));
+        }
+
+        $gender = $form->addSelect("gender", $this->translator->translate("team.gender"), $genderList);
         $firstName = $form->addText("firstName", $this->translator->translate("team.firstName"));
+        $lastName = $form->addText("lastName", $this->translator->translate("team.lastName"));
+        $phone = $form->addText("phone", $this->translator->translate("team.phone"))->addRule($form::PATTERN, null, '[+]?[()/0-9. -]{9,}');
+        $email = $form->addText("email", $this->translator->translate("team.email"))->addRule($form::EMAIL);
+        $birthDate = $form->addText("birthDate", $this->translator->translate("team.birthDate"))->setHtmlType("date");
+        $nameDayMonth = $form->addSelect("nameDayMonth", $this->translator->translate("team.nameDayMonth"), $months)->setCaption($this->translator->translate("_team.chooseMonth") . " ↓");
+        $nameDayDay = $form->addInteger("nameDayDay", $this->translator->translate("team.nameDayDay"))->addRule($form::MIN, null, 1)->addRule($form::MAX, null, 31);
+        $language = $form->addSelect("language", $this->translator->translate("team.language"), Team::LANGUAGES);
 
+        $callName = $form->addText("callName", $this->translator->translate("team.callName"));
+        $canEditCallName = $form->addCheckbox("canEditCallName", $this->translator->translate("team.canEditCallName"));
+        $login = $form->addText("login", $this->translator->translate("team.login"));
+        $newPasswordAgain = $form->addText("newPasswordAgain", $this->translator->translate("team.newPasswordAgain"));
+        $password = $form->addPassword("password", $this->translator->translate("team.password"))->addRule($form::EQUAL, null, $form['newPasswordAgain']);
+        $canLogin = $form->addCheckbox("canLogin", $this->translator->translate("team.canLogin"));
 
+        $skin = $form->addSelect("skin", "Skin", $this->teamManager->allSkins);
+        $hideDiscDesc = $form->addCheckbox("hideDiscDesc", $this->translator->translate("team.hideDiscDesc"));
 
-        /*
-         * <tr>
-            <th>{_team.firstName}:</th><td><input name="firstName" data-value="{$player->getFirstName()}" type="text" value="{$player->getFirstName()}" n:class="col-6, form-control, in_array('firstName',$player->getErrFields()) ? is-invalid" /></td>
-        </tr>
-        <tr>
-            <th>{_team.lastName}:</th><td><input name="lastName" data-value="{$player->getLastName()}" type="text" value="{$player->getLastName()}" n:class="col-6, form-control, in_array('lastName',$player->getErrFields()) ? is-invalid" /></td>
-        </tr>
-        <tr>
-            <th>{_team.phone}:</th><td><input name="phone" data-value="{$player->getPhone()}" type="text" value="{$player->getPhone()}" n:class="col-6, form-control, in_array('phone',$player->getErrFields()) ? is-invalid" /></td>
-        </tr>
-        <tr>
-            <th>{_team.email}:</th><td><div class="input-group"><input name="email" data-value="{$player->getEmail()}" type="text" value="{$player->getEmail()}" n:class="col-6, form-control, in_array('email',$player->getErrFields()) ? is-invalid" style="min-width: 200px"/><div class="input-group-append"><span class="input-group-text"><a n:tag-if="$player->getEmail() != ''" href="mailto:{$player->getEmail()}"><i class="fa fa-envelope" aria-hidden="true"></i></a></span></div></div></td>
-        </tr>
-        <tr>
-            <th>{_team.birthDate}:</th><td><input name="birthDate" data-value="{$player->getBirthDate()}" type="date" value="{$player->getBirthDate()}" n:class="col-6, form-control, in_array('birthDate',$player->getErrFields()) ? is-invalid" /></td>
-        </tr>
-        <tr>
-            <th>{_team.nameDayMonth}:</th><td>
-                <select n:class="col-3, form-control, in_array('nameDayMonth',$player->getErrFields()) ? is-invalid" style="min-width: 160px" name="nameDayMonth" data-value="{$player->getNameDayMonth() == 0 ? '' : $player->getNameDayMonth()}">
-                    <option value="">{_team.chooseMonth} ↓</option>
-                    <option n:for="$m=1; $m<=12; $m++" value="{$m}" n:attr="selected => $player->getNameDayMonth()==$m">{$m|monthName}</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <th>{_team.nameDayDay}:</th><td><input name="nameDayDay" data-value="{$player->getNameDayDay()}" type="number" value="{$player->getNameDayDay()}" min="1" max="31" n:class="col-2, form-control, in_array('nameDayDay',$player->getErrFields()) ? is-invalid" style="min-width: 160px" /></td>
-        </tr>
-        <tr>
-            <th>{_team.language}:</th>
-            <td>
-                <select n:class="col-3, form-control, in_array('language',$player->getErrFields()) ? is-invalid"  style="min-width: 120px" name="language" data-value="{$player->getLanguage()}">
-                    <option value="CZ" n:attr="selected => $player->getLanguage()=='CZ'">Česky</option>
-                    <option value="EN" n:attr="selected => $player->getLanguage()=='EN'">English</option>
-                    <option value="FR" n:attr="selected => $player->getLanguage()=='FR'">Le français</option>
-                    <option value="PL" n:attr="selected => $player->getLanguage()=='PL'">Polski</option>
-                </select>
-            </td>
-        </tr>
-         */
+        $status = $form->addSelect("status", $this->translator->translate("team.status"), $statusList);
+        $jerseyNumber = $form->addInteger("jerseyNumber", $this->translator->translate("team.jerseyNumber"));
+
+        $street = $form->addText("street", $this->translator->translate("team.street"));
+        $city = $form->addText("city", $this->translator->translate("team.city"));
+        $zipCode = $form->addText("zipCode", $this->translator->translate("team.zipCode"));
+
+        $roles = $form->addCheckboxList("roles", $this->translator->translate("team.roles"), $rolesList);
+        
         if ($user) {
-            $gender->setValue($user->getGender());
+            $gender->setValue($user->getGender())->setHtmlAttribute("data-value", $user->getGender());
+            $firstName->setValue($user->getFirstName())->setHtmlAttribute("data-value", $user->getFirstName());
+            $lastName->setValue($user->getLastName())->setHtmlAttribute("data-value", $user->getLastName());
+            $phone->setValue($user->getPhone())->setHtmlAttribute("data-value", $user->getPhone());
+            $email->setValue($user->getEmail())->setHtmlAttribute("data-value", $user->getEmail());
+            $birthDate->setValue($user->getBirthDate())->setHtmlAttribute("data-value", $user->getBirthDate());
+            $nameDayMonth->setValue($user->getNameDayMonth())->setHtmlAttribute("data-value", $user->getNameDayMonth());
+            $nameDayDay->setValue($user->getNameDayDay())->setHtmlAttribute("data-value", $user->getNameDayDay());
+            $language->setValue($user->getLanguage())->setHtmlAttribute("data-value", $user->getLanguage());
+
+            $callName->setValue($user->getCallName())->setHtmlAttribute("data-value", $user->getCallName());
+            $canEditCallName->setValue($user->getCanEditCallName())->setHtmlAttribute("data-value", $user->getCanEditCallName());
+            $login->setValue($user->getLogin())->setHtmlAttribute("data-value", $user->getLogin());
+            $canLogin->setValue($user->getCanLogin())->setHtmlAttribute("data-value", $user->getCanLogin());
+
+            $skin->setValue($user->getSkin())->setHtmlAttribute("data-value", $user->getSkin());
+            $hideDiscDesc->setValue($user->getHideDiscDesc())->setHtmlAttribute("data-value", $user->getHideDiscDesc());
+
+            $status->setValue($user->getStatus())->setHtmlAttribute("data-value", $user->getStatus());
+            $jerseyNumber->setValue($user->getJerseyNumber())->setHtmlAttribute("data-value", $user->getJerseyNumber());
+
+            $street->setValue($user->getStreet())->setHtmlAttribute("data-value", $user->getStreet());
+            $city->setValue($user->getCity())->setHtmlAttribute("data-value", $user->getCity());
+            $zipCode->setValue($user->getZipCode())->setHtmlAttribute("data-value", $user->getZipCode());
         }
 
         $form->onSuccess[] = $onSuccess;
