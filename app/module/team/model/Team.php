@@ -16,6 +16,12 @@ class Team extends BaseModel
 {
     public const TABLE = "teams";
     public const MODULE = "team";
+    public const LANGUAGES = [
+        "CZ" => "Česky",
+        "EN" => "English",
+        "PL" => "Polski",
+        "FR" => "Le français",
+    ];
 
     private string $sysName;
     /** @var string Like sysName, but extended with dev or prod postfixes if being run on dev/prod instance */
