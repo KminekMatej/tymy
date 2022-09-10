@@ -95,7 +95,8 @@ class PlayerPresenter extends SecuredPresenter
         $this->addBreadcrumb($user->getDisplayName(), $this->link(":Team:Player:", $user->getWebName()));
 
         $this->template->player = $user;
-        $this->template->canUpdate = $this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("USR_UPDATE")) || $user->getId() == $this->getUser()->getId();
+        $this->template->isMe = $user->getId() == $this->getUser()->getId();
+        $this->template->canUpdate = $this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("USR_UPDATE")) || $this->template->isMe;
 
         $this->template->allRoles = $this->getAllRoles();
         $this->template->allSkins = TeamManager::SKINS;
