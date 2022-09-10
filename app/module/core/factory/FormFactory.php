@@ -6,6 +6,7 @@ use Kdyby\Translation\Translator;
 use Nette;
 use Nette\Application\UI\Form;
 use Nette\Application\UI\Multiplier;
+use Nette\Forms\Controls\BaseControl;
 use Nette\Utils\DateTime;
 use Tymy\Module\Attendance\Manager\StatusSetManager;
 use Tymy\Module\Attendance\Model\Status;
@@ -398,7 +399,15 @@ class FormFactory
             $street->setValue($user->getStreet())->setHtmlAttribute("data-value", $user->getStreet());
             $city->setValue($user->getCity())->setHtmlAttribute("data-value", $user->getCity());
             $zipCode->setValue($user->getZipCode())->setHtmlAttribute("data-value", $user->getZipCode());
+
+            foreach ($form->controls as $control) {
+                /* @var $control BaseControl */
+                if (in_array($control->getName(), $this->teamManager->getTeam()->getRequiredFields())) {
+                    $control->setRequired();
+                }
+            }
         }
+
 
         $form->onSuccess[] = $onSuccess;
 
