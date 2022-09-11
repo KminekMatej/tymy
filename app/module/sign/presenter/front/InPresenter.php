@@ -41,6 +41,7 @@ class InPresenter extends BasePresenter
                 }
             }
             if ($this->user->isLoggedIn()) {
+                $this->initUser();
                 Debugger::log($this->tymyUser->getCallName() . "@" . $this->team->getSysName() . " logged in");
             }
             $this->redirect(':Core:Default:');
@@ -65,6 +66,7 @@ class InPresenter extends BasePresenter
                 }
             }
             if ($this->user->isLoggedIn()) {
+                $this->initUser();
                 Debugger::log($this->tymyUser->getCallName() . "@" . $this->team->getSysName() . " logged in using transfer key");
             }
             $this->redirect(':Core:Default:');

@@ -52,11 +52,20 @@ abstract class RootPresenter extends Presenter
         $this->teamCache = new Cache($this->cacheStorage, $this->team->getSysName());
 
         if ($this->getUser()->isLoggedIn()) {
-            $this->tymyUser = $this->userManager->getById($this->getUser()->getId());
+            $this->initUser();
+        }
+    }
 
-            if ($this->tymyUser->getLanguage()) {
-                $this->setLanguage($this->tymyUser->getLanguage());
-            }
+    /**
+     * After succesful login, load logged user into tymyUser variable
+     * @return void
+     */
+    protected function initUser(): void
+    {
+        $this->tymyUser = $this->userManager->getById($this->getUser()->getId());
+
+        if ($this->tymyUser->getLanguage()) {
+            $this->setLanguage($this->tymyUser->getLanguage());
         }
     }
 
