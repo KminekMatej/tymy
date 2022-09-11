@@ -93,7 +93,7 @@ class AuthenticationManager implements IAuthenticator
             $this->teamDatabase->table(self::TABLE)->where('id', $row->id)->update(["last_login" => new DateTime()]);
         }
 
-        return new SimpleIdentity($row->getId(), explode(",", $row->roles), ["ghost" => $ghost]);
+        return new SimpleIdentity($row->id, explode(",", $row->roles), ["ghost" => $ghost]);
     }
 
     /**
