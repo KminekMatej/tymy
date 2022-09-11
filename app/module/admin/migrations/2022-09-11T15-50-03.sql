@@ -48,6 +48,14 @@ ALTER TABLE `ical_items`
   DROP `event_type`,
   DROP `pre_status`;
 
+ALTER TABLE `ical` ADD `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `id`, ADD `created_user_id` INT NULL AFTER `created`;
+ALTER TABLE `ical_items` ADD `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `id`, ADD `created_user_id` INT NULL AFTER `created`;
+
+UPDATE `ical` SET `created_user_id` = `user_id` WHERE 1;
+UPDATE `ical_items` SET `created_user_id` = (SELECT `user_id` FROM `ical` WHERE `ical`.`id` = `ical_items`.`ical_id`) WHERE 1;
+ALTER TABLE `ical` ADD FOREIGN KEY (`created_user_id`) REFERENCES `user`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `ical_items` ADD FOREIGN KEY (`created_user_id`) REFERENCES `user`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
 -- DOWN:
 -- commands that reverts updates from UP section shall be written here:
 
