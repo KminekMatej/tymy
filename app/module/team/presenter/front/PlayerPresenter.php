@@ -127,32 +127,6 @@ class PlayerPresenter extends SecuredPresenter
         $this->redirect(":Team:Player:", $createdPlayer->getWebName()); /* @phpstan-ignore-line */
     }
 
-    public function handleEdit()
-    {
-        $bind = $this->getRequest()->getPost();
-        if (array_key_exists("roles", $bind["changes"]) && $bind["changes"]["roles"] === "") {
-            $bind["changes"]["roles"] = [];
-        }
-
-        try {
-            $this->userManager->update($bind["changes"], $bind["id"]);
-        } catch (TymyResponse $tResp) {
-            $this->handleTymyResponse($tResp);
-            $this->redirect('this');
-        }
-
-        $this->flashMessage($this->translator->translate("common.alerts.configSaved"), "success");
-        $this->redrawControl("flashes");
-        $this->redrawControl("player-header");
-
-        $this->redrawNavbar();
-
-        if (array_key_exists("language", $bind["changes"])) {
-            $this->flashMessage($this->translator->translate("team.alerts.signOffNeeded"), "info");
-            $this->redirect('this');
-        }
-    }
-
     public function handleDelete()
     {
         $bind = $this->getRequest()->getPost();
@@ -203,9 +177,30 @@ class PlayerPresenter extends SecuredPresenter
                 $this->userManager->getById($userId),
         );
     }
-    
+
     public function userConfigFormSuccess(Form $form, $values)
     {
-        \Tracy\Debugger::barDump($values);
+        $userId = intval($values->id);
+
+        /* @var $oldUser User */
+        $oldUser = $this->userManager->getById($userId);
+
+        try {
+            $this->userManager->update((array) $values, $userId);
+        } catch (TymyResponse $tResp) {
+            $this->handleTymyResponse($tResp);
+            $this->redirect('this');
+        }
+
+        $this->flashMessage($this->translator->translate("common.alerts.configSaved"), "success");
+        $this->redrawControl("flashes");
+        $this->redrawControl("player-header");
+
+        $this->redrawNavbar();
+
+        if ($values->language !== $oldUser->getLanguage()) {
+            $this->flashMessage($this->translator->translate("team.alerts.signOffNeeded"), "info");
+            $this->redirect('this');
+        }
     }
 }
