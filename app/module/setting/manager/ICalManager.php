@@ -45,10 +45,12 @@ class ICalManager extends BaseManager
     {
         $this->checkInputs($data);
 
+        $data["hash"] = bin2hex(random_bytes(16));
+
         if ($data["userId"] !== $this->user->getId()) {
             $this->respondForbidden();
         }
-        
+
         return $this->map(parent::createByArray($data));
     }
 
