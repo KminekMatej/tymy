@@ -44,7 +44,7 @@
                     </fieldset>
                     <div class="card-footer text-right">
                         <a n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('USR_CREATE'))" href="{plink :Team:Player:new $player->getWebName()}" class="btn btn-outline-success btn-lg mx-2" title="{_common.duplicate}"><i class="far fa-clone" aria-hidden="true"></i></a>
-                        <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('USR_HDEL'))" type="button" href="{link delete!}" class="btn btn-danger btn-lg mx-2" onclick="return confirm({_discussion.alerts.confirmDeletePost})"><i class="far fa-trash-can" aria-hidden="true"></i></button>
+                        <a n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('USR_HDEL'))" href="{link delete!}" class="btn btn-danger btn-lg mx-2" onclick="return confirm({_discussion.alerts.confirmDeletePost})"><i class="far fa-trash-can" aria-hidden="true"></i></a>
                         <button type="submit" n:name="save" n:if="$canUpdate" class="btn btn-lg btn-primary"><i class="fa fa-save" aria-hidden="true"></i></button>
                     </div>
                 {/form}

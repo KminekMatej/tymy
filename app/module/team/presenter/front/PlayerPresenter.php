@@ -58,6 +58,7 @@ class PlayerPresenter extends SecuredPresenter
         }
 
         $this->template->canUpdate = true;
+        $this->template->isNew = true;
 
         $team = $this->teamManager->getTeam();
 
@@ -104,16 +105,11 @@ class PlayerPresenter extends SecuredPresenter
 
         $this->template->allRoles = $this->getAllRoles();
         $this->template->allSkins = $this->teamManager->allSkins;
+        $this->template->isNew = false;
     }
 
     public function handleCreate()
     {
-        $bind = $this->getRequest()->getPost();
-        if (array_key_exists("roles", $bind["changes"]) && $bind["changes"]["roles"] === "") {
-            $bind["changes"]["roles"] = [];
-        }
-        /* @todo Finish proper validation on new player, make sure that password and email fields are filled */
-
         try {
             /* @var $createdPlayer User */
             $createdPlayer = $this->userManager->create($bind["changes"]);
@@ -127,17 +123,19 @@ class PlayerPresenter extends SecuredPresenter
         $this->redirect(":Team:Player:", $createdPlayer->getWebName()); /* @phpstan-ignore-line */
     }
 
-    public function handleDelete()
+    public function handleDelete($player)
     {
-        $bind = $this->getRequest()->getPost();
+        /* @var $user User */
+        $userId = $this->parseIdFromWebname($player);
+
         try {
-            $this->userManager->delete($bind["id"]);
+            $this->userManager->delete($userId);
         } catch (TymyResponse $tResp) {
             $this->handleTymyResponse($tResp);
             $this->redirect('this');
         }
 
-        $this->flashMessage($this->translator->translate("common.alerts.userSuccesfullyDeleted") . " ({$bind["id"]})", "success");
+        $this->flashMessage($this->translator->translate("common.alerts.userSuccesfullyDeleted") . " (id $userId)", "success");
         $this->redirect(':Team:Default:');
     }
 
@@ -173,8 +171,8 @@ class PlayerPresenter extends SecuredPresenter
         $userId = $this->parseIdFromWebname($this->getRequest()->getParameter("player"));
 
         return $this->formFactory->createUserConfigForm(
-                [$this, "userConfigFormSuccess"],
-                $this->userManager->getById($userId),
+                [$this, "userConfigFormSuccess"], 
+                $this->getAction() == "new" ? null : $this->userManager->getById($userId),
         );
     }
 
@@ -186,13 +184,19 @@ class PlayerPresenter extends SecuredPresenter
         $oldUser = $this->userManager->getById($userId);
 
         try {
-            $this->userManager->update((array) $values, $userId);
+            if ($userId) {
+                $this->userManager->update((array) $values, $userId);
+                $this->flashMessage($this->translator->translate("common.alerts.configSaved"), "success");
+                $this->redirect('this');
+            } else {
+                $createdUser = $this->userManager->create((array) $values);
+                $this->flashMessage($this->translator->translate("common.alerts.userAdded", ["fullname" => $createdUser->getDisplayName()]), "success");
+                $this->redirect(':Team:');
+            }
         } catch (TymyResponse $tResp) {
             $this->handleTymyResponse($tResp);
-            $this->redirect('this');
         }
 
-        $this->flashMessage($this->translator->translate("common.alerts.configSaved"), "success");
         $this->redirect('this');
     }
 }

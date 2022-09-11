@@ -9,7 +9,7 @@
 {block player-content}
 <div class="tab-pane fade" id="prihlaseni" role="tabpanel">
     <div class="tymy-table">
-        <div class="row">
+        <div class="row" n:if="!$isNew">
             <div class="col-12 col-md-4 table-head">{_team.dateOfRegistration}:</div>
             <div class="col-12 col-md-8">{$player->getCreatedAt()|date:'j.n.Y G:i'}</div>
         </div>

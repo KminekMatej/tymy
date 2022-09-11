@@ -647,6 +647,11 @@ class UserManager extends BaseManager
         }
     }
 
+    /**
+     * @param array $data
+     * @param int|null $resourceId
+     * @return User
+     */
     public function create(array $data, ?int $resourceId = null): BaseModel
     {
         parent::toBoolData($data, ["canEditCallName", "canLogin", "hideDiscDesc"]);
