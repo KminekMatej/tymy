@@ -328,10 +328,11 @@ class FormFactory
         ];
 
         $statusList = [
-            User::STATUS_PLAYER => $this->translator->translate("team.PLAYER"),
-            User::STATUS_SICK => $this->translator->translate("team.SICK"),
-            User::STATUS_MEMBER => $this->translator->translate("team.MEMBER"),
-            User::STATUS_DELETED => $this->translator->translate("team.DELETED"),
+            User::STATUS_INIT => $this->translator->translate("team.INIT", 1),
+            User::STATUS_PLAYER => $this->translator->translate("team.PLAYER", 1),
+            User::STATUS_MEMBER => $this->translator->translate("team.MEMBER", 1),
+            User::STATUS_SICK => $this->translator->translate("team.SICK", 1),
+            User::STATUS_DELETED => $this->translator->translate("team.DELETED", 1),
         ];
 
         $rolesList = [
@@ -348,7 +349,7 @@ class FormFactory
         $gender = $form->addSelect("gender", $this->translator->translate("team.gender"), $genderList);
         $firstName = $form->addText("firstName", $this->translator->translate("team.firstName"));
         $lastName = $form->addText("lastName", $this->translator->translate("team.lastName"));
-        $phone = $form->addText("phone", $this->translator->translate("team.phone"))->addRule($form::PATTERN, null, '[+]?[()/0-9. -]{9,}');
+        $phone = $form->addText("phone", $this->translator->translate("team.phone"))->addRule($form::PATTERN, $this->translator->translate("team.errors.invalidPhone"), '^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
         $email = $form->addText("email", $this->translator->translate("team.email"))->addRule($form::EMAIL);
         $birthDate = $form->addText("birthDate", $this->translator->translate("team.birthDate"))->setHtmlType("date");
         $nameDayMonth = $form->addSelect("nameDayMonth", $this->translator->translate("team.nameDayMonth"), $months)->setCaption($this->translator->translate("_team.chooseMonth") . " ↓");
@@ -360,19 +361,19 @@ class FormFactory
         $login = $form->addText("login", $this->translator->translate("team.login"));
         $newPasswordAgain = $form->addText("newPasswordAgain", $this->translator->translate("team.newPasswordAgain"));
         $password = $form->addPassword("password", $this->translator->translate("team.password"))->addRule($form::EQUAL, null, $form['newPasswordAgain']);
-        $canLogin = $form->addCheckbox("canLogin", $this->translator->translate("team.canLogin"));
+        $canLogin = $form->addCheckbox("canLogin");
 
         $skin = $form->addSelect("skin", "Skin", $this->teamManager->allSkins);
         $hideDiscDesc = $form->addCheckbox("hideDiscDesc", $this->translator->translate("team.hideDiscDesc"));
 
-        $status = $form->addSelect("status", $this->translator->translate("team.status"), $statusList);
+        $status = $form->addSelect("status", $this->translator->translate("team.status"), $statusList)->setDisabled([User::STATUS_INIT]);
         $jerseyNumber = $form->addInteger("jerseyNumber", $this->translator->translate("team.jerseyNumber"));
 
         $street = $form->addText("street", $this->translator->translate("team.street"));
         $city = $form->addText("city", $this->translator->translate("team.city"));
-        $zipCode = $form->addText("zipCode", $this->translator->translate("team.zipCode"));
+        $zipCode = $form->addText("zipCode", $this->translator->translate("team.zipCode"))->addRule($form::PATTERN, $this->translator->translate("team.errors.invalidZipCode"), '^[0-9]{5}(?:-[0-9]{4})?$');
 
-        $roles = $form->addCheckboxList("roles", $this->translator->translate("team.roles"), $rolesList);
+        $roles = $form->addCheckboxList("roles", $this->translator->translate("team.roles", 1), $rolesList);
         
         if ($user) {
             $gender->setValue($user->getGender())->setHtmlAttribute("data-value", $user->getGender());
@@ -380,7 +381,7 @@ class FormFactory
             $lastName->setValue($user->getLastName())->setHtmlAttribute("data-value", $user->getLastName());
             $phone->setValue($user->getPhone())->setHtmlAttribute("data-value", $user->getPhone());
             $email->setValue($user->getEmail())->setHtmlAttribute("data-value", $user->getEmail());
-            $birthDate->setValue($user->getBirthDate())->setHtmlAttribute("data-value", $user->getBirthDate());
+            $birthDate->setValue($user->getBirthDate()->format(BaseModel::DATE_ENG_FORMAT))->setHtmlAttribute("data-value", $user->getBirthDate()->format(BaseModel::DATE_ENG_FORMAT));
             $nameDayMonth->setValue($user->getNameDayMonth())->setHtmlAttribute("data-value", $user->getNameDayMonth());
             $nameDayDay->setValue($user->getNameDayDay())->setHtmlAttribute("data-value", $user->getNameDayDay());
             $language->setValue($user->getLanguage())->setHtmlAttribute("data-value", $user->getLanguage());
@@ -399,6 +400,8 @@ class FormFactory
             $street->setValue($user->getStreet())->setHtmlAttribute("data-value", $user->getStreet());
             $city->setValue($user->getCity())->setHtmlAttribute("data-value", $user->getCity());
             $zipCode->setValue($user->getZipCode())->setHtmlAttribute("data-value", $user->getZipCode());
+            
+            $roles->setValue($user->getRoles());
 
             foreach ($form->controls as $control) {
                 /* @var $control BaseControl */
