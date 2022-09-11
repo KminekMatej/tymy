@@ -28,8 +28,6 @@ class SecuredPresenter extends BasePresenter
         if (!isset($this->user) || !$this->user->isLoggedIn()) {
             $this->respondUnauthorized();
         }
-
-        $this->setLanguage($this->user->getIdentity()->getData()["language"] ?? $this->team->getDefaultLanguageCode());
     }
 
     /**

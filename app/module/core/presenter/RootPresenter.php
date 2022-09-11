@@ -10,7 +10,8 @@ use Nette\Utils\DateTime;
 use Tymy\Module\Core\Model\Version;
 use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\Team\Model\Team;
-
+use Tymy\Module\User\Manager\UserManager;
+use Tymy\Module\User\Model\User;
 use const ROOT_DIR;
 use const TEAM_DIR;
 
@@ -33,8 +34,12 @@ abstract class RootPresenter extends Presenter
     public TeamManager $teamManager;
 
     /** @inject */
+    public UserManager $userManager;
+
+    /** @inject */
     public Storage $cacheStorage;
     protected Cache $teamCache;
+    protected User $tymyUser;
 
     protected function startup()
     {
@@ -42,9 +47,17 @@ abstract class RootPresenter extends Presenter
 
         $this->team = $this->teamManager->getTeam();
         $this->setLanguage($this->team->getDefaultLanguageCode());
-        $timezoneName = str_replace("Europe/Paris", "Europe/Prague", timezone_name_from_abbr("", $this->team->getTimeZone() * 3600, false));//get tz name from hours of shift but dont display paris, display prague ;)
+        $timezoneName = str_replace("Europe/Paris", "Europe/Prague", timezone_name_from_abbr("", $this->team->getTimeZone() * 3600, false)); //get tz name from hours of shift but dont display paris, display prague ;)
         date_default_timezone_set($timezoneName);
         $this->teamCache = new Cache($this->cacheStorage, $this->team->getSysName());
+
+        if ($this->getUser()->isLoggedIn()) {
+            $this->tymyUser = $this->userManager->getById($this->getUser()->getId());
+
+            if ($this->tymyUser->getLanguage()) {
+                $this->setLanguage($this->tymyUser->getLanguage());
+            }
+        }
     }
 
     protected function setLanguage(string $languageCode): void
