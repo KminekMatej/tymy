@@ -193,14 +193,6 @@ class PlayerPresenter extends SecuredPresenter
         }
 
         $this->flashMessage($this->translator->translate("common.alerts.configSaved"), "success");
-        $this->redrawControl("flashes");
-        $this->redrawControl("player-header");
-
-        $this->redrawNavbar();
-
-        if ($values->language !== $oldUser->getLanguage()) {
-            $this->flashMessage($this->translator->translate("team.alerts.signOffNeeded"), "info");
-            $this->redirect('this');
-        }
+        $this->redirect('this');
     }
 }
