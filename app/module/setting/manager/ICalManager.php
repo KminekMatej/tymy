@@ -4,7 +4,7 @@ namespace Tymy\Module\Settings\Manager;
 
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
-use Tymy\Module\Poll\Mapper\ICalMapper;
+use Tymy\Module\Settings\Mapper\ICalMapper;
 use Tymy\Module\Settings\Model\ICal;
 
 /**
@@ -41,15 +41,22 @@ class ICalManager extends BaseManager
         return $this->canEdit($entity, $userId);
     }
 
+    /**
+     * Load calendar of specific user
+     * @param int $userId
+     * @return ICal|null
+     */
+    public function getByUserId(int $userId): ?ICal
+    {
+        return $this->map($this->database->table($this->getTable())->where("user_id", $userId)->fetch());
+    }
+
     public function create(array $data, ?int $resourceId = null): BaseModel
     {
-        $this->checkInputs($data);
-
         $data["hash"] = bin2hex(random_bytes(16));
+        $data["userId"] = $this->user->getId();
 
-        if ($data["userId"] !== $this->user->getId()) {
-            $this->respondForbidden();
-        }
+        $this->checkInputs($data);
 
         return $this->map(parent::createByArray($data));
     }
@@ -87,18 +94,24 @@ class ICalManager extends BaseManager
     public function update(array $data, int $resourceId, ?int $subResourceId = null): BaseModel
     {
         /* @var $iCal ICal */
-        $iCal = $this->getById($resourceId);
+        $iCal = $this->getById($subResourceId);
 
-        if ($iCal->getUserId() !== $this->user->getId()) {
+        if ($iCal->getUserId() !== $resourceId) {
             $this->respondForbidden();
         }
 
-        if ($data["userId"] !== $this->user->getId()) {
+        if ($resourceId !== $this->user->getId()) {
             $this->respondForbidden();
         }
 
-        $this->updateByArray($resourceId, $data);
+        foreach (["hash", "userId"] as $field) {
+            if (isset($data[$field])) {
+                unset($data[$field]);
+            }
+        }
 
-        return $this->getById($resourceId, true);
+        $this->updateByArray($subResourceId, $data);
+
+        return $this->getById($subResourceId, true);
     }
 }
