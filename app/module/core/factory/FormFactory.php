@@ -320,6 +320,7 @@ class FormFactory
     public function createUserConfigForm(array $onSuccess, ?User $user): Form
     {
         $form = new Form();
+        $id = $form->addHidden("id");
 
         $genderList = [
             "UNKNOWN" => $this->translator->translate("common.chooseSex", 1) . " ↓",
@@ -358,7 +359,10 @@ class FormFactory
 
         $callName = $form->addText("callName", $this->translator->translate("team.callName"));
         $canEditCallName = $form->addCheckbox("canEditCallName", $this->translator->translate("team.canEditCallName"));
-        $login = $form->addText("login", $this->translator->translate("team.login"));
+        $login = $form->addText("login", $this->translator->translate("team.login"))
+            ->addRule($form::MIN_LENGTH, null, 3)
+            ->addRule($form::MAX_LENGTH, null, 20);
+
         $newPasswordAgain = $form->addText("newPasswordAgain", $this->translator->translate("team.newPasswordAgain"));
         $password = $form->addPassword("password", $this->translator->translate("team.password"))->addRule($form::EQUAL, null, $form['newPasswordAgain']);
         $canLogin = $form->addCheckbox("canLogin");
@@ -376,6 +380,7 @@ class FormFactory
         $roles = $form->addCheckboxList("roles", $this->translator->translate("team.roles", 1), $rolesList);
 
         if ($user) {
+            $id->setValue($user->getId());
             $gender->setValue($user->getGender())->setHtmlAttribute("data-value", $user->getGender());
             $firstName->setValue($user->getFirstName())->setHtmlAttribute("data-value", $user->getFirstName());
             $lastName->setValue($user->getLastName())->setHtmlAttribute("data-value", $user->getLastName());
