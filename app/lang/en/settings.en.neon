@@ -27,3 +27,4 @@ eventColors: Event colors
 statusColors: Attendance colors
 multiaccount: Multiaccount|Multiaccount
 addAccount: Add multiaccount
+export: Export
