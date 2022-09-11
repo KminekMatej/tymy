@@ -28,3 +28,5 @@ statusColors: Barvy účastí
 multiaccount: Multiúčet|Multiúčty
 addAccount: Přidat účet
 export: Export
+enableExport: Povolit export
+calendarExport: "Export kalendáře (ical)"

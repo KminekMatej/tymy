@@ -28,3 +28,5 @@ statusColors: Kolory przybycia
 multiaccount: Multi-konto|Multi-konto
 addAccount: Dodaj konto
 export: Eksport
+enableExport: Włącz eksport
+calendarExport: "Eksport kalendarza (ical)"
