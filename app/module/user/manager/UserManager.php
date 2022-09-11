@@ -221,7 +221,7 @@ class UserManager extends BaseManager
             }
         }
 
-        if (array_key_exists("email", $array) && !empty($array["email"])) {
+        if (array_key_exists("email", $array) && !empty($array["email"]) && $array["email"] !== $userModel->getEmail()) {
             $this->saveEmail($id, $array["email"]);
         }
 
