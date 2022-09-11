@@ -94,3 +94,6 @@ months:
     october: October
     november: November
     december: December
+errors:
+    valueInvalid: Invalid value entered
+    teamValueRequired: Your team requires this field

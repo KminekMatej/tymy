@@ -94,3 +94,6 @@ months:
     october: Říjen
     november: Listopad
     december: Prosinec
+errors:
+    valueInvalid: Chybně zadaná hodnota
+    teamValueRequired: Váš tým vyžaduje vyplnit toto pole

@@ -349,7 +349,7 @@ class FormFactory
         $gender = $form->addSelect("gender", $this->translator->translate("team.gender"), $genderList);
         $firstName = $form->addText("firstName", $this->translator->translate("team.firstName"));
         $lastName = $form->addText("lastName", $this->translator->translate("team.lastName"));
-        $phone = $form->addText("phone", $this->translator->translate("team.phone"))->addRule($form::PATTERN, $this->translator->translate("team.errors.invalidPhone"), '^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
+        $phone = $form->addText("phone", $this->translator->translate("team.phone"))->addRule($form::PATTERN, $this->translator->translate("common.errors.valueInvalid"), '^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
         $email = $form->addText("email", $this->translator->translate("team.email"))->addRule($form::EMAIL);
         $birthDate = $form->addText("birthDate", $this->translator->translate("team.birthDate"))->setHtmlType("date");
         $nameDayMonth = $form->addSelect("nameDayMonth", $this->translator->translate("team.nameDayMonth"), $months)->setCaption($this->translator->translate("_team.chooseMonth") . " ↓");
@@ -371,10 +371,10 @@ class FormFactory
 
         $street = $form->addText("street", $this->translator->translate("team.street"));
         $city = $form->addText("city", $this->translator->translate("team.city"));
-        $zipCode = $form->addText("zipCode", $this->translator->translate("team.zipCode"))->addRule($form::PATTERN, $this->translator->translate("team.errors.invalidZipCode"), '^[0-9]{5}(?:-[0-9]{4})?$');
+        $zipCode = $form->addText("zipCode", $this->translator->translate("team.zipCode"))->addRule($form::PATTERN, $this->translator->translate("common.errors.valueInvalid"), '^[0-9]{5}(?:-[0-9]{4})?$');
 
         $roles = $form->addCheckboxList("roles", $this->translator->translate("team.roles", 1), $rolesList);
-        
+
         if ($user) {
             $gender->setValue($user->getGender())->setHtmlAttribute("data-value", $user->getGender());
             $firstName->setValue($user->getFirstName())->setHtmlAttribute("data-value", $user->getFirstName());
@@ -406,7 +406,7 @@ class FormFactory
             foreach ($form->controls as $control) {
                 /* @var $control BaseControl */
                 if (in_array($control->getName(), $this->teamManager->getTeam()->getRequiredFields())) {
-                    $control->setRequired();
+                    $control->setRequired($this->translator->translate("common.errors.teamValueRequired"));
                 }
             }
         }
