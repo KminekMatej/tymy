@@ -147,8 +147,10 @@ class SecuredPresenter extends BasePresenter
 
     private function setAccessibleSettings()
     {
+        $separate = false;
         if ($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("DSSETUP"))) {
             $this->accessibleSettings[] = new SettingMenu("discussions", $this->translator->translate("discussion.discussion", 2), $this->link(":Setting:Discussion:"), "fa-comments", true);
+            $separate = true;
         }
         if (
             $this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('EVE_UPDATE')) ||
@@ -156,26 +158,37 @@ class SecuredPresenter extends BasePresenter
                 $this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('EVE_DELETE'))
         ) {
             $this->accessibleSettings[] = new SettingMenu("events", $this->translator->translate("event.event", 2), $this->link(":Setting:Event:"), "fa-calendar", true);
+            $separate = true;
         }
 
         if ($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("TEAM_UPDATE"))) {
             $this->accessibleSettings[] = new SettingMenu("team", $this->translator->translate("team.team", 1), $this->link(":Setting:Team:"), "fa-users", true);
+            $separate = true;
         }
 
         if ($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('ASK.VOTE_UPDATE'))) {
             $this->accessibleSettings[] = new SettingMenu("polls", $this->translator->translate("poll.poll", 2), $this->link(":Setting:Poll:"), "fa-chart-pie", true);
+            $separate = true;
         }
 
-        if ($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("REP_SETUP"))) {
+        /*if ($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("REP_SETUP"))) {
             $this->accessibleSettings[] = new SettingMenu("reports", $this->translator->translate("report.report", 2), $this->link(":Setting:Report:"), "fa-chart-area", false);
-        }
+            $separate = true;
+        }*/
 
         if ($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('IS_ADMIN'))) {
             $this->accessibleSettings[] = new SettingMenu("permissions", $this->translator->translate("permission.permission", 2), $this->link(":Setting:Permission:"), "fa-gavel", true);
+            $separate = true;
         }
 
-        $this->accessibleSettings[] = new SettingMenu("multiaccounts", $this->translator->translate("settings.multiaccount", 1), $this->link(":Setting:Multiaccount:"), "fa-sitemap", true); //user can always look into multiaccount settings
-        $this->accessibleSettings[] = new SettingMenu("app", $this->translator->translate("settings.application"), $this->link(":Setting:App:"), "fa-laptop", true); //user can always look into app settings to setup his own properties
+        if ($separate) {
+            $this->accessibleSettings[] = new SettingMenu("separator"); //to separate user settings from admin settings
+        }
+
+        //user always accessible settings
+        $this->accessibleSettings[] = new SettingMenu("multiaccounts", $this->translator->translate("settings.multiaccount", 1), $this->link(":Setting:Multiaccount:"), "fa-sitemap", true);
+        $this->accessibleSettings[] = new SettingMenu("export", $this->translator->translate("settings.export", 1), $this->link(":Setting:Export:"), "far fa-calendar", true);
+        $this->accessibleSettings[] = new SettingMenu("app", $this->translator->translate("settings.application"), $this->link(":Setting:App:"), "fa-laptop", true);
 
         return $this;
     }
