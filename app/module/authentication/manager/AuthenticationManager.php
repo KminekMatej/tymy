@@ -14,7 +14,6 @@ use Tracy\Debugger;
 use Tymy\Module\Core\Manager\Responder;
 use Tymy\Module\Multiaccount\Model\TransferKey;
 use Tymy\Module\Team\Model\Team;
-use Tymy\Module\User\Manager\UserManager;
 use Tymy\Module\User\Model\User;
 
 /**
@@ -30,18 +29,16 @@ class AuthenticationManager implements IAuthenticator
     private Responder $responder;
     private Explorer $mainDatabase;
     private Explorer $teamDatabase;
-    private Container $container;
     private Translator $translator;
     private string $teamSysName;
     private array $ghosts;
 
-    public function __construct(array $ghosts, string $teamSysName, Explorer $mainDatabase, Explorer $teamDatabase, Responder $responder, Container $container, Translator $translator)
+    public function __construct(array $ghosts, string $teamSysName, Explorer $mainDatabase, Explorer $teamDatabase, Responder $responder, Translator $translator)
     {
         $this->teamSysName = $teamSysName;
         $this->responder = $responder;
         $this->mainDatabase = $mainDatabase;
         $this->teamDatabase = $teamDatabase;
-        $this->container = $container;
         $this->ghosts = $ghosts;
         $this->translator = $translator;
     }
@@ -96,19 +93,7 @@ class AuthenticationManager implements IAuthenticator
             $this->teamDatabase->table(self::TABLE)->where('id', $row->id)->update(["last_login" => new DateTime()]);
         }
 
-        /* @var $userManager UserManager */
-        $userManager = $this->container->getByName("UserManager");
-
-        /* @var $user User */
-        $user = $userManager->map($row);
-        $userData = $user->jsonSerialize();
-
-        if ($ghost) {
-            $user->setGhost(true);
-            $userData["ghost"] = true;
-        }
-
-        return new SimpleIdentity($user->getId(), $user->getRoles(), $userData);
+        return new SimpleIdentity($row->getId(), explode(",", $row->roles), ["ghost" => $ghost]);
     }
 
     /**
@@ -132,15 +117,10 @@ class AuthenticationManager implements IAuthenticator
             throw new AuthenticationException($this->translator->translate("team.alerts.authenticationFailed"), self::INVALID_CREDENTIAL);
         }
 
-        /* @var $userManager UserManager */
-        $userManager = $this->container->getByName("UserManager");
-
-        /* @var $user User */
-        $user = $userManager->getById($userId);
-
+        $row = $this->teamDatabase->table(self::TABLE)->get($userId);
         $this->teamDatabase->table(self::TABLE)->where('id', $userId)->update(["last_login" => new DateTime()]);
 
-        return new SimpleIdentity($user->getId(), $user->getRoles(), $user->jsonSerialize());
+        return new SimpleIdentity($userId, explode(",", $row->roles), ["ghost" => false]);
     }
 
     /**
