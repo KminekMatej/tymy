@@ -8,29 +8,36 @@
 
 {block player-content}
 <div class="tab-pane fade" id="prihlaseni" role="tabpanel">
-    <table class="table">
-        <tr>
-            <th>{_team.dateOfRegistration}:</th><td>{$player->getCreatedAt()|date:'j.n.Y G:i'}</td>
-        </tr>
-        <tr>
-            <th>{_team.callName}:</th><td><input name="callName" data-value="{$player->getCallName()}" type="text" value="{$player->getCallName()}" n:class="col-6, form-control, in_array('callName',$player->getErrFields()) ? is-invalid" /></td>
-        </tr>
-        <tr>
-            <th>{_team.canEditCallName}:</th><td><input name="canEditCallName" data-value="{$player->getCanEditCallName()}" type="checkbox" n:attr='checked => $player->getCanEditCallName()' class="form-control form-check col-6" /></td>
-        </tr>
-        <tr>
-            <th>{_team.login}:</th><td><input name="login" data-value="{$player->getLogin()}" type="text" value="{$player->getLogin()}" n:class="col-6, form-control, in_array('login',$player->getErrFields()) ? is-invalid" /></td>
-        </tr>
-        <tr>
-            <th>{_team.password}:</th><td><input name="password" data-value="" type="password" value="" class="form-control col-6" data-validation-field2="password-check"/></td>
-        </tr>
-        <tr>
-            <th>{_team.newPasswordAgain}:</th><td><input name="password-check" type="password" value="" class="form-control col-6" /></td>
-        </tr>
-        <tr>
-            <th>{_team.canLogin}:</th><td><input name="canLogin" data-value="{$player->getCanLogin()}" type="checkbox" n:attr='checked => $player->getCanLogin()' class="form-control from-control-lg form-check col-6" /></td>
-        </tr>
-    </table>
+    <div class="tymy-table">
+        <div class="row">
+            <div class="col-12 col-md-4 table-head">{_team.dateOfRegistration}:</div>
+            <div class="col-12 col-md-8">{$player->getCreatedAt()|date:'j.n.Y G:i'}</div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-4 table-head">{label callName /}:</div>
+            <div class="col-12 col-md-8">{input callName, class => 'col-12 col-md-6 form-control'}</div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-4 table-head">{_team.canEditCallName}:</div>
+            <div class="col-12 col-md-8"><input n:name="canEditCallName" type="checkbox" class="form-control from-control-lg form-check col-6" /></div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-4 table-head">{label login /}:</div>
+            <div class="col-12 col-md-8">{input login, class => 'col-12 col-md-6 form-control'}</div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-4 table-head">{label password /}:</div>
+            <div class="col-12 col-md-8">{input password, class => 'col-12 col-md-6 form-control'}</div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-4 table-head">{label newPasswordAgain /}:</div>
+            <div class="col-12 col-md-8">{input newPasswordAgain, class => 'col-12 col-md-6 form-control'}</div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-4 table-head">{_team.canLogin}:</div>
+            <div class="col-12 col-md-8"><input n:name="canLogin" type="checkbox" class="form-control from-control-lg form-check col-6" /></div>
+        </div>
+    </div>
 </div>
 {include parent}
 {/block}

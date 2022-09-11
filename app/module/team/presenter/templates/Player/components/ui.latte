@@ -8,19 +8,16 @@
 
 {block player-content}
 <div class="tab-pane fade" id="ui" role="tabpanel">
-    <table class="table">
-        <tr>
-            <th>Skin:</th><td>
-                <select n:class="col-3, form-control, in_array('skin',$player->getErrFields()) ? is-invalid" style="min-width: 120px" name="skin" data-value="{$player->getSkin()}">
-                    <option n:foreach="$allSkins as $s => $sCaption" value="{$s}" n:attr="selected => $player->getSkin()==$s">{$sCaption}</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <th>{_team.hideDiscDesc}:</th><td><input name="hideDiscDesc" data-value="{$player->getHideDiscDesc()}" type="checkbox" n:attr='checked => $player->getHideDiscDesc()' class="form-control form-check col-6" /></td>
-        </tr>
-    </table>
-
+    <div class="tymy-table">
+        <div class="row">
+            <div class="col-12 col-md-4 table-head">{label skin /}:</div>
+            <div class="col-12 col-md-8">{input skin, class => 'col-12 col-md-6 form-control'}</div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-4 table-head">{{_team.hideDiscDesc}:</div>
+            <div class="col-12 col-md-8"><input n:name="hideDiscDesc" type="checkbox" class="form-control from-control-lg form-check" /></div>
+        </div>
+    </div>
 </div>
 {include parent}
 {/block}

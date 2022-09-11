@@ -2,12 +2,13 @@
 
 namespace Tymy\Module\Team\Presenter\Front;
 
+use Nette\Application\UI\Form;
 use Nette\Http\FileUpload;
 use Nette\Utils\Image;
 use Tymy\Module\Core\Exception\TymyResponse;
+use Tymy\Module\Core\Factory\FormFactory;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Permission\Model\Privilege;
-use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\User\Manager\AvatarManager;
 use Tymy\Module\User\Model\User;
 
@@ -15,6 +16,9 @@ class PlayerPresenter extends SecuredPresenter
 {
     /** @inject */
     public AvatarManager $avatarManager;
+
+    /** @inject */
+    public FormFactory $formFactory;
 
     public function beforeRender()
     {
@@ -187,5 +191,21 @@ class PlayerPresenter extends SecuredPresenter
             $response = $this->getHttpResponse();
             $response->setCode(400);
         }
+    }
+
+
+    public function createComponentUserConfigForm(): Form
+    {
+        $userId = $this->parseIdFromWebname($this->getRequest()->getParameter("player"));
+
+        return $this->formFactory->createUserConfigForm(
+                [$this, "userConfigFormSuccess"],
+                $this->userManager->getById($userId),
+        );
+    }
+    
+    public function userConfigFormSuccess(Form $form, $values)
+    {
+        \Tracy\Debugger::barDump($values);
     }
 }
