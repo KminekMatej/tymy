@@ -13,10 +13,9 @@ use Tymy\Module\Poll\Mapper\ICalMapper;
  */
 class ICal extends BaseModel
 {
-    
     public const MODULE = "settings";
     public const TABLE = "ical";
-    
+
     private DateTime $created;
     private ?int $createdUserId = null;
     private int $userId;
