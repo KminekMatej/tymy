@@ -354,7 +354,7 @@ class FormFactory
         $email = $form->addText("email", $this->translator->translate("team.email"))->addRule($form::EMAIL);
         $birthDate = $form->addText("birthDate", $this->translator->translate("team.birthDate"))->setHtmlType("date");
         $nameDayMonth = $form->addSelect("nameDayMonth", $this->translator->translate("team.nameDayMonth"), $months)->setCaption($this->translator->translate("_team.chooseMonth") . " ↓");
-        $nameDayDay = $form->addInteger("nameDayDay", $this->translator->translate("team.nameDayDay"))->addRule($form::MIN, null, 1)->addRule($form::MAX, null, 31);
+        $nameDayDay = $form->addInteger("nameDayDay", $this->translator->translate("team.nameDayDay"))->addRule($form::MIN, null, 0)->addRule($form::MAX, null, 31);
         $language = $form->addSelect("language", $this->translator->translate("team.language"), Team::LANGUAGES);
 
         $callName = $form->addText("callName", $this->translator->translate("team.callName"));
@@ -363,8 +363,8 @@ class FormFactory
             ->addRule($form::MIN_LENGTH, null, 3)
             ->addRule($form::MAX_LENGTH, null, 20);
 
-        $newPasswordAgain = $form->addText("newPasswordAgain", $this->translator->translate("team.newPasswordAgain"));
-        $password = $form->addPassword("password", $this->translator->translate("team.password"))->addRule($form::EQUAL, null, $form['newPasswordAgain']);
+        $password = $form->addPassword("password", $this->translator->translate("team.password"));
+        $newPasswordAgain = $form->addPassword("newPasswordAgain", $this->translator->translate("team.newPasswordAgain"))->addRule($form::EQUAL, "xxx", $form['password']);
         $canLogin = $form->addCheckbox("canLogin");
 
         $skin = $form->addSelect("skin", "Skin", $this->teamManager->allSkins);
@@ -405,14 +405,14 @@ class FormFactory
             $street->setValue($user->getStreet())->setHtmlAttribute("data-value", $user->getStreet());
             $city->setValue($user->getCity())->setHtmlAttribute("data-value", $user->getCity());
             $zipCode->setValue($user->getZipCode())->setHtmlAttribute("data-value", $user->getZipCode());
-            
-            $roles->setValue($user->getRoles());
 
-            foreach ($form->controls as $control) {
-                /* @var $control BaseControl */
-                if (in_array($control->getName(), $this->teamManager->getTeam()->getRequiredFields())) {
-                    $control->setRequired($this->translator->translate("common.errors.teamValueRequired"));
-                }
+            $roles->setValue($user->getRoles());
+        }
+
+        foreach ($form->controls as $control) {
+            /* @var $control BaseControl */
+            if (in_array($control->getName(), $this->teamManager->getTeam()->getRequiredFields())) {
+                $control->setRequired($this->translator->translate("common.errors.teamValueRequired"));
             }
         }
 
