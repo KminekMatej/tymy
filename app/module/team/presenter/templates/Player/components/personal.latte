@@ -9,32 +9,29 @@
 {block player-content}
 <div class="tab-pane fade show active" id="osobni-udaje" role="tabpanel">
     <div class="tymy-table">
-        {*<div class="row">
-            <div class="col-12 col-md-4 table-head">{_team.profilePhoto}:</div><td n:class="in_array('pictureUrl',$player->getErrFields()) ? is-invalid">
+        <div class="row">
+            <div class="col-12 col-md-4 table-head">{_team.profilePhoto}:</div>
+            <div class="col-12 col-md-1 text-center">
+                <a href="{$baseUrl}{$player->getPictureUrl()}" target="_blank"><img class="avatar" src="{$player->getPictureUrl()}" /></a>
+            </div>
+            <div class="col-12 col-md-7" n:if="$isMe">
                 <div class="row">
-                    <div class="col-1">
-                        <a href="{$baseUrl}{$player->getPictureUrl()}" target="_blank"><img class="avatar" src="{$player->getPictureUrl()}" /></a>
-                    </div>
-                    <div class="col-10" n:if="$isMe">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="custom-file mb-1">
-                                    <input id="fileupload" type="file" name="files[]" data-url="{link upload!}" class="custom-file-input" lang="cs">
-                                    <label class="custom-file-label" for="fileupload">{_common.chooseFile} ...</label>
-                                </div>
-                            </div>
+                    <div class="col-12 col-lg-6 col-md-8">
+                        <div class="custom-file mb-1">
+                            <input id="fileupload" type="file" name="files[]" data-url="{link upload!}" class="custom-file-input" lang="cs">
+                            <label class="custom-file-label" for="fileupload">{_common.chooseFile} ...</label>
                         </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="progress">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="height: 6px;"></div>
-                                </div>
-                            </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="height: 6px;"></div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>*}
+        </div>
         <div class="row">
             <div class="col-12 col-md-4 table-head">{label gender /}:</div>
             <div class="col-12 col-md-8">{input gender, class => 'col-12 col-md-3 form-control', style => 'min-width: 80px'}</div>
