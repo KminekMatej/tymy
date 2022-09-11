@@ -1,0 +1,38 @@
+{import $componentsDir . '/secured.latte'}
+
+{block navbar}
+{control navbar}
+{/block}
+
+{block content}
+<div class="container-fluid container-md settings">
+    {dump $iCal}
+    <div class="row">
+        <div class="col">
+            <div class="card sh-box my-2">
+                {form calendarForm}
+                    <div class="card-header">
+                        <h4>{_settings.calendarExport}</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="tymy-table">
+                            <div class="row">
+                                <div class="col-12 col-md-4 table-head">{_settings.enableExport}:</div>
+                                <div class="col-12 col-md-8"><input n:name="enabled" type="checkbox" class="form-control from-control-lg form-check col-6" /></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-md-4 table-head">Url:</div>
+                                <div class="col-12 col-md-8">
+                                    <a n:ifset="$iCal" href="{plink :User:Detail:Calendar $user->getId(), $iCal->getHash()}">{link //:User:Detail:Calendar $user->getId(), $iCal->getHash()}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer text-right">
+                        <button n:name="save" class="btn btn-lg btn-outline-primary" title="{_common.save}" onclick="return $(this).find('svg[data-fa-i2svg]').addClass('fa-spin')"><i class="fa fa-save" aria-hidden="true"></i></button>
+                    </div>
+                {/form}
+            </div>
+        </div>
+    </div>
+</div>
