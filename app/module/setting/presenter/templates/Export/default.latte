@@ -4,6 +4,16 @@
 {control navbar}
 {/block}
 
+{block styles}
+{include parent}
+<link rel="stylesheet" href="{$publicPath}/resources/bootstrap4-multiselect/css/BsMultiSelect.{$css}?ver={$appver}" />
+{/block}
+
+{block scripts}
+{include parent}
+<script src="{$publicPath}/resources/bootstrap4-multiselect/js/BsMultiSelect.{$js}?ver={$appver}"></script>
+{/block}
+
 {block content}
 <div class="container-fluid container-md settings">
     {dump $iCal}
@@ -20,12 +30,18 @@
                                 <div class="col-12 col-md-4 table-head">{_settings.enableExport}:</div>
                                 <div class="col-12 col-md-8"><input n:name="enabled" type="checkbox" class="form-control from-control-lg form-check col-6" /></div>
                             </div>
-                            <div class="row">
-                                <div class="col-12 col-md-4 table-head">Url:</div>
-                                <div class="col-12 col-md-8">
-                                    <a n:ifset="$iCal" href="{plink :User:Detail:Calendar $user->getId(), $iCal->getHash()}">{link //:User:Detail:Calendar $user->getId(), $iCal->getHash()}</a>
+                            {ifset $iCal}
+                                <div class="row">
+                                    <div class="col-12 col-md-4 table-head">Url:</div>
+                                    <div class="col-12 col-md-8">
+                                        <a n:href=":User:Detail:Calendar $user->getId(), $iCal->getHash()">{link //:User:Detail:Calendar $user->getId(), $iCal->getHash()}</a>
+                                    </div>
                                 </div>
-                            </div>
+                                <div class="row">
+                                    <div class="col-12 col-md-4 table-head">{_settings.displayStatuses}:</div>
+                                    <div class="col-12 col-md-8">{input items, class => 'form-control w-50'}</div>
+                                </div>
+                            {/ifset}
                         </div>
                     </div>
                     <div class="card-footer text-right">

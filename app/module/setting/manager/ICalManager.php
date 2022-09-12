@@ -2,10 +2,12 @@
 
 namespace Tymy\Module\Settings\Manager;
 
+use Nette\Database\IRow;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Settings\Mapper\ICalMapper;
 use Tymy\Module\Settings\Model\ICal;
+use Tymy\Module\Settings\Model\ICalItem;
 
 /**
  * Description of ICalManager
@@ -39,6 +41,20 @@ class ICalManager extends BaseManager
     public function canRead(BaseModel $entity, int $userId): bool
     {
         return $this->canEdit($entity, $userId);
+    }
+
+    public function map(?IRow $row, $force = false): ?BaseModel
+    {
+        if (!$row) {
+            return null;
+        }
+
+        /* @var $iCal ICal */
+        $iCal = parent::map($row, $force);
+
+        $iCal->setStatusIds($row->related(ICalItem::TABLE)->fetchPairs(null, "status_id"));
+
+        return $iCal;
     }
 
     /**
@@ -112,6 +128,45 @@ class ICalManager extends BaseManager
 
         $this->updateByArray($subResourceId, $data);
 
+        if (array_key_exists("items", $data)) {
+            $this->updateItems($iCal, $data["items"]);
+        }
+
         return $this->getById($subResourceId, true);
+    }
+    
+    /**
+     * Update statuses which events this ical shall display
+     * @param int $exportId
+     * @param int[] $statusIds
+     * @return void
+     */
+    public function updateItems(ICal $iCal, array $statusIds): void
+    {
+        $existingStatuses = $iCal->getStatusIds();
+        $newStatuses = $statusIds;
+
+        $statusesToAdd = array_diff($newStatuses, $existingStatuses);
+        $statusesToRemove = array_diff($existingStatuses, $newStatuses);
+
+        // DELETE REMOVED
+        if (!empty($statusesToRemove)) {
+            $this->database->table(ICalItem::TABLE)->where('ical_id', $iCal->getId())->where('status_id IN ?', $statusesToRemove)->delete();
+        }
+
+        // INSERT NEW
+        if (!empty($statusesToAdd)) {
+            $inserts = [];
+
+            foreach ($statusesToAdd as $statusToAdd) {
+                $inserts[] = [
+                    "created_user_id" => $this->user->getId(),
+                    "ical_id" => $iCal->getId(),
+                    "status_id" => $statusToAdd,
+                ];
+            }
+
+            $this->database->table(ICalItem::TABLE)->insert($inserts);
+        }
     }
 }

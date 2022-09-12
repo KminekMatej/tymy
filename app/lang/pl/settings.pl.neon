@@ -30,3 +30,4 @@ addAccount: Dodaj konto
 export: Eksport
 enableExport: Włącz eksport
 calendarExport: "Eksport kalendarza (ical)"
+displayStatuses: Pokaż wydarzenia o statusie

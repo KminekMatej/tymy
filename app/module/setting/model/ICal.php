@@ -21,6 +21,7 @@ class ICal extends BaseModel
     private int $userId;
     private string $hash;
     private bool $enabled;
+    private array $statusIds = [];
 
     public function getCreated(): DateTime
     {
@@ -45,6 +46,11 @@ class ICal extends BaseModel
     public function getEnabled(): bool
     {
         return $this->enabled;
+    }
+
+    public function getStatusIds(): array
+    {
+        return $this->statusIds;
     }
 
     public function setCreated(DateTime $created)
@@ -74,6 +80,12 @@ class ICal extends BaseModel
     public function setEnabled(?bool $enabled)
     {
         $this->enabled = $enabled ? true : false;
+        return $this;
+    }
+
+    public function setStatusIds(array $statusIds)
+    {
+        $this->statusIds = $statusIds;
         return $this;
     }
 

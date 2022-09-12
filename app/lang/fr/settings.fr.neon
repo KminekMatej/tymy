@@ -30,3 +30,4 @@ addAccount: Ajouter multi-compte
 export: Exportation
 enableExport: "Activer l 'exportation"
 calendarExport: "Exportation du calendrier (ical)"
+displayStatuses: Afficher les événements ayant un statut

@@ -2,6 +2,7 @@
 
 namespace Tymy\Module\Attendance\Manager;
 
+use Nette\Database\IRow;
 use Nette\Database\Table\ActiveRow;
 use Nette\Utils\FileSystem;
 use Nette\Utils\Image;
@@ -59,6 +60,20 @@ class StatusManager extends BaseManager
     private function dropSimpleCache(): void
     {
         $this->simpleCache = [];
+    }
+
+    public function map(?IRow $row, $force = false): ?BaseModel
+    {
+        if (!$row) {
+            return null;
+        }
+
+        /* @var $status Status */
+        $status = parent::map($row, $force);
+
+        $status->setStatusSetName($row->ref(StatusSet::TABLE)->name);
+
+        return $status;
     }
 
     protected function allowCreate(?array &$data = null): void
