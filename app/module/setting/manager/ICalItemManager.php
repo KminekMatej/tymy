@@ -41,7 +41,7 @@ class ICalItemManager extends BaseManager
 
     public function delete(int $resourceId, ?int $subResourceId = null): int
     {
-        return parent::delete($subResourceId);
+        return parent::deleteRecord($subResourceId);
     }
 
     public function getAllowedReaders(BaseModel $record): array

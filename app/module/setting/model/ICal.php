@@ -4,7 +4,7 @@ namespace Tymy\Module\Settings\Model;
 
 use Nette\Utils\DateTime;
 use Tymy\Module\Core\Model\BaseModel;
-use Tymy\Module\Poll\Mapper\ICalMapper;
+use Tymy\Module\Settings\Mapper\ICalMapper;
 
 /**
  * Description of ICal

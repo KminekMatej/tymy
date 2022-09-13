@@ -349,7 +349,7 @@ class ArrayHelper
             $valueGetter = "get" . ucfirst($valueProperty);
         }
         foreach ($inputArray as $baseEntity) {
-            $pairs[$baseEntity->$keyGetter()] = $valueGetter ? $baseEntity->$valueGetter() : $baseEntity;
+            $pairs[$baseEntity->$keyGetter()] = isset($valueGetter) ? $baseEntity->$valueGetter() : $baseEntity;
         }
         return $pairs;
     }
