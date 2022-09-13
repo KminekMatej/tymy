@@ -23,6 +23,7 @@ class Status extends BaseModel
     private int $statusSetId;
     private ?int $updatedById = null;
     private ?DateTime $updatedAt = null;
+    private string $statusSetName;
 
     public function getCode(): string
     {
@@ -57,6 +58,11 @@ class Status extends BaseModel
     public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
+    }
+
+    public function getStatusSetName(): string
+    {
+        return $this->statusSetName;
     }
 
     public function setCode(string $code)
@@ -98,6 +104,12 @@ class Status extends BaseModel
     public function setUpdatedAt(?DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
+    public function setStatusSetName(string $statusSetName)
+    {
+        $this->statusSetName = $statusSetName;
         return $this;
     }
 

@@ -2,16 +2,20 @@
 
 namespace Tymy\Module\Attendance\Manager;
 
+use Nette\Database\IRow;
+use Nette\Database\Table\ActiveRow;
 use Nette\Utils\FileSystem;
 use Nette\Utils\Image;
 use Tymy\Module\Attendance\Mapper\StatusMapper;
-use Tymy\Module\Attendance\Model\Attendance;
 use Tymy\Module\Attendance\Model\Status;
 use Tymy\Module\Attendance\Model\StatusSet;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Event\Model\EventType;
 use Tymy\Module\Team\Manager\TeamManager;
+
+use const TEAM_DIR;
 
 /**
  * Description of StatusManager
@@ -57,6 +61,20 @@ class StatusManager extends BaseManager
     private function dropSimpleCache(): void
     {
         $this->simpleCache = [];
+    }
+
+    public function map(?IRow $row, $force = false): ?BaseModel
+    {
+        if (!$row) {
+            return null;
+        }
+
+        /* @var $status Status */
+        $status = parent::map($row, $force);
+
+        $status->setStatusSetName($row->ref(StatusSet::TABLE)->name);
+
+        return $status;
     }
 
     protected function allowCreate(?array &$data = null): void
@@ -139,6 +157,19 @@ class StatusManager extends BaseManager
             $statuses[$row->code] = $this->map($row);
         }
         return $statuses;
+    }
+
+    /**
+     * Get all statuses, which are used in any event_type for pre-status purposes
+     * @return Status[] where key is code
+     */
+    public function getAllPreStatuses(): array
+    {
+        $setIds = $this->database->table(EventType::TABLE)->select("DISTINCT(pre_status_set_id) AS setIds")->fetchPairs(null, "setIds");
+
+        $preStatuses = $this->database->table(Status::TABLE)->where("status_set.id", $setIds)->fetchAll();
+
+        return $this->mapAll($preStatuses);
     }
 
     protected function allowRead(?int $recordId = null): void

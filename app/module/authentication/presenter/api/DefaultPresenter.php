@@ -31,7 +31,7 @@ class DefaultPresenter extends BasePresenter
             $this->responder->E401_UNAUTHORIZED("Not logged in");
         }
 
-        $userId = $this->user->getIdentity()->getData()["id"];
+        $userId = $this->user->getId();
         $this->responder->A2001_LOGGED_IN($this->userManager->getById($userId)->jsonSerialize(), session_id());
     }
 
@@ -48,7 +48,7 @@ class DefaultPresenter extends BasePresenter
             $this->responder->E401_UNAUTHORIZED("Not logged in");
         }
 
-        $userId = $this->user->getIdentity()->getData()["id"];
+        $userId = $this->user->getId();
         $this->responder->A2001_LOGGED_IN($this->userManager->getById($userId)->jsonSerialize(), session_id());
     }
 

@@ -8,15 +8,18 @@
 
 <div class="container-fluid container-md settings">
     <div class="row my-4 justify-content-center">
-        <div class="col-md-4" n:foreach="$accessibleSettings as $set">
-            <div n:class="card,sh-box,my-4,text-center,$set->enabled ? set-box">
-                <a n:class="!$set->enabled ? disabled" n:attr="href => $set->enabled ? $set->href : '#', disabled => !$set->enabled">
-                    <div class="card-body">
-                        <h1><i class="fa {$set->icon}"></i></h1>
-                        <h2 class="my-3">{$set->name}</h2>
-                    </div>
-                </a>
+        {foreach $accessibleSettings as $set}
+            {continueIf $set->code == 'separator'}
+            <div class="col-md-4">
+                <div n:class="card,sh-box,my-4,text-center,$set->enabled ? set-box">
+                    <a n:class="!$set->enabled ? disabled" n:attr="href => $set->enabled ? $set->href : '#', disabled => !$set->enabled">
+                        <div class="card-body">
+                            <h1><i class="fa {$set->icon}"></i></h1>
+                            <h2 class="my-3">{$set->name}</h2>
+                        </div>
+                    </a>
+                </div>
             </div>
-        </div>
+        {/foreach}
     </div>
 </div>

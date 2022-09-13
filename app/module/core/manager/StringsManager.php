@@ -7,6 +7,7 @@ use Nette\Security\User;
 use Tracy\Debugger;
 use Tracy\ILogger;
 use Tymy\Module\Team\Manager\TeamManager;
+use Tymy\Module\User\Manager\UserManager;
 
 /**
  * Description of StringsManager
@@ -19,6 +20,7 @@ class StringsManager
     public const LC = ["CZ" => "cs", "EN" => "en", "FR" => "fr", "PL" => "pl"];
 
     private TeamManager $teamManager;
+    private UserManager $userManager;
     private Explorer $database;
     private User $user;
 
@@ -48,7 +50,7 @@ class StringsManager
      */
     private function getLc(): string
     {
-        $code = $this->user->isLoggedIn() ? $this->user->getIdentity()->getData()["language"] : $this->teamManager->getTeam()->getDefaultLanguageCode();
+        $code = $this->user->isLoggedIn() ? $this->userManager->getById($this->user->getId())->getLanguage() : $this->teamManager->getTeam()->getDefaultLanguageCode();
         return self::LC[$code];
     }
 

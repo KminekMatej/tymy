@@ -332,4 +332,25 @@ class ArrayHelper
         }
         return $pairs;
     }
+
+    /**
+     * Transform two-dimensional array to key->value pair array, getting key from object getter, formed from property name
+     * If no value is specified, returns complete model
+     * @param BaseModel[] $inputArray
+     * @param string $keyProperty
+     * @param string|null $valueProperty
+     * @return array|BaseModel[]
+     */
+    public static function pairsEntity(array $inputArray, string $keyProperty = 'id', ?string $valueProperty = null): array
+    {
+        $pairs = [];
+        $keyGetter = "get" . ucfirst($keyProperty);
+        if ($valueProperty) {
+            $valueGetter = "get" . ucfirst($valueProperty);
+        }
+        foreach ($inputArray as $baseEntity) {
+            $pairs[$baseEntity->$keyGetter()] = isset($valueGetter) ? $baseEntity->$valueGetter() : $baseEntity;
+        }
+        return $pairs;
+    }
 }

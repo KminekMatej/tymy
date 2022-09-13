@@ -10,12 +10,12 @@ namespace Tymy\Module\Core\Model;
 class SettingMenu
 {
     public string $code;
-    public string $name;
-    public string $href;
-    public string $icon;
-    public bool $enabled;
+    public ?string $name = null;
+    public ?string $href = null;
+    public ?string $icon = null;
+    public bool $enabled = true;
 
-    public function __construct(string $code, string $name, string $href, string $icon, bool $enabled)
+    public function __construct(string $code, ?string $name = null, ?string $href = null, ?string $icon = null, bool $enabled = true)
     {
         $this->code = $code;
         $this->name = $name;

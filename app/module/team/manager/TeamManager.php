@@ -21,26 +21,20 @@ use Tymy\Module\Team\Model\Team;
  */
 class TeamManager extends BaseManager
 {
-    public const SKIN_HELLBOY = "hell-boy";
-    public const SKIN_SILVER_SURFER = "silver-surfer";
-    public const SKIN_BLACK_PANTHER = "black-panther";
-    public const DEFAULT_SKIN = self::SKIN_BLACK_PANTHER;
-    public const SKINS = [
-        self::SKIN_HELLBOY => "Hellboy",
-        self::SKIN_SILVER_SURFER => "Silver surfer",
-        self::SKIN_BLACK_PANTHER => "Black panther",
-    ];
+    public const DEFAULT_SKIN = "black-panther";
 
     private string $teamFolder;
     private Request $httpRequest;
     private Team $team;
+    public array $allSkins;
 
-    public function __construct(string $teamFolder, ManagerFactory $managerFactory, Request $httpRequest)
+    public function __construct(string $teamFolder, array $allSkins, ManagerFactory $managerFactory, Request $httpRequest)
     {
         parent::__construct($managerFactory);
         $this->database = $this->mainDatabase;
         $this->teamFolder = $teamFolder;
         $this->httpRequest = $httpRequest;
+        $this->allSkins = $allSkins;
     }
 
     public function map(?IRow $row, $force = false): ?BaseModel

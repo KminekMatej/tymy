@@ -27,3 +27,7 @@ eventColors: Event colors
 statusColors: Attendance colors
 multiaccount: Multiaccount|Multiaccount
 addAccount: Add multiaccount
+export: Export
+enableExport: Enable export
+calendarExport: "Export calendar (ical)"
+displayStatuses: Display events having status

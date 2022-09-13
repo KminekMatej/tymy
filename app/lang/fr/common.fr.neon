@@ -92,3 +92,6 @@ months:
     october: Octobre
     november: Novembre
     december: Décembre
+errors:
+    valueInvalid: Valeur invalide saisie
+    teamValueRequired: Votre équipe a besoin de ce champ
