@@ -5,13 +5,13 @@ X-WR-TIMEZONE:UTC
 TZID:UTC
 {foreach $events as $event}
 BEGIN:VEVENT
-UID:event_{$event->getId()}@{$serverName}
-CREATED:{$event->getCreated()->setTimezone($dtz)|date:'Ymd\THis\Z'}
+UID:event_{$event->id}@{$serverName}
+CREATED:{$event->created->setTimezone($dtz)|date:'Ymd\THis\Z'}
 DTSTAMP:{$now->setTimezone($dtz)|date:'Ymd\THis\Z'}
-DTSTART;{$event->getStartTime()->setTimezone($dtz)|date:'Ymd\THis\Z'}
-DTEND;{$event->getEndTime()->setTimezone($dtz)|date:'Ymd\THis\Z'}
-SUMMARY:{$event->getCaption()}{if $event->getMyAttendance()}({$event->getMyAttendance()->getPreStatusId()|statusName}){/if}
-DESCRIPTION:{\Nette\Utils\Strings::normalize($event->getDescription())}
+DTSTART;{$event->start_time->setTimezone($dtz)|date:'Ymd\THis\Z'}
+DTEND;{$event->end_time->setTimezone($dtz)|date:'Ymd\THis\Z'}
+SUMMARY:{$event->caption}{if $event->pre_status_id}({$event->pre_status_id|statusName}){/if}
+DESCRIPTION:{\Nette\Utils\Strings::normalize($event->descr)}
 END:VEVENT
 {/foreach}
 END:VCALENDAR

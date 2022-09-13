@@ -49,9 +49,9 @@ class DetailPresenter extends BasePresenter
 
     public function renderCalendar(int $resource, string $hash)
     {
-        $iCal = $this->iCalManager->getByUserId($this->user->getId());
+        $iCal = $this->iCalManager->getByUserId($resource);
 
-        if ($this->user->getId() !== $resource || empty($iCal) || $iCal->getHash() !== $hash) {
+        if (empty($iCal) || $iCal->getHash() !== $hash) {
             $this->responder->E404_NOT_FOUND("Calendar");
         }
 
@@ -59,7 +59,7 @@ class DetailPresenter extends BasePresenter
         $this->template->dtz = new DateTimeZone("UTC");
         $this->template->serverName = $_SERVER["SERVER_NAME"];
         $this->template->now = (new DateTime())->setTimezone($this->template->dtz);
-        $this->template->events = $this->eventManager->getMyEventsOfPrestatus($this->user->getId(), $iCal->getStatusIds(), new DateTime("-90 days"));
+        $this->template->events = $this->eventManager->getEventsOfPrestatus($resource, $iCal->getStatusIds(), new DateTime("-90 days"));
 
         $this->getHttpResponse()->setContentType('text/calendar', 'UTF-8');
     }
