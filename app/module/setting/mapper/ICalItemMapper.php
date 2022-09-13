@@ -12,7 +12,6 @@ use Tymy\Module\Core\Model\Field;
  */
 class ICalItemMapper extends BaseMapper
 {
-
     public static function scheme(): array
     {
         return [

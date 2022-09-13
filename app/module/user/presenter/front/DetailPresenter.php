@@ -20,22 +20,22 @@ class DetailPresenter extends BasePresenter
 {
     /** @inject */
     public ICalManager $iCalManager;
-    
+
     /** @inject */
     public EventManager $eventManager;
-    
+
     /** @inject */
     public StatusManager $statusManager;
 
     /** @inject */
     public Responder $responder;
-    
+
     private array $statusNameCache = [];
 
     public function beforeRender()
     {
         parent::beforeRender();
-        
+
         $this->template->addFilter("statusName", function (int $statusId) {
             if (!array_key_exists($statusId, $this->statusNameCache)) {
                 /* @var $status Status */

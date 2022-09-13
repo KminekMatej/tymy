@@ -14,6 +14,7 @@ use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Event\Model\EventType;
 use Tymy\Module\Team\Manager\TeamManager;
+
 use const TEAM_DIR;
 
 /**

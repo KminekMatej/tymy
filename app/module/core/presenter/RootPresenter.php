@@ -12,6 +12,7 @@ use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\Team\Model\Team;
 use Tymy\Module\User\Manager\UserManager;
 use Tymy\Module\User\Model\User;
+
 use const ROOT_DIR;
 use const TEAM_DIR;
 

@@ -171,8 +171,8 @@ class PlayerPresenter extends SecuredPresenter
         $userId = $this->parseIdFromWebname($this->getRequest()->getParameter("player"));
 
         return $this->formFactory->createUserConfigForm(
-                [$this, "userConfigFormSuccess"], 
-                $this->getAction() == "new" ? null : $this->userManager->getById($userId),
+            [$this, "userConfigFormSuccess"],
+            $this->getAction() == "new" ? null : $this->userManager->getById($userId),
         );
     }
 

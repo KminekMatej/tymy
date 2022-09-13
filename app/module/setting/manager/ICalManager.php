@@ -16,7 +16,6 @@ use Tymy\Module\Settings\Model\ICalItem;
  */
 class ICalManager extends BaseManager
 {
-    
     protected function getClassName(): string
     {
         return ICal::class;
@@ -81,11 +80,11 @@ class ICalManager extends BaseManager
     {
         /* @var $iCal ICal */
         $iCal = $this->getById($resourceId);
-        
-        if($iCal->getUserId() !== $this->user->getId()){
+
+        if ($iCal->getUserId() !== $this->user->getId()) {
             $this->respondForbidden();
         }
-        
+
         return parent::deleteRecord($resourceId);
     }
 
@@ -99,11 +98,11 @@ class ICalManager extends BaseManager
     {
         /* @var $iCal ICal */
         $iCal = $this->getById($resourceId);
-        
-        if($iCal->getUserId() !== $this->user->getId()){
+
+        if ($iCal->getUserId() !== $this->user->getId()) {
             $this->respondForbidden();
         }
-        
+
         return $iCal;
     }
 
@@ -134,7 +133,7 @@ class ICalManager extends BaseManager
 
         return $this->getById($subResourceId, true);
     }
-    
+
     /**
      * Update statuses which events this ical shall display
      * @param int $exportId
