@@ -108,21 +108,6 @@ class PlayerPresenter extends SecuredPresenter
         $this->template->isNew = false;
     }
 
-    public function handleCreate()
-    {
-        try {
-            /* @var $createdPlayer User */
-            $createdPlayer = $this->userManager->create($bind["changes"]);
-        } catch (TymyResponse $tResp) {
-            $this->handleTymyResponse($tResp);
-            $this->redirect("this");
-        }
-
-        $this->flashMessage($this->translator->translate("common.alerts.userAdded", null, ["fullname" => $createdPlayer->getDisplayName()]), "success"); /* @phpstan-ignore-line */
-
-        $this->redirect(":Team:Player:", $createdPlayer->getWebName()); /* @phpstan-ignore-line */
-    }
-
     public function handleDelete($player)
     {
         /* @var $user User */
