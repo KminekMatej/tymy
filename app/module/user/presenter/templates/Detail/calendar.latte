@@ -1,0 +1,17 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:tymyCal
+X-WR-TIMEZONE:UTC
+TZID:UTC
+{foreach $events as $event}
+BEGIN:VEVENT
+UID:event_{$event->getId()}@{$serverName}
+CREATED:{$event->getCreated()->setTimezone($dtz)|date:'Ymd\THis\Z'}
+DTSTAMP:{$now->setTimezone($dtz)|date:'Ymd\THis\Z'}
+DTSTART;{$event->getStartTime()->setTimezone($dtz)|date:'Ymd\THis\Z'}
+DTEND;{$event->getEndTime()->setTimezone($dtz)|date:'Ymd\THis\Z'}
+SUMMARY:{$event->getCaption()}{if $event->getMyAttendance()}({$event->getMyAttendance()->getPreStatusId()|statusName}){/if}
+DESCRIPTION:{\Nette\Utils\Strings::normalize($event->getDescription())}
+END:VEVENT
+{/foreach}
+END:VCALENDAR

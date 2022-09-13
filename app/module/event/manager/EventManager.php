@@ -194,6 +194,25 @@ class EventManager extends BaseManager
     }
 
     /**
+     * Load events of user in specified interval and where users attendance is one of selected
+     * @param int $userId
+     * @param array $prestatusIds
+     * @return Event[]
+     */
+    public function getMyEventsOfPrestatus(int $userId, array $prestatusIds, DateTime $since): array
+    {
+        $selector = $this->selectUserEvents($userId)
+            ->where("end_time > ?", $since) //do not load older events than since
+            ->where(":" . Attendance::TABLE . "(event).user_id", $userId)
+            ->where(":" . Attendance::TABLE . "(event).pre_status_id IN (?)", $prestatusIds);
+        $selector->order("start_time DESC");
+        
+        $events = $selector->fetchAll();
+
+        return $this->mapAll($events);
+    }
+
+    /**
      * Get currently active events
      * @param int $userId
      * @return Event[]
