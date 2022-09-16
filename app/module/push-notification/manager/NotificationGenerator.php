@@ -3,6 +3,7 @@
 namespace Tymy\Module\PushNotification\Manager;
 
 use Nette\Security\User;
+use Nette\Utils\DateTime;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Discussion\Model\Discussion;
 use Tymy\Module\Discussion\Model\Post;
@@ -93,7 +94,7 @@ class NotificationGenerator
             $this->user->getId(),
             $this->teamManager->getTeam()->getId(),
             "{$user->getCallName()} changed event time",
-            "{$event->getCaption()} start time changed to " . $event->getStartTime()->format(BaseModel::DATETIME_CZECH_FORMAT) . "(previously " . $previousStartTime->format(BaseModel::DATETIME_CZECH_FORMAT) . ")",
+            "{$event->getCaption()} starts on " . $event->getStartTime()->format(BaseModel::DATETIME_CZECH_FORMAT) . " (previously " . $previousStartTime->format(BaseModel::DATETIME_CZECH_FORMAT) . ")",
             null,
             null,
             [
