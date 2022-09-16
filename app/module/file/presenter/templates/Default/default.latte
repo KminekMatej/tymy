@@ -4,6 +4,16 @@
 {control navbar}
 {/block}
 
+{block styles}
+{include parent}
+<link rel='stylesheet' href="{$publicPath}/resources/tablesorter/css/theme.bootstrap_4.min.css?ver={$appver}" />
+{/block}
+
+{block scripts}
+{include parent}
+<script type="text/javascript" src="{$publicPath}/resources/tablesorter/js/jquery.tablesorter.{$js}?ver={$appver}"></script>
+{/block}
+
 {block content}
 
 <div class="container-fluid container-md files">
@@ -95,13 +105,13 @@
                     </div>
 
                     <div class="table-responsive mt-3" n:snippet="file-list">
-                        <table class="table table-striped table-hover table-sm mb-0">
+                        <table class="table table-striped table-hover table-sm mb-0 tablesorter tablesorter-bootstrap">
                             <thead>
                                 <tr>
                                     <th>{_common.name} <i class="bx bx-up-arrow-alt ms-2"></i></th>
                                     <th>{_file.size}</th>
-                                    <th>{_file.uploaded}</th>
-                                    <th></th>
+                                    <th data-sorter="czechDT">{_file.uploaded}</th>
+                                    <th data-sorter="false"></th>
                                 </tr>
                             </thead>
                             <tbody>
