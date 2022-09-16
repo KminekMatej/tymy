@@ -60,7 +60,7 @@ class NotificationGenerator
             $this->user->getId(),
             $this->teamManager->getTeam()->getId(),
             "{$user->getCallName()} created new event",
-            "{$event->getCaption()} on " . $event->getStartTime()->format(BaseModel::DATETIME_CZECH_FORMAT),
+            "{$event->getCaption()} on " . $event->getStartTime()->format(BaseModel::DATETIME_CZECH_NO_SECS_FORMAT),
             null,
             null,
             [
@@ -77,7 +77,7 @@ class NotificationGenerator
             $this->user->getId(),
             $this->teamManager->getTeam()->getId(),
             "{$user->getCallName()} delete event",
-            "{$event->getCaption()} on " . $event->getStartTime()->format(BaseModel::DATETIME_CZECH_FORMAT),
+            "{$event->getCaption()} on " . $event->getStartTime()->format(BaseModel::DATETIME_CZECH_NO_SECS_FORMAT),
             null,
             null,
             [
@@ -94,7 +94,7 @@ class NotificationGenerator
             $this->user->getId(),
             $this->teamManager->getTeam()->getId(),
             "{$user->getCallName()} changed event time",
-            "{$event->getCaption()} starts on " . $event->getStartTime()->format(BaseModel::DATETIME_CZECH_FORMAT) . " (previously " . $previousStartTime->format(BaseModel::DATETIME_CZECH_FORMAT) . ")",
+            "{$event->getCaption()} starts on " . $event->getStartTime()->format(BaseModel::DATETIME_CZECH_NO_SECS_FORMAT) . " (previously " . $previousStartTime->format(BaseModel::DATETIME_CZECH_NO_SECS_FORMAT) . ")",
             null,
             null,
             [
