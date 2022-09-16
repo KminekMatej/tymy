@@ -3,10 +3,13 @@
 namespace Tymy\Module\PushNotification\Manager;
 
 use Nette\Security\User;
+use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Discussion\Model\Discussion;
 use Tymy\Module\Discussion\Model\Post;
+use Tymy\Module\Event\Model\Event;
 use Tymy\Module\PushNotification\Model\PushNotification;
 use Tymy\Module\Team\Manager\TeamManager;
+use Tymy\Module\User\Manager\UserManager;
 
 /**
  * Description of NotificationGenerator
@@ -16,14 +19,19 @@ use Tymy\Module\Team\Manager\TeamManager;
 class NotificationGenerator
 {
     public const CREATE_POST = "create-post";
+    public const CREATE_EVENT = "create-event";
+    public const DELETE_EVENT = "delete-event";
+    public const UPDATE_EVENT_TIME = "update-event-time";
 
     private User $user;
     private TeamManager $teamManager;
+    private UserManager $userManager;
 
-    public function __construct(User $user, TeamManager $teamManager)
+    public function __construct(User $user, TeamManager $teamManager, UserManager $userManager)
     {
         $this->user = $user;
         $this->teamManager = $teamManager;
+        $this->userManager = $userManager;
     }
 
     public function createPost(Discussion $discussion, Post $post)
@@ -38,6 +46,57 @@ class NotificationGenerator
             null,
             [
                 "discussionId" => $discussion->getId()
+            ]
+        );
+    }
+
+    public function createEvent(Event $event)
+    {
+        $user = $this->userManager->getById($this->user->getId());
+
+        return new PushNotification(
+            self::CREATE_EVENT,
+            $this->user->getId(),
+            $this->teamManager->getTeam()->getId(),
+            "{$user->getCallName()} created new event",
+            "{$event->getCaption()} on " . $event->getStartTime()->format(BaseModel::DATETIME_CZECH_FORMAT),
+            null,
+            null,
+            [
+            ]
+        );
+    }
+
+    public function deleteEvent(Event $event)
+    {
+        $user = $this->userManager->getById($this->user->getId());
+
+        return new PushNotification(
+            self::DELETE_EVENT,
+            $this->user->getId(),
+            $this->teamManager->getTeam()->getId(),
+            "{$user->getCallName()} delete event",
+            "{$event->getCaption()} on " . $event->getStartTime()->format(BaseModel::DATETIME_CZECH_FORMAT),
+            null,
+            null,
+            [
+            ]
+        );
+    }
+
+    public function changeEventTime(Event $event, DateTime $previousStartTime)
+    {
+        $user = $this->userManager->getById($this->user->getId());
+
+        return new PushNotification(
+            self::UPDATE_EVENT_TIME,
+            $this->user->getId(),
+            $this->teamManager->getTeam()->getId(),
+            "{$user->getCallName()} changed event time",
+            "{$event->getCaption()} start time changed to " . $event->getStartTime()->format(BaseModel::DATETIME_CZECH_FORMAT) . "(previously " . $previousStartTime->format(BaseModel::DATETIME_CZECH_FORMAT) . ")",
+            null,
+            null,
+            [
             ]
         );
     }

@@ -21,6 +21,8 @@ use Tymy\Module\Event\Model\EventType;
 use Tymy\Module\Permission\Manager\PermissionManager;
 use Tymy\Module\Permission\Model\Permission;
 use Tymy\Module\Permission\Model\Privilege;
+use Tymy\Module\PushNotification\Manager\NotificationGenerator;
+use Tymy\Module\PushNotification\Manager\PushNotificationManager;
 use Tymy\Module\User\Manager\UserManager;
 
 /**
@@ -36,16 +38,20 @@ class EventManager extends BaseManager
     private AttendanceManager $attendanceManager;
     private EventTypeManager $eventTypeManager;
     private UserManager $userManager;
+    private NotificationGenerator $notificationGenerator;
+    private PushNotificationManager $pushNotificationManager;
     private DateTime $now;
     private ?Event $event = null;
 
-    public function __construct(ManagerFactory $managerFactory, PermissionManager $permissionManager, UserManager $userManager, AttendanceManager $attendanceManager, EventTypeManager $eventTypeManager)
+    public function __construct(ManagerFactory $managerFactory, PermissionManager $permissionManager, UserManager $userManager, AttendanceManager $attendanceManager, EventTypeManager $eventTypeManager, NotificationGenerator $notificationGenerator, PushNotificationManager $pushNotificationManager)
     {
         parent::__construct($managerFactory);
         $this->permissionManager = $permissionManager;
         $this->eventTypeManager = $eventTypeManager;
         $this->userManager = $userManager;
         $this->attendanceManager = $attendanceManager;
+        $this->notificationGenerator = $notificationGenerator;
+        $this->pushNotificationManager = $pushNotificationManager;
         $this->now = new DateTime();
     }
 
@@ -439,8 +445,12 @@ class EventManager extends BaseManager
         $this->allowCreate($data);
 
         $createdRow = parent::createByArray($data);
+        $createdEvent = $this->getById($createdRow->id);
 
-        return $this->getById($createdRow->id);
+        $notification = $this->notificationGenerator->createEvent($createdEvent);
+        $this->pushNotificationManager->notifyUsers($notification, $this->getAllowedReaders($createdEvent));
+
+        return $createdEvent;
     }
 
     public function delete(int $resourceId, ?int $subResourceId = null): int
@@ -448,6 +458,9 @@ class EventManager extends BaseManager
         $this->allowDelete($resourceId);
 
         $deleted = parent::deleteRecord($resourceId);
+
+        $notification = $this->notificationGenerator->deleteEvent($this->event);
+        $this->pushNotificationManager->notifyUsers($notification, $this->getAllowedReaders($this->event));
 
         return $deleted ? $resourceId : null;
     }
@@ -465,7 +478,16 @@ class EventManager extends BaseManager
 
         parent::updateByArray($resourceId, $data);
 
-        return $this->getById($resourceId);
+        $oldStartTime = $this->event->getStartTime();
+
+        $this->event = $this->getById($resourceId);
+
+        if ($this->event->getStartTime()->format(BaseModel::DATETIME_ENG_FORMAT) !== $oldStartTime->format(BaseModel::DATETIME_ENG_FORMAT)) {
+            $notification = $this->notificationGenerator->changeEventTime($this->event, $this->event->getStartTime());
+            $this->pushNotificationManager->notifyUsers($notification, $this->getAllowedReaders($this->event));
+        }
+
+        return $this->event;
     }
 
     /**
