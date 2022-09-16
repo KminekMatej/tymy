@@ -12,7 +12,6 @@ use Tymy\Module\Core\Router\RouteList;
  */
 class Router implements RouterInterface
 {
-
     public function addRoutes(RouteList &$router): void
     {
         //add route to be able to server ical calendars on the same url like in previous version
