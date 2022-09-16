@@ -60,7 +60,7 @@ function isPushNotificationSupported() {
  * 
  */
 function registerServiceWorker() {
-    return navigator.serviceWorker.register('/service-worker.js')
+    return navigator.serviceWorker.register('/public/service-worker.js')
             .then(function (registration) {
                 console.log('Service worker successfully registered with scope ' + registration.scope);
                 return registration;
