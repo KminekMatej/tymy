@@ -148,7 +148,7 @@ class EventPresenter extends SettingBasePresenter
 
             $createdEvents = [];
             foreach ($items as $item) {
-                $createdEvents[] = $this->eventManager->createByArray($item);
+                $createdEvents[] = $this->eventManager->create($item);
             }
         } catch (TymyResponse $tResp) {
             $this->handleTymyResponse($tResp);
