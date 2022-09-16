@@ -15,6 +15,7 @@
 /tests/test_XDEV_PRESENTERS.sh
 /vendor/
 user_pics
+download
 www/user_pics
 /local/*.neon
 /config/debug.neon
