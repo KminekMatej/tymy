@@ -386,7 +386,9 @@ class FormFactory
             $lastName->setValue($user->getLastName())->setHtmlAttribute("data-value", $user->getLastName());
             $phone->setValue($user->getPhone())->setHtmlAttribute("data-value", $user->getPhone());
             $email->setValue($user->getEmail())->setHtmlAttribute("data-value", $user->getEmail());
-            $birthDate->setValue($user->getBirthDate()->format(BaseModel::DATE_ENG_FORMAT))->setHtmlAttribute("data-value", $user->getBirthDate()->format(BaseModel::DATE_ENG_FORMAT));
+            if ($user->getBirthDate()) {
+                $birthDate->setValue($user->getBirthDate()->format(BaseModel::DATE_ENG_FORMAT))->setHtmlAttribute("data-value", $user->getBirthDate()->format(BaseModel::DATE_ENG_FORMAT));
+            }
             $nameDayMonth->setValue($user->getNameDayMonth())->setHtmlAttribute("data-value", $user->getNameDayMonth());
             $nameDayDay->setValue($user->getNameDayDay())->setHtmlAttribute("data-value", $user->getNameDayDay());
             $language->setValue($user->getLanguage())->setHtmlAttribute("data-value", $user->getLanguage());
