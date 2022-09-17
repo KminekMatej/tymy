@@ -342,7 +342,7 @@ class FormFactory
             User::ROLE_ATTENDANCE => $this->translator->translate("team.attendanceAdmin"),
         ];
 
-        $months = [];
+        $months = [0 => $this->translator->translate("common.choose") . " ↓"];
         for ($m = 1; $m <= 12; $m++) {
             $months[$m] = $this->translator->translate("common.months." . strtolower(DateTime::createFromFormat('!m', "$m")->format("F")));
         }
