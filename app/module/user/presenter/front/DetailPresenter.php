@@ -52,7 +52,8 @@ class DetailPresenter extends BasePresenter
         $iCal = $this->iCalManager->getByUserId($resource);
 
         if (empty($iCal) || $iCal->getHash() !== $hash) {
-            $this->responder->E404_NOT_FOUND("Calendar");
+            $this->getHttpResponse()->setCode(404);
+            $this->sendJson("Calendar not found");
         }
 
         $this->template->iCal = $iCal;
