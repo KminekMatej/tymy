@@ -41,7 +41,7 @@ class Bootstrap
 
         $configurator->enableTracy($autotestMode ? TEAM_DIR . '/log_autotest' : TEAM_DIR . '/log');
 
-        $configurator->setTempDirectory($tmpDir);
+        $configurator->setTempDirectory($autotestMode ? TEAM_DIR . '/temp_autotest' : TEAM_DIR . '/temp');
 
         $configurator->createRobotLoader()
             ->addDirectory(__DIR__)
