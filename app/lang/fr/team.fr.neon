@@ -72,3 +72,4 @@ alerts:
     loginForbidden: "Joueur n'est pas autorisé à se connecter"
     loginNotApproved: "Joueur n'a pas encore été approuvé par les administrateurs"
     authenticationFailed: Niezgodność loginu lub hasła
+    loginExists: Ce login existe déjà

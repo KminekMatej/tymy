@@ -72,3 +72,4 @@ alerts:
     loginForbidden: "User isn't allowed to sign in"
     loginNotApproved: User has not yet been approved by administrators
     authenticationFailed: Login or password mismatch
+    loginExists: This login already exists

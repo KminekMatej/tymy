@@ -72,4 +72,5 @@ alerts:
     registrationDenied: Byl Vám zamítnut přístup do aplikace %s
     loginForbidden: Uživatel nemá povolené přihlášení
     loginNotApproved: Uživatel nebyl doposud schválen administrátory
-    authenticationFailed: Login či heslo jsou chybné
+    authenticationFailed: Uživatelské jméno či heslo jsou chybné
+    loginExists: Takové uživatelské jméno již existuje

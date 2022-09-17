@@ -360,7 +360,7 @@ class FormFactory
         $callName = $form->addText("callName", $this->translator->translate("team.callName"));
         $canEditCallName = $form->addCheckbox("canEditCallName", $this->translator->translate("team.canEditCallName"));
         $login = $form->addText("login", $this->translator->translate("team.login"))
-            ->addRule($form::IS_NOT_IN, $this->translator->translate("team.errors.loginExists"), $this->userManager->getExistingLoginsExcept($user ? $user->getLogin() : null))
+            ->addRule($form::IS_NOT_IN, $this->translator->translate("team.alerts.loginExists"), $this->userManager->getExistingLoginsExcept($user ? $user->getLogin() : null))
             ->addRule($form::MIN_LENGTH, null, 3)
             ->addRule($form::MAX_LENGTH, null, 20);
 

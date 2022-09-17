@@ -72,3 +72,4 @@ alerts:
     loginForbidden: Użytkownik nie może się zalogować
     loginNotApproved: Użytkownik nie został jeszcze zatwierdzony przez administratorów
     authenticationFailed: Niezgodność loginu lub hasła
+    loginExists: Ten login już istnieje

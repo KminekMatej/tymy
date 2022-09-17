@@ -321,6 +321,19 @@ class UserManager extends BaseManager
     }
 
     /**
+     * Load logins that already exists - for form validation
+     * @return string[]
+     */
+    public function getExistingLoginsExcept(?string $exceptLogin = null): array
+    {
+        $selector = $this->database->table($this->getTable());
+        if ($exceptLogin) {
+            $selector->where("user_name != ?", $exceptLogin);
+        }
+        return $selector->fetchPairs(null, "user_name");
+    }
+
+    /**
      * Check if user limit has been reached
      *
      * @param string $login
