@@ -28,11 +28,6 @@ class Bootstrap
 
         $autotestMode = getenv("AUTOTEST") || isset($_GET["AUTOTEST"]) ? true : false;
 
-        $tmpDir = $autotestMode ? TEAM_DIR . '/temp_autotest' : TEAM_DIR . '/temp';
-        if (!file_exists($tmpDir . "/sessions")) {
-            mkdir($tmpDir . "/sessions");
-        }
-
         $configurator = new Configurator();
 
         try {   // debug.local.neon contains either true, to generally enable debug, or array of IP addresses

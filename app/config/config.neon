@@ -13,8 +13,6 @@ http:
 
 session:
         expiration: 14 days
-        savePath: "%tempDir%/sessions"
-
 
 services:
         routerFactory: Tymy\RouterFactory
