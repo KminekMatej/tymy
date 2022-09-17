@@ -13,6 +13,7 @@ http:
 
 session:
         expiration: 14 days
+        savePath: "%tempDir%/sessions"
 
 
 services:
