@@ -389,8 +389,14 @@ class FormFactory
             if ($user->getBirthDate()) {
                 $birthDate->setValue($user->getBirthDate()->format(BaseModel::DATE_ENG_FORMAT))->setHtmlAttribute("data-value", $user->getBirthDate()->format(BaseModel::DATE_ENG_FORMAT));
             }
-            $nameDayMonth->setValue($user->getNameDayMonth())->setHtmlAttribute("data-value", $user->getNameDayMonth());
-            $nameDayDay->setValue($user->getNameDayDay())->setHtmlAttribute("data-value", $user->getNameDayDay());
+            if ($user->getNameDayMonth() > 0 && $user->getNameDayMonth() <= 12) {
+                $nameDayMonth->setValue($user->getNameDayMonth())->setHtmlAttribute("data-value", $user->getNameDayMonth());
+            }
+
+            if ($user->getNameDayDay() > 0 && $user->getNameDayDay() <= 31) {
+                $nameDayDay->setValue($user->getNameDayDay())->setHtmlAttribute("data-value", $user->getNameDayDay());
+            }
+
             $language->setValue($user->getLanguage())->setHtmlAttribute("data-value", $user->getLanguage());
 
             $callName->setValue($user->getCallName())->setHtmlAttribute("data-value", $user->getCallName());
