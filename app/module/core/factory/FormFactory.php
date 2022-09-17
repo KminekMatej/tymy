@@ -360,11 +360,12 @@ class FormFactory
         $callName = $form->addText("callName", $this->translator->translate("team.callName"));
         $canEditCallName = $form->addCheckbox("canEditCallName", $this->translator->translate("team.canEditCallName"));
         $login = $form->addText("login", $this->translator->translate("team.login"))
+            ->addRule($form::IS_NOT_IN, $this->translator->translate("team.errors.loginExists"), $this->userManager->getExistingLoginsExcept($user ? $user->getLogin() : null))
             ->addRule($form::MIN_LENGTH, null, 3)
             ->addRule($form::MAX_LENGTH, null, 20);
 
         $password = $form->addPassword("password", $this->translator->translate("team.password"));
-        $newPasswordAgain = $form->addPassword("newPasswordAgain", $this->translator->translate("team.newPasswordAgain"))->addRule($form::EQUAL, "xxx", $form['password']);
+        $newPasswordAgain = $form->addPassword("newPasswordAgain", $this->translator->translate("team.newPasswordAgain"))->addRule($form::EQUAL, $this->translator->translate("common.errors.valueInvalid"), $form['password']);
         $canLogin = $form->addCheckbox("canLogin");
 
         $skin = $form->addSelect("skin", "Skin", $this->teamManager->allSkins);
@@ -414,7 +415,7 @@ class FormFactory
             $city->setValue($user->getCity())->setHtmlAttribute("data-value", $user->getCity());
             $zipCode->setValue($user->getZipCode())->setHtmlAttribute("data-value", $user->getZipCode());
 
-            $roles->setValue($user->getRoles());
+            $roles->setValue(array_intersect($user->getRoles(), $rolesList));
         }
 
         foreach ($form->controls as $control) {
