@@ -3,6 +3,11 @@
 namespace Tymy\Module\User\Presenter\Front;
 
 use DateTimeZone;
+use Nette\Application\Responses\CallbackResponse;
+use Nette\Application\UI\Template;
+use Nette\Http\IRequest;
+use Nette\Http\Response;
+use Nette\Utils\Arrays;
 use Nette\Utils\DateTime;
 use Tymy\Module\Attendance\Manager\StatusManager;
 use Tymy\Module\Attendance\Model\Status;
@@ -62,6 +67,35 @@ class DetailPresenter extends BasePresenter
         $this->template->now = (new DateTime())->setTimezone($this->template->dtz);
         $this->template->events = $this->eventManager->getEventsOfPrestatus($resource, $iCal->getStatusIds(), new DateTime("-90 days"));
 
-        $this->getHttpResponse()->setContentType('text/calendar', 'UTF-8');
+        $this->sendAsIcal($this->template);
+    }
+
+    /**
+     * Send response in iCal formatting, with respect to some ical specific formatting
+     * @param Template $template
+     * @return never
+     */
+    private function sendAsIcal(Template $template)
+    {
+        $files = $this->formatTemplateFiles();
+        foreach ($files as $file) {
+            if (is_file($file)) {
+                $template->setFile($file);
+                break;
+            }
+        }
+
+        if (!$template->getFile()) {
+            $file = strtr(Arrays::first($files), '/', DIRECTORY_SEPARATOR);
+            $this->error("Page not found. Missing template '$file'.");
+        }
+
+        $this->sendResponse(
+            new CallbackResponse(function (IRequest $request, Response $response) use ($template): void {
+                    $response->setContentType('text/calendar');
+
+                    echo str_replace(PHP_EOL, "\r\n", $template->renderToString());
+                })
+        );
     }
 }
