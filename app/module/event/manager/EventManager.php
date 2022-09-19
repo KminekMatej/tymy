@@ -210,10 +210,10 @@ class EventManager extends BaseManager
         $selector = $this->selectUserEvents($userId)
             ->select($this->getTable() . ".*")
             ->select(":" . Attendance::TABLE . "(event).pre_status_id")
+            ->joinWhere(":" . Attendance::TABLE . "(event)", ":" . Attendance::TABLE . "(event).user_id = ?", $userId)
             ->where("end_time > ?", $since) //do not load older events than since
-            ->where(":" . Attendance::TABLE . "(event).user_id OR :" . Attendance::TABLE . "(event).user_id IS NULL", $userId)
             ->where(":" . Attendance::TABLE . "(event).pre_status_id IN (?) OR :" . Attendance::TABLE . "(event).pre_status_id IS NULL", $prestatusIds)
-            ->order("start_time DESC");
+            ->order("start_time DESC")->group($this->getTable() . ".id");
 
         return $selector->fetchAll();
     }

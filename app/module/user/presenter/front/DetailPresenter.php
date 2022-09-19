@@ -9,6 +9,7 @@ use Nette\Http\IRequest;
 use Nette\Http\Response;
 use Nette\Utils\Arrays;
 use Nette\Utils\DateTime;
+use Nette\Utils\Strings;
 use Tymy\Module\Attendance\Manager\StatusManager;
 use Tymy\Module\Attendance\Model\Status;
 use Tymy\Module\Core\Manager\Responder;
@@ -49,6 +50,15 @@ class DetailPresenter extends BasePresenter
             }
 
             return $this->statusNameCache[$statusId];
+        });
+
+        $this->template->addFilter("splitDescription", function (?string $description = null) {
+            if (empty($description)) {
+                return $description;
+            }
+
+            $separatedParts = mb_str_split(str_replace(["\r\n", "\n", ";", ","], ["\\n", "\\n", "\;", "\,"], $description), 62);
+            return Strings::normalize(join(PHP_EOL . " ", $separatedParts));
         });
     }
 
