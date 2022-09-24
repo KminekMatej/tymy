@@ -57,8 +57,8 @@ class CURLHelper
     {
         $handle = curl_init($url);
         curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($handle, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
-        curl_setopt($handle, CURLOPT_REFERER, $_SERVER['HTTP_REFERER']);
+        curl_setopt($handle, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT'] ?? "Tymy.cz php application");
+        curl_setopt($handle, CURLOPT_REFERER, $_SERVER['HTTP_REFERER'] ?? "localhost");
         return $handle;
     }
 }
