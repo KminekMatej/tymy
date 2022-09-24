@@ -13,10 +13,10 @@ use Nette\InvalidArgumentException;
 use Nette\Security\User as UserNette;
 use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
-use Tracy\Debugger;
 use Tymy\Module\Authentication\Manager\AuthenticationManager;
 use Tymy\Module\Core\Exception\MissingInputException;
 use Tymy\Module\Core\Factory\ManagerFactory;
+use Tymy\Module\Core\Helper\CURLHelper;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Service\MailService;
@@ -27,6 +27,8 @@ use Tymy\Module\Team\Model\Team;
 use Tymy\Module\User\Mapper\UserMapper;
 use Tymy\Module\User\Model\SimpleUser;
 use Tymy\Module\User\Model\User;
+
+use const TEAM_DIR;
 
 /**
  * Description of UserManager
@@ -356,7 +358,12 @@ class UserManager extends BaseManager
      */
     public function checkCredentials(Team $team, string $username, string $password): ?int
     {
-        $userId = file_get_contents("https://tymy.cz/api/check-credentials?username={$username}&teamId={$team->getId()}&password={$password}");    //this request is accessible from localhost only
+        $userId = CURLHelper::get("https://tymy.cz/api/check-credentials?" . http_build_query([
+                    "username" => $username,
+                    "teamId" => $team->getId(),
+                    "password" => $password,
+        ]));    //this request is accessible from localhost only
+
         return $userId && $userId !== "null" ? $userId : null;
     }
 
