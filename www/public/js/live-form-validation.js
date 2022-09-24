@@ -143,7 +143,7 @@
             event = event || window.event;
             Nette.validateControl(event.target ? event.target : event.srcElement);
             if (typeof options.onValidate === 'function') {
-                options.onValidate(event);
+                options.onValidate(event.target.closest("form"));
             }
         };
 
@@ -1247,6 +1247,9 @@
                         LiveForm.setFormProperty(form, "onLoadValidation", true);
                         Nette.validateForm(form);
                         LiveForm.setFormProperty(form, "onLoadValidation", false);
+                        if (typeof LiveForm.options.onValidate === 'function') {
+                            LiveForm.options.onValidate(form);
+                        }
                     }
 
                     break;

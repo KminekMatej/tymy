@@ -24,10 +24,10 @@
         controlErrorClass: 'is-invalid',
         controlValidClass: 'is-valid',
         wait: 300,
-        onValidate: function (event) {
-            var form = $(event.target.closest("form"));
+        onValidate: function (form) {
             var completeErrCount = 0;
-            form.find("DIV.tab-pane").each(function () {
+            var jqForm  = $(form);
+            jqForm.find("DIV.tab-pane").each(function () {
                 var errorCount = $(this).find(".is-invalid").length;
                 var heading = $("A[data-toggle='tab'][href='#" + $(this).attr("id") + "']");
                 var badge = heading.find("SPAN.badge-pill");
@@ -40,7 +40,7 @@
                 completeErrCount += errorCount;
             });
             
-            var saveBtn = form.find("BUTTON[type='submit']");
+            var saveBtn = jqForm.find("BUTTON[type='submit']");
             if (completeErrCount) {
                 saveBtn.removeClass("btn-primary");
                 saveBtn.addClass("btn-outline-secondary");
