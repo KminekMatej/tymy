@@ -63,6 +63,7 @@ hideDiscDesc: Ukryj opis dyskusji
 approveAsPlayer: Zatwierdź jako gracz
 errors:
     imgFileCorrupted: "Plik nie jest obrazkiem, lub jest uszkodzony"
+    passwordMismatch: Hasło różni się
 alerts:
     signOffNeeded: Language changed - please logout & login for language to change
     registrationApprovedSubject: Rejestracja do %s zatwierdzona

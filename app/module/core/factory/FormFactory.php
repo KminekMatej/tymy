@@ -365,7 +365,7 @@ class FormFactory
             ->addRule($form::MAX_LENGTH, null, 20);
 
         $password = $form->addPassword("password", $this->translator->translate("team.password"));
-        $newPasswordAgain = $form->addPassword("newPasswordAgain", $this->translator->translate("team.newPasswordAgain"))->addRule($form::EQUAL, $this->translator->translate("common.errors.valueInvalid"), $form['password']);
+        $newPasswordAgain = $form->addPassword("newPasswordAgain", $this->translator->translate("team.newPasswordAgain"))->addRule($form::EQUAL, $this->translator->translate("team.errors.passwordMismatch"), $form['password']);
         $canLogin = $form->addCheckbox("canLogin");
 
         $skin = $form->addSelect("skin", "Skin", $this->teamManager->allSkins);
@@ -416,6 +416,10 @@ class FormFactory
             $zipCode->setValue($user->getZipCode())->setHtmlAttribute("data-value", $user->getZipCode());
 
             $roles->setValue(array_intersect($user->getRoles(), $rolesList));
+        } else {    //creating new user, login and password are mandatory as well
+            $login->setRequired();
+            $password->setRequired();
+            $newPasswordAgain->setRequired();
         }
 
         foreach ($form->controls as $control) {

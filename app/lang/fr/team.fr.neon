@@ -63,6 +63,7 @@ hideDiscDesc: Masquer la description de la discussion
 approveAsPlayer: Approuver en tant que joueur
 errors:
     imgFileCorrupted: "Le fichier n'est pas une image ou il est endommagé"
+    passwordMismatch: Non concordance des mots de passe
 alerts:
     signOffNeeded: Language changed - please logout & login for language to change
     registrationApprovedSubject: Inscription à %s approuvée

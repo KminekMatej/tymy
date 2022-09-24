@@ -64,6 +64,7 @@ hideDiscDesc: Skrýt popisky diskusí
 approveAsPlayer: Schválit jako hráče
 errors:
     imgFileCorrupted: "Soubor není obrázek, nebo je poškozený"
+    passwordMismatch: Hesla se neshodují
 alerts:
     signOffNeeded: Došlo ke změně jazyka - změna se projeví až po přihlášení a odhlášení
     registrationApprovedSubject: Registrace do %s povolena
