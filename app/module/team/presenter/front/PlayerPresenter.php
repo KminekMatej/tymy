@@ -176,7 +176,7 @@ class PlayerPresenter extends SecuredPresenter
             } else {
                 $createdUser = $this->userManager->create((array) $values);
                 $this->flashMessage($this->translator->translate("common.alerts.userAdded", null, ["fullname" => $createdUser->getDisplayName()]), "success");
-                $this->redirect(':Team:');
+                $this->redirect(':Team:Default:');
             }
         } catch (TymyResponse $tResp) {
             $this->handleTymyResponse($tResp);
