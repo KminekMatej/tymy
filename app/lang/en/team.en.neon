@@ -46,7 +46,7 @@ city: City
 zipCode: Postal
 hasNamedayToday: %name% celebrates nameday today
 hasBirthdayToday: %name% celebrates %year% birthday today
-hasNamedayTommorow: %name% celebrates nameday tommorow
+hasNamedayTommorow: %name% celebrates nameday tommorow  
 hasBirthdayTommorow: %name% celebrates %year% birthday tommorow
 currentlyOnline: Online
 lastLogin: Last login

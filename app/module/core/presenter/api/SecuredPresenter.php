@@ -25,7 +25,7 @@ class SecuredPresenter extends BasePresenter
             $this->session->start();
             $this->user->refreshStorage();
         }
-       
+
         if (!isset($this->user) || !$this->user->isLoggedIn()) {
             $this->respondUnauthorized();
         }

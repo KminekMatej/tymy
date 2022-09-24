@@ -105,7 +105,7 @@ class DetailPresenter extends BasePresenter
                     $response->setContentType('text/calendar');
 
                     echo str_replace(PHP_EOL, "\r\n", $template->renderToString());
-                })
+            })
         );
     }
 }
