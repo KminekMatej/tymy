@@ -76,7 +76,7 @@ alerts:
     authenticationFailed: Uživatelské jméno či heslo jsou chybné
     loginExists: Takové uživatelské jméno již existuje
     changingRolesForbidden: Změna rolí není povolena
-    changingCanEditCallnameForbidden: Změna povolení editace není povolena
+    changingCanEditCallnameForbidden: Změna Editovatelné uživatelem není povolena
     changingStatusForbidden: Změna statusu není povolena
     changingLoginForbidden: Změna uživatelského jména není povolena
     editingCallNameForbidden: Změna zobrazovaného jména není povolena
