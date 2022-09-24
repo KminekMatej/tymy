@@ -44,10 +44,10 @@ jerseyNumber: Jersey number
 street: Street
 city: City
 zipCode: Postal
-hasNamedayToday: %name% celebrates his nameday today
-hasBirthdayToday: %name% celebrates his %year% birthday today
-hasNamedayTommorow: %name% celebrates his nameday tommorow
-hasBirthdayTommorow: %name% celebrates his %year% birthday tommorow
+hasNamedayToday: %name% celebrates nameday today
+hasBirthdayToday: %name% celebrates %year% birthday today
+hasNamedayTommorow: %name% celebrates nameday tommorow
+hasBirthdayTommorow: %name% celebrates %year% birthday tommorow
 currentlyOnline: Online
 lastLogin: Last login
 nobodyIsOnline: Nobody online
