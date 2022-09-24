@@ -56,3 +56,7 @@ input[type='checkbox'].lfv-diff + .custom-control-label:before {
         text-align: center;
     }
 }
+
+BUTTON.btn:not(:disabled):not(.disabled), BUTTON.dropdown-item:not(:disabled):not(.disabled), A.btn:not(:disabled):not(.disabled), INPUT.btn:not(:disabled):not(.disabled){
+    cursor: pointer;
+}

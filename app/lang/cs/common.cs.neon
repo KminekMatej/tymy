@@ -97,3 +97,4 @@ months:
 errors:
     valueInvalid: Chybně zadaná hodnota
     teamValueRequired: Váš tým vyžaduje vyplnit toto pole
+    savingNotAllowedErrors: Nelze uložit - formulář obsahuje chyby

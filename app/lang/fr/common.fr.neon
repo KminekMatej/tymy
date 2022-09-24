@@ -95,3 +95,4 @@ months:
 errors:
     valueInvalid: Valeur invalide saisie
     teamValueRequired: Votre équipe a besoin de ce champ
+    savingNotAllowedErrors: "Impossible d'enregistrer - le formulaire contient des erreurs"

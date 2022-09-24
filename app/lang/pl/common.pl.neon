@@ -97,3 +97,4 @@ months:
 errors:
     valueInvalid: Wprowadzono nieprawidłową wartość
     teamValueRequired: Twój zespół wymaga tego pola
+    savingNotAllowedErrors: Nie można zapisać - formularz zawiera błędy

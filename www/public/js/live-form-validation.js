@@ -82,7 +82,10 @@
             wait: false,
 
             // vertical screen offset in px to scroll after focusing element with error (useful when using fixed navbar menu which may otherwise obscure the element in focus); or use "false" for default behavior
-            focusScreenOffsetY: false
+            focusScreenOffsetY: false,
+
+            // function to trigger after everything has been validated
+            onValidate: false
         },
 
         forms: {}
@@ -134,9 +137,14 @@
         // Remember we initialized this element so we won't do it again
         el.setAttribute('data-lfv-initialized', 'true');
 
+        let options = this.options;
+        
         var handler = function (event) {
             event = event || window.event;
             Nette.validateControl(event.target ? event.target : event.srcElement);
+            if (typeof options.onValidate === 'function') {
+                options.onValidate(event);
+            }
         };
 
         var self = this;
