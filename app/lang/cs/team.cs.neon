@@ -75,3 +75,14 @@ alerts:
     loginNotApproved: Uživatel nebyl doposud schválen administrátory
     authenticationFailed: Uživatelské jméno či heslo jsou chybné
     loginExists: Takové uživatelské jméno již existuje
+    changingRolesForbidden: Změna rolí není povolena
+    changingCanEditCallnameForbidden: Změna povolení editace není povolena
+    changingStatusForbidden: Změna statusu není povolena
+    changingLoginForbidden: Změna uživatelského jména není povolena
+    editingCallNameForbidden: Změna zobrazovaného jména není povolena
+    emailExists: Tento e-mail už existuje
+    userQuotaReached: Dosažen limit počtu uživatelů systému
+    registrationsLimitReached: Příliš mnoho čekajících neschválených registrací - nelze registrovat dalšího člena
+    passwordTooShort: Heslo je příliš krátké
+    emailFailure: Chybný formát e-mailu
+    usernameFailure: Uživatelské jméno musí mít alespoň 3 a nejvíce 20 znaků

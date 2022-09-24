@@ -523,22 +523,22 @@ class UserManager extends BaseManager
         }
 
         if (strlen($data["password"]) < 3) {
-            $this->respondBadRequest("Password failure");
+            $this->respondBadRequest($this->translator->translate("team.alerts.passwordTooShort"));
         }
         if (!preg_match(BaseModel::MAIL_REGEX, $data["email"])) {
-            $this->respondBadRequest("E-mail failure");
+            $this->respondBadRequest($this->translator->translate("team.alerts.emailFailure"));
         }
         if (strlen($data["login"]) < 3 || strlen($data["login"]) > 20) {
-            $this->respondBadRequest("Username failure");
+            $this->respondBadRequest($this->translator->translate("team.alerts.usernameFailure"));
         }
         if ($this->loginExists($data["login"])) {
-            $this->respondBadRequest("Username taken");
+            $this->respondBadRequest($this->translator->translate("team.alerts.loginExists"));
         }
         if ($this->limitUsersReached()) {
-            $this->respondForbidden("User quota limit reached");
+            $this->respondForbidden($this->translator->translate("team.alerts.userQuotaReached"));
         }
         if ($this->getIdByEmail($data["email"])) {
-            $this->respondBadRequest("E-mail taken");
+            $this->respondBadRequest($this->translator->translate("team.alerts.emailExists"));
         }
     }
 
@@ -577,32 +577,32 @@ class UserManager extends BaseManager
         if (!$canEditFull) {
             //editing myself - cannot edit roles, canEditCallName, status, login and callName (when user cannot edit callName)
             if (isset($data["roles"]) && $data["roles"] !== $this->userModel->getRoles()) {
-                $this->responder->E403_FORBIDDEN("Changing roles is forbidden");
+                $this->responder->E403_FORBIDDEN($this->translator->translate("team.alerts.changingRolesForbidden"));
             }
             if (isset($data["canEditCallName"]) && $data["canEditCallName"] !== $this->userModel->getCanEditCallName()) {
-                $this->responder->E403_FORBIDDEN("Changing canEditCallName is forbidden");
+                $this->responder->E403_FORBIDDEN($this->translator->translate("team.alerts.changingCanEditCallnameForbidden"));
             }
             if (isset($data["status"]) && $data["status"] !== $this->userModel->getStatus()) {
-                $this->responder->E403_FORBIDDEN("Changing status is forbidden");
+                $this->responder->E403_FORBIDDEN($this->translator->translate("team.alerts.changingStatusForbidden"));
             }
             if (isset($data["login"]) && $data["login"] !== $this->userModel->getLogin()) {
-                $this->responder->E403_FORBIDDEN("Changing login is forbidden");
+                $this->responder->E403_FORBIDDEN($this->translator->translate("team.alerts.changingLoginForbidden"));
             }
-            if (isset($data["callName"]) && !$this->userModel->getCanEditCallName()) {
-                $this->responder->E403_FORBIDDEN("Editing call name forbidden");
+            if (isset($data["callName"]) && $data["callName"] !== $this->userModel->getCallName() && !$this->userModel->getCanEditCallName()) {
+                $this->responder->E403_FORBIDDEN($this->translator->translate("team.alerts.editingCallNameForbidden"));
             }
         }
 
         if (array_key_exists("email", $data)) {
             $userIdWithThatEmail = $this->getIdByEmail($data["email"]);
             if ($userIdWithThatEmail && $userIdWithThatEmail !== $this->userModel->getId()) { //changing mail to already existing one
-                $this->responder->E403_FORBIDDEN("This e-mail already exists");
+                $this->responder->E403_FORBIDDEN($this->translator->translate("team.alerts.emailExists"));
             }
         }
 
         //changing user status from deleted?
         if ($this->userModel->getStatus() == "DELETED" && array_key_exists("status", $data) && $data["status"] !== "DELETED" && $this->limitUsersReached()) {
-            $this->respondForbidden("User quota limit reached");
+            $this->respondForbidden($this->translator->translate("team.alerts.userQuotaReached"));
         }
 
         //surge that user with ID 1 will always stay Admin
@@ -633,30 +633,25 @@ class UserManager extends BaseManager
         }
 
         if ($this->loginExists($data["login"])) {
-            throw new InvalidArgumentException("Username taken");
+            throw new InvalidArgumentException($this->translator->translate("team.alerts.loginExists"));
         }
-
         if (count($inits) > 3) {
-            throw new InvalidArgumentException("Registrations limit reached");
+            throw new InvalidArgumentException($this->translator->translate("team.alerts.registrationsLimitReached"));
         }
-
         if (strlen($data["password"]) < 3) {
-            throw new InvalidArgumentException("Password failure");
+            throw new InvalidArgumentException($this->translator->translate("team.alerts.passwordTooShort"));
         }
         if (!preg_match(BaseModel::MAIL_REGEX, $data["email"])) {
-            throw new InvalidArgumentException("E-mail failure");
+            throw new InvalidArgumentException($this->translator->translate("team.alerts.emailFailure"));
         }
         if (strlen($data["login"]) < 3 || strlen($data["login"]) > 20) {
-            throw new InvalidArgumentException("Username failure");
-        }
-        if ($this->loginExists($data["login"])) {
-            throw new InvalidArgumentException("Username taken");
+            throw new InvalidArgumentException($this->translator->translate("team.alerts.usernameFailure"));
         }
         if ($this->limitUsersReached()) {
-            throw new InvalidArgumentException("User quota limit reached");
+            throw new InvalidArgumentException($this->translator->translate("team.alerts.userQuotaReached"));
         }
         if ($this->getIdByEmail($data["email"])) {
-            throw new InvalidArgumentException("E-mail taken");
+            throw new InvalidArgumentException($this->translator->translate("team.alerts.emailExists"));
         }
     }
 

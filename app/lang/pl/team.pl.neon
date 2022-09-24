@@ -74,3 +74,14 @@ alerts:
     loginNotApproved: Użytkownik nie został jeszcze zatwierdzony przez administratorów
     authenticationFailed: Niezgodność loginu lub hasła
     loginExists: Ten login już istnieje
+    changingRolesForbidden: Zmiana ról zabroniona
+    changingCanEditCallnameForbidden: Zmiana canEditCallName jest zabroniona
+    changingStatusForbidden: Zmiana statusu jest zabroniona
+    changingLoginForbidden: Zmiana loginu jest zabroniona
+    editingCallNameForbidden: Zmiana nicku jest zabroniona
+    emailExists: Ten email już istnieje
+    userQuotaReached: Osiągnięto limit przydziału użytkowników
+    registrationsLimitReached: Zbyt wiele oczekujących rejestracji
+    passwordTooShort: Hasło jest za krótkie
+    emailFailure: Niewłaściwy format wiadomości email
+    usernameFailure: Nazwa użytkownika musi mieć co najmniej 3 i maksymalnie 20 znaki

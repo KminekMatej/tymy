@@ -74,3 +74,14 @@ alerts:
     loginNotApproved: User has not yet been approved by administrators
     authenticationFailed: Login or password mismatch
     loginExists: This login already exists
+    changingRolesForbidden: Changing roles is forbidden
+    changingCanEditCallnameForbidden: Changing canEditCallName is forbidden
+    changingStatusForbidden: Changing status is forbidden
+    changingLoginForbidden: Changing login is forbidden
+    editingCallNameForbidden: Editing call name forbidden
+    emailExists: This e-mail already exists
+    userQuotaReached: User quota limit reached
+    registrationsLimitReached: Too many pending registrations
+    passwordTooShort: Password is too short
+    emailFailure: Invalid e-mail format
+    usernameFailure: Username must be at least 3 and at most 20 characters long

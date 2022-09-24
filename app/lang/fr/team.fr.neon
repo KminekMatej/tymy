@@ -74,3 +74,14 @@ alerts:
     loginNotApproved: "Joueur n'a pas encore été approuvé par les administrateurs"
     authenticationFailed: Niezgodność loginu lub hasła
     loginExists: Ce login existe déjà
+    changingRolesForbidden: Interdiction de changer de rôle
+    changingCanEditCallnameForbidden: Le changement de canEditCallName est interdite
+    changingStatusForbidden: Le changement de statut est interdit
+    changingLoginForbidden: Le changement de login est interdit
+    editingCallNameForbidden: Changement de nom à afficher interdit
+    emailExists: E-mail existe déjà
+    userQuotaReached: "Limite de quota d'utilisateurs atteinte"
+    registrationsLimitReached: "Trop d'inscriptions en attente"
+    passwordTooShort: Le mot de passe est trop court
+    emailFailure: "Format d'email invalide"
+    usernameFailure: "Le nom d'utilisateur doit comporter au moins 3 et au plus 20 caractères"
