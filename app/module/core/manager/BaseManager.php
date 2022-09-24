@@ -419,10 +419,10 @@ abstract class BaseManager
             } else {
                 //update also update timestamp
                 if (!$field->getChangeable()) {
-                    if ($field->getColumn() == "usr_mod" && !empty($this->user)) {
+                    if ($field->getColumn() == "updated_user_id" && !empty($this->user)) {
                         $updates[$field->getColumn()] = $this->user->id;
                     }
-                    if ($field->getColumn() == "dat_mod") {
+                    if ($field->getColumn() == "updated") {
                         $updates[$field->getColumn()] = new DateTime();
                     }
                 }
@@ -469,7 +469,7 @@ abstract class BaseManager
             if (!$field->getChangeable()) {
                 if (in_array($field->getColumn(), ["user_id", "usr_cre", "created_user_id"]) && !empty($this->user)) {
                     $value = $this->user->id;
-                } elseif (in_array($field->getColumn(), ["dat_cre", "insert_date"])) {
+                } elseif (in_array($field->getColumn(), ["dat_cre", "insert_date", "created"])) {
                     $value = new DateTime();
                 } else {
                     continue;

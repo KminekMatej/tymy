@@ -23,7 +23,7 @@ class EventType extends BaseModel
     private ?int $preStatusSetId = null;
     private ?int $postStatusSetId = null;
     private ?string $mandatory = "FREE";
-    private DateTime $updatedAt;
+    private ?DateTime $updatedAt = null;
     private ?int $updatedById = null;
     private array $preStatusSet = [];
     private array $postStatusSet = [];
@@ -58,7 +58,7 @@ class EventType extends BaseModel
         return $this->mandatory;
     }
 
-    public function getUpdatedAt(): DateTime
+    public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }
@@ -114,7 +114,7 @@ class EventType extends BaseModel
         return $this;
     }
 
-    public function setUpdatedAt(DateTime $updatedAt)
+    public function setUpdatedAt(?DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;
         return $this;

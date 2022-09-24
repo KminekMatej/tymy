@@ -21,7 +21,7 @@ class Post extends BaseModel
 
     private int $discussionId;
     private string $post;
-    private int $createdById;
+    private ?int $createdById = null;
     private DateTime $createdAt;
     private ?DateTime $updatedAt = null;
     private ?int $updatedById = null;
@@ -42,7 +42,7 @@ class Post extends BaseModel
         return $this->post;
     }
 
-    public function getCreatedById(): int
+    public function getCreatedById(): ?int
     {
         return $this->createdById;
     }
@@ -104,7 +104,7 @@ class Post extends BaseModel
         return $this;
     }
 
-    public function setCreatedById(int $createdById)
+    public function setCreatedById(?int $createdById)
     {
         $this->createdById = $createdById;
         return $this;

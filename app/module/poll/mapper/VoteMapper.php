@@ -21,8 +21,8 @@ class VoteMapper extends BaseMapper
             Field::string()->withColumn("text_value")->setProperty("stringValue"),
             Field::int()->withColumn("numeric_value")->setProperty("numericValue"),
             Field::int()->withColumn("boolean_value")->setProperty("booleanValue"),
-            Field::int()->withColumn("usr_mod")->setProperty("updatedById")->setChangeable(false),
-            Field::datetime()->withColumn("dat_mod")->setProperty("updatedAt")->setChangeable(false),
+            Field::int()->withColumn("updated_user_id")->setProperty("updatedById")->setChangeable(false),
+            Field::datetime()->withColumn("updated")->setProperty("updatedAt")->setChangeable(false),
         ];
     }
 }

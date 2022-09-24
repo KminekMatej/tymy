@@ -22,8 +22,8 @@ class EventTypeMapper extends BaseMapper
             Field::int()->withColumn("pre_status_set_id")->setProperty("preStatusSetId"),
             Field::int()->withColumn("post_status_set_id")->setProperty("postStatusSetId"),
             Field::string()->withPropertyAndColumn("mandatory"),
-            Field::int()->withColumn("dat_mod")->setProperty("updatedAt")->setChangeable(false),
-            Field::int()->withColumn("usr_mod")->setProperty("updatedById"),
+            Field::int()->withColumn("updated")->setProperty("updatedAt")->setChangeable(false),
+            Field::int()->withColumn("updated_user_id")->setProperty("updatedById"),
         ];
     }
 }

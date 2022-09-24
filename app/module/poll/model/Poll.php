@@ -24,7 +24,7 @@ class Poll extends BaseModel
     public const RESULTS_AFTER_VOTE = "AFTER_VOTE";
     public const RESULTS_WHEN_CLOSED = "WHEN_CLOSED";
 
-    private int $createdById;
+    private ?int $createdById = null;
     private ?DateTime $createdAt = null;
     private ?int $updatedById = null;
     private ?DateTime $updatedAt = null;
@@ -57,7 +57,7 @@ class Poll extends BaseModel
     private bool $votePending = false;
     public bool $fullyMapped = false;
 
-    public function getCreatedById(): int
+    public function getCreatedById(): ?int
     {
         return $this->createdById;
     }
@@ -193,7 +193,7 @@ class Poll extends BaseModel
         return $this->myVotes;
     }
 
-    public function setCreatedById(int $createdById)
+    public function setCreatedById(?int $createdById)
     {
         $this->createdById = $createdById;
         return $this;

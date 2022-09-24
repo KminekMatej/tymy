@@ -25,8 +25,8 @@ class PermissionMapper extends BaseMapper
             Field::string()->withColumn("r_statuses")->setProperty("revokedStatuses"),
             Field::string()->withColumn("a_users")->setProperty("allowedUsers"),
             Field::string()->withColumn("r_users")->setProperty("revokedUsers"),
-            Field::datetime()->withColumn("dat_mod", false, false)->setProperty("updatedAt"),
-            Field::int()->withColumn("usr_mod", false, false)->setProperty("updatedById"),
+            Field::datetime()->withColumn("updated", false, false)->setProperty("updatedAt"),
+            Field::int()->withColumn("updated_user_id", false, false)->setProperty("updatedById"),
         ];
     }
 }

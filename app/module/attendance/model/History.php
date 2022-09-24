@@ -20,7 +20,7 @@ class History extends BaseModel
 
     private int $eventId;
     private int $userId;
-    private DateTime $updatedAt;
+    private ?DateTime $updatedAt = null;
     private ?int $updatedById = null;
     private string $entryType;
     private ?int $statusIdFrom = null;  //null if this is the first set
