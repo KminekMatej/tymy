@@ -31,7 +31,7 @@ class MultiaccountManager extends BaseManager
         $this->teamManager = $teamManager;
         $this->userManager = $userManager;
         $this->database = $this->mainDatabase;
-        $this->translator = $this->translator;
+        $this->translator = $translator;
         $this->idCol = null;    //there is no simple primary key column in database - so avoid errors from BaseManager
     }
 
