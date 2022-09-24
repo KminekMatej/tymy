@@ -583,9 +583,9 @@ abstract class BaseManager
         $this->responder->E400_BAD_REQUEST($message);
     }
 
-    protected function respondUnauthorized()
+    protected function respondUnauthorized(?string $message = null)
     {
-        $this->responder->E401_UNAUTHORIZED();
+        $this->responder->E401_UNAUTHORIZED($message);
     }
 
     protected function respondForbidden(?string $message = null)

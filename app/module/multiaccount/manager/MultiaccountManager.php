@@ -2,6 +2,7 @@
 
 namespace Tymy\Module\Multiaccount\Manager;
 
+use Kdyby\Translation\Translator;
 use Nette\NotImplementedException;
 use Nette\Utils\DateTime;
 use Tymy\Module\Core\Factory\ManagerFactory;
@@ -22,13 +23,15 @@ class MultiaccountManager extends BaseManager
 {
     private UserManager $userManager;
     private TeamManager $teamManager;
+    private Translator $translator;
 
-    public function __construct(ManagerFactory $managerFactory, UserManager $userManager, TeamManager $teamManager)
+    public function __construct(ManagerFactory $managerFactory, UserManager $userManager, TeamManager $teamManager, Translator $translator)
     {
         parent::__construct($managerFactory);
         $this->teamManager = $teamManager;
         $this->userManager = $userManager;
         $this->database = $this->mainDatabase;
+        $this->translator = $this->$translator;
         $this->idCol = null;    //there is no simple primary key column in database - so avoid errors from BaseManager
     }
 
@@ -95,7 +98,7 @@ class MultiaccountManager extends BaseManager
 
         $userId = $this->userManager->checkCredentials($targetTeam, $username, $password);
         if (!$userId) {
-            $this->respondUnauthorized();
+            $this->respondUnauthorized($this->translator->translate("team.alerts.authenticationFailed"));
         }
 
         $sourceAccountId = $this->getAccountId();
@@ -108,7 +111,7 @@ class MultiaccountManager extends BaseManager
         $targetAccountId = $existingAccountRow ? $existingAccountRow->account_id : null;
 
         if ($sourceAccountId && $targetAccountId == $sourceAccountId) {
-            $this->responder->E400_BAD_REQUEST("Target team already exists in your multiaccount");
+            $this->responder->E400_BAD_REQUEST($this->translator->translate("team.alerts.targetTeamExists"));
         }
 
         //four scenarios can happen now:

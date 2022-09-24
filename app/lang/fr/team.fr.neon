@@ -85,3 +85,4 @@ alerts:
     passwordTooShort: Le mot de passe est trop court
     emailFailure: "Format d'email invalide"
     usernameFailure: "Le nom d'utilisateur doit comporter au moins 3 et au plus 20 caractères"
+    targetTeamExists: Cette équipe a déjà ajouté

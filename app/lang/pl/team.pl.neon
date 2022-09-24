@@ -85,3 +85,4 @@ alerts:
     passwordTooShort: Hasło jest za krótkie
     emailFailure: Niewłaściwy format wiadomości email
     usernameFailure: Nazwa użytkownika musi mieć co najmniej 3 i maksymalnie 20 znaki
+    targetTeamExists: Ten zespół został już dodany
