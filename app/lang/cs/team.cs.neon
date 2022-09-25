@@ -62,6 +62,7 @@ sport: Sport
 defaultLanguage: Výchozí jazyk
 hideDiscDesc: Skrýt popisky diskusí
 approveAsPlayer: Schválit jako hráče
+invitation: Pozvánka|Pozvánky
 errors:
     imgFileCorrupted: "Soubor není obrázek, nebo je poškozený"
     passwordMismatch: Hesla se neshodují

@@ -13,7 +13,7 @@
         <a class="dropdown-item" href="{plink :Team:Default:}">{_common.everyone} ({$counts['ALL']})</a>
         <a class="dropdown-item" href="{plink :Team:Player:new}" n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('USR_CREATE'))"><i class="fa fa-plus-circle text-success" aria-hidden="true"></i> {_common.new}</a>
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="{plink :Team:Default:jerseys}">{_team.jerseyList}</a>
-
+        <a class="dropdown-item" href="{plink :Team:Default:jerseys}"><i class="fas fa-tshirt" aria-hidden="true"></i> {_team.jerseyList}</a>
+        <a class="dropdown-item" href="{plink :Team:Default:invitation}"><i class="fas fa-door-open" aria-hidden="true"></i> {_team.invitation, 2}</a>
     </div>
 </li>

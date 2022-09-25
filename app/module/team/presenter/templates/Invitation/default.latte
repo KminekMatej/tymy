@@ -1,0 +1,22 @@
+{import $componentsDir . '/secured.latte'}
+
+{block navbar}
+{control navbar}
+{/block}
+
+{block content}
+<div class="container-fluid container-md jerseys table-responsive">
+    <table class="table table-default table-hover my-4">
+        <tr n:foreach="$jerseyList as $number => $players">
+            <td>
+                <button type="button" n:class="btn, btn-dark, !is_null($players) ? disabled" style="cursor: initial">{$number}</button>
+                {if is_null($players)}
+                    <button type="button" class="btn btn-outline-light" style="cursor: initial">{_team.freeNumber}</button>
+                {else}
+                    <a n:foreach="$players as $player" href="{plink :Team:Player: $player->getWebName()}" n:class="btn, $player->getId() == $user->getId() ? btn-primary, $player->getId() != $user->getId() ? ($player->getStatus() == 'PLAYER' ? btn-light : btn-outline-dark)" title="{$player->getFullName()} {if $player->getStatus() != 'PLAYER'}({_team.inActive}){/if}" href='{plink :Team:Player: $player->getWebName()}'>{$player->getCallname()}</a>
+                {/if}
+
+            </td>
+        </tr>
+    </table>
+</div>
