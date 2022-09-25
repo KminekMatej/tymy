@@ -37,11 +37,7 @@ class DefaultPresenter extends SecuredPresenter
 
             return count($errFields);
         });
-    }
 
-    public function startup()
-    {
-        parent::startup();
         $this->addBreadcrumb($this->translator->translate("team.team", 1), $this->link(":Team:Default:"));
     }
 
