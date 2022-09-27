@@ -40,9 +40,9 @@ class UserManager extends BaseManager
     public const HASH_LIMIT = 20;
     public const VALIDITYMIN = 10;
     public const MAX_PWD_REQUESTS = 3;
-    private const FIELDS_PERSONAL = ["gender", "firstName", "lastName", "phone", "email", "birthDate", "nameDayMonth", "nameDayDay", "language"];
+    private const FIELDS_PERSONAL = ["gender", "firstName", "lastName", "phone", "email", "birthDate", "nameDayMonth", "nameDayDay"];
     private const FIELDS_LOGIN = ["callName", "canEditCallName", "login", "password", "canLogin"];
-    private const FIELDS_UI = ["skin"];
+    private const FIELDS_UI = ["language", "skin", "hideDiscDesc"];
     private const FIELDS_TEAMINFO = ["status", "jerseyNumber"];
     private const FIELDS_ADDRESS = ["street", "city", "zipCode"];
     private const TABS = [
