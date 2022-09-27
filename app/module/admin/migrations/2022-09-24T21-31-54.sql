@@ -54,7 +54,7 @@ ALTER TABLE `discussion` ADD FOREIGN KEY (`updated_user_id`) REFERENCES `user`(`
 
 /* discussion_post */
 
-UPDATE `discussion_post` SET `user_id` = NULL WHERE `user_id` NOT IN (SELECT `id` FROM `user` WHERE 1);
+UPDATE `discussion_post` SET `user_id` = NULL WHERE `user_id` NOT IN (SELECT `id` FROM `user` WHERE 1) OR `user_id` = 0;
 ALTER TABLE `discussion_post` CHANGE `user_id` `user_id` INT(11) NULL DEFAULT NULL;
 ALTER TABLE `discussion_post` ADD FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
