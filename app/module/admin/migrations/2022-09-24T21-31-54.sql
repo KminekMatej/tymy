@@ -52,7 +52,10 @@ ALTER TABLE `discussion` CHANGE `dat_mod` `updated` TIMESTAMP on update CURRENT_
 ALTER TABLE `discussion` CHANGE `usr_mod` `updated_user_id` INT(11) NULL DEFAULT NULL;
 ALTER TABLE `discussion` ADD FOREIGN KEY (`updated_user_id`) REFERENCES `user`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
-/* discussion_post */
+/* discussion_post - store username first to keep at least a bit of history */
+
+ALTER TABLE `discussion_post` ADD `user_name` VARCHAR(64) NULL DEFAULT NULL AFTER `user_id`;
+UPDATE `discussion_post` SET `user_name` = (SELECT `call_name` FROM `user` WHERE `user`.`id` = `discussion_post`.`user_id`);
 
 ALTER TABLE `discussion_post` CHANGE `user_id` `user_id` INT(11) NULL DEFAULT NULL;
 UPDATE `discussion_post` SET `user_id` = NULL WHERE `user_id` NOT IN (SELECT `id` FROM `user` WHERE 1) OR `user_id` = 0;
