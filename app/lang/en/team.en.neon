@@ -86,3 +86,5 @@ alerts:
     emailFailure: Invalid e-mail format
     usernameFailure: Username must be at least 3 and at most 20 characters long
     targetTeamExists: This team was already added into multiaccount
+    invitationCreated: Invitation created
+    invitationSent: Invitation sent

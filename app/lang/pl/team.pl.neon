@@ -86,3 +86,5 @@ alerts:
     emailFailure: Niewłaściwy format wiadomości email
     usernameFailure: Nazwa użytkownika musi mieć co najmniej 3 i maksymalnie 20 znaki
     targetTeamExists: Ten zespół został już dodany
+    invitationCreated: Utworzono zaproszenie
+    invitationSent: Zaproszenie wysłane

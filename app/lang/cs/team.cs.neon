@@ -88,3 +88,5 @@ alerts:
     emailFailure: Chybný formát e-mailu
     usernameFailure: Uživatelské jméno musí mít alespoň 3 a nejvíce 20 znaků
     targetTeamExists: Tento tým již v multiúčtu máte
+    invitationCreated: Pozvánka vytvořena
+    invitationSent: Pozvánka odeslána
