@@ -29,6 +29,8 @@ lastName: Příjmení
 phone: Telefon
 email: E-mail
 birthDate: Datum narození
+birthCode: Rodné číslo
+nameDay: Svátek
 nameDayMonth: Měsíc svátku
 chooseMonth: Vyberte měsíc
 nameDayDay: Den svátku

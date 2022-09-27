@@ -28,9 +28,11 @@ lastName: Nom de famille
 phone: Téléphone
 email: E-mail
 birthDate: Date de naissance
-nameDayMonth: Mois de la fête
+birthCode: NIR
+nameDay: Jour de nom
+nameDayMonth: Mois du jour du nom
 chooseMonth: Choisir le mois
-nameDayDay: Jour de la fête
+nameDayDay: Jour du jour du nom
 language: Langue
 dateOfRegistration: "Jour d'enregistrement"
 callName: Nom à afficher

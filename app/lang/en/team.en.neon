@@ -28,9 +28,11 @@ lastName: Surname
 phone: Phone
 email: E-mail
 birthDate: Date of birth
-nameDayMonth: Month of nameday
+birthCode: Personal ID
+nameDay: Name day
+nameDayMonth: Month of name day
 chooseMonth: Pick month
-nameDayDay: Day of nameday
+nameDayDay: Day of name day
 language: Language
 dateOfRegistration: Registered
 callName: Displayed name

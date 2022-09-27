@@ -66,16 +66,25 @@
             <div class="col-12 col-md-8">{input birthDate, class => 'col-12 col-md-6 form-control'}</div>
         </div>
         <div class="row">
-            <div class="col-12 col-md-4 table-head">{_team.nameDayMonth}:</div>
-            <div class="col-12 col-md-8">{input nameDayMonth, class => 'col-12 col-md-6 form-control'}</div>
+            <div class="col-12 col-md-4 table-head">{_team.birthCode}:</div>
+            <div class="col-12 col-md-8">{input birthCode, class => 'col-12 col-md-6 form-control'}</div>
         </div>
         <div class="row">
-            <div class="col-12 col-md-4 table-head">{_team.nameDayDay}:</div>
-            <div class="col-12 col-md-8">{input nameDayDay, class => 'col-12 col-md-3 form-control'}</div>
+            <div class="col-12 col-md-4 table-head">{_team.nameDay}:</div>
+            <div class="col-12 col-md-8">
+                <div class="input-group col-12 col-md-6 px-0">
+                    {input nameDayDay, class => 'form-control'}
+                    {input nameDayMonth, class => 'form-control'}
+                </div>
+            </div>
         </div>
         <div class="row">
             <div class="col-12 col-md-4 table-head">{_team.language}:</div>
             <div class="col-12 col-md-8">{input language, class => 'col-12 col-md-6 form-control', style => 'min-width: 120px'}</div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-4 table-head">{_debt.accountNumber}:</div>
+            <div class="col-12 col-md-8">{input accountNumber, class => 'col-12 col-md-6 form-control'}</div>
         </div>
     </div>
 </div>

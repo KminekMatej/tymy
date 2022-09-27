@@ -28,6 +28,8 @@ lastName: Nazwisko
 phone: Telefon
 email: E-mail
 birthDate: Data urodzenia
+birthCode: PESEL
+nameDay: Imieniny
 nameDayMonth: Miesiąc imienin
 chooseMonth: Wybierz miesiąc
 nameDayDay: Dzień imienin

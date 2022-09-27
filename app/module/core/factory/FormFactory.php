@@ -353,9 +353,11 @@ class FormFactory
         $phone = $form->addText("phone", $this->translator->translate("team.phone"))->addRule($form::PATTERN, $this->translator->translate("common.errors.valueInvalid"), '^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
         $email = $form->addText("email", $this->translator->translate("team.email"))->addRule($form::EMAIL);
         $birthDate = $form->addText("birthDate", $this->translator->translate("team.birthDate"))->setHtmlType("date");
-        $nameDayMonth = $form->addSelect("nameDayMonth", $this->translator->translate("team.nameDayMonth"), $months)->setCaption($this->translator->translate("_team.chooseMonth") . " ↓");
-        $nameDayDay = $form->addInteger("nameDayDay", $this->translator->translate("team.nameDayDay"))->addRule($form::MIN, null, 0)->addRule($form::MAX, null, 31);
+        $birthCode = $form->addText("birthCode", $this->translator->translate("team.birthCode"));
+        $nameDayMonth = $form->addSelect("nameDayMonth", $this->translator->translate("team.nameDayMonth"), $months)->setCaption($this->translator->translate("_team.chooseMonth") . " ↓")->setHtmlAttribute("title", $this->translator->translate("team.nameDayMonth"));
+        $nameDayDay = $form->addInteger("nameDayDay", $this->translator->translate("team.nameDayDay"))->addRule($form::MIN, null, 0)->addRule($form::MAX, null, 31)->setHtmlAttribute("title", $this->translator->translate("team.nameDayDay"));
         $language = $form->addSelect("language", $this->translator->translate("team.language"), Team::LANGUAGES);
+        $accountNumber = $form->addText("accountNumber", $this->translator->translate("debt.accountNumber"));
 
         $callName = $form->addText("callName", $this->translator->translate("team.callName"));
         $canEditCallName = $form->addCheckbox("canEditCallName", $this->translator->translate("team.canEditCallName"));
@@ -390,6 +392,8 @@ class FormFactory
             if ($user->getBirthDate()) {
                 $birthDate->setValue($user->getBirthDate()->format(BaseModel::DATE_ENG_FORMAT))->setHtmlAttribute("data-value", $user->getBirthDate()->format(BaseModel::DATE_ENG_FORMAT));
             }
+            $birthCode->setValue($user->getBirthCode())->setHtmlAttribute("data-value", $user->getBirthCode());
+            $accountNumber->setValue($user->getAccountNumber())->setHtmlAttribute("data-value", $user->getAccountNumber());
             if ($user->getNameDayMonth() > 0 && $user->getNameDayMonth() <= 12) {
                 $nameDayMonth->setValue($user->getNameDayMonth())->setHtmlAttribute("data-value", $user->getNameDayMonth());
             }
