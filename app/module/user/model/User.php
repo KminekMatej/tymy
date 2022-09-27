@@ -47,6 +47,7 @@ class User extends BaseModel
     private ?string $firstName = null;
     private ?string $lastName = null;
     private string $fullName;
+    private ?string $userName = null;
     private string $password;
     private ?string $callName = null;
     private ?string $language = null;
@@ -428,6 +429,17 @@ class User extends BaseModel
         return $this;
     }
 
+    public function getUserName(): ?string
+    {
+        return $this->userName;
+    }
+
+    public function setUserName(?string $userName)
+    {
+        $this->userName = $userName;
+        return $this;
+    }
+
     public function getPassword(): string
     {
         return $this->password;
@@ -527,6 +539,7 @@ class User extends BaseModel
     {
         $data = parent::jsonSerialize();
         unset($data["password"]);
+        unset($data["userName"]);
         $data["birthDate"] = $this->getBirthDate() ? $this->getBirthDate()->format(self::DATE_ENG_FORMAT) : null;
 
         return $data + [
