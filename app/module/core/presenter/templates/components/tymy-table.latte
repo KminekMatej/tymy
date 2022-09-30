@@ -29,12 +29,20 @@ $rows = [
 ];
 
 *}
-{var $grid = round(12 / count($cols),0)}
+
+{var $grid = intval(floor(12 / count($cols)))}
+{var $spacers = 12 - (count($cols) * $grid)}
+{var $leftCols = ceil($spacers/2)} {* fill left empty columns in grid if neccessary*}
+{var $rightCols = $spacers - $leftCols} {* fill right empty columns in grid if neccessary*}
+
 <div class="container-fluid tymy-table">
     <div class="row table-head">
+        <div n:if="$leftCols" class="col col-md-{$leftCols}"></div>
         <div class="col col-md-{$grid}" n:foreach="$cols as $col">{$col}</div>
+        <div n:if="$rightCols" class="col col-md-{$rightCols}"></div>
     </div>
     <div class="row striped" n:foreach="$rows as $row">
+        <div n:if="$leftCols" class="col col-md-{$leftCols}"></div>
         <div class="col col-md-{$grid}" n:foreach="$row as $cell">
             {if is_string($cell)}
                 <span>{$cell}</span>
@@ -51,5 +59,6 @@ $rows = [
                 <span {ifset $cell->class}class="{$cell->class}"{/ifset}>{$cell}</span>
             {/if}
         </div>
+        <div n:if="$rightCols" class="col col-md-{$rightCols}"></div>
     </div>
 </div>
