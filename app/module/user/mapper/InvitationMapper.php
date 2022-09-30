@@ -18,6 +18,7 @@ class InvitationMapper extends BaseMapper
         return [
             Field::int()->withPropertyAndColumn("id", false, false),
             Field::datetime()->withPropertyAndColumn("created", false, false),
+            Field::int()->withColumn("created_user_id", false, false)->setProperty("createdUserId"),
             Field::string()->withColumn("first_name")->setProperty("firstName"),
             Field::string()->withColumn("last_name")->setProperty("lastName"),
             Field::string()->withPropertyAndColumn("email"),
