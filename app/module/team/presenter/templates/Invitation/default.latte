@@ -5,18 +5,45 @@
 {/block}
 
 {block content}
-<div class="container-fluid container-md jerseys table-responsive">
-    <table class="table table-default table-hover my-4">
-        <tr n:foreach="$jerseyList as $number => $players">
-            <td>
-                <button type="button" n:class="btn, btn-dark, !is_null($players) ? disabled" style="cursor: initial">{$number}</button>
-                {if is_null($players)}
-                    <button type="button" class="btn btn-outline-light" style="cursor: initial">{_team.freeNumber}</button>
-                {else}
-                    <a n:foreach="$players as $player" href="{plink :Team:Player: $player->getWebName()}" n:class="btn, $player->getId() == $user->getId() ? btn-primary, $player->getId() != $user->getId() ? ($player->getStatus() == 'PLAYER' ? btn-light : btn-outline-dark)" title="{$player->getFullName()} {if $player->getStatus() != 'PLAYER'}({_team.inActive}){/if}" href='{plink :Team:Player: $player->getWebName()}'>{$player->getCallname()}</a>
-                {/if}
+<div class="container settings">
+    <div class="row">
+        <div class="col">
+            <div class="card sh-box my-3">
+                <div class="card-header">
+                    <h4>{_team.invitation, 2}</h4>
+                </div>
+                <div class="card-body">
+                    {include $componentsDir . '/tymy-table.latte'}
+                    <div class="card-footer text-right">
+                        <button class="dropdown-item" data-toggle="modal" data-target="#newInvitationModal" title="{_team.createInvitation}" style="margin-right: 10px" onclick="btnRotate($(this), true)">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-            </td>
-        </tr>
-    </table>
+<div class="modal fade" id="newFolderModal" tabindex="-1" aria-labelledby="newInvitationModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newFolderModalLabel">{_file.mkdir}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {form invitationForm, class => 'form-inline'}
+                <div class="modal-body">
+                    {input firstName, class=>'form-control'}
+                    {input lastName, class=>'form-control'}
+                    {input email, class=>'form-control'}
+                </div>
+                <div class="modal-footer">
+                    <button n:name="save" type="submit" class="btn btn-primary">{_common.create}</button>
+                </div>
+            {/form}
+        </div>
+    </div>
 </div>

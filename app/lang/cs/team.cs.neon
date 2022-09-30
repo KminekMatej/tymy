@@ -63,6 +63,10 @@ defaultLanguage: Výchozí jazyk
 hideDiscDesc: Skrýt popisky diskusí
 approveAsPlayer: Schválit jako hráče
 invitation: Pozvánka|Pozvánky
+createInvitation: Vytvořit novou pozvánku
+invitation-pending: Čeká
+invitation-accepted: Přijata
+invitation-expired: Prošlá
 errors:
     imgFileCorrupted: "Soubor není obrázek, nebo je poškozený"
     passwordMismatch: Hesla se neshodují

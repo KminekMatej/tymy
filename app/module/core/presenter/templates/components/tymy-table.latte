@@ -41,7 +41,7 @@ $rows = [
         <div class="col col-md-{$grid}" n:foreach="$cols as $col">{$col}</div>
         <div n:if="$rightCols" class="col col-md-{$rightCols}"></div>
     </div>
-    <div class="row striped" n:foreach="$rows as $row">
+    <div n:foreach="$rows as $row" class="row striped {$row->classStr()}" {if $row->getStyle()}style="{$row->getStyle()|noescape}"{/if}>
         <div n:if="$leftCols" class="col col-md-{$leftCols}"></div>
         <div class="col col-md-{$grid}" n:foreach="$row as $cell">
             {if is_string($cell)}
