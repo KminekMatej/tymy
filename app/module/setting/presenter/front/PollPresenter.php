@@ -46,7 +46,8 @@ class PollPresenter extends SettingBasePresenter
         ];
 
         $this->template->rows = [];
-        foreach ($this->pollManager->getList() as $poll) {
+        $polls = $this->pollManager->getList();
+        foreach ($polls as $poll) {
             /* @var $poll Poll */
             $this->template->rows[] = [
                 Cell::detail($this->link(":Setting:Poll:", [$poll->getWebName()])),
@@ -58,7 +59,7 @@ class PollPresenter extends SettingBasePresenter
             ];
         }
 
-        $this->template->polls = $this->pollManager->getList();
+        $this->template->polls = $polls;
     }
 
     public function renderNew()
