@@ -52,11 +52,6 @@ class UserManager extends BaseManager
         "TEAMINFO" => self::FIELDS_TEAMINFO,
         "ADDRESS" => self::FIELDS_ADDRESS,
     ];
-
-    private MailService $mailService;
-    private PermissionManager $permissionManager;
-    private TeamManager $teamManager;
-    private Translator $translator;
     private ?User $userModel = null;
     private array $userFields;
     private array $userCounts;
@@ -64,13 +59,9 @@ class UserManager extends BaseManager
     /** @var SimpleUser[] */
     private array $simpleUserCache = [];
 
-    public function __construct(ManagerFactory $managerFactory, MailService $mailService, PermissionManager $permissionManager, AuthenticationManager $authenticationManager, Request $request, Translator $translator, TeamManager $teamManager)
+    public function __construct(ManagerFactory $managerFactory, private MailService $mailService, private PermissionManager $permissionManager, AuthenticationManager $authenticationManager, Request $request, private Translator $translator, private TeamManager $teamManager)
     {
         parent::__construct($managerFactory);
-        $this->mailService = $mailService;
-        $this->permissionManager = $permissionManager;
-        $this->translator = $translator;
-        $this->teamManager = $teamManager;
     }
 
     /**
@@ -145,7 +136,7 @@ class UserManager extends BaseManager
         $array["login"] = strtoupper($array["login"]);
 
         $array["gender"] = isset($array["gender"]) && $array["gender"] == "FEMALE" ? "FEMALE" : "MALE";
-        $array["jerseyNumber"] = isset($array["jerseyNumber"]) ? $array["jerseyNumber"] : "";
+        $array["jerseyNumber"] ??= "";
 
         $array["password"] = $this->hashPassword($array["password"]);
 
@@ -479,7 +470,7 @@ class UserManager extends BaseManager
     private function hashPassword(string $password): string
     {
         $hash = md5($password);
-        for ($index = 1; $index < (rand(0, 1) * self::HASH_LIMIT); $index++) {// when password is being edited, save password hashed 1 - 20 times into database. Starting from and hashing in init makes sure that hash is made at least once
+        for ($index = 1; $index < (random_int(0, 1) * self::HASH_LIMIT); $index++) {// when password is being edited, save password hashed 1 - 20 times into database. Starting from and hashing in init makes sure that hash is made at least once
             $hash = md5($password);
         }
         return $hash; //TODO neccessary to update oldPassword to enable login from old gui
@@ -702,7 +693,7 @@ class UserManager extends BaseManager
             $this->respondBadRequest($this->translator->translate("common.alerts.tooManyTries"));
         }
 
-        $resetCode = substr(md5(rand()), 0, 20);
+        $resetCode = substr(md5(random_int(0, mt_getrandmax())), 0, 20);
 
         $this->database->table(User::TABLE_PWD_RESET)->insert([
             "from_host" => $hostname,
@@ -735,7 +726,7 @@ class UserManager extends BaseManager
             $this->respondBadRequest($this->translator->translate("common.alerts.invalidResetCode"));
         }
 
-        $newPwd = substr(md5($resetCode . rand(0, 100000)), 0, 8);
+        $newPwd = substr(md5($resetCode . random_int(0, 100000)), 0, 8);
 
         $this->database->table(User::TABLE)
                 ->where("id", $user->getId())
