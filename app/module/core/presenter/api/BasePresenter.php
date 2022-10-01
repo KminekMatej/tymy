@@ -157,22 +157,22 @@ class BasePresenter extends RootPresenter
 
         Debugger::log($exc->getMessage(), ILogger::EXCEPTION);
 
-        if (is_a($exc, DeleteIntegrityException::class)) {
+        if ($exc instanceof \Tymy\Module\Core\Exception\DeleteIntegrityException) {
             /* @var $exc DeleteIntegrityException */
             $this->responder->E4016_DELETE_BLOCKED_BY($exc->fkTable, $exc->blockingIds);
         }
 
-        if (is_a($exc, UpdateIntegrityException::class)) {
+        if ($exc instanceof \Tymy\Module\Core\Exception\UpdateIntegrityException) {
             /* @var $exc UpdateIntegrityException */
             $this->responder->E4017_UPDATE_BLOCKED_BY($exc->fkTable, $exc->blockingIds);
         }
 
-        if (is_a($exc, IntegrityException::class)) {
+        if ($exc instanceof \Tymy\Module\Core\Exception\IntegrityException) {
             /* @var $exc IntegrityException */
             $this->responder->E4007_RELATION_PROHIBITS($exc->failingField);
         }
 
-        if (is_a($exc, MissingInputException::class)) {
+        if ($exc instanceof \Tymy\Module\Core\Exception\MissingInputException) {
             /* @var $exc IntegrityException */
             $this->responder->E4013_MISSING_INPUT($exc->getMessage());
         }
@@ -235,7 +235,7 @@ class BasePresenter extends RootPresenter
 
         $this->resourceRow = $manager->getRow($resourceId);
 
-        if (!$this->resourceRow) {
+        if (!$this->resourceRow instanceof \Nette\Database\Table\ActiveRow) {
             $this->responder->E4005_OBJECT_NOT_FOUND($manager->getModule(), $resourceId);
         }
 
@@ -257,7 +257,7 @@ class BasePresenter extends RootPresenter
 
         $this->subResourceRow = $manager->getRow($subResourceId);
 
-        if (!$this->subResourceRow) {
+        if (!$this->subResourceRow instanceof \Nette\Database\Table\ActiveRow) {
             $this->responder->E4005_OBJECT_NOT_FOUND($manager->getModule(), $subResourceId);
         }
 
@@ -324,7 +324,7 @@ class BasePresenter extends RootPresenter
         $this->mainDatabase->table("api_log")->insert(
             [
                     "remote_host" => $this->httpRequest->getRemoteHost(),
-                    "request_url" => $this->httpRequest->getUrl()->absoluteUrl,
+                    "request_url" => $this->httpRequest->getUrl()->getAbsoluteUrl(),
                     "response_status" => $this->httpResponse->getCode(),
                     "time_in_ms" => round(Debugger::timer("request") * 1000),
             ]
