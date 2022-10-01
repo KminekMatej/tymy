@@ -38,13 +38,13 @@ class AppPresenter extends SettingBasePresenter
     /** @inject */
     public StatusManager $statusManager;
 
-    public function beforeRender()
+    public function beforeRender(): void
     {
         parent::beforeRender();
         $this->addBreadcrumb($this->translator->translate("settings.application"), $this->link(":Setting:App:"));
     }
 
-    public function renderDefault()
+    public function renderDefault(): void
     {
         $currentVersion = $this->getCurrentVersion();
         $this->template->version = $currentVersion;
@@ -69,7 +69,7 @@ class AppPresenter extends SettingBasePresenter
         $this->getNextMilestone();
     }
 
-    private function getNextMilestone()
+    private function getNextMilestone(): void
     {
         $milestones = CURLHelper::get("https://api.github.com/repos/KminekMatej/tymy/milestones", true);
         $versions = ArrayHelper::pairs($milestones, "title", "html_url");
@@ -80,13 +80,13 @@ class AppPresenter extends SettingBasePresenter
         $this->template->nextMilestoneUrl = $versions[$nextVersion];
     }
 
-    public function createComponentUserConfigForm()
+    public function createComponentUserConfigForm(): \Nette\Application\UI\Form
     {
         $form = new Form();
         $form->addSelect("skin", "Skin", $this->teamManager->allSkins)->setValue($this->skin);
         $form->addSubmit("save");
 
-        $form->onSuccess[] = function (Form $form, stdClass $values) {
+        $form->onSuccess[] = function (Form $form, stdClass $values): void {
             $this->userManager->update(["skin" => $values->skin], $this->user->getId());
         };
 

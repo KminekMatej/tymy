@@ -42,7 +42,7 @@ class MigrationManager
      *
      * @return string[] Array of performed succesfull migrations
      */
-    public function getPerformedSuccesfullMigrations()
+    public function getPerformedSuccesfullMigrations(): array
     {
         return $this->tableExists ? $this->teamDatabase->table(Migration::TABLE)->where("result", Migration::RESULT_OK)->fetchPairs(null, "migration") : $this->migrationsCache;
     }
@@ -59,7 +59,10 @@ class MigrationManager
         return $this->teamDatabase->table(Migration::TABLE)->where("result", Migration::RESULT_OK)->order("migration DESC")->limit(1)->fetchField("migration");
     }
 
-    public function executeSqlContents($contents, &$log = false)
+    /**
+     * @return mixed[]
+     */
+    public function executeSqlContents(string $contents, &$log = false): array
     {
         if ($log) {
             $this->log = &$log;
@@ -68,6 +71,9 @@ class MigrationManager
         return $this->executeCommands($commands);
     }
 
+    /**
+     * @return mixed[]
+     */
     public function executeCommands(array $sqlCommands): array
     {
         $this->logg("Executing supplied " . count($sqlCommands) . " queries");
@@ -82,7 +88,7 @@ class MigrationManager
         return $this->log;
     }
 
-    public function saveMigrationRecord(Migration $mig)
+    public function saveMigrationRecord(Migration $mig): void
     {
         $existed = $this->tableExists;
         $this->tableExists = $this->migrationTableExists();
@@ -102,7 +108,7 @@ class MigrationManager
         }
     }
 
-    private function saveMigrationsCache()
+    private function saveMigrationsCache(): void
     {
         if (empty($this->migrationsCache)) {
             return;
@@ -117,6 +123,7 @@ class MigrationManager
      * Drop all comments from file and get just array of sql queries
      *
      * @throws Exception When there are no commands
+     * @return string[]
      */
     public function getCommands(string $contents): array
     {
@@ -133,9 +140,8 @@ class MigrationManager
 
     /**
      * Remove all comments from input
-     * @return void
      */
-    private function removeComments(string $contents): string
+    private function removeComments(string $contents): ?string
     {
         $this->logg("Removing comments");
 
@@ -182,6 +188,7 @@ class MigrationManager
     /**
      * Split an uploaded sql file into single sql statements.
      * Note: expects trim() to have already been run on $sql.
+     * @return string[]
      */
     private function splitSqlFile(string $sql, string $delimiter): array
     {
@@ -268,7 +275,7 @@ class MigrationManager
         return $output;
     }
 
-    private function logg($text)
+    private function logg($text): void
     {
         $this->log[] = (new DateTime())->format(BaseModel::DATETIME_CZECH_FORMAT) . " " . $text;
     }
@@ -309,6 +316,7 @@ class MigrationManager
 
     /**
      * Migrate database to latest version
+     * @return array<string, mixed[]>
      */
     public function migrateUp(): array
     {
@@ -393,12 +401,12 @@ class MigrationManager
     /**
      * @todo when migrations DOWN are enabled
      */
-    public function migrateDown()
+    public function migrateDown(): void
     {
         $this->logg("Migration DOWN started");
     }
 
-    private function migrateBatch(array $migrations)
+    private function migrateBatch(array $migrations): bool
     {
         $this->teamDatabase->beginTransaction();
         Debugger::timer("migration");

@@ -12,7 +12,7 @@ use Tymy\Module\User\Manager\UserManager;
  */
 class PwdPresenter extends BasePresenter
 {
-    public function injectManager(UserManager $userManager)
+    public function injectManager(UserManager $userManager): void
     {
         $this->manager = $userManager;
     }
@@ -21,7 +21,7 @@ class PwdPresenter extends BasePresenter
      *
     @RequestMapping(value = "/pwdlost", method = RequestMethod.POST)
      */
-    public function actionLost()
+    public function actionLost(): void
     {
         if ($this->getRequest()->getMethod() !== "POST") {
             $this->respondNotAllowed();
@@ -39,11 +39,10 @@ class PwdPresenter extends BasePresenter
     }
 
     /**
-     *
-    @RequestMapping(value = "/pwdreset/{resetCode}", method = RequestMethod.GET)
-     * @param string $code
-     */
-    public function actionReset(?string $code)
+    *
+        @RequestMapping(value = "/pwdreset/{resetCode}", method = RequestMethod.GET)
+    */
+    public function actionReset(?string $code): void
     {
         if ($this->getRequest()->getMethod() !== "GET") {
             $this->respondNotAllowed();

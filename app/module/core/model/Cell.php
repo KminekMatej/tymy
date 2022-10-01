@@ -50,31 +50,31 @@ class Cell
         return $this->style;
     }
 
-    public function setType(string $type)
+    public function setType(string $type): static
     {
         $this->type = $type;
         return $this;
     }
 
-    public function setHref(?string $href)
+    public function setHref(?string $href): static
     {
         $this->href = $href;
         return $this;
     }
 
-    public function setClass(?string $class)
+    public function setClass(?string $class): static
     {
         $this->class = $class;
         return $this;
     }
 
-    public function setTitle(?string $title)
+    public function setTitle(?string $title): static
     {
         $this->title = $title;
         return $this;
     }
 
-    public function setStyle(?string $style)
+    public function setStyle(?string $style): static
     {
         $this->style = $style;
         return $this;

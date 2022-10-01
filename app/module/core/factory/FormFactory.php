@@ -106,7 +106,7 @@ class FormFactory
 
     public function createStatusSetForm(array $onSuccess): Multiplier
     {
-        return new Multiplier(function (string $statusSetId) use ($onSuccess) {
+        return new Multiplier(function (string $statusSetId) use ($onSuccess): \Nette\Application\UI\Form {
                 /* @var $statusSet StatusSet */
                 $statusSet = $this->statusSetManager->getById((int) $statusSetId);
                 $form = new Form();
@@ -153,7 +153,7 @@ class FormFactory
             $ssList[$statusSet->getId()] = $statusSet->getName();
         }
 
-        return new Multiplier(function (string $eventTypeId) use ($onSuccess, $ssList) {
+        return new Multiplier(function (string $eventTypeId) use ($onSuccess, $ssList): \Nette\Application\UI\Form {
                 /* @var $eventType EventType */
                 $eventType = $this->eventTypeManager->getById((int) $eventTypeId);
                 $form = new Form();

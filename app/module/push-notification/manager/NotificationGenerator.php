@@ -28,7 +28,7 @@ class NotificationGenerator
     {
     }
 
-    public function createPost(Discussion $discussion, Post $post)
+    public function createPost(Discussion $discussion, Post $post): \Tymy\Module\PushNotification\Model\PushNotification
     {
         return new PushNotification(
             self::CREATE_POST,
@@ -44,7 +44,7 @@ class NotificationGenerator
         );
     }
 
-    public function createEvent(Event $event)
+    public function createEvent(Event $event): \Tymy\Module\PushNotification\Model\PushNotification
     {
         $user = $this->userManager->getById($this->user->getId());
 
@@ -61,7 +61,7 @@ class NotificationGenerator
         );
     }
 
-    public function deleteEvent(Event $event)
+    public function deleteEvent(Event $event): \Tymy\Module\PushNotification\Model\PushNotification
     {
         $user = $this->userManager->getById($this->user->getId());
 
@@ -78,7 +78,7 @@ class NotificationGenerator
         );
     }
 
-    public function changeEventTime(Event $event, DateTime $previousStartTime)
+    public function changeEventTime(Event $event, DateTime $previousStartTime): \Tymy\Module\PushNotification\Model\PushNotification
     {
         $user = $this->userManager->getById($this->user->getId());
 

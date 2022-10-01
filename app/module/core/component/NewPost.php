@@ -16,7 +16,7 @@ class NewPostControl extends Control
     {
     }
 
-    public function render($discussion, $search = null, $suser = null)
+    public function render($discussion, $search = null, $suser = null): void
     {
 
         $this->template->addFilter('czechize', fn($status) => ["PLAYER" => "HRÁČI", "MEMBER" => "ČLENOVÉ", "SICK" => "MARODI"][$status]);

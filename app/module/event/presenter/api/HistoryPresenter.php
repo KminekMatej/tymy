@@ -13,12 +13,12 @@ use Tymy\Module\Core\Presenter\Api\SecuredPresenter;
  */
 class HistoryPresenter extends SecuredPresenter
 {
-    public function injectManager(HistoryManager $manager)
+    public function injectManager(HistoryManager $manager): void
     {
         $this->manager = $manager;
     }
 
-    public function actionDefault($resourceId, $subResourceId)
+    public function actionDefault(mixed $resourceId, $subResourceId): void
     {
         if ($this->getRequest()->getMethod() != "GET") {
             $this->respondNotAllowed();
@@ -28,7 +28,7 @@ class HistoryPresenter extends SecuredPresenter
         $this->requestGetList($resourceId);
     }
 
-    protected function requestGetList($eventId)
+    protected function requestGetList($eventId): void
     {
         $records = null;
         try {

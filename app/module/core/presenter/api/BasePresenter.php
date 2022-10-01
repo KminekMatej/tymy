@@ -52,7 +52,7 @@ class BasePresenter extends RootPresenter
         parent::__construct();
     }
 
-    protected function startup()
+    protected function startup(): void
     {
         Debugger::timer("request");
         parent::startup();
@@ -97,7 +97,7 @@ class BasePresenter extends RootPresenter
         }
     }
 
-    protected function requestGet($resourceId, $subResourceId)
+    protected function requestGet(int $resourceId, ?int $subResourceId): void
     {
         $record = null;
         try {
@@ -109,7 +109,7 @@ class BasePresenter extends RootPresenter
         $this->respondOk($record->jsonSerialize()); /* @phpstan-ignore-line */
     }
 
-    protected function requestPost($resourceId)
+    protected function requestPost(?int $resourceId): void
     {
         $created = null;
         try {
@@ -121,7 +121,7 @@ class BasePresenter extends RootPresenter
         $this->respondOkCreated($created->jsonSerialize()); /* @phpstan-ignore-line */
     }
 
-    protected function requestPut($resourceId, $subResourceId)
+    protected function requestPut(int $resourceId, ?int $subResourceId): void
     {
         $updated = null;
         try {
@@ -133,7 +133,7 @@ class BasePresenter extends RootPresenter
         $this->respondOk($updated->jsonSerialize()); /* @phpstan-ignore-line */
     }
 
-    protected function requestDelete($resourceId, $subResourceId)
+    protected function requestDelete(int $resourceId, ?int $subResourceId): void
     {
         $deletedId = null;
         try {
@@ -148,7 +148,7 @@ class BasePresenter extends RootPresenter
     /**
      * Simple exception handler. If any exception gets throws, logs message into exception.log file and then either responds proper response, or continue throwing the response
      */
-    protected function handleException(\Throwable $exc)
+    protected function handleException(\Throwable $exc): void
     {
         if ($exc instanceof AbortException) {
             throw $exc; //when its aborted, simply continue with abortion
@@ -179,42 +179,42 @@ class BasePresenter extends RootPresenter
         throw $exc;
     }
 
-    protected function respondOk($payload = null)
+    protected function respondOk($payload = null): void
     {
         $this->responder->A200_OK($payload);
     }
 
-    protected function respondOkCreated($payload = null)
+    protected function respondOkCreated($payload = null): void
     {
         $this->responder->A201_CREATED($payload);
     }
 
-    protected function respondDeleted($id)
+    protected function respondDeleted($id): void
     {
         $this->respondOk(["id" => (int) $id]);
     }
 
-    protected function respondBadRequest($message = null)
+    protected function respondBadRequest($message = null): void
     {
         $this->responder->E400_BAD_REQUEST($message);
     }
 
-    protected function respondUnauthorized()
+    protected function respondUnauthorized(): void
     {
         $this->responder->E401_UNAUTHORIZED();
     }
 
-    protected function respondForbidden()
+    protected function respondForbidden(): void
     {
         $this->responder->E403_FORBIDDEN("Nedostatečná práva");
     }
 
-    protected function respondNotFound()
+    protected function respondNotFound(): void
     {
         $this->responder->E404_NOT_FOUND();
     }
 
-    protected function respondNotAllowed()
+    protected function respondNotAllowed(): void
     {
         $this->responder->E405_METHOD_NOT_ALLOWED();
     }
@@ -223,10 +223,9 @@ class BasePresenter extends RootPresenter
      * If resourceId is supplied, load desired object using supplied manager.
      * Fills resourceRow property and returns BaseModel (resourceRow mapped using BaseManager)
      *
-     * @param int $resourceId
-     * @return BaseModel|false Model mapped
+     * @return BaseModel|false|null Model mapped
      */
-    protected function loadResource($resourceId, BaseManager $manager): \Tymy\Module\Core\Model\BaseModel|false
+    protected function loadResource(int $resourceId, BaseManager $manager): ?\Tymy\Module\Core\Model\BaseModel
     {
         if (empty($resourceId)) {
             return null;
@@ -245,10 +244,9 @@ class BasePresenter extends RootPresenter
      * If subResourceId is supplied, load desired object using supplied manager.
      * Fills subResourceRow property and returns BaseModel (subResourceRow mapped using BaseManager)
      *
-     * @param int $subResourceId
-     * @return BaseModel|false Model mapped
+     * @return BaseModel|false|null Model mapped
      */
-    protected function loadSubResource($subResourceId, BaseManager $manager): \Tymy\Module\Core\Model\BaseModel|false
+    protected function loadSubResource(int $subResourceId, BaseManager $manager): ?\Tymy\Module\Core\Model\BaseModel
     {
         if (empty($subResourceId)) {
             return null;
@@ -267,9 +265,9 @@ class BasePresenter extends RootPresenter
      * Transform array of entities into jsonizable array
      *
      * @param BaseModel[] $entities
-     * @return array
+     * @return mixed[]
      */
-    protected function arrayToJson($entities)
+    protected function arrayToJson(array $entities): array
     {
         if (empty($entities)) {
             return [];
@@ -281,35 +279,24 @@ $entity->jsonSerialize(), $entities);
 
     /**
      * Check that supplied array is arrray of objects - used to detect whether POST or PUT request input data are single or multiple objects
-     * @param array $array
-     * @return boolean
+     * @param mixed[] $array
      */
-    public function isMultipleObjects($array)
+    public function isMultipleObjects(array $array): bool
     {
-        if (!is_array($array)) {
-            return false;
-        }
-
-        foreach ($array as $innArr) {
-            if (!is_array($innArr)) {
-                return false;
-            }
-        }
-
-        return true;
+        return false;
     }
 
     /**
      * Simple function to throw Bad Request if suplied parametr is non-truthy
      */
-    protected function needs(mixed $parameter = null)
+    protected function needs(mixed $parameter = null): void
     {
         if (!$parameter) {
             $this->respondBadRequest();
         }
     }
 
-    public function setRequestData($requestData)
+    public function setRequestData($requestData): void
     {
         $this->requestData = $requestData;
     }

@@ -97,79 +97,79 @@ class Attendance extends BaseModel implements JsonSerializable
         return $this->user;
     }
 
-    public function setUserId(int $userId)
+    public function setUserId(int $userId): static
     {
         $this->userId = $userId;
         return $this;
     }
 
-    public function setEventId(int $eventId)
+    public function setEventId(int $eventId): static
     {
         $this->eventId = $eventId;
         return $this;
     }
 
-    public function setPreStatusId(?int $preStatusId)
+    public function setPreStatusId(?int $preStatusId): static
     {
         $this->preStatusId = $preStatusId;
         return $this;
     }
 
-    public function setPreStatus(?string $preStatus)
+    public function setPreStatus(?string $preStatus): static
     {
         $this->preStatus = $preStatus;
         return $this;
     }
 
-    public function setPreDescription(?string $preDescription)
+    public function setPreDescription(?string $preDescription): static
     {
         $this->preDescription = $preDescription;
         return $this;
     }
 
-    public function setPreUserMod(?int $preUserMod)
+    public function setPreUserMod(?int $preUserMod): static
     {
         $this->preUserMod = $preUserMod;
         return $this;
     }
 
-    public function setPreDatMod(?DateTime $preDatMod)
+    public function setPreDatMod(?DateTime $preDatMod): static
     {
         $this->preDatMod = $preDatMod;
         return $this;
     }
 
-    public function setPostStatusId(?int $postStatusId)
+    public function setPostStatusId(?int $postStatusId): static
     {
         $this->postStatusId = $postStatusId;
         return $this;
     }
 
-    public function setPostStatus(?string $postStatus)
+    public function setPostStatus(?string $postStatus): static
     {
         $this->postStatus = $postStatus;
         return $this;
     }
 
-    public function setPostDescription(?string $postDescription)
+    public function setPostDescription(?string $postDescription): static
     {
         $this->postDescription = $postDescription;
         return $this;
     }
 
-    public function setPostUserMod(?int $postUserMod)
+    public function setPostUserMod(?int $postUserMod): static
     {
         $this->postUserMod = $postUserMod;
         return $this;
     }
 
-    public function setPostDatMod(?DateTime $postDatMod)
+    public function setPostDatMod(?DateTime $postDatMod): static
     {
         $this->postDatMod = $postDatMod;
         return $this;
     }
 
-    public function setUser(?SimpleUser $user = null)
+    public function setUser(?SimpleUser $user = null): static
     {
         $this->user = $user;
         return $this;
@@ -180,6 +180,9 @@ class Attendance extends BaseModel implements JsonSerializable
         return self::MODULE;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     public function getScheme(): array
     {
         return AttendanceMapper::scheme();
@@ -190,7 +193,10 @@ class Attendance extends BaseModel implements JsonSerializable
         return self::TABLE;
     }
 
-    public function jsonSerialize()
+    /**
+     * @return mixed[]
+     */
+    public function jsonSerialize(): array
     {
         return parent::jsonSerialize() + [
             "user" => $this->user !== null ? $this->user->jsonSerialize() : null,

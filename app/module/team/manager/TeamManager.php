@@ -79,7 +79,7 @@ class TeamManager extends BaseManager
         return $this->map($this->database->table(Team::TABLE)->where("sys_name", $sysname)->fetch());
     }
 
-    public function getTeam(): Team
+    public function getTeam(): ?\Tymy\Module\Team\Model\Team
     {
         if (!isset($this->team)) {
             $this->team = $this->getBySysname($this->teamSysName);
@@ -97,6 +97,9 @@ class TeamManager extends BaseManager
         return Team::class;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     protected function getScheme(): array
     {
         return TeamMapper::scheme();
@@ -112,6 +115,9 @@ class TeamManager extends BaseManager
         return true;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getAllowedReaders(BaseModel $record): array
     {
         return [];

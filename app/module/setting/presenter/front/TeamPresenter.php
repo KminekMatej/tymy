@@ -16,7 +16,7 @@ class TeamPresenter extends SettingBasePresenter
     /** @inject */
     public FormFactory $formFactory;
 
-    public function renderDefault()
+    public function renderDefault(): void
     {
         $this->template->statusSets = $this->statusSetManager->getList();
     }

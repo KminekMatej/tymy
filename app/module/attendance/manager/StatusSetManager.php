@@ -48,6 +48,9 @@ class StatusSetManager extends BaseManager
         return StatusSet::class;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     protected function getScheme(): array
     {
         return StatusSetMapper::scheme();
@@ -141,6 +144,9 @@ class StatusSetManager extends BaseManager
         return parent::deleteRecord($resourceId);
     }
 
+    /**
+     * @return int[]
+     */
     public function getAllowedReaders(BaseModel $record): array
     {
         return $this->getAllUserIds();
@@ -153,10 +159,9 @@ class StatusSetManager extends BaseManager
 
     /**
      * Get array of StatusSet objects which user is allowed to read
-     * @param int $userId
      * @return Discussion[]
      */
-    public function getListUserAllowed($userId)
+    public function getListUserAllowed(int $userId): array
     {
         return $this->mapAll($this->database->table($this->getTable())->fetchAll());
     }

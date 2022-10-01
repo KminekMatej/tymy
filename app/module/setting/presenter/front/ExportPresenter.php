@@ -15,18 +15,18 @@ class ExportPresenter extends SettingBasePresenter
     /** @inject */
     public StatusManager $statusManager;
 
-    public function beforeRender()
+    public function beforeRender(): void
     {
         parent::beforeRender();
         $this->addBreadcrumb($this->translator->translate("settings.export"), $this->link(":Setting:Export:"));
     }
 
-    public function renderDefault()
+    public function renderDefault(): void
     {
         $this->template->iCal = $this->iCalManager->getByUserId($this->user->getId());
     }
 
-    public function createComponentCalendarForm()
+    public function createComponentCalendarForm(): \Nette\Application\UI\Form
     {
         $iCal = $this->iCalManager->getByUserId($this->user->getId());
 
@@ -49,7 +49,7 @@ class ExportPresenter extends SettingBasePresenter
 
         $form->addSubmit("save");
 
-        $form->onSuccess[] = function (Form $form, stdClass $values) use ($iCal) {
+        $form->onSuccess[] = function (Form $form, stdClass $values) use ($iCal): void {
             if ($iCal !== null) {
                 $this->iCalManager->update((array) $values, $this->user->getId(), $iCal->getId());
             } else {

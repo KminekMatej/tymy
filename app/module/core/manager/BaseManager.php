@@ -117,7 +117,7 @@ abstract class BaseManager
 
     /**
      * Maps one active row to object
-     * @param ActiveRow|false $row
+     * @param ActiveRow|false|null $row
      * @return BaseModel
      */
     public function map(?IRow $row, bool $force = false): ?BaseModel
@@ -303,7 +303,7 @@ abstract class BaseManager
      * @return int number of affected rows
      * @throws Exception
      */
-    protected function updateRecord($table, $id, array $updates, $idColumn = "id")
+    protected function updateRecord(string $table, int $id, array $updates, string $idColumn = "id")
     {
         try {
             $updated = $this->database->table($table)->where($idColumn, $id)->update($updates);
@@ -317,12 +317,10 @@ abstract class BaseManager
      * Creates table row based on given table, inserts array. Function throws correct exception using class DBException
      * IDColumn can be changed if primary key is different than classic `id`
      *
-     * @param string $table
-     * @param string $idColumn
      * @return ActiveRow
      * @throws Exception
      */
-    protected function createRecord($table, array $inserts, $idColumn = "id")
+    protected function createRecord(string $table, array $inserts, string $idColumn = "id")
     {
         try {
             $inserted = $this->database->table($table)->insert($inserts);
@@ -398,7 +396,7 @@ abstract class BaseManager
      * @return ActiveRow Created row
      * @throws Exception
      */
-    public function createByArray($array)
+    public function createByArray(array $array)
     {
         $created = $this->createRecord($this->getTable(), $this->composeInsertArray($array));
 
@@ -414,13 +412,13 @@ abstract class BaseManager
      * @param array $array Input data (usually $this->requestData)
      * @return array Insert output
      */
-    public function composeInsertArray($array)
+    public function composeInsertArray(array $array)
     {
         $inserts = [];
 
         foreach ($this->getScheme() as $field) {
             /* @var $field Field */
-            if ($field->getMandatory() && !array_key_exists($field->getProperty(), $array)) {
+            if ($field->getMandatory() && !property_exists($array, $field->getProperty())) {
                 $this->responder->E4013_MISSING_INPUT($field->getProperty());
             }
 
@@ -480,7 +478,7 @@ abstract class BaseManager
 
     /**
      * Basic allow function to be overriden - otherwise throw 405:Not allowed
-     * @param ?int $recordId Id of record to read (optional)
+     * @param int $recordId Id of record to read (optional)
      */
     protected function allowDelete(int $recordId): void
     {

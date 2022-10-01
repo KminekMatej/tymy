@@ -20,13 +20,13 @@ class PlayerPresenter extends SecuredPresenter
     /** @inject */
     public FormFactory $formFactory;
 
-    public function beforeRender()
+    public function beforeRender(): void
     {
         parent::beforeRender();
         $this->addBreadcrumb($this->translator->translate("team.team", 1), $this->link(":Team:Default:"));
 
         $allFields = $this->userManager->getAllFields();
-        $this->template->addFilter('errorsCount', function ($player, $tabName) use ($allFields) {
+        $this->template->addFilter('errorsCount', function ($player, $tabName) use ($allFields): int {
             $errFields = [];
             switch ($tabName) {
                 case "osobni-udaje":
@@ -50,7 +50,7 @@ class PlayerPresenter extends SecuredPresenter
         });
     }
 
-    public function renderNew($player = null)
+    public function renderNew($player = null): void
     {
         if (!$this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('USR_CREATE'))) {
             $this->flashMessage($this->translator->translate("common.alerts.notPermitted"), "warning");
@@ -86,7 +86,7 @@ class PlayerPresenter extends SecuredPresenter
         $this->template->allRoles = $this->getAllRoles();
     }
 
-    public function renderDefault($player)
+    public function renderDefault($player): void
     {
         /* @var $user User */
         $userId = $this->parseIdFromWebname($player);
@@ -108,7 +108,7 @@ class PlayerPresenter extends SecuredPresenter
         $this->template->isNew = false;
     }
 
-    public function handleDelete($player)
+    public function handleDelete($player): void
     {
         /* @var $user User */
         $userId = $this->parseIdFromWebname($player);
@@ -124,7 +124,7 @@ class PlayerPresenter extends SecuredPresenter
         $this->redirect(':Team:Default:');
     }
 
-    public function handleUpload()
+    public function handleUpload(): void
     {
         $this->getRequest()->getPost();
         $files = $this->getRequest()->getFiles();
@@ -161,7 +161,7 @@ class PlayerPresenter extends SecuredPresenter
         );
     }
 
-    public function userConfigFormSuccess(Form $form, $values)
+    public function userConfigFormSuccess(Form $form, $values): void
     {
         $userId = (int) $values->id;
 

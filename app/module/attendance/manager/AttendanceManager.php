@@ -39,15 +39,15 @@ class AttendanceManager extends BaseManager
 
     /**
      * Get attendance using event and user id
-     * @return Attendance
      */
-    public function getByEventUserId(int $eventId, int $userId)
+    public function getByEventUserId(int $eventId, int $userId): ?\Tymy\Module\Attendance\Model\Attendance
     {
         return $this->map($this->database->table($this->getTable())->where("event_id", $eventId)->where("user_id", $userId)->fetch());
     }
 
     /**
      * Get array of attendanced related to events
+     * @return array<int|string, array<\Tymy\Module\Attendance\Model\Attendance|null>>
      */
     public function getByEvents(array $eventIds): array
     {
@@ -66,7 +66,7 @@ class AttendanceManager extends BaseManager
 
     /**
      * Maps one active row to object
-     * @param ActiveRow|false $row
+     * @param ActiveRow|false|null $row
      * @param bool $force True to skip cache
      * @return Attendance|null
      */
@@ -97,6 +97,9 @@ class AttendanceManager extends BaseManager
         return Attendance::class;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     protected function getScheme(): array
     {
         return AttendanceMapper::scheme();
@@ -105,9 +108,8 @@ class AttendanceManager extends BaseManager
     /**
      * Check edit permission
      * @param Attendance $entity
-     * @param int $userId
      */
-    public function canEdit($entity, $userId): bool
+    public function canEdit($entity, int $userId): bool
     {
         return $entity->getUserId() == $userId;
     }
@@ -115,9 +117,8 @@ class AttendanceManager extends BaseManager
     /**
      * Check read permission
      * @param Attendance $entity
-     * @param int $userId
      */
-    public function canRead($entity, $userId): bool
+    public function canRead($entity, int $userId): bool
     {
         return true;
     }
@@ -181,7 +182,7 @@ class AttendanceManager extends BaseManager
     /**
      * Check permissions if user, specified in data, can create attendance result for this event
      */
-    private function allowSetResult()
+    private function allowSetResult(): void
     {
         $resultRightName = $this->eventRow->result_rights;
         if ($resultRightName) {
@@ -196,7 +197,7 @@ class AttendanceManager extends BaseManager
     /**
      * Check permissions if user, specified in data, can create attendance for this event
      */
-    private function allowAttend(array $data)
+    private function allowAttend(array $data): void
     {
         if ($this->user->getId() !== $data["userId"] && !$this->user->isAllowed($this->user->getId(), Privilege::SYS("ATT_UPDATE"))) {
             $this->respondForbidden();
@@ -241,7 +242,7 @@ class AttendanceManager extends BaseManager
      * @param int $postStatus Either id or code
      * @return int|null Return correct statusId or null for invalid code
      */
-    private function getPostStatusId(int $eventId, $postStatus): ?int
+    private function getPostStatusId(int $eventId, int $postStatus): ?int
     {
         $allowedStatuses = $this->database->query("SELECT status.id, status.code FROM status "
                 . "LEFT JOIN status_set ON status_set.id=status.status_set_id "
@@ -327,7 +328,7 @@ class AttendanceManager extends BaseManager
      * @return int number of affected rows
      * @throws Exception
      */
-    protected function updateRecord($table, $id, array $updates, $idColumn = "id")
+    protected function updateRecord(string $table, int $id, array $updates, string $idColumn = "id"): int
     {
         try {
             $updated = $this->database->table($table)->where("event_id", $id)->where("user_id", $updates["user_id"])->update($updates);

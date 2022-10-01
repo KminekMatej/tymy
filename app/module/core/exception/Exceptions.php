@@ -56,31 +56,31 @@ class TymyResponse extends Exception
         return $this->redirect;
     }
 
-    public function setHttpCode(?int $httpCode)
+    public function setHttpCode(?int $httpCode): static
     {
         $this->httpCode = $httpCode;
         return $this;
     }
 
-    public function setSuccess(bool $success)
+    public function setSuccess(bool $success): static
     {
         $this->success = $success;
         return $this;
     }
 
-    public function setSessionKey(?string $sessionKey)
+    public function setSessionKey(?string $sessionKey): static
     {
         $this->sessionKey = $sessionKey;
         return $this;
     }
 
-    public function setPayload($payload)
+    public function setPayload($payload): static
     {
         $this->payload = $payload;
         return $this;
     }
 
-    public function setRedirect(?string $redirect)
+    public function setRedirect(?string $redirect): static
     {
         $this->redirect = $redirect;
         return $this;

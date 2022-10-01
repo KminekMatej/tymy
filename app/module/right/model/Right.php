@@ -35,19 +35,19 @@ class Right extends BaseModel
         return $this->allowed;
     }
 
-    public function setType(string $type)
+    public function setType(string $type): static
     {
         $this->type = $type;
         return $this;
     }
 
-    public function setName(string $name)
+    public function setName(string $name): static
     {
         $this->name = $name;
         return $this;
     }
 
-    public function setAllowed(string $allowed)
+    public function setAllowed(string $allowed): static
     {
         $this->allowed = $allowed == "YES";
         return $this;
@@ -58,6 +58,9 @@ class Right extends BaseModel
         return self::MODULE;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     public function getScheme(): array
     {
         return RightMapper::scheme();

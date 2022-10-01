@@ -15,7 +15,7 @@ class SimpleUser implements JsonSerializable
     {
     }
 
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }
@@ -50,7 +50,10 @@ class SimpleUser implements JsonSerializable
         return $this->email;
     }
 
-    public function jsonSerialize()
+    /**
+     * @return array<string, string>|array<string, null>
+     */
+    public function jsonSerialize(): array
     {
         return [
             "id" => $this->id,

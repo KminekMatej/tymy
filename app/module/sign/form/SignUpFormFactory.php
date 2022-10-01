@@ -20,10 +20,7 @@ class SignUpFormFactory
     {
     }
 
-    /**
-     * @return Form
-     */
-    public function create(callable $onSuccess)
+    public function create(callable $onSuccess): \Nette\Application\UI\Form
     {
         $form = new Form();
         $form->addText('username', 'Uživatelské jméno:')
@@ -50,7 +47,7 @@ class SignUpFormFactory
 
         $form->addSubmit('send', 'Registrovat');
 
-        $form->onSuccess[] = function (Form $form, $values) use ($onSuccess) {
+        $form->onSuccess[] = function (Form $form, $values) use ($onSuccess): void {
             try {
                 $this->userManager->register([
                     "login" => $values->username,

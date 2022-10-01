@@ -21,19 +21,19 @@ use const QR_ECLEVEL_H;
  */
 class DefaultPresenter extends DebtBasePresenter
 {
-    public function actionDefault(?string $resource = null)
+    public function actionDefault(?string $resource = null): void
     {
         if ($resource) {
             $this->setView("debt");
         }
     }
 
-    public function renderDefault()
+    public function renderDefault(): void
     {
         $this->template->debts = $this->debtManager->getListUserAllowed();
     }
 
-    public function renderDebt(string $resource)
+    public function renderDebt(string $resource): void
     {
         $debtId = $this->parseIdFromWebname($resource);
 
@@ -47,7 +47,7 @@ class DefaultPresenter extends DebtBasePresenter
         $this->template->countryList = $this->getCountryList();
     }
 
-    public function renderImg(string $resource)
+    public function renderImg(string $resource): void
     {
         $debtId = $this->parseIdFromWebname($resource);
 
@@ -66,7 +66,7 @@ class DefaultPresenter extends DebtBasePresenter
         $this->terminate();
     }
 
-    public function renderNew()
+    public function renderNew(): void
     {
         $this->template->debt = (new Debt())
                 ->setAmount(1)
@@ -92,7 +92,7 @@ class DefaultPresenter extends DebtBasePresenter
         $this->template->countryList = $this->getCountryList();
     }
 
-    private function generateQRCodeString($payeeCallName, $payeeEmail, $accountNumber, $amount, $varcode, $message, $currencyISO = "CZK", $countryISO = "CZ")
+    private function generateQRCodeString(string $payeeCallName, $payeeEmail, $accountNumber, $amount, $varcode, string $message, $currencyISO = "CZK", $countryISO = "CZ"): ?string
     {
         Debugger::barDump(func_get_args());
         $accPrefix = null;
@@ -146,7 +146,7 @@ class DefaultPresenter extends DebtBasePresenter
         return rtrim($paymentString, "*");
     }
 
-    public function handleDebtCreate()
+    public function handleDebtCreate(): void
     {
         $bind = $this->getRequest()->getPost();
 
@@ -158,20 +158,20 @@ class DefaultPresenter extends DebtBasePresenter
         $this->redirect(":Debt:Default:", $createdDebt->getWebName());
     }
 
-    public function handleDebtEdit()
+    public function handleDebtEdit(): void
     {
         $bind = $this->getRequest()->getPost();
         $this->editDebt($bind);
     }
 
-    public function handleDebtDelete(string $resource)
+    public function handleDebtDelete(string $resource): void
     {
         $debtId = $this->parseIdFromWebname($resource);
         $this->debtManager->delete($debtId);
         $this->redirect(":Core:Default:");
     }
 
-    private function editDebt($bind)
+    private function editDebt($bind): void
     {
         $this->debtManager->update($bind["changes"], $bind["id"]);
     }

@@ -121,7 +121,7 @@ class UserManager extends BaseManager
      * @return ActiveRow Created row
      * @throws Exception
      */
-    public function createByArray($array)
+    public function createByArray(array $array): \Nette\Database\Table\ActiveRow
     {
         if (isset($array["firstName"]) && strlen($array["firstName"]) > 20) {
             $array["firstName"] = substr($array["firstName"], 0, 20);
@@ -183,7 +183,7 @@ class UserManager extends BaseManager
         $this->database->table(User::TABLE)->where("id", $userId)->update(["last_read_news" => new DateTime()]);
     }
 
-    public function updateByArray(int $id, array $array)
+    public function updateByArray(int $id, array $array): int
     {
         parent::toBoolData($array, ["anonymousResults", "changeableVotes"]);
 
@@ -215,7 +215,8 @@ class UserManager extends BaseManager
         return parent::updateByArray($id, $array);
     }
 
-    /** @return User */
+    /**
+     * @return User|null */
     public function map(?IRow $row, bool $force = false): ?BaseModel
     {
         /* @var $user User */
@@ -240,7 +241,7 @@ class UserManager extends BaseManager
         return $user;
     }
 
-    private function addWarnings(User $user)
+    private function addWarnings(User $user): void
     {
         foreach ($this->teamManager->getTeam()->getRequiredFields() as $requiredField) {
             $getter = "get" . ucfirst($requiredField);
@@ -280,17 +281,15 @@ class UserManager extends BaseManager
      *
      * @return User[]
      */
-    public function getByStatus(string $status)
+    public function getByStatus(string $status): array
     {
         return $this->mapAll($this->database->table($this->getTable())->where("status", $status)->fetchAll());
     }
 
     /**
      * Check if login is already taken
-     *
-     * @return bool
      */
-    public function loginExists(string $login)
+    public function loginExists(string $login): bool
     {
         return $this->database->table($this->getTable())->select("id")->where("user_name", $login)->count("id") > 0;
     }
@@ -338,10 +337,8 @@ class UserManager extends BaseManager
 
     /**
      * Get userId by email
-     *
-     * @return bool
      */
-    public function getIdByEmail(string $email): ?int
+    public function getIdByEmail(string $email): bool
     {
         $row = $this->database->table(User::TABLE_MAILS)->where("email", $email)->fetch();
         return $row !== null ? $row->user_id : null;
@@ -350,7 +347,7 @@ class UserManager extends BaseManager
     /**
      * Register user - create user record in INIT status
      */
-    public function register(array $array): User
+    public function register(array $array): ?\Tymy\Module\User\Model\User
     {
         $this->allowRegister($array);
 
@@ -423,7 +420,7 @@ class UserManager extends BaseManager
 
     /**
      * Load list of user ids, allowed to operate with given privilege
-     * @return int[]|null
+     * @return mixed[]
      */
     public function getUserIdsWithPrivilege(Privilege $privilege): array
     {
@@ -432,7 +429,7 @@ class UserManager extends BaseManager
 
     /**
      * Load list of user object, allowed to operate with given privilege
-     * @return User[]|null
+     * @return \Tymy\Module\Core\Model\BaseModel[]
      */
     public function getUsersWithPrivilege(Privilege $privilege): array
     {
@@ -444,6 +441,9 @@ class UserManager extends BaseManager
         return User::class;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     protected function getScheme(): array
     {
         return UserMapper::scheme();
@@ -459,6 +459,9 @@ class UserManager extends BaseManager
         return true;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getAllowedReaders(BaseModel $record): array
     {
         return [];
@@ -675,7 +678,7 @@ class UserManager extends BaseManager
      *
      * @param int $userId
      */
-    public function pwdLost(string $email, string $hostname, string $callbackUri)
+    public function pwdLost(string $email, string $hostname, string $callbackUri): void
     {
         $userId = $this->getIdByEmail($email);
         if (empty($userId)) {
@@ -854,6 +857,7 @@ class UserManager extends BaseManager
 
     /**
      * Get array of user fields
+     * @return mixed[]|array<string, array<string, string>>
      */
     public function getAllFields(): array
     {
@@ -879,6 +883,9 @@ class UserManager extends BaseManager
         return $this->userFields;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\BaseModel[]
+     */
     public function getList(?array $idList = null, string $idField = "id", ?int $limit = null, ?int $offset = null, ?string $order = null): array
     {
         $rows = $this->database->table($this->getTable())->where("status != ?", User::STATUS_DELETED);

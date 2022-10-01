@@ -28,9 +28,8 @@ class PushNotificationManager extends BaseManager
 
     /**
      * Get Push Notification subscription based on user ID and subscription
-     * @return Subscriber
      */
-    public function getByUserAndSubscription(int $userId, string $subscription)
+    public function getByUserAndSubscription(int $userId, string $subscription): ?\Tymy\Module\Core\Model\BaseModel
     {
         return $this->map($this->database->table(Subscriber::TABLE)
                     ->where("user_id", $userId)
@@ -43,7 +42,7 @@ class PushNotificationManager extends BaseManager
      * @param int[] User ids
      * @return Subscriber[]
      */
-    private function getByUsers(array $userIds)
+    private function getByUsers(array $userIds): array
     {
         return $this->mapAll($this->database->table(Subscriber::TABLE)
                     ->where("user_id", $userIds)
@@ -53,9 +52,8 @@ class PushNotificationManager extends BaseManager
 
     /**
      * Flush (send) all push notification in queue
-     * @return void
      */
-    public function flush()
+    public function flush(): void
     {
         $this->webPush->flush();
     }
@@ -65,6 +63,9 @@ class PushNotificationManager extends BaseManager
         return Subscriber::class;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     protected function getScheme(): array
     {
         return SubscriberMapper::scheme();
@@ -90,6 +91,9 @@ class PushNotificationManager extends BaseManager
         return $this->deleteRecord($resourceId);
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getAllowedReaders(BaseModel $record): array
     {
         //no-one is allowed
@@ -144,7 +148,7 @@ class PushNotificationManager extends BaseManager
      *
      * @param Subscriber[] $subscribers
      */
-    private function applePushBulk(PushNotification $notification, array $subscribers)
+    private function applePushBulk(PushNotification $notification, array $subscribers): void
     {
         $this->applePush->sendBulkNotifications($subscribers, $notification);
 
@@ -160,7 +164,7 @@ class PushNotificationManager extends BaseManager
      * @param Subscriber[] $subscribers
      * @todo
      */
-    private function firebasePushBulk(PushNotification $notification, array $subscribers)
+    private function firebasePushBulk(PushNotification $notification, array $subscribers): void
     {
         try {
             $this->firebasePush->sendBulkNotifications($subscribers, $notification);

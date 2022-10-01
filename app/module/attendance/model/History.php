@@ -42,7 +42,7 @@ class History extends BaseModel
         return $this->userId;
     }
 
-    public function getUpdatedAt(): DateTime
+    public function getUpdatedAt(): ?\Nette\Utils\DateTime
     {
         return $this->updatedAt;
     }
@@ -77,7 +77,7 @@ class History extends BaseModel
         return $this->statusIdTo;
     }
 
-    public function getPreStatusTo(): ?string
+    public function getPreStatusTo(): string
     {
         return $this->preStatusTo;
     }
@@ -97,79 +97,79 @@ class History extends BaseModel
         return $this->updatedBy;
     }
 
-    public function setEventId(int $eventId)
+    public function setEventId(int $eventId): static
     {
         $this->eventId = $eventId;
         return $this;
     }
 
-    public function setUserId(int $userId)
+    public function setUserId(int $userId): static
     {
         $this->userId = $userId;
         return $this;
     }
 
-    public function setUpdatedAt(DateTime $updatedAt)
+    public function setUpdatedAt(DateTime $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
         return $this;
     }
 
-    public function setUpdatedById(?int $updatedById)
+    public function setUpdatedById(?int $updatedById): static
     {
         $this->updatedById = $updatedById;
         return $this;
     }
 
-    public function setEntryType(string $entryType)
+    public function setEntryType(string $entryType): static
     {
         $this->entryType = $entryType;
         return $this;
     }
 
-    public function setStatusIdFrom(?int $statusIdFrom)
+    public function setStatusIdFrom(?int $statusIdFrom): static
     {
         $this->statusIdFrom = $statusIdFrom;
         return $this;
     }
 
-    public function setPreStatusFrom(?string $preStatusFrom)
+    public function setPreStatusFrom(?string $preStatusFrom): static
     {
         $this->preStatusFrom = $preStatusFrom;
         return $this;
     }
 
-    public function setPreDescFrom(?string $preDescFrom)
+    public function setPreDescFrom(?string $preDescFrom): static
     {
         $this->preDescFrom = $preDescFrom;
         return $this;
     }
 
-    public function setStatusIdTo(int $statusIdTo)
+    public function setStatusIdTo(int $statusIdTo): static
     {
         $this->statusIdTo = $statusIdTo;
         return $this;
     }
 
-    public function setPreStatusTo(?string $preStatusTo)
+    public function setPreStatusTo(?string $preStatusTo): static
     {
         $this->preStatusTo = $preStatusTo;
         return $this;
     }
 
-    public function setPreDescTo(?string $preDescTo)
+    public function setPreDescTo(?string $preDescTo): static
     {
         $this->preDescTo = $preDescTo;
         return $this;
     }
 
-    public function setUser(?SimpleUser $user = null)
+    public function setUser(?SimpleUser $user = null): static
     {
         $this->user = $user;
         return $this;
     }
 
-    public function setUpdatedBy(?SimpleUser $updatedBy)
+    public function setUpdatedBy(?SimpleUser $updatedBy): static
     {
         $this->updatedBy = $updatedBy;
         return $this;
@@ -180,6 +180,9 @@ class History extends BaseModel
         return self::MODULE;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     public function getScheme(): array
     {
         return HistoryMapper::scheme();
@@ -190,7 +193,10 @@ class History extends BaseModel
         return self::TABLE;
     }
 
-    public function jsonSerialize()
+    /**
+     * @return mixed[]
+     */
+    public function jsonSerialize(): array
     {
         return parent::jsonSerialize() + [
             "preStatusFrom" => $this->getPreStatusFrom(),

@@ -27,7 +27,7 @@ class AttendanceTest extends RequestCase
         return Attendance::MODULE;
     }
 
-    public function testPost()
+    public function testPost(): void
     {
         $this->authorizeAdmin();
         //pre
@@ -102,7 +102,7 @@ class AttendanceTest extends RequestCase
         $this->request($this->getBasePath(), "POST", $mocked)->expect(400);
     }
 
-    public function testViewPlanForbidden()
+    public function testViewPlanForbidden(): void
     {
         $this->authorizeAdmin();
         $eventId = $this->recordManager->createEvent(null, ["resultRightName" => null]);
@@ -123,7 +123,7 @@ class AttendanceTest extends RequestCase
         $this->request($this->getBasePath(), "POST", $mockedPlan)->expect(200, "array");
     }
 
-    public function testPermissivePost()
+    public function testPermissivePost(): void
     {
         $this->authorizeAdmin();
         $this->eventId = $this->recordManager->createEvent(null, ["viewRightName" => "ADMINONLY", "planRightName" => "ADMINONLY", "resultRightName" => "MAINADMIN"]);
@@ -149,24 +149,27 @@ class AttendanceTest extends RequestCase
         $this->request($this->getBasePath(), "POST", $mockedResult)->expect(200, "array"); //superadmin is allowed to fill result
     }
 
-    public function testUnknownEvent()
+    public function testUnknownEvent(): void
     {
         $this->authorizeUser();
         $mocked = $this->recordManager->mockAttendance(99999, true, false);
         $this->request($this->getBasePath(), "POST", $mocked)->expect(404); //event doesnt exist
     }
 
-    public function createRecord()
+    public function createRecord(): void
     {
         //attendance are never created solely, always just posted to some event
     }
 
-    public function mockRecord()
+    public function mockRecord(): array
     {
         return $this->recordManager->mockAttendance($this->eventId, true, false);
     }
 
 
+    /**
+     * @return mixed[]
+     */
     protected function mockChanges(): array
     {
         return [];

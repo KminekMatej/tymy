@@ -96,7 +96,7 @@ abstract class RequestCase extends TestCase
         return $this->recordManager;
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         //process request logs and save them to file
         if (empty($this->logs)) {
@@ -226,7 +226,7 @@ abstract class RequestCase extends TestCase
         }
     }
 
-    private function createInitialRequest($httpRequest): Request
+    private function createInitialRequest(\Nette\Http\IRequest $httpRequest): Request
     {
         $params = $this->routeList->match($httpRequest);
 
@@ -299,7 +299,7 @@ abstract class RequestCase extends TestCase
     }
 
     /** @return Presenter */
-    protected function loadPresenter($name)
+    protected function loadPresenter(string $name)
     {
         $presenter = $this->presenterFactory->createPresenter($name);
         $presenter->autoCanonicalize = false;

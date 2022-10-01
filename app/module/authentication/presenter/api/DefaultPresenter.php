@@ -21,7 +21,7 @@ class DefaultPresenter extends BasePresenter
     /** @inject */
     public MultiaccountManager $maManager;
 
-    public function actionIn($username, $password)
+    public function actionIn($username, $password): void
     {
         try {
             $this->user->login($this->requestData["login"] ?? $username, $this->requestData["password"] ?? $password);
@@ -35,7 +35,7 @@ class DefaultPresenter extends BasePresenter
         $this->responder->A2001_LOGGED_IN($this->userManager->getById($userId)->jsonSerialize(), session_id());
     }
 
-    public function actionInTk(string $tk)
+    public function actionInTk(string $tk): void
     {
         if (empty($tk)) {
             $this->respondBadRequest();
@@ -52,7 +52,7 @@ class DefaultPresenter extends BasePresenter
         $this->responder->A2001_LOGGED_IN($this->userManager->getById($userId)->jsonSerialize(), session_id());
     }
 
-    public function actionOut()
+    public function actionOut(): void
     {
         $this->user->logout();
         $this->respondOk();

@@ -20,7 +20,7 @@ class StatusPresenter extends SecuredPresenter
     /** @inject */
     public StatusSetManager $statusSetManager;
 
-    public function actionStatus($resourceId, $subResourceId)
+    public function actionStatus($resourceId, $subResourceId): void
     {
         switch ($this->getRequest()->getMethod()) {
             case "GET":
@@ -39,7 +39,7 @@ class StatusPresenter extends SecuredPresenter
         $this->respondNotAllowed();
     }
 
-    public function actionStatusSet($resourceId, $subResourceId)
+    public function actionStatusSet($resourceId, $subResourceId): void
     {
         switch ($this->getRequest()->getMethod()) {
             case "POST":
@@ -55,7 +55,7 @@ class StatusPresenter extends SecuredPresenter
         $this->respondNotAllowed();
     }
 
-    private function requestStatusGet($resourceId, $subResourceId)
+    private function requestStatusGet(int $resourceId, ?int $subResourceId): void
     {
         $record = null;
         try {
@@ -67,7 +67,7 @@ class StatusPresenter extends SecuredPresenter
         $this->respondOk($record->jsonSerialize()); /* @phpstan-ignore-line */
     }
 
-    private function requestStatusGetList()
+    private function requestStatusGetList(): void
     {
         $statuses = null;
         try {
@@ -79,7 +79,7 @@ class StatusPresenter extends SecuredPresenter
         $this->respondOk($this->arrayToJson($statuses)); /* @phpstan-ignore-line */
     }
 
-    private function requestStatusPost($resourceId)
+    private function requestStatusPost(?int $resourceId): void
     {
         $created = null;
         try {
@@ -91,7 +91,7 @@ class StatusPresenter extends SecuredPresenter
         $this->respondOkCreated($created->jsonSerialize()); /* @phpstan-ignore-line */
     }
 
-    private function requestStatusPut($resourceId, $subResourceId)
+    private function requestStatusPut(int $resourceId, ?int $subResourceId): void
     {
         $updated = null;
         try {
@@ -103,7 +103,7 @@ class StatusPresenter extends SecuredPresenter
         $this->respondOk($updated->jsonSerialize()); /* @phpstan-ignore-line */
     }
 
-    private function requestStatusDelete($resourceId, $subResourceId)
+    private function requestStatusDelete(int $resourceId, ?int $subResourceId): void
     {
         $deletedId = null;
         try {
@@ -115,7 +115,7 @@ class StatusPresenter extends SecuredPresenter
         $this->respondDeleted($deletedId); /* @phpstan-ignore-line */
     }
 
-    private function requestStatusSetPost($resourceId)
+    private function requestStatusSetPost(?int $resourceId): void
     {
         $created = null;
         try {
@@ -127,7 +127,7 @@ class StatusPresenter extends SecuredPresenter
         $this->respondOkCreated($created->jsonSerialize()); /* @phpstan-ignore-line */
     }
 
-    private function requestStatusSetPut($resourceId, $subResourceId)
+    private function requestStatusSetPut(int $resourceId, ?int $subResourceId): void
     {
         $updated = null;
         try {
@@ -139,7 +139,7 @@ class StatusPresenter extends SecuredPresenter
         $this->respondOk($updated->jsonSerialize()); /* @phpstan-ignore-line */
     }
 
-    private function requestStatusSetDelete($resourceId, $subResourceId)
+    private function requestStatusSetDelete(int $resourceId, ?int $subResourceId): void
     {
         $deletedId = null;
         try {

@@ -30,7 +30,7 @@ class AttendanceStatusTest extends RequestCase
         return parent::getBasePath() . "Status";
     }
 
-    public function getStatusSetPath()
+    public function getStatusSetPath(): string
     {
         return parent::getBasePath() . "StatusSet";
     }
@@ -40,7 +40,7 @@ class AttendanceStatusTest extends RequestCase
         return Attendance::MODULE;
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $this->authorizeAdmin();
 
@@ -54,7 +54,7 @@ class AttendanceStatusTest extends RequestCase
         $this->request($this->getBasePath() . "/" . $last["id"])->expect(200, "array");
     }
 
-    public function testCRUDStatus()
+    public function testCRUDStatus(): void
     {
         //createStatus under some status set
         $statusSetId = $this->getStatusSetId();
@@ -90,7 +90,7 @@ class AttendanceStatusTest extends RequestCase
         $this->request($this->getBasePath() . "/$statusId", "DELETE")->expect(200);
     }
 
-    public function testStatusSetForbidden()
+    public function testStatusSetForbidden(): void
     {
         $this->authorizeUser();
 
@@ -98,7 +98,7 @@ class AttendanceStatusTest extends RequestCase
         $this->request($this->getStatusSetPath(), "POST", $statusSetData)->expect(403);
     }
 
-    public function testStatusSetNoName()
+    public function testStatusSetNoName(): void
     {
         $this->authorizeAdmin();
 
@@ -107,7 +107,7 @@ class AttendanceStatusTest extends RequestCase
         $this->request($this->getStatusSetPath(), "POST", $statusSetData)->expect(400);
     }
 
-    public function testCRUDStatusSet()
+    public function testCRUDStatusSet(): void
     {
         $this->authorizeAdmin();
 
@@ -140,7 +140,7 @@ class AttendanceStatusTest extends RequestCase
         $this->request($this->getStatusSetPath() . "/$statusSetId", "DELETE")->expect(200);
     }
 
-    private function checkStatusOfStatusSet(int $statusSetId, array $mockedStatusData)
+    private function checkStatusOfStatusSet(int $statusSetId, array $mockedStatusData): void
     {
         $statusData = $this->request($this->getBasePath() . "/$statusSetId")->expect(200, "array")->getData();
         Assert::hasKey("id", $statusData);
@@ -179,17 +179,20 @@ class AttendanceStatusTest extends RequestCase
         return $allStatusSets[random_int(0, (is_countable($allStatusSets) ? count($allStatusSets) : 0) - 1)]["id"];
     }
 
-    public function createRecord()
+    public function createRecord(): void
     {
         //use creator from recorManager - can create status or statusSet
     }
 
-    public function mockRecord()
+    public function mockRecord(): void
     {
         //use mocker from recordManager - can mock status or statusSet
     }
 
 
+    /**
+     * @return mixed[]
+     */
     protected function mockChanges(): array
     {
         return [];

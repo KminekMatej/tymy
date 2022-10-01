@@ -19,7 +19,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->manager = $manager;
     }
 
-    public function actionDefault($resourceId, $subResourceId, ?string $filter, ?string $order, ?string $limit, ?string $offset)
+    public function actionDefault($resourceId, $subResourceId, ?string $filter, ?string $order, ?string $limit, ?string $offset): void
     {
         if (empty($resourceId) && in_array($this->getRequest()->getMethod(), ["PUT", "DELETE"])) {
             $resourceId = $this->requestData["id"];
@@ -44,14 +44,14 @@ class DefaultPresenter extends SecuredPresenter
         $this->respondNotAllowed();
     }
 
-    private function requestGetList(?string $filter, ?string $order, ?string $limit, ?string $offset)
+    private function requestGetList(?string $filter, ?string $order, ?string $limit, ?string $offset): void
     {
         $events = $this->manager->getListUserAllowed($this->user->getId(), $filter, $order, (int) $limit, (int) $offset);
 
         $this->respondOk($this->arrayToJson($events));
     }
 
-    protected function requestPost($resourceId)
+    protected function requestPost($resourceId): void
     {
         if ($this->isMultipleObjects($this->requestData)) {
             $events = [];
@@ -64,7 +64,7 @@ class DefaultPresenter extends SecuredPresenter
         }
     }
 
-    private function performPost(array $data): Event
+    private function performPost(array $data): ?\Tymy\Module\Core\Model\BaseModel
     {
         $created = null;
         try {

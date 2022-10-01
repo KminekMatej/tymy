@@ -23,7 +23,7 @@ $container = Bootstrap::boot();
  */
 class DiscussionTest extends RequestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
         $listResponse = $this->getList();
         if ((is_countable($listResponse->getData()) ? count($listResponse->getData()) : 0) == 0) {
@@ -68,7 +68,7 @@ class DiscussionTest extends RequestCase
         }
     }
 
-    public function testNewOnly()
+    public function testNewOnly(): void
     {
         $newOnlyResponse = $this->request($this->getBasePath() . "/newOnly")->expect(200, "array");
         $data = $newOnlyResponse->getData();
@@ -79,7 +79,7 @@ class DiscussionTest extends RequestCase
         }
     }
 
-    public function testCRUDNotPermittedDiscussion()
+    public function testCRUDNotPermittedDiscussion(): void
     {
         $dId = $this->recordManager->createDiscussion(null, [
             "readRightName" => "ADMINONLY",
@@ -133,7 +133,7 @@ class DiscussionTest extends RequestCase
         $this->request($this->getBasePath() . "/$dId/bb?search=Autotest&suser=2")->expect(200, "array");
     }
 
-    public function testPostDiscussion()
+    public function testPostDiscussion(): void
     {
         $this->authorizeAdmin();
         $dId = $this->recordManager->createDiscussion(null, [
@@ -177,7 +177,7 @@ class DiscussionTest extends RequestCase
         $this->request($this->getBasePath() . "/$dId/post/$pid", "DELETE")->expect(200);
     }
 
-    public function testBbCodes()
+    public function testBbCodes(): void
     {
         $this->bbTest("[b]Tucnice[/b]", "<strong>Tucnice</strong>");
         $this->bbTest("[i]Kurziva[/i]", "<em>Kurziva</em>");
@@ -230,13 +230,13 @@ class DiscussionTest extends RequestCase
         $this->bbTest("[script type='text/javascript']alert('Uu');[/script]", "[script type='text/javascript']alert('Uu');[/script]");
     }
 
-    private function bbTest(string $bb, string $html)
+    private function bbTest(string $bb, string $html): void
     {
         $out = $this->request($this->getBasePath() . "/preview", "POST", ["post" => $bb])->expect(200, "string")->getData();
         Assert::equal($html, $out);
     }
 
-    public function testSticky()
+    public function testSticky(): void
     {
         $this->authorizeAdmin();
         $dId = $this->recordManager->createDiscussion(null, [
@@ -264,7 +264,7 @@ class DiscussionTest extends RequestCase
         return $this->request($this->getBasePath())->expect(200, "array");
     }
 
-    public function testCRUD()
+    public function testCRUD(): void
     {
         $this->authorizeAdmin();
         $recordId = $this->createRecord();
@@ -276,7 +276,7 @@ class DiscussionTest extends RequestCase
         $this->deleteRecord($recordId);
     }
 
-    public function createRecord()
+    public function createRecord(): int
     {
         return $this->recordManager->createDiscussion();
     }
@@ -291,6 +291,9 @@ class DiscussionTest extends RequestCase
         return Discussion::MODULE;
     }
 
+    /**
+     * @return array<string, string>
+     */
     protected function mockChanges(): array
     {
         return [
@@ -299,7 +302,10 @@ class DiscussionTest extends RequestCase
         ];
     }
 
-    public function mockRecord()
+    /**
+     * @return array<string, string>|array<string, bool>
+     */
+    public function mockRecord(): array
     {
         return $this->recordManager->mockDiscussion();
     }

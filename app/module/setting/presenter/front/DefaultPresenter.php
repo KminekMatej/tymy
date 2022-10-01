@@ -30,7 +30,7 @@ class DefaultPresenter extends SettingBasePresenter
     public StatusManager $statusManager;
 
 
-    public function renderDefault()
+    public function renderDefault(): void
     {
         $this->template->accessibleSettings = $this->getAccessibleSettings();
     }

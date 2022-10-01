@@ -20,20 +20,20 @@ class EventPresenter extends SettingBasePresenter
     /** @inject */
     public FormFactory $formFactory;
 
-    public function beforeRender()
+    public function beforeRender(): void
     {
         parent::beforeRender();
         $this->addBreadcrumb($this->translator->translate("event.event", 2), $this->link(":Setting:Event:"));
     }
 
-    public function actionDefault(?string $resource = null, int $page = 1)
+    public function actionDefault(?string $resource = null, int $page = 1): void
     {
         if ($resource) {
             $this->setView("event");
         }
     }
 
-    public function renderDefault(?string $resource = null, int $page = 1)
+    public function renderDefault(?string $resource = null, int $page = 1): void
     {
         $limit = Event::PAGING_EVENTS_PER_PAGE;
         $offset = ($page - 1) * $limit;
@@ -45,7 +45,7 @@ class EventPresenter extends SettingBasePresenter
         $this->template->pagination = $this->pagination($allEventsCount, $limit, $page, 5);
     }
 
-    public function renderNew()
+    public function renderNew(): void
     {
         $this->allowPermission('EVE_CREATE');
 
@@ -63,7 +63,7 @@ class EventPresenter extends SettingBasePresenter
         ];
     }
 
-    public function renderEvent(string $resource)
+    public function renderEvent(string $resource): void
     {
         $this->allowPermission('EVE_UPDATE');
 
@@ -80,13 +80,13 @@ class EventPresenter extends SettingBasePresenter
         $this->template->event = $eventObj;
     }
 
-    public function handleEventDelete(int $eventId)
+    public function handleEventDelete(int $eventId): void
     {
         $this->eventManager->delete($eventId);
         $this->redirect(':Setting:Event:');
     }
 
-    public function createComponentNewEventForm()
+    public function createComponentNewEventForm(): \Nette\Application\UI\Form
     {
         return $this->formFactory->createEventLineForm(
             $this->eventTypes,
@@ -94,9 +94,9 @@ class EventPresenter extends SettingBasePresenter
         );
     }
 
-    public function createComponentEventForm()
+    public function createComponentEventForm(): \Nette\Application\UI\Multiplier
     {
-        return new Multiplier(function (string $eventId) {
+        return new Multiplier(function (string $eventId): \Nette\Application\UI\Form {
                 $event = $this->eventManager->getById((int) $eventId);
 
                 return $this->formFactory->createEventLineForm(
@@ -107,7 +107,7 @@ class EventPresenter extends SettingBasePresenter
         });
     }
 
-    public function eventFormSuccess(Form $form, stdClass $values)
+    public function eventFormSuccess(Form $form, stdClass $values): void
     {
         try {
             $this->eventManager->update((array) $values, $values->id);
@@ -120,7 +120,7 @@ class EventPresenter extends SettingBasePresenter
         }
     }
 
-    public function newEventFormSuccess(Form $form, stdClass $values)
+    public function newEventFormSuccess(Form $form, stdClass $values): void
     {
         try {
             //load inputs until there are any more rows

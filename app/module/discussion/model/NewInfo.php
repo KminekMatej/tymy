@@ -31,7 +31,10 @@ class NewInfo implements JsonSerializable
         return $this->lastVisit;
     }
 
-    public function jsonSerialize()
+    /**
+     * @return array<string, int>|array<string, \Nette\Utils\DateTime>|array<string, null>
+     */
+    public function jsonSerialize(): array
     {
         return [
             "discussionId" => $this->getDiscussionId(),

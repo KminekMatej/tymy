@@ -33,6 +33,9 @@ class PermissionManager extends BaseManager
         return Permission::class;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     protected function getScheme(): array
     {
         return PermissionMapper::scheme();
@@ -76,20 +79,16 @@ class PermissionManager extends BaseManager
 
     /**
      * Find permissions by its name - returns the first one that matches
-     *
-     * @return Permission
      */
-    public function getByTypeName(string $type, string $name)
+    public function getByTypeName(string $type, string $name): ?\Tymy\Module\Core\Model\BaseModel
     {
         return $this->map($this->database->table($this->getTable())->where("right_type", $type)->where("name", $name)->limit(1)->fetch());
     }
 
     /**
      * Find permissions by its name - returns the first one that matches
-     *
-     * @return Permission
      */
-    public function getByName(string $name)
+    public function getByName(string $name): ?\Tymy\Module\Core\Model\BaseModel
     {
         return $this->map($this->database->table($this->getTable())->where("name", $name)->limit(1)->fetch());
     }
@@ -98,7 +97,7 @@ class PermissionManager extends BaseManager
      * Find permissions by its type
      * @return Permission[]
      */
-    public function getByType(string $type)
+    public function getByType(string $type): array
     {
         return $this->mapAll($this->database->table($this->getTable())->where("right_type", $type)->fetchAll());
     }

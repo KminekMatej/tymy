@@ -53,18 +53,21 @@ class PushNotification implements JsonSerializable
         return $this->badge;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getParams(): array
     {
         return $this->params;
     }
 
-    public function addParam(string $name, $value)
+    public function addParam(string $name, $value): static
     {
         $this->params[$name] = $value;
         return $this;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $array = [
             "userId" => $this->userId,

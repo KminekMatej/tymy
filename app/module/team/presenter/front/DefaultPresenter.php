@@ -10,12 +10,12 @@ class DefaultPresenter extends SecuredPresenter
 {
     private string $userType;
 
-    public function beforeRender()
+    public function beforeRender(): void
     {
         parent::beforeRender();
 
         $allFields = $this->userManager->getAllFields();
-        $this->template->addFilter('errorsCount', function ($player, $tabName) use ($allFields) {
+        $this->template->addFilter('errorsCount', function ($player, $tabName) use ($allFields): int {
             $errFields = [];
             switch ($tabName) {
                 case "osobni-udaje":
@@ -39,41 +39,41 @@ class DefaultPresenter extends SecuredPresenter
         });
     }
 
-    public function startup()
+    public function startup(): void
     {
         parent::startup();
         $this->addBreadcrumb($this->translator->translate("team.team", 1), $this->link(":Team:Default:"));
     }
 
-    public function actionPlayers()
+    public function actionPlayers(): void
     {
         $this->addBreadcrumb($this->translator->translate("team.PLAYER", 2), $this->link(":Team:Default:players"));
         $this->userType = "PLAYER";
         $this->setView('default');
     }
 
-    public function actionMembers()
+    public function actionMembers(): void
     {
         $this->addBreadcrumb($this->translator->translate("team.MEMBER", 2), $this->link(":Team:Default:members"));
         $this->userType = "MEMBER";
         $this->setView('default');
     }
 
-    public function actionSicks()
+    public function actionSicks(): void
     {
         $this->addBreadcrumb($this->translator->translate("team.SICK", 2), $this->link(":Team:Default:sicks"));
         $this->userType = "SICK";
         $this->setView('default');
     }
 
-    public function actionInits()
+    public function actionInits(): void
     {
         $this->addBreadcrumb($this->translator->translate("team.INIT", 2), $this->link(":Team:Default:inits"));
         $this->userType = "INIT";
         $this->setView('default');
     }
 
-    public function renderDefault()
+    public function renderDefault(): void
     {
         $users = isset($this->userType) ? $this->userManager->getByStatus($this->userType) : $this->userManager->getList();
         $allMails = [];
@@ -92,7 +92,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->template->allMails = implode(",", $allMails);
     }
 
-    public function renderJerseys()
+    public function renderJerseys(): void
     {
         $allPlayers = $this->userManager->getList();
         $min = 0;
@@ -122,7 +122,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->addBreadcrumb($this->translator->translate("team.jersey", 2), $this->link(":Team:Default:jerseys"));
     }
 
-    public function handleApprove(int $userId)
+    public function handleApprove(int $userId): void
     {
         try {
             $this->userManager->update(["status" => User::STATUS_PLAYER], $userId);
@@ -135,7 +135,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->redrawNavbar();
     }
 
-    public function handleDelete(int $userId)
+    public function handleDelete(int $userId): void
     {
         try {
             $this->userManager->delete($userId);

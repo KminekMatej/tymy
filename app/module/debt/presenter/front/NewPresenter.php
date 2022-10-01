@@ -17,7 +17,7 @@ class NewPresenter extends DebtBasePresenter
     /** @inject */
     public DebtManager $debtManager;
 
-    public function renderDefault()
+    public function renderDefault(): void
     {
         $this->template->debt = (new Debt())
             ->setAmount(1)
@@ -43,7 +43,7 @@ class NewPresenter extends DebtBasePresenter
         $this->template->countryList = $this->getCountryList();
     }
 
-    public function handleDebtCreate()
+    public function handleDebtCreate(): void
     {
         $bind = $this->getRequest()->getPost();
 

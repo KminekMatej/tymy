@@ -17,7 +17,7 @@ use Tymy\Module\Poll\Model\Poll;
  */
 class OptionManager extends BaseManager
 {
-    public function setPollManager(PollManager $pollManager)
+    public function setPollManager(PollManager $pollManager): static
     {
         return $this;
     }
@@ -27,6 +27,9 @@ class OptionManager extends BaseManager
         return Option::class;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     protected function getScheme(): array
     {
         return OptionMapper::scheme();
@@ -68,6 +71,9 @@ class OptionManager extends BaseManager
     }
 
 
+    /**
+     * @return \Tymy\Module\Core\Model\BaseModel[]|null[]
+     */
     public function createMultiple(array $options, ?int $resourceId = null): array
     {
         if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("ASK.VOTE_UPDATE"))) {
@@ -104,6 +110,9 @@ class OptionManager extends BaseManager
         return parent::deleteRecord($subResourceId);
     }
 
+    /**
+     * @return int[]
+     */
     public function getAllowedReaders(BaseModel $record): array
     {
         return $this->getAllUserIds();

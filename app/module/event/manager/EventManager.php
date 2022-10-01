@@ -44,7 +44,7 @@ class EventManager extends BaseManager
 
     /**
      * Maps one active row to object
-     * @param ActiveRow|false $row
+     * @param ActiveRow|false|null $row
      * @param bool $force True to skip cache
      * @return Event|null
      */
@@ -162,7 +162,7 @@ class EventManager extends BaseManager
      * Get array of event objects which user is allowed to view
      * @return Event[]
      */
-    public function getListUserAllowed(int $userId, ?string $filter = null, ?string $order = null, ?int $limit = null, ?int $offset = null)
+    public function getListUserAllowed(int $userId, ?string $filter = null, ?string $order = null, ?int $limit = null, ?int $offset = null): array
     {
         $selector = $this->selectUserEvents($userId);
 
@@ -235,7 +235,7 @@ class EventManager extends BaseManager
      * @param array|null $eventAttendances Cached attendances - null loads them from database for just this one event
      * @param array|null $allSimpleUsers Cached all simple users, null loads them from database
      */
-    private function addAttendancesToEvent(Event $event, ?array $eventAttendances = null, ?array $allSimpleUsers = null)
+    private function addAttendancesToEvent(Event $event, ?array $eventAttendances = null, ?array $allSimpleUsers = null): void
     {
         if ($eventAttendances == null) {
             $eventAttendances = $this->attendanceManager->getByEvents([$event->getId()])[$event->getId()] ?? [];
@@ -279,10 +279,9 @@ class EventManager extends BaseManager
 
     /**
      * Get array of event ids which user is allowed to view
-     * @param int $userId
      * @return int[]
      */
-    public function getIdsUserAllowed($userId)
+    public function getIdsUserAllowed(int $userId): array
     {
         return $this->selectUserEvents($userId)->fetchPairs(null, "id");
     }
@@ -371,6 +370,9 @@ class EventManager extends BaseManager
         return Event::class;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     protected function getScheme(): array
     {
         return EventMapper::scheme();
@@ -379,9 +381,8 @@ class EventManager extends BaseManager
     /**
      * Check edit permission
      * @param Event $entity
-     * @param int $userId
      */
-    public function canEdit($entity, $userId): bool
+    public function canEdit($entity, int $userId): bool
     {
         return in_array($userId, $this->userManager->getUserIdsWithPrivilege(Privilege::SYS("EVE_UPDATE")));
     }
@@ -389,9 +390,8 @@ class EventManager extends BaseManager
     /**
      * Check read permission
      * @param Event $entity
-     * @param int $userId
      */
-    public function canRead($entity, $userId): bool
+    public function canRead($entity, int $userId): bool
     {
         return empty($entity->getViewRightName()) || in_array($entity->getViewRightName(), $this->permissionManager->getUserAllowedPermissionNames($this->userManager->getById($userId), Permission::TYPE_USER));
     }
@@ -464,7 +464,7 @@ class EventManager extends BaseManager
      *
      * @return Event[]
      */
-    public function getEventsInterval(int $userId, DateTime $from, DateTime $until, ?string $order = null)
+    public function getEventsInterval(int $userId, DateTime $from, DateTime $until, ?string $order = null): array
     {
         return $this->getListUserAllowed($userId, $this->getIntervalFilter($from, $until), $order);
     }
@@ -492,7 +492,7 @@ class EventManager extends BaseManager
      *
      * @return array in the form of ["2021-01" => [...events...], "2021-02" => [...events...], ...]
      */
-    public function getAsMonthArray(array $events)
+    public function getAsMonthArray(array $events): array
     {
         $monthArray = [];
 
@@ -512,9 +512,8 @@ class EventManager extends BaseManager
 
     /**
      * Count all events
-     * @return int
      */
-    public function countAllEvents()
+    public function countAllEvents(): int
     {
         return $this->database->table(Event::TABLE)->count("id");
     }

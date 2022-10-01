@@ -87,7 +87,7 @@ class AuthenticationManager implements IAuthenticator
      *
      * @throws AuthenticationException
      */
-    private function authenticateByTk(string $transferKey): IIdentity
+    private function authenticateByTk(string $transferKey): \Nette\Security\SimpleIdentity
     {
         $teamId = $this->mainDatabase->table(Team::TABLE)->where("sys_name", $this->teamSysName)->fetch()->id;
 

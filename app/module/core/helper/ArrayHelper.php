@@ -25,8 +25,8 @@ class ArrayHelper
      *
      * @param array $inputArray E.g. [[id => 1, value => foo],[id => 2, value => bar]]
      * @param mixed $where E.g. id
-     * @param string $equals E.g. 1
-     * @param string $outputField E.g. value
+     * @param string|null $equals E.g. 1
+     * @param string|null $outputField E.g. value
      * @return array|mixed If output field is specified, returns exact output field from sub-array, found by $key and $value. E.g. would return "foo" or [id => 1, value => foo] if $outputField is not specified. Return null if nothing has been found
      */
     public static function subValue(array $inputArray, mixed $where, string $equals = null, string $outputField = null)
@@ -43,9 +43,9 @@ class ArrayHelper
      * Get sub-arrrays frorm multidimensional array, where property equals field or is in array of fields
      *
      * @param string|string[]|int|int[]|bool $equals
-     * @return array
+     * @return mixed[]
      */
-    public static function filter(array $inputArray, mixed $where, string|array|int|bool $equals)
+    public static function filter(array $inputArray, mixed $where, string|array|int|bool $equals): array
     {
         return array_filter($inputArray, function ($elm) use ($where, $equals) {
             if (is_string($equals) || is_int($equals) || is_bool($equals)) {
@@ -63,7 +63,7 @@ class ArrayHelper
     {
         $sum = 0.0;
 
-        array_walk($inputArray, function ($elm) use (&$sum, $whereKey, $whereValue, $sumKey) {
+        array_walk($inputArray, function ($elm) use (&$sum, $whereKey, $whereValue, $sumKey): void {
             if ($elm[$whereKey] == $whereValue) {
                 $sum += (float) $elm[$sumKey];
             }
@@ -143,6 +143,7 @@ class ArrayHelper
     /**
      * Transform array of entities to array of its json representation
      * @param BaseModel[]|null $entities
+     * @return mixed[]
      */
     public static function arrayToJson(?array $entities = null): array
     {
@@ -209,6 +210,7 @@ $entity->jsonSerialize(), $entities);
 
     /**
      * Function to process absolute array diff - will return array of items which are not in BOTH arrays
+     * @return mixed[]
      */
     public static function diffAbs(array $array1, array $array2): array
     {
@@ -220,6 +222,7 @@ $entity->jsonSerialize(), $entities);
 
     /**
      * Cast all entities in array to int
+     * @return int[]
      */
     public static function ints(array $array): array
     {
@@ -228,6 +231,7 @@ $entity->jsonSerialize(), $entities);
 
     /**
      * Explode string by separator and cast all explded values to int
+     * @return mixed[]
      */
     public static function explodeInts(string $separator, string $string): array
     {
@@ -256,6 +260,7 @@ $entity->jsonSerialize(), $entities);
      * Rows of type ActiveRow are transformed into array and outputed.
      * Any other types of rows are skipped and not outputed.
      * Array keys and order are maintained.
+     * @return mixed[][]
      */
     public static function rowsToArrays(array $rows): array
     {
@@ -277,6 +282,7 @@ $entity->jsonSerialize(), $entities);
      *
      * @param string|null $keyIndex - If null, output array is numerically indexed
      * @param string|null $valueIndex - If null, returns full item specified by its key
+     * @return mixed[]|array<int|string, mixed>
      */
     public static function pairs(array $inputArray, ?string $keyIndex = null, ?string $valueIndex = null): array
     {

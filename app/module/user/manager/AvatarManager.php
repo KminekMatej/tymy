@@ -25,7 +25,7 @@ class AvatarManager
     {
     }
 
-    private function allowUpload(int $userId)
+    private function allowUpload(int $userId): void
     {
         $this->userModel = $this->userManager->getById($userId);
 

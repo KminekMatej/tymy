@@ -18,7 +18,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->manager = $manager;
     }
 
-    public function actionDefault($resourceId, $subResourceId)
+    public function actionDefault($resourceId, $subResourceId): void
     {
         if ($this->getRequest()->getMethod() === 'POST') {
             $this->requestPost($resourceId);
@@ -27,7 +27,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->respondNotAllowed();
     }
 
-    protected function requestPost($resourceId)
+    protected function requestPost($resourceId): void
     {
         if (empty($this->requestData)) {
             $this->respondBadRequest("Missing request data");

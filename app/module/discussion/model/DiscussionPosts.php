@@ -28,12 +28,18 @@ class DiscussionPosts implements \JsonSerializable
         return $this->numberOfPages;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getPosts(): array
     {
         return $this->posts;
     }
 
-    public function jsonSerialize()
+    /**
+     * @return array<string, \Tymy\Module\Discussion\Model\Discussion>|array<string, mixed[]>
+     */
+    public function jsonSerialize(): array
     {
         return [
             "discussion" => $this->getDiscussion(),

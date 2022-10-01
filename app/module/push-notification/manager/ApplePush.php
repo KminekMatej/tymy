@@ -28,7 +28,7 @@ class ApplePush
     {
     }
 
-    public function sendBulkNotifications(array $subscribers, PushNotification $pushNotification)
+    public function sendBulkNotifications(array $subscribers, PushNotification $pushNotification): void
     {
         $this->expiredSubscribers = [];
 
@@ -97,6 +97,9 @@ class ApplePush
         }
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getExpiredSubscribers(): array
     {
         return $this->expiredSubscribers;

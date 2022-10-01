@@ -12,15 +12,21 @@ use Tracy\Debugger;
  */
 class Timer
 {
-    private static $number;
-    private static $sumNumber;
-    private static $points;
-    private static $sumpoints;
+    private static ?int $number = null;
+    private static ?int $sumNumber = null;
+    /**
+     * @var array<mixed, array<string, mixed>>|null
+     */
+    private static ?array $points = null;
+    /**
+     * @var array<mixed, array<string, mixed>>|null
+     */
+    private static ?array $sumpoints = null;
     private static array $serverTimingHeader = [];
     private static bool $started = false;
     private static array $dumps = [];
 
-    private static function start()
+    private static function start(): void
     {
         if (!self::$started) {
             Debugger::timer("_app");
@@ -35,7 +41,7 @@ class Timer
      * @param string $name
      * @param bool $sum If this is a summed checkpoint
      */
-    public static function checkpoint($name = null)
+    public static function checkpoint($name = null): void
     {
         self::start();
 
@@ -46,10 +52,8 @@ class Timer
 
     /**
      * Create measured summed checkpoint for time measurements. Ends previous summed checkpoint and adds its spent time into time sums.
-     *
-     * @param string $name
      */
-    public static function sumpoint($name)
+    public static function sumpoint(string $name): void
     {
         self::start();
 
@@ -58,7 +62,7 @@ class Timer
         self::startNewSumPoint($name);
     }
 
-    private static function finishRunningPoint()
+    private static function finishRunningPoint(): void
     {
         $active = is_int(self::$number);
 
@@ -67,7 +71,7 @@ class Timer
         }
     }
 
-    private static function finishRunningSumPoint()
+    private static function finishRunningSumPoint(): void
     {
         $active = !empty(self::$sumNumber);
 
@@ -77,7 +81,7 @@ class Timer
         }
     }
 
-    private static function startNewPoint($name = null)
+    private static function startNewPoint($name = null): void
     {
         self::$number = is_int(self::$number) ? self::$number + 1 : 0;
         self::$points[self::$number] = [
@@ -87,7 +91,7 @@ class Timer
         Debugger::timer(self::$number);
     }
 
-    private static function startNewSumPoint($name)
+    private static function startNewSumPoint($name): void
     {
         self::$sumNumber = is_int(self::$sumNumber) ? self::$sumNumber + 1 : 0;
         self::$sumpoints[self::$sumNumber] = [
@@ -100,7 +104,7 @@ class Timer
     /**
      * Ends time measuring - stops last timer and logs all checkpoints into info.log
      */
-    public static function end()
+    public static function end(): void
     {
         self::finishRunningPoint();
 
@@ -120,7 +124,7 @@ class Timer
         Debugger::barDump(self::$dumps);
     }
 
-    private static function logPoints($timeWholeApp)
+    private static function logPoints($timeWholeApp): void
     {
         Debugger::log("**** Timer points: ****", "timer");
 
@@ -144,13 +148,13 @@ class Timer
         }
     }
 
-    private static function addServerTime(string $fromName, ?string $toName = null, float $time = 0.0)
+    private static function addServerTime(string $fromName, ?string $toName = null, float $time = 0.0): void
     {
         $caption = $toName ? Strings::webalize($fromName) . "..." . Strings::webalize($toName) : Strings::webalize($fromName);
         self::$serverTimingHeader[] = "$caption;dur=" . (int) round($time * 1000, 0);
     }
 
-    private static function setServerTimingApiHeader()
+    private static function setServerTimingApiHeader(): void
     {
         $decades = count(self::$serverTimingHeader) > 9 ? 2 : 1;
 
@@ -167,7 +171,7 @@ class Timer
         }
     }
 
-    private static function logSumPoints($timeWholeApp)
+    private static function logSumPoints($timeWholeApp): void
     {
         Debugger::log("**** Timer sumpoints: ****", "timer");
         if (empty(self::$sumpoints)) {
@@ -209,7 +213,7 @@ class Timer
         }
     }
 
-    private static function toMs($time)
+    private static function toMs($time): string
     {
         return round((float)$time * 1000, 3) . " ms";
     }

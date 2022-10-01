@@ -27,7 +27,7 @@ class MailService
     {
     }
 
-    private function startup()
+    private function startup(): void
     {
         if (empty($this->team)) {
             $this->team = $this->teamManager->getTeam();
@@ -35,7 +35,7 @@ class MailService
         }
     }
 
-    public function mailUserRegistered(string $nameTo, string $emailTo, string $login, string $email, ?string $firstName = null, ?string $lastName = null, ?string $note = "")
+    public function mailUserRegistered(string $nameTo, string $emailTo, string $login, string $email, ?string $firstName = null, ?string $lastName = null, ?string $note = ""): void
     {
         $this->startup();
         $body = $this->stringsManager->translateBy("register", "reg_mail_body_5s", $login, $firstName, $lastName, $email, $note);
@@ -65,7 +65,7 @@ class MailService
         $this->sendMail($name, $email, $body, $subject);
     }
 
-    public function mailPwdReset(string $name, string $email, string $callbackUri, string $hostName, string $resetCode)
+    public function mailPwdReset(string $name, string $email, string $callbackUri, string $hostName, string $resetCode): void
     {
         $this->startup();
         $body = $this->stringsManager->translateBy("pswd_reset", "rc_mail_body_4s", $hostName, $this->teamDomain, $resetCode, sprintf($callbackUri, $resetCode));

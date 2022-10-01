@@ -72,6 +72,9 @@ class Post extends BaseModel
         return $this->newPost;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getReactions(): array
     {
         return $this->reactions;
@@ -92,73 +95,76 @@ class Post extends BaseModel
         return $this->createdBy;
     }
 
-    public function setDiscussionId(int $discussionId)
+    public function setDiscussionId(int $discussionId): static
     {
         $this->discussionId = $discussionId;
         return $this;
     }
 
-    public function setPost(string $post)
+    public function setPost(string $post): static
     {
         $this->post = $post;
         return $this;
     }
 
-    public function setCreatedById(?int $createdById)
+    public function setCreatedById(?int $createdById): static
     {
         $this->createdById = $createdById;
         return $this;
     }
 
-    public function setCreatedAt(DateTime $createdAt)
+    public function setCreatedAt(DateTime $createdAt): static
     {
         $this->createdAt = $createdAt;
         return $this;
     }
 
-    public function setUpdatedAt(?DateTime $updatedAt)
+    public function setUpdatedAt(?DateTime $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
         return $this;
     }
 
-    public function setUpdatedById(?int $updatedById)
+    public function setUpdatedById(?int $updatedById): static
     {
         $this->updatedById = $updatedById;
         return $this;
     }
 
-    public function setSticky(bool $sticky)
+    public function setSticky(bool $sticky): static
     {
         $this->sticky = $sticky;
         return $this;
     }
 
-    public function setNewPost(bool $newPost)
+    public function setNewPost(bool $newPost): static
     {
         $this->newPost = $newPost;
         return $this;
     }
 
-    public function setReactions(array $reactions)
+    /**
+     * @param mixed[] $reactions
+     */
+    public function setReactions(array $reactions): static
     {
         $this->reactions = $reactions;
         return $this;
     }
 
-    public function setCreatedAtStr(string $createdAtStr)
+    public function setCreatedAtStr(string $createdAtStr): static
     {
         $this->createdAtStr = $createdAtStr;
         return $this;
     }
 
-    public function setUpdatedAtStr(?string $updatedAtStr)
+    public function setUpdatedAtStr(?string $updatedAtStr): static
     {
         $this->updatedAtStr = $updatedAtStr;
         return $this;
     }
 
-    public function setCreatedBy(?SimpleUser $createdBy)
+    public function setCreatedBy(?SimpleUser $createdBy): static
     {
         $this->createdBy = $createdBy;
         return $this;
@@ -169,6 +175,9 @@ class Post extends BaseModel
         return Discussion::MODULE;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     public function getScheme(): array
     {
         return PostMapper::scheme();
@@ -179,7 +188,10 @@ class Post extends BaseModel
         return Discussion::TABLE;
     }
 
-    public function jsonSerialize()
+    /**
+     * @return mixed[]
+     */
+    public function jsonSerialize(): array
     {
         return parent::jsonSerialize() + [
             "newPost" => $this->getNewPost(),

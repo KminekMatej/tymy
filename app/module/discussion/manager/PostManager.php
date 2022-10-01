@@ -43,7 +43,7 @@ class PostManager extends BaseManager
         parent::__construct($managerFactory);
     }
 
-    public function allowDiscussion($discussionId)
+    public function allowDiscussion($discussionId): void
     {
         $this->discussion = $this->loadRecord($discussionId, $this->discussionManager);
 
@@ -275,6 +275,9 @@ class PostManager extends BaseManager
         return Post::class;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     protected function getScheme(): array
     {
         return PostMapper::scheme();
@@ -283,9 +286,8 @@ class PostManager extends BaseManager
     /**
      * Check edit permissions
      * @param Post $entity
-     * @param int $userId
      */
-    public function canEdit($entity, $userId): bool
+    public function canEdit($entity, int $userId): bool
     {
         return $entity->getCreatedById() == $userId;
     }
@@ -293,9 +295,8 @@ class PostManager extends BaseManager
     /**
      * Check read permissions
      * @param Post $entity
-     * @param int $userId
      */
-    public function canRead($entity, $userId): bool
+    public function canRead($entity, int $userId): bool
     {
         return in_array($entity->getDiscussionId(), $this->discussionManager->getIdsUserAllowed($userId));
     }
@@ -313,9 +314,9 @@ class PostManager extends BaseManager
 
     /**
      * Get posts from discussion, selected by page, optionally filtered with search string and/or search user id
-     * @return Post[]|null
+     * @return \Tymy\Module\Core\Model\BaseModel[]
      */
-    private function getPostsFromDiscussion(int $discussionId, int $page = 1, $inBBCode = true, ?string $search = null, ?int $searchUserId = null): ?array
+    private function getPostsFromDiscussion(int $discussionId, int $page = 1, bool $inBBCode = true, ?string $search = null, ?int $searchUserId = null): array
     {
         $this->inBbCode = $inBBCode;
         $offset = ($page - 1) * self::POSTS_PER_PAGE;
@@ -365,7 +366,7 @@ class PostManager extends BaseManager
     /**
      * Get proper page number when searching for page of specific date
      */
-    private function getPageNumberFromDate(int $dicussionId, int $newPosts, DateTime $jumpDate): int
+    private function getPageNumberFromDate(int $dicussionId, int $newPosts, DateTime $jumpDate): int|float
     {
         $firstPageSize = $this->getFirstPageSize($newPosts);
         $postCountBeforeDate = $this->database->table($this->getTable())->where("discussion_id", $dicussionId)->where("insert_date > ?", $jumpDate)->count("id");
@@ -377,9 +378,8 @@ class PostManager extends BaseManager
 
     /**
      * Return number of all posts, optionally filtered with search string and/or search user id
-     * @return int
      */
-    public function countPosts(int $discussionId, ?string $search = null, ?int $searchUserId = null)
+    public function countPosts(int $discussionId, ?string $search = null, ?int $searchUserId = null): int
     {
         $selector = $this->database->table($this->getTable())
                 ->where("discussion_id", $discussionId);

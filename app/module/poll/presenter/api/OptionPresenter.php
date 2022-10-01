@@ -22,7 +22,7 @@ class OptionPresenter extends SecuredPresenter
         $this->manager = $manager;
     }
 
-    public function actionDefault($resourceId, $subResourceId)
+    public function actionDefault(int $resourceId, $subResourceId): void
     {
         switch ($this->getRequest()->getMethod()) {
             case 'GET':
@@ -45,14 +45,14 @@ class OptionPresenter extends SecuredPresenter
         $this->respondNotAllowed();
     }
 
-    private function requestGetList(int $pollId)
+    private function requestGetList(int $pollId): void
     {
         $options = $this->manager->getPollOptions($pollId);
 
         $this->respondOk($this->arrayToJson($options));
     }
 
-    protected function requestPost($resourceId)
+    protected function requestPost($resourceId): void
     {
         $created = null;
         if (!$this->isMultipleObjects($this->requestData)) {

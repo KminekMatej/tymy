@@ -18,8 +18,11 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->sets([
         SetList::CODE_QUALITY,
         SetList::DEAD_CODE,
+        SetList::TYPE_DECLARATION,
         SetList::ACTION_INJECTION_TO_CONSTRUCTOR_INJECTION,
+//        SetList::EARLY_RETURN,    //makes code a bit harder to read
 //        SetList::PRIVATIZATION,   //makes every class final
+//        SetList::CODING_STYLE,    //dont like the coding style, stick with phpcs
         LevelSetList::UP_TO_PHP_80,
     ]);
 };

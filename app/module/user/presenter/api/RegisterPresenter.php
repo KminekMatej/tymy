@@ -13,12 +13,12 @@ use Tymy\Module\User\Manager\UserManager;
  */
 class RegisterPresenter extends BasePresenter
 {
-    public function injectManager(UserManager $userManager)
+    public function injectManager(UserManager $userManager): void
     {
         $this->manager = $userManager;
     }
 
-    public function actionDefault()
+    public function actionDefault(): void
     {
         $registeredUser = null;
         if ($this->getRequest()->getMethod() !== "POST") {

@@ -30,30 +30,36 @@ class StatusSet extends BaseModel
         return $this->webname;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getStatuses(): array
     {
         return $this->statuses;
     }
 
-    public function setName(string $name)
+    public function setName(string $name): static
     {
         $this->name = $name;
         return $this;
     }
 
-    public function setWebname(string $webname)
+    public function setWebname(string $webname): static
     {
         $this->webname = $webname;
         return $this;
     }
 
-    public function setStatuses(array $statuses)
+    /**
+     * @param mixed[] $statuses
+     */
+    public function setStatuses(array $statuses): static
     {
         $this->statuses = $statuses;
         return $this;
     }
 
-    public function addStatus(Status $status)
+    public function addStatus(Status $status): void
     {
         $this->statuses[] = $status;
     }
@@ -63,6 +69,9 @@ class StatusSet extends BaseModel
         return Attendance::MODULE;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     public function getScheme(): array
     {
         return StatusSetMapper::scheme();
@@ -73,7 +82,10 @@ class StatusSet extends BaseModel
         return self::TABLE;
     }
 
-    public function jsonSerialize()
+    /**
+     * @return mixed[]
+     */
+    public function jsonSerialize(): array
     {
         return parent::jsonSerialize() + [
             "webname" => $this->getWebname(),

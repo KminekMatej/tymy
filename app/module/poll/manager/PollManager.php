@@ -42,6 +42,9 @@ class PollManager extends BaseManager
         return Poll::class;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     protected function getScheme(): array
     {
         return PollMapper::scheme();
@@ -225,6 +228,9 @@ class PollManager extends BaseManager
         return parent::deleteRecord($resourceId);
     }
 
+    /**
+     * @return int[]
+     */
     public function getAllowedReaders(BaseModel $record): array
     {
         return $this->getAllUserIds();
@@ -256,7 +262,7 @@ class PollManager extends BaseManager
      * Get list of polls, which currently logged user is allowed to see
      * @return Poll[]
      */
-    public function getListUserAllowed()
+    public function getListUserAllowed(): array
     {
         $userPermissions = $this->permissionManager->getUserAllowedPermissionNames($this->userManager->getById($this->user->getId()), Permission::TYPE_USER);
 

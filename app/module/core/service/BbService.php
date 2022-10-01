@@ -12,13 +12,13 @@ class BbService
     private static array $find = [];
     private static array $replace = [];
 
-    private static function add(string $pattern, string $replace)
+    private static function add(string $pattern, string $replace): void
     {
         self::$find[] = $pattern;
         self::$replace[] = $replace;
     }
 
-    private static function init()
+    private static function init(): void
     {
         if (!empty(self::$find)) {
             return;
@@ -69,10 +69,10 @@ class BbService
      * Transform BB codes into appropriate HTML tags
      *
      * @param string $text written in BB code
-     * @return string Text with html tags
+     * @return string|null Text with html tags
      * @todo Finish all neccessary tags
      */
-    public static function bb2Html($text)
+    public static function bb2Html(string $text): ?string
     {
         self::init();
         $text = preg_replace(self::$find, self::$replace, strip_tags($text));

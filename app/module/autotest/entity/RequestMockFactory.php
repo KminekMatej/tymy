@@ -30,22 +30,17 @@ class RequestMockFactory
 
     private bool $binary = false;
 
-    /** @var array */
-    private $SERVERMOCK = [];
+    private array $SERVERMOCK = [];
 
     private ?array $POSTMOCK = [];
 
-    /** @var array */
-    private $FILESMOCK = [];
+    private array $FILESMOCK = [];
 
     /** @var string[] */
     private array $proxies = [];
 
 
-    /**
-     * @return static
-     */
-    public function setBinary(bool $binary = true)
+    public function setBinary(bool $binary = true): static
     {
         $this->binary = $binary;
         return $this;
@@ -54,9 +49,8 @@ class RequestMockFactory
 
     /**
      * @param  string|string[]  $proxy
-     * @return static
      */
-    public function setProxy(string|array $proxy)
+    public function setProxy(string|array $proxy): static
     {
         $this->proxies = (array) $proxy;
         return $this;
@@ -65,8 +59,10 @@ class RequestMockFactory
 
     /**
      * Returns new Request instance, using values from superglobals.
+     * @param mixed[] $SERVERMOCK
+     * @param mixed[] $FILESMOCK
      */
-    public function fromMock($SERVERMOCK, $POSTMOCK = [], $COOKIESMOCK = [], $FILESMOCK = [], ?string $rawInput = null): Request
+    public function fromMock(array $SERVERMOCK, $POSTMOCK = [], $COOKIESMOCK = [], array $FILESMOCK = [], ?string $rawInput = null): Request
     {
         $this->SERVERMOCK = $SERVERMOCK;
         $this->POSTMOCK = is_array($POSTMOCK) ? $POSTMOCK : null;
@@ -132,7 +128,7 @@ class RequestMockFactory
     }
 
 
-    private function getScriptPath(Url $url): string
+    private function getScriptPath(Url $url): string|bool
     {
         $i = null;
         $path = $url->getPath();
@@ -145,6 +141,9 @@ class RequestMockFactory
     }
 
 
+    /**
+     * @return mixed[]
+     */
     private function getGetPostCookie(Url $url): array
     {
         $query = $url->getQueryParameters();
@@ -175,6 +174,9 @@ class RequestMockFactory
     }
 
 
+    /**
+     * @return mixed[]
+     */
     private function getFiles(): array
     {
         $reChars = '#^[' . self::CHARS . ']*+$#Du';
@@ -224,6 +226,9 @@ class RequestMockFactory
     }
 
 
+    /**
+     * @return mixed[]|array<string, mixed>
+     */
     private function getHeaders(): array
     {
         if (function_exists('apache_request_headers')) {
@@ -256,6 +261,9 @@ class RequestMockFactory
     }
 
 
+    /**
+     * @return mixed[]
+     */
     private function getClient(Url $url): array
     {
         $remoteAddr = empty($this->SERVERMOCK['REMOTE_ADDR']) ? null : trim($this->SERVERMOCK['REMOTE_ADDR'], '[]'); // workaround for PHP 7.3

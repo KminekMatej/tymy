@@ -12,12 +12,12 @@ use Tymy\Module\Discussion\Manager\DiscussionManager;
  */
 class NewOnlyPresenter extends SecuredPresenter
 {
-    public function injectDiscussionManager(DiscussionManager $discussionManager)
+    public function injectDiscussionManager(DiscussionManager $discussionManager): void
     {
         $this->manager = $discussionManager;
     }
 
-    public function actionDefault()
+    public function actionDefault(): void
     {
         if ($this->getRequest()->getMethod() !== "GET") {
             $this->respondNotAllowed();
@@ -26,7 +26,7 @@ class NewOnlyPresenter extends SecuredPresenter
         $this->requestGet();
     }
 
-    protected function requestGet($resourceId = null, $subResourceId = null)
+    protected function requestGet($resourceId = null, $subResourceId = null): void
     {
         $discussions = $this->manager->getListUserAllowed($this->user->getId());
         $output = [];

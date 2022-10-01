@@ -33,6 +33,9 @@ class MultiaccountManager extends BaseManager
         return TransferKey::class;
     }
 
+    /**
+     * @return mixed[]
+     */
     protected function getScheme(): array
     {
         return []; //no entity considered here
@@ -48,6 +51,9 @@ class MultiaccountManager extends BaseManager
         return false;   //there is actually no entity
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getAllowedReaders(BaseModel $record): array
     {
         return [];
@@ -56,10 +62,9 @@ class MultiaccountManager extends BaseManager
     /**
      * Generate new transfer key to jump to desired account and return it as object
      *
-     * @param int $resourceId
      * @return TransferKey
      */
-    public function read($resourceId, ?int $subResourceId = null): BaseModel
+    public function read(int $resourceId, ?int $subResourceId = null): BaseModel
     {
         return $this->generateNewTk($resourceId);
     }
@@ -184,7 +189,7 @@ class MultiaccountManager extends BaseManager
      * Get list of users multiaccounts
      * @return SimpleTeam[]
      */
-    public function getListUserAllowed()
+    public function getListUserAllowed(): array
     {
         $accountId = $this->getAccountId();
 

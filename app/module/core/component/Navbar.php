@@ -102,7 +102,7 @@ class NavbarControl extends Control
         return $form;
     }
 
-    public function fileLoad(Form $form, $values)
+    public function fileLoad(Form $form, $values): void
     {
         /* @var $file FileUpload */
         $file = $values['file'];
@@ -117,7 +117,7 @@ class NavbarControl extends Control
         $this->template->accessibleSettings = $this->presenter->getAccessibleSettings();
     }
 
-    public function render()
+    public function render(): void
     {
         $this->template->setFile(__DIR__ . '/templates/navbar.latte');
         $this->template->levels = $this->presenter->getLevelCaptions();
@@ -139,7 +139,7 @@ class NavbarControl extends Control
         $this->template->render();
     }
 
-    public function handleRefresh()
+    public function handleRefresh(): void
     {
         if ($this->parent->isAjax()) {
             $this->redrawControl('nav');

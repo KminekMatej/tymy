@@ -84,6 +84,9 @@ class DebtManager extends BaseManager
         return Debt::class;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     protected function getScheme(): array
     {
         return DebtMapper::scheme();
@@ -92,9 +95,8 @@ class DebtManager extends BaseManager
     /**
      * Check edit permission
      * @param Debt $entity
-     * @param int $userId
      */
-    public function canEdit($entity, $userId): bool
+    public function canEdit($entity, int $userId): bool
     {
         return $this->canEditDebtData($entity->getPayeeId(), $entity->getPayeeType());
     }
@@ -114,9 +116,8 @@ class DebtManager extends BaseManager
     /**
      * Check read permission
      * @param Debt $entity
-     * @param int $userId
      */
-    public function canRead($entity, $userId): bool
+    public function canRead($entity, int $userId): bool
     {
         return ($entity->getDebtorType() == self::TYPE_USER && $entity->getDebtorId() == $userId) || $entity->getCanEdit();
     }

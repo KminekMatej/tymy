@@ -31,11 +31,10 @@ class EventTypeManager extends BaseManager
 
     /**
      *
-     * @param ActiveRow $row
-     * @param bool $force
+     * @param ActiveRow|null $row
      * @return EventType|null
      */
-    public function map(?IRow $row, $force = false): ?BaseModel
+    public function map(?IRow $row, bool $force = false): ?BaseModel
     {
         if ($row === null) {
             return null;
@@ -62,6 +61,9 @@ class EventTypeManager extends BaseManager
         return EventType::class;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     protected function getScheme(): array
     {
         return EventTypeMapper::scheme();
@@ -91,7 +93,7 @@ class EventTypeManager extends BaseManager
      * Get list of all event types, with their code as array keys
      * @return EventType[]
      */
-    public function getIndexedList()
+    public function getIndexedList(): array
     {
         $types = $this->getList();
         $typesIndexed = [];
@@ -104,6 +106,9 @@ class EventTypeManager extends BaseManager
         return $typesIndexed;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\BaseModel[]
+     */
     public function getListUserAllowed($userId): array
     {
         //reading is not restricted
@@ -120,6 +125,9 @@ class EventTypeManager extends BaseManager
         throw new NotImplementedException("Not implemented yet");
     }
 
+    /**
+     * @return int[]
+     */
     public function getAllowedReaders(BaseModel $record): array
     {
         return $this->getAllUserIds(); //everyone can read

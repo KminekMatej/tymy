@@ -13,7 +13,7 @@ class DefaultPresenter extends EventBasePresenter
     public HistoryManager $historyManager;
 
 
-    public function renderDefault($date = null, $direction = null)
+    public function renderDefault($date = null, $direction = null): void
     {
         $dateTimeBase = new DateTime();
         $dateTimeFrom = $dateTimeBase->modifyClone("- 6 months")->setTime(0, 0, 0);
@@ -41,7 +41,7 @@ class DefaultPresenter extends EventBasePresenter
         }
     }
 
-    public function handleEventLoad()
+    public function handleEventLoad(): void
     {
         $this->redrawControl("events-agenda");
     }

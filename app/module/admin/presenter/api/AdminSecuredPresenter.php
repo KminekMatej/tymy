@@ -15,7 +15,7 @@ class AdminSecuredPresenter extends BasePresenter
     /** @inject */
     public AdminManager $adminManager;
 
-    protected function startup()
+    protected function startup(): void
     {
         parent::startup();
 
@@ -33,7 +33,7 @@ class AdminSecuredPresenter extends BasePresenter
      * @param string $header Name of header to try to parse from
      * @return string|null If bearer is not found or is invalid formatted
      */
-    private function getTokenFromHeader($header): ?string
+    private function getTokenFromHeader(string $header): ?string
     {
         $headerContent = $this->getHttpRequest()->getHeader($header);
 

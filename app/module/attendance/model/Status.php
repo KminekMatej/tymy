@@ -65,49 +65,49 @@ class Status extends BaseModel
         return $this->statusSetName;
     }
 
-    public function setCode(string $code)
+    public function setCode(string $code): static
     {
         $this->code = $code;
         return $this;
     }
 
-    public function setColor(string $color)
+    public function setColor(string $color): static
     {
         $this->color = $color;
         return $this;
     }
 
-    public function setCaption(?string $caption)
+    public function setCaption(?string $caption): static
     {
         $this->caption = $caption;
         return $this;
     }
 
-    public function setIcon(?string $icon)
+    public function setIcon(?string $icon): static
     {
         $this->icon = $icon;
         return $this;
     }
 
-    public function setStatusSetId(int $statusSetId)
+    public function setStatusSetId(int $statusSetId): static
     {
         $this->statusSetId = $statusSetId;
         return $this;
     }
 
-    public function setUpdatedById(?int $updatedById)
+    public function setUpdatedById(?int $updatedById): static
     {
         $this->updatedById = $updatedById;
         return $this;
     }
 
-    public function setUpdatedAt(?DateTime $updatedAt)
+    public function setUpdatedAt(?DateTime $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
         return $this;
     }
 
-    public function setStatusSetName(string $statusSetName)
+    public function setStatusSetName(string $statusSetName): static
     {
         $this->statusSetName = $statusSetName;
         return $this;
@@ -118,6 +118,9 @@ class Status extends BaseModel
         return self::MODULE;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     public function getScheme(): array
     {
         return StatusMapper::scheme();

@@ -15,20 +15,18 @@ class Privilege
 
     /**
      * Returns a SYS privilege
-     * @param string $name Name of permission
-     * @return Privilege|null
+     * @param string|null $name Name of permission
      */
-    public static function SYS(?string $name)
+    public static function SYS(?string $name): ?\Tymy\Module\Permission\Model\Privilege
     {
         return $name ? (new Privilege(Permission::TYPE_SYSTEM, $name)) : null;
     }
 
     /**
      * Returns a USR privilege
-     * @param string $name Name of permission
-     * @return Privilege|null
+     * @param string|null $name Name of permission
      */
-    public static function USR(?string $name)
+    public static function USR(?string $name): ?\Tymy\Module\Permission\Model\Privilege
     {
         return $name ? (new Privilege(Permission::TYPE_USER, $name)) : null;
     }

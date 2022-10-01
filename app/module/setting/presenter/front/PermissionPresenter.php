@@ -13,21 +13,21 @@ class PermissionPresenter extends SettingBasePresenter
     /** @inject */
     public PermissionManager $permissionManager;
 
-    public function beforeRender()
+    public function beforeRender(): void
     {
         parent::beforeRender();
         $this->allowPermission('IS_ADMIN');
         $this->addBreadcrumb($this->translator->translate("permission.permission", 2), $this->link(":Setting:Permission:"));
     }
 
-    public function actionDefault(?string $resource = null)
+    public function actionDefault(?string $resource = null): void
     {
         if ($resource) {
             $this->setView("permission");
         }
     }
 
-    public function renderNew()
+    public function renderNew(): void
     {
         $this->allowPermission("IS_ADMIN");
 
@@ -52,7 +52,7 @@ class PermissionPresenter extends SettingBasePresenter
         $this->template->usersRule = "revoked";
     }
 
-    public function renderPermission(?string $resource = null)
+    public function renderPermission(?string $resource = null): void
     {
         $this->allowPermission("IS_ADMIN");
 
@@ -80,7 +80,7 @@ class PermissionPresenter extends SettingBasePresenter
         $this->template->isNew = false;
     }
 
-    public function handlePermissionCreate()
+    public function handlePermissionCreate(): void
     {
         $bind = $this->getRequest()->getPost();
         try {
@@ -93,7 +93,7 @@ class PermissionPresenter extends SettingBasePresenter
         }
     }
 
-    public function handlePermissionEdit()
+    public function handlePermissionEdit(): void
     {
         $bind = $this->getRequest()->getPost();
 
@@ -109,7 +109,7 @@ class PermissionPresenter extends SettingBasePresenter
         }
     }
 
-    public function handlePermissionDelete()
+    public function handlePermissionDelete(): void
     {
         $bind = $this->getRequest()->getPost();
 
@@ -124,6 +124,7 @@ class PermissionPresenter extends SettingBasePresenter
 
     /**
      * Create input array for permission, containing name, caption, allowedRoles (or revokedRoles), allowedStatuses (or revokedStatuses) and , allowedUsers (or revokedUsers)
+     * @return array<string, mixed>
      */
     private function composePermissionData(array $changes): array
     {

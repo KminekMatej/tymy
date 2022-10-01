@@ -30,73 +30,73 @@ class SimpleResponse
         }
     }
 
-    public function getCode()
+    public function getCode(): int
     {
         return $this->code;
     }
 
-    public function getData()
+    public function getData(): string
     {
         return $this->data;
     }
 
-    public function getHttpRequest()
+    public function getHttpRequest(): \Nette\Application\Request
     {
         return $this->httpRequest;
     }
 
-    public function getHttpResponse()
+    public function getHttpResponse(): \Nette\Http\Response
     {
         return $this->httpResponse;
     }
 
-    public function getResponse()
+    public function getResponse(): \Nette\Application\IResponse
     {
         return $this->response;
     }
 
-    public function setCode($code)
+    public function setCode(int $code): static
     {
         $this->code = $code;
         return $this;
     }
 
-    public function setData($data)
+    public function setData(string $data): static
     {
         $this->data = $data;
         return $this;
     }
 
-    public function setHttpRequest(Request $httpRequest)
+    public function setHttpRequest(Request $httpRequest): static
     {
         $this->httpRequest = $httpRequest;
         return $this;
     }
 
-    public function setHttpResponse(Response $httpResponse)
+    public function setHttpResponse(Response $httpResponse): static
     {
         $this->httpResponse = $httpResponse;
         return $this;
     }
 
-    public function setResponse(IResponse $jsonResponse)
+    public function setResponse(IResponse $jsonResponse): static
     {
         $this->response = $jsonResponse;
         return $this;
     }
 
-    public function getPresenter()
+    public function getPresenter(): \Nette\Application\UI\Presenter
     {
         return $this->presenter;
     }
 
-    public function setPresenter(Presenter $presenter)
+    public function setPresenter(Presenter $presenter): static
     {
         $this->presenter = $presenter;
         return $this;
     }
 
-    public function expect(int $code, ?string $type = null)
+    public function expect(int $code, ?string $type = null): static
     {
         $this->log->setExpectCode($code);
         if ($code < 999) {

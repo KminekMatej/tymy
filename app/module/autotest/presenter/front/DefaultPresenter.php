@@ -19,7 +19,7 @@ class DefaultPresenter extends BasePresenter
     /** @inject */
     public TestsManager $testsManager;
 
-    public function startup()
+    public function startup(): void
     {
         parent::startup();
         if (Debugger::$productionMode) {
@@ -31,7 +31,7 @@ class DefaultPresenter extends BasePresenter
 
     protected function beforeRender(): void
     {
-        $this->template->addFilter('colorize', fn($text) => preg_replace([
+        $this->template->addFilter('colorize', fn($text): ?string => preg_replace([
             '/\[green\]/',
             '/\[red\]/',
             '/\[\/green\]/',
@@ -44,7 +44,7 @@ class DefaultPresenter extends BasePresenter
             ], htmlspecialchars((string) $text, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')));
     }
 
-    public function renderDefault($resourceId = null)
+    public function renderDefault($resourceId = null): void
     {
         $this->mockAutotestServer($this->getHttpRequest()->getUrl());
         $output = $resourceId ? $this->runTests($resourceId) : null;
@@ -63,7 +63,7 @@ class DefaultPresenter extends BasePresenter
         $this->template->requests = file_exists(TEAM_DIR . "/log_autotest/requests.log") ? file(TEAM_DIR . "/log_autotest/requests.log") : [];
     }
 
-    private function processTestsOutput($output)
+    private function processTestsOutput($output): void
     {
         $results = [];
 
@@ -101,7 +101,10 @@ class DefaultPresenter extends BasePresenter
         ];
     }
 
-    public function runTests($folder = "")
+    /**
+     * @return string[]|bool[]
+     */
+    public function runTests($folder = ""): array
     {
         $requestLogFile = TEAM_DIR . "/log_autotest/requests.log";
         if (file_exists($requestLogFile)) {
@@ -120,7 +123,7 @@ class DefaultPresenter extends BasePresenter
     /**
      * Get team name from url and save it to environment variable to be able to use it in bootstrap later (which doesnt have HTTP_HOST)
      */
-    private function mockAutotestServer(UrlScript $url)
+    private function mockAutotestServer(UrlScript $url): void
     {
         $this->template->urlroot = "{$url->getScheme()}://{$url->getHost()}{$url->getBasePath()}autotest";
         $team = substr($url->getHost(), 0, strpos($url->getHost(), "."));

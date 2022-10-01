@@ -6,7 +6,7 @@ use Tymy\Module\Core\Presenter\Front\BasePresenter;
 
 class OutPresenter extends BasePresenter
 {
-    public function actionDefault()
+    public function actionDefault(): void
     {
         if (!is_null($this->getUser()->getIdentity())) {
             $this->getUser()->logout();

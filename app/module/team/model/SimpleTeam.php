@@ -17,37 +17,43 @@ class SimpleTeam implements JsonSerializable
     public array $languages;
     public string $defaultLanguageCode;
 
-    public function setSysName(string $sysName)
+    public function setSysName(string $sysName): static
     {
         $this->sysName = $sysName;
         return $this;
     }
 
-    public function setName(string $name)
+    public function setName(string $name): static
     {
         $this->name = $name;
         return $this;
     }
 
-    public function setSport(string $sport)
+    public function setSport(string $sport): static
     {
         $this->sport = $sport;
         return $this;
     }
 
-    public function setLanguages(array $languages)
+    /**
+     * @param mixed[] $languages
+     */
+    public function setLanguages(array $languages): static
     {
         $this->languages = $languages;
         return $this;
     }
 
-    public function setDefaultLanguageCode(string $defaultLanguageCode)
+    public function setDefaultLanguageCode(string $defaultLanguageCode): static
     {
         $this->defaultLanguageCode = $defaultLanguageCode;
         return $this;
     }
 
-    public function jsonSerialize()
+    /**
+     * @return array<string, string>|array<string, mixed[]>
+     */
+    public function jsonSerialize(): array
     {
         return [
             "sysName" => $this->sysName,

@@ -24,7 +24,7 @@ class UserTest extends RequestCase
 {
     private bool $inited = false;
 
-    private function init()
+    private function init(): void
     {
         if (!$this->inited) {
             $this->database->table(User::TABLE)->where("id > ?", 6)->where("status", "INIT")->delete();
@@ -51,7 +51,7 @@ class UserTest extends RequestCase
       @RequestMapping(value = "/logout")
      *
      */
-    public function testGetSingular()
+    public function testGetSingular(): void
     {
         $listResponse = $this->getList();
         if ((is_countable($listResponse->getData()) ? count($listResponse->getData()) : 0) == 0) {
@@ -68,7 +68,7 @@ class UserTest extends RequestCase
         }
     }
 
-    public function testGetPlural()
+    public function testGetPlural(): void
     {
         $listResponse = $this->request($this->getBasePath() . "s")->expect(200, "array");
         if ((is_countable($listResponse->getData()) ? count($listResponse->getData()) : 0) == 0) {
@@ -85,7 +85,7 @@ class UserTest extends RequestCase
         }
     }
 
-    public function testLogin()
+    public function testLogin(): void
     {
         $this->user->logout(); //make sure user is logged out
 
@@ -107,7 +107,7 @@ class UserTest extends RequestCase
         $this->request("login/$username/$pwdHash")->expect(401);
     }
 
-    public function testStatus()
+    public function testStatus(): void
     {
         $this->authorizeAdmin();
 
@@ -131,7 +131,7 @@ class UserTest extends RequestCase
         $this->request($this->getBasePath() . "/status/XSFD")->expect(404);
     }
 
-    public function testCRUD()
+    public function testCRUD(): void
     {
         $recordId = $this->createRecord();
 
@@ -144,7 +144,7 @@ class UserTest extends RequestCase
         $this->deleteRecord($recordId);
     }
 
-    public function testCreateFailures()
+    public function testCreateFailures(): void
     {
         $this->authorizeUser();
 
@@ -178,7 +178,7 @@ class UserTest extends RequestCase
         $this->request(User::MODULE, "POST", $data)->expect(400);
     }
 
-    public function testRegister()
+    public function testRegister(): void
     {
         $this->init();
         $this->user->logout();
@@ -192,7 +192,7 @@ class UserTest extends RequestCase
         $registeredData = $this->request($this->getBasePath() . "/register", "POST", $regData)->expect(201)->getData();
 
         //user is in INIT state now and thus cannot login
-        Assert::exception(function () use ($regData) {
+        Assert::exception(function () use ($regData): void {
             $this->user->login($regData["login"], $regData["password"]);
         }, AuthenticationException::class, "Uživatel nebyl doposud schválen administrátory");
 
@@ -210,7 +210,7 @@ class UserTest extends RequestCase
         $this->request($this->getBasePath() . "/" . $registeredData["id"], "PUT", ["canLogin" => false]);
         $this->user->logout();
 
-        Assert::exception(function () use ($regData) {
+        Assert::exception(function () use ($regData): void {
             $this->user->login($regData["login"], $regData["password"]);
         }, AuthenticationException::class, "Uživatel nemá povolené přihlášení");
 
@@ -219,7 +219,10 @@ class UserTest extends RequestCase
         $this->deleteRecord($registeredData["id"]);
     }
 
-    private function mockRegData()
+    /**
+     * @return array<string, mixed>
+     */
+    private function mockRegData(): array
     {
         $rand = random_int(0, 10000);
         return [
@@ -230,7 +233,7 @@ class UserTest extends RequestCase
         ];
     }
 
-    public function testRegisterFailure()
+    public function testRegisterFailure(): void
     {
         $this->init();
         $this->user->logout();
@@ -280,7 +283,7 @@ class UserTest extends RequestCase
         $this->deleteRecord($reg3Id);
     }
 
-    public function testUpdateFailures()
+    public function testUpdateFailures(): void
     {
         $this->authorizeAdmin();
         $adminData = $this->request($this->getBasePath() . "/1", "PUT", ["roles" => ["USR"]])->expect(200)->getData();
@@ -301,7 +304,7 @@ class UserTest extends RequestCase
         $this->request($this->getBasePath() . "/$myId", "PUT", ["email" => $this->config["user_admin_mail"]])->expect(403);
     }
 
-    public function testAvatar()
+    public function testAvatar(): void
     {
         $this->authorizeUser();
         $myId = $this->config["user_test_id"];
@@ -348,19 +351,22 @@ class UserTest extends RequestCase
         )->expect(200);
     }
 
-    public function testLive()
+    public function testLive(): void
     {
         $this->authorizeUser();
         $this->request("live")->expect(200, "array");
         $this->request("live", "POST")->expect(405);
     }
 
-    public function createRecord()
+    public function createRecord(): int
     {
         return $this->recordManager->createUser();
     }
 
-    public function mockRecord()
+    /**
+     * @return string[]|bool[]|int[]
+     */
+    public function mockRecord(): array
     {
         return $this->recordManager->mockUser();
     }
@@ -369,7 +375,7 @@ class UserTest extends RequestCase
      * Override deleting function - user is not being deleted normally, he gets marked as deleted in status
      * @param int $recordId
      */
-    public function deleteRecord($recordId)
+    public function deleteRecord($recordId): void
     {
         $this->request($this->getBasePath() . "/$recordId", "PUT", ["status" => "DELETED"])->expect(200, "array");
     }

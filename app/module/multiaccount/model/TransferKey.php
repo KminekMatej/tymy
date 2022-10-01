@@ -35,19 +35,22 @@ class TransferKey extends BaseModel implements JsonSerializable
         return $this->uid;
     }
 
-    public function setTransferKey(string $transferKey)
+    public function setTransferKey(string $transferKey): static
     {
         $this->transferKey = $transferKey;
         return $this;
     }
 
-    public function setUid(int $uid)
+    public function setUid(int $uid): static
     {
         $this->uid = $uid;
         return $this;
     }
 
-    public function jsonSerialize()
+    /**
+     * @return array<string, string>|array<string, int>
+     */
+    public function jsonSerialize(): array
     {
         return [
             "transferKey" => $this->transferKey,
@@ -60,6 +63,9 @@ class TransferKey extends BaseModel implements JsonSerializable
         return self::MODULE;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     public function getScheme(): array
     {
         return TransferKeyMapper::scheme();

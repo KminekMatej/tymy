@@ -56,6 +56,9 @@ class FileManager
         return $targetFile;
     }
 
+    /**
+     * @return mixed[]
+     */
     private function getMimeTypes(): array
     {
         return self::getArchiveMimeTypes() +
@@ -74,6 +77,9 @@ class FileManager
         ];
     }
 
+    /**
+     * @return array<string, string>
+     */
     public static function getAudioMimeTypes(): array
     {
         return [

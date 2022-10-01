@@ -14,7 +14,7 @@ class ReportPresenter extends EventBasePresenter
     /** @inject */
     public UserManager $userManager;
 
-    public function renderDefault(?int $year = null, ?int $page = null)
+    public function renderDefault(?int $year = null, ?int $page = null): void
     {
         $year = $year ?: date("Y");
 

@@ -31,11 +31,10 @@ class HistoryManager extends BaseManager
 
     /**
      *
-     * @param ActiveRow $row
-     * @param bool $force
+     * @param ActiveRow|null $row
      * @return History|null
      */
-    public function map(?IRow $row, $force = false): ?BaseModel
+    public function map(?IRow $row, bool $force = false): ?BaseModel
     {
         if ($row === null) {
             return null;
@@ -64,6 +63,9 @@ class HistoryManager extends BaseManager
         return History::class;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     protected function getScheme(): array
     {
         return HistoryMapper::scheme();
@@ -79,9 +81,8 @@ class HistoryManager extends BaseManager
      * Check read permissions
      *
      * @param History $entity
-     * @param int $userId
      */
-    public function canRead($entity, $userId): bool
+    public function canRead($entity, int $userId): bool
     {
         /* @var $entity Event */
         return $entity->getViewRightName() ? $this->user->isAllowed($this->user->getId(), Privilege::USR($entity->getViewRightName())) : true;
@@ -124,11 +125,17 @@ class HistoryManager extends BaseManager
         throw new NotImplementedException("Not implemented yet");
     }
 
+    /**
+     * @return int[]
+     */
     public function getAllowedReaders(BaseModel $record): array
     {
         return $this->getAllUserIds(); //everyone can read
     }
 
+    /**
+     * @return \Tymy\Module\Attendance\Model\History[]
+     */
     public function readForEvent(int $eventId): array
     {
         $this->allowRead($eventId);

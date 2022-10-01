@@ -55,7 +55,7 @@ class SecuredPresenter extends BasePresenter
     public $eventTypeList;
     public $noteList;
     public $statusList;
-    public $accessibleSettings = [];
+    public array $accessibleSettings = [];
 
     public function getLevelCaptions()
     {
@@ -86,7 +86,7 @@ class SecuredPresenter extends BasePresenter
         $this->addBreadcrumb($this->translator->translate("common.mainPage"), $this->link(":Core:Default:"));
     }
 
-    protected function startup()
+    protected function startup(): void
     {
         parent::startup();
         Debugger::$maxDepth = 7;
@@ -200,7 +200,7 @@ class SecuredPresenter extends BasePresenter
         ];
     }
 
-    protected function redrawNavbar()
+    protected function redrawNavbar(): void
     {
         $this['navbar']->redrawControl("nav");
     }

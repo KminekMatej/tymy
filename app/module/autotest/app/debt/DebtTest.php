@@ -27,7 +27,7 @@ class DebtTest extends RequestCase
         return Debt::MODULE;
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $this->authorizeAdmin();
         $listResponse = $this->request($this->getBasePath())->expect(200, "array");
@@ -47,7 +47,7 @@ class DebtTest extends RequestCase
         }
     }
 
-    public function testCRUDSingular()
+    public function testCRUDSingular(): void
     {
         $this->authorizeAdmin();
         $recordId = $this->createRecord();
@@ -82,7 +82,7 @@ class DebtTest extends RequestCase
         $this->request($this->getBasePath() . "/" . $recordId, "DELETE")->expect(200);
     }
 
-    public function testTeamDebts()
+    public function testTeamDebts(): void
     {
         //admin can create team debt
         $this->authorizeAdmin();
@@ -143,7 +143,7 @@ class DebtTest extends RequestCase
         $this->request($this->getBasePath() . "/" . $recordId, "DELETE")->expect(200);
     }
 
-    public function testBlankCaption()
+    public function testBlankCaption(): void
     {
         $data = $this->mockRecord();
         $data["caption"] = "";
@@ -153,7 +153,7 @@ class DebtTest extends RequestCase
         $this->request($this->getBasePath() . "/" . $recordId, "PUT", ["caption" => ""])->expect(400);
     }
 
-    public function testDifferentUsersDebt()
+    public function testDifferentUsersDebt(): void
     {
         $this->authorizeUser();
         $data = $this->mockRecord();
@@ -161,7 +161,7 @@ class DebtTest extends RequestCase
         $this->request($this->getBasePath(), "POST", $data)->expect(403);
     }
 
-    public function testDebtNegative()
+    public function testDebtNegative(): void
     {
         $this->authorizeAdmin();
         $data = $this->mockRecord();
@@ -172,7 +172,7 @@ class DebtTest extends RequestCase
         $this->request($this->getBasePath() . "/" . $recordId, "PUT", ["amount" => "-14"])->expect(400);
     }
 
-    public function testTeamOwesMe()
+    public function testTeamOwesMe(): void
     {
         $this->authorizeUser();
 
@@ -192,7 +192,7 @@ class DebtTest extends RequestCase
         $this->deleteRecord($recordId);
     }
 
-    public function testCRUDPlural()
+    public function testCRUDPlural(): void
     {
         $this->authorizeAdmin();
         $recordId = $this->createRecord();
@@ -204,17 +204,23 @@ class DebtTest extends RequestCase
         $this->deleteRecord($recordId);
     }
 
-    public function createRecord()
+    public function createRecord(): int
     {
         return $this->recordManager->createDebt();
     }
 
-    public function mockRecord()
+    /**
+     * @return array<string, mixed>
+     */
+    public function mockRecord(): array
     {
         return $this->recordManager->mockDebt();
     }
 
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function mockChanges(): array
     {
         return [

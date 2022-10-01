@@ -30,7 +30,7 @@ class CURLHelper
      * @param int $entityId
      * @return CustomFieldValue[]
      */
-    public static function sendPost($url, $data, $isJson = false)
+    public static function sendPost(string $url, $data, $isJson = false): array
     {
         $handle = self::getCurl($url);
         curl_setopt($handle, CURLOPT_CUSTOMREQUEST, 'POST');

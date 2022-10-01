@@ -65,7 +65,7 @@ abstract class BaseModel implements JsonSerializable
      * @param BaseModel[] $entities
      * @return array
      */
-    protected function arrayToJson($entities)
+    protected function arrayToJson(array $entities)
     {
         if (empty($entities)) {
             return [];
@@ -75,7 +75,7 @@ abstract class BaseModel implements JsonSerializable
 $entity->jsonSerialize(), $entities);
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         $ret = [];
         foreach ($this->getScheme() as $field) {

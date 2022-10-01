@@ -89,7 +89,7 @@ class EventBasePresenter extends SecuredPresenter
         return $feed;
     }
 
-    public function handleAttendance(int $eventId, int $preStatusId, ?string $desc = null, ?int $userId = null)
+    public function handleAttendance(int $eventId, int $preStatusId, ?string $desc = null, ?int $userId = null): void
     {
         $this->attendanceManager->create([
             "userId" => $userId ?: $this->user->getId(),

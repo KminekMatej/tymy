@@ -30,12 +30,15 @@ class VoteManager extends BaseManager
         return Vote::class;
     }
 
+    /**
+     * @return mixed[]
+     */
     protected function getScheme(): array
     {
         return VoteMapper::scheme();
     }
 
-    public function setPoll(?Poll $poll = null)
+    public function setPoll(?Poll $poll = null): static
     {
         $this->poll = $poll;
         return $this;
@@ -114,10 +117,8 @@ class VoteManager extends BaseManager
 
     /**
      * Check if desired user already voted in this vote
-     *
-     * @return boolean
      */
-    private function userVoted(Poll $poll, int $userId)
+    private function userVoted(Poll $poll, int $userId): bool
     {
         foreach ($poll->getVotes() as $vote) {
             /* @var $vote Vote */
@@ -160,6 +161,9 @@ class VoteManager extends BaseManager
         throw new NotImplementedException("Not implemented yet");
     }
 
+    /**
+     * @return int[]
+     */
     public function getAllowedReaders(BaseModel $record): array
     {
         return $this->getAllUserIds();

@@ -25,7 +25,7 @@ class PollTest extends RequestCase
         return Poll::MODULE;
     }
 
-    public function testGetSingular()
+    public function testGetSingular(): void
     {
         $this->authorizeAdmin();
         $listResponse = $this->request($this->getBasePath())->expect(200, "array");
@@ -45,7 +45,7 @@ class PollTest extends RequestCase
         }
     }
 
-    public function testGetPlural()
+    public function testGetPlural(): void
     {
         $this->authorizeAdmin();
         $listResponse = $this->request($this->getBasePath() . "s")->expect(200, "array");
@@ -65,7 +65,7 @@ class PollTest extends RequestCase
         }
     }
 
-    public function testCRUDSingular()
+    public function testCRUDSingular(): void
     {
         $this->authorizeAdmin();
 
@@ -100,7 +100,7 @@ class PollTest extends RequestCase
         $this->deleteRecord($recordId);
     }
 
-    public function testCrudForbidden()
+    public function testCrudForbidden(): void
     {
         $this->authorizeAdmin();
         $pollId = $this->createRecord();
@@ -128,13 +128,13 @@ class PollTest extends RequestCase
         $this->request($this->getBasePath() . "/$pollId", "DELETE")->expect(200);//delete created poll
     }
 
-    public function testUserVisibility()
+    public function testUserVisibility(): void
     {
         $this->authorizeUser();
         $this->request($this->getBasePath())->expect(200);//get list of polls
     }
 
-    public function testMenu()
+    public function testMenu(): void
     {
         $this->request($this->getBasePath() . "/menu")->expect(200, "array")->getData();//poll doesnt exist
 
@@ -143,7 +143,7 @@ class PollTest extends RequestCase
         $this->request($this->getBasePath() . "/menu", "DELETE")->expect(405);
     }
 
-    public function testBlank()
+    public function testBlank(): void
     {
         $this->authorizeAdmin();
         $createdData = $this->request($this->getBasePath(), "POST")->expect(201, "array")->getData();
@@ -160,16 +160,16 @@ class PollTest extends RequestCase
         $this->deleteRecord($createdData["id"]);
     }
 
-    public function test($param)
+    public function test($param): void
     {
     }
 
-    public function testVoting()
+    public function testVoting(): void
     {
         //create poll and add some votes into it, the get the poll again and check the votes exists
     }
 
-    public function createRecord()
+    public function createRecord(): int
     {
         return $this->recordManager->createPoll();
     }
@@ -179,17 +179,26 @@ class PollTest extends RequestCase
         $this->recordManager->createOptions($pollId, $numberOfOptions);
     }
 
-    public function mockRecord()
+    /**
+     * @return array<string, string>|array<string, bool>
+     */
+    public function mockRecord(): array
     {
         return $this->recordManager->mockPoll();
     }
 
-    public function mockOptionFor(int $pollId)
+    /**
+     * @return array<string, string>|array<string, int>|array<string, null>
+     */
+    public function mockOptionFor(int $pollId): array
     {
         return $this->recordManager->mockOption($pollId);
     }
 
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function mockChanges(): array
     {
         return [

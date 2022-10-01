@@ -53,43 +53,43 @@ class RequestLog
         return $this->customResponseCode;
     }
 
-    public function setTime(DateTime $time)
+    public function setTime(DateTime $time): static
     {
         $this->time = $time;
         return $this;
     }
 
-    public function setMethod(string $method)
+    public function setMethod(string $method): static
     {
         $this->method = $method;
         return $this;
     }
 
-    public function setUrl(string $url)
+    public function setUrl(string $url): static
     {
         $this->url = $url;
         return $this;
     }
 
-    public function setPostData($postData)
+    public function setPostData($postData): static
     {
         $this->postData = $postData;
         return $this;
     }
 
-    public function setExpectCode(?int $expectCode)
+    public function setExpectCode(?int $expectCode): static
     {
         $this->expectCode = $expectCode;
         return $this;
     }
 
-    public function setHttpResponseCode(?int $httpResponseCode)
+    public function setHttpResponseCode(?int $httpResponseCode): static
     {
         $this->httpResponseCode = $httpResponseCode;
         return $this;
     }
 
-    public function setCustomResponseCode(?int $customResponseCode)
+    public function setCustomResponseCode(?int $customResponseCode): static
     {
         $this->customResponseCode = $customResponseCode;
         return $this;

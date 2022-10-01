@@ -68,83 +68,95 @@ class EventType extends BaseModel
         return $this->updatedById;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getPreStatusSet(): array
     {
         return $this->preStatusSet;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getPostStatusSet(): array
     {
         return $this->postStatusSet;
     }
 
-    public function setCode(string $code)
+    public function setCode(string $code): static
     {
         $this->code = $code;
         return $this;
     }
 
-    public function setCaption(?string $caption)
+    public function setCaption(?string $caption): static
     {
         $this->caption = $caption;
         return $this;
     }
 
-    public function setColor(?string $color)
+    public function setColor(?string $color): static
     {
         $this->color = $color;
         return $this;
     }
 
-    public function setPreStatusSetId(?int $preStatusSetId)
+    public function setPreStatusSetId(?int $preStatusSetId): static
     {
         $this->preStatusSetId = $preStatusSetId;
         return $this;
     }
 
-    public function setPostStatusSetId(?int $postStatusSetId)
+    public function setPostStatusSetId(?int $postStatusSetId): static
     {
         $this->postStatusSetId = $postStatusSetId;
         return $this;
     }
 
-    public function setMandatory(?string $mandatory)
+    public function setMandatory(?string $mandatory): static
     {
         $this->mandatory = $mandatory;
         return $this;
     }
 
-    public function setUpdatedAt(?DateTime $updatedAt)
+    public function setUpdatedAt(?DateTime $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
         return $this;
     }
 
-    public function setUpdatedById(?int $updatedById)
+    public function setUpdatedById(?int $updatedById): static
     {
         $this->updatedById = $updatedById;
         return $this;
     }
 
-    public function setPreStatusSet(array $preStatusSet)
+    /**
+     * @param mixed[] $preStatusSet
+     */
+    public function setPreStatusSet(array $preStatusSet): static
     {
         $this->preStatusSet = $preStatusSet;
         return $this;
     }
 
-    public function setPostStatusSet(array $postStatusSet)
+    /**
+     * @param mixed[] $postStatusSet
+     */
+    public function setPostStatusSet(array $postStatusSet): static
     {
         $this->postStatusSet = $postStatusSet;
         return $this;
     }
 
-    public function addPreStatusSet(Status $preStatusSet)
+    public function addPreStatusSet(Status $preStatusSet): static
     {
         $this->preStatusSet[$preStatusSet->getCode()] = $preStatusSet;
         return $this;
     }
 
-    public function addPostStatusSet(Status $postStatusSet)
+    public function addPostStatusSet(Status $postStatusSet): static
     {
         $this->postStatusSet[$postStatusSet->getCode()] = $postStatusSet;
         return $this;
@@ -155,6 +167,9 @@ class EventType extends BaseModel
         return self::MODULE;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     public function getScheme(): array
     {
         return EventTypeMapper::scheme();
@@ -165,7 +180,10 @@ class EventType extends BaseModel
         return self::TABLE;
     }
 
-    public function jsonSerialize()
+    /**
+     * @return mixed[]
+     */
+    public function jsonSerialize(): array
     {
         return parent::jsonSerialize() + [
             "preStatusSet" => $this->arrayToJson(array_values($this->preStatusSet)),

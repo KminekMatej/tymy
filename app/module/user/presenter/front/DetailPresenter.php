@@ -38,7 +38,7 @@ class DetailPresenter extends BasePresenter
 
     private array $statusNameCache = [];
 
-    public function beforeRender()
+    public function beforeRender(): void
     {
         parent::beforeRender();
 
@@ -52,7 +52,7 @@ class DetailPresenter extends BasePresenter
             return $this->statusNameCache[$statusId];
         });
 
-        $this->template->addFilter("splitDescription", function (?string $description = null) {
+        $this->template->addFilter("splitDescription", function (?string $description = null): ?string {
             if (empty($description)) {
                 return $description;
             }
@@ -62,7 +62,7 @@ class DetailPresenter extends BasePresenter
         });
     }
 
-    public function renderCalendar(int $resource, string $hash)
+    public function renderCalendar(int $resource, string $hash): void
     {
         $iCal = $this->iCalManager->getByUserId($resource);
 
@@ -84,7 +84,7 @@ class DetailPresenter extends BasePresenter
      * Send response in iCal formatting, with respect to some ical specific formatting
      * @return never
      */
-    private function sendAsIcal(Template $template)
+    private function sendAsIcal(Template $template): void
     {
         $files = $this->formatTemplateFiles();
         foreach ($files as $file) {

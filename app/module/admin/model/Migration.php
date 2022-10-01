@@ -17,7 +17,7 @@ class Migration
 
     private string $migration;
 
-    /** @var string */
+    /** @var mixed|null */
     private $migratingFrom;
 
     private \Nette\Utils\DateTime $datetime;
@@ -28,14 +28,12 @@ class Migration
 
     private string $downContents;
 
-    /** @var double */
+    /** @var mixed|null */
     private $time;
 
-    /** @var bool */
-    private $result = false;
+    private bool $result = false;
 
-    /** @var bool */
-    private $pastMigration = false;
+    private bool $pastMigration = false;
 
     /**
      * @param string $file
@@ -54,12 +52,12 @@ class Migration
         $this->downContents = $migSections[1];
     }
 
-    public function getFile()
+    public function getFile(): string
     {
         return $this->file;
     }
 
-    public function getMigration()
+    public function getMigration(): string
     {
         return $this->migration;
     }
@@ -69,60 +67,60 @@ class Migration
         return $this->datetime;
     }
 
-    public function getFileContents()
+    public function getFileContents(): string
     {
         return $this->fileContents;
     }
 
-    public function getUpContents()
+    public function getUpContents(): string
     {
         return $this->upContents;
     }
 
-    public function getDownContents()
+    public function getDownContents(): string
     {
         return $this->downContents;
     }
 
-    public function getTime()
+    public function getTime(): float
     {
         return $this->time;
     }
 
-    public function getResult()
+    public function getResult(): bool
     {
         return $this->result;
     }
 
-    public function setTime($time)
+    public function setTime(float $time): static
     {
         $this->time = $time;
         return $this;
     }
 
-    public function setResult($result)
+    public function setResult(bool $result): static
     {
         $this->result = $result;
         return $this;
     }
 
-    public function getMigratingFrom()
+    public function getMigratingFrom(): string
     {
         return $this->migratingFrom;
     }
 
-    public function setMigratingFrom($migratingFrom)
+    public function setMigratingFrom(string $migratingFrom): static
     {
         $this->migratingFrom = $migratingFrom;
         return $this;
     }
 
-    public function isPastMigration()
+    public function isPastMigration(): bool
     {
         return $this->pastMigration;
     }
 
-    public function setPastMigration($pastMigration)
+    public function setPastMigration(bool $pastMigration): static
     {
         $this->pastMigration = $pastMigration;
         return $this;

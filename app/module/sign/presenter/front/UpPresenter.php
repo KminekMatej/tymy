@@ -13,11 +13,10 @@ class UpPresenter extends BasePresenter
 
     /**
      * Sign-up form factory.
-     * @return Nette\Application\UI\Form
      */
-    protected function createComponentSignUpForm()
+    protected function createComponentSignUpForm(): \Nette\Application\UI\Form
     {
-        return $this->signUpFactory->create(function () {
+        return $this->signUpFactory->create(function (): void {
                     $this->flashMessage($this->translator->translate("common.alerts.registrationSuccesfull"), 'success');
                     $this->redirect(':Sign:In:');
         });

@@ -37,7 +37,7 @@ class ErrorPresenter implements IPresenter
         }
 
         $this->logger->log($e, ILogger::EXCEPTION);
-        return new CallbackResponse(function () {
+        return new CallbackResponse(function (): void {
             require __DIR__ . '/templates/Error/500.html';
         });
     }

@@ -35,6 +35,9 @@ class StatusManager extends BaseManager
         return Status::class;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     protected function getScheme(): array
     {
         return StatusMapper::scheme();
@@ -98,6 +101,7 @@ class StatusManager extends BaseManager
 
     /**
      * Get all status unique status codes
+     * @return mixed[]
      */
     public function getAllStatusCodes(): array
     {
@@ -210,6 +214,9 @@ class StatusManager extends BaseManager
         $image->save($this->getStatusSetFolder($statusSetId) . "/$code.png");
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\BaseModel[]
+     */
     public function getListUserAllowed($userId): array
     {
         //reading is not restricted
@@ -250,6 +257,9 @@ class StatusManager extends BaseManager
         return $deleted;
     }
 
+    /**
+     * @return int[]
+     */
     public function getAllowedReaders(BaseModel $record): array
     {
         return $this->getAllUserIds(); //everyone can read

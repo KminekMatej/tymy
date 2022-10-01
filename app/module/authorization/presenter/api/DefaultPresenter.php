@@ -20,7 +20,7 @@ class DefaultPresenter extends BasePresenter
     /** @inject */
     public UserManager $userManager;
 
-    public function actionDefault($resourceId)
+    public function actionDefault($resourceId): void
     {
         if (empty($resourceId)) {
             $this->respondBadRequest();
@@ -33,7 +33,7 @@ class DefaultPresenter extends BasePresenter
         $this->requestGetList($resourceId);
     }
 
-    private function requestGetList(int $userId)
+    private function requestGetList(int $userId): void
     {
         $rights = null;
         try {

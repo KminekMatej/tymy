@@ -15,7 +15,7 @@ class DefaultPresenter extends SecuredPresenter
     /** @var RightManager @inject */
     public RightManager $rightManager;
 
-    public function actionDefault()
+    public function actionDefault(): void
     {
         if ($this->getRequest()->getMethod() === 'GET') {
             $this->requestGetList();
@@ -24,7 +24,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->respondNotAllowed();
     }
 
-    private function requestGetList()
+    private function requestGetList(): void
     {
         $users = $this->rightManager->getList();
 

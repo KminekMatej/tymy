@@ -23,7 +23,7 @@ class RecordManager
     {
     }
 
-    private function createRecord(string $url, $data = null, $changes = null, string $identifier = "ID", ?array $checkSkips = null): int
+    private function createRecord(string $url, array $data = null, $changes = null, string $identifier = "ID", ?array $checkSkips = null): int
     {
         $this->applyChanges($data, $changes);
 
@@ -108,7 +108,7 @@ class RecordManager
         return $this->createRecord("attendanceStatusSet", $data ?: $this->mockStatusSet(), $changes, "id");
     }
 
-    public function mockAttendance(int $eventId, $pre = true, $post = false)
+    public function mockAttendance(int $eventId, $pre = true, $post = false): array
     {
         $data = [
             "eventId" => $eventId
@@ -127,7 +127,10 @@ class RecordManager
         return $data;
     }
 
-    public function mockDebt()
+    /**
+     * @return array<string, mixed>
+     */
+    public function mockDebt(): array
     {
         return [
             "amount" => (float)random_int(10, 1000),
@@ -143,7 +146,10 @@ class RecordManager
         ];
     }
 
-    public function mockDiscussion()
+    /**
+     * @return array<string, string>|array<string, bool>
+     */
+    public function mockDiscussion(): array
     {
         return [
             "caption" => "Autotest diskuze " . random_int(0, 1000),
@@ -157,7 +163,10 @@ class RecordManager
         ];
     }
 
-    public function mockEvent()
+    /**
+     * @return array<string, mixed>
+     */
+    public function mockEvent(): array
     {
         return [
             "caption" => "Autotest event " . random_int(0, 1000),
@@ -172,7 +181,10 @@ class RecordManager
         ];
     }
 
-    public function mockOption(int $pollId = null)
+    /**
+     * @return array<string, string>|array<string, int>|array<string, null>
+     */
+    public function mockOption(int $pollId = null): array
     {
         $type = ["NUMBER","TEXT","BOOLEAN"][random_int(0, 2)];
 
@@ -183,7 +195,7 @@ class RecordManager
         ];
     }
 
-    public function mockPermission()
+    public function mockPermission(): array
     {
         return [
             "type" => "USR",
@@ -198,7 +210,10 @@ class RecordManager
         ];
     }
 
-    public function mockPoll()
+    /**
+     * @return array<string, string>|array<string, bool>
+     */
+    public function mockPoll(): array
     {
         return [
             "caption" => "Autotest poll " . random_int(0, 1000),
@@ -209,7 +224,10 @@ class RecordManager
         ];
     }
 
-    public function mockUser()
+    /**
+     * @return string[]|bool[]|int[]
+     */
+    public function mockUser(): array
     {
         $rand = random_int(0, 30000);
         return [
@@ -235,7 +253,10 @@ class RecordManager
         ];
     }
 
-    public function mockStatus(int $statusSetId)
+    /**
+     * @return array<string, mixed>
+     */
+    public function mockStatus(int $statusSetId): array
     {
         $rand = random_int(0, 30000);
         return [
@@ -246,7 +267,10 @@ class RecordManager
         ];
     }
 
-    public function mockStatusSet()
+    /**
+     * @return array<string, mixed>
+     */
+    public function mockStatusSet(): array
     {
         $rand = random_int(0, 30000);
         return [
@@ -254,12 +278,12 @@ class RecordManager
         ];
     }
 
-    public function deleteUser($id)
+    public function deleteUser($id): void
     {
         $this->deleteRecord(User::MODULE, $id);
     }
 
-    public function deleteRecord($basePath, $id)
+    public function deleteRecord($basePath, $id): void
     {
         $url = "$basePath/$id";
 
@@ -273,7 +297,7 @@ class RecordManager
         return $date !== null ? $date->format(BaseModel::DATE_FORMAT) : null;
     }
 
-    private function applyChanges(&$data, $changes)
+    private function applyChanges(&$data, $changes): void
     {
         if ($changes && is_array($changes)) {
             foreach ($changes as $key => $value) {

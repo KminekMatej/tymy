@@ -25,7 +25,7 @@ class PermissionTest extends RequestCase
         return Permission::MODULE;
     }
 
-    public function testGetSingular()
+    public function testGetSingular(): void
     {
         $this->authorizeAdmin();
         $listResponse = $this->request($this->getBasePath())->expect(200, "array");
@@ -45,7 +45,7 @@ class PermissionTest extends RequestCase
         }
     }
 
-    public function testGetPlural()
+    public function testGetPlural(): void
     {
         $this->authorizeAdmin();
         $listResponse = $this->request($this->getBasePath() . "s")->expect(200, "array");
@@ -65,7 +65,7 @@ class PermissionTest extends RequestCase
         }
     }
 
-    public function testCRUDSingular()
+    public function testCRUDSingular(): void
     {
         $recordId = $this->createRecord();
 
@@ -76,7 +76,7 @@ class PermissionTest extends RequestCase
         $this->deleteRecord($recordId);
     }
 
-    public function testCRUDPlural()
+    public function testCRUDPlural(): void
     {
         $this->authorizeAdmin();
         $response = $this->request("permissions", "POST", $this->mockRecord())->expect(201, "array");
@@ -96,23 +96,26 @@ class PermissionTest extends RequestCase
         $this->request("permissions/" . $permissionId, "DELETE")->expect(200);
     }
 
-    public function testPermissionName()
+    public function testPermissionName(): void
     {
         $this->request("permissionName/EVE_CREATE")->expect(200, "array");
         $this->request("permissionName/ADMINONLY")->expect(200, "array");
     }
 
-    public function createRecord()
+    public function createRecord(): int
     {
         return $this->recordManager->createPermission();
     }
 
-    public function mockRecord()
+    public function mockRecord(): array
     {
         return $this->recordManager->mockPermission();
     }
 
 
+    /**
+     * @return mixed[]
+     */
     protected function mockChanges(): array
     {
         return [];

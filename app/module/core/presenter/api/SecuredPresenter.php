@@ -13,7 +13,7 @@ class SecuredPresenter extends BasePresenter
 {
     private const TSID = "TSID";
 
-    public function startup()
+    public function startup(): void
     {
         parent::startup();
 
@@ -34,7 +34,7 @@ class SecuredPresenter extends BasePresenter
     /**
      * Function responds immediately 403:FORBIDDEN for non-admin users
      */
-    protected function allowAdmin()
+    protected function allowAdmin(): void
     {
         if (!$this->user->isInRole(User::ROLE_SUPER)) {
             $this->respondForbidden();

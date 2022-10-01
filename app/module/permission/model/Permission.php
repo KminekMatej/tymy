@@ -103,19 +103,19 @@ class Permission extends BaseModel
         return $this->meAllowed;
     }
 
-    public function setId(int $id)
+    public function setId(int $id): static
     {
         $this->id = $id;
         return $this;
     }
 
-    public function setType(string $type)
+    public function setType(string $type): static
     {
         $this->type = $type;
         return $this;
     }
 
-    public function setName(string $name)
+    public function setName(string $name): static
     {
         $this->name = $name;
         return $this;
@@ -126,55 +126,55 @@ class Permission extends BaseModel
         $this->webname = $webname;
     }
 
-    public function setCaption(?string $caption)
+    public function setCaption(?string $caption): static
     {
         $this->caption = $caption;
         return $this;
     }
 
-    public function setAllowedRoles(?string $allowedRoles)
+    public function setAllowedRoles(?string $allowedRoles): static
     {
         $this->allowedRoles = empty($allowedRoles) ? null : explode(",", $allowedRoles);
         return $this;
     }
 
-    public function setRevokedRoles(?string $revokedRoles)
+    public function setRevokedRoles(?string $revokedRoles): static
     {
         $this->revokedRoles = empty($revokedRoles) ? null : explode(",", $revokedRoles);
         return $this;
     }
 
-    public function setAllowedStatuses(?string $allowedStatuses)
+    public function setAllowedStatuses(?string $allowedStatuses): static
     {
         $this->allowedStatuses = empty($allowedStatuses) ? null : explode(",", $allowedStatuses);
         return $this;
     }
 
-    public function setRevokedStatuses(?string $revokedStatuses)
+    public function setRevokedStatuses(?string $revokedStatuses): static
     {
         $this->revokedStatuses = empty($revokedStatuses) ? null : explode(",", $revokedStatuses);
         return $this;
     }
 
-    public function setAllowedUsers(?string $allowedUsers)
+    public function setAllowedUsers(?string $allowedUsers): static
     {
         $this->allowedUsers = empty($allowedUsers) ? null : array_map('intval', explode(",", $allowedUsers));
         return $this;
     }
 
-    public function setRevokedUsers(?string $revokedUsers)
+    public function setRevokedUsers(?string $revokedUsers): static
     {
         $this->revokedUsers = empty($revokedUsers) ? null : array_map('intval', explode(",", $revokedUsers));
         return $this;
     }
 
-    public function setUpdatedAt(?DateTime $updatedAt)
+    public function setUpdatedAt(?DateTime $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
         return $this;
     }
 
-    public function setUpdatedById(?int $updatedById)
+    public function setUpdatedById(?int $updatedById): static
     {
         $this->updatedById = $updatedById;
         return $this;
@@ -190,6 +190,9 @@ class Permission extends BaseModel
         return self::MODULE;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     public function getScheme(): array
     {
         return PermissionMapper::scheme();

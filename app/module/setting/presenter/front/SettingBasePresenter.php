@@ -32,7 +32,7 @@ class SettingBasePresenter extends SecuredPresenter
     protected array $eventTypes;
     protected array $userPermissions;
 
-    protected function startup()
+    protected function startup(): void
     {
         parent::startup();
         $this->eventTypes = $this->eventTypeManager->getIndexedList();

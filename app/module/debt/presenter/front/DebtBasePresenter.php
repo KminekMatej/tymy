@@ -20,7 +20,7 @@ class DebtBasePresenter extends SecuredPresenter
     /** @inject */
     public UserManager $userManager;
 
-    public function beforeRender()
+    public function beforeRender(): void
     {
         parent::beforeRender();
         $this->addBreadcrumb($this->translator->translate("debt.debt", 2), $this->link(":Debt:Default:"));
@@ -28,6 +28,7 @@ class DebtBasePresenter extends SecuredPresenter
 
     /**
      * Get list of possible payees - always Me, but if user is permitted to manage team debts, also TEAM mocked user
+     * @return \Tymy\Module\Core\Model\BaseModel[]|null[]|mixed[]
      */
     protected function getPayeeList(): array
     {

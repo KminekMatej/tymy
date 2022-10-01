@@ -21,6 +21,9 @@ class ICalManager extends BaseManager
         return ICal::class;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     protected function getScheme(): array
     {
         return ICalMapper::scheme();
@@ -84,6 +87,9 @@ class ICalManager extends BaseManager
         return parent::deleteRecord($resourceId);
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getAllowedReaders(BaseModel $record): array
     {
         /* @var $record ICal */

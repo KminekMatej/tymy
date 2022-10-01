@@ -16,6 +16,9 @@ use Tymy\Module\Right\Model\Right;
  */
 class RightManager extends BaseManager
 {
+    /**
+     * @return \Tymy\Module\Core\Model\BaseModel[]
+     */
     public function getList($idList = null, $idField = "id", ?int $limit = null, ?int $offset = null, ?string $order = null): array
     {
         return $this->mapAll($this->database->query("SELECT " . Permission::TABLE . ".*  FROM " . Right::TABLE
@@ -39,6 +42,9 @@ class RightManager extends BaseManager
         return Right::class;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     protected function getScheme(): array
     {
         return RightMapper::scheme();
