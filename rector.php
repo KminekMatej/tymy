@@ -14,17 +14,10 @@ return static function (RectorConfig $rectorConfig): void {
 
     // register a single rule
     $rectorConfig->rule(InlineConstructorDefaultToPropertyRector::class);
-    
-    //$rectorConfig->phpstanConfig(__DIR__ . '/phpstan.neon');
 
     $rectorConfig->sets([
         SetList::CODE_QUALITY,
         SetList::DEAD_CODE,
         LevelSetList::UP_TO_PHP_80
     ]);
-
-    // define sets of rules
-    //    $rectorConfig->sets([
-    //        LevelSetList::UP_TO_PHP_74
-    //    ]);
 };
