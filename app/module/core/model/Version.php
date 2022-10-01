@@ -11,15 +11,13 @@ use Nette\Utils\DateTime;
  */
 class Version
 {
-    private string $name;
     private string $major;
     private string $minor;
     private string $patch;
     private DateTime $datetime;
 
-    public function __construct(string $name, ?DateTime $datetime)
+    public function __construct(private string $name, ?DateTime $datetime)
     {
-        $this->name = $name;
         $this->datetime = $datetime ?: new DateTime();
         $vData = explode(".", $name);
         if (count($vData) === 3 && is_numeric($vData[0]) && is_numeric($vData[1]) && is_numeric($vData[2])) {

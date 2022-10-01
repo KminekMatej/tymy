@@ -90,9 +90,7 @@ class EventPresenter extends SettingBasePresenter
     {
         return $this->formFactory->createEventLineForm(
             $this->eventTypes,
-            function (\Nette\Application\UI\Form $form, \stdClass $values) {
-                return $this->newEventFormSuccess($form, $values);
-            }
+            fn(\Nette\Application\UI\Form $form, \stdClass $values) => $this->newEventFormSuccess($form, $values)
         );
     }
 
@@ -103,9 +101,7 @@ class EventPresenter extends SettingBasePresenter
 
                 return $this->formFactory->createEventLineForm(
                     $this->eventTypes,
-                    function (\Nette\Application\UI\Form $form, \stdClass $values) {
-                        return $this->eventFormSuccess($form, $values);
-                    },
+                    fn(\Nette\Application\UI\Form $form, \stdClass $values) => $this->eventFormSuccess($form, $values),
                     $event
                 );
         });

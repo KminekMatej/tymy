@@ -9,13 +9,8 @@ namespace Tymy\Module\Permission\Model;
  */
 class Privilege
 {
-    private string $type;
-    private string $name;
-
-    private function __construct(string $type, string $name)
+    private function __construct(private string $type, private string $name)
     {
-        $this->type = $type;
-        $this->name = $name;
     }
 
     /**

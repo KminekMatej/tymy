@@ -28,20 +28,18 @@ class RequestMockFactory
         'url' => [], // '#[.,)]$#D' => ''
     ];
 
-    /** @var bool */
-    private $binary = false;
+    private bool $binary = false;
 
     /** @var array */
     private $SERVERMOCK = [];
 
-    /** @var array */
-    private $POSTMOCK = [];
+    private ?array $POSTMOCK = [];
 
     /** @var array */
     private $FILESMOCK = [];
 
     /** @var string[] */
-    private $proxies = [];
+    private array $proxies = [];
 
 
     /**
@@ -58,7 +56,7 @@ class RequestMockFactory
      * @param  string|string[]  $proxy
      * @return static
      */
-    public function setProxy($proxy)
+    public function setProxy(string|array $proxy)
     {
         $this->proxies = (array) $proxy;
         return $this;
@@ -136,11 +134,11 @@ class RequestMockFactory
 
     private function getScriptPath(Url $url): string
     {
+        $i = null;
         $path = $url->getPath();
         $lpath = strtolower($path);
         $script = strtolower($this->SERVERMOCK['SCRIPT_NAME'] ?? '');
         if ($lpath !== $script) {
-            $max = min(strlen($lpath), strlen($script));
             $path = $i !== 0 ? substr($path, 0, strrpos($path, '/', $i - strlen($path) - 1) + 1) : '/';
         }
         return $path;
@@ -229,14 +227,14 @@ class RequestMockFactory
     private function getHeaders(): array
     {
         if (function_exists('apache_request_headers')) {
-            return apache_request_headers();
+            return getallheaders();
         }
 
         $headers = [];
         foreach ($this->SERVERMOCK as $k => $v) {
             if (strncmp($k, 'HTTP_', 5) == 0) {
                 $k = substr($k, 5);
-            } elseif (strncmp($k, 'CONTENT_', 8) !== 0) {
+            } elseif (!str_starts_with($k, 'CONTENT_')) {
                 continue;
             }
             $headers[strtr($k, '_', '-')] = $v;
@@ -264,9 +262,7 @@ class RequestMockFactory
         $remoteHost = empty($this->SERVERMOCK['REMOTE_HOST']) ? null : $this->SERVERMOCK['REMOTE_HOST'];
 
         // use real client address and host if trusted proxy is used
-        $usingTrustedProxy = $remoteAddr && array_filter($this->proxies, function (string $proxy) use ($remoteAddr): bool {
-            return Helpers::ipMatch($remoteAddr, $proxy);
-        });
+        $usingTrustedProxy = $remoteAddr && array_filter($this->proxies, fn(string $proxy): bool => Helpers::ipMatch($remoteAddr, $proxy));
         if ($usingTrustedProxy) {
             empty($this->SERVERMOCK['HTTP_FORWARDED'])
                 ? $this->useNonstandardProxy($url, $remoteAddr, $remoteHost)
@@ -279,6 +275,7 @@ class RequestMockFactory
 
     private function useForwardedProxy(Url $url, &$remoteAddr, &$remoteHost): void
     {
+        $proxyParams = [];
         $forwardParams = preg_split('/[,;]/', $this->SERVERMOCK['HTTP_FORWARDED']);
         foreach ($forwardParams as $forwardParam) {
             [$key, $value] = explode('=', $forwardParam, 2) + [1 => null];
@@ -287,11 +284,7 @@ class RequestMockFactory
 
         if (isset($proxyParams['for'])) {
             $address = $proxyParams['for'][0];
-            if (strpos($address, '[') === false) { //IPv4
-                $remoteAddr = explode(':', $address)[0];
-            } else { //IPv6
-                $remoteAddr = substr($address, 1, strpos($address, ']') - 1);
-            }
+            $remoteAddr = str_contains($address, '[') ? substr($address, 1, strpos($address, ']') - 1) : explode(':', $address)[0];
         }
 
         if (isset($proxyParams['host']) && count($proxyParams['host']) === 1) {
@@ -332,11 +325,7 @@ class RequestMockFactory
         }
 
         if (!empty($this->SERVERMOCK['HTTP_X_FORWARDED_FOR'])) {
-            $xForwardedForWithoutProxies = array_filter(explode(',', $this->SERVERMOCK['HTTP_X_FORWARDED_FOR']), function (string $ip): bool {
-                return !array_filter($this->proxies, function (string $proxy) use ($ip): bool {
-                    return filter_var(trim($ip), FILTER_VALIDATE_IP) !== false && Helpers::ipMatch(trim($ip), $proxy);
-                });
-            });
+            $xForwardedForWithoutProxies = array_filter(explode(',', $this->SERVERMOCK['HTTP_X_FORWARDED_FOR']), fn(string $ip): bool => !array_filter($this->proxies, fn(string $proxy): bool => filter_var(trim($ip), FILTER_VALIDATE_IP) !== false && Helpers::ipMatch(trim($ip), $proxy)));
             $remoteAddr = trim(end($xForwardedForWithoutProxies));
             $xForwardedForRealIpKey = key($xForwardedForWithoutProxies);
         }

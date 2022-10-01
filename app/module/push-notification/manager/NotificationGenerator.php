@@ -24,15 +24,8 @@ class NotificationGenerator
     public const DELETE_EVENT = "delete-event";
     public const UPDATE_EVENT_TIME = "update-event-time";
 
-    private User $user;
-    private TeamManager $teamManager;
-    private UserManager $userManager;
-
-    public function __construct(User $user, TeamManager $teamManager, UserManager $userManager)
+    public function __construct(private User $user, private TeamManager $teamManager, private UserManager $userManager)
     {
-        $this->user = $user;
-        $this->teamManager = $teamManager;
-        $this->userManager = $userManager;
     }
 
     public function createPost(Discussion $discussion, Post $post)

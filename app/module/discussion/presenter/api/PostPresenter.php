@@ -77,6 +77,7 @@ class PostPresenter extends SecuredPresenter
 
     private function requestGetList($resourceId, $page = 1)
     {
+        $posts = null;
         try {
             $posts = $this->manager->mode($resourceId, $page, "html", $this->getRequest()->getParameter("search"), $this->getRequest()->getParameter("suser"), $this->getRequest()->getParameter("jump2date"));
         } catch (Exception $exc) {

@@ -21,16 +21,9 @@ use Tymy\Module\PushNotification\Model\Subscriber;
  */
 class PushNotificationManager extends BaseManager
 {
-    private WebPush $webPush;
-    private ApplePush $applePush;
-    private FirebasePush $firebasePush;
-
-    public function __construct(ManagerFactory $managerFactory, WebPush $webPush, ApplePush $applePush, FirebasePush $firebasePush)
+    public function __construct(ManagerFactory $managerFactory, private WebPush $webPush, private ApplePush $applePush, private FirebasePush $firebasePush)
     {
         parent::__construct($managerFactory);
-        $this->webPush = $webPush;
-        $this->applePush = $applePush;
-        $this->firebasePush = $firebasePush;
     }
 
     /**
@@ -137,8 +130,8 @@ class PushNotificationManager extends BaseManager
             foreach ($subscribers as $subscriber) {
                 /* @var $subscriber Subscriber */
                 $report = $this->webPush->sendOneNotification(
-                    Subscription::create(\json_decode($subscriber->getSubscription(), true)), // subscription
-                    \json_encode($notification->jsonSerialize()) // payload
+                    Subscription::create(\json_decode($subscriber->getSubscription(), true, 512, JSON_THROW_ON_ERROR)), // subscription
+                    \json_encode($notification->jsonSerialize(), JSON_THROW_ON_ERROR) // payload
                 );
                 $this->processReport($subscriber, $report);
             }

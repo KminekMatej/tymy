@@ -14,10 +14,6 @@ class Router implements RouterInterface
 {
     public function addRoutes(RouteList &$router): void
     {
-        $router->addApiRoute('multiaccount[s][/<resourceId>]', array(
-            'module' => 'Multiaccount',
-            'presenter' => 'Default',
-            'action' => 'default',
-        ));
+        $router->addApiRoute('multiaccount[s][/<resourceId>]', ['module' => 'Multiaccount', 'presenter' => 'Default', 'action' => 'default']);
     }
 }

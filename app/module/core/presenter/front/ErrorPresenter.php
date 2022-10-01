@@ -17,13 +17,9 @@ class ErrorPresenter implements IPresenter
 {
     use SmartObject;
 
-    /** @var ILogger */
-    private $logger;
 
-
-    public function __construct(ILogger $logger)
+    public function __construct(private ILogger $logger)
     {
-        $this->logger = $logger;
     }
 
 
@@ -36,7 +32,7 @@ class ErrorPresenter implements IPresenter
 
         if ($e instanceof BadRequestException) {
             // $this->logger->log("HTTP code {$e->getCode()}: {$e->getMessage()} in {$e->getFile()}:{$e->getLine()}", 'access');
-            list($module, , $sep) = Helpers::splitName($request->getPresenterName());
+            [$module, , $sep] = Helpers::splitName($request->getPresenterName());
             return new ForwardResponse($request->setPresenterName($module . $sep . 'Error4xx'));
         }
 

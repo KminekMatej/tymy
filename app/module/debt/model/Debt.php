@@ -42,9 +42,9 @@ class Debt extends BaseModel implements JsonSerializable
     private bool $paymentPending = false;
     private ?string $webName = null;
     private string $class;
-    private ?User $debtor;
-    private ?User $payee;
-    private ?User $author;
+    private ?User $debtor = null;
+    private ?User $payee = null;
+    private ?User $author = null;
     private string $debtorCallName;
     private string $payeeCallName;
     private string $displayString;

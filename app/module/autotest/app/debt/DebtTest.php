@@ -31,12 +31,12 @@ class DebtTest extends RequestCase
     {
         $this->authorizeAdmin();
         $listResponse = $this->request($this->getBasePath())->expect(200, "array");
-        if (count($listResponse->getData()) == 0) {
+        if ((is_countable($listResponse->getData()) ? count($listResponse->getData()) : 0) == 0) {
             return;
         }
         $data = $listResponse->getData();
         shuffle($data);
-        $iterations = min(5, count($data));
+        $iterations = min(5, is_countable($data) ? count($data) : 0);
         if ($iterations == 0) {
             return;
         }
@@ -218,7 +218,7 @@ class DebtTest extends RequestCase
     protected function mockChanges(): array
     {
         return [
-            "amount" => (float)rand(1000, 10000),
+            "amount" => (float)random_int(1000, 10000),
             "payeeAccountNumber" => "214700539/0800",
             "varcode" => "654321",
             "debtDate" => $this->toJsonDate(new DateTime("- 14 days")),

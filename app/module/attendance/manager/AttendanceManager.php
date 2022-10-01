@@ -28,17 +28,13 @@ use Tymy\Module\User\Manager\UserManager;
  */
 class AttendanceManager extends BaseManager
 {
-    private UserManager $userManager;
-    private HistoryManager $historyManager;
-    private ?ActiveRow $eventRow;
+    private ?ActiveRow $eventRow = null;
     private array $myAttendances;
 
 
-    public function __construct(ManagerFactory $managerFactory, UserManager $userManager, PermissionManager $permissionManager, HistoryManager $historyManager)
+    public function __construct(ManagerFactory $managerFactory, private UserManager $userManager, PermissionManager $permissionManager, private HistoryManager $historyManager)
     {
         parent::__construct($managerFactory);
-        $this->userManager = $userManager;
-        $this->historyManager = $historyManager;
     }
 
     /**
@@ -219,7 +215,7 @@ class AttendanceManager extends BaseManager
      * @param int|string $preStatus Either id or code
      * @return int|null Return correct statusId or null for invalid code
      */
-    private function getPreStatusId(int $eventId, $preStatus): ?int
+    private function getPreStatusId(int $eventId, int|string $preStatus): ?int
     {
         $allowedStatuses = $this->database->query("SELECT status.id, status.code FROM status "
                 . "LEFT JOIN status_set ON status_set.id=status.status_set_id "

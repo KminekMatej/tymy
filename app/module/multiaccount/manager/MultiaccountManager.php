@@ -21,17 +21,10 @@ use Tymy\Module\User\Manager\UserManager;
  */
 class MultiaccountManager extends BaseManager
 {
-    private UserManager $userManager;
-    private TeamManager $teamManager;
-    private Translator $translator;
-
-    public function __construct(ManagerFactory $managerFactory, UserManager $userManager, TeamManager $teamManager, Translator $translator)
+    public function __construct(ManagerFactory $managerFactory, private UserManager $userManager, private TeamManager $teamManager, private Translator $translator)
     {
         parent::__construct($managerFactory);
-        $this->teamManager = $teamManager;
-        $this->userManager = $userManager;
         $this->database = $this->mainDatabase;
-        $this->translator = $translator;
         $this->idCol = null;    //there is no simple primary key column in database - so avoid errors from BaseManager
     }
 
@@ -241,7 +234,7 @@ class MultiaccountManager extends BaseManager
 
         $targetUserId = $this->getTargetUserId($accountId, $targetTeam->getId());
 
-        $newTk = sha1($accountId . rand(0, 100000));
+        $newTk = sha1($accountId . random_int(0, 100000));
         $this->mainDatabase->table(TransferKey::TABLE)
             ->where("account_id", $accountId)
             ->where("team_id", $targetTeam->getId())

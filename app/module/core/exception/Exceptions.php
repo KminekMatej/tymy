@@ -23,22 +23,12 @@ class MissingInputException extends Exception
 
 class TymyResponse extends Exception
 {
-    private ?int $httpCode = null;
-    private bool $success = true;
-    private ?string $sessionKey = null;
     private ?string $redirect = null;
 
-    /** @var mixed */
-    private $payload;
-
-    public function __construct(string $message = "", int $httpCode = Response::S200_OK, ?int $code = null, $payload = null, bool $success = true, ?string $sessionKey = null, Throwable $previous = null)
+    public function __construct(string $message = "", private ?int $httpCode = Response::S200_OK, ?int $code = null, private mixed $payload = null, private bool $success = true, private ?string $sessionKey = null, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
-        $this->success = $success;
-        $this->sessionKey = $sessionKey;
         $this->code = $code;
-        $this->payload = $payload;
-        $this->httpCode = $httpCode;
     }
 
     public function getHttpCode(): ?int

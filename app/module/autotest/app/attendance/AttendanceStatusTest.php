@@ -76,7 +76,7 @@ class AttendanceStatusTest extends RequestCase
 
         //now try to update this status using PUT request
 
-        $rand = rand(0, 1000);
+        $rand = random_int(0, 1000);
         $changeMock = [
             "code" => strtoupper(substr(md5($rand), 0, 3)),
             "caption" => "Changed name $rand",
@@ -127,7 +127,7 @@ class AttendanceStatusTest extends RequestCase
 
         //now try to update this status using PUT request
 
-        $rand = rand(0, 1000);
+        $rand = random_int(0, 1000);
         $changeMock = [
             "name" => "Changed SS name$rand",
         ];
@@ -176,7 +176,7 @@ class AttendanceStatusTest extends RequestCase
     private function getStatusSetId()
     {
         $allStatusSets = $this->request("attendanceStatus")->expect(200, "array")->getData();
-        return $allStatusSets[rand(0, count($allStatusSets) - 1)]["id"];
+        return $allStatusSets[random_int(0, (is_countable($allStatusSets) ? count($allStatusSets) : 0) - 1)]["id"];
     }
 
     public function createRecord()

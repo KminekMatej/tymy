@@ -29,19 +29,11 @@ use Tymy\Module\User\Manager\UserManager;
  */
 class PollManager extends BaseManager
 {
-    private ?Poll $poll;
-    private OptionManager $optionManager;
-    private VoteManager $voteManager;
-    private PermissionManager $permissionManager;
-    private UserManager $userManager;
+    private ?Poll $poll = null;
 
-    public function __construct(ManagerFactory $managerFactory, OptionManager $optionManager, VoteManager $voteManager, PermissionManager $permissionManager, UserManager $userManager)
+    public function __construct(ManagerFactory $managerFactory, private OptionManager $optionManager, private VoteManager $voteManager, private PermissionManager $permissionManager, private UserManager $userManager)
     {
         parent::__construct($managerFactory);
-        $this->optionManager = $optionManager;
-        $this->voteManager = $voteManager;
-        $this->permissionManager = $permissionManager;
-        $this->userManager = $userManager;
         $this->optionManager->setPollManager($this);
     }
 
@@ -176,9 +168,9 @@ class PollManager extends BaseManager
         if ($data["maxItems"] < $data["minItems"]) {
             $this->respondBadRequest("Max Items must be bigger or equal to Min items");
         }
-        $data["showResults"] = $data["showResults"] ?? Poll::RESULTS_NEVER;
-        $data["status"] = $data["status"] ?? Poll::STATUS_DESIGN;
-        $data["orderFlag"] = $data["orderFlag"] ?? 0;
+        $data["showResults"] ??= Poll::RESULTS_NEVER;
+        $data["status"] ??= Poll::STATUS_DESIGN;
+        $data["orderFlag"] ??= 0;
 
         $this->checkInputs($data);
     }
@@ -294,7 +286,7 @@ class PollManager extends BaseManager
 
         foreach ($poll->getVotes() as &$vote) {
             do {
-                $cloakId = rand(100000, 200000);
+                $cloakId = random_int(100000, 200000);
             } while (in_array($cloakId, $cloakIds));
             $cloakIds[] = $cloakId;
 

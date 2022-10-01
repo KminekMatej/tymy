@@ -9,11 +9,8 @@ namespace Tymy\Module\Admin\Manager;
  */
 class AdminManager
 {
-    private array $ghosts;
-
-    public function __construct(array $ghosts)
+    public function __construct(private array $ghosts)
     {
-        $this->ghosts = $ghosts;
     }
 
     /**

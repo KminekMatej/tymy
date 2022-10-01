@@ -22,17 +22,10 @@ class ApplePush
 {
     private const URL_SANDBOX = "https://api.sandbox.push.apple.com/3/device";
     private const URL_PRODUCTION = "https://api.push.apple.com/3/device";
-
-    private Configuration $jwtConfiguration;
-    private TeamManager $teamManager;
-    private array $apns;
     private array $expiredSubscribers = [];
 
-    public function __construct(array $apns, Configuration $jwtConfiguration, TeamManager $teamManager)
+    public function __construct(private array $apns, private Configuration $jwtConfiguration, private TeamManager $teamManager)
     {
-        $this->jwtConfiguration = $jwtConfiguration;
-        $this->teamManager = $teamManager;
-        $this->apns = $apns;
     }
 
     public function sendBulkNotifications(array $subscribers, PushNotification $pushNotification)
@@ -93,13 +86,13 @@ class ApplePush
             $info = curl_getinfo($ch);
 
             if ($response === false || $info["http_code"] !== 200) {
-                $decodedResponse = json_decode($response);
+                $decodedResponse = json_decode($response, null, 512, JSON_THROW_ON_ERROR);
                 $errorReason = $decodedResponse->reason ?? null;
                 if ($errorReason === "BadDeviceToken") {
                     //invalid device id, delete from database
                     $this->expiredSubscribers[] = $subscriber;
                 }
-                Debugger::log("APNS notifikace nemohla být odeslána, chyba: " . $response . ", infodata: " . json_encode($info), ILogger::ERROR);
+                Debugger::log("APNS notifikace nemohla být odeslána, chyba: " . $response . ", infodata: " . json_encode($info, JSON_THROW_ON_ERROR), ILogger::ERROR);
             }
         }
     }

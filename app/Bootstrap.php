@@ -24,7 +24,7 @@ class Bootstrap
         // absolute filesystem path to the application root
         define("ROOT_DIR", getenv("ROOT_DIR") ? self::normalizePath(getenv("ROOT_DIR")) : self::normalizePath(__DIR__ . "/.."));
         define("TEAM_DIR", getenv("TEAM_DIR") ?: str_replace("//", "/", dirname($_SERVER['SCRIPT_FILENAME'], 2)));
-        define('MODULES', array_diff(scandir(self::MODULES_DIR), array('..', '.')));
+        define('MODULES', array_diff(scandir(self::MODULES_DIR), ['..', '.']));
 
         $autotestMode = getenv("AUTOTEST") || isset($_GET["AUTOTEST"]);
 
@@ -33,11 +33,11 @@ class Bootstrap
         try {   // debug.local.neon contains either true, to generally enable debug, or array of IP addresses
             $debugFile = TEAM_DIR . '/local/debug.neon';
             $debug = file_exists($debugFile) ? Neon::decode(file_get_contents($debugFile)) : false;
-        } catch (Exception $exc) {
+        } catch (Exception) {
             $debug = false;
         }
 
-        $configurator->setDebugMode($debug ? $debug : false);
+        $configurator->setDebugMode($debug ?: false);
 
         $configurator->enableTracy($autotestMode ? TEAM_DIR . '/log_autotest' : TEAM_DIR . '/log');
 
@@ -65,7 +65,7 @@ class Bootstrap
         $root = ($path[0] === '/') ? '/' : '';
 
         $segments = explode('/', trim($path, '/'));
-        $ret = array();
+        $ret = [];
         foreach ($segments as $segment) {
             if (($segment == '.') || $segment === '') {
                 continue;

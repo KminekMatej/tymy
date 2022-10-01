@@ -23,12 +23,10 @@ class EventTypeManager extends BaseManager
 {
     private ?EventType $eventType = null;
     private array $colorList;
-    private StatusManager $statusManager;
 
-    public function __construct(ManagerFactory $managerFactory, StatusManager $statusManager)
+    public function __construct(ManagerFactory $managerFactory, private StatusManager $statusManager)
     {
         parent::__construct($managerFactory);
-        $this->statusManager = $statusManager;
     }
 
     /**

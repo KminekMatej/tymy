@@ -16,11 +16,8 @@ class FirebasePush
 {
     private const URL = "https://fcm.googleapis.com/fcm/send";
 
-    private array $fcm;
-
-    public function __construct(array $fcm)
+    public function __construct(private array $fcm)
     {
-        $this->fcm = $fcm;
     }
 
     /**
@@ -51,7 +48,7 @@ class FirebasePush
                 'message' => $pushNotification->getMessage(),
                 'title' => $pushNotification->getTitle()
             ]
-        ]);
+        ], JSON_THROW_ON_ERROR);
 
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
 

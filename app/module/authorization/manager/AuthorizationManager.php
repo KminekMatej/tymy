@@ -19,13 +19,11 @@ use Tymy\Module\User\Model\User;
  */
 class AuthorizationManager implements IAuthorizator
 {
-    private Explorer $teamDatabase;
     private array $permissionCache = [];
     private array $userCache = [];
 
-    public function __construct(Explorer $teamDatabase)
+    public function __construct(private Explorer $teamDatabase)
     {
-        $this->teamDatabase = $teamDatabase;
     }
 
     private function getUserStatus($userId): string
@@ -45,10 +43,9 @@ class AuthorizationManager implements IAuthorizator
 
     /**
      * Maps one active row to object
-     * @param ActiveRow|false $row
      * @return BaseModel
      */
-    public function map(string $class, array $scheme, $row, $force = false)
+    public function map(string $class, array $scheme, \Nette\Database\Table\ActiveRow|false $row, $force = false)
     {
         if (!$row) {
             return null;

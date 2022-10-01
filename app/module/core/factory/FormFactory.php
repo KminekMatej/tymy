@@ -28,23 +28,10 @@ use Tymy\Module\User\Model\User;
 class FormFactory
 {
     use Nette\SmartObject;
-
-    private EventTypeManager $eventTypeManager;
-    private StatusSetManager $statusSetManager;
-    private TeamManager $teamManager;
-    private UserManager $userManager;
-    private Translator $translator;
-    private PermissionManager $permissionManager;
     private array $userPermissions;
 
-    public function __construct(EventTypeManager $eventTypeManager, EventManager $eventManager, Translator $translator, StatusSetManager $statusSetManager, TeamManager $teamManager, UserManager $userManager, PermissionManager $permissionManager)
+    public function __construct(private EventTypeManager $eventTypeManager, EventManager $eventManager, private Translator $translator, private StatusSetManager $statusSetManager, private TeamManager $teamManager, private UserManager $userManager, private PermissionManager $permissionManager)
     {
-        $this->eventTypeManager = $eventTypeManager;
-        $this->teamManager = $teamManager;
-        $this->userManager = $userManager;
-        $this->translator = $translator;
-        $this->statusSetManager = $statusSetManager;
-        $this->permissionManager = $permissionManager;
     }
 
     /**

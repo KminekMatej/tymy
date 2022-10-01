@@ -24,15 +24,11 @@ use Tymy\Module\User\Manager\UserManager;
  */
 class DiscussionManager extends BaseManager
 {
-    private PermissionManager $permissionManager;
-    private UserManager $userManager;
-    private ?Discussion $discussion;
+    private ?Discussion $discussion = null;
 
-    public function __construct(ManagerFactory $managerFactory, PermissionManager $permissionManager, UserManager $userManager)
+    public function __construct(ManagerFactory $managerFactory, private PermissionManager $permissionManager, private UserManager $userManager)
     {
         parent::__construct($managerFactory);
-        $this->permissionManager = $permissionManager;
-        $this->userManager = $userManager;
     }
 
     protected function allowCreate(?array &$data = null): void

@@ -70,18 +70,10 @@ class DefaultPresenter extends SecuredPresenter
             ;
         });
 
-        $this->template->addFilter('namedayToday', function ($name, $webname) {
-            return $this->translator->translate("team.hasNamedayToday", null, ["name" => '<strong><a href=' . $this->link(":Team:Player:", $webname) . '>' . $name . '</a></strong>']);
-        });
-        $this->template->addFilter('namedayTommorow', function ($name, $webname) {
-            return $this->translator->translate("team.hasNamedayTommorow", null, ["name" => '<strong><a href=' . $this->link(":Team:Player:", $webname) . '>' . $name . '</a></strong>']);
-        });
-        $this->template->addFilter('birthdayToday', function ($name, $webname, $year) {
-            return $this->translator->translate("team.hasBirthdayToday", null, ["name" => '<strong><a href=' . $this->link(":Team:Player:", $webname) . '>' . $name . '</a></strong>', "year" => '<strong>' . $year . '.</strong>']);
-        });
-        $this->template->addFilter('birthdayTommorow', function ($name, $webname, $year) {
-            return $this->translator->translate("team.hasBirthdayTommorow", null, ["name" => '<strong><a href=' . $this->link(":Team:Player:", $webname) . '>' . $name . '</a></strong>', "year" => '<strong>' . $year . '.</strong>']);
-        });
+        $this->template->addFilter('namedayToday', fn($name, $webname) => $this->translator->translate("team.hasNamedayToday", null, ["name" => '<strong><a href=' . $this->link(":Team:Player:", $webname) . '>' . $name . '</a></strong>']));
+        $this->template->addFilter('namedayTommorow', fn($name, $webname) => $this->translator->translate("team.hasNamedayTommorow", null, ["name" => '<strong><a href=' . $this->link(":Team:Player:", $webname) . '>' . $name . '</a></strong>']));
+        $this->template->addFilter('birthdayToday', fn($name, $webname, $year) => $this->translator->translate("team.hasBirthdayToday", null, ["name" => '<strong><a href=' . $this->link(":Team:Player:", $webname) . '>' . $name . '</a></strong>', "year" => '<strong>' . $year . '.</strong>']));
+        $this->template->addFilter('birthdayTommorow', fn($name, $webname, $year) => $this->translator->translate("team.hasBirthdayTommorow", null, ["name" => '<strong><a href=' . $this->link(":Team:Player:", $webname) . '>' . $name . '</a></strong>', "year" => '<strong>' . $year . '.</strong>']));
     }
 
     public function renderDefault()
@@ -120,9 +112,7 @@ class DefaultPresenter extends SecuredPresenter
                 unset($usersArray[$key]);
             }
         }
-        usort($usersArray, function ($a, $b) {
-            return $this::sortUsersComparer($a, $b);
-        });
+        usort($usersArray, fn($a, $b) => $this::sortUsersComparer($a, $b));
         return array_merge($usersArray, $notSetValues);
     }
 

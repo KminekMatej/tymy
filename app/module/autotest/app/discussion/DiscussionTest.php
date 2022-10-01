@@ -26,12 +26,12 @@ class DiscussionTest extends RequestCase
     public function testGet()
     {
         $listResponse = $this->getList();
-        if (count($listResponse->getData()) == 0) {
+        if ((is_countable($listResponse->getData()) ? count($listResponse->getData()) : 0) == 0) {
             return;
         }
         $data = $listResponse->getData();
         shuffle($data);
-        $iterations = min(5, count($data));
+        $iterations = min(5, is_countable($data) ? count($data) : 0);
 
         for ($index = 0; $index < $iterations; $index++) {
             $d = array_shift($data);
@@ -88,7 +88,7 @@ class DiscussionTest extends RequestCase
             "stickyRightName" => "MAINADMIN",
         ]);
 
-        $pid = $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "ADMIN first post " . rand(0, 10000)])->expect(201)->getData()["id"];
+        $pid = $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "ADMIN first post " . random_int(0, 10000)])->expect(201)->getData()["id"];
 
         $this->authorizeUser();
         //cannot create discussion
@@ -101,7 +101,7 @@ class DiscussionTest extends RequestCase
         $this->request($this->getBasePath() . "/$dId", "DELETE")->expect(403);
 
         //cannot write post to existing disucssion
-        $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "Autotest post " . rand(0, 10000)])->expect(403);
+        $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "Autotest post " . random_int(0, 10000)])->expect(403);
 
         //cannot read post in existing disucssion
         $this->request($this->getBasePath() . "/$dId/post", "GET")->expect(403);
@@ -142,14 +142,14 @@ class DiscussionTest extends RequestCase
             "stickyRightName" => "MAINADMIN",
         ]);
 
-        $pid = $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "ADMIN first post " . rand(0, 10000)])->expect(201)->getData()["id"];
+        $pid = $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "ADMIN first post " . random_int(0, 10000)])->expect(201)->getData()["id"];
 
         $this->authorizeUser();
 
         //cannot write new post to read-only disucssion
-        $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "Autotest post " . rand(0, 10000)])->expect(403);
+        $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "Autotest post " . random_int(0, 10000)])->expect(403);
         //cannot edit post in read-only
-        $this->request($this->getBasePath() . "/$dId/post/$pid", "PUT", ["post" => "Autotest post " . rand(0, 10000)])->expect(403);
+        $this->request($this->getBasePath() . "/$dId/post/$pid", "PUT", ["post" => "Autotest post " . random_int(0, 10000)])->expect(403);
         //cannot delete post in read-only
         $this->request($this->getBasePath() . "/$dId/post/$pid", "DELETE")->expect(403);
 
@@ -159,12 +159,12 @@ class DiscussionTest extends RequestCase
 
         //unknown post returns 404
         $this->request($this->getBasePath() . "/$dId/post/99999")->expect(404);
-        $this->request($this->getBasePath() . "/$dId/post/99999", "PUT", ["post" => "Autotest post " . rand(0, 10000)])->expect(404);
+        $this->request($this->getBasePath() . "/$dId/post/99999", "PUT", ["post" => "Autotest post " . random_int(0, 10000)])->expect(404);
         $this->request($this->getBasePath() . "/$dId/post/99999", "DELETE")->expect(404);
 
         //post from other discussion returns 404
         $this->request($this->getBasePath() . "/$dId/post/1")->expect(404);
-        $this->request($this->getBasePath() . "/$dId/post/1", "PUT", ["post" => "Autotest post " . rand(0, 10000)])->expect(404);
+        $this->request($this->getBasePath() . "/$dId/post/1", "PUT", ["post" => "Autotest post " . random_int(0, 10000)])->expect(404);
 
         //get as html mode
         $this->request($this->getBasePath() . "/$dId/html")->expect(200);
@@ -244,11 +244,11 @@ class DiscussionTest extends RequestCase
             "stickyRightName" => "MAINADMIN",
         ]);
 
-        $pid = $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "ADMIN first post " . rand(0, 10000)])->expect(201)->getData();
+        $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "ADMIN first post " . random_int(0, 10000)])->expect(201)->getData();
 
         $this->authorizeUser();
 
-        $pid2 = $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "USER first post " . rand(0, 10000)])->expect(201)->getData()["id"];
+        $pid2 = $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "USER first post " . random_int(0, 10000)])->expect(201)->getData()["id"];
 
         //check that user can update, but cannot stick
         $this->request($this->getBasePath() . "/$dId/post/$pid2", "PUT", ["sticky" => true])->expect(403);

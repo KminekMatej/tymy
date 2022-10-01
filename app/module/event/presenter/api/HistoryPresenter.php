@@ -30,6 +30,7 @@ class HistoryPresenter extends SecuredPresenter
 
     protected function requestGetList($eventId)
     {
+        $records = null;
         try {
             $records = $this->manager->readForEvent($eventId);
         } catch (Exception $exc) {

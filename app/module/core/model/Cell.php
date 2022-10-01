@@ -10,16 +10,13 @@ namespace Tymy\Module\Core\Model;
 class Cell
 {
     private const TYPE_DETAIL = "detail";
-
-    private string $type;
     private ?string $href = null;
     private ?string $class = null;
     private ?string $title = null;
     private ?string $style = null;
 
-    public function __construct(string $type)
+    public function __construct(private string $type)
     {
-        $this->type = $type;
     }
 
     public static function detail(string $href): self

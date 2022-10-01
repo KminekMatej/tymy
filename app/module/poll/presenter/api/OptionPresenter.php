@@ -54,6 +54,7 @@ class OptionPresenter extends SecuredPresenter
 
     protected function requestPost($resourceId)
     {
+        $created = null;
         if (!$this->isMultipleObjects($this->requestData)) {
             parent::requestPost($resourceId);   //if creating just one poll, use parent post handler
         }

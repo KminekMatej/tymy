@@ -27,14 +27,11 @@ class DBException
                 $re = '/.* constraint fails \((.*), CONSTRAINT (.*) FOREIGN KEY \((.*)\) REFERENCES (.*) \((.*)\).*\)/';
                 preg_match($re, $exc->getMessage(), $matches);
                 if (count($matches) > 0) {
-                    switch ($type) {
-                        case self::TYPE_DELETE:
-                            return new DeleteIntegrityException($matches[3], $matches[4], $matches[5], $matches[1], $matches[2]);
-                        case self::TYPE_UPDATE:
-                            return new UpdateIntegrityException($matches[3], $matches[4], $matches[5], $matches[1], $matches[2]);
-                        default:
-                            return new IntegrityException($matches[3], $matches[4], $matches[5], $matches[1], $matches[2]);
-                    }
+                    return match ($type) {
+                        self::TYPE_DELETE => new DeleteIntegrityException($matches[3], $matches[4], $matches[5], $matches[1], $matches[2]),
+                        self::TYPE_UPDATE => new UpdateIntegrityException($matches[3], $matches[4], $matches[5], $matches[1], $matches[2]),
+                        default => new IntegrityException($matches[3], $matches[4], $matches[5], $matches[1], $matches[2]),
+                    };
                 }
                 $re = '/Column \'(.*)\' cannot be null/m';
                 preg_match($re, $exc->getMessage(), $matches);
@@ -111,28 +108,15 @@ class UpdateIntegrityException extends IntegrityException
 
 class NotFoundException extends \Exception
 {
-    /** @var string */
-    public $failingField;
-
-    /** @var string */
-    public $relatedTable;
-
-    /** @var string */
-    public $relatedColumn;
-
-    /** @var string */
-    public $fkTable;
-
-    /** @var string */
-    public $fkName;
-
-    public function __construct($failingField, $relatedTable, $relatedColumn, $fkTable, $fkName)
+    /**
+     * @param string $failingField
+     * @param string $relatedTable
+     * @param string $relatedColumn
+     * @param string $fkTable
+     * @param string $fkName
+     */
+    public function __construct(public $failingField, public $relatedTable, public $relatedColumn, public $fkTable, public $fkName)
     {
-        $this->failingField = $failingField;
-        $this->relatedTable = $relatedTable;
-        $this->relatedColumn = $relatedColumn;
-        $this->fkTable = $fkTable;
-        $this->fkName = $fkName;
         parent::__construct("Related record, specified by field $failingField does not exist in column $relatedTable.$relatedColumn. (constraint $fkTable:$fkName)");
     }
 }

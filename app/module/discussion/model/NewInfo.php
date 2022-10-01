@@ -12,15 +12,8 @@ use Nette\Utils\DateTime;
  */
 class NewInfo implements JsonSerializable
 {
-    private int $discussionId;
-    private int $newsCount;
-    private ?DateTime $lastVisit = null;
-
-    public function __construct(int $discussionId, int $newsCount, ?DateTime $lastVisit = null)
+    public function __construct(private int $discussionId, private int $newsCount, private ?\Nette\Utils\DateTime $lastVisit = null)
     {
-        $this->discussionId = $discussionId;
-        $this->newsCount = $newsCount;
-        $this->lastVisit = $lastVisit;
     }
 
     public function getDiscussionId(): int

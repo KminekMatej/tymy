@@ -15,26 +15,18 @@ class Migration
     public const RESULT_OK = "OK";
     public const RESULT_ERROR = "ERROR";
 
-    /** @var string */
-    private $file;
-
-    /** @var string */
-    private $migration;
+    private string $migration;
 
     /** @var string */
     private $migratingFrom;
 
-    /** @var DateTime */
-    private $datetime;
+    private \Nette\Utils\DateTime $datetime;
 
-    /** @var string */
-    private $fileContents;
+    private string $fileContents;
 
-    /** @var string */
-    private $upContents;
+    private string $upContents;
 
-    /** @var string */
-    private $downContents;
+    private string $downContents;
 
     /** @var double */
     private $time;
@@ -45,10 +37,11 @@ class Migration
     /** @var bool */
     private $pastMigration = false;
 
-    public function __construct($file)
+    /**
+     * @param string $file
+     */
+    public function __construct(private $file)
     {
-        $this->file = $file;
-
         $migFileInfo = pathinfo($file);
         $this->migration = str_replace("base-", "", $migFileInfo["filename"]); //remove base prefix, if exists
         $this->datetime = DateTime::createFromFormat("Y-m-d?H-i-s", $this->migration);

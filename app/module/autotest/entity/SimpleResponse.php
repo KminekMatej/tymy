@@ -13,38 +13,14 @@ use Tymy\Module\Autotest\Entity\Assert;
  */
 class SimpleResponse
 {
-    /** @var int */
-    private $code;
-
-    /** @var string */
-    private $data;
-
     private ?string $message = null;
 
-    /** @var Request */
-    private $httpRequest;
-
-    /** @var Response */
-    private $httpResponse;
-
-    /** @var IResponse */
-    private $response;
-
-    /** @var Presenter */
-    private $presenter;
-
-    /** @var RequestLog */
-    private $log;
-
-    public function __construct($code, $data, Request $httpRequest, Response $httpResponse, IResponse $response, Presenter $presenter, RequestLog &$log)
+    /**
+     * @param int $code
+     * @param string $data
+     */
+    public function __construct(private $code, private $data, private Request $httpRequest, private Response $httpResponse, private IResponse $response, private Presenter $presenter, private RequestLog &$log)
     {
-        $this->code = $code;
-        $this->data = $data;
-        $this->httpRequest = $httpRequest;
-        $this->httpResponse = $httpResponse;
-        $this->response = $response;
-        $this->presenter = $presenter;
-        $this->log = $log;
         $this->log->setHttpResponseCode($httpResponse->getCode());
         if ($data && is_array($data) && array_key_exists("code", $data)) {
             $this->log->setCustomResponseCode((int) $data["code"]);

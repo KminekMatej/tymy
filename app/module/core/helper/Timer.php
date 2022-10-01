@@ -16,9 +16,9 @@ class Timer
     private static $sumNumber;
     private static $points;
     private static $sumpoints;
-    private static $serverTimingHeader = [];
-    private static $started = false;
-    private static $dumps = [];
+    private static array $serverTimingHeader = [];
+    private static bool $started = false;
+    private static array $dumps = [];
 
     private static function start()
     {

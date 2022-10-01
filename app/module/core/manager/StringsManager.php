@@ -18,17 +18,10 @@ class StringsManager
 {
     public const TABLE = "strings";
     public const LC = ["CZ" => "cs", "EN" => "en", "FR" => "fr", "PL" => "pl"];
-
-    private TeamManager $teamManager;
     private UserManager $userManager;
-    private Explorer $database;
-    private User $user;
 
-    public function __construct(Explorer $mainDatabase, User $user, TeamManager $teamManager)
+    public function __construct(private Explorer $database, private User $user, private TeamManager $teamManager)
     {
-        $this->database = $mainDatabase;
-        $this->user = $user;
-        $this->teamManager = $teamManager;
     }
 
     public function translate($message, ...$parameters): string
@@ -55,10 +48,8 @@ class StringsManager
 
     /**
      * Translate by domain and code
-     *
-     * @param mixed $parameters
      */
-    public function translateBy(string $domain, string $code, ...$parameters): string
+    public function translateBy(string $domain, string $code, mixed ...$parameters): string
     {
         $translation = $this->database->table(self::TABLE)->where("domain", $domain)->where("code", $code)->where("language", $this->getLc())->limit(1)->fetch();
 

@@ -29,30 +29,10 @@ use Tymy\Module\User\Model\User as User2;
  */
 class NavbarControl extends Control
 {
-    private SecuredPresenter $presenter;
-    private PollManager $pollManager;
-    private DiscussionManager $discussionManager;
-    private EventManager $eventManager;
-    private DebtManager $debtManager;
-    private UserManager $userManager;
-    private MultiaccountManager $multiaccountManager;
-    private TeamManager $teamManager;
     private Translator $translator;
-    private User $user;
-    private EventTypeManager $eventTypeManager;
 
-    public function __construct(SecuredPresenter $presenter, PollManager $pollManager, DiscussionManager $discussionManager, EventManager $eventManager, DebtManager $debtManager, UserManager $userManager, MultiaccountManager $multiaccountManager, User $user, TeamManager $teamManager, EventTypeManager $eventTypeManager)
+    public function __construct(private SecuredPresenter $presenter, private PollManager $pollManager, private DiscussionManager $discussionManager, private EventManager $eventManager, private DebtManager $debtManager, private UserManager $userManager, private MultiaccountManager $multiaccountManager, private User $user, private TeamManager $teamManager, private EventTypeManager $eventTypeManager)
     {
-        $this->presenter = $presenter;
-        $this->discussionManager = $discussionManager;
-        $this->pollManager = $pollManager;
-        $this->eventManager = $eventManager;
-        $this->eventTypeManager = $eventTypeManager;
-        $this->debtManager = $debtManager;
-        $this->userManager = $userManager;
-        $this->multiaccountManager = $multiaccountManager;
-        $this->user = $user;
-        $this->teamManager = $teamManager;
         $this->translator = $this->presenter->translator;
     }
 
@@ -117,9 +97,7 @@ class NavbarControl extends Control
         $form = new Form();
         $form->addUpload("file", $this->translator->translate("file.file"));
         $form->addSubmit("save", "Nahrát");
-        $form->onSuccess[] = function (\Nette\Application\UI\Form $form, $values) {
-            return $this->fileLoad($form, $values);
-        };
+        $form->onSuccess[] = fn(\Nette\Application\UI\Form $form, $values) => $this->fileLoad($form, $values);
 
         return $form;
     }

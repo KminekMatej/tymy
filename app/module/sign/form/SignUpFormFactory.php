@@ -16,11 +16,8 @@ class SignUpFormFactory
     public const EMAIL_PATTERN = "^[-a-zA-Z0-9!#$%&'*+/=?^_`{|}~]+(\\.[-a-zA-Z0-9!#$%&'*+/=?^_`{|}~]+)*@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)+";
     public const LOGIN_PATTERN = '^[\w-]{3,20}';
 
-    private UserManager $userManager;
-
-    public function __construct(UserManager $userManager)
+    public function __construct(private UserManager $userManager)
     {
-        $this->userManager = $userManager;
     }
 
     /**

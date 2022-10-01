@@ -22,16 +22,12 @@ use Tymy\Module\Team\Model\Team;
 class TeamManager extends BaseManager
 {
     public const DEFAULT_SKIN = "black-panther";
-    private Request $httpRequest;
     private Team $team;
-    public array $allSkins;
 
-    public function __construct(string $teamFolder, array $allSkins, ManagerFactory $managerFactory, Request $httpRequest)
+    public function __construct(string $teamFolder, public array $allSkins, ManagerFactory $managerFactory, private Request $httpRequest)
     {
         parent::__construct($managerFactory);
         $this->database = $this->mainDatabase;
-        $this->httpRequest = $httpRequest;
-        $this->allSkins = $allSkins;
     }
 
     public function map(?IRow $row, $force = false): ?BaseModel
@@ -179,6 +175,6 @@ class TeamManager extends BaseManager
         $bytesFree = 1024 * 1024 * 10; //10 MB for free teams
         $bytesFull = 1024 * 1024 * 100; //100 MB for full teams
 
-        return strpos($team->getTariff(), "FULL") !== false ? $bytesFull : $bytesFree;
+        return str_contains($team->getTariff(), "FULL") ? $bytesFull : $bytesFree;
     }
 }

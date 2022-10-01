@@ -188,7 +188,7 @@ abstract class BaseManager
                 continue;
             }
 
-            $input = $field->getAlias() ? $field->getAlias() : $field->getProperty();
+            $input = $field->getAlias() ?: $field->getProperty();
             if ($field->getMandatory() && !array_key_exists($input, $array)) {
                 $this->responder->E4015_MISSING_URL_INPUT($input);
             }
@@ -273,7 +273,7 @@ abstract class BaseManager
      */
     public function exists(int $id, string $table = null): bool
     {
-        $table = $table ? $table : $this->getTable();
+        $table = $table ?: $this->getTable();
         return $this->database->table($table)->where("id", $id)->count("id") > 0;
     }
 
@@ -284,7 +284,7 @@ abstract class BaseManager
      */
     public function existsList(array $idList, string $table = null)
     {
-        $table = $table ? $table : $this->getTable();
+        $table = $table ?: $this->getTable();
         $ids = $this->database->table($table)->where("id", $idList)->fetchPairs(null, "id");
         if (count($ids) === count($idList)) {
             return true;
@@ -692,9 +692,8 @@ abstract class BaseManager
 
     /**
      * Retype various boolean stored variables like YES, ANO etc. to proper boolean value
-     * @param mixed $value
      */
-    protected function toBool($value): bool
+    protected function toBool(mixed $value): bool
     {
         if (is_string($value)) {
             return in_array(strtolower($value), ["yes", "true", "ano"]);

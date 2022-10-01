@@ -21,19 +21,15 @@ use Tymy\Module\User\Model\User;
  */
 class Responder
 {
-    private Application $application;
     public ?RootPresenter $presenter = null;
     public ?RootPresenter $presenterMock = null;
-    public Translator $translator;
     private int $httpCode = Response::S403_FORBIDDEN;
 
     /** @var mixed */
     private $payload;
 
-    public function __construct(Application $application, Request $request, Translator $translator)
+    public function __construct(private Application $application, Request $request, public Translator $translator)
     {
-        $this->application = $application;
-        $this->translator = $translator;
     }
 
     private function init($httpCode = Response::S403_FORBIDDEN)
@@ -117,35 +113,31 @@ class Responder
     public function E400_BAD_REQUEST($message = null)
     {
         $this->init(Response::S400_BAD_REQUEST);
-        $this->respond(400, ($message ? $message : ""));
+        $this->respond(400, ($message ?: ""));
     }
 
     /** @throws AbortException */
     public function E401_UNAUTHORIZED($message = null)
     {
         $this->init(Response::S401_UNAUTHORIZED);
-        $this->respond(401, ($message ? $message : "Unauthorized"));
+        $this->respond(401, ($message ?: "Unauthorized"));
     }
 
     /** @throws AbortException */
     public function E403_FORBIDDEN($message = null)
     {
         $this->init();
-        $this->respond(403, ($message ? $message : "Forbidden"));
+        $this->respond(403, ($message ?: "Forbidden"));
     }
 
     /** @throws AbortException */
     public function E404_NOT_FOUND(?string $module = null, $identifier = null)
     {
         $this->init(Response::S404_NOT_FOUND);
-        switch ($module) {
-            case User::MODULE:
-                $message = $this->translator->translate("common.alerts.userNotFound");
-                break;
-            default:
-                $message = "Not-found";
-                break;
-        }
+        $message = match ($module) {
+            User::MODULE => $this->translator->translate("common.alerts.userNotFound"),
+            default => "Not-found",
+        };
         $this->respond(404, $message, "Not-found");
     }
 

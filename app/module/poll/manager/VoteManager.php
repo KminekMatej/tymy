@@ -43,6 +43,7 @@ class VoteManager extends BaseManager
 
     protected function allowCreate(?array &$data = null): void
     {
+        $vote = [];
         //check consistency of userId and pollId (same user, same poll)
 
         $voteUserId = null;

@@ -29,12 +29,12 @@ class PermissionTest extends RequestCase
     {
         $this->authorizeAdmin();
         $listResponse = $this->request($this->getBasePath())->expect(200, "array");
-        if (count($listResponse->getData()) == 0) {
+        if ((is_countable($listResponse->getData()) ? count($listResponse->getData()) : 0) == 0) {
             return;
         }
         $data = $listResponse->getData();
         shuffle($data);
-        $iterations = min(5, count($data));
+        $iterations = min(5, is_countable($data) ? count($data) : 0);
         if ($iterations == 0) {
             return;
         }
@@ -49,12 +49,12 @@ class PermissionTest extends RequestCase
     {
         $this->authorizeAdmin();
         $listResponse = $this->request($this->getBasePath() . "s")->expect(200, "array");
-        if (count($listResponse->getData()) == 0) {
+        if ((is_countable($listResponse->getData()) ? count($listResponse->getData()) : 0) == 0) {
             return;
         }
         $data = $listResponse->getData();
         shuffle($data);
-        $iterations = min(5, count($data));
+        $iterations = min(5, is_countable($data) ? count($data) : 0);
         if ($iterations == 0) {
             return;
         }

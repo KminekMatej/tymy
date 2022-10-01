@@ -19,16 +19,10 @@ class AvatarManager
 {
     public const WIDTH = 400;
     public const HEIGHT = 500;
-    private User $user;
     private User2 $userModel;
-    private Responder $responder;
-    private UserManager $userManager;
 
-    public function __construct(string $userPicFolder, Responder $responder, TeamManager $teamManager, UserManager $userManager, User $user)
+    public function __construct(string $userPicFolder, private Responder $responder, TeamManager $teamManager, private UserManager $userManager, private User $user)
     {
-        $this->responder = $responder;
-        $this->userManager = $userManager;
-        $this->user = $user;
     }
 
     private function allowUpload(int $userId)

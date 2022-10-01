@@ -9,12 +9,10 @@ namespace Tymy\Module\Core\Model;
  */
 class Order
 {
-    private string $column;
     private string $order;
 
-    public function __construct(string $column, string $order)
+    public function __construct(private string $column, string $order)
     {
-        $this->column = $column;
         $this->order = strtoupper($order) == "ASC" ? "ASC" : "DESC";
     }
 

@@ -20,20 +20,11 @@ class MailService
 {
     public const TEMPLATES_PATH = __DIR__ . "/../templates/mail";
     public const ROBOT_EMAIL_FROM_S = "robot@%s.tymy.cz";
-
-    private TeamManager $teamManager;
-    private Translator $translator;
     private Team $team;
     private string $teamDomain;
-    private Mailer $mailSender;
-    private StringsManager $stringsManager;
 
-    public function __construct(TeamManager $teamManager, LinkGenerator $linkGenerator, ITemplateFactory $templateFactory, Mailer $mailer, StringsManager $stringsManager, Translator $translator)
+    public function __construct(private TeamManager $teamManager, LinkGenerator $linkGenerator, ITemplateFactory $templateFactory, private Mailer $mailSender, private StringsManager $stringsManager, private Translator $translator)
     {
-        $this->teamManager = $teamManager;
-        $this->mailSender = $mailer;
-        $this->stringsManager = $stringsManager;
-        $this->translator = $translator;
     }
 
     private function startup()

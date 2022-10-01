@@ -41,6 +41,7 @@ class DefaultPresenter extends SecuredPresenter
 
     private function performPost(array $data): Attendance
     {
+        $created = null;
         try {
             $created = $this->manager->create($data);
         } catch (Exception $exc) {

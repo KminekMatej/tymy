@@ -13,18 +13,7 @@ use Tymy\Module\Core\Manager\Responder;
  */
 class ManagerFactory
 {
-    public Explorer $mainDatabase;
-    public Explorer $teamDatabase;
-    public Responder $responder;
-    public User $user;
-    public string $teamSysName;
-
-    public function __construct(Explorer $mainDatabase, Explorer $teamDatabase, string $teamSysName, Responder $responder, User $user)
+    public function __construct(public Explorer $mainDatabase, public Explorer $teamDatabase, public string $teamSysName, public Responder $responder, public User $user)
     {
-        $this->mainDatabase = $mainDatabase;
-        $this->teamDatabase = $teamDatabase;
-        $this->teamSysName = $teamSysName;
-        $this->responder = $responder;
-        $this->user = $user;
     }
 }

@@ -12,22 +12,10 @@ use Nette\Utils\DateTime;
 class RequestLog
 {
     private DateTime $time;
-    private string $method;
-    private string $url;
-    private $postData;
-    private ?int $expectCode = null;
-    private ?int $httpResponseCode = null;
-    private ?int $customResponseCode = null;
 
-    public function __construct(string $method, string $url, $postData, ?int $expectCode = null, ?int $httpResponseCode = null, ?int $customResponseCode = null)
+    public function __construct(private string $method, private string $url, private $postData, private ?int $expectCode = null, private ?int $httpResponseCode = null, private ?int $customResponseCode = null)
     {
         $this->time = new DateTime();
-        $this->method = $method;
-        $this->url = $url;
-        $this->postData = $postData;
-        $this->expectCode = $expectCode;
-        $this->httpResponseCode = $httpResponseCode;
-        $this->customResponseCode = $customResponseCode;
     }
 
     public function getTime(): DateTime

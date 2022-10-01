@@ -47,9 +47,7 @@ abstract class BasePresenter extends RootPresenter
 
         $this->template->appver = $this->getCurrentVersion()->getName();
 
-        $this->template->addFilter('monthName', function ($number) {
-            return $this->translator->translate("common.months." . strtolower(DateTime::createFromFormat("!m", (string) $number)->format("F"))) ;
-        });
+        $this->template->addFilter('monthName', fn($number) => $this->translator->translate("common.months." . strtolower(DateTime::createFromFormat("!m", (string) $number)->format("F"))));
     }
 
     public function formatLayoutTemplateFiles(): array

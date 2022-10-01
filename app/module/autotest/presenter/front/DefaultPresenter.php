@@ -31,19 +31,17 @@ class DefaultPresenter extends BasePresenter
 
     protected function beforeRender(): void
     {
-        $this->template->addFilter('colorize', function ($text) {
-            return preg_replace([
-                '/\[green\]/',
-                '/\[red\]/',
-                '/\[\/green\]/',
-                '/\[\/red\]/',
-                ], [
-                "<strong style='color:green'>",
-                "<strong style='color:red'>",
-                "</strong>",
-                "</strong>",
-                ], htmlspecialchars((string) $text, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'));
-        });
+        $this->template->addFilter('colorize', fn($text) => preg_replace([
+            '/\[green\]/',
+            '/\[red\]/',
+            '/\[\/green\]/',
+            '/\[\/red\]/',
+            ], [
+            "<strong style='color:green'>",
+            "<strong style='color:red'>",
+            "</strong>",
+            "</strong>",
+            ], htmlspecialchars((string) $text, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')));
     }
 
     public function renderDefault($resourceId = null)

@@ -12,19 +12,14 @@ use Tymy\Module\User\Manager\UserManager;
  */
 class NewPostControl extends Control
 {
-    private UserManager $userManager;
-
-    public function __construct(UserManager $userManager)
+    public function __construct(private UserManager $userManager)
     {
-        $this->userManager = $userManager;
     }
 
     public function render($discussion, $search = null, $suser = null)
     {
 
-        $this->template->addFilter('czechize', function ($status) {
-            return ["PLAYER" => "HRÁČI", "MEMBER" => "ČLENOVÉ", "SICK" => "MARODI"][$status];
-        });
+        $this->template->addFilter('czechize', fn($status) => ["PLAYER" => "HRÁČI", "MEMBER" => "ČLENOVÉ", "SICK" => "MARODI"][$status]);
 
         $template = $this->template;
         $template->setFile(__DIR__ . '/templates/newpost.latte');

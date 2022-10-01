@@ -33,25 +33,12 @@ use Tymy\Module\User\Manager\UserManager;
 class EventManager extends BaseManager
 {
     public const EVENTS_PER_PAGE = 15;
-
-    private PermissionManager $permissionManager;
-    private AttendanceManager $attendanceManager;
-    private EventTypeManager $eventTypeManager;
-    private UserManager $userManager;
-    private NotificationGenerator $notificationGenerator;
-    private PushNotificationManager $pushNotificationManager;
     private DateTime $now;
     private ?Event $event = null;
 
-    public function __construct(ManagerFactory $managerFactory, PermissionManager $permissionManager, UserManager $userManager, AttendanceManager $attendanceManager, EventTypeManager $eventTypeManager, NotificationGenerator $notificationGenerator, PushNotificationManager $pushNotificationManager)
+    public function __construct(ManagerFactory $managerFactory, private PermissionManager $permissionManager, private UserManager $userManager, private AttendanceManager $attendanceManager, private EventTypeManager $eventTypeManager, private NotificationGenerator $notificationGenerator, private PushNotificationManager $pushNotificationManager)
     {
         parent::__construct($managerFactory);
-        $this->permissionManager = $permissionManager;
-        $this->eventTypeManager = $eventTypeManager;
-        $this->userManager = $userManager;
-        $this->attendanceManager = $attendanceManager;
-        $this->notificationGenerator = $notificationGenerator;
-        $this->pushNotificationManager = $pushNotificationManager;
         $this->now = new DateTime();
     }
 

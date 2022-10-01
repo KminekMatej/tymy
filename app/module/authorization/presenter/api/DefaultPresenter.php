@@ -35,6 +35,7 @@ class DefaultPresenter extends BasePresenter
 
     private function requestGetList(int $userId)
     {
+        $rights = null;
         try {
             $rights = $this->AuthorizationManager->getListUserAllowed($this->userManager->getById($userId));
         } catch (\Exception $exc) {

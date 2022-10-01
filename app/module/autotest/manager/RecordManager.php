@@ -19,14 +19,8 @@ use Tymy\Module\Autotest\Entity\Assert;
  */
 class RecordManager
 {
-    /** @var RequestCase */
-    private $requestCase;
-    private $config;
-
-    public function __construct(RequestCase $requestCase, $config)
+    public function __construct(private RequestCase $requestCase, private $config)
     {
-        $this->requestCase = $requestCase;
-        $this->config = $config;
     }
 
     private function createRecord(string $url, $data = null, $changes = null, string $identifier = "ID", ?array $checkSkips = null): int
@@ -136,7 +130,7 @@ class RecordManager
     public function mockDebt()
     {
         return [
-            "amount" => (float)rand(10, 1000),
+            "amount" => (float)random_int(10, 1000),
             "currencyIso" => "CZK",
             "countryIso" => "cs",
             "debtorId" => $this->config["user_test_id"],
@@ -152,8 +146,8 @@ class RecordManager
     public function mockDiscussion()
     {
         return [
-            "caption" => "Autotest diskuze " . rand(0, 1000),
-            "description" => "Blablabla " . rand(0, 1000),
+            "caption" => "Autotest diskuze " . random_int(0, 1000),
+            "description" => "Blablabla " . random_int(0, 1000),
             "readRightName" => "",
             "writeRightName" => "",
             "deleteRightName" => "ADMINONLY",
@@ -166,9 +160,9 @@ class RecordManager
     public function mockEvent()
     {
         return [
-            "caption" => "Autotest event " . rand(0, 1000),
+            "caption" => "Autotest event " . random_int(0, 1000),
             "type" => "TRA",
-            "description" => "Testovací trénink " . rand(0, 1000),
+            "description" => "Testovací trénink " . random_int(0, 1000),
             "closeTime" => $this->toJsonDate(new DateTime("- 2 hours")),
             "startTime" => $this->toJsonDate(new DateTime("+ 2 hours")),
             "endTime" => $this->toJsonDate(new DateTime("+ 3 hours")),
@@ -180,10 +174,10 @@ class RecordManager
 
     public function mockOption(int $pollId = null)
     {
-        $type = ["NUMBER","TEXT","BOOLEAN"][rand(0, 2)];
+        $type = ["NUMBER","TEXT","BOOLEAN"][random_int(0, 2)];
 
         return [
-            "caption" => "Poll $type " . rand(0, 1000),
+            "caption" => "Poll $type " . random_int(0, 1000),
             "type" => $type,
             "pollId" => $pollId,
         ];
@@ -193,8 +187,8 @@ class RecordManager
     {
         return [
             "type" => "USR",
-            "caption" => "Autotest event " . rand(0, 1000),
-            "name" => "AUTOPERM " . rand(0, 1000),
+            "caption" => "Autotest event " . random_int(0, 1000),
+            "name" => "AUTOPERM " . random_int(0, 1000),
             "allowedRoles" => ["SUPER", "ATT"],
             "revokedRoles" => ["USR"],
             "allowedStatuses" => ["PLAYER"],
@@ -207,7 +201,7 @@ class RecordManager
     public function mockPoll()
     {
         return [
-            "caption" => "Autotest poll " . rand(0, 1000),
+            "caption" => "Autotest poll " . random_int(0, 1000),
             "changeableVotes" => true,
             "anonymousResults" => false,
             "showResults" => "ALWAYS",
@@ -217,7 +211,7 @@ class RecordManager
 
     public function mockUser()
     {
-        $rand = rand(0, 30000);
+        $rand = random_int(0, 30000);
         return [
             "login" => "MAL_GANIS_" . $rand,
             "password" => md5($rand),
@@ -229,8 +223,8 @@ class RecordManager
             "lastName" => "Svěcený",
             "callName" => "Jožo",
             "language" => "CZ",
-            "jerseyNumber" => (string)rand(0, 100),
-            "gender" => ["MALE", "FEMALE"][rand(0, 1)],
+            "jerseyNumber" => (string)random_int(0, 100),
+            "gender" => ["MALE", "FEMALE"][random_int(0, 1)],
             "street" => "K Marastu 315",
             "city" => "Nový Krobuzon",
             "zipCode" => "91544",
@@ -243,7 +237,7 @@ class RecordManager
 
     public function mockStatus(int $statusSetId)
     {
-        $rand = rand(0, 30000);
+        $rand = random_int(0, 30000);
         return [
             "code" => strtoupper(substr(md5($rand), 0, 3)),//random code
             "caption" => "Why do this? ($rand)",
@@ -254,7 +248,7 @@ class RecordManager
 
     public function mockStatusSet()
     {
-        $rand = rand(0, 30000);
+        $rand = random_int(0, 30000);
         return [
             "name" => "Autotest status set $rand"
         ];

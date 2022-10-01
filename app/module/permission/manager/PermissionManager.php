@@ -22,12 +22,10 @@ use Tymy\Module\User\Model\User;
 class PermissionManager extends BaseManager
 {
     private ?Permission $permission = null;
-    private AuthorizationManager $authorizationManager;
 
-    public function __construct(ManagerFactory $managerFactory, AuthorizationManager $authorizationManager)
+    public function __construct(ManagerFactory $managerFactory, private AuthorizationManager $authorizationManager)
     {
         parent::__construct($managerFactory);
-        $this->authorizationManager = $authorizationManager;
     }
 
     protected function getClassName(): string

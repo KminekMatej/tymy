@@ -18,11 +18,9 @@ use const TEAM_DIR;
 class FileManager
 {
     public const DOWNLOAD_DIR = TEAM_DIR . "/download";
-    private Responder $responder;
 
-    public function __construct(User $user, Responder $responder)
+    public function __construct(User $user, private Responder $responder)
     {
-        $this->responder = $responder;
     }
 
     /**

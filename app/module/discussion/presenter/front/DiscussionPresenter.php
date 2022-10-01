@@ -45,11 +45,7 @@ class DiscussionPresenter extends SecuredPresenter
             return null;
         });
 
-        $this->template->addFilter('displayNames', function (array $userIds) {
-            return implode(", ", array_map(function ($userId) {
-                return $this->userList[$userId]->getCallName();
-            }, $userIds));
-        });
+        $this->template->addFilter('displayNames', fn(array $userIds) => implode(", ", array_map(fn($userId) => $this->userList[$userId]->getCallName(), $userIds)));
     }
 
     public function handleReact(int $postId, ?string $reaction = null, bool $remove = false)

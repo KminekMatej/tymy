@@ -31,14 +31,10 @@ class InPresenter extends BasePresenter
                 $this->user->login($values->name, $values->password);
                 BaseManager::logg($this->team, "{$values->name} application login");
             } catch (Nette\Security\AuthenticationException $exc) {
-                switch ($exc->getMessage()) {
-                    case "Login not approved":
-                        $this->flashMessage($this->translator->translate("common.alerts.loginNotApproved"), "danger");
-                        break;
-                    default:
-                        $this->flashMessage($this->translator->translate("common.alerts.loginNotSuccesfull") . ' (' . $exc->getMessage() . ")", "danger");
-                        break;
-                }
+                match ($exc->getMessage()) {
+                    "Login not approved" => $this->flashMessage($this->translator->translate("common.alerts.loginNotApproved"), "danger"),
+                    default => $this->flashMessage($this->translator->translate("common.alerts.loginNotSuccesfull") . ' (' . $exc->getMessage() . ")", "danger"),
+                };
             }
             if ($this->user->isLoggedIn()) {
                 $this->initUser();
@@ -54,14 +50,10 @@ class InPresenter extends BasePresenter
             try {
                 $this->tkLogin($tk);
             } catch (Nette\Security\AuthenticationException $exc) {
-                switch ($exc->getMessage()) {
-                    case "Login not approved":
-                        $this->flashMessage($this->translator->translate("common.alerts.loginNotApproved"), "danger");
-                        break;
-                    default:
-                        $this->flashMessage($this->translator->translate("common.alerts.loginNotSuccesfull") . ' (' . $exc->getMessage() . ")", "danger");
-                        break;
-                }
+                match ($exc->getMessage()) {
+                    "Login not approved" => $this->flashMessage($this->translator->translate("common.alerts.loginNotApproved"), "danger"),
+                    default => $this->flashMessage($this->translator->translate("common.alerts.loginNotSuccesfull") . ' (' . $exc->getMessage() . ")", "danger"),
+                };
             }
             if ($this->user->isLoggedIn()) {
                 $this->initUser();

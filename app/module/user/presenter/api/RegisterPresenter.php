@@ -20,6 +20,7 @@ class RegisterPresenter extends BasePresenter
 
     public function actionDefault()
     {
+        $registeredUser = null;
         if ($this->getRequest()->getMethod() !== "POST") {
             $this->respondNotAllowed();
         }

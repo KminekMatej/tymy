@@ -41,7 +41,6 @@ abstract class RequestCase extends TestCase
 
     protected JsonResponse $jsonResponse;
     protected Explorer $database;
-    protected Container $container;
     protected User $user;
     protected array $config;
     protected array $moduleConfig;
@@ -54,11 +53,10 @@ abstract class RequestCase extends TestCase
     /** @var RequestLog[] */
     private array $logs = [];
 
-    public function __construct(Container $container)
+    public function __construct(protected Container $container)
     {
         define('TEST_DIR', Bootstrap::normalizePath(Bootstrap::MODULES_DIR . "/autotest"));
         define('WWW_DIR', Bootstrap::normalizePath(TEAM_DIR . "/www"));
-        $this->container = $container;
         $this->user = $this->container->getByType(User::class);
         $this->authenticationManager = $this->container->getByType(AuthenticationManager::class);
         $this->presenterFactory = $this->container->getService("application.presenterFactory");
@@ -66,7 +64,7 @@ abstract class RequestCase extends TestCase
         $this->database = $this->container->getService("database.team.explorer");
         $this->routeList = $this->container->getService("router");
         $this->config = Neon::decode(file_get_contents(TEST_DIR . '/autotest.records.map.neon'));
-        $this->moduleConfig = isset($this->config[$this->getModule()]) ? $this->config[$this->getModule()] : [];
+        $this->moduleConfig = $this->config[$this->getModule()] ?? [];
         $this->recordManager = new RecordManager($this, $this->config);
         Environment::setup();
     }
@@ -140,7 +138,7 @@ abstract class RequestCase extends TestCase
             }
             $string = ($requestLog->getTime())->format(BaseModel::DATETIME_CZECH_FORMAT) . "$clrStart {$requestLog->getMethod()}: {$requestLog->getUrl()}";
             if (!empty($data)) {
-                $string .= ", data: " . json_encode($data);
+                $string .= ", data: " . json_encode($data, JSON_THROW_ON_ERROR);
             }
             if (!empty($coded)) {
                 $string .= $codeStr;
@@ -255,7 +253,7 @@ abstract class RequestCase extends TestCase
     {
         $this->user->logout(true);
         $this->user->setAuthenticator($this->authenticationManager);
-        $this->user->login($userName ? $userName : $this->config["user_test_login"], $password ? $password : $this->config["user_test_pwd"]);
+        $this->user->login($userName ?: $this->config["user_test_login"], $password ?: $this->config["user_test_pwd"]);
 
         Assert::true($this->user->isLoggedIn());
         Assert::equal($this->user->getId(), $this->config["user_test_id"]);
@@ -265,7 +263,7 @@ abstract class RequestCase extends TestCase
     {
         $this->user->logout(true);
         $this->user->setAuthenticator($this->authenticationManager);
-        $this->user->login($userName ? $userName : $this->config["user_admin_login"], $password ? $password : $this->config["user_admin_pwd"]);
+        $this->user->login($userName ?: $this->config["user_admin_login"], $password ?: $this->config["user_admin_pwd"]);
 
         Assert::true($this->user->isLoggedIn());
         if (empty($userName)) {
@@ -321,6 +319,7 @@ abstract class RequestCase extends TestCase
      */
     private function mockHttpRequest($method, $requestUrl, $data)
     {
+        $SERVER = [];
         $requestMockFactory = new RequestMockFactory();
 
         $SERVER["HTTPS"] = "on";

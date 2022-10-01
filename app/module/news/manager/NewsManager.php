@@ -19,12 +19,9 @@ use Tymy\Module\User\Model\User;
  */
 class NewsManager extends BaseManager
 {
-    private UserManager $userManager;
-
-    public function __construct(ManagerFactory $managerFactory, UserManager $userManager)
+    public function __construct(ManagerFactory $managerFactory, private UserManager $userManager)
     {
         parent::__construct($managerFactory);
-        $this->userManager = $userManager;
     }
 
     protected function getClassName(): string

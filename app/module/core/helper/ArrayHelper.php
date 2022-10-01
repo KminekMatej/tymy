@@ -29,7 +29,7 @@ class ArrayHelper
      * @param string $outputField E.g. value
      * @return array|mixed If output field is specified, returns exact output field from sub-array, found by $key and $value. E.g. would return "foo" or [id => 1, value => foo] if $outputField is not specified. Return null if nothing has been found
      */
-    public static function subValue(array $inputArray, $where, string $equals = null, string $outputField = null)
+    public static function subValue(array $inputArray, mixed $where, string $equals = null, string $outputField = null)
     {
         $foundIndex = array_search($equals, array_column($inputArray, $where));
         if ($foundIndex === false) {
@@ -42,11 +42,10 @@ class ArrayHelper
     /**
      * Get sub-arrrays frorm multidimensional array, where property equals field or is in array of fields
      *
-     * @param mixed $where
      * @param string|string[]|int|int[]|bool $equals
      * @return array
      */
-    public static function filter(array $inputArray, $where, mixed $equals)
+    public static function filter(array $inputArray, mixed $where, string|array|int|bool $equals)
     {
         return array_filter($inputArray, function ($elm) use ($where, $equals) {
             if (is_string($equals) || is_int($equals) || is_bool($equals)) {
@@ -59,10 +58,8 @@ class ArrayHelper
 
     /**
      * Sum specified $sumKey field in all sub-arrays, filtered by $whereKey and $whereValue conditions.
-     *
-     * @param string|int $whereKey
      */
-    public static function sum(array $inputArray, $whereKey, string $whereValue, string $sumKey): float
+    public static function sum(array $inputArray, string|int $whereKey, string $whereValue, string $sumKey): float
     {
         $sum = 0.0;
 
@@ -88,7 +85,7 @@ class ArrayHelper
      * @param type $objects
      * @throws Exception
      */
-    public static function isEqual($expected, $actual, int $level = 0, $objects = null): bool
+    public static function isEqual(mixed $expected, mixed $actual, int $level = 0, $objects = null): bool
     {
         switch (true) {
             case $level > 10:
@@ -98,7 +95,7 @@ class ArrayHelper
                 $diff = abs($expected - $actual);
                 return ($diff < self::EPSILON) || ($diff / max(abs($expected), abs($actual)) < self::EPSILON);
 
-            case is_object($expected) && is_object($actual) && get_class($expected) === get_class($actual):
+            case is_object($expected) && is_object($actual) && $expected::class === $actual::class:
                 $objects = $objects !== null ? clone $objects : new SplObjectStorage();
                 if (isset($objects[$expected])) {
                     return $objects[$expected] === $actual;
@@ -153,10 +150,8 @@ class ArrayHelper
             return [];
         }
 
-        return array_map(function ($entity) {
-            /* @var $entity BaseModel */
-            return $entity->jsonSerialize();
-        }, $entities);
+        return array_map(fn($entity) => /* @var $entity BaseModel */
+$entity->jsonSerialize(), $entities);
     }
 
     /**
@@ -197,7 +192,7 @@ class ArrayHelper
      */
     public static function isAssoc(array $array): bool
     {
-        if (array() === $array) {
+        if ([] === $array) {
             return false;
         }
 

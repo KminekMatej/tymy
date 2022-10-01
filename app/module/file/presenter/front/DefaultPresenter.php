@@ -34,24 +34,17 @@ class DefaultPresenter extends SecuredPresenter
         $this->addBreadcrumb($this->translator->translate("file.file", 2), $this->link(":File:Default:"));
         $this->initFileStats();
 
-        $this->template->addFilter('filesize', function ($sizeInBytes) {
-            return $this->formatBytes($sizeInBytes);
-        });
+        $this->template->addFilter('filesize', fn($sizeInBytes) => $this->formatBytes($sizeInBytes));
 
         $this->template->addFilter('filetype', function ($filename) {
             $mime = mime_content_type($filename);
-            switch (true) {
-                case array_key_exists($mime, FileManager::getArchiveMimeTypes()):
-                    return "ARCHIVE";
-                case array_key_exists($mime, FileManager::getAudioMimeTypes()):
-                    return "AUDIO";
-                case array_key_exists($mime, FileManager::getDocumentMimeTypes()):
-                    return FileManager::getDocumentMimeTypes()[$mime] ?? "DOCUMENT";
-                case array_key_exists($mime, FileManager::getImageMimeTypes()):
-                    return "IMAGE";
-                default:
-                    return "OTHER";
-            }
+            return match (true) {
+                array_key_exists($mime, FileManager::getArchiveMimeTypes()) => "ARCHIVE",
+                array_key_exists($mime, FileManager::getAudioMimeTypes()) => "AUDIO",
+                array_key_exists($mime, FileManager::getDocumentMimeTypes()) => FileManager::getDocumentMimeTypes()[$mime] ?? "DOCUMENT",
+                array_key_exists($mime, FileManager::getImageMimeTypes()) => "IMAGE",
+                default => "OTHER",
+            };
         });
     }
 
@@ -212,7 +205,7 @@ class DefaultPresenter extends SecuredPresenter
         $timestamp = new DateTime();
 
         if (file_exists($cachedSizeFile)) {
-            $decoded = \json_decode(file_get_contents($cachedSizeFile), true);
+            $decoded = \json_decode(file_get_contents($cachedSizeFile), true, 512, JSON_THROW_ON_ERROR);
             if ($decoded) {
                 $this->fileStats = $decoded;
                 $timestamp = DateTime::createFromFormat("U", (string) filemtime($cachedSizeFile));
@@ -225,7 +218,7 @@ class DefaultPresenter extends SecuredPresenter
             ];
 
             $this->loadFileTypeSizes(FileManager::DOWNLOAD_DIR);
-            file_put_contents($cachedSizeFile, \json_encode($this->fileStats));
+            file_put_contents($cachedSizeFile, \json_encode($this->fileStats, JSON_THROW_ON_ERROR));
         }
     }
 
@@ -311,7 +304,7 @@ class DefaultPresenter extends SecuredPresenter
      */
     private function formatBytes(int $bytes, int $precision = 2): string
     {
-        $units = array('B', 'KB', 'MB', 'GB', 'TB');
+        $units = ['B', 'KB', 'MB', 'GB', 'TB'];
 
         $bytes = max($bytes, 0);
         $pow = floor(($bytes !== 0 ? log($bytes) : 0) / log(1024));

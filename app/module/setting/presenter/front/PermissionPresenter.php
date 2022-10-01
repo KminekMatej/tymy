@@ -149,7 +149,7 @@ class PermissionPresenter extends SettingBasePresenter
         if (array_key_exists("userAllowance", $changes)) { //set either allowed or revoked users
             $userList = [];
             foreach ($changes as $key => $value) {
-                if (strpos($key, "userCheck") !== false && $value == "true") {
+                if (str_contains($key, "userCheck") && $value == "true") {
                     $userList[] = (int) explode("_", $key)[1];
                 }
             }

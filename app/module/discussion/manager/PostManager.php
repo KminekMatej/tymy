@@ -33,23 +33,14 @@ class PostManager extends BaseManager
     // so if discussion has 6 sticky posts, even one new is not displayed at first page
     public const MINIMUM_NUMBER_OF_POSTS_DISPLAYED_WITH_NEW_POSTS = 5;
     public const MAXIMUM_FIRST_PAGE_SIZE = 200;
-
-    private DiscussionManager $discussionManager;
-    private PushNotificationManager $pushNotificationManager;
-    private NotificationGenerator $notificationGenerator;
-    private UserManager $userManager;
     private bool $inBbCode = true;
-    private ?Discussion $discussion;
-    private ?Post $post;
+    private ?Discussion $discussion = null;
+    private ?Post $post = null;
     private array $reactionsCache;
 
-    public function __construct(ManagerFactory $managerFactory, DiscussionManager $discussionManager, UserManager $userManager, PushNotificationManager $pushNotificationManager, NotificationGenerator $notificationGenerator)
+    public function __construct(ManagerFactory $managerFactory, private DiscussionManager $discussionManager, private UserManager $userManager, private PushNotificationManager $pushNotificationManager, private NotificationGenerator $notificationGenerator)
     {
         parent::__construct($managerFactory);
-        $this->discussionManager = $discussionManager;
-        $this->userManager = $userManager;
-        $this->pushNotificationManager = $pushNotificationManager;
-        $this->notificationGenerator = $notificationGenerator;
     }
 
     public function allowDiscussion($discussionId)
@@ -259,7 +250,7 @@ class PostManager extends BaseManager
         if ($jump2Date) {
             try {
                 $page = $this->getPageNumberFromDate($discussionId, $this->discussion->getNewInfo()->getNewsCount(), new DateTime($jump2Date)); //sanitize invalid inputs
-            } catch (Exception $exc) {
+            } catch (Exception) {
                 $page = 1;
             }
         }

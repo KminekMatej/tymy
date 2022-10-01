@@ -57,6 +57,7 @@ class StatusPresenter extends SecuredPresenter
 
     private function requestStatusGet($resourceId, $subResourceId)
     {
+        $record = null;
         try {
             $record = $this->statusSetManager->read($resourceId, $subResourceId);
         } catch (Exception $exc) {
@@ -68,6 +69,7 @@ class StatusPresenter extends SecuredPresenter
 
     private function requestStatusGetList()
     {
+        $statuses = null;
         try {
             $statuses = $this->statusSetManager->getListUserAllowed($this->user->getId());
         } catch (Exception $exc) {
@@ -79,6 +81,7 @@ class StatusPresenter extends SecuredPresenter
 
     private function requestStatusPost($resourceId)
     {
+        $created = null;
         try {
             $created = $this->statusManager->create($this->requestData, $resourceId);
         } catch (Exception $exc) {
@@ -90,6 +93,7 @@ class StatusPresenter extends SecuredPresenter
 
     private function requestStatusPut($resourceId, $subResourceId)
     {
+        $updated = null;
         try {
             $updated = $this->statusManager->update($this->requestData, $resourceId, $subResourceId);
         } catch (Exception $exc) {
@@ -101,6 +105,7 @@ class StatusPresenter extends SecuredPresenter
 
     private function requestStatusDelete($resourceId, $subResourceId)
     {
+        $deletedId = null;
         try {
             $deletedId = $this->statusManager->delete($resourceId, $subResourceId);
         } catch (Exception $exc) {
@@ -112,6 +117,7 @@ class StatusPresenter extends SecuredPresenter
 
     private function requestStatusSetPost($resourceId)
     {
+        $created = null;
         try {
             $created = $this->statusSetManager->create($this->requestData, $resourceId);
         } catch (Exception $exc) {
@@ -123,6 +129,7 @@ class StatusPresenter extends SecuredPresenter
 
     private function requestStatusSetPut($resourceId, $subResourceId)
     {
+        $updated = null;
         try {
             $updated = $this->statusSetManager->update($this->requestData, $resourceId, $subResourceId);
         } catch (Exception $exc) {
@@ -134,6 +141,7 @@ class StatusPresenter extends SecuredPresenter
 
     private function requestStatusSetDelete($resourceId, $subResourceId)
     {
+        $deletedId = null;
         try {
             $deletedId = $this->statusSetManager->delete($resourceId, $subResourceId);
         } catch (Exception $exc) {

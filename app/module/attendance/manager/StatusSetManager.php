@@ -22,15 +22,11 @@ use Tymy\Module\User\Manager\UserManager;
  */
 class StatusSetManager extends BaseManager
 {
-    private ?StatusSet $statusSet;
-    private StatusManager $statusManager;
-    private UserManager $userManager;
+    private ?StatusSet $statusSet = null;
 
-    public function __construct(ManagerFactory $managerFactory, StatusManager $statusManager, UserManager $userManager)
+    public function __construct(ManagerFactory $managerFactory, private StatusManager $statusManager, private UserManager $userManager)
     {
         parent::__construct($managerFactory);
-        $this->statusManager = $statusManager;
-        $this->userManager = $userManager;
     }
 
     public function map(?IRow $row, $force = false): ?BaseModel

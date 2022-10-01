@@ -99,6 +99,7 @@ class BasePresenter extends RootPresenter
 
     protected function requestGet($resourceId, $subResourceId)
     {
+        $record = null;
         try {
             $record = $this->manager->read($resourceId, $subResourceId);
         } catch (\Exception $exc) {
@@ -110,6 +111,7 @@ class BasePresenter extends RootPresenter
 
     protected function requestPost($resourceId)
     {
+        $created = null;
         try {
             $created = $this->manager->create($this->requestData, $resourceId);
         } catch (\Exception $exc) {
@@ -121,6 +123,7 @@ class BasePresenter extends RootPresenter
 
     protected function requestPut($resourceId, $subResourceId)
     {
+        $updated = null;
         try {
             $updated = $this->manager->update($this->requestData, $resourceId, $subResourceId);
         } catch (\Exception $exc) {
@@ -132,6 +135,7 @@ class BasePresenter extends RootPresenter
 
     protected function requestDelete($resourceId, $subResourceId)
     {
+        $deletedId = null;
         try {
             $deletedId = $this->manager->delete($resourceId, $subResourceId);
         } catch (\Exception $exc) {
@@ -144,7 +148,7 @@ class BasePresenter extends RootPresenter
     /**
      * Simple exception handler. If any exception gets throws, logs message into exception.log file and then either responds proper response, or continue throwing the response
      */
-    protected function handleException(\Exception $exc)
+    protected function handleException(\Throwable $exc)
     {
         if ($exc instanceof AbortException) {
             throw $exc; //when its aborted, simply continue with abortion
@@ -222,7 +226,7 @@ class BasePresenter extends RootPresenter
      * @param int $resourceId
      * @return BaseModel|false Model mapped
      */
-    protected function loadResource($resourceId, BaseManager $manager)
+    protected function loadResource($resourceId, BaseManager $manager): \Tymy\Module\Core\Model\BaseModel|false
     {
         if (empty($resourceId)) {
             return null;
@@ -244,7 +248,7 @@ class BasePresenter extends RootPresenter
      * @param int $subResourceId
      * @return BaseModel|false Model mapped
      */
-    protected function loadSubResource($subResourceId, BaseManager $manager)
+    protected function loadSubResource($subResourceId, BaseManager $manager): \Tymy\Module\Core\Model\BaseModel|false
     {
         if (empty($subResourceId)) {
             return null;
@@ -271,10 +275,8 @@ class BasePresenter extends RootPresenter
             return [];
         }
 
-        return array_map(function ($entity) {
-            /* @var $entity BaseModel */
-            return $entity->jsonSerialize();
-        }, $entities);
+        return array_map(fn($entity) => /* @var $entity BaseModel */
+$entity->jsonSerialize(), $entities);
     }
 
     /**
@@ -299,9 +301,8 @@ class BasePresenter extends RootPresenter
 
     /**
      * Simple function to throw Bad Request if suplied parametr is non-truthy
-     * @param mixed $parameter
      */
-    protected function needs($parameter = null)
+    protected function needs(mixed $parameter = null)
     {
         if (!$parameter) {
             $this->respondBadRequest();

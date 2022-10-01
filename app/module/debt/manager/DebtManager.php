@@ -24,13 +24,11 @@ class DebtManager extends BaseManager
     public const TYPE_TEAM = "team";
     public const TYPE_OTHER = "other";
 
-    private ?Debt $debt;
-    private UserManager $userManager;
+    private ?Debt $debt = null;
 
-    public function __construct(ManagerFactory $managerFactory, AuthorizationManager $authorizationManager, UserManager $userManager)
+    public function __construct(ManagerFactory $managerFactory, AuthorizationManager $authorizationManager, private UserManager $userManager)
     {
         parent::__construct($managerFactory);
-        $this->userManager = $userManager;
     }
 
     public function map(?IRow $row, $force = false): ?BaseModel
@@ -240,8 +238,8 @@ class DebtManager extends BaseManager
     private function autosetType(array &$debtData, ?Debt $originalDebt = null): void
     {
         if ($originalDebt !== null) {
-            $debtData["debtorId"] = $debtData["debtorId"] ?? $originalDebt->getDebtorId();
-            $debtData["payeeId"] = $debtData["payeeId"] ?? $originalDebt->getPayeeId();
+            $debtData["debtorId"] ??= $originalDebt->getDebtorId();
+            $debtData["payeeId"] ??= $originalDebt->getPayeeId();
         }
 
         $debtData["debtorType"] = empty($debtData["debtorId"]) ? self::TYPE_TEAM : self::TYPE_USER;

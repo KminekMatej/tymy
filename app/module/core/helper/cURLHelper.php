@@ -10,14 +10,14 @@ class CURLHelper
      * Get content from url
      * @return string|array If its json data
      */
-    public static function get(string $url, bool $isJson = false)
+    public static function get(string $url, bool $isJson = false): string|array
     {
         $handle = self::getCurl($url);
         $response = curl_exec($handle);
         curl_close($handle);
 
         if ($isJson) {
-            $response = json_decode($response, true);
+            $response = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
         }
 
         return $response;
@@ -40,7 +40,7 @@ class CURLHelper
         curl_close($handle);
 
         if ($isJson) {
-            $response = json_decode($response, true);
+            $response = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
         }
         return $response;
     }

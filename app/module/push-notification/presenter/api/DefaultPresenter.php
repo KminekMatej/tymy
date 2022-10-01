@@ -33,7 +33,7 @@ class DefaultPresenter extends SecuredPresenter
             $this->respondBadRequest("Missing request data");
         }
 
-        $subscription = \json_encode($this->requestData);
+        $subscription = \json_encode($this->requestData, JSON_THROW_ON_ERROR);
         /* @var $subscriber Subscriber */
         $subscriber = $this->manager->getByUserAndSubscription($this->user->getId(), $subscription);
 

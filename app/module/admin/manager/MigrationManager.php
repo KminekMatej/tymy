@@ -20,15 +20,12 @@ class MigrationManager
     private const MIGRATION_UP = true;
     private const REGEX_MIGRATION = "\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}.sql";
     private const REGEX_BASE = "\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-base.sql";
-
-    private Explorer $teamDatabase;
     private array $log = [];
     private bool $tableExists;
     private array $migrationsCache = [];
 
-    public function __construct(Explorer $teamDatabase)
+    public function __construct(private Explorer $teamDatabase)
     {
-        $this->teamDatabase = $teamDatabase;
     }
 
     private function migrationTableExists(): bool
@@ -206,7 +203,7 @@ class MigrationManager
         $matches = [];
 
         // this is faster than calling count($oktens) every time thru the loop.
-        $token_count = count($tokens);
+        $token_count = is_countable($tokens) ? count($tokens) : 0;
         for ($i = 0; $i < $token_count; $i++) {
             // Don't wanna add an empty string as the last thing in the array.
             if (($i !== $token_count - 1) || (strlen($tokens[$i] > 0))) {

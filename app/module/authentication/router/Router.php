@@ -14,15 +14,7 @@ class Router implements RouterInterface
 {
     public function addRoutes(RouteList &$router): void
     {
-        $router->addApiRoute('log<action \D+>[/<username>][/<password>]', array(
-                    'module' => 'Authentication',
-                    'presenter' => 'Default',
-                    'action' => 'default',
-                ))
-                ->addApiRoute('is', array(
-                    'module' => 'Authentication',
-                    'presenter' => 'Is',
-                    'action' => 'default',
-                ));
+        $router->addApiRoute('log<action \D+>[/<username>][/<password>]', ['module' => 'Authentication', 'presenter' => 'Default', 'action' => 'default'])
+                ->addApiRoute('is', ['module' => 'Authentication', 'presenter' => 'Is', 'action' => 'default']);
     }
 }

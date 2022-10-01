@@ -71,10 +71,8 @@ abstract class BaseModel implements JsonSerializable
             return [];
         }
 
-        return array_map(function ($entity) {
-            /* @var $entity BaseModel */
-            return $entity->jsonSerialize();
-        }, $entities);
+        return array_map(fn($entity) => /* @var $entity BaseModel */
+$entity->jsonSerialize(), $entities);
     }
 
     public function jsonSerialize()

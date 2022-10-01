@@ -25,19 +25,9 @@ class AuthenticationManager implements IAuthenticator
 {
     public const TABLE = "user";
     public const HASH_LIMIT = 19;
-    private Explorer $mainDatabase;
-    private Explorer $teamDatabase;
-    private Translator $translator;
-    private string $teamSysName;
-    private array $ghosts;
 
-    public function __construct(array $ghosts, string $teamSysName, Explorer $mainDatabase, Explorer $teamDatabase, Responder $responder, Translator $translator)
+    public function __construct(private array $ghosts, private string $teamSysName, private Explorer $mainDatabase, private Explorer $teamDatabase, Responder $responder, private Translator $translator)
     {
-        $this->teamSysName = $teamSysName;
-        $this->mainDatabase = $mainDatabase;
-        $this->teamDatabase = $teamDatabase;
-        $this->ghosts = $ghosts;
-        $this->translator = $translator;
     }
 
     public function authenticate(array $credentials): IIdentity
@@ -50,7 +40,7 @@ class AuthenticationManager implements IAuthenticator
         }
 
         //continue with classic login process
-        list($username, $password) = $credentials;
+        [$username, $password] = $credentials;
 
         $userparts = explode(chr(45), $username);
 

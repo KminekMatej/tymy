@@ -22,7 +22,7 @@ $container = Bootstrap::boot();
  */
 class UserTest extends RequestCase
 {
-    private $inited = false;
+    private bool $inited = false;
 
     private function init()
     {
@@ -54,12 +54,12 @@ class UserTest extends RequestCase
     public function testGetSingular()
     {
         $listResponse = $this->getList();
-        if (count($listResponse->getData()) == 0) {
+        if ((is_countable($listResponse->getData()) ? count($listResponse->getData()) : 0) == 0) {
             return;
         }
         $data = $listResponse->getData();
         shuffle($data);
-        $iterations = min(5, count($data));
+        $iterations = min(5, is_countable($data) ? count($data) : 0);
 
         for ($index = 0; $index < $iterations; $index++) {
             $d = array_shift($data);
@@ -71,12 +71,12 @@ class UserTest extends RequestCase
     public function testGetPlural()
     {
         $listResponse = $this->request($this->getBasePath() . "s")->expect(200, "array");
-        if (count($listResponse->getData()) == 0) {
+        if ((is_countable($listResponse->getData()) ? count($listResponse->getData()) : 0) == 0) {
             return;
         }
         $data = $listResponse->getData();
         shuffle($data);
-        $iterations = min(5, count($data));
+        $iterations = min(5, is_countable($data) ? count($data) : 0);
 
         for ($index = 0; $index < $iterations; $index++) {
             $d = array_shift($data);
@@ -221,7 +221,7 @@ class UserTest extends RequestCase
 
     private function mockRegData()
     {
-        $rand = rand(0, 10000);
+        $rand = random_int(0, 10000);
         return [
             "login" => "kil_jaeden_$rand",
             "email" => "kil_jaeden_$rand@autotest.tymy.cz",
@@ -234,7 +234,7 @@ class UserTest extends RequestCase
     {
         $this->init();
         $this->user->logout();
-        rand(0, 10000);
+        random_int(0, 10000);
 
         $regData = $this->mockRegData();
         $regData["login"] = $this->config["user_test_login"];
@@ -387,7 +387,7 @@ class UserTest extends RequestCase
     protected function mockChanges(): array
     {
         return [
-            "login" => "autotest_changed_" . rand(700, 900),
+            "login" => "autotest_changed_" . random_int(700, 900),
             "canLogin" => true,
             "canEditCallName" => false,
             "status" => "MEMBER",
@@ -395,8 +395,8 @@ class UserTest extends RequestCase
             "lastName" => "Marná",
             "callName" => "Joža",
             "language" => "EN",
-            "jerseyNumber" => (string)rand(100, 2000),
-            "gender" => ["MALE", "FEMALE"][rand(0, 1)],
+            "jerseyNumber" => (string)random_int(100, 2000),
+            "gender" => ["MALE", "FEMALE"][random_int(0, 1)],
             "street" => "K Marastu 316",
             "city" => "Nový Krobuzon",
             "zipCode" => "91545",
@@ -404,7 +404,7 @@ class UserTest extends RequestCase
             "nameDayMonth" => 7,
             "nameDayDay" => 15,
             "accountNumber" => "987654321/0300",
-            "email" => rand(100, 200000) . "_emailtest.tymy.cz",
+            "email" => random_int(100, 200000) . "_emailtest.tymy.cz",
         ];
     }
 }

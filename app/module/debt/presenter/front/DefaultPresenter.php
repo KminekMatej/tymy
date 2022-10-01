@@ -98,7 +98,7 @@ class DefaultPresenter extends DebtBasePresenter
         $accPrefix = null;
         $accountNumberBody = $accountNumber;
 
-        if (strpos($accountNumber, "/") === false) {
+        if (!str_contains($accountNumber, "/")) {
             return null;
         }
 

@@ -91,20 +91,12 @@ class Vote extends BaseModel
 
     public function setBooleanValue($booleanValue)
     {
-        switch (true) {
-            case is_string($booleanValue):
-                $this->booleanValue = in_array(strtoupper($booleanValue), ["YES", "TRUE", "ANO"]);
-                break;
-            case is_int($booleanValue):
-                $this->booleanValue = (bool) $booleanValue;
-                break;
-            case is_bool($booleanValue):
-                $this->booleanValue = $booleanValue;
-                break;
-            default:
-                $this->booleanValue = null;
-                break;
-        }
+        $this->booleanValue = match (true) {
+            is_string($booleanValue) => in_array(strtoupper($booleanValue), ["YES", "TRUE", "ANO"]),
+            is_int($booleanValue) => (bool) $booleanValue,
+            is_bool($booleanValue) => $booleanValue,
+            default => null,
+        };
         return $this;
     }
 
