@@ -76,7 +76,7 @@ class InvitationPresenter extends SecuredPresenter
 
         $form->addText("firstName", $this->translator->translate("team.firstName"));
         $form->addText("lastName", $this->translator->translate("team.lastName"));
-        $form->addText("email", $this->translator->translate("team.email"));
+        $form->addEmail("email", $this->translator->translate("team.email"))->addRule($form::EMAIL);
 
         $form->addSubmit("save");
 
