@@ -2,14 +2,16 @@
 
 namespace Tymy\Module\User\Manager;
 
+use Kdyby\Translation\Translator;
+use Nette\Application\LinkGenerator;
 use Nette\Utils\DateTime;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Service\MailService;
 use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Mapper\InvitationMapper;
 use Tymy\Module\User\Model\Invitation;
-use Tymy\Module\User\Model\User;
 
 /**
  * Description of InvitationManager
@@ -19,11 +21,16 @@ use Tymy\Module\User\Model\User;
 class InvitationManager extends BaseManager
 {
     private UserManager $userManager;
+    private MailService $mailService;
+    private LinkGenerator $linkGenerator;
+    private Translator $translator;
 
-    public function __construct(ManagerFactory $managerFactory, UserManager $userManager)
+    public function __construct(ManagerFactory $managerFactory, UserManager $userManager, LinkGenerator $linkGenerator, Translator $translator)
     {
         parent::__construct($managerFactory);
         $this->userManager = $userManager;
+        $this->linkGenerator = $linkGenerator;
+        $this->translator = $translator;
     }
 
     protected function getClassName(): string
@@ -48,6 +55,10 @@ class InvitationManager extends BaseManager
         }
 
         $this->checkInputs($data);
+
+        if (empty($data["firstName"]) && empty($data["lastName"]) || empty($data["email"])) {
+            $this->respondBadRequest($this->translator->translate("team.errors.invitationAtLeast"));
+        }
     }
 
     protected function allowDelete(?int $recordId): void
@@ -91,7 +102,14 @@ class InvitationManager extends BaseManager
 
         $createdRow = $this->createByArray($data);
 
-        return $this->map($createdRow);
+        /* @var $invitation Invitation */
+        $invitation = $this->map($createdRow);
+
+        if ($invitation->getEmail()) {
+            $this->notifyByEmail($invitation);
+        }
+
+        return $invitation;
     }
 
     public function delete(int $resourceId, ?int $subResourceId = null): int
@@ -122,5 +140,12 @@ class InvitationManager extends BaseManager
         parent::updateByArray($resourceId, $data);
 
         return $this->getById($resourceId, true);
+    }
+
+    private function notifyByEmail(Invitation $invitation)
+    {
+        $name = $invitation->getFirstName() || $invitation->getLastName() ? join(" ", [$invitation->getFirstName(), $invitation->getLastName()]) : null;
+        
+        $this->mailService->mailInvitation($name, $invitation->getEmail(), $this->linkGenerator->link(":Sign:ByInvite:default", ["invite" => $invitation->getCode()]), $invitation->getValidUntil());
     }
 }

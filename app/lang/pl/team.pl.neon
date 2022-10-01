@@ -69,6 +69,7 @@ invitation-expired: Wygasły
 errors:
     imgFileCorrupted: "Plik nie jest obrazkiem, lub jest uszkodzony"
     passwordMismatch: Hasło różni się
+    invitationAtLeast: "Przynajmniej jedno z pól Imię, Nazwisko i E-Mail musi być wypełnione"
 alerts:
     signOffNeeded: Language changed - please logout & login for language to change
     registrationApprovedSubject: Rejestracja do %s zatwierdzona

@@ -3,13 +3,19 @@
 namespace Tymy\Module\Core\Service;
 
 use Kdyby\Translation\Translator;
+use Latte\Engine;
 use Nette\Application\LinkGenerator;
 use Nette\Application\UI\ITemplateFactory;
 use Nette\Mail\Mailer;
 use Nette\Mail\Message;
+use Nette\Security\User;
+use Nette\Utils\DateTime;
+use Tymy\Bootstrap;
 use Tymy\Module\Core\Manager\StringsManager;
 use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\Team\Model\Team;
+use Tymy\Module\User\Manager\UserManager;
+use Tymy\Module\User\Model\User as UserTymy;
 
 /**
  * Description of MailService
@@ -22,15 +28,17 @@ class MailService
     public const ROBOT_EMAIL_FROM_S = "robot@%s.tymy.cz";
 
     private TeamManager $teamManager;
+    private UserManager $userManager;
     private Translator $translator;
     private Team $team;
+    private User $user;
     private string $teamDomain;
     private LinkGenerator $linkGenerator;
     private ITemplateFactory $templateFactory;
     private Mailer $mailSender;
     private StringsManager $stringsManager;
 
-    public function __construct(TeamManager $teamManager, LinkGenerator $linkGenerator, ITemplateFactory $templateFactory, Mailer $mailer, StringsManager $stringsManager, Translator $translator)
+    public function __construct(TeamManager $teamManager, LinkGenerator $linkGenerator, ITemplateFactory $templateFactory, Mailer $mailer, StringsManager $stringsManager, Translator $translator, UserManager $userManager, User $user)
     {
         $this->teamManager = $teamManager;
         $this->linkGenerator = $linkGenerator;
@@ -38,6 +46,8 @@ class MailService
         $this->mailSender = $mailer;
         $this->stringsManager = $stringsManager;
         $this->translator = $translator;
+        $this->userManager = $userManager;
+        $this->user = $user;
     }
 
     private function startup()
@@ -95,6 +105,36 @@ class MailService
         $this->startup();
         $body = $this->stringsManager->translateBy("pswd_reset", "rc_mail_body_4s", $hostName, $this->teamDomain, $resetCode, sprintf($callbackUri, $resetCode));
         $subject = "{$this->teamDomain}: " . $this->stringsManager->translateBy("pswd_reset", "pswd_mail_subj");
+        $this->sendMail($name, $email, $body, $subject);
+    }
+
+    /**
+     * Compose & send email with invitation of user into this team
+     * @param string $name
+     * @param string $email
+     * @param string $invitationUrl
+     * @param DateTime $invitationValidity
+     * @return void
+     */
+    public function mailInvitation(string $name, string $email, string $invitationUrl, DateTime $invitationValidity): void
+    {
+        $this->startup();
+
+        $latte = new Engine();
+
+        /* @var $creator UserTymy */
+        $creator = $this->userManager->getById($this->user->getId());
+
+        $subject = $this->translator->translate("mail.invitation.subject");
+
+        $body = $latte->renderToString(Bootstrap::MODULES_DIR . "/core/mail/invitation.latte", [
+            "teamPortalUrl" => $this->teamDomain,
+            "invitationUrl" => $invitationUrl,
+            "validity" => $invitationValidity,
+            "teamName" => $this->team->getName(),
+            "invitationCreator" => $creator->getFullName() . "({$creator->getDisplayName()})",
+        ]);
+
         $this->sendMail($name, $email, $body, $subject);
     }
 

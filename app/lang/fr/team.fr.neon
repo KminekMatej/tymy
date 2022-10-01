@@ -69,6 +69,7 @@ invitation-expired: Expiré
 errors:
     imgFileCorrupted: "Le fichier n'est pas une image ou il est endommagé"
     passwordMismatch: Non concordance des mots de passe
+    invitationAtLeast: "Au moins un des champs Nom, Prénom et E-Mail doit être rempli"
 alerts:
     signOffNeeded: Language changed - please logout & login for language to change
     registrationApprovedSubject: Inscription à %s approuvée
