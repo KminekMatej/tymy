@@ -1,0 +1,11 @@
+bestRegards: Best regards
+teamAdministrator: Administrator of
+invitation:
+    subject: Invitation into team
+    body: 
+        invited: "you've been invited into team portal"
+        registerHere: "Please, register here"
+        validity: This invitation expires on
+        dontHesitate: "So don't hesitate"
+        tymyDescription: Portal tymy.cz serves to maintain and administrate sport teams
+        tymyApproval: is being administrated here and this invitation allows you to join the team
