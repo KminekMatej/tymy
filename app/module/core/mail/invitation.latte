@@ -1,0 +1,11 @@
+{_mail.hello},
+{_mail.invitation.body.invited} {$teamPortalUrl}.
+{_mail.invitation.body.registerHere}: {$invitationUrl}
+{_mail.invitation.body.validity} {$validity|date:\Tymy\Module\Core\Model\BaseModel::DAY_CZECH_FORMAT}. {_mail.invitation.body.dontHesitate} :-).
+
+{_mail.invitation.body.tymyDescription}. 
+{_team.team, 1} {$teamName} {_mail.invitation.body.tymyApproval}.
+
+{_mail.bestRegards},
+{$invitationCreator}
+{_mail.teamAdministrator} {$teamName}
