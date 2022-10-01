@@ -145,7 +145,17 @@ class InvitationManager extends BaseManager
     private function notifyByEmail(Invitation $invitation)
     {
         $name = $invitation->getFirstName() || $invitation->getLastName() ? join(" ", [$invitation->getFirstName(), $invitation->getLastName()]) : null;
-        
+
         $this->mailService->mailInvitation($name, $invitation->getEmail(), $this->linkGenerator->link(":Sign:ByInvite:default", ["invite" => $invitation->getCode()]), $invitation->getValidUntil());
+    }
+
+    /**
+     * Get Invitation by its code
+     * @param string $code
+     * @return Invitation
+     */
+    public function getByCode(string $code): Invitation
+    {
+        return $this->map($this->database->table($this->getTable())->where("code", $code)->fetch());
     }
 }
