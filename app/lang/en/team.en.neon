@@ -61,6 +61,11 @@ sport: Sport
 defaultLanguage: Default language
 hideDiscDesc: Hide discussion description
 approveAsPlayer: Approve as player
+invitation: Invitation|Invitations
+createInvitation: Invite new player
+invitation-sent: Sent
+invitation-accepted: Accepted
+invitation-expired: Expired
 errors:
     imgFileCorrupted: "File is not a pictute, or is corrupted"
     passwordMismatch: Passwords mismatch

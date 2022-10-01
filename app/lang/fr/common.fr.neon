@@ -36,6 +36,7 @@ week: semaine
 month: moi
 name: Nom
 created: Établi
+create: Créer
 navigationBlock:
     first: premier
     previous: précédent

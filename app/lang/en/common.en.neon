@@ -36,6 +36,7 @@ week: Week
 month: Month
 name: Name
 created: Created
+create: Create
 navigationBlock:
     first: First
     previous: Previous

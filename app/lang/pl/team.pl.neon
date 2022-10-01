@@ -61,6 +61,11 @@ sport: Sport
 defaultLanguage: Domyślny język
 hideDiscDesc: Ukryj opis dyskusji
 approveAsPlayer: Zatwierdź jako gracz
+invitation: Zaproszenie|Zaproszenia
+createInvitation: Zaproś nowego gracza
+invitation-sent: Wysłano
+invitation-accepted: Przyjęty
+invitation-expired: Wygasły
 errors:
     imgFileCorrupted: "Plik nie jest obrazkiem, lub jest uszkodzony"
     passwordMismatch: Hasło różni się

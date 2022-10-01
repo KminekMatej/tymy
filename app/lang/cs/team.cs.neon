@@ -64,7 +64,7 @@ hideDiscDesc: Skrýt popisky diskusí
 approveAsPlayer: Schválit jako hráče
 invitation: Pozvánka|Pozvánky
 createInvitation: Vytvořit novou pozvánku
-invitation-pending: Čeká
+invitation-sent: Čeká
 invitation-accepted: Přijata
 invitation-expired: Prošlá
 errors:
