@@ -53,6 +53,7 @@ lastLogin:
     dayAgo: il y a un jour
     daysAgo: il y a %n% jours
 alerts:
+    notFound: pas trouvé
     nobodyFound: personne trouvé
     userSuccesfullyDeleted: utilisateur supprimé avec succès
     loginNotApproved: connexion non validée

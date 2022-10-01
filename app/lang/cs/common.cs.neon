@@ -53,6 +53,7 @@ lastLogin:
     dayAgo: před 1 dnem
     daysAgo: před %n% dny
 alerts:
+    notFound: nenalezen|nenalezena
     nobodyFound: Nikdo nenalezen
     userSuccesfullyDeleted: Uživatel byl úspešně smazán
     loginNotApproved: Tento uživatel zatím nemá povolené přihlášení

@@ -14,7 +14,6 @@ use Tymy\Bootstrap;
 use Tymy\Module\Core\Manager\StringsManager;
 use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\Team\Model\Team;
-use Tymy\Module\User\Manager\UserManager;
 use Tymy\Module\User\Model\User as UserTymy;
 
 /**
@@ -28,17 +27,15 @@ class MailService
     public const ROBOT_EMAIL_FROM_S = "robot@%s.tymy.cz";
 
     private TeamManager $teamManager;
-    private UserManager $userManager;
     private Translator $translator;
     private Team $team;
-    private User $user;
     private string $teamDomain;
     private LinkGenerator $linkGenerator;
     private ITemplateFactory $templateFactory;
     private Mailer $mailSender;
     private StringsManager $stringsManager;
 
-    public function __construct(TeamManager $teamManager, LinkGenerator $linkGenerator, ITemplateFactory $templateFactory, Mailer $mailer, StringsManager $stringsManager, Translator $translator, UserManager $userManager, User $user)
+    public function __construct(TeamManager $teamManager, LinkGenerator $linkGenerator, ITemplateFactory $templateFactory, Mailer $mailer, StringsManager $stringsManager, Translator $translator, User $user)
     {
         $this->teamManager = $teamManager;
         $this->linkGenerator = $linkGenerator;
@@ -46,7 +43,6 @@ class MailService
         $this->mailSender = $mailer;
         $this->stringsManager = $stringsManager;
         $this->translator = $translator;
-        $this->userManager = $userManager;
         $this->user = $user;
     }
 
@@ -110,13 +106,14 @@ class MailService
 
     /**
      * Compose & send email with invitation of user into this team
-     * @param string $name
-     * @param string $email
+     * @param string $nameTo
+     * @param string $emailTo
+     * @param string $nameFrom
      * @param string $invitationUrl
      * @param DateTime $invitationValidity
      * @return void
      */
-    public function mailInvitation(string $name, string $email, string $invitationUrl, DateTime $invitationValidity): void
+    public function mailInvitation(string $nameTo, string $emailTo, string $nameFrom, string $invitationUrl, DateTime $invitationValidity): void
     {
         $this->startup();
 
@@ -132,10 +129,10 @@ class MailService
             "invitationUrl" => $invitationUrl,
             "validity" => $invitationValidity,
             "teamName" => $this->team->getName(),
-            "invitationCreator" => $creator->getFullName() . "({$creator->getDisplayName()})",
+            "invitationCreator" => $nameFrom,
         ]);
 
-        $this->sendMail($name, $email, $body, $subject);
+        $this->sendMail($nameTo, $emailTo, $body, $subject);
     }
 
     private function sendMail(string $name, string $email, string $body, ?string $subject = null, ?string $replyTo = null): void

@@ -53,6 +53,7 @@ lastLogin:
     dayAgo: 1 day ago
     daysAgo: %n% days ago
 alerts:
+    notFound: not found
     nobodyFound: No-one found
     userSuccesfullyDeleted: User has been succesfully deleted
     loginNotApproved: This user is not allowed to login

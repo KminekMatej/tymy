@@ -53,6 +53,7 @@ lastLogin:
     dayAgo: 1 dzień temu
     daysAgo: %n% dni temu
 alerts:
+    notFound: nie znaleziono|nie znaleziona
     nobodyFound: Nikogo takiego nie znalazłem
     userSuccesfullyDeleted: Użytkownik został usunięty
     loginNotApproved: Ten użytkownik nie został jeszcze zatwierdzony
