@@ -84,7 +84,7 @@ class AttendanceManager extends BaseManager
     public function map(?IRow $row, bool $force = false): ?BaseModel
     {
         /* @var $row ActiveRow */
-        if (!$row) {
+        if ($row === null) {
             return null;
         }
 
@@ -201,10 +201,8 @@ class AttendanceManager extends BaseManager
             if (!$this->user->isAllowed($this->user->getId(), Privilege::USR($resultRightName))) {
                 $this->respondForbidden();
             }
-        } else {
-            if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("EVE_ATT_UPDATE"))) {
-                $this->respondForbidden();
-            }
+        } elseif (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("EVE_ATT_UPDATE"))) {
+            $this->respondForbidden();
         }
     }
 
@@ -215,10 +213,8 @@ class AttendanceManager extends BaseManager
      */
     private function allowAttend(array $data)
     {
-        if ($this->user->getId() !== $data["userId"]) {
-            if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("ATT_UPDATE"))) {
-                $this->respondForbidden();
-            }
+        if ($this->user->getId() !== $data["userId"] && !$this->user->isAllowed($this->user->getId(), Privilege::SYS("ATT_UPDATE"))) {
+            $this->respondForbidden();
         }
 
         $planRightName = $this->eventRow->plan_rights;
@@ -242,13 +238,13 @@ class AttendanceManager extends BaseManager
                 . "LEFT JOIN event_types ON event_types.pre_status_set_id=status_set.id "
                 . "LEFT JOIN events ON events.event_type_id=event_types.id WHERE events.id=?", $eventId)->fetchPairs("id", "code");
 
-        if (is_numeric($preStatus) && array_key_exists(intval($preStatus), $allowedStatuses)) { //preStatus is ID
-            return intval($preStatus);
+        if (is_numeric($preStatus) && array_key_exists((int) $preStatus, $allowedStatuses)) { //preStatus is ID
+            return (int) $preStatus;
         }
 
         //preStatus is code - return and fill statusId automatically
         if (in_array($preStatus, $allowedStatuses)) {
-            return intval(array_flip($allowedStatuses)[$preStatus]);
+            return (int) array_flip($allowedStatuses)[$preStatus];
         }
 
         return null;
@@ -269,13 +265,13 @@ class AttendanceManager extends BaseManager
                 . "LEFT JOIN event_types ON event_types.post_status_set_id=status_set.id "
                 . "LEFT JOIN events ON events.event_type_id=event_types.id WHERE events.id=?", $eventId)->fetchPairs("id", "code");
 
-        if (is_numeric($postStatus) && array_key_exists(intval($postStatus), $allowedStatuses)) { //postStatus is ID
-            return intval($postStatus);
+        if (is_numeric($postStatus) && array_key_exists((int) $postStatus, $allowedStatuses)) { //postStatus is ID
+            return (int) $postStatus;
         }
 
         //postStatus is code - return and fill statusId automatically
         if (in_array($postStatus, $allowedStatuses)) {
-            return intval(array_flip($allowedStatuses)[$postStatus]);
+            return (int) array_flip($allowedStatuses)[$postStatus];
         }
 
         return null;

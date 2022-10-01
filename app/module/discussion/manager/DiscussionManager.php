@@ -75,7 +75,7 @@ class DiscussionManager extends BaseManager
      */
     public function map(?IRow $row, bool $force = false): ?BaseModel
     {
-        if (!$row) {
+        if ($row === null) {
             return null;
         }
 

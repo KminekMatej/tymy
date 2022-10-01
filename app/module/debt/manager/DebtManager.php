@@ -248,7 +248,7 @@ class DebtManager extends BaseManager
      */
     private function autosetType(array &$debtData, ?Debt $originalDebt = null): void
     {
-        if ($originalDebt) {
+        if ($originalDebt !== null) {
             $debtData["debtorId"] = $debtData["debtorId"] ?? $originalDebt->getDebtorId();
             $debtData["payeeId"] = $debtData["payeeId"] ?? $originalDebt->getPayeeId();
         }

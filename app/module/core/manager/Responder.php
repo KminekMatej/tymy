@@ -281,7 +281,7 @@ class Responder
     public function E4016_DELETE_BLOCKED_BY(string $blockingModule, array $blockingIds)
     {
         $this->init(Response::S403_FORBIDDEN);
-        $this->respond(4016, "Delete blocked by `$blockingModule` `" . join(", ", $blockingIds) . "`");
+        $this->respond(4016, "Delete blocked by `$blockingModule` `" . implode(", ", $blockingIds) . "`");
     }
 
     /**
@@ -294,7 +294,7 @@ class Responder
     public function E4017_UPDATE_BLOCKED_BY(string $blockingModule, array $blockingIds)
     {
         $this->init();
-        $this->respond(4017, "Update blocked by `$blockingModule` `" . join(", ", $blockingIds) . "`");
+        $this->respond(4017, "Update blocked by `$blockingModule` `" . implode(", ", $blockingIds) . "`");
     }
 
     public function E4018_MIGRATION_FAILED(array $log = [])

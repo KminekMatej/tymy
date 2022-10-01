@@ -25,7 +25,7 @@ class InPresenter extends BasePresenter
      */
     protected function createComponentSignInForm()
     {
-        $form = $this->signInFactory->create(function (Form $form, $values) {
+        return $this->signInFactory->create(function (Form $form, $values) {
             try {
                 $this->user->setExpiration('20 minutes');
                 $r = $this->user->login($values->name, $values->password);
@@ -46,8 +46,6 @@ class InPresenter extends BasePresenter
             }
             $this->redirect(':Core:Default:');
         });
-
-        return $form;
     }
 
     public function renderDefault()

@@ -195,13 +195,13 @@ class Discussion extends BaseModel
 
     public function setPublicRead($publicRead)
     {
-        $this->publicRead = $publicRead ? true : false;
+        $this->publicRead = (bool) $publicRead;
         return $this;
     }
 
     public function setEditablePosts($editablePosts)
     {
-        $this->editablePosts = $editablePosts ? true : false;
+        $this->editablePosts = (bool) $editablePosts;
         return $this;
     }
 

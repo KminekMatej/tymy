@@ -65,7 +65,7 @@ class StatusManager extends BaseManager
 
     public function map(?IRow $row, $force = false): ?BaseModel
     {
-        if (!$row) {
+        if ($row === null) {
             return null;
         }
 
@@ -257,7 +257,7 @@ class StatusManager extends BaseManager
 
         $deleted = parent::deleteRecord($resourceId, $this->getTable());
 
-        if ($deleted) {
+        if ($deleted !== 0) {
             FileSystem::delete($this->getStatusSetFolder($this->status->getStatusSetId()) . "/{$this->status->getCode()}.png");
         }
 

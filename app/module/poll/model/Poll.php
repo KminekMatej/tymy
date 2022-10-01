@@ -249,13 +249,13 @@ class Poll extends BaseModel
 
     public function setChangeableVotes(string $changeableVotes)
     {
-        $this->changeableVotes = $changeableVotes ? true : false;
+        $this->changeableVotes = (bool) $changeableVotes;
         return $this;
     }
 
     public function setAnonymousResults($anonymousResults)
     {
-        $this->anonymousResults = $anonymousResults ? true : false;
+        $this->anonymousResults = (bool) $anonymousResults;
         return $this;
     }
 
@@ -363,7 +363,7 @@ class Poll extends BaseModel
         }
         $this->orderedVotes[$vote->getUserId()][$vote->getOptionId()] = $vote;
 
-        if (!$this->getAnonymousResults() && $vote->getUserId() == $userId) {
+        if (!$this->getAnonymousResults() && $vote->getUserId() === $userId) {
             $this->myVotes[$vote->getOptionId()] = $vote;
         }
 

@@ -79,7 +79,7 @@ class MultiaccountManager extends BaseManager
         $sourceTeam = $this->teamManager->getTeam();
         $sourceUserId = $this->user->getId();
 
-        if (!$targetTeam) {
+        if (!$targetTeam instanceof \Tymy\Module\Team\Model\Team) {
             $this->respondNotFound();
         }
 
@@ -108,7 +108,7 @@ class MultiaccountManager extends BaseManager
             ->where("team_id", $targetTeam->getId())
             ->fetch();
 
-        $targetAccountId = $existingAccountRow ? $existingAccountRow->account_id : null;
+        $targetAccountId = $existingAccountRow !== null ? $existingAccountRow->account_id : null;
 
         if ($sourceAccountId && $targetAccountId == $sourceAccountId) {
             $this->responder->E400_BAD_REQUEST($this->translator->translate("team.alerts.targetTeamExists"));
@@ -169,7 +169,7 @@ class MultiaccountManager extends BaseManager
         //delete multi account
         $targetTeam = $this->teamManager->getBySysname($resourceId);
 
-        if (!$targetTeam) {
+        if (!$targetTeam instanceof \Tymy\Module\Team\Model\Team) {
             $this->responder->E4005_OBJECT_NOT_FOUND(Team::MODULE, $resourceId);
         }
 
@@ -225,7 +225,7 @@ class MultiaccountManager extends BaseManager
             ->where("user_id", $this->user->getId())
             ->fetch();
 
-        return $accountRow ? $accountRow->account_id : null;
+        return $accountRow !== null ? $accountRow->account_id : null;
     }
 
     /**
@@ -238,7 +238,7 @@ class MultiaccountManager extends BaseManager
     {
         $targetTeam = $this->teamManager->getBySysname($targetTeamSysName);
 
-        if (!$targetTeam) {
+        if (!$targetTeam instanceof \Tymy\Module\Team\Model\Team) {
             $this->respondNotFound();
         }
 
@@ -276,7 +276,7 @@ class MultiaccountManager extends BaseManager
             ->where("team_id", $teamId)
             ->fetch();
 
-        if (!$row) {
+        if (!$row instanceof \Nette\Database\Table\ActiveRow) {
             $this->responder->E4005_OBJECT_NOT_FOUND(Team::MODULE, $teamId);
         }
 

@@ -26,7 +26,7 @@ class Bootstrap
         define("TEAM_DIR", getenv("TEAM_DIR") ?: str_replace("//", "/", dirname($_SERVER['SCRIPT_FILENAME'], 2)));
         define('MODULES', array_diff(scandir(self::MODULES_DIR), array('..', '.')));
 
-        $autotestMode = getenv("AUTOTEST") || isset($_GET["AUTOTEST"]) ? true : false;
+        $autotestMode = getenv("AUTOTEST") || isset($_GET["AUTOTEST"]);
 
         $configurator = new Configurator();
 
@@ -70,13 +70,13 @@ class Bootstrap
         $segments = explode('/', trim($path, '/'));
         $ret = array();
         foreach ($segments as $segment) {
-            if (($segment == '.') || strlen($segment) === 0) {
+            if (($segment == '.') || $segment === '') {
                 continue;
             }
             if ($segment == '..') {
                 array_pop($ret);
             } else {
-                array_push($ret, $segment);
+                $ret[] = $segment;
             }
         }
         return $root . implode('/', $ret);

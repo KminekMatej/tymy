@@ -46,7 +46,7 @@ class DetailPresenter extends BasePresenter
             if (!array_key_exists($statusId, $this->statusNameCache)) {
                 /* @var $status Status */
                 $status = $this->statusManager->getById($statusId);
-                $this->statusNameCache[$statusId] = $status ? $status->getCaption() : "?";
+                $this->statusNameCache[$statusId] = $status !== null ? $status->getCaption() : "?";
             }
 
             return $this->statusNameCache[$statusId];
@@ -58,7 +58,7 @@ class DetailPresenter extends BasePresenter
             }
 
             $separatedParts = mb_str_split(str_replace(["\r\n", "\n", ";", ","], ["\\n", "\\n", "\;", "\,"], $description), 62);
-            return Strings::normalize(join(PHP_EOL . " ", $separatedParts));
+            return Strings::normalize(implode(PHP_EOL . " ", $separatedParts));
         });
     }
 

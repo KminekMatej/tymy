@@ -95,10 +95,9 @@ class ApplePush
             if ($response === false || $info["http_code"] !== 200) {
                 $decodedResponse = json_decode($response);
                 $errorReason = $decodedResponse->reason ?? null;
-                switch ($errorReason) {
-                    case "BadDeviceToken"://invalid device id, delete from database
-                        $this->expiredSubscribers[] = $subscriber;
-                        break;
+                if ($errorReason === "BadDeviceToken") {
+                    //invalid device id, delete from database
+                    $this->expiredSubscribers[] = $subscriber;
                 }
                 Debugger::log("APNS notifikace nemohla být odeslána, chyba: " . $response . ", infodata: " . json_encode($info), ILogger::ERROR);
             }

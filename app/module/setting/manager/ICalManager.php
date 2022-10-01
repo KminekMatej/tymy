@@ -34,7 +34,7 @@ class ICalManager extends BaseManager
     public function canEdit(BaseModel $entity, int $userId): bool
     {
         /* @var $entity ICal */
-        return $entity->getUserId() == $userId;
+        return $entity->getUserId() === $userId;
     }
 
     public function canRead(BaseModel $entity, int $userId): bool
@@ -44,7 +44,7 @@ class ICalManager extends BaseManager
 
     public function map(?IRow $row, $force = false): ?BaseModel
     {
-        if (!$row) {
+        if ($row === null) {
             return null;
         }
 

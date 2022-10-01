@@ -146,7 +146,7 @@ class RequestMockFactory
         if ($lpath !== $script) {
             $max = min(strlen($lpath), strlen($script));
             for ($i = 0; $i < $max && $lpath[$i] === $script[$i]; $i++);
-            $path = $i ? substr($path, 0, strrpos($path, '/', $i - strlen($path) - 1) + 1) : '/';
+            $path = $i !== 0 ? substr($path, 0, strrpos($path, '/', $i - strlen($path) - 1) + 1) : '/';
         }
         return $path;
     }
@@ -213,7 +213,7 @@ class RequestMockFactory
                 continue;
             }
 
-            foreach ($v['name'] as $k => $foo) {
+            foreach (array_keys($v['name']) as $k) {
                 if (!$this->binary && is_string($k) && (!preg_match($reChars, $k) || preg_last_error())) {
                     continue;
                 }
@@ -241,7 +241,7 @@ class RequestMockFactory
         foreach ($this->SERVERMOCK as $k => $v) {
             if (strncmp($k, 'HTTP_', 5) == 0) {
                 $k = substr($k, 5);
-            } elseif (strncmp($k, 'CONTENT_', 8)) {
+            } elseif (strncmp($k, 'CONTENT_', 8) !== 0) {
                 continue;
             }
             $headers[strtr($k, '_', '-')] = $v;
@@ -265,8 +265,8 @@ class RequestMockFactory
 
     private function getClient(Url $url): array
     {
-        $remoteAddr = !empty($this->SERVERMOCK['REMOTE_ADDR']) ? trim($this->SERVERMOCK['REMOTE_ADDR'], '[]') : null; // workaround for PHP 7.3
-        $remoteHost = !empty($this->SERVERMOCK['REMOTE_HOST']) ? $this->SERVERMOCK['REMOTE_HOST'] : null;
+        $remoteAddr = empty($this->SERVERMOCK['REMOTE_ADDR']) ? null : trim($this->SERVERMOCK['REMOTE_ADDR'], '[]'); // workaround for PHP 7.3
+        $remoteHost = empty($this->SERVERMOCK['REMOTE_HOST']) ? null : $this->SERVERMOCK['REMOTE_HOST'];
 
         // use real client address and host if trusted proxy is used
         $usingTrustedProxy = $remoteAddr && array_filter($this->proxies, function (string $proxy) use ($remoteAddr): bool {

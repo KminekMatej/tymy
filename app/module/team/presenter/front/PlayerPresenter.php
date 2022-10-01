@@ -92,7 +92,7 @@ class PlayerPresenter extends SecuredPresenter
         $userId = $this->parseIdFromWebname($player);
         $user = $this->userManager->getById($userId);
 
-        if (!$user) {
+        if (!$user instanceof \Tymy\Module\Core\Model\BaseModel) {
             $this->flashMessage($this->translator->translate("common.alerts.userNotFound", null, ['id' => $userId]), "danger");
             $this->redirect(':Team:Default:');
         }
@@ -156,20 +156,22 @@ class PlayerPresenter extends SecuredPresenter
         $userId = $this->parseIdFromWebname($this->getRequest()->getParameter("player"));
 
         return $this->formFactory->createUserConfigForm(
-            [$this, "userConfigFormSuccess"],
+            function (\Nette\Application\UI\Form $form, $values) {
+                return $this->userConfigFormSuccess($form, $values);
+            },
             $this->getAction() == "new" ? null : $this->userManager->getById($userId),
         );
     }
 
     public function userConfigFormSuccess(Form $form, $values)
     {
-        $userId = intval($values->id);
+        $userId = (int) $values->id;
 
         /* @var $oldUser User */
         $oldUser = $this->userManager->getById($userId);
 
         try {
-            if ($userId) {
+            if ($userId !== 0) {
                 $this->userManager->update((array) $values, $userId);
                 $this->flashMessage($this->translator->translate("common.alerts.configSaved"), "success");
                 $this->redirect('this');

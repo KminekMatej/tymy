@@ -90,18 +90,22 @@ class EventPresenter extends SettingBasePresenter
     {
         return $this->formFactory->createEventLineForm(
             $this->eventTypes,
-            [$this, "newEventFormSuccess"]
+            function (\Nette\Application\UI\Form $form, \stdClass $values) {
+                return $this->newEventFormSuccess($form, $values);
+            }
         );
     }
 
     public function createComponentEventForm()
     {
         return new Multiplier(function (string $eventId) {
-                $event = $this->eventManager->getById(intval($eventId));
+                $event = $this->eventManager->getById((int) $eventId);
 
                 return $this->formFactory->createEventLineForm(
                     $this->eventTypes,
-                    [$this, "eventFormSuccess"],
+                    function (\Nette\Application\UI\Form $form, \stdClass $values) {
+                        return $this->eventFormSuccess($form, $values);
+                    },
                     $event
                 );
         });
@@ -138,7 +142,7 @@ class EventPresenter extends SettingBasePresenter
                 }
                 //this row exists
                 $nextItem = [];
-                foreach ((array) $values as $name => $value) {
+                foreach (array_keys((array) $values) as $name) {
                     $nextName = $i > 0 ? $name . "-" . $i : $name;
                     $nextItem[$name] = $data[$nextName];
                 }

@@ -23,9 +23,9 @@ class Version
         $this->datetime = $datetime ?: new DateTime();
         $vData = explode(".", $name);
         if (count($vData) === 3 && is_numeric($vData[0]) && is_numeric($vData[1]) && is_numeric($vData[2])) {
-            $this->major = intval($vData[0]);
-            $this->minor = intval($vData[1]);
-            $this->patch = intval($vData[2]);
+            $this->major = (int) $vData[0];
+            $this->minor = (int) $vData[1];
+            $this->patch = (int) $vData[2];
         } else {
             $this->major = $name;
             $this->minor = "0";

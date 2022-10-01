@@ -186,7 +186,7 @@ class Post extends BaseModel
             "reactions" => $this->getReactions(),
             "createdAtStr" => $this->getCreatedAtStr(),
             "updatedAtStr" => $this->getUpdatedAtStr(),
-            "createdBy" => $this->getCreatedBy() ? $this->getCreatedBy()->jsonSerialize() : null,
+            "createdBy" => $this->getCreatedBy() !== null ? $this->getCreatedBy()->jsonSerialize() : null,
         ];
     }
 }

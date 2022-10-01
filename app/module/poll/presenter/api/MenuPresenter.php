@@ -19,9 +19,8 @@ class MenuPresenter extends SecuredPresenter
 
     public function actionDefault()
     {
-        switch ($this->getRequest()->getMethod()) {
-            case 'GET':
-                $this->requestGetMenu();
+        if ($this->getRequest()->getMethod() === 'GET') {
+            $this->requestGetMenu();
         }
 
         $this->respondNotAllowed();

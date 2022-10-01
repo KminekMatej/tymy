@@ -195,8 +195,8 @@ class History extends BaseModel
         return parent::jsonSerialize() + [
             "preStatusFrom" => $this->getPreStatusFrom(),
             "preStatusTo" => $this->getPreStatusTo(),
-            "user" => $this->user ? $this->user->jsonSerialize() : null,
-            "updatedBy" => $this->updatedBy ? $this->updatedBy->jsonSerialize() : null,
+            "user" => $this->user !== null ? $this->user->jsonSerialize() : null,
+            "updatedBy" => $this->updatedBy !== null ? $this->updatedBy->jsonSerialize() : null,
         ];
     }
 }

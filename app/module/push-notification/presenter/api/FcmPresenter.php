@@ -18,10 +18,8 @@ class FcmPresenter extends SecuredPresenter
 
     public function actionDefault($resourceId)
     {
-        switch ($this->getRequest()->getMethod()) {
-            case 'POST':
-                $this->requestPost($resourceId);
-            // no break
+        if ($this->getRequest()->getMethod() === 'POST') {
+            $this->requestPost($resourceId);
         }
 
         $this->respondNotAllowed();

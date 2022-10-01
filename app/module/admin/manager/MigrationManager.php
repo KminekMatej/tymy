@@ -79,7 +79,7 @@ class MigrationManager
         foreach ($sqlCommands as $cmd) {
             $cmd = trim($cmd);
             if (substr($cmd, 0, -1) !== ";") {    //add semicolon to the end if its not there
-                $cmd = $cmd . ";";
+                $cmd .= ";";
             }
             $this->logg("Executing query " . $cmd);
             $this->teamDatabase->query($cmd);
@@ -89,7 +89,7 @@ class MigrationManager
 
     public function saveMigrationRecord(Migration $mig)
     {
-        $existed = $this->tableExists ? true : false;
+        $existed = $this->tableExists;
         $this->tableExists = $this->migrationTableExists();
         if (!$existed && $this->tableExists) {
             $this->saveMigrationsCache();
@@ -173,7 +173,7 @@ class MigrationManager
             $i++;
             $lineT = trim($line);
             $lineT = str_replace('&nbsp;', ' ', $lineT);
-            if (!strlen($lineT)) {
+            if ($lineT === '') {
                 continue;
             }
             if ($lineT[0] == "#") {
@@ -186,7 +186,7 @@ class MigrationManager
             $output[] = $lineT;
         }
 
-        return join(" ", $output);
+        return implode(" ", $output);
     }
 
     /**
@@ -219,7 +219,7 @@ class MigrationManager
         $token_count = count($tokens);
         for ($i = 0; $i < $token_count; $i++) {
             // Don't wanna add an empty string as the last thing in the array.
-            if (($i != ($token_count - 1)) || (strlen($tokens[$i] > 0))) {
+            if (($i !== $token_count - 1) || (strlen($tokens[$i] > 0))) {
                 // This is the total number of single quotes in the token.
                 $total_quotes = preg_match_all("/'/", $tokens[$i], $matches);
                 // Counts single quotes that are preceded by an odd number of backslashes,

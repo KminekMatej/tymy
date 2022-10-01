@@ -126,7 +126,7 @@ abstract class BaseManager
      */
     public function map(?IRow $row, bool $force = false): ?BaseModel
     {
-        if (!$row) {
+        if ($row === null) {
             return null;
         }
 
@@ -320,7 +320,7 @@ abstract class BaseManager
     {
         $table = $table ? $table : $this->getTable();
         $ids = $this->database->table($table)->where("id", $idList)->fetchPairs(null, "id");
-        if (count($ids) == count($idList)) {
+        if (count($ids) === count($idList)) {
             return true;
         }
         return array_diff($ids, $idList);
@@ -387,7 +387,7 @@ abstract class BaseManager
             throw $e;
         }
 
-        if (!$deleted) {
+        if ($deleted === 0) {
             $this->responder->E4005_OBJECT_NOT_FOUND($this->getModule(), $id);
         }
 
@@ -416,15 +416,12 @@ abstract class BaseManager
                     $this->responder->E4014_EMPTY_INPUT($field->getProperty());
                 }
                 $updates[$field->getColumn()] = $value;
-            } else {
-                //update also update timestamp
-                if (!$field->getChangeable()) {
-                    if ($field->getColumn() == "updated_user_id" && !empty($this->user)) {
-                        $updates[$field->getColumn()] = $this->user->id;
-                    }
-                    if ($field->getColumn() == "updated") {
-                        $updates[$field->getColumn()] = new DateTime();
-                    }
+            } elseif (!$field->getChangeable()) {
+                if ($field->getColumn() == "updated_user_id" && !empty($this->user)) {
+                    $updates[$field->getColumn()] = $this->user->getId();
+                }
+                if ($field->getColumn() == "updated") {
+                    $updates[$field->getColumn()] = new DateTime();
                 }
             }
         }
@@ -468,7 +465,7 @@ abstract class BaseManager
 
             if (!$field->getChangeable()) {
                 if (in_array($field->getColumn(), ["user_id", "usr_cre", "created_user_id"]) && !empty($this->user)) {
-                    $value = $this->user->id;
+                    $value = $this->user->getId();
                 } elseif (in_array($field->getColumn(), ["dat_cre", "insert_date", "created"])) {
                     $value = new DateTime();
                 } else {
@@ -611,9 +608,9 @@ abstract class BaseManager
      */
     protected function loadRecord(int $recordId, ?BaseManager $manager = null)
     {
-        $record = $manager ? $manager->getById($recordId) : $this->getById($recordId);
+        $record = $manager !== null ? $manager->getById($recordId) : $this->getById($recordId);
 
-        if (!$record) {
+        if (!$record instanceof \Tymy\Module\Core\Model\BaseModel) {
             $this->respondNotFound();
         }
 

@@ -34,7 +34,7 @@ class DefaultPresenter extends BasePresenter
     protected function beforeRender(): void
     {
         $this->template->addFilter('colorize', function ($text) {
-            $text = preg_replace([
+            return preg_replace([
                 '/\[green\]/',
                 '/\[red\]/',
                 '/\[\/green\]/',
@@ -45,8 +45,6 @@ class DefaultPresenter extends BasePresenter
                 "</strong>",
                 "</strong>",
                 ], htmlspecialchars((string) $text, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'));
-
-            return $text;
         });
     }
 
@@ -83,10 +81,10 @@ class DefaultPresenter extends BasePresenter
                 continue;   //if there is already fail on current dir, just simply continue
             }
 
-            if (isset($case->failure)) {
+            if (property_exists($case, 'failure') && $case->failure !== null) {
                 $results[$dir] = "fail";
                 $hasFailures = true;
-            } elseif (isset($case->skipped)) {
+            } elseif (property_exists($case, 'skipped') && $case->skipped !== null) {
                 $results[$dir] = "skip";
             } else {
                 $results[$dir] = "success";
@@ -129,8 +127,8 @@ class DefaultPresenter extends BasePresenter
      */
     private function mockAutotestServer(UrlScript $url)
     {
-        $this->template->urlroot = "{$url->scheme}://{$url->host}{$url->basePath}autotest";
-        $team = substr($url->host, 0, strpos($url->host, "."));
+        $this->template->urlroot = "{$url->getScheme()}://{$url->getHost()}{$url->getBasePath()}autotest";
+        $team = substr($url->getHost(), 0, strpos($url->getHost(), "."));
         putenv("team=$team");
     }
 }

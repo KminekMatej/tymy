@@ -185,7 +185,7 @@ class PollManager extends BaseManager
 
     protected function allowDelete(?int $recordId): void
     {
-        if (!$this->poll) {
+        if ($this->poll === null) {
             $this->responder->E4005_OBJECT_NOT_FOUND(Poll::MODULE, $recordId);
         }
 
@@ -198,7 +198,7 @@ class PollManager extends BaseManager
 
     protected function allowRead(?int $recordId = null): void
     {
-        if (!$this->poll) {
+        if ($this->poll === null) {
             $this->responder->E4005_OBJECT_NOT_FOUND(Poll::MODULE, $recordId);
         }
     }

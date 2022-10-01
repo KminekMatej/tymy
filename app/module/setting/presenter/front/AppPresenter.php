@@ -51,11 +51,11 @@ class AppPresenter extends SettingBasePresenter
         $previousPatch = null;
         $firstMinor = null;
         foreach ($this->getVersions() as $version) {
-            if (empty($previousPatch) && ($currentVersion->getMajor() != $version->getMajor() || $currentVersion->getMinor() != $version->getMinor() || $currentVersion->getPatch() != $version->getPatch())) {
+            if (empty($previousPatch) && ($currentVersion->getMajor() !== $version->getMajor() || $currentVersion->getMinor() !== $version->getMinor() || $currentVersion->getPatch() !== $version->getPatch())) {
                 $previousPatch = $version;
             }
 
-            if (!isset($firstMinor) && $version->getMinor() != $currentVersion->getMinor() && $version->getPatch() == 0) {
+            if (!isset($firstMinor) && $version->getMinor() !== $currentVersion->getMinor() && $version->getPatch() == 0) {
                 $firstMinor = $version;
             }
         }

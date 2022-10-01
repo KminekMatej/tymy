@@ -14,7 +14,7 @@ return static function (RectorConfig $rectorConfig): void {
     // register a single rule
     $rectorConfig->rule(InlineConstructorDefaultToPropertyRector::class);
     
-    $rectorConfig->phpstanConfig(__DIR__ . '/phpstan.neon');
+    //$rectorConfig->phpstanConfig(__DIR__ . '/phpstan.neon');
 
     $rectorConfig->sets([
         SetList::CODE_QUALITY

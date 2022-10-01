@@ -40,7 +40,7 @@ class AvatarManager
     {
         $this->userModel = $this->userManager->getById($userId);
 
-        if (!$this->userModel) {
+        if (!$this->userModel instanceof \Tymy\Module\Core\Model\BaseModel) {
             $this->responder->E4005_OBJECT_NOT_FOUND(User2::MODULE, $userId);
         }
 

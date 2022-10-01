@@ -40,7 +40,7 @@ class HistoryManager extends BaseManager
      */
     public function map(?IRow $row, $force = false): ?BaseModel
     {
-        if (!$row) {
+        if ($row === null) {
             return null;
         }
 
@@ -94,7 +94,7 @@ class HistoryManager extends BaseManager
     protected function allowRead(?int $recordId = null): void
     {
         $eventRow = $this->database->table(Event::TABLE)->where("id", $recordId)->fetch();
-        if (!$eventRow) {
+        if (!$eventRow instanceof \Nette\Database\Table\ActiveRow) {
             $this->responder->E4005_OBJECT_NOT_FOUND(Event::MODULE, $recordId);
         }
 

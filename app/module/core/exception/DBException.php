@@ -26,7 +26,7 @@ class DBException
                 $matches = [];
                 $re = '/.* constraint fails \((.*), CONSTRAINT (.*) FOREIGN KEY \((.*)\) REFERENCES (.*) \((.*)\).*\)/';
                 preg_match($re, $exc->getMessage(), $matches);
-                if (count($matches)) {
+                if (count($matches) > 0) {
                     switch ($type) {
                         case self::TYPE_DELETE:
                             return new DeleteIntegrityException($matches[3], $matches[4], $matches[5], $matches[1], $matches[2]);
@@ -38,7 +38,7 @@ class DBException
                 }
                 $re = '/Column \'(.*)\' cannot be null/m';
                 preg_match($re, $exc->getMessage(), $matches);
-                if (count($matches)) {
+                if (count($matches) > 0) {
                     $msg = "Property '" . $matches[1] . "' cannot be null";
                     throw new BadRequestException($msg, 400, $exc);
                 }

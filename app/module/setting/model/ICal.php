@@ -79,7 +79,7 @@ class ICal extends BaseModel
 
     public function setEnabled(?bool $enabled)
     {
-        $this->enabled = $enabled ? true : false;
+        $this->enabled = (bool) $enabled;
         return $this;
     }
 

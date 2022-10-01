@@ -18,8 +18,7 @@ class StringHelper
     {
         $str = urlencode($input);
         $str = str_replace('.', '%2E', $str);
-        $str = str_replace('-', '%2D', $str);
-        return $str;
+        return str_replace('-', '%2D', $str);
     }
 
     /**
@@ -31,7 +30,6 @@ class StringHelper
     {
         $str = urldecode($input);
         $str = str_replace('%2E', '.', $str);
-        $str = str_replace('%2D', '-', $str);
-        return $str;
+        return str_replace('%2D', '-', $str);
     }
 }

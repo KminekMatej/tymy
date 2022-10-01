@@ -66,10 +66,10 @@ class StringsManager
     {
         $translation = $this->database->table(self::TABLE)->where("domain", $domain)->where("code", $code)->where("language", $this->getLc())->limit(1)->fetch();
 
-        if (!$translation) {
+        if (!$translation instanceof \Nette\Database\Table\ActiveRow) {
             Debugger::log("Missing translation: $domain.$code", ILogger::ERROR);
         }
 
-        return $translation ? sprintf($translation->value, ...$parameters) : "Missing translation: $domain.$code";
+        return $translation !== null ? sprintf($translation->value, ...$parameters) : "Missing translation: $domain.$code";
     }
 }

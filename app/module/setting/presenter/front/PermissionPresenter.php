@@ -57,7 +57,7 @@ class PermissionPresenter extends SettingBasePresenter
         $this->allowPermission("IS_ADMIN");
 
         $permission = $this->permissionManager->getByWebName($resource);
-        if (!$permission) {
+        if (!$permission instanceof \Tymy\Module\Permission\Model\Permission) {
             $this->flashMessage($this->translator->translate("permission.errors.permissionNotExists", null, ['id' => $permission]), "danger");
             $this->redirect(':Setting:Event:');
         }

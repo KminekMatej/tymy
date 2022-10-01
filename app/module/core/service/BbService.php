@@ -77,7 +77,6 @@ class BbService
         self::init();
         $text = preg_replace(self::$find, self::$replace, strip_tags($text));
         $text = nl2br($text);
-        $text = preg_replace("/\n|\r/", "", $text);
-        return $text;
+        return preg_replace("/\n|\r/", "", $text);
     }
 }

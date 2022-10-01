@@ -120,7 +120,9 @@ class DefaultPresenter extends SecuredPresenter
                 unset($usersArray[$key]);
             }
         }
-        usort($usersArray, array( $this, 'sortUsersComparer' ));
+        usort($usersArray, function ($a, $b) {
+            return $this::sortUsersComparer($a, $b);
+        });
         return array_merge($usersArray, $notSetValues);
     }
 

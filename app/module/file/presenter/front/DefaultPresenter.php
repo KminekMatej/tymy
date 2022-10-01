@@ -96,7 +96,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->template->folder = $folderSanitized;
         $this->template->folderSlashed = rtrim($folderSanitized, "/") . "/";
         array_pop($folderParts);
-        $this->template->parentFolder = join("/", $folderParts);
+        $this->template->parentFolder = implode("/", $folderParts);
 
         $this->template->fileTypes = $this->fileStats["fileTypes"];
         $this->template->contents = $this->getContents($folderSanitized);
@@ -157,7 +157,7 @@ class DefaultPresenter extends SecuredPresenter
 
         $form->addUpload('upload');
         $form->onError[] = function (Form $form) {
-            foreach ($form->errors as $error) {
+            foreach ($form->getErrors() as $error) {
                 $this->presenter->flashMessage($error, "danger");
             }
 
@@ -327,7 +327,7 @@ class DefaultPresenter extends SecuredPresenter
         $units = array('B', 'KB', 'MB', 'GB', 'TB');
 
         $bytes = max($bytes, 0);
-        $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+        $pow = floor(($bytes !== 0 ? log($bytes) : 0) / log(1024));
         $pow = min($pow, count($units) - 1);
 
         // Uncomment one of the following alternatives

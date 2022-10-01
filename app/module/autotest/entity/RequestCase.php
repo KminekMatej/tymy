@@ -122,14 +122,12 @@ abstract class RequestCase extends TestCase
                     $codeStr = ", code: {$requestLog->getCustomResponseCode()}/{$requestLog->getExpectCode()}";
                     $success = false;
                 }
+            } elseif ($requestLog->getHttpResponseCode() == $requestLog->getExpectCode()) {
+                $codeStr = ", code: {$requestLog->getExpectCode()}";
+                $success = true;
             } else {
-                if ($requestLog->getHttpResponseCode() == $requestLog->getExpectCode()) {
-                    $codeStr = ", code: {$requestLog->getExpectCode()}";
-                    $success = true;
-                } else {
-                    $codeStr = ", code: {$requestLog->getHttpResponseCode()}/{$requestLog->getExpectCode()}";
-                    $success = false;
-                }
+                $codeStr = ", code: {$requestLog->getHttpResponseCode()}/{$requestLog->getExpectCode()}";
+                $success = false;
             }
             /* @var $requestLog RequestLog */
             $data = $requestLog->getPostData();
@@ -264,7 +262,7 @@ abstract class RequestCase extends TestCase
         $this->user->login($userName ? $userName : $this->config["user_test_login"], $password ? $password : $this->config["user_test_pwd"]);
 
         Assert::true($this->user->isLoggedIn());
-        Assert::equal($this->user->id, $this->config["user_test_id"]);
+        Assert::equal($this->user->getId(), $this->config["user_test_id"]);
     }
 
     public function authorizeAdmin($userName = null, $password = null)
@@ -275,7 +273,7 @@ abstract class RequestCase extends TestCase
 
         Assert::true($this->user->isLoggedIn());
         if (empty($userName)) {
-            Assert::equal($this->user->id, $this->config["user_admin_id"]);
+            Assert::equal($this->user->getId(), $this->config["user_admin_id"]);
         }
     }
 
@@ -342,6 +340,6 @@ abstract class RequestCase extends TestCase
 
     public function toJsonDate(DateTime $date = null)
     {
-        return $date ? $date->format(BaseModel::DATE_FORMAT) : null;
+        return $date !== null ? $date->format(BaseModel::DATE_FORMAT) : null;
     }
 }

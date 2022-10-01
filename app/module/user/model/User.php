@@ -258,13 +258,13 @@ class User extends BaseModel
 
     public function setCanLogin($canLogin)
     {
-        $this->canLogin = $canLogin ? true : false;
+        $this->canLogin = (bool) $canLogin;
         return $this;
     }
 
     public function setCanEditCallName($canEditCallName)
     {
-        $this->canEditCallName = $canEditCallName ? true : false;
+        $this->canEditCallName = (bool) $canEditCallName;
         return $this;
     }
 
@@ -510,7 +510,7 @@ class User extends BaseModel
 
     public function setHideDiscDesc(int $hideDiscDesc)
     {
-        $this->hideDiscDesc = $hideDiscDesc ? true : false;
+        $this->hideDiscDesc = (bool) $hideDiscDesc;
         return $this;
     }
 
@@ -540,12 +540,12 @@ class User extends BaseModel
         $data = parent::jsonSerialize();
         unset($data["password"]);
         unset($data["userName"]);
-        $data["birthDate"] = $this->getBirthDate() ? $this->getBirthDate()->format(self::DATE_ENG_FORMAT) : null;
+        $data["birthDate"] = $this->getBirthDate() !== null ? $this->getBirthDate()->format(self::DATE_ENG_FORMAT) : null;
 
         return $data + [
             "email" => $this->getEmail(),
             "fullName" => $this->getFullName(),
-            "rolesAsString" => join(",", $this->getRoles()),
+            "rolesAsString" => implode(",", $this->getRoles()),
             "pictureUrl" => $this->getPictureUrl(),
             "displayName" => $this->getDisplayName(),
         ];

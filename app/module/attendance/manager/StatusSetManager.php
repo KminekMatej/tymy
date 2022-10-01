@@ -175,8 +175,6 @@ class StatusSetManager extends BaseManager
 
         parent::updateByArray($resourceId, $data);
 
-        $updatedSS = $this->getById($resourceId);
-
-        return $updatedSS;
+        return $this->getById($resourceId);
     }
 }

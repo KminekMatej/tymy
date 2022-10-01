@@ -19,10 +19,8 @@ class VotePresenter extends SecuredPresenter
 
     public function actionDefault($resourceId, $subResourceId)
     {
-        switch ($this->getRequest()->getMethod()) {
-            case 'POST':
-                $this->requestPost($resourceId);
-            // no break
+        if ($this->getRequest()->getMethod() === 'POST') {
+            $this->requestPost($resourceId);
         }
 
         $this->respondNotAllowed();

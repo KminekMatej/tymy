@@ -42,11 +42,7 @@ class DefaultPresenter extends DebtBasePresenter
         $this->template->debt = $debt;
         $this->template->userListWithTeam = $this->userManager->getByIdWithTeam();
 
-        if ($debt->getCanEdit()) {
-            $this->template->payeeList = $this->getPayeeList();
-        } else {
-            $this->template->payeeList = $this->userManager->getByIdWithTeam();
-        }
+        $this->template->payeeList = $debt->getCanEdit() ? $this->getPayeeList() : $this->userManager->getByIdWithTeam();
 
         $this->template->countryList = $this->getCountryList();
     }

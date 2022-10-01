@@ -158,7 +158,7 @@ class PermissionManager extends BaseManager
         $conditions[] = "FIND_IN_SET(?, a_users) > 0";
         $params[] = "$userId";
 
-        $selector->where("(" . join(") OR (", $conditions) . ")", ...$params);
+        $selector->where("(" . implode(") OR (", $conditions) . ")", ...$params);
 
         //add revokes
         if (!empty($roles)) {
@@ -198,7 +198,7 @@ class PermissionManager extends BaseManager
 
         $this->permission = $this->getById($recordId);
 
-        if (!$this->permission) {
+        if (!$this->permission instanceof \Tymy\Module\Core\Model\BaseModel) {
             $this->respondNotFound();
         }
 
@@ -220,13 +220,13 @@ class PermissionManager extends BaseManager
 
         $this->permission = $this->getById($recordId);
 
-        if (!$this->permission) {
+        if (!$this->permission instanceof \Tymy\Module\Core\Model\BaseModel) {
             $this->respondNotFound();
         }
 
         if (isset($data["name"]) && $data["name"] !== $this->permission->getName()) {
             $namedPermission = $this->getByName($data["name"]);
-            if ($namedPermission->getId() != $this->permission->getId()) {
+            if ($namedPermission->getId() !== $this->permission->getId()) {
                 $this->respondBadRequest("Name already used");
             }
         }
@@ -256,7 +256,7 @@ class PermissionManager extends BaseManager
         ];
         foreach ($inputsToProcess as $input) {
             if (array_key_exists($input, $data) && is_array($data[$input])) {
-                    $data[$input] = join(",", $data[$input]);
+                    $data[$input] = implode(",", $data[$input]);
             }
         }
 
@@ -293,7 +293,7 @@ class PermissionManager extends BaseManager
 
         $this->authorizationManager->dropPermissionCache();
 
-        return $deleted ? $resourceId : null;
+        return $deleted !== 0 ? $resourceId : null;
     }
 
     public function read(int $resourceId, ?int $subResourceId = null): BaseModel

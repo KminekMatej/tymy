@@ -73,7 +73,7 @@ class ArrayHelper
 
         array_walk($inputArray, function ($elm) use (&$sum, $whereKey, $whereValue, $sumKey) {
             if ($elm[$whereKey] == $whereValue) {
-                $sum += floatval($elm[$sumKey]);
+                $sum += (float) $elm[$sumKey];
             }
         });
 
@@ -105,7 +105,7 @@ class ArrayHelper
                 return ($diff < self::EPSILON) || ($diff / max(abs($expected), abs($actual)) < self::EPSILON);
 
             case is_object($expected) && is_object($actual) && get_class($expected) === get_class($actual):
-                $objects = $objects ? clone $objects : new SplObjectStorage();
+                $objects = $objects !== null ? clone $objects : new SplObjectStorage();
                 if (isset($objects[$expected])) {
                     return $objects[$expected] === $actual;
                 } elseif ($expected === $actual) {
@@ -262,7 +262,7 @@ class ArrayHelper
      */
     public static function explodeInts(string $separator, string $string): array
     {
-        return $string ? array_map('intval', explode($separator, $string)) : [];
+        return $string !== '' && $string !== '0' ? array_map('intval', explode($separator, $string)) : [];
     }
 
 

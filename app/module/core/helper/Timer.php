@@ -149,7 +149,7 @@ class Timer
     private static function addServerTime(string $fromName, ?string $toName = null, float $time = 0.0)
     {
         $caption = $toName ? Strings::webalize($fromName) . "..." . Strings::webalize($toName) : Strings::webalize($fromName);
-        self::$serverTimingHeader[] = "$caption;dur=" . intval(round((float)$time * 1000, 0));
+        self::$serverTimingHeader[] = "$caption;dur=" . (int) round((float)$time * 1000, 0);
     }
 
     private static function setServerTimingApiHeader()
@@ -165,7 +165,7 @@ class Timer
         }
 
         if (!headers_sent()) {
-            header("Server-Timing: " . join(", ", $headerStrings));
+            header("Server-Timing: " . implode(", ", $headerStrings));
         }
     }
 

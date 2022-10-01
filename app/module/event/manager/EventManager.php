@@ -63,7 +63,7 @@ class EventManager extends BaseManager
      */
     public function map(?IRow $row, bool $force = false): ?BaseModel
     {
-        if (!$row) {
+        if ($row === null) {
             return null;
         }
 
@@ -95,7 +95,7 @@ class EventManager extends BaseManager
 
         $myAttendance = $this->attendanceManager->getMyAttendance($model->getId());
 
-        if ($myAttendance) {
+        if ($myAttendance !== null) {
             $model->setMyAttendance($this->attendanceManager->map($myAttendance));
         } elseif ($model->getCloseTime() > $this->now) { //my attendance doesnt exist and this event is still open
             $model->setAttendancePending(true);
@@ -111,7 +111,7 @@ class EventManager extends BaseManager
     {
         $event = parent::getById($id);
 
-        if (!$event) {
+        if (!$event instanceof \Tymy\Module\Core\Model\BaseModel) {
             return null;
         }
 
@@ -128,7 +128,7 @@ class EventManager extends BaseManager
      */
     private function getIntervalFilter(DateTime $from, DateTime $until): string
     {
-        return join("~", [
+        return implode("~", [
             "startTime>" . $from->format(BaseModel::DATETIME_ISO_FORMAT),
             "startTime<" . $until->format(BaseModel::DATETIME_ISO_FORMAT),
         ]);
@@ -155,7 +155,7 @@ class EventManager extends BaseManager
                 ->where("start_time < ?", new DateTime())
                 ->count("id");
 
-            $page = intval(floor($eventsBeforeToday / EventManager::EVENTS_PER_PAGE)) + 1;
+            $page = (int) floor($eventsBeforeToday / EventManager::EVENTS_PER_PAGE) + 1;
         }
 
         $totalCount = (clone $yearEventsSelector)->count("id");
@@ -302,7 +302,7 @@ class EventManager extends BaseManager
         }
 
         return $this->database->table($this->getTable())
-                ->where(join(" OR ", $readPermsQ), empty($readPerms) ? null : $readPerms);
+                ->where(implode(" OR ", $readPermsQ), empty($readPerms) ? null : $readPerms);
     }
 
     /**
@@ -462,7 +462,7 @@ class EventManager extends BaseManager
         $notification = $this->notificationGenerator->deleteEvent($this->event);
         $this->pushNotificationManager->notifyUsers($notification, $this->getAllowedReaders($this->event));
 
-        return $deleted ? $resourceId : null;
+        return $deleted !== 0 ? $resourceId : null;
     }
 
     public function read(int $resourceId, ?int $subResourceId = null): BaseModel

@@ -281,7 +281,7 @@ class RecordManager
 
     private function toJsonDate(DateTime $date = null)
     {
-        return $date ? $date->format(BaseModel::DATE_FORMAT) : null;
+        return $date !== null ? $date->format(BaseModel::DATE_FORMAT) : null;
     }
 
     private function applyChanges(&$data, $changes)

@@ -93,10 +93,10 @@ class Vote extends BaseModel
     {
         switch (true) {
             case is_string($booleanValue):
-                $this->booleanValue = in_array(strtoupper($booleanValue), ["YES", "TRUE", "ANO"]) ? true : false;
+                $this->booleanValue = in_array(strtoupper($booleanValue), ["YES", "TRUE", "ANO"]);
                 break;
             case is_int($booleanValue):
-                $this->booleanValue = $booleanValue ? true : false;
+                $this->booleanValue = (bool) $booleanValue;
                 break;
             case is_bool($booleanValue):
                 $this->booleanValue = $booleanValue;

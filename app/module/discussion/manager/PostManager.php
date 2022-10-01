@@ -132,7 +132,7 @@ class PostManager extends BaseManager
 
     public function map(?IRow $row, bool $force = false): ?BaseModel
     {
-        if (!$row) {
+        if ($row === null) {
             return null;
         }
 
@@ -192,7 +192,7 @@ class PostManager extends BaseManager
                 $postReactions[$reaction] = [];
             }
 
-            $postReactions[$reaction][] = intval($userId);
+            $postReactions[$reaction][] = (int) $userId;
         }
 
         return $postReactions;
@@ -267,7 +267,7 @@ class PostManager extends BaseManager
             }
         }
 
-        $posts = $this->getPostsFromDiscussion($this->discussion->getId(), $page, $mode == "bb", $search, intval($suser));
+        $posts = $this->getPostsFromDiscussion($this->discussion->getId(), $page, $mode == "bb", $search, (int) $suser);
         return new DiscussionPosts($this->discussion, $page, $this->getNumberOfPages($this->discussion->getId()), $posts);
     }
 
@@ -361,7 +361,7 @@ class PostManager extends BaseManager
         $query[] = "OFFSET ?";
         $params[] = $offset;
 
-        $posts = $this->mapAll($this->database->query(join(" ", $query), ...$params)->fetchAll());
+        $posts = $this->mapAll($this->database->query(implode(" ", $query), ...$params)->fetchAll());
 
         if (!$this->user->getIdentity()->ghost) {
             $this->markAllAsRead($this->user->getId(), $discussionId);
@@ -451,7 +451,7 @@ class PostManager extends BaseManager
             ->where("discussion_id", $discussionId)
             ->where("user_id", $userId);
 
-        if ($selector->count()) {
+        if ($selector->count() !== 0) {
             $selector->update([
                 "last_date" => Explorer::literal("NOW()")
             ]);
@@ -519,7 +519,7 @@ class PostManager extends BaseManager
             ->where("reaction", $reaction)
             ->count('id');
 
-        if ($reactionsCnt) {
+        if ($reactionsCnt !== 0) {
             //this reaction already exists - dont do anything
             return;
         }

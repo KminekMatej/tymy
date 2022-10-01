@@ -77,7 +77,7 @@ class DefaultPresenter extends SecuredPresenter
     {
         $users = isset($this->userType) ? $this->userManager->getByStatus($this->userType) : $this->userManager->getList();
         $allMails = [];
-        if ($users) {
+        if ($users !== []) {
             foreach ($users as $u) {
                 if ($u->getEmail()) {
                     $allMails[] = $u->getEmail();
@@ -89,7 +89,7 @@ class DefaultPresenter extends SecuredPresenter
 
         $this->template->userType = $this->userType ?? null;
         $this->template->users = $users;
-        $this->template->allMails = join(",", $allMails);
+        $this->template->allMails = implode(",", $allMails);
     }
 
     public function renderJerseys()
@@ -101,7 +101,7 @@ class DefaultPresenter extends SecuredPresenter
         foreach ($allPlayers as $player) {
             /* @var $player User */
             if ($player->getJerseyNumber() != "") {
-                $jNumber = intval($player->getJerseyNumber());
+                $jNumber = (int) $player->getJerseyNumber();
                 if ($jNumber < $min && $jNumber > -100) {
                     $min = $jNumber;
                 }

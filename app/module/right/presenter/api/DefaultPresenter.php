@@ -17,9 +17,8 @@ class DefaultPresenter extends SecuredPresenter
 
     public function actionDefault()
     {
-        switch ($this->getRequest()->getMethod()) {
-            case 'GET':
-                $this->requestGetList();
+        if ($this->getRequest()->getMethod() === 'GET') {
+            $this->requestGetList();
         }
 
         $this->respondNotAllowed();

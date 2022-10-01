@@ -32,7 +32,7 @@ class DetailPresenter extends EventBasePresenter
         /* @var $event Event */
         $event = $this->eventManager->getById($eventId);
 
-        if (!$event) {
+        if (!$event instanceof \Tymy\Module\Core\Model\BaseModel) {
             $this->flashMessage($this->translator->translate("event.errors.eventNotExists", null, ['id' => $eventId]), "danger");
             $this->redirect(':Event:Default:');
         }

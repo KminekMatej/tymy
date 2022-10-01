@@ -46,7 +46,7 @@ class DiscussionPresenter extends SecuredPresenter
         });
 
         $this->template->addFilter('displayNames', function (array $userIds) {
-            return join(", ", array_map(function ($userId) {
+            return implode(", ", array_map(function ($userId) {
                 return $this->userList[$userId]->getCallName();
             }, $userIds));
         });
@@ -72,7 +72,7 @@ class DiscussionPresenter extends SecuredPresenter
 
     public function renderDefault(string $discussion, int $page = 1, ?string $search = null, string $suser = "all", ?string $jump2date = null)
     {
-        $d = (is_int($discussion) || is_numeric($discussion)) ? $this->discussionManager->getById(intval($discussion)) : $this->discussionManager->getByWebName($discussion, $this->user->getId());
+        $d = (is_int($discussion) || is_numeric($discussion)) ? $this->discussionManager->getById((int) $discussion) : $this->discussionManager->getByWebName($discussion, $this->user->getId());
 
         if (empty($d)) {
             $this->error($this->translator->translate("discussion.errors.noDiscussionExists"));
@@ -102,7 +102,7 @@ class DiscussionPresenter extends SecuredPresenter
     public function actionNewPost(string $discussion)
     {
         $post = $this->getHttpRequest()->getPost("post");
-        $discussionId = intval($discussion);
+        $discussionId = (int) $discussion;
         if (trim($post) != "") {
             $this->postManager->create([
                 "post" => $post,
@@ -126,7 +126,7 @@ class DiscussionPresenter extends SecuredPresenter
             $updates["sticky"] = $this->getHttpRequest()->getPost("sticky");
         }
 
-        $discussionId = intval($discussion);
+        $discussionId = (int) $discussion;
 
         try {
             $this->postManager->update($updates, $discussionId, $postId);
@@ -150,7 +150,7 @@ class DiscussionPresenter extends SecuredPresenter
     public function actionStickPost($postId, $discussionId, $sticky)
     {
         try {
-            $this->postManager->stickPost($postId, $discussionId, $sticky ? true : false);
+            $this->postManager->stickPost($postId, $discussionId, (bool) $sticky);
             $this->redirect(":Discussion:Discussion:", ["discussion" => $discussionId, "page" => 1]);
         } catch (TymyResponse $tResp) {
             $this->handleTymyResponse($tResp);

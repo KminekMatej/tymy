@@ -159,7 +159,7 @@ class UserManager extends BaseManager
         $array["password"] = $this->hashPassword($array["password"]);
 
         if (array_key_exists("roles", $array) && is_array($array["roles"])) {
-            $array["roles"] = join(",", $array["roles"]);
+            $array["roles"] = implode(",", $array["roles"]);
         }
 
         $createdRow = parent::createByArray($array);
@@ -180,7 +180,7 @@ class UserManager extends BaseManager
     {
         $updated = $this->database->table(User::TABLE_MAILS)->where("user_id", $userId)->where("type", $type)->update(["email" => $email]);
 
-        if (!$updated) {
+        if ($updated === 0) {
             $created = $this->database->table(User::TABLE_MAILS)->insert(
                 [
                         "user_id" => $userId,
@@ -228,7 +228,7 @@ class UserManager extends BaseManager
         }
 
         if (array_key_exists("roles", $array) && is_array($array["roles"])) {
-            $array["roles"] = join(",", $array["roles"]);
+            $array["roles"] = implode(",", $array["roles"]);
         }
 
         if (array_key_exists("password", $array)) {
@@ -244,7 +244,7 @@ class UserManager extends BaseManager
         /* @var $user User */
         $user = parent::map($row, $force);
 
-        if (!$row) {
+        if ($row === null) {
             return null;
         }
 
@@ -376,7 +376,7 @@ class UserManager extends BaseManager
     public function getIdByEmail(string $email): ?int
     {
         $row = $this->database->table(User::TABLE_MAILS)->where("email", $email)->fetch();
-        return $row ? $row->user_id : null;
+        return $row !== null ? $row->user_id : null;
     }
 
     /**
@@ -438,7 +438,7 @@ class UserManager extends BaseManager
             $conditions[] = "id IN ?";
             $params[] = $permission->getAllowedUsers();
         }
-        $usersSelector->where("(" . join(") OR (", $conditions) . ")", ...$params);
+        $usersSelector->where("(" . implode(") OR (", $conditions) . ")", ...$params);
 
         //add revokes
         if (!empty($permission->getRevokedRoles())) {
@@ -765,11 +765,11 @@ class UserManager extends BaseManager
                 ->where("reseted", null)
                 ->fetch();
 
-        if (!$resetRow) {
+        if (!$resetRow instanceof \Nette\Database\Table\ActiveRow) {
             $this->respondBadRequest($this->translator->translate("common.alerts.invalidResetCode"));
         }
         $user = $this->getById($resetRow->user_id);
-        if (!$user) {
+        if (!$user instanceof \Tymy\Module\Core\Model\BaseModel) {
             $this->respondBadRequest($this->translator->translate("common.alerts.invalidResetCode"));
         }
 

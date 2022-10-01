@@ -37,6 +37,6 @@ class Order
             $outOrders[] = "{$order->getColumn()} {$order->getOrder()}";
         }
 
-        return join(", ", $outOrders);
+        return implode(", ", $outOrders);
     }
 }

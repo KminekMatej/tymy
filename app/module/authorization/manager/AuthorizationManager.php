@@ -138,7 +138,7 @@ class AuthorizationManager implements IAuthorizator
         }
 
         $permission = $this->getPermission($privilege->getType(), $privilege->getName());
-        if (!$permission) {
+        if (!$permission instanceof \Tymy\Module\Permission\Model\Permission) {
             //\Tracy\Debugger::log("No permission");
             return self::DENY;
         }

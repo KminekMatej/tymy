@@ -385,8 +385,8 @@ class Event extends BaseModel
             "eventType" => $this->getEventType()->jsonSerialize(),
         ];
 
-        if ($this->getMyAttendance()) {   //set myAttendance property only if there is some
-            $json = $json + ["myAttendance" => $this->getMyAttendance()->jsonSerialize()];
+        if ($this->getMyAttendance() !== null) {   //set myAttendance property only if there is some
+            $json += ["myAttendance" => $this->getMyAttendance()->jsonSerialize()];
         }
         return $json;
     }

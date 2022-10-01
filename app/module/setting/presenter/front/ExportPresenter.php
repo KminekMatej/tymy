@@ -44,7 +44,7 @@ class ExportPresenter extends SettingBasePresenter
 
         $form->addMultiSelect("items", $this->translator->translate("settings.items"), $statusArray);
 
-        if ($iCal) {
+        if ($iCal !== null) {
             $form['enabled']->setValue($iCal->getEnabled());
             $form['items']->setValue($iCal->getStatusIds());
         }
@@ -52,7 +52,7 @@ class ExportPresenter extends SettingBasePresenter
         $form->addSubmit("save");
 
         $form->onSuccess[] = function (Form $form, stdClass $values) use ($iCal) {
-            if ($iCal) {
+            if ($iCal !== null) {
                 $this->iCalManager->update((array) $values, $this->user->getId(), $iCal->getId());
             } else {
                 $this->iCalManager->create((array) $values);

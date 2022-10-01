@@ -18,7 +18,7 @@ class SecuredPresenter extends BasePresenter
         parent::startup();
 
         if ($tsid = $this->getParameter(self::TSID) ?: $this->httpRequest->getHeader(self::TSID)) {
-            if ($this->session->getId()) {
+            if ($this->session->getId() !== '' && $this->session->getId() !== '0') {
                 $this->session->close();
             }
             session_id($tsid);
@@ -26,7 +26,7 @@ class SecuredPresenter extends BasePresenter
             $this->user->refreshStorage();
         }
 
-        if (!isset($this->user) || !$this->user->isLoggedIn()) {
+        if ($this->user === null || !$this->user->isLoggedIn()) {
             $this->respondUnauthorized();
         }
     }

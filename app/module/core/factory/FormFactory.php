@@ -94,7 +94,7 @@ class FormFactory
         $canPlan = $form->addSelect("canPlan", null, $this->getUserPermissions())->setHtmlAttribute("data-name", "canPlan")->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
         $canResult = $form->addSelect("canResult", null, $this->getUserPermissions())->setHtmlAttribute("data-name", "canResult")->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
 
-        if ($event) {
+        if ($event !== null) {
             $form->addHidden("id", $event->getId());
             $type->setValue($event->getEventTypeId());
             $caption->setValue($event->getCaption());
@@ -126,7 +126,7 @@ class FormFactory
     {
         return new Multiplier(function (string $statusSetId) use ($onSuccess) {
                 /* @var $statusSet StatusSet */
-                $statusSet = $this->statusSetManager->getById(intval($statusSetId));
+                $statusSet = $this->statusSetManager->getById((int) $statusSetId);
                 $form = new Form();
                 $form->addHidden("id", $statusSetId);
                 $form->addText("name", $this->translator->translate("settings.team"))->setValue($statusSet->getName())->setRequired();
@@ -173,7 +173,7 @@ class FormFactory
 
         return new Multiplier(function (string $eventTypeId) use ($onSuccess, $ssList) {
                 /* @var $eventType EventType */
-                $eventType = $this->eventTypeManager->getById(intval($eventTypeId));
+                $eventType = $this->eventTypeManager->getById((int) $eventTypeId);
                 $form = new Form();
                 $form->addHidden("id", $eventTypeId);
                 $form->addText("code", $this->translator->translate("status.code"))
@@ -273,7 +273,7 @@ class FormFactory
         $orderFlag = $form->addInteger("orderFlag", $this->translator->translate("settings.order"));
 
 
-        if ($poll) {
+        if ($poll !== null) {
             $id->setValue($poll->getId());
             $caption->setValue($poll->getCaption())->setHtmlAttribute("data-value", $poll->getCaption());
             $description->setValue($poll->getDescription())->setHtmlAttribute("data-value", $poll->getDescription());
@@ -282,7 +282,7 @@ class FormFactory
             $maxItems->setValue($poll->getMaxItems())->setHtmlAttribute("data-value", $poll->getMaxItems());
             $anonymousVotes->setValue($poll->getAnonymousResults())->setHtmlAttribute("data-value", $poll->getAnonymousResults() ? 1 : 0);
             $changeableVotes->setValue($poll->getChangeableVotes())->setHtmlAttribute("data-value", $poll->getChangeableVotes() ? 1 : 0);
-            $displayResults->setValue($poll->getShowResults())->setHtmlAttribute("data-value", $poll->getShowResults() ? 1 : 0);
+            $displayResults->setValue($poll->getShowResults())->setHtmlAttribute("data-value", $poll->getShowResults() !== '' && $poll->getShowResults() !== '0' ? 1 : 0);
             $orderFlag->setValue($poll->getOrderFlag())->setHtmlAttribute("data-value", $poll->getOrderFlag());
             if ($poll->getVoteRightName()) {
                 $canVote->setValue($poll->getVoteRightName())->setHtmlAttribute("data-value", $poll->getVoteRightName());
@@ -362,7 +362,7 @@ class FormFactory
         $callName = $form->addText("callName", $this->translator->translate("team.callName"));
         $canEditCallName = $form->addCheckbox("canEditCallName", $this->translator->translate("team.canEditCallName"));
         $login = $form->addText("login", $this->translator->translate("team.login"))
-            ->addRule($form::IS_NOT_IN, $this->translator->translate("team.alerts.loginExists"), $this->userManager->getExistingLoginsExcept($user ? $user->getLogin() : null))
+            ->addRule($form::IS_NOT_IN, $this->translator->translate("team.alerts.loginExists"), $this->userManager->getExistingLoginsExcept($user !== null ? $user->getLogin() : null))
             ->addRule($form::MIN_LENGTH, null, 3)
             ->addRule($form::MAX_LENGTH, null, 20);
 
@@ -382,14 +382,14 @@ class FormFactory
 
         $roles = $form->addCheckboxList("roles", $this->translator->translate("team.roles", 1), $rolesList);
 
-        if ($user) {
+        if ($user !== null) {
             $id->setValue($user->getId());
             $gender->setValue($user->getGender())->setHtmlAttribute("data-value", $user->getGender());
             $firstName->setValue($user->getFirstName())->setHtmlAttribute("data-value", $user->getFirstName());
             $lastName->setValue($user->getLastName())->setHtmlAttribute("data-value", $user->getLastName());
             $phone->setValue($user->getPhone())->setHtmlAttribute("data-value", $user->getPhone());
             $email->setValue($user->getEmail())->setHtmlAttribute("data-value", $user->getEmail());
-            if ($user->getBirthDate()) {
+            if ($user->getBirthDate() !== null) {
                 $birthDate->setValue($user->getBirthDate()->format(BaseModel::DATE_ENG_FORMAT))->setHtmlAttribute("data-value", $user->getBirthDate()->format(BaseModel::DATE_ENG_FORMAT));
             }
             $birthCode->setValue($user->getBirthCode())->setHtmlAttribute("data-value", $user->getBirthCode());
@@ -426,7 +426,7 @@ class FormFactory
             $newPasswordAgain->setRequired();
         }
 
-        foreach ($form->controls as $control) {
+        foreach ($form->getControls() as $control) {
             /* @var $control BaseControl */
             if (in_array($control->getName(), $this->teamManager->getTeam()->getRequiredFields())) {
                 $control->setRequired($this->translator->translate("common.errors.teamValueRequired"));

@@ -45,8 +45,8 @@ class EventBasePresenter extends SecuredPresenter
         });
 
         $this->template->addFilter("prestatusClass", function (?Attendance $myAttendance, $statusId, $canPlan, $startTime) {
-            $myPreStatusId = $myAttendance ? $myAttendance->getPreStatusId() : null;
-            $myPostStatusId = $myAttendance ? $myAttendance->getPostStatusId() : null;
+            $myPreStatusId = $myAttendance !== null ? $myAttendance->getPreStatusId() : null;
+            $myPostStatusId = $myAttendance !== null ? $myAttendance->getPostStatusId() : null;
 
             if (!$canPlan) {
                 return $statusId == $myPostStatusId && $myPostStatusId ? "statusBtn$statusId disabled active" : "btn-outline-secondary disabled";

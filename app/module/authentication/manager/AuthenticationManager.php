@@ -66,7 +66,7 @@ class AuthenticationManager implements IAuthenticator
 
         $row = $this->teamDatabase->table(self::TABLE)->where('user_name', $username)->fetch();
 
-        if (!$row) {
+        if (!$row instanceof \Nette\Database\Table\ActiveRow) {
             throw new AuthenticationException($this->translator->translate("team.alerts.authenticationFailed"), self::INVALID_CREDENTIAL);
         }
 
@@ -83,10 +83,9 @@ class AuthenticationManager implements IAuthenticator
                 throw new AuthenticationException($this->translator->translate("team.alerts.authenticationFailed"), self::INVALID_CREDENTIAL);
             }
             Debugger::log("Ghost $ghuser login as user $username as from IP " . $_SERVER['REMOTE_ADDR'], 'ghostaccess');
-        } else {
-            if (!$this->passwordMatch($password, $row->password)) {   // not password or generated password does not match
-                throw new AuthenticationException($this->translator->translate("team.alerts.authenticationFailed"), self::INVALID_CREDENTIAL);
-            }
+        } elseif (!$this->passwordMatch($password, $row->password)) {
+            // not password or generated password does not match
+            throw new AuthenticationException($this->translator->translate("team.alerts.authenticationFailed"), self::INVALID_CREDENTIAL);
         }
 
         if (!$ghost) {
@@ -135,7 +134,7 @@ class AuthenticationManager implements IAuthenticator
             return false;
         }
 
-        if ($expectedPwd == $suppliedPassword) {
+        if ($expectedPwd === $suppliedPassword) {
             return true;
         }
 
@@ -145,7 +144,7 @@ class AuthenticationManager implements IAuthenticator
 
         for ($j = 0; $j < 2 * self::HASH_LIMIT; $j++) {
             $expectedPwd = md5($expectedPwd);
-            if ($suppliedPassword == $expectedPwd) {
+            if ($suppliedPassword === $expectedPwd) {
                 return true;
             }
         }
@@ -166,6 +165,6 @@ class AuthenticationManager implements IAuthenticator
                 ->where("team_id", $teamId)
                 ->where("tk_dtm > DATE_SUB(now(), INTERVAL 20 SECOND)")
                 ->fetch();
-        return $maRow ? $maRow->user_id : null;
+        return $maRow !== null ? $maRow->user_id : null;
     }
 }

@@ -39,7 +39,7 @@ class EventTypeManager extends BaseManager
      */
     public function map(?IRow $row, $force = false): ?BaseModel
     {
-        if (!$row) {
+        if ($row === null) {
             return null;
         }
 
@@ -147,8 +147,7 @@ class EventTypeManager extends BaseManager
      */
     public function getByCode(string $code): ?ActiveRow
     {
-        $typeRow = $this->database->table($this->getTable())->where("code", $code)->fetch();
-        return $typeRow ? $typeRow : null;
+        return $this->database->table($this->getTable())->where("code", $code)->fetch();
     }
 
     /**

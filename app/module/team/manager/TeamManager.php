@@ -39,7 +39,7 @@ class TeamManager extends BaseManager
 
     public function map(?IRow $row, $force = false): ?BaseModel
     {
-        if (!$row) {
+        if ($row === null) {
             return null;
         }
 
