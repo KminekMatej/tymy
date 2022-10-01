@@ -64,7 +64,7 @@ class UserTest extends RequestCase
         for ($index = 0; $index < $iterations; $index++) {
             $d = array_shift($data);
             $idRecord = $d["id"];
-            $responseObj = $this->request($this->getBasePath() . "/$idRecord")->expect(200, "array");
+            $this->request($this->getBasePath() . "/$idRecord")->expect(200, "array");
         }
     }
 
@@ -81,7 +81,7 @@ class UserTest extends RequestCase
         for ($index = 0; $index < $iterations; $index++) {
             $d = array_shift($data);
             $idRecord = $d["id"];
-            $responseObj = $this->request($this->getBasePath() . "s/$idRecord")->expect(200, "array");
+            $this->request($this->getBasePath() . "s/$idRecord")->expect(200, "array");
         }
     }
 
@@ -135,7 +135,7 @@ class UserTest extends RequestCase
     {
         $recordId = $this->createRecord();
 
-        $readResponse = $this->request($this->getBasePath() . "/" . $recordId)->expect(200, "array");
+        $this->request($this->getBasePath() . "/" . $recordId)->expect(200, "array");
 
         $this->change($recordId);
 
@@ -234,7 +234,7 @@ class UserTest extends RequestCase
     {
         $this->init();
         $this->user->logout();
-        $rand = rand(0, 10000);
+        rand(0, 10000);
 
         $regData = $this->mockRegData();
         $regData["login"] = $this->config["user_test_login"];
@@ -404,7 +404,7 @@ class UserTest extends RequestCase
             "nameDayMonth" => 7,
             "nameDayDay" => 15,
             "accountNumber" => "987654321/0300",
-            "email" => (string)rand(100, 200000) . "_emailtest.tymy.cz",
+            "email" => rand(100, 200000) . "_emailtest.tymy.cz",
         ];
     }
 }

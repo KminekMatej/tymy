@@ -39,10 +39,6 @@ class Filter
 
     /**
      * Add filters, one by one, to existing selector, using ->where functions
-     *
-     * @param Selection $selector
-     * @param array $filters
-     * @return void
      */
     public static function addFilter(Selection &$selector, array $filters): void
     {

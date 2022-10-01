@@ -122,8 +122,6 @@ class EventManager extends BaseManager
 
     /**
      * Returns filter array, based on provided $from and $until datetimes
-     * @param DateTime $from
-     * @param DateTime $until
      * @return string Filter syntax string
      */
     private function getIntervalFilter(DateTime $from, DateTime $until): string
@@ -135,17 +133,14 @@ class EventManager extends BaseManager
     }
 
     /**
-     * Get year events for event report. Also autodetects page to show if no page is specified
-     *
-     * @param int $userId
-     * @param int $year
-     * @param int|null $page
-     * @return array [
-      "page" => (int),    //number of current page. Either supplied or auto detected
-      "totalCount" => (int), //total number of events for given year (needed for pagination script)
-      "events" => array , //Event[]
-      ]
-     */
+    * Get year events for event report. Also autodetects page to show if no page is specified
+    *
+    * @return array [
+     "page" => (int),    //number of current page. Either supplied or auto detected
+     "totalCount" => (int), //total number of events for given year (needed for pagination script)
+     "events" => array , //Event[]
+     ]
+    */
     public function getYearEvents(int $userId, int $year, ?int $page = null): array
     {
         $yearEventsSelector = $this->selectUserEvents($userId)->where("start_time LIKE ?", "$year-%");
@@ -178,7 +173,6 @@ class EventManager extends BaseManager
 
     /**
      * Get array of event objects which user is allowed to view
-     * @param int $userId
      * @return Event[]
      */
     public function getListUserAllowed(int $userId, ?string $filter = null, ?string $order = null, ?int $limit = null, ?int $offset = null)
@@ -201,8 +195,6 @@ class EventManager extends BaseManager
 
     /**
      * Load events of user in specified interval and where users attendance is one of selected
-     * @param int $userId
-     * @param array $prestatusIds
      * @return ActiveRow[]
      */
     public function getEventsOfPrestatus(int $userId, array $prestatusIds, DateTime $since): array
@@ -220,7 +212,6 @@ class EventManager extends BaseManager
 
     /**
      * Get currently active events
-     * @param int $userId
      * @return Event[]
      */
     public function getCurrentEvents(int $userId): array
@@ -240,8 +231,6 @@ class EventManager extends BaseManager
 
     /**
      * Load attendances from database and automatically adds all of them to input array of events
-     * @param array $events
-     * @return void
      */
     private function addAttendances(array &$events): void
     {
@@ -256,7 +245,6 @@ class EventManager extends BaseManager
 
     /**
      * Add attendance to one event
-     * @param Event $event
      * @param array|null $eventAttendances Cached attendances - null loads them from database for just this one event
      * @param array|null $allSimpleUsers Cached all simple users, null loads them from database
      */
@@ -288,9 +276,6 @@ class EventManager extends BaseManager
 
     /**
      * Get basic selector for user permitted events
-     *
-     * @param int $userId
-     * @return Selection
      */
     private function selectUserEvents(int $userId): Selection
     {
@@ -325,7 +310,6 @@ class EventManager extends BaseManager
             $data["endTime"] = $data["startTime"];
         }
         if (!isset($data["closeTime"])) {
-            $data["closeTime"] = $data["closeTime"];
         }
 
         $closeTimeDT = new DateTime($data["closeTime"]);
@@ -409,7 +393,6 @@ class EventManager extends BaseManager
      * Check edit permission
      * @param Event $entity
      * @param int $userId
-     * @return bool
      */
     public function canEdit($entity, $userId): bool
     {
@@ -420,7 +403,6 @@ class EventManager extends BaseManager
      * Check read permission
      * @param Event $entity
      * @param int $userId
-     * @return bool
      */
     public function canRead($entity, $userId): bool
     {
@@ -493,10 +475,6 @@ class EventManager extends BaseManager
     /**
      * Return events specified by interval
      *
-     * @param int $userId
-     * @param DateTime $from
-     * @param DateTime $until
-     * @param string|null $order
      * @return Event[]
      */
     public function getEventsInterval(int $userId, DateTime $from, DateTime $until, ?string $order = null)
@@ -508,7 +486,6 @@ class EventManager extends BaseManager
      * Get sum of all events with pending attendances
      *
      * @param Event[] $events
-     * @return int
      */
     public function getWarnings(array $events): int
     {
@@ -526,7 +503,6 @@ class EventManager extends BaseManager
     /**
      * Get list of events, separated in array with year-month as key
      *
-     * @param array $events
      * @return array in the form of ["2021-01" => [...events...], "2021-02" => [...events...], ...]
      */
     public function getAsMonthArray(array $events)

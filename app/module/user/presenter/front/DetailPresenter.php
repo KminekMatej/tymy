@@ -82,7 +82,6 @@ class DetailPresenter extends BasePresenter
 
     /**
      * Send response in iCal formatting, with respect to some ical specific formatting
-     * @param Template $template
      * @return never
      */
     private function sendAsIcal(Template $template)

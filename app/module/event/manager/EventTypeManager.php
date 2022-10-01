@@ -141,9 +141,6 @@ class EventTypeManager extends BaseManager
 
     /**
      * Get Event type row from database, using its unique code or null, if this code has not been found
-     *
-     * @param string $code
-     * @return ActiveRow|null
      */
     public function getByCode(string $code): ?ActiveRow
     {
@@ -153,7 +150,6 @@ class EventTypeManager extends BaseManager
     /**
      * Get event type color, cached
      *
-     * @param int $eventTypeId
      * @return string Hexadecimal color value, without leading hashtag
      */
     public function getEventTypeColor(int $eventTypeId): string

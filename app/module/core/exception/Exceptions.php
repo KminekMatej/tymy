@@ -29,7 +29,7 @@ class TymyResponse extends Exception
     private ?string $redirect = null;
 
     /** @var mixed */
-    private $payload = null;
+    private $payload;
 
     public function __construct(string $message = "", int $httpCode = Response::S200_OK, ?int $code = null, $payload = null, bool $success = true, ?string $sessionKey = null, Throwable $previous = null)
     {

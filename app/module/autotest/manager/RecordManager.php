@@ -265,11 +265,6 @@ class RecordManager
         $this->deleteRecord(User::MODULE, $id);
     }
 
-    private function moduleConfig($module, $key)
-    {
-        return isset($this->config[$module]) ? $this->config[$module][$key] : null;
-    }
-
     public function deleteRecord($basePath, $id)
     {
         $url = "$basePath/$id";

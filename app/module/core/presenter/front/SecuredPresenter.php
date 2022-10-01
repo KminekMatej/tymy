@@ -122,7 +122,6 @@ class SecuredPresenter extends BasePresenter
      * @param int $perPage Number of items per page
      * @param int $currentPage Number of current page
      * @param int $shownCount Number of shown links
-     * @return array
      */
     protected function pagination(int $totalCount, int $perPage, int $currentPage, int $shownCount): array
     {
@@ -133,7 +132,7 @@ class SecuredPresenter extends BasePresenter
         $result = range(1, ceil($totalCount / $perPage));
 
         if (($shownCount = floor($shownCount / 2) * 2 + 1) >= 1) {
-            $result = array_slice($result, max(0, min(count($result) - $shownCount, (int) $currentPage - ceil($shownCount / 2))), $shownCount);
+            $result = array_slice($result, max(0, min(count($result) - $shownCount, $currentPage - ceil($shownCount / 2))), $shownCount);
         }
 
         return $result;

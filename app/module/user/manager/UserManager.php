@@ -54,36 +54,27 @@ class UserManager extends BaseManager
     ];
 
     private MailService $mailService;
-    private Request $request;
     private PermissionManager $permissionManager;
-    private AuthenticationManager $authenticationManager;
     private TeamManager $teamManager;
     private Translator $translator;
     private ?User $userModel = null;
-    private UserNette $netteUser;
     private array $userFields;
     private array $userCounts;
 
     /** @var SimpleUser[] */
     private array $simpleUserCache = [];
 
-    public function __construct(ManagerFactory $managerFactory, MailService $mailService, PermissionManager $permissionManager, AuthenticationManager $authenticationManager, Request $request, Translator $translator, TeamManager $teamManager, UserNette $netteUser)
+    public function __construct(ManagerFactory $managerFactory, MailService $mailService, PermissionManager $permissionManager, AuthenticationManager $authenticationManager, Request $request, Translator $translator, TeamManager $teamManager)
     {
         parent::__construct($managerFactory);
         $this->mailService = $mailService;
         $this->permissionManager = $permissionManager;
-        $this->authenticationManager = $authenticationManager;
         $this->translator = $translator;
-        $this->request = $request;
         $this->teamManager = $teamManager;
-        $this->netteUser = $netteUser;
     }
 
     /**
      * Get simple user based on his id or null if hasnt been found
-     *
-     * @param int $userId
-     * @return SimpleUser|null
      */
     public function getSimpleUser(int $userId): ?SimpleUser
     {
@@ -171,8 +162,6 @@ class UserManager extends BaseManager
 
     /**
      * Function to save email for given user.
-     * @param int $userId
-     * @param string $email
      * @param string $type Default DEF
      * @throws AbortException
      */
@@ -197,9 +186,6 @@ class UserManager extends BaseManager
 
     /**
      * Update users last read news to current timestamp
-     *
-     * @param int $userId
-     * @return void
      */
     public function updateLastReadNews(int $userId): void
     {
@@ -286,8 +272,6 @@ class UserManager extends BaseManager
     /**
      * Get url of users avatar.
      * Hint: appends file modification time, so the image gets dropped from browser cache after avatar upload
-     * @param int $userId
-     * @return string
      */
     private function getPictureUrl(int $userId): string
     {
@@ -303,7 +287,6 @@ class UserManager extends BaseManager
     /**
      * Get users based on their status
      *
-     * @param string $status
      * @return User[]
      */
     public function getByStatus(string $status)
@@ -314,7 +297,6 @@ class UserManager extends BaseManager
     /**
      * Check if login is already taken
      *
-     * @param string $login
      * @return bool
      */
     public function loginExists(string $login)
@@ -339,7 +321,6 @@ class UserManager extends BaseManager
      * Check if user limit has been reached
      *
      * @param string $login
-     * @return bool
      */
     public function limitUsersReached(): bool
     {
@@ -351,9 +332,6 @@ class UserManager extends BaseManager
     /**
      * Check credentials of user in specified team and returns its id if exists and credentials are valid
      *
-     * @param Team $team
-     * @param string $username
-     * @param string $password
      * @return int|null User id if credentials match or null if they dont
      */
     public function checkCredentials(Team $team, string $username, string $password): ?int
@@ -370,7 +348,6 @@ class UserManager extends BaseManager
     /**
      * Get userId by email
      *
-     * @param string $email
      * @return bool
      */
     public function getIdByEmail(string $email): ?int
@@ -381,8 +358,6 @@ class UserManager extends BaseManager
 
     /**
      * Register user - create user record in INIT status
-     * @param array $array
-     * @return User
      */
     public function register(array $array): User
     {
@@ -411,7 +386,6 @@ class UserManager extends BaseManager
 
     /**
      * Function selects all users allowed on given permission
-     * @param Privilege $privilege
      * @return Selection Selection to operate with
      */
     private function selectUsersByPrivilege(Privilege $privilege): Selection
@@ -458,7 +432,6 @@ class UserManager extends BaseManager
 
     /**
      * Load list of user ids, allowed to operate with given privilege
-     * @param Privilege $privilege
      * @return int[]|null
      */
     public function getUserIdsWithPrivilege(Privilege $privilege): array
@@ -468,7 +441,6 @@ class UserManager extends BaseManager
 
     /**
      * Load list of user object, allowed to operate with given privilege
-     * @param Privilege $privilege
      * @return User[]|null
      */
     public function getUsersWithPrivilege(Privilege $privilege): array
@@ -503,8 +475,6 @@ class UserManager extends BaseManager
 
     /**
      * Hash password 1-20 times
-     * @param string $password
-     * @return string
      */
     private function hashPassword(string $password): string
     {
@@ -621,8 +591,6 @@ class UserManager extends BaseManager
     /**
      * Check if registration is allowed
      *
-     * @param array $data
-     * @return void
      * @throws InvalidArgumentException
      */
     private function allowRegister(array &$data): void
@@ -663,8 +631,6 @@ class UserManager extends BaseManager
     }
 
     /**
-     * @param array $data
-     * @param int|null $resourceId
      * @return User
      */
     public function create(array $data, ?int $resourceId = null): BaseModel
@@ -717,9 +683,6 @@ class UserManager extends BaseManager
      * Checks prerequisities, generate reset code, store it into database and send informational mail to the resetting user
      *
      * @param int $userId
-     * @param string $email
-     * @param string $hostname
-     * @param string $callbackUri
      */
     public function pwdLost(string $email, string $hostname, string $callbackUri)
     {
@@ -754,7 +717,6 @@ class UserManager extends BaseManager
     /**
      * Check conditions, reset password and return the new password
      *
-     * @param string $resetCode
      * @return string New password
      */
     public function pwdReset(string $resetCode): string
@@ -790,9 +752,6 @@ class UserManager extends BaseManager
 
     /**
      * Count password reset requests in last hour
-     *
-     * @param int $userId
-     * @return int
      */
     private function pwdLostCount(int $userId): int
     {
@@ -850,7 +809,6 @@ class UserManager extends BaseManager
      * Get sum of all warnings of desired users
      *
      * @param User[] $users
-     * @return int
      */
     public function getWarnings(array $users): int
     {
@@ -905,8 +863,6 @@ class UserManager extends BaseManager
 
     /**
      * Get array of user fields
-     *
-     * @return array
      */
     public function getAllFields(): array
     {

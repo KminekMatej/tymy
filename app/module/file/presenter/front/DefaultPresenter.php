@@ -27,7 +27,6 @@ class DefaultPresenter extends SecuredPresenter
     /** @inject */
     public FileManager $fileManager;
     private array $fileStats;
-    private array $contents;
 
     public function beforeRender()
     {
@@ -44,19 +43,14 @@ class DefaultPresenter extends SecuredPresenter
             switch (true) {
                 case array_key_exists($mime, FileManager::getArchiveMimeTypes()):
                     return "ARCHIVE";
-                    break;
                 case array_key_exists($mime, FileManager::getAudioMimeTypes()):
                     return "AUDIO";
-                    break;
                 case array_key_exists($mime, FileManager::getDocumentMimeTypes()):
-                    return FileManager::getDocumentMimeTypes()[$mime] ?? "DOCUMENT";   //separate pdf, xls etc.
-                    break;
+                    return FileManager::getDocumentMimeTypes()[$mime] ?? "DOCUMENT";
                 case array_key_exists($mime, FileManager::getImageMimeTypes()):
                     return "IMAGE";
-                    break;
                 default:
                     return "OTHER";
-                    break;
             }
         });
     }
@@ -181,9 +175,6 @@ class DefaultPresenter extends SecuredPresenter
 
     /**
      * Get download folder contents
-     *
-     * @param string $folder
-     * @return array
      */
     private function getContents(string $folder): array
     {
@@ -317,10 +308,6 @@ class DefaultPresenter extends SecuredPresenter
      * 805 = 805 B
      * 824320 = 805 KB
      * etc
-     *
-     * @param int $bytes
-     * @param int $precision
-     * @return string
      */
     private function formatBytes(int $bytes, int $precision = 2): string
     {

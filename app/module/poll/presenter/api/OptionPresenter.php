@@ -70,8 +70,6 @@ class OptionPresenter extends SecuredPresenter
 
     /**
      * Parse out option id from request data
-     *
-     * @return int
      */
     private function getOptionIdFromData(): int
     {

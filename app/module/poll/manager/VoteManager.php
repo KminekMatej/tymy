@@ -114,8 +114,6 @@ class VoteManager extends BaseManager
     /**
      * Check if desired user already voted in this vote
      *
-     * @param Poll $poll
-     * @param int $userId
      * @return boolean
      */
     private function userVoted(Poll $poll, int $userId)

@@ -16,8 +16,6 @@ class DefaultPresenter extends BasePresenter
 {
     public const PHP_CMD_PARAM = "php_cmd";
 
-    private array $log;
-
     /** @inject */
     public TestsManager $testsManager;
 
@@ -113,7 +111,7 @@ class DefaultPresenter extends BasePresenter
         }
 
         try {
-            $output = $this->testsManager->runTests($folder);
+            $this->testsManager->runTests($folder);
         } catch (\Exception $exc) {
             $this->handleException($exc);
         }
@@ -123,7 +121,6 @@ class DefaultPresenter extends BasePresenter
 
     /**
      * Get team name from url and save it to environment variable to be able to use it in bootstrap later (which doesnt have HTTP_HOST)
-     * @param UrlScript $url
      */
     private function mockAutotestServer(UrlScript $url)
     {

@@ -11,8 +11,6 @@ class StringHelper
 {
     /**
      * Encode url, along with dots and hyphens
-     * @param string $input
-     * @return string
      */
     public static function urlencode(string $input): string
     {
@@ -23,8 +21,6 @@ class StringHelper
 
     /**
      * Decode url, along with dots and hyphens
-     * @param string $input
-     * @return string
      */
     public static function urldecode(string $input): string
     {

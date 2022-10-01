@@ -83,7 +83,6 @@ class HistoryManager extends BaseManager
      *
      * @param History $entity
      * @param int $userId
-     * @return bool
      */
     public function canRead($entity, $userId): bool
     {
@@ -107,7 +106,6 @@ class HistoryManager extends BaseManager
     /**
      * Load all history records for users which are not DELETED
      *
-     * @param int $eventId
      * @return History[]
      */
     public function getEventHistory(int $eventId): array

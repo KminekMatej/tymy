@@ -18,9 +18,6 @@ class AdminManager
 
     /**
      * Returns validity of given token
-     *
-     * @param string $token
-     * @return bool
      */
     public function allowToken(string $token): bool
     {

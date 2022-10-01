@@ -67,7 +67,6 @@ class EventBasePresenter extends SecuredPresenter
      * Transform array of events into event feed - array in format specified by FullCalendar specifications
      *
      * @param Event[] $events
-     * @return array
      */
     protected function toFeed(array $events): array
     {

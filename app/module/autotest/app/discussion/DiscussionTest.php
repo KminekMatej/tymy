@@ -244,7 +244,7 @@ class DiscussionTest extends RequestCase
             "stickyRightName" => "MAINADMIN",
         ]);
 
-        $pid = $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "ADMIN first post " . rand(0, 10000)])->expect(201)->getData()["id"];
+        $pid = $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "ADMIN first post " . rand(0, 10000)])->expect(201)->getData();
 
         $this->authorizeUser();
 
@@ -269,7 +269,7 @@ class DiscussionTest extends RequestCase
         $this->authorizeAdmin();
         $recordId = $this->createRecord();
 
-        $readResponse = $this->request($this->getBasePath() . "/" . $recordId)->expect(200, "array");
+        $this->request($this->getBasePath() . "/" . $recordId)->expect(200, "array");
 
         $this->change($recordId);
 

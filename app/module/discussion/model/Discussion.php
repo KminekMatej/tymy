@@ -33,7 +33,6 @@ class Discussion extends BaseModel
     private bool $canWrite = false;
     private bool $canDelete = false;
     private bool $canStick = false;
-    private int $newPosts = 0;
     private int $numberOfPosts = 0;
     private NewInfo $newInfo;
     private string $webName;
@@ -237,7 +236,6 @@ class Discussion extends BaseModel
 
     public function setNewPosts(int $newPosts)
     {
-        $this->newPosts = $newPosts;
         return $this;
     }
 

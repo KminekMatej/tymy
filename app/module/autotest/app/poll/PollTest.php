@@ -95,7 +95,7 @@ class PollTest extends RequestCase
         Assert::equal($optionData["caption"], $changedData["caption"]);
         Assert::equal($optionData["type"], $changedData["type"]);
 
-        $deleteOption = $this->request($this->getBasePath() . "/" . $recordId . "/options", "DELETE", $changedData)->expect(200, "array");
+        $this->request($this->getBasePath() . "/" . $recordId . "/options", "DELETE", $changedData)->expect(200, "array");
 
         $this->deleteRecord($recordId);
     }
@@ -136,7 +136,7 @@ class PollTest extends RequestCase
 
     public function testMenu()
     {
-        $polls = $this->request($this->getBasePath() . "/menu")->expect(200, "array")->getData();//poll doesnt exist
+        $this->request($this->getBasePath() . "/menu")->expect(200, "array")->getData();//poll doesnt exist
 
         $this->request($this->getBasePath() . "/menu", "POST")->expect(405);
         $this->request($this->getBasePath() . "/menu", "PUT")->expect(405);

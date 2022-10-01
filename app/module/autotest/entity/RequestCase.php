@@ -47,8 +47,6 @@ abstract class RequestCase extends TestCase
     protected array $moduleConfig;
     protected RecordManager $recordManager;
     private RouteList $routeList;
-    private Request2 $httpRequest;
-    private RequestFactory $requestFactory;
     private PresenterFactory $presenterFactory;
     protected AuthenticationManager $authenticationManager;
     protected Responder $responder;
@@ -63,8 +61,6 @@ abstract class RequestCase extends TestCase
         $this->container = $container;
         $this->user = $this->container->getByType(User::class);
         $this->authenticationManager = $this->container->getByType(AuthenticationManager::class);
-        $this->httpRequest = $this->container->getService("http.request");
-        $this->requestFactory = $this->container->getService("http.requestFactory");
         $this->presenterFactory = $this->container->getService("application.presenterFactory");
         $this->responder = $this->container->getService("Responder");
         $this->database = $this->container->getService("database.team.explorer");

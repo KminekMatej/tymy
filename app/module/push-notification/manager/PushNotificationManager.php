@@ -35,8 +35,6 @@ class PushNotificationManager extends BaseManager
 
     /**
      * Get Push Notification subscription based on user ID and subscription
-     * @param int $userId
-     * @param string $subscription
      * @return Subscriber
      */
     public function getByUserAndSubscription(int $userId, string $subscription)
@@ -123,7 +121,6 @@ class PushNotificationManager extends BaseManager
      * @param PushNotification $notification Push notification object to be sent. Can be generated using NotificationGenerator
      * @param int $userId ID of user to send Push notification
      * @param bool $flush Instant flush message
-     * @return void
      */
     public function notifyUser(PushNotification $notification, int $userId): void
     {
@@ -132,9 +129,7 @@ class PushNotificationManager extends BaseManager
 
     /**
      * Notify all subscribers registered through Web push messaging
-     * @param PushNotification $notification
      * @param Subscriber[] $subscribers
-     * @return void
      */
     private function webPushBulk(PushNotification $notification, array $subscribers): void
     {
@@ -154,7 +149,6 @@ class PushNotificationManager extends BaseManager
 
     /**
      *
-     * @param PushNotification $notification
      * @param Subscriber[] $subscribers
      */
     private function applePushBulk(PushNotification $notification, array $subscribers)
@@ -170,7 +164,6 @@ class PushNotificationManager extends BaseManager
 
     /**
      *
-     * @param PushNotification $notification
      * @param Subscriber[] $subscribers
      * @todo
      */
@@ -187,9 +180,7 @@ class PushNotificationManager extends BaseManager
     /**
      * Notify multiple users by their ids
      *
-     * @param PushNotification $notification
      * @param int[] $userIds
-     * @return void
      */
     public function notifyUsers(PushNotification $notification, array $userIds): void
     {
@@ -228,9 +219,7 @@ class PushNotificationManager extends BaseManager
     /**
      * Notify every subscriber with PushNotification object.
      *
-     * @param PushNotification $notification
      * @param int[] $userIds
-     * @return void
      */
     public function notifyEveryone(PushNotification $notification): void
     {
@@ -273,10 +262,6 @@ class PushNotificationManager extends BaseManager
     /**
      * Deletes subscriber from database if its already expired.
      * May contain another post-processing tasks
-     *
-     * @param Subscriber $subscriber
-     * @param MessageSentReport $report
-     * @return void
      */
     private function processReport(Subscriber $subscriber, MessageSentReport $report): void
     {

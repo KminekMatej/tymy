@@ -20,16 +20,6 @@ class PushNotification implements JsonSerializable
     private ?int $badge = null;
     private array $params;
 
-    /**
-     * @param string $type
-     * @param int $userId
-     * @param int $teamId
-     * @param string $title
-     * @param string $message
-     * @param string|null $imageUrl
-     * @param int|null $badge
-     * @param array $params
-     */
     public function __construct(string $type, int $userId, int $teamId, string $title, string $message, ?string $imageUrl, ?int $badge, array $params = [])
     {
         $this->type = $type;

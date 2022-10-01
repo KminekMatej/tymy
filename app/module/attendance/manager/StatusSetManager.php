@@ -96,9 +96,6 @@ class StatusSetManager extends BaseManager
 
     /**
      * Check this status set is used, by checking if any of its statuses is used
-     *
-     * @param int $statusSetId
-     * @return bool
      */
     public function isUsed(int $statusSetId): bool
     {
@@ -122,7 +119,6 @@ class StatusSetManager extends BaseManager
 
     /**
      * Create status set folder
-     * @param int $statusSetId
      */
     private function createStatusSetDir(int $statusSetId): void
     {

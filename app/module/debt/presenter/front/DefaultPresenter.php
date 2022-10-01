@@ -68,7 +68,7 @@ class DefaultPresenter extends DebtBasePresenter
 
     public function renderNew()
     {
-        $newDebt = (new Debt())
+        $this->template->debt = (new Debt())
                 ->setAmount(1)
                 ->setCurrencyIso("CZK")
                 ->setCountryIso("CZ")
@@ -86,7 +86,6 @@ class DefaultPresenter extends DebtBasePresenter
                 ->setCanSetSentDate(false)
                 ->setPaymentSent(null)
                 ->setPaymentReceived(null);
-        $this->template->debt = $newDebt;
 
         $this->template->userListWithTeam = $this->userManager->getByIdWithTeam();
         $this->template->payeeList = $this->getPayeeList();

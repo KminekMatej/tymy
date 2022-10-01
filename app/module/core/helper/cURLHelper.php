@@ -8,15 +8,12 @@ class CURLHelper
 {
     /**
      * Get content from url
-     * @param string $url
-     * @param bool $isJson
      * @return string|array If its json data
      */
     public static function get(string $url, bool $isJson = false)
     {
         $handle = self::getCurl($url);
         $response = curl_exec($handle);
-        $info = curl_getinfo($handle);
         curl_close($handle);
 
         if ($isJson) {
@@ -50,7 +47,6 @@ class CURLHelper
 
     /**
      * Initialize curl handle with common settings
-     * @param string $url
      * @return \CurlHandle
      */
     private static function getCurl(string $url)

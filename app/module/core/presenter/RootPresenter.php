@@ -59,7 +59,6 @@ abstract class RootPresenter extends Presenter
 
     /**
      * After succesful login, load logged user into tymyUser variable
-     * @return void
      */
     protected function initUser(): void
     {
@@ -103,7 +102,6 @@ abstract class RootPresenter extends Presenter
 
     /**
      * Get current version object
-     * @return Version
      */
     protected function getCurrentVersion(): Version
     {

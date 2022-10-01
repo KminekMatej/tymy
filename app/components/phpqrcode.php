@@ -251,10 +251,8 @@ class QRtools
         $mask = new QRmask();
         for ($a = 1; $a <= QRSPEC_VERSION_MAX; $a++) {
             $frame = QRspec::newFrame($a);
-            if (QR_IMAGE) {
-                $fileName = QR_CACHE_DIR . 'frame_' . $a . '.png';
-                QRimage::png(self::binarize($frame), $fileName, 1, 0);
-            }
+            $fileName = QR_CACHE_DIR . 'frame_' . $a . '.png';
+            QRimage::png(self::binarize($frame), $fileName, 1, 0);
 
             $width = count($frame);
             $bitMask = array_fill(0, $width, array_fill(0, $width, 0));
@@ -1115,7 +1113,6 @@ class QRinputItem
 
         if (!QRinput::check($mode, $size, $setData)) {
             throw new Exception('Error m:' . $mode . ',s:' . $size . ',d:' . implode(',', $setData));
-            return null;
         }
 
         $this->mode = $mode;
@@ -1361,7 +1358,6 @@ class QRinput
     {
         if ($version < 0 || $version > QRSPEC_VERSION_MAX || $level > QR_ECLEVEL_H) {
             throw new Exception('Invalid version no');
-            return null;
         }
 
         $this->version = $version;
@@ -1379,7 +1375,6 @@ class QRinput
     {
         if ($version < 0 || $version > QRSPEC_VERSION_MAX) {
             throw new Exception('Invalid version no');
-            return -1;
         }
 
         $this->version = $version;
@@ -1398,7 +1393,6 @@ class QRinput
     {
         if ($level > QR_ECLEVEL_H) {
             throw new Exception('Invalid ECLEVEL');
-            return -1;
         }
 
         $this->level = $level;
@@ -1435,8 +1429,6 @@ class QRinput
         if ($index <= 0 || $index > MAX_STRUCTURED_SYMBOLS) {
             throw new Exception('insertStructuredAppendHeader wrong index');
         }
-
-        $buf = array($size, $index, $parity);
 
         try {
             $entry = new QRinputItem(QR_MODE_STRUCTURE, 3, buf);
@@ -1580,19 +1572,13 @@ class QRinput
         switch ($mode) {
             case QR_MODE_NUM:
                 return self::checkModeNum($size, $data);
-                break;
             case QR_MODE_AN:
                 return self::checkModeAn($size, $data);
-                break;
             case QR_MODE_KANJI:
                 return self::checkModeKanji($size, $data);
-                break;
             case QR_MODE_8:
-                return true;
-                break;
             case QR_MODE_STRUCTURE:
                 return true;
-                break;
 
             default:
                 break;
@@ -1714,7 +1700,6 @@ class QRinput
             $ver = QRspec::getMinimumVersion((int) (($bits + 7) / 8), $this->level);
             if ($ver < 0) {
                 throw new Exception('WRONG VERSION');
-                return -1;
             } elseif ($ver > $this->getVersion()) {
                 $this->setVersion($ver);
             } else {
@@ -2443,11 +2428,7 @@ class QRrsItem
         $rs->fcr = $fcr;
         $rs->prim = $prim;
         $rs->nroots = $nroots;
-        $rs->gfpoly = $gfpoly;
-
-        /* Find prim-th root of 1, used in decoding */
-        for ($iprim = 1; $iprim % $prim != 0; $iprim += $rs->nn)
-            ; // intentional empty-body loop!
+        $rs->gfpoly = $gfpoly; // intentional empty-body loop!
 
         $rs->iprim = (int) ($iprim / $prim);
         $rs->genpoly[0] = 1;
@@ -2759,7 +2740,7 @@ class QRmask
                 if ($bitMask[$y][$x] == 1) {
                     $d[$y][$x] = chr(ord($s[$y][$x]) ^ (int) $bitMask[$y][$x]);
                 }
-                $b += (int) (ord($d[$y][$x]) & 1);
+                $b += ord($d[$y][$x]) & 1;
             }
         }
 
@@ -2879,14 +2860,11 @@ class QRmask
         $bestMask = array();
 
         $checked_masks = array(0, 1, 2, 3, 4, 5, 6, 7);
-
-        if (QR_FIND_FROM_RANDOM !== false) {
-            $howManuOut = 8 - (QR_FIND_FROM_RANDOM % 9);
-            for ($i = 0; $i < $howManuOut; $i++) {
-                $remPos = rand(0, count($checked_masks) - 1);
-                unset($checked_masks[$remPos]);
-                $checked_masks = array_values($checked_masks);
-            }
+        $howManuOut = 8 - (QR_FIND_FROM_RANDOM % 9);
+        for ($i = 0; $i < $howManuOut; $i++) {
+            $remPos = rand(0, count($checked_masks) - 1);
+            unset($checked_masks[$remPos]);
+            $checked_masks = array_values($checked_masks);
         }
 
         $bestMask = $frame;
@@ -2895,11 +2873,10 @@ class QRmask
             $mask = array_fill(0, $width, str_repeat("\0", $width));
 
             $demerit = 0;
-            $blacks = 0;
             $blacks = $this->makeMaskNo($i, $width, $frame, $mask);
             $blacks += $this->writeFormatInformation($width, $mask, $i, $level);
             $blacks = (int) (100 * $blacks / ($width * $width));
-            $demerit = (int) ((int) (abs($blacks - 50) / 5) * N4);
+            $demerit = (int) (abs($blacks - 50) / 5) * N4;
             $demerit += $this->evaluateSymbol($width, $mask);
 
             if ($demerit < $minDemerit) {
@@ -3002,7 +2979,6 @@ class QRrawcode
         $ret = $this->init($spec);
         if ($ret < 0) {
             throw new Exception('block alloc error');
-            return null;
         }
 
         $this->count = 0;
@@ -3057,8 +3033,6 @@ class QRrawcode
     //----------------------------------------------------------------------
     public function getCode()
     {
-        $ret;
-
         if ($this->count < $this->dataLength) {
             $row = $this->count % $this->blocks;
             $col = $this->count / $this->blocks;
@@ -3142,7 +3116,7 @@ class QRcode
             if (QR_FIND_BEST_MASK) {
                 $masked = $maskObj->mask($width, $frame, $input->getErrorCorrectionLevel());
             } else {
-                $masked = $maskObj->makeMask($width, $frame, ((int) QR_DEFAULT_MASK % 8), $input->getErrorCorrectionLevel());
+                $masked = $maskObj->makeMask($width, $frame, (QR_DEFAULT_MASK % 8), $input->getErrorCorrectionLevel());
             }
         } else {
             $masked = $maskObj->makeMask($width, $frame, $mask, $input->getErrorCorrectionLevel());
@@ -3172,7 +3146,6 @@ class QRcode
     {
         if (string == null) {
             throw new Exception('empty string!');
-            return null;
         }
 
         $input = new QRinput($version, $level);
@@ -3194,7 +3167,6 @@ class QRcode
 
         if ($hint != QR_MODE_8 && $hint != QR_MODE_KANJI) {
             throw new Exception('bad hint');
-            return null;
         }
 
         $input = new QRinput($version, $level);

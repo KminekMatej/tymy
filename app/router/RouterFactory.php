@@ -16,9 +16,6 @@ class RouterFactory
         $this->container = $container;
     }
 
-    /**
-     * @return RouteList
-     */
     public function createRouter(): RouteList
     {
         /* @var $router RouteList */

@@ -14,7 +14,7 @@ class RequestLog
     private DateTime $time;
     private string $method;
     private string $url;
-    private $postData = null;
+    private $postData;
     private ?int $expectCode = null;
     private ?int $httpResponseCode = null;
     private ?int $customResponseCode = null;

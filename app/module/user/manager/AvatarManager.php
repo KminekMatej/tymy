@@ -19,19 +19,14 @@ class AvatarManager
 {
     public const WIDTH = 400;
     public const HEIGHT = 500;
-
-    private string $userPicFolder;
     private User $user;
     private User2 $userModel;
     private Responder $responder;
-    private TeamManager $teamManager;
     private UserManager $userManager;
 
     public function __construct(string $userPicFolder, Responder $responder, TeamManager $teamManager, UserManager $userManager, User $user)
     {
-        $this->userPicFolder = $userPicFolder;
         $this->responder = $responder;
-        $this->teamManager = $teamManager;
         $this->userManager = $userManager;
         $this->user = $user;
     }
@@ -54,9 +49,6 @@ class AvatarManager
 
     /**
      * Upload avatar from base64 string
-     * @param string $base64Image
-     * @param int $userId
-     * @return void
      */
     public function uploadAvatarBase64(string $base64Image, int $userId): void
     {
@@ -73,9 +65,6 @@ class AvatarManager
 
     /**
      * Upload avatar from Image
-     * @param Image $image
-     * @param int $userId
-     * @return void
      */
     public function uploadAvatarImage(Image $image, int $type, int $userId): void
     {

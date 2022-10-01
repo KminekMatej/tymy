@@ -9,9 +9,6 @@ class PwdLostFormFactory
 {
     use SmartObject;
 
-    /**
-     * @return Form
-     */
     public function create(): Form
     {
 

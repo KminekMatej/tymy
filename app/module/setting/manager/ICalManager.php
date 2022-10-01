@@ -28,8 +28,6 @@ class ICalManager extends BaseManager
 
     /**
      * @param ICal $entity
-     * @param int $userId
-     * @return bool
      */
     public function canEdit(BaseModel $entity, int $userId): bool
     {
@@ -58,8 +56,6 @@ class ICalManager extends BaseManager
 
     /**
      * Load calendar of specific user
-     * @param int $userId
-     * @return ICal|null
      */
     public function getByUserId(int $userId): ?ICal
     {
@@ -138,7 +134,6 @@ class ICalManager extends BaseManager
      * Update statuses which events this ical shall display
      * @param int $exportId
      * @param int[] $statusIds
-     * @return void
      */
     public function updateItems(ICal $iCal, array $statusIds): void
     {

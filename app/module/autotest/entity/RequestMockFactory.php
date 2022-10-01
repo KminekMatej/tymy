@@ -38,9 +38,6 @@ class RequestMockFactory
     private $POSTMOCK = [];
 
     /** @var array */
-    private $COOKIESMOCK = [];
-
-    /** @var array */
     private $FILESMOCK = [];
 
     /** @var string[] */
@@ -75,7 +72,6 @@ class RequestMockFactory
     {
         $this->SERVERMOCK = $SERVERMOCK;
         $this->POSTMOCK = is_array($POSTMOCK) ? $POSTMOCK : null;
-        $this->COOKIESMOCK = $COOKIESMOCK;
         $this->FILESMOCK = $FILESMOCK;
 
         $url = new Url();
@@ -145,7 +141,6 @@ class RequestMockFactory
         $script = strtolower($this->SERVERMOCK['SCRIPT_NAME'] ?? '');
         if ($lpath !== $script) {
             $max = min(strlen($lpath), strlen($script));
-            for ($i = 0; $i < $max && $lpath[$i] === $script[$i]; $i++);
             $path = $i !== 0 ? substr($path, 0, strrpos($path, '/', $i - strlen($path) - 1) + 1) : '/';
         }
         return $path;

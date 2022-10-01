@@ -46,7 +46,6 @@ class StringsManager
 
     /**
      * Get language code - either from registered user, or system default
-     * @return string
      */
     private function getLc(): string
     {
@@ -57,10 +56,7 @@ class StringsManager
     /**
      * Translate by domain and code
      *
-     * @param string $domain
-     * @param string $code
      * @param mixed $parameters
-     * @return string
      */
     public function translateBy(string $domain, string $code, ...$parameters): string
     {

@@ -59,9 +59,6 @@ class Bootstrap
 
     /**
      * Path normalizer - removes double dots from path to make it look clearer
-     *
-     * @param string $path
-     * @return string
      */
     public static function normalizePath(string $path): string
     {
@@ -84,10 +81,6 @@ class Bootstrap
 
     /**
      * Enrich configurator with config files from all of the submodules
-     *
-     * @param Configurator $configurator
-     * @param array $modules
-     * @return void
      */
     private static function addModuleConfig(Configurator &$configurator, array $modules): void
     {

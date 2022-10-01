@@ -24,9 +24,7 @@ use Tymy\Module\User\Model\User;
 class AuthenticationManager implements IAuthenticator
 {
     public const TABLE = "user";
-    public const HASH_LIMIT = 19;  //to be able to allow first 20 md5 hashes to pass, this constant needs to be 19
-
-    private Responder $responder;
+    public const HASH_LIMIT = 19;
     private Explorer $mainDatabase;
     private Explorer $teamDatabase;
     private Translator $translator;
@@ -36,7 +34,6 @@ class AuthenticationManager implements IAuthenticator
     public function __construct(array $ghosts, string $teamSysName, Explorer $mainDatabase, Explorer $teamDatabase, Responder $responder, Translator $translator)
     {
         $this->teamSysName = $teamSysName;
-        $this->responder = $responder;
         $this->mainDatabase = $mainDatabase;
         $this->teamDatabase = $teamDatabase;
         $this->ghosts = $ghosts;
@@ -98,8 +95,6 @@ class AuthenticationManager implements IAuthenticator
     /**
      * Authenticate using transfer key
      *
-     * @param string $transferKey
-     * @return IIdentity
      * @throws AuthenticationException
      */
     private function authenticateByTk(string $transferKey): IIdentity
@@ -124,9 +119,7 @@ class AuthenticationManager implements IAuthenticator
 
     /**
      * Check that password matches
-     * @param string $suppliedPassword
      * @param string|null $expectedPwd  (can be null for new non-approved users)
-     * @return bool
      */
     public function passwordMatch(string $suppliedPassword, ?string $expectedPwd = null): bool
     {
@@ -153,10 +146,6 @@ class AuthenticationManager implements IAuthenticator
 
     /**
      * Load target user_id of user containing current transfer key
-     *
-     * @param int $teamId
-     * @param string $transferKey
-     * @return int|null
      */
     public function getUserIdByTransferKey(int $teamId, string $transferKey): ?int
     {

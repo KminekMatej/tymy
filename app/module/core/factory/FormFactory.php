@@ -31,7 +31,6 @@ class FormFactory
 
     private EventTypeManager $eventTypeManager;
     private StatusSetManager $statusSetManager;
-    private EventManager $eventManager;
     private TeamManager $teamManager;
     private UserManager $userManager;
     private Translator $translator;
@@ -41,7 +40,6 @@ class FormFactory
     public function __construct(EventTypeManager $eventTypeManager, EventManager $eventManager, Translator $translator, StatusSetManager $statusSetManager, TeamManager $teamManager, UserManager $userManager, PermissionManager $permissionManager)
     {
         $this->eventTypeManager = $eventTypeManager;
-        $this->eventManager = $eventManager;
         $this->teamManager = $teamManager;
         $this->userManager = $userManager;
         $this->translator = $translator;
@@ -66,9 +64,6 @@ class FormFactory
         return $this->userPermissions;
     }
 
-    /**
-     * @return Form
-     */
     public function createEventLineForm(array $eventTypesList, array $onSuccess, ?Event $event = null): Form
     {
         $eventTypes = [];
@@ -299,7 +294,7 @@ class FormFactory
                 /* @var $option Option */
                 $form->addHidden("option_id_" . $option->getId(), $option->getId());
                 $form->addText("option_caption_" . $option->getId(), $this->translator->translate("poll.itemCaption"))->setValue($option->getCaption())->setHtmlAttribute("data-value", $option->getCaption());
-                $typeSelector = $form->addSelect("option_type_" . $option->getId(), $this->translator->translate("settings.type"), $optionTypes)
+                $form->addSelect("option_type_" . $option->getId(), $this->translator->translate("settings.type"), $optionTypes)
                     ->setValue($option->getType())
                     ->setHtmlAttribute("data-value", $option->getType());
             }

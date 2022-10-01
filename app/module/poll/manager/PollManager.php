@@ -283,9 +283,6 @@ class PollManager extends BaseManager
 
     /**
      * If supplied poll is set to have anonymouse results, then this function process all votes, and sets random userId to each vote and drops updatedAt and updatedById properties
-     *
-     * @param Poll $poll
-     * @return void
      */
     private function anonymizeIfNeeded(Poll &$poll): void
     {
@@ -310,9 +307,6 @@ class PollManager extends BaseManager
 
     /**
      * If user is not allowed to see poll results, this function removes results from the poll
-     *
-     * @param Poll $poll
-     * @return void
      */
     private function hideResultsIfNeeded(Poll &$poll): void
     {
@@ -325,7 +319,6 @@ class PollManager extends BaseManager
      * Get sum of all polls with pending vote
      *
      * @param Poll[] $polls
-     * @return int
      */
     public function getWarnings(array $polls): int
     {

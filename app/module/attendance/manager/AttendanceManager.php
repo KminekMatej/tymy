@@ -30,7 +30,6 @@ class AttendanceManager extends BaseManager
 {
     private UserManager $userManager;
     private HistoryManager $historyManager;
-    private PermissionManager $permissionManager;
     private ?ActiveRow $eventRow;
     private array $myAttendances;
 
@@ -39,14 +38,11 @@ class AttendanceManager extends BaseManager
     {
         parent::__construct($managerFactory);
         $this->userManager = $userManager;
-        $this->permissionManager = $permissionManager;
         $this->historyManager = $historyManager;
     }
 
     /**
      * Get attendance using event and user id
-     * @param int $eventId
-     * @param int $userId
      * @return Attendance
      */
     public function getByEventUserId(int $eventId, int $userId)
@@ -56,9 +52,6 @@ class AttendanceManager extends BaseManager
 
     /**
      * Get array of attendanced related to events
-     *
-     * @param array $eventIds
-     * @return array
      */
     public function getByEvents(array $eventIds): array
     {
@@ -117,7 +110,6 @@ class AttendanceManager extends BaseManager
      * Check edit permission
      * @param Attendance $entity
      * @param int $userId
-     * @return bool
      */
     public function canEdit($entity, $userId): bool
     {
@@ -128,7 +120,6 @@ class AttendanceManager extends BaseManager
      * Check read permission
      * @param Attendance $entity
      * @param int $userId
-     * @return bool
      */
     public function canRead($entity, $userId): bool
     {
@@ -208,8 +199,6 @@ class AttendanceManager extends BaseManager
 
     /**
      * Check permissions if user, specified in data, can create attendance for this event
-     *
-     * @param array $data
      */
     private function allowAttend(array $data)
     {
@@ -227,7 +216,6 @@ class AttendanceManager extends BaseManager
      * Check if supplied PRE status can be assigned to this eventId and if can, return correct preStatusId (transforming code to id)
      * (Check using event_type and so on)
      *
-     * @param int $eventId
      * @param int|string $preStatus Either id or code
      * @return int|null Return correct statusId or null for invalid code
      */
@@ -254,7 +242,6 @@ class AttendanceManager extends BaseManager
      * Check if supplied POST status can be assigned to this eventId and if can, return correct postStatusId (transforming code to id)
      * (Check using event_type and so on)
      *
-     * @param int $eventId
      * @param int $postStatus Either id or code
      * @return int|null Return correct statusId or null for invalid code
      */
@@ -279,14 +266,6 @@ class AttendanceManager extends BaseManager
 
     /**
      * Create row of attendance history
-     *
-     * @param int $userId
-     * @param int $eventId
-     * @param int $statusIdTo
-     * @param string|null $preDescTo
-     * @param int|null $statusIdFrom
-     * @param string|null $preDescFrom
-     * @return ActiveRow
      */
     private function createHistory(int $userId, int $eventId, int $statusIdTo, ?string $preDescTo = null, ?int $statusIdFrom = null, ?string $preDescFrom = null): ActiveRow
     {
@@ -379,9 +358,6 @@ class AttendanceManager extends BaseManager
 
     /**
      * Get my attendance on specific event id, using cache
-     *
-     * @param int $eventId
-     * @return ActiveRow|null
      */
     public function getMyAttendance(int $eventId): ?ActiveRow
     {

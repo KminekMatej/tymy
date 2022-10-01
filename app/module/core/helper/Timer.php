@@ -15,7 +15,6 @@ class Timer
     private static $number;
     private static $sumNumber;
     private static $points;
-    private static $runningSumPointName;
     private static $sumpoints;
     private static $serverTimingHeader = [];
     private static $started = false;
@@ -95,7 +94,6 @@ class Timer
             "name" => $name,
             "time" => 0
         ];
-        self::$runningSumPointName = $name;
         Debugger::timer("_sum_" . self::$sumNumber);
     }
 
@@ -149,7 +147,7 @@ class Timer
     private static function addServerTime(string $fromName, ?string $toName = null, float $time = 0.0)
     {
         $caption = $toName ? Strings::webalize($fromName) . "..." . Strings::webalize($toName) : Strings::webalize($fromName);
-        self::$serverTimingHeader[] = "$caption;dur=" . (int) round((float)$time * 1000, 0);
+        self::$serverTimingHeader[] = "$caption;dur=" . (int) round($time * 1000, 0);
     }
 
     private static function setServerTimingApiHeader()

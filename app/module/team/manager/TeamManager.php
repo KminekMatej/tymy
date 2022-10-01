@@ -22,8 +22,6 @@ use Tymy\Module\Team\Model\Team;
 class TeamManager extends BaseManager
 {
     public const DEFAULT_SKIN = "black-panther";
-
-    private string $teamFolder;
     private Request $httpRequest;
     private Team $team;
     public array $allSkins;
@@ -32,7 +30,6 @@ class TeamManager extends BaseManager
     {
         parent::__construct($managerFactory);
         $this->database = $this->mainDatabase;
-        $this->teamFolder = $teamFolder;
         $this->httpRequest = $httpRequest;
         $this->allSkins = $allSkins;
     }
@@ -67,9 +64,6 @@ class TeamManager extends BaseManager
 
     /**
      * Get SimpleTeam object from Team
-     *
-     * @param Team $team
-     * @return SimpleTeam
      */
     public function toSimpleTeam(Team $team): SimpleTeam
     {
@@ -83,8 +77,6 @@ class TeamManager extends BaseManager
 
     /**
      * Get team by its sysname
-     * @param string $sysname
-     * @return Team|null
      */
     public function getBySysname(string $sysname): ?Team
     {
@@ -181,9 +173,6 @@ class TeamManager extends BaseManager
 
     /**
      * Get maximum available downloads folder size
-     *
-     * @param Team $team
-     * @return int
      */
     public function getMaxDownloadSize(Team $team): int
     {

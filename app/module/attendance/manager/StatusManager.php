@@ -28,14 +28,7 @@ class StatusManager extends BaseManager
     public const ICON_HEIGHT = 250;
 
     private ?Status $status = null;
-    private TeamManager $teamManager;
     private array $simpleCache = [];
-
-    public function __construct(ManagerFactory $managerFactory, TeamManager $teamManager)
-    {
-        parent::__construct($managerFactory);
-        $this->teamManager = $teamManager;
-    }
 
     protected function getClassName(): string
     {
@@ -93,9 +86,6 @@ class StatusManager extends BaseManager
 
     /**
      * Compose and return correct folder of status set, using its ID
-     *
-     * @param int $statusSetId
-     * @return string
      */
     public function getStatusSetFolder(int $statusSetId): string
     {
@@ -108,7 +98,6 @@ class StatusManager extends BaseManager
 
     /**
      * Get all status unique status codes
-     * @return array
      */
     public function getAllStatusCodes(): array
     {
@@ -117,7 +106,6 @@ class StatusManager extends BaseManager
 
     /**
      * Get all pre and post statuses by corresponding event type id
-     * @param int $eventTypeId
      * @return array In the form of ["pre" => [..array of Status objects..], "post" => [..array of Status objects..]]
      */
     public function getByEventTypeId(int $eventTypeId): array
@@ -212,10 +200,6 @@ class StatusManager extends BaseManager
 
     /**
      * Save image of status, specified as base64 string
-     *
-     * @param int $statusSetId
-     * @param string $code
-     * @param string $imgB64
      */
     private function saveStatusImage(int $statusSetId, string $code, string $imgB64): void
     {
@@ -286,7 +270,7 @@ class StatusManager extends BaseManager
 
         $this->allowUpdate($resourceId, $data);
 
-        $updated = parent::updateByArray($resourceId, $data);
+        parent::updateByArray($resourceId, $data);
 
         if (isset($data["image"])) {
             $code = $data["code"] ?? $this->status->getCode();

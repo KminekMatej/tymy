@@ -17,12 +17,8 @@ use Tymy\Module\Poll\Model\Poll;
  */
 class OptionManager extends BaseManager
 {
-    private PollManager $pollManager;
-    private Option $option;
-
     public function setPollManager(PollManager $pollManager)
     {
-        $this->pollManager = $pollManager;
         return $this;
     }
 
@@ -132,7 +128,6 @@ class OptionManager extends BaseManager
     /**
      * Get options of specified poll
      *
-     * @param int $pollId
      * @return Option[]
      */
     public function getPollOptions(int $pollId): array
@@ -144,9 +139,6 @@ class OptionManager extends BaseManager
 
     /**
      * Delete multiple poll options
-     * @param int $pollId
-     * @param array $ids
-     * @return void
      */
     public function deleteOptions(int $pollId, array $ids): void
     {

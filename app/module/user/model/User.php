@@ -59,7 +59,6 @@ class User extends BaseModel
     private ?string $zipCode = null;
     private ?string $phone = null;
     private ?string $phone2 = null;
-    private ?string $displayName = null;
     private ?DateTime $birthDate = null;
     private int $nameDayMonth = 0;
     private int $nameDayDay = 0;
@@ -366,7 +365,6 @@ class User extends BaseModel
 
     public function setDisplayName(?string $displayName)
     {
-        $this->displayName = $displayName;
         return $this;
     }
 

@@ -42,7 +42,6 @@ class ArrayHelper
     /**
      * Get sub-arrrays frorm multidimensional array, where property equals field or is in array of fields
      *
-     * @param array $inputArray
      * @param mixed $where
      * @param string|string[]|int|int[]|bool $equals
      * @return array
@@ -61,11 +60,7 @@ class ArrayHelper
     /**
      * Sum specified $sumKey field in all sub-arrays, filtered by $whereKey and $whereValue conditions.
      *
-     * @param array $inputArray
      * @param string|int $whereKey
-     * @param string $whereValue
-     * @param string $sumKey
-     * @return float
      */
     public static function sum(array $inputArray, $whereKey, string $whereValue, string $sumKey): float
     {
@@ -91,7 +86,6 @@ class ArrayHelper
      * @param mixed $actual
      * @param int $level = 0 (internal usage to avoid recursion overflow)
      * @param type $objects
-     * @return bool
      * @throws Exception
      */
     public static function isEqual($expected, $actual, int $level = 0, $objects = null): bool
@@ -139,10 +133,6 @@ class ArrayHelper
 
     /**
      * Sort entities array according another array specifying the actual sort order
-     *
-     * @param array $entities
-     * @param array $idArray
-     * @return void
      */
     public static function idSort(array &$entities, array $idArray, string $column = "id"): void
     {
@@ -156,7 +146,6 @@ class ArrayHelper
     /**
      * Transform array of entities to array of its json representation
      * @param BaseModel[]|null $entities
-     * @return array
      */
     public static function arrayToJson(?array $entities = null): array
     {
@@ -205,8 +194,6 @@ class ArrayHelper
 
     /**
      * Checks whether this array is actually an associative array with numeric indexes
-     * @param array $array
-     * @return bool
      */
     public static function isAssoc(array $array): bool
     {
@@ -219,10 +206,6 @@ class ArrayHelper
 
     /**
      * Compare array values - check if values in each array are equal, nevermind order, nevermind keys
-     *
-     * @param array $array1
-     * @param array $array2
-     * @return bool
      */
     public static function valuesEqual(array $array1, array $array2): bool
     {
@@ -231,10 +214,6 @@ class ArrayHelper
 
     /**
      * Function to process absolute array diff - will return array of items which are not in BOTH arrays
-     *
-     * @param array $array1
-     * @param array $array2
-     * @return array
      */
     public static function diffAbs(array $array1, array $array2): array
     {
@@ -246,8 +225,6 @@ class ArrayHelper
 
     /**
      * Cast all entities in array to int
-     * @param array $array
-     * @return array
      */
     public static function ints(array $array): array
     {
@@ -256,9 +233,6 @@ class ArrayHelper
 
     /**
      * Explode string by separator and cast all explded values to int
-     * @param string $separator
-     * @param string $string
-     * @return array
      */
     public static function explodeInts(string $separator, string $string): array
     {
@@ -287,9 +261,6 @@ class ArrayHelper
      * Rows of type ActiveRow are transformed into array and outputed.
      * Any other types of rows are skipped and not outputed.
      * Array keys and order are maintained.
-     *
-     * @param array $rows
-     * @return array
      */
     public static function rowsToArrays(array $rows): array
     {
@@ -309,10 +280,8 @@ class ArrayHelper
      * Transform two-dimensional array to key-pair array, using array index to be taken as key and array index to be treated as value.
      * If both keyIndex and valueIndex are null, returns the input array unchanged
      *
-     * @param array $inputArray
      * @param string|null $keyIndex - If null, output array is numerically indexed
      * @param string|null $valueIndex - If null, returns full item specified by its key
-     * @return array
      */
     public static function pairs(array $inputArray, ?string $keyIndex = null, ?string $valueIndex = null): array
     {
@@ -337,8 +306,6 @@ class ArrayHelper
      * Transform two-dimensional array to key->value pair array, getting key from object getter, formed from property name
      * If no value is specified, returns complete model
      * @param BaseModel[] $inputArray
-     * @param string $keyProperty
-     * @param string|null $valueProperty
      * @return array|BaseModel[]
      */
     public static function pairsEntity(array $inputArray, string $keyProperty = 'id', ?string $valueProperty = null): array

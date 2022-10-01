@@ -27,25 +27,25 @@ class RightTest extends RequestCase
     public function testGetSingular()
     {
         $this->authorizeAdmin();
-        $listResponse = $this->request($this->getBasePath())->expect(200, "array");
+        $this->request($this->getBasePath())->expect(200, "array");
     }
 
     public function testGetPlural()
     {
         $this->authorizeAdmin();
-        $listResponse = $this->request($this->getBasePath() . "s")->expect(200, "array");
+        $this->request($this->getBasePath() . "s")->expect(200, "array");
     }
 
     public function testRightUserSingular()
     {
         $this->authorizeAdmin();
-        $listResponse = $this->request($this->getBasePath() . "/user")->expect(200, "array");
+        $this->request($this->getBasePath() . "/user")->expect(200, "array");
     }
 
     public function testRightUserPlural()
     {
         $this->authorizeAdmin();
-        $listResponse = $this->request($this->getBasePath() . "s/user")->expect(200, "array");
+        $this->request($this->getBasePath() . "s/user")->expect(200, "array");
     }
 
     public function createRecord()

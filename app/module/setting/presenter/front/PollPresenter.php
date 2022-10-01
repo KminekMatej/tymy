@@ -100,9 +100,7 @@ class PollPresenter extends SettingBasePresenter
     }
 
     /**
-     * @param Form $form
      * @param stdClass $values
-     * @return void
      */
     public function pollFormSuccess(Form $form, $values): void
     {

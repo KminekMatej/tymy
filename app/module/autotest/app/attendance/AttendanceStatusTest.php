@@ -169,11 +169,6 @@ class AttendanceStatusTest extends RequestCase
         Assert::equal($correctStatus["code"], $mockedStatusData["code"]);
         Assert::equal($correctStatus["caption"], $mockedStatusData["caption"]);
     }
-
-    private function createStatus(int $statusSetId, ?array $changes = null): int
-    {
-        return $this->recordManager->createStatus($statusSetId, null, $changes);
-    }
     /**
      * Return id of random, already existing status set
      * @return type

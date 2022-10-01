@@ -52,7 +52,7 @@ class DebtTest extends RequestCase
         $this->authorizeAdmin();
         $recordId = $this->createRecord();
 
-        $data = $this->request($this->getBasePath() . "/" . $recordId)->expect(200, "array");
+        $this->request($this->getBasePath() . "/" . $recordId)->expect(200, "array");
 
         $this->change($recordId);
 
@@ -197,7 +197,7 @@ class DebtTest extends RequestCase
         $this->authorizeAdmin();
         $recordId = $this->createRecord();
 
-        $data = $this->request($this->getBasePath() . "s/" . $recordId)->expect(200, "array");
+        $this->request($this->getBasePath() . "s/" . $recordId)->expect(200, "array");
 
         $this->change($recordId);
 

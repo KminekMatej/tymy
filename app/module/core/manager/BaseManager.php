@@ -56,9 +56,6 @@ abstract class BaseManager
 
     /**
      * Exception safe global team log
-     * @param Team $team
-     * @param string $log
-     * @return void
      */
     public static function logg(Team $team, string $log): void
     {
@@ -80,7 +77,6 @@ abstract class BaseManager
 
     abstract public function delete(int $resourceId, ?int $subResourceId = null): int;
 
-    /** @return string */
     protected function getTable(): string
     {
         $class = $this->getClassName();
@@ -151,7 +147,6 @@ abstract class BaseManager
 
     /**
      * Maps active rows to array of objects
-     * @param array $rows
      * @return BaseModel[]
      */
     public function mapAll(array $rows): array
@@ -169,7 +164,6 @@ abstract class BaseManager
 
     /**
      * Maps active rows to array of objects, where keys are id fields
-     * @param array $rows
      * @return BaseModel[]
      */
     public function mapAllWithId(array $rows): array
@@ -186,7 +180,6 @@ abstract class BaseManager
      *
      * @param array $array - Input array to check
      * @throws AbortException
-     * @return void
      */
     public function checkInputs(array $array): void
     {
@@ -209,7 +202,6 @@ abstract class BaseManager
     /**
      * Get row from database with given id
      *
-     * @param int $id
      * @return ActiveRow $row
      */
     public function getRow(int $id): ?ActiveRow
@@ -217,12 +209,6 @@ abstract class BaseManager
         return $this->database->table($this->getTable())->where("id", $id)->fetch();
     }
 
-    /**
-     *
-     * @param int $id
-     * @param bool $force
-     * @return BaseModel|null
-     */
     public function getById(int $id, bool $force = false): ?BaseModel
     {
         if (!is_numeric($id)) {
@@ -283,27 +269,7 @@ abstract class BaseManager
     }
 
     /**
-     * Return field associated with given property
-     * Used for filter validation
-     *
-     * @param string $propertyName
-     * @return Field|null
-     */
-    private function getFieldFromProperty(string $propertyName)
-    {
-        foreach ($this->getScheme() as $field) {
-            $property = $field->getAlias() ? $field->getAlias() : $field->getProperty();
-            if ($property === $propertyName) {
-                return $field;
-            }
-        }
-        return null;
-    }
-
-    /**
      * Check if record, specified by ID, exists - performs a quick db check
-     * @param int $id
-     * @return bool
      */
     public function exists(int $id, string $table = null): bool
     {
@@ -352,7 +318,6 @@ abstract class BaseManager
      * IDColumn can be changed if primary key is different than classic `id`
      *
      * @param string $table
-     * @param array $inserts
      * @param string $idColumn
      * @return ActiveRow
      * @throws Exception
@@ -371,8 +336,6 @@ abstract class BaseManager
      * Delete table row based on given table and id.
      * IDColumn can be changed if primary key is different than classic `id`
      *
-     * @param int $id
-     * @param string|null $table
      * @param type $idColumn
      * @return int number of affected rows
      * @throws @static.mtd:DBException.from
@@ -552,7 +515,6 @@ abstract class BaseManager
     /**
      * Get user ids allowed to read given id
      *
-     * @param int $modelId
      * @return int[]
      */
     public function getAllowedReadersById(int $modelId)
@@ -603,7 +565,6 @@ abstract class BaseManager
     /**
      * Load record using id. Responds with 404 if not found
      *
-     * @param int $recordId
      * @return BaseModel
      */
     protected function loadRecord(int $recordId, ?BaseManager $manager = null)
@@ -620,7 +581,6 @@ abstract class BaseManager
     /**
      * Iterate through filterString, parse out all filters and return from them the array or Filter objects for further processing
      *
-     * @param string $filterString
      * @return Filter[]
      */
     protected function filterToArray(string $filterString): array
@@ -657,7 +617,6 @@ abstract class BaseManager
     /**
      * Iterate through $orderString, parse out all orders and return from them the array or Order objects for further processing
      *
-     * @param string $orderString
      * @return Order[]
      */
     protected function orderToArray(string $orderString): array
@@ -697,7 +656,6 @@ abstract class BaseManager
      * Check if current scheme contains property and return its corresponding column name
      *
      * @param string $propertyName Property to get
-     * @return string|null
      */
     private function getColumnName(string $propertyName): ?string
     {
@@ -722,9 +680,6 @@ abstract class BaseManager
 
     /**
      * Change all fields in input $data array to proper bool value (if the fields are correctly specified)
-     * @param array $data
-     * @param array $fields
-     * @return void
      */
     protected function toBoolData(array &$data, array $fields): void
     {
@@ -738,7 +693,6 @@ abstract class BaseManager
     /**
      * Retype various boolean stored variables like YES, ANO etc. to proper boolean value
      * @param mixed $value
-     * @return bool
      */
     protected function toBool($value): bool
     {

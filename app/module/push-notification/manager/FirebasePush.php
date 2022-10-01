@@ -17,20 +17,16 @@ class FirebasePush
     private const URL = "https://fcm.googleapis.com/fcm/send";
 
     private array $fcm;
-    private TeamManager $teamManager;
 
-    public function __construct(array $fcm, TeamManager $teamManager)
+    public function __construct(array $fcm)
     {
         $this->fcm = $fcm;
-        $this->teamManager = $teamManager;
     }
 
     /**
      * Send multiple notifications using FCM
      *
      * @param string[] $deviceIds
-     * @param PushNotification $pushNotification
-     * @return void
      */
     public function sendBulkNotifications(array $deviceIds, PushNotification $pushNotification): void
     {

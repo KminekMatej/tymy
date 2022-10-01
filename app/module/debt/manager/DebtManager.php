@@ -25,13 +25,11 @@ class DebtManager extends BaseManager
     public const TYPE_OTHER = "other";
 
     private ?Debt $debt;
-    private AuthorizationManager $authorizationManager;
     private UserManager $userManager;
 
     public function __construct(ManagerFactory $managerFactory, AuthorizationManager $authorizationManager, UserManager $userManager)
     {
         parent::__construct($managerFactory);
-        $this->authorizationManager = $authorizationManager;
         $this->userManager = $userManager;
     }
 
@@ -97,7 +95,6 @@ class DebtManager extends BaseManager
      * Check edit permission
      * @param Debt $entity
      * @param int $userId
-     * @return bool
      */
     public function canEdit($entity, $userId): bool
     {
@@ -109,8 +106,6 @@ class DebtManager extends BaseManager
      *
      * @param int $userId
      * @param ?int $payeeId (null for team payee)
-     * @param string $payeeType
-     * @return bool
      */
     private function canEditDebtData(?int $payeeId, string $payeeType): bool
     {
@@ -122,7 +117,6 @@ class DebtManager extends BaseManager
      * Check read permission
      * @param Debt $entity
      * @param int $userId
-     * @return bool
      */
     public function canRead($entity, $userId): bool
     {
@@ -242,9 +236,6 @@ class DebtManager extends BaseManager
 
     /**
      * Autoset debtor id and debtor type
-     * @param array &$debtData
-     * @param Debt|null $originalDebt
-     * @return void
      */
     private function autosetType(array &$debtData, ?Debt $originalDebt = null): void
     {
@@ -286,7 +277,6 @@ class DebtManager extends BaseManager
      * Get sum of all debts with pending payment
      *
      * @param Debt[] $debts
-     * @return int
      */
     public function getWarnings(array $debts): int
     {

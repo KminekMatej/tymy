@@ -30,7 +30,6 @@ use Tymy\Module\User\Model\User as User2;
 class NavbarControl extends Control
 {
     private SecuredPresenter $presenter;
-    private array $accessibleSettings;
     private PollManager $pollManager;
     private DiscussionManager $discussionManager;
     private EventManager $eventManager;

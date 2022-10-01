@@ -69,8 +69,6 @@ class BasePresenter extends RootPresenter
 
     /**
      * Decode input request data passed as url-encoded string
-     *
-     * @return void
      */
     private function decodeUrlEncodedData(): void
     {
@@ -84,7 +82,6 @@ class BasePresenter extends RootPresenter
 
     /**
      * Decode input request data passed as json-encoded string
-     * @return void
      * @throws JsonException
      */
     private function decodeJsonData(): void
@@ -146,8 +143,6 @@ class BasePresenter extends RootPresenter
 
     /**
      * Simple exception handler. If any exception gets throws, logs message into exception.log file and then either responds proper response, or continue throwing the response
-     *
-     * @param \Exception $exc
      */
     protected function handleException(\Exception $exc)
     {

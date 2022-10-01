@@ -9,9 +9,6 @@ class SignInFormFactory
 {
     use SmartObject;
 
-    /**
-     * @return Form
-     */
     public function create(callable $onSuccess): Form
     {
 

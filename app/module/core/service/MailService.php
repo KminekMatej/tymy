@@ -25,16 +25,12 @@ class MailService
     private Translator $translator;
     private Team $team;
     private string $teamDomain;
-    private LinkGenerator $linkGenerator;
-    private ITemplateFactory $templateFactory;
     private Mailer $mailSender;
     private StringsManager $stringsManager;
 
     public function __construct(TeamManager $teamManager, LinkGenerator $linkGenerator, ITemplateFactory $templateFactory, Mailer $mailer, StringsManager $stringsManager, Translator $translator)
     {
         $this->teamManager = $teamManager;
-        $this->linkGenerator = $linkGenerator;
-        $this->templateFactory = $templateFactory;
         $this->mailSender = $mailer;
         $this->stringsManager = $stringsManager;
         $this->translator = $translator;
@@ -48,13 +44,6 @@ class MailService
         }
     }
 
-    private function createTemplate($templateName, $params)
-    {
-        $template = $this->templateFactory->createTemplate();
-        $template->getLatte()->addProvider('uiControl', $this->linkGenerator);
-        return $template->renderToString(self::TEMPLATES_PATH . "$templateName.latte", $params);
-    }
-
     public function mailUserRegistered(string $nameTo, string $emailTo, string $login, string $email, ?string $firstName = null, ?string $lastName = null, ?string $note = "")
     {
         $this->startup();
@@ -65,9 +54,6 @@ class MailService
 
     /**
      * Send email to user that his registration has been approved
-     * @param string $name
-     * @param string $email
-     * @return void
      */
     public function mailLoginApproved(string $name, string $email): void
     {
@@ -79,8 +65,6 @@ class MailService
 
     /**
      * Send email to user that his registration has been denied
-     * @param string $name
-     * @param string $email
      */
     public function mailLoginDenied(string $name, string $email): void
     {

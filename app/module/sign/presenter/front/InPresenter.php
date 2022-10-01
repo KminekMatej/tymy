@@ -28,7 +28,7 @@ class InPresenter extends BasePresenter
         return $this->signInFactory->create(function (Form $form, $values) {
             try {
                 $this->user->setExpiration('20 minutes');
-                $r = $this->user->login($values->name, $values->password);
+                $this->user->login($values->name, $values->password);
                 BaseManager::logg($this->team, "{$values->name} application login");
             } catch (Nette\Security\AuthenticationException $exc) {
                 switch ($exc->getMessage()) {
@@ -73,8 +73,6 @@ class InPresenter extends BasePresenter
 
     /**
      * Validate transfer key and log user if its valid
-     * @param string $tk
-     * @return void
      */
     private function tkLogin(string $tk): void
     {

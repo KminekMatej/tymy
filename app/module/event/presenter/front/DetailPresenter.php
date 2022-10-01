@@ -55,8 +55,6 @@ class DetailPresenter extends EventBasePresenter
 
     /**
      * Compose attendance array to be easily used on template
-     * @param Event $event
-     * @return array
      */
     private function loadEventAttendance(Event $event): array
     {

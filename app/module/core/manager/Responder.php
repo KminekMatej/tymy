@@ -29,12 +29,10 @@ class Responder
 
     /** @var mixed */
     private $payload;
-    private Request $request;
 
     public function __construct(Application $application, Request $request, Translator $translator)
     {
         $this->application = $application;
-        $this->request = $request;
         $this->translator = $translator;
     }
 
@@ -56,7 +54,6 @@ class Responder
      * @param int $code Specific tymy app response code
      * @param string $message Additional response message
      * @param string $sessionKey SessionKey - used only for auth responses
-     * @return void
      * @throws TymyResponse
      */
     private function respond(int $code, string $message, string $sessionKey = null): void
@@ -274,7 +271,6 @@ class Responder
     /**
      * @param string $module
      * @param int $recordId
-     * @param string $blockingModule
      * @param int[] $blockingIds
      * @throws AbortException
      */
@@ -287,7 +283,6 @@ class Responder
     /**
      * @param string $module
      * @param int $recordId
-     * @param string $blockingModule
      * @param int[] $blockingIds
      * @throws AbortException
      */

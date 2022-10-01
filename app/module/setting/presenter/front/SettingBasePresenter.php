@@ -55,7 +55,6 @@ class SettingBasePresenter extends SecuredPresenter
      *
      * @param string $permissionName Permission name
      * @param string $type Permission type, default SYS
-     * @return void
      */
     protected function allowPermission(string $permissionName, string $type = "SYS"): void
     {

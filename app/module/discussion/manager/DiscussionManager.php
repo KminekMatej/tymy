@@ -120,9 +120,6 @@ class DiscussionManager extends BaseManager
 
     /**
      * Get discussion object using its webname, optionally with check for user permissions
-     *
-     * @param string $webName
-     * @return Discussion|null
      */
     public function getByWebName(string $webName, ?int $userId = null): ?Discussion
     {
@@ -214,7 +211,6 @@ class DiscussionManager extends BaseManager
      * Check edit permission
      * @param Discussion $entity
      * @param int $userId
-     * @return bool
      */
     public function canEdit($entity, $userId): bool
     {
@@ -225,7 +221,6 @@ class DiscussionManager extends BaseManager
      * Check read permission
      * @param Discussion $entity
      * @param int $userId
-     * @return bool
      */
     public function canRead($entity, $userId): bool
     {
@@ -285,7 +280,6 @@ class DiscussionManager extends BaseManager
      * Get sum of all warnings of desired discussions
      *
      * @param Discussion[] $discussions
-     * @return int
      */
     public function getWarnings(array $discussions): int
     {

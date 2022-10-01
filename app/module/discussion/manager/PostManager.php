@@ -161,7 +161,6 @@ class PostManager extends BaseManager
 
     /**
      * Load aray of reactions to a certain posts.
-     * @param int $postId
      * @return array in the form of ["utf8mb4smiley" => [1,2,4]] .. where 1,2,4 are user ids, reacting with this smile
      */
     private function getReactions(int $postId): array
@@ -228,10 +227,8 @@ class PostManager extends BaseManager
     /**
      * Update POST with checking permissions
      *
-     * @param array $data
      * @param int $resourceId Id of discussion
      * @param int|null $subResourceId Id of post
-     * @return Post
      */
     public function update(array $data, int $resourceId, ?int $subResourceId = null): Post
     {
@@ -296,7 +293,6 @@ class PostManager extends BaseManager
      * Check edit permissions
      * @param Post $entity
      * @param int $userId
-     * @return bool
      */
     public function canEdit($entity, $userId): bool
     {
@@ -307,7 +303,6 @@ class PostManager extends BaseManager
      * Check read permissions
      * @param Post $entity
      * @param int $userId
-     * @return bool
      */
     public function canRead($entity, $userId): bool
     {
@@ -327,10 +322,6 @@ class PostManager extends BaseManager
 
     /**
      * Get posts from discussion, selected by page, optionally filtered with search string and/or search user id
-     * @param int $discussionId
-     * @param int $page
-     * @param string|null $search
-     * @param int|null $searchUserId
      * @return Post[]|null
      */
     private function getPostsFromDiscussion(int $discussionId, int $page = 1, $inBBCode = true, ?string $search = null, ?int $searchUserId = null): ?array
@@ -372,9 +363,6 @@ class PostManager extends BaseManager
 
     /**
      * Return size of first page - usually its twenty, but with a lot of new posts it can get higher, up until 200
-     *
-     * @param int|null $newPosts
-     * @return int
      */
     private function getFirstPageSize(?int $newPosts = null): int
     {
@@ -385,11 +373,6 @@ class PostManager extends BaseManager
 
     /**
      * Get proper page number when searching for page of specific date
-     *
-     * @param int $dicussionId
-     * @param int $newPosts
-     * @param DateTime $jumpDate
-     * @return int
      */
     private function getPageNumberFromDate(int $dicussionId, int $newPosts, DateTime $jumpDate): int
     {
@@ -403,9 +386,6 @@ class PostManager extends BaseManager
 
     /**
      * Return number of all posts, optionally filtered with search string and/or search user id
-     * @param int $discussionId
-     * @param string|null $search
-     * @param int|null $searchUserId
      * @return int
      */
     public function countPosts(int $discussionId, ?string $search = null, ?int $searchUserId = null)
@@ -426,11 +406,6 @@ class PostManager extends BaseManager
 
     /**
      * Get number of all pages in selected discussion, optionally filtered with search string and/or search user id
-     *
-     * @param int $discussionId
-     * @param string|null $search
-     * @param int|null $searchUserId
-     * @return int
      */
     public function getNumberOfPages(int $discussionId, ?string $search = null, ?int $searchUserId = null): int
     {
@@ -440,10 +415,6 @@ class PostManager extends BaseManager
 
     /**
      * Mark all items in discussion as read for user
-     *
-     * @param int $userId
-     * @param int $discussionId
-     * @return void
      */
     private function markAllAsRead(int $userId, int $discussionId): void
     {
@@ -467,11 +438,6 @@ class PostManager extends BaseManager
 
     /**
      * Stick/unstick a post
-     *
-     * @param int $postId
-     * @param int $discussionId
-     * @param bool $stick
-     * @return void
      */
     public function stickPost(int $postId, int $discussionId, bool $stick = true): void
     {
@@ -486,12 +452,6 @@ class PostManager extends BaseManager
 
     /**
      * Create new reaction or delete existing one to a discussion post or update existing reaction
-     * @param int $discussionId
-     * @param int $postId
-     * @param int $userId
-     * @param string $reaction
-     * @param bool $remove
-     * @return void
      */
     public function react(int $discussionId, int $postId, int $userId, string $reaction, bool $remove = false): void
     {

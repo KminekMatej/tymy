@@ -23,9 +23,7 @@ class ExportPresenter extends SettingBasePresenter
 
     public function renderDefault()
     {
-        $myICal = $this->iCalManager->getByUserId($this->user->getId());
-
-        $this->template->iCal = $myICal;
+        $this->template->iCal = $this->iCalManager->getByUserId($this->user->getId());
     }
 
     public function createComponentCalendarForm()

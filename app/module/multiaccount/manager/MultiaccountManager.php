@@ -64,7 +64,6 @@ class MultiaccountManager extends BaseManager
      * Generate new transfer key to jump to desired account and return it as object
      *
      * @param int $resourceId
-     * @param int|null $subResourceId
      * @return TransferKey
      */
     public function read($resourceId, ?int $subResourceId = null): BaseModel
@@ -134,9 +133,6 @@ class MultiaccountManager extends BaseManager
 
     /**
      * Add team underneath account id
-     * @param int $teamId
-     * @param int|null $accountId
-     * @return int
      */
     private function addTeamUnderAccount(int $teamId, int $userId, ?int $accountId = null): int
     {
@@ -215,8 +211,6 @@ class MultiaccountManager extends BaseManager
 
     /**
      * Get account id, related to current team & user
-     *
-     * @return int|null
      */
     private function getAccountId(): ?int
     {
@@ -230,9 +224,6 @@ class MultiaccountManager extends BaseManager
 
     /**
      * Generate new transfer key to current user's multiaccount and stores it into database for future login
-     *
-     * @param string $targetTeamSysName
-     * @return TransferKey
      */
     private function generateNewTk(string $targetTeamSysName): TransferKey
     {
@@ -264,10 +255,6 @@ class MultiaccountManager extends BaseManager
 
     /**
      * Get id of target user, based on accountId and team
-     *
-     * @param int $accountId
-     * @param int $teamId
-     * @return int
      */
     private function getTargetUserId(int $accountId, int $teamId): int
     {

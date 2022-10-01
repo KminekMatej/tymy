@@ -57,7 +57,7 @@ class PermissionManager extends BaseManager
     protected function metaMap(BaseModel &$model, $userId = null): void
     {
         $privilege = $model->getType() == Permission::TYPE_SYSTEM ? Privilege::SYS($model->getName()) : Privilege::USR($model->getName());
-        $model->setMeAllowed($this->user->isLoggedIn() ? $this->user->isAllowed($this->user->getId(), $privilege) : false);
+        $model->setMeAllowed($this->user->isLoggedIn() && $this->user->isAllowed($this->user->getId(), $privilege));
     }
 
     public function canEdit($entity, $userId): bool
@@ -79,7 +79,6 @@ class PermissionManager extends BaseManager
     /**
      * Find permissions by its name - returns the first one that matches
      *
-     * @param string $name
      * @return Permission
      */
     public function getByTypeName(string $type, string $name)
@@ -90,7 +89,6 @@ class PermissionManager extends BaseManager
     /**
      * Find permissions by its name - returns the first one that matches
      *
-     * @param string $name
      * @return Permission
      */
     public function getByName(string $name)
@@ -100,7 +98,6 @@ class PermissionManager extends BaseManager
 
     /**
      * Find permissions by its type
-     * @param string $type
      * @return Permission[]
      */
     public function getByType(string $type)
@@ -110,8 +107,6 @@ class PermissionManager extends BaseManager
 
     /**
      * Get all permission names which are allowed for user
-     * @param User $user
-     * @param string|null $type
      * @return array of names
      */
     public function getUserAllowedPermissionNames(User $user, ?string $type = null): array
@@ -121,8 +116,6 @@ class PermissionManager extends BaseManager
 
     /**
      * Get all permission objects which are allowed for user
-     * @param User $user
-     * @param string|null $type
      * @return Permission[]
      */
     public function getUserAllowedPermissionObjects(User $user, ?string $type = null): array
@@ -132,9 +125,6 @@ class PermissionManager extends BaseManager
 
     /**
      * Get all permissions which are allowed for user
-     * @param User $user
-     * @param string|null $type
-     * @return Selection
      */
     public function getUserAllowedPermissions(User $user, ?string $type = null): Selection
     {
@@ -145,11 +135,9 @@ class PermissionManager extends BaseManager
         $selector = $this->database->table($this->getTable());
         $conditions = [];
         $params = [];
-        if (!empty($roles)) {
-            foreach ($roles as $allowedRole) {
-                $conditions[] = "FIND_IN_SET(?, a_roles) > 0";
-                $params[] = "$allowedRole";
-            }
+        foreach ($roles as $allowedRole) {
+            $conditions[] = "FIND_IN_SET(?, a_roles) > 0";
+            $params[] = "$allowedRole";
         }
 
         $conditions[] = "FIND_IN_SET(?, a_statuses) > 0";
@@ -161,10 +149,8 @@ class PermissionManager extends BaseManager
         $selector->where("(" . implode(") OR (", $conditions) . ")", ...$params);
 
         //add revokes
-        if (!empty($roles)) {
-            foreach ($roles as $revokedRole) {
-                $selector->where("(FIND_IN_SET(?, r_roles) = 0 OR r_roles IS NULL)", "$revokedRole");
-            }
+        foreach ($roles as $revokedRole) {
+            $selector->where("(FIND_IN_SET(?, r_roles) = 0 OR r_roles IS NULL)", "$revokedRole");
         }
 
         $selector->where("FIND_IN_SET(?, r_statuses) = 0 OR r_statuses IS NULL", "$status");
@@ -185,9 +171,7 @@ class PermissionManager extends BaseManager
 
         $this->checkInputs($data);
 
-        if (!empty($this->getByName($data["name"]))) {
-            $this->respondBadRequest("Name already used");
-        }
+        $this->respondBadRequest("Name already used");
 
         $this->precedenceCheck($data);
     }
@@ -241,8 +225,6 @@ class PermissionManager extends BaseManager
 
     /**
      * Transform input data passed as array of strings, to one string, comma separated (which is what database wants)
-     * @param array $data
-     * @return void
      */
     private function transformArrayToString(array &$data): void
     {

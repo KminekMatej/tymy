@@ -126,7 +126,7 @@ class PlayerPresenter extends SecuredPresenter
 
     public function handleUpload()
     {
-        $bind = $this->getRequest()->getPost();
+        $this->getRequest()->getPost();
         $files = $this->getRequest()->getFiles();
         /* @var $file FileUpload */
         $file = $files["files"][0] ?? null;
@@ -168,7 +168,7 @@ class PlayerPresenter extends SecuredPresenter
         $userId = (int) $values->id;
 
         /* @var $oldUser User */
-        $oldUser = $this->userManager->getById($userId);
+        $this->userManager->getById($userId);
 
         try {
             if ($userId !== 0) {

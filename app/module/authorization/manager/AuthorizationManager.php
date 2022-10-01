@@ -72,9 +72,6 @@ class AuthorizationManager implements IAuthorizator
 
     /**
      * Find permissions by its name - returns the first one that matches
-     *
-     * @param string $name
-     * @return Permission|null
      */
     public function getPermission(string $type, string $name): ?Permission
     {
@@ -93,9 +90,6 @@ class AuthorizationManager implements IAuthorizator
 
     /**
      * Check user is allowed for privilege. Does the same thing as Nette user->isAllowed() but with any user object
-     * @param User $user
-     * @param Privilege $privilege
-     * @return boolean
      */
     public function isUserAllowed(User $user, Privilege $privilege): bool
     {
@@ -113,7 +107,6 @@ class AuthorizationManager implements IAuthorizator
      * @param string $role Role - SUPER / USR / WEB / ATT
      * @param int $resource User id
      * @param Privilege $privilege Privilege, consisting of type and name of permissions
-     * @return bool
      */
     public function isAllowed($role, $resource, $privilege): bool
     {

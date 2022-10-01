@@ -69,13 +69,4 @@ class AdminSecuredPresenter extends BasePresenter
 
         return is_string($paramContent) ? $paramContent : null;
     }
-
-    /**
-     * Authorize user using token
-     *
-     * @param string $token Contents
-     */
-    private function allowToken(?string $token): void
-    {
-    }
 }

@@ -18,7 +18,6 @@ use Tymy\Module\Core\Model\BaseModel;
 class MigrationManager
 {
     private const MIGRATION_UP = true;
-    private const MIGRATION_DOWN = false;
     private const REGEX_MIGRATION = "\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}.sql";
     private const REGEX_BASE = "\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-base.sql";
 
@@ -53,7 +52,6 @@ class MigrationManager
 
     /**
      * Detect in database latest performed migration and return its number, or null if not found
-     * @return string|null
      */
     public function getLatestMigration(): ?string
     {
@@ -121,8 +119,6 @@ class MigrationManager
     /**
      * Drop all comments from file and get just array of sql queries
      *
-     * @param string $contents
-     * @return array
      * @throws Exception When there are no commands
      */
     public function getCommands(string $contents): array
@@ -140,7 +136,6 @@ class MigrationManager
 
     /**
      * Remove all comments from input
-     * @param string $contents
      * @return void
      */
     private function removeComments(string $contents): string
@@ -159,8 +154,6 @@ class MigrationManager
 
     /**
      * Strip the sql comment lines out of an uploaded sql file
-     * @param string $sql
-     * @return string
      */
     private function removeRemarks(string $sql): string
     {
@@ -192,9 +185,6 @@ class MigrationManager
     /**
      * Split an uploaded sql file into single sql statements.
      * Note: expects trim() to have already been run on $sql.
-     * @param string $sql
-     * @param string $delimiter
-     * @return array
      */
     private function splitSqlFile(string $sql, string $delimiter): array
     {
@@ -296,7 +286,6 @@ class MigrationManager
 
         //get only the latest found base and all migrations afterwards
         $migrations = [];
-        $base = null;
         foreach ($glob as $file) {
             if (preg_match('/.*\/migrations\/' . self::REGEX_BASE . '/', $file)) {  //this migration is a base. Check if current version is before this base or after
                 if (empty($latestMigration)) {    //if there is no base migration done yet, use this base as migration base and remove all previous migrations
@@ -357,7 +346,6 @@ class MigrationManager
      * Function automatically checks whether migrations from v1 has already been performed and if not, performs them before it even starts migrating
      *
      * Can be removed after all teams has been switched to new version
-     * @return void
      */
     private function migrateFromVersion1(): void
     {
@@ -389,10 +377,7 @@ class MigrationManager
         if (!$usersHasBirthcodeField) {  //this database does not have birth_code field in users
             $this->executeSqlContents(file_get_contents("/var/www/vhosts/tymy.cz/src/v1/1.1.23/sql/0018_birthcode.sql"), $this->log);
         }
-
-
-        if (!$migrationTableExists) {   //create table with first basic migration
-            $this->teamDatabase->query("CREATE TABLE `migration` (
+        $this->teamDatabase->query("CREATE TABLE `migration` (
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
                 `created` timestamp NOT NULL DEFAULT current_timestamp(),
                 `migration_from` varchar(19) NOT NULL,
@@ -400,14 +385,12 @@ class MigrationManager
                 `time` double NOT NULL,
                 `result` enum('OK','ERROR') NOT NULL
               ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-
-            $this->teamDatabase->table("migration")->insert([
-                "migration_from" => "0",
-                "migration" => "2021-10-25T11-00-00",
-                "time" => "0",
-                "result" => "OK",
-            ]);
-        }
+        $this->teamDatabase->table("migration")->insert([
+            "migration_from" => "0",
+            "migration" => "2021-10-25T11-00-00",
+            "time" => "0",
+            "result" => "OK",
+        ]);
     }
 
     /**
@@ -464,9 +447,7 @@ class MigrationManager
     /**
      * Migrate one migration file
      *
-     * @param Migration $mig
      * @param type $direction
-     * @return void
      */
     private function migrateOne(Migration $mig, $direction = self::MIGRATION_UP): void
     {

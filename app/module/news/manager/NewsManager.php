@@ -41,7 +41,6 @@ class NewsManager extends BaseManager
      * Check edit permission
      * @param Notice $entity
      * @param int $userId
-     * @return bool
      */
     public function canEdit($entity, $userId): bool
     {
@@ -52,7 +51,6 @@ class NewsManager extends BaseManager
      * Check read permission
      * @param Notice $entity
      * @param int $userId
-     * @return bool
      */
     public function canRead($entity, $userId): bool
     {
