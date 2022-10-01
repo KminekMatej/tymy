@@ -62,6 +62,7 @@ defaultLanguage: Default language
 hideDiscDesc: Hide discussion description
 approveAsPlayer: Approve as player
 invitation: Invitation|Invitations
+invite: Pozvat
 createInvitation: Invite new player
 invitation-sent: Sent
 invitation-accepted: Accepted

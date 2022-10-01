@@ -63,8 +63,9 @@ defaultLanguage: Výchozí jazyk
 hideDiscDesc: Skrýt popisky diskusí
 approveAsPlayer: Schválit jako hráče
 invitation: Pozvánka|Pozvánky
+invite: Pozvat
 createInvitation: Vytvořit novou pozvánku
-invitation-sent: Čeká
+invitation-sent: Odeslána
 invitation-accepted: Přijata
 invitation-expired: Prošlá
 errors:

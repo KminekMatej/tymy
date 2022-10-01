@@ -15,7 +15,7 @@ class Invitation extends BaseModel
 {
     public const MODULE = "user";
     public const TABLE = "user_invitation";
-    public const STATUS_PENDING = "pending";
+    public const STATUS_SENT = "sent";
     public const STATUS_ACCEPTED = "accepted";
     public const STATUS_EXPIRED = "expired";
 
@@ -121,7 +121,7 @@ class Invitation extends BaseModel
         if($this->userId){
             return self::STATUS_ACCEPTED;
         }
-        return $this->getValidUntil() < (new DateTime()) ? self::STATUS_EXPIRED : self::STATUS_PENDING;
+        return $this->getValidUntil() < (new DateTime()) ? self::STATUS_EXPIRED : self::STATUS_SENT;
     }
     
 

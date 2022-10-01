@@ -62,6 +62,7 @@ defaultLanguage: Langage par défaut
 hideDiscDesc: Masquer la description de la discussion
 approveAsPlayer: Approuver en tant que joueur
 invitation: Invitation|Invitations
+invite: Inviter
 createInvitation: Inviter un nouveau joueur
 invitation-sent: Expédié
 invitation-accepted: Accepté

@@ -15,7 +15,7 @@
                 <div class="card-body">
                     {include $componentsDir . '/tymy-table.latte'}
                     <div class="card-footer text-right">
-                        <button class="dropdown-item" data-toggle="modal" data-target="#newInvitationModal" title="{_team.createInvitation}" style="margin-right: 10px" onclick="btnRotate($(this), true)">
+                        <button class="btn btn-lg btn-success" data-toggle="modal" data-target="#newInvitationModal" title="{_team.createInvitation}" style="margin-right: 10px">
                             <i class="fa fa-plus" aria-hidden="true"></i>
                         </button>
                     </div>
@@ -25,23 +25,28 @@
     </div>
 </div>
 
-<div class="modal fade" id="newFolderModal" tabindex="-1" aria-labelledby="newInvitationModal" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade" id="newInvitationModal" tabindex="-1" aria-labelledby="newInvitationModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="newFolderModalLabel">{_file.mkdir}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            {form invitationForm, class => 'form-inline'}
+            {form invitationForm}
                 <div class="modal-body">
-                    {input firstName, class=>'form-control'}
-                    {input lastName, class=>'form-control'}
-                    {input email, class=>'form-control'}
+                    <div class="row px-2">
+                        <div class="col-12 col-md-4 px-1">
+                            {label firstName /}
+                            {input firstName, class=>'form-control'}
+                        </div>
+                        <div class="col-12 col-md-4 px-1">
+                            {label lastName /}
+                            {input lastName, class=>'form-control'}
+                        </div>
+                        <div class="col-12 col-md-4 px-1">
+                            {label email /}
+                            {input email, class=>'form-control'}
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button n:name="save" type="submit" class="btn btn-primary">{_common.create}</button>
+                    <button n:name="save" type="submit" class="btn btn-primary">{_team.invite}</button>
                 </div>
             {/form}
         </div>
