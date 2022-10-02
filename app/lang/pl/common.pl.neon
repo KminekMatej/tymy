@@ -37,6 +37,7 @@ month: Miesiąc
 name: Nazwa
 created: Utworzony
 create: Tworzyć
+validity: Ważne do
 navigationBlock:
     first: Pierwsza
     previous: Poprzednia

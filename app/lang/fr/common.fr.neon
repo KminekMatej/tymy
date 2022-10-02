@@ -37,6 +37,7 @@ month: moi
 name: Nom
 created: Établi
 create: Créer
+validity: Valide
 navigationBlock:
     first: premier
     previous: précédent

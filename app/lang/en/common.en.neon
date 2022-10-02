@@ -37,6 +37,7 @@ month: Month
 name: Name
 created: Created
 create: Create
+validity: Valid until
 navigationBlock:
     first: First
     previous: Previous

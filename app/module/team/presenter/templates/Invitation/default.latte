@@ -1,5 +1,11 @@
 {import $componentsDir . '/secured.latte'}
 
+{block scripts}
+<script src="{$publicPath}/resources/clipboard/clipboard.{$js}?ver={$appver}"></script>
+{include parent}
+{/block}
+
+
 {block navbar}
 {control navbar}
 {/block}
@@ -13,7 +19,43 @@
                     <h4>{_team.invitation, 2}</h4>
                 </div>
                 <div class="card-body">
-                    {include $componentsDir . '/tymy-table.latte'}
+                    <div class="container-fluid tymy-table">
+                        <div class="row table-head">
+                            <div class="col col-md-1"></div>
+                            <div class="col col-md-2 text-center">{_team.firstName}</div>
+                            <div class="col col-md-2 text-center">E-Mail</div>
+                            <div class="col col-md-1 text-center">{_team.language}</div>
+                            <div class="col col-md-2 text-center">{_common.created}</div>
+                            <div class="col col-md-2 text-center">{_settings.status}</div>
+                            <div class="col col-md-2">{_common.validity}</div>
+                        </div>
+                        <div n:foreach="$invitations as $invitation" 
+                             n:class="row, striped, invitation, $invitation->getStatus()==\Tymy\Module\User\Model\Invitation::STATUS_ACCEPTED ? text-success,$invitation->getStatus()==\Tymy\Module\User\Model\Invitation::STATUS_EXPIRED ? text-secondary" 
+                             {if $invitation->getStatus()==\Tymy\Module\User\Model\Invitation::STATUS_EXPIRED}style="background-color: #f7f7f7"{/if}
+                             data-validity="{$invitation->getValidUntil()|date:\Tymy\Module\Core\Model\BaseModel::DATE_CZECH_FORMAT}"
+                             data-code="{$invitation->getCode()}"
+                             data-lang="{$invitation->getLang()}"
+                             >
+                            {var $creator = ($invitation->getCreatedUserId()|loadUser)}
+                            <div class="col col-md-1">
+                                <button class="btn btn-sm btn-outline-primary border" data-toggle="modal" data-target="#invitationContentModal">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                                </button>
+                            </div>
+                            <div class="col col-md-2 text-center">{$invitation->getFirstName()} {$invitation->getLastName()}</div>
+                            <div class="col col-md-2 text-center">{$invitation->getEmail()}</div>
+                            <div class="col col-md-1 text-center"><span class="badge badge-light">{$invitation->getLang()}</span></div>
+                            <div class="col col-md-2 text-center creator" data-fullname="{$creator->getFullName()}">{$invitation->getCreated()|date:\Tymy\Module\Core\Model\BaseModel::DATE_CZECH_FORMAT}, {$creator->getDisplayName()}</div>
+                            <div class="col col-md-2 text-center">{_"team.invitation-".$invitation->getStatus()}</div>
+                            <div class="col col-md-2 text-right" title="{$invitation->getValidUntil()|date:\Tymy\Module\Core\Model\BaseModel::DATETIME_CZECH_FORMAT}">
+                                {$invitation->getValidUntil()|date:\Tymy\Module\Core\Model\BaseModel::DATE_CZECH_FORMAT}
+                                <button class="btn btn-sm btn-danger ml-4" title="{_common.delete}" onclick="return confirm({_common.alerts.confirmDelete})"><i class="far fa-trash-can" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                     <div class="card-footer text-right">
                         <button class="btn btn-lg btn-success" data-toggle="modal" data-target="#newInvitationModal" title="{_team.createInvitation}" style="margin-right: 10px">
                             <i class="fa fa-plus" aria-hidden="true"></i>
@@ -49,6 +91,31 @@
                     <button n:name="save" type="submit" class="btn btn-primary">{_team.invite}</button>
                 </div>
             {/form}
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="invitationContentModal" tabindex="-1" aria-labelledby="invitationContentModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <pre n:foreach="['cs', 'en', 'fr', 'pl'] as $lang" class="border rounded bg-light" data-lang="{$lang}" style="display: none; white-space: pre-wrap;">{_mail.hello, null, [], null, $lang},
+
+{_mail.invitation.body.invited, null, [], null, $lang} {$team->getName()}.
+
+{_mail.invitation.body.registerHere, null, [], null, $lang}: <a href="{link //:Sign:ByInvite:default, invite => 'CODE'}" target="_blank">{link //:Sign:ByInvite:default, invite => 'CODE'}</a>
+{_mail.invitation.body.validity, null, [], null, $lang} <span class='validity'></span>. {_mail.invitation.body.dontHesitate, null, [], null, $lang} ;-).
+
+{_mail.invitation.body.tymyDescription, null, [], null, $lang}. {_team.team, 1, [], null, $lang} {$team->getName()} {_mail.invitation.body.tymyApproval, null, [], null, $lang}.
+
+{_mail.bestRegards, null, [], null, $lang},
+
+<span class="creator"></span>
+{_mail.teamAdministrator, null, [], null, $lang} {$team->getName()} | <a href="{link //:Core:Default:}" target="_blank">{$team->getSysName()}.tymy.cz</a></pre>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-light btn-light-bordered clipboard-btn" data-clipboard-target="#invitationContentModal PRE[data-lang='LANG']" title="{_common.copyToClipboard}"><i class="far fa-copy" aria-hidden="true"></i></button>
+            </div>
         </div>
     </div>
 </div>

@@ -37,6 +37,7 @@ day: Den
 week: Týden
 month: Měsíc
 name: Název
+validity: Platnost do
 navigationBlock:
     first: První
     previous: Předchozí

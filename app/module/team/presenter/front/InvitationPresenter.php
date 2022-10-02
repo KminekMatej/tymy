@@ -4,12 +4,10 @@ namespace Tymy\Module\Team\Presenter\Front;
 
 use Nette\Application\UI\Form;
 use stdClass;
-use Tymy\Module\Core\Model\BaseModel;
-use Tymy\Module\Core\Model\Row;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Manager\InvitationManager;
-use Tymy\Module\User\Model\Invitation;
+use Tymy\Module\User\Model\User;
 
 /**
  * Description of InvitationPresenter
@@ -27,6 +25,11 @@ class InvitationPresenter extends SecuredPresenter
 
         $this->addBreadcrumb($this->translator->translate("team.team", 1), $this->link(":Team:Default:"));
         $this->addBreadcrumb($this->translator->translate("team.invitation", 2), $this->link(":Team:Invitation:"));
+
+        $this->template->addFilter("loadUser", function (int $userId) {
+            /* @var $user User */
+            return $this->userManager->getById($userId);
+        });
     }
 
     public function renderDefault()
@@ -36,38 +39,8 @@ class InvitationPresenter extends SecuredPresenter
             $this->redirect(':Core:Default:');
         }
 
-        $this->template->cols = [
-            "Id",
-            $this->translator->translate("settings.title"),
-            $this->translator->translate("settings.description"),
-            $this->translator->translate("settings.status"),
-            $this->translator->translate("common.created"),
-        ];
-
-        $invitations = $this->invitationManager->getList();
-        $this->template->rows = [];
-        foreach ($invitations as $invitation) {
-            /* @var $invitation Invitation */
-            $row = new Row([
-                $invitation->getId(),
-                $invitation->getFirstName(),
-                $invitation->getLastName(),
-                $this->translator->translate("team.invitation-" . $invitation->getStatus()),
-                $invitation->getCreated()->format(BaseModel::DATE_CZECH_FORMAT) . ", " . $this->userManager->getById($invitation->getCreatedUserId())->getDisplayName(),
-            ]);
-            switch ($invitation->getStatus()) {
-                case Invitation::STATUS_ACCEPTED:
-                    $row->addClass("text-success");
-                    break;
-                case Invitation::STATUS_EXPIRED:
-                    $row->addClass("text-secondary")->setStyle("background-color: #ededed");
-                    break;
-            }
-
-            $this->template->rows[] = $row;
-        }
-
-        $this->template->invitations = $invitations;
+        $this->template->invitations = $this->invitationManager->getList();
+        $this->template->trans = $this->translator;
     }
 
     public function createComponentInvitationForm()
