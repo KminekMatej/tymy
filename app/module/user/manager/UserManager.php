@@ -28,6 +28,7 @@ use Tymy\Module\User\Mapper\UserMapper;
 use Tymy\Module\User\Model\Invitation;
 use Tymy\Module\User\Model\SimpleUser;
 use Tymy\Module\User\Model\User;
+
 use const TEAM_DIR;
 
 /**
@@ -399,8 +400,8 @@ class UserManager extends BaseManager
 
         $array["status"] = "INIT";
         $array["callName"] = $array["login"];
-        
-        if($invitation){
+
+        if ($invitation) {
             $array["status"] = "PLAYER";
             $array["canLogin"] = true;
             $array["canEditCallName"] = true;

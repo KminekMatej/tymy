@@ -12,7 +12,6 @@ use Tymy\Module\Core\Model\Field;
  */
 class InvitationMapper extends BaseMapper
 {
-
     public static function scheme(): array
     {
         return [

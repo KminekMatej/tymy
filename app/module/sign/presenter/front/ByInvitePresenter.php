@@ -45,6 +45,6 @@ class ByInvitePresenter extends BasePresenter
                 $this->user->setExpiration('20 minutes');
                 $this->user->login($registeredIdentity);
                 $this->redirect(':Core:Default:');
-            }, $invitation);
+        }, $invitation);
     }
 }

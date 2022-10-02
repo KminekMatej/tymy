@@ -127,15 +127,15 @@ class Invitation extends BaseModel
         $this->validUntil = $validUntil;
         return $this;
     }
-    
+
     public function getStatus()
     {
-        if($this->userId){
+        if ($this->userId) {
             return self::STATUS_ACCEPTED;
         }
         return $this->getValidUntil() < (new DateTime()) ? self::STATUS_EXPIRED : self::STATUS_SENT;
     }
-    
+
 
     public function getModule(): string
     {

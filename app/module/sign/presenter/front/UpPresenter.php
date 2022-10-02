@@ -20,6 +20,6 @@ class UpPresenter extends BasePresenter
         return $this->signUpFactory->create(function (SimpleIdentity $registeredIdentity) {
                 $this->flashMessage($this->translator->translate("common.alerts.registrationSuccesfull") . " " . $this->translator->translate("common.alerts.waitForApproval"), 'success');
                 $this->redirect(':Sign:In:');
-            });
+        });
     }
 }

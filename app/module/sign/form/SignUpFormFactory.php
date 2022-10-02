@@ -93,7 +93,7 @@ class SignUpFormFactory
                     "note" => $values->admin_note,
                     "invitation" => $values->invitation,
                 ], $invitation);
-                
+
                 $identity = new SimpleIdentity($registeredUser->getId(), $registeredUser->getRoles());
             } catch (\Nette\InvalidArgumentException $exc) {
                 $form['username']->addError($exc->getMessage());

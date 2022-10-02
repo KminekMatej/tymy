@@ -90,7 +90,7 @@ class InvitationManager extends BaseManager
     }
 
     /**
-     * 
+     *
      * @param BaseModel $entity
      * @param int $userId
      * @return bool
