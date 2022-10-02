@@ -25,12 +25,13 @@ class InvitationManager extends BaseManager
     private LinkGenerator $linkGenerator;
     private Translator $translator;
 
-    public function __construct(ManagerFactory $managerFactory, UserManager $userManager, LinkGenerator $linkGenerator, Translator $translator)
+    public function __construct(ManagerFactory $managerFactory, UserManager $userManager, LinkGenerator $linkGenerator, Translator $translator, MailService $mailService)
     {
         parent::__construct($managerFactory);
         $this->userManager = $userManager;
         $this->linkGenerator = $linkGenerator;
         $this->translator = $translator;
+        $this->mailService = $mailService;
     }
 
     protected function getClassName(): string
@@ -108,7 +109,7 @@ class InvitationManager extends BaseManager
 
     public function create(array $data, ?int $resourceId = null): BaseModel
     {
-        $data["code"] = bin2hex(random_bytes(32));
+        $data["code"] = bin2hex(openssl_random_pseudo_bytes(6));
         $data["validUntil"] = new DateTime("+ 30 days");
 
         $this->allowCreate($data);

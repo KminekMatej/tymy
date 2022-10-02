@@ -66,7 +66,7 @@ class InvitationPresenter extends SecuredPresenter
 
         $form->addSubmit("save");
 
-        $form->onSuccess[] = [$this, ["invitationFormSuccess"]];
+        $form->onSuccess[] = [$this, "invitationFormSuccess"];
 
         return $form;
     }
