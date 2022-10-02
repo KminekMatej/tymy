@@ -26,10 +26,10 @@ class ByInvitePresenter extends BasePresenter
         }
 
         if ($invitation->getStatus() == Invitation::STATUS_EXPIRED) { //already expired
-            $this->flashMessage($this->translator->translate("team.errors.invitationExpired", 1) . " " . strtolower($this->translator->translate("team.invitation-expired")), "danger");
+            $this->flashMessage($this->translator->translate("team.errors.invitationExpired"), "danger");
             $this->redirect(":Core:Default:");
         } elseif ($invitation->getStatus() == Invitation::STATUS_ACCEPTED) {
-            $this->flashMessage($this->translator->translate("team.errors.invitationAccepted", 1) . " $invite " . $this->translator->translate("common.alerts.notFound", 2), "danger");
+            $this->flashMessage($this->translator->translate("team.errors.invitationAccepted"), "danger");
             $this->redirect(":Sign:In:");
         }
 
