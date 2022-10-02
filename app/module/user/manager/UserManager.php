@@ -336,6 +336,15 @@ class UserManager extends BaseManager
     }
 
     /**
+     * Load e-mails that already exists - for form validation
+     * @return string[]
+     */
+    public function getExistingEmails(): array
+    {
+        return $this->database->table(User::VIEW)->fetchPairs(null, "email");
+    }
+
+    /**
      * Check if user limit has been reached
      *
      * @param string $login

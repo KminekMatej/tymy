@@ -59,11 +59,24 @@ class InvitationManager extends BaseManager
         if (empty($data["firstName"]) && empty($data["lastName"]) || empty($data["email"])) {
             $this->respondBadRequest($this->translator->translate("team.errors.invitationAtLeast"));
         }
+
+        $existingUser = $this->userManager->getIdByEmail($data["email"]);
+
+        if ($existingUser) {
+            $this->respondBadRequest($this->translator->translate("team.alerts.emailExists"));
+        }
     }
 
     protected function allowDelete(?int $recordId): void
     {
         if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("USR_CREATE"))) {
+            $this->responder->E4004_DELETE_NOT_PERMITTED("Invitiation", $recordId);
+        }
+
+        /* @var $invitation Invitation */
+        $invitation = $this->getById($recordId);
+
+        if ($invitation->getStatus() === Invitation::STATUS_ACCEPTED) {
             $this->responder->E4004_DELETE_NOT_PERMITTED("Invitiation", $recordId);
         }
     }
@@ -159,5 +172,14 @@ class InvitationManager extends BaseManager
     public function getByCode(string $code): ?Invitation
     {
         return $this->map($this->database->table($this->getTable())->where("code", $code)->fetch());
+    }
+
+    /**
+     * Load e-mails that already exists - for form validation
+     * @return string[]
+     */
+    public function getExistingEmails(): array
+    {
+        return $this->database->table($this->getTable())->fetchPairs(null, "email");
     }
 }

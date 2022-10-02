@@ -60,7 +60,9 @@ class InvitationPresenter extends SecuredPresenter
 
         $form->addText("firstName", $this->translator->translate("team.firstName"));
         $form->addText("lastName", $this->translator->translate("team.lastName"));
-        $form->addEmail("email", $this->translator->translate("team.email"))->addRule($form::EMAIL);
+        $form->addEmail("email", $this->translator->translate("team.email"))->addRule($form::EMAIL)
+            ->addRule($form::IS_NOT_IN, $this->translator->translate("team.alerts.emailExists"), $this->userManager->getExistingEmails())
+            ->addRule($form::IS_NOT_IN, $this->translator->translate("team.alerts.emailExists"), $this->invitationManager->getExistingEmails());
 
         $form->addSubmit("save");
 
