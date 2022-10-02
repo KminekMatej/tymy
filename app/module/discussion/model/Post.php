@@ -31,6 +31,7 @@ class Post extends BaseModel
     private string $createdAtStr;
     private ?string $updatedAtStr = null;
     private ?SimpleUser $createdBy = null;
+    private ?string $userName = null;
 
     public function getDiscussionId(): int
     {
@@ -90,6 +91,11 @@ class Post extends BaseModel
     public function getCreatedBy(): ?SimpleUser
     {
         return $this->createdBy;
+    }
+
+    public function getUserName(): ?string
+    {
+        return $this->userName;
     }
 
     public function setDiscussionId(int $discussionId)
@@ -161,6 +167,12 @@ class Post extends BaseModel
     public function setCreatedBy(?SimpleUser $createdBy)
     {
         $this->createdBy = $createdBy;
+        return $this;
+    }
+
+    public function setUserName(?string $userName)
+    {
+        $this->userName = $userName;
         return $this;
     }
 
