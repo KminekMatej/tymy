@@ -1,0 +1,12 @@
+hello: Dobrý den
+bestRegards: S pozdravem
+teamAdministrator: Správce týmu
+invitation:
+    subject: Pozvánka do týmu
+    body: 
+        invited: byl jste pozván do týmového portálu
+        registerHere: Registrujte se prosím zde
+        validity: Platnost této pozvánky vyprší
+        dontHesitate: Tak neváhejte
+        tymyDescription: Portál tymy.cz slouží k vedení a spravování sportovních týmů
+        tymyApproval: je na nich spravován a tato pozvánka Vás opravňuje se k týmu připojit

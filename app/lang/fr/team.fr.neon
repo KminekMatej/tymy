@@ -63,9 +63,18 @@ sport: Sport
 defaultLanguage: Langage par défaut
 hideDiscDesc: Masquer la description de la discussion
 approveAsPlayer: Approuver en tant que joueur
+invitation: Invitation|Invitations
+invite: Inviter
+createInvitation: Inviter un nouveau joueur
+invitation-sent: Expédié
+invitation-accepted: Accepté
+invitation-expired: Expiré
 errors:
     imgFileCorrupted: "Le fichier n'est pas une image ou il est endommagé"
     passwordMismatch: Non concordance des mots de passe
+    invitationAtLeast: "Au moins un des champs Nom, Prénom et E-Mail doit être rempli"
+    invitationExpired: Invitation déjà expirée
+    invitationAccepted: Invitation déjà utilisée
 alerts:
     signOffNeeded: Language changed - please logout & login for language to change
     registrationApprovedSubject: Inscription à %s approuvée
@@ -88,3 +97,5 @@ alerts:
     emailFailure: "Format d'email invalide"
     usernameFailure: "Le nom d'utilisateur doit comporter au moins 3 et au plus 20 caractères"
     targetTeamExists: Cette équipe a déjà ajouté
+    invitationCreated: Invitation créée
+    invitationSent: Invitation envoyée

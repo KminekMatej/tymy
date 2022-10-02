@@ -1,5 +1,6 @@
-$(function () {
+$(document).ready(function () {
     togglePopovers();
+    new ClipboardJS('BUTTON.clipboard-btn');
 });
 
 function togglePopovers() {

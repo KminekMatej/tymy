@@ -25,6 +25,7 @@ use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\Team\Model\Team;
 use Tymy\Module\User\Mapper\UserMapper;
+use Tymy\Module\User\Model\Invitation;
 use Tymy\Module\User\Model\SimpleUser;
 use Tymy\Module\User\Model\User;
 
@@ -336,6 +337,15 @@ class UserManager extends BaseManager
     }
 
     /**
+     * Load e-mails that already exists - for form validation
+     * @return string[]
+     */
+    public function getExistingEmails(): array
+    {
+        return $this->database->table(User::VIEW)->fetchPairs(null, "email");
+    }
+
+    /**
      * Check if user limit has been reached
      *
      * @param string $login
@@ -384,12 +394,18 @@ class UserManager extends BaseManager
      * @param array $array
      * @return User
      */
-    public function register(array $array): User
+    public function register(array $array, ?Invitation $invitation = null): User
     {
         $this->allowRegister($array);
 
         $array["status"] = "INIT";
         $array["callName"] = $array["login"];
+
+        if ($invitation) {
+            $array["status"] = "PLAYER";
+            $array["canLogin"] = true;
+            $array["canEditCallName"] = true;
+        }
 
         $createdRow = $this->createByArray($array);
 
@@ -398,12 +414,18 @@ class UserManager extends BaseManager
 
         $allAdmins = $this->getUsersWithPrivilege(Privilege::SYS("USR_UPDATE"));
 
-        foreach ($allAdmins as $admin) {
-            if (empty($admin->getEmail())) {  //skip admins without email
-                continue;
+        if (!$invitation) { //send registration email only if this is blank registration from web, not from invitation
+            foreach ($allAdmins as $admin) {
+                if (empty($admin->getEmail())) {  //skip admins without email
+                    continue;
+                }
+                /* @var $admin User */
+                $this->mailService->mailUserRegistered($admin->getCallName(), $admin->getEmail(), $registeredUser->getLogin(), $registeredUser->getEmail(), $registeredUser->getFirstName(), $registeredUser->getLastName(), $array["note"] ?? null);
             }
-            /* @var $admin User */
-            $this->mailService->mailUserRegistered($admin->getCallName(), $admin->getEmail(), $registeredUser->getLogin(), $registeredUser->getEmail(), $registeredUser->getFirstName(), $registeredUser->getLastName(), $array["note"] ?? null);
+        } else {    //mark invitation request as accepted. Cannot from invitationManager, since that would caus circullar reference
+            $this->database->table(Invitation::TABLE)
+                ->where("id", $invitation->getId())
+                ->update(["user_id" => $registeredUser->getId()]);
         }
 
         return $registeredUser;

@@ -36,6 +36,8 @@ week: Tydzień
 month: Miesiąc
 name: Nazwa
 created: Utworzony
+create: Tworzyć
+validity: Ważne do
 navigationBlock:
     first: Pierwsza
     previous: Poprzednia
@@ -52,12 +54,14 @@ lastLogin:
     dayAgo: 1 dzień temu
     daysAgo: %n% dni temu
 alerts:
+    notFound: nie znaleziono|nie znaleziona
     nobodyFound: Nikogo takiego nie znalazłem
     userSuccesfullyDeleted: Użytkownik został usunięty
     loginNotApproved: Ten użytkownik nie został jeszcze zatwierdzony
     loginNotSuccesfull: Logowanie nieudane
     logoutSuccesfull: Zostałeś pomyślnie wylogowany
-    registrationSuccesfull: Rejestracja ukończona. Czekaj na zatwierdzenie przez administratora.
+    registrationSuccesfull: Rejestracja ukończona.
+    waitForApproval: Czekaj na zatwierdzenie przez administratora.
     userNotFound: "Użytkownik nieodnaleziony, wystąpił błąd. Skontaktuj sięz administratorem."
     resetCodeSent: Kod do zmiany hasła został wysłany na Twój adres e-mail
     invalidResetCode: Nieprawidłowy kod resetowania

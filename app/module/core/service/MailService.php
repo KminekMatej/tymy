@@ -3,10 +3,13 @@
 namespace Tymy\Module\Core\Service;
 
 use Kdyby\Translation\Translator;
+use Latte\Engine;
 use Nette\Application\LinkGenerator;
 use Nette\Application\UI\ITemplateFactory;
 use Nette\Mail\Mailer;
 use Nette\Mail\Message;
+use Nette\Utils\DateTime;
+use Tymy\Bootstrap;
 use Tymy\Module\Core\Manager\StringsManager;
 use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\Team\Model\Team;
@@ -96,6 +99,36 @@ class MailService
         $body = $this->stringsManager->translateBy("pswd_reset", "rc_mail_body_4s", $hostName, $this->teamDomain, $resetCode, sprintf($callbackUri, $resetCode));
         $subject = "{$this->teamDomain}: " . $this->stringsManager->translateBy("pswd_reset", "pswd_mail_subj");
         $this->sendMail($name, $email, $body, $subject);
+    }
+
+    /**
+     * Compose & send email with invitation of user into this team
+     * @param string $nameTo
+     * @param string $emailTo
+     * @param string $nameFrom
+     * @param string $invitationUrl
+     * @param DateTime $invitationValidity
+     * @return void
+     */
+    public function mailInvitation(string $nameTo, string $emailTo, string $nameFrom, string $invitationUrl, DateTime $invitationValidity): void
+    {
+        $this->startup();
+
+        $latte = new Engine();
+
+        $latte->addFilter('translate', [$this->translator, 'translate']);
+
+        $subject = $this->translator->translate("mail.invitation.subject");
+
+        $body = $latte->renderToString(Bootstrap::MODULES_DIR . "/core/mail/invitation.latte", [
+            "teamPortalUrl" => $this->teamDomain,
+            "invitationUrl" => $invitationUrl,
+            "validity" => $invitationValidity,
+            "teamName" => $this->team->getName(),
+            "invitationCreator" => $nameFrom,
+        ]);
+
+        $this->sendMail($nameTo, $emailTo, $body, $subject);
     }
 
     private function sendMail(string $name, string $email, string $body, ?string $subject = null, ?string $replyTo = null): void

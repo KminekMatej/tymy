@@ -64,9 +64,18 @@ sport: Sport
 defaultLanguage: Výchozí jazyk
 hideDiscDesc: Skrýt popisky diskusí
 approveAsPlayer: Schválit jako hráče
+invitation: Pozvánka|Pozvánky
+invite: Pozvat
+createInvitation: Vytvořit novou pozvánku
+invitation-sent: Odeslána
+invitation-accepted: Přijata
+invitation-expired: Prošlá
 errors:
     imgFileCorrupted: "Soubor není obrázek, nebo je poškozený"
     passwordMismatch: Hesla se neshodují
+    invitationAtLeast: "Je potřeba vyplnit alespoň jedno z polí Jméno, Příjmení nebo E-Mail"
+    invitationExpired: Platnost pozvánky již vypršela
+    invitationAccepted: Tato pozvánka již byla použita
 alerts:
     signOffNeeded: Došlo ke změně jazyka - změna se projeví až po přihlášení a odhlášení
     registrationApprovedSubject: Registrace do %s povolena
@@ -89,3 +98,5 @@ alerts:
     emailFailure: Chybný formát e-mailu
     usernameFailure: Uživatelské jméno musí mít alespoň 3 a nejvíce 20 znaků
     targetTeamExists: Tento tým již v multiúčtu máte
+    invitationCreated: Pozvánka vytvořena
+    invitationSent: Pozvánka odeslána

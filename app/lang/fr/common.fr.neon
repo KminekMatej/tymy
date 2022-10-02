@@ -36,6 +36,8 @@ week: semaine
 month: moi
 name: Nom
 created: Établi
+create: Créer
+validity: Valide
 navigationBlock:
     first: premier
     previous: précédent
@@ -52,12 +54,14 @@ lastLogin:
     dayAgo: il y a un jour
     daysAgo: il y a %n% jours
 alerts:
+    notFound: pas trouvé
     nobodyFound: personne trouvé
     userSuccesfullyDeleted: utilisateur supprimé avec succès
     loginNotApproved: connexion non validée
     loginNotSuccesfull: Echec de connexion
     logoutSuccesfull: Déconnexion réussie
-    registrationSuccesfull: "Inscription validée. Merci de patienter afin que l'administrateur valide votre inscription."
+    registrationSuccesfull: Inscription validée. 
+    waitForApproval: "Merci de patienter afin que l'administrateur valide votre inscription."
     userNotFound: "Nom d'utilisateur inconnu. Merci de ré-essayer ou contacter l'administrateur"
     resetCodeSent: Le code réinitialisé a été envoyé sur votre adresse mail.
     invalidResetCode: Code de réinitialisation invalide

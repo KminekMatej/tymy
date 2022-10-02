@@ -1,2 +1,3 @@
 services:
     TeamManager: Tymy\Module\Team\Manager\TeamManager(%teamFolder%, %appConfig.allSkins%)
+    InvitationManager: Tymy\Module\User\Manager\InvitationManager
