@@ -5,7 +5,9 @@
     
     <div class="row justify-content-md-center">
         <div class="col-md-6 sh-box bg-light p-5 my-5">
-            Invitation {$invitation->getCode()}
+            <h5>{_team.invitation, 1} {$invitation->getCode()}</h5>
+            <hr />
+            {control signUpForm}
         </div>
     </div>
 </div>

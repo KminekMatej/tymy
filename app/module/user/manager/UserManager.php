@@ -393,11 +393,11 @@ class UserManager extends BaseManager
      * @param array $array
      * @return User
      */
-    public function register(array $array): User
+    public function register(array $array, ?Invitation $invitation = null): User
     {
         $this->allowRegister($array);
 
-        $array["status"] = "INIT";
+        $array["status"] = $invitation ? "PLAYER" : "INIT";
         $array["callName"] = $array["login"];
 
         $createdRow = $this->createByArray($array);
@@ -407,12 +407,14 @@ class UserManager extends BaseManager
 
         $allAdmins = $this->getUsersWithPrivilege(Privilege::SYS("USR_UPDATE"));
 
-        foreach ($allAdmins as $admin) {
-            if (empty($admin->getEmail())) {  //skip admins without email
-                continue;
+        if (!$invitation) { //send registration email only if this is blank registration from web, not from invitation
+            foreach ($allAdmins as $admin) {
+                if (empty($admin->getEmail())) {  //skip admins without email
+                    continue;
+                }
+                /* @var $admin User */
+                $this->mailService->mailUserRegistered($admin->getCallName(), $admin->getEmail(), $registeredUser->getLogin(), $registeredUser->getEmail(), $registeredUser->getFirstName(), $registeredUser->getLastName(), $array["note"] ?? null);
             }
-            /* @var $admin User */
-            $this->mailService->mailUserRegistered($admin->getCallName(), $admin->getEmail(), $registeredUser->getLogin(), $registeredUser->getEmail(), $registeredUser->getFirstName(), $registeredUser->getLastName(), $array["note"] ?? null);
         }
 
         return $registeredUser;

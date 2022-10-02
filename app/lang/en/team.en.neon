@@ -71,6 +71,8 @@ errors:
     imgFileCorrupted: "File is not a pictute, or is corrupted"
     passwordMismatch: Passwords mismatch
     invitationAtLeast: "At least one of fields Name, Surname and E-Mail must be filled"
+    invitationExpired: Invitation already expired
+    invitationAccepted: Invitation already used
 alerts:
     signOffNeeded: Language changed - please logout & login for language to change
     registrationApprovedSubject: Registration to %s approved

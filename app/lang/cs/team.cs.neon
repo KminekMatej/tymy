@@ -72,6 +72,8 @@ errors:
     imgFileCorrupted: "Soubor není obrázek, nebo je poškozený"
     passwordMismatch: Hesla se neshodují
     invitationAtLeast: "Je potřeba vyplnit alespoň jedno z polí Jméno, Příjmení nebo E-Mail"
+    invitationExpired: Platnost pozvánky již vypršela
+    invitationAccepted: Tato pozvánka již byla použita
 alerts:
     signOffNeeded: Došlo ke změně jazyka - změna se projeví až po přihlášení a odhlášení
     registrationApprovedSubject: Registrace do %s povolena
