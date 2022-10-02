@@ -25,6 +25,7 @@ class Invitation extends BaseModel
     private ?string $lastName = null;
     private ?string $email = null;
     private string $code;
+    private string $lang;
     private ?int $userId = null;
     private DateTime $validUntil;
 
@@ -56,6 +57,11 @@ class Invitation extends BaseModel
     public function getCode(): string
     {
         return $this->code;
+    }
+
+    public function getLang(): string
+    {
+        return $this->lang;
     }
 
     public function getUserId(): ?int
@@ -101,6 +107,12 @@ class Invitation extends BaseModel
     public function setCode(string $code)
     {
         $this->code = $code;
+        return $this;
+    }
+
+    public function setLang(string $lang)
+    {
+        $this->lang = $lang;
         return $this;
     }
 
