@@ -3,6 +3,7 @@
 namespace Tymy\Module\Sign\Presenter\Front;
 
 use Nette;
+use Nette\Security\SimpleIdentity;
 use Tymy\Module\Core\Presenter\Front\BasePresenter;
 use Tymy\Module\Sign\Form\SignUpFormFactory;
 
