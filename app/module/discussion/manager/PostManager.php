@@ -202,7 +202,7 @@ class PostManager extends BaseManager
     {
         $data["discussionId"] = $resourceId;
         $data["createdAt"] = new DateTime();
-        $data["userName"] = $this->userManager->getById($data["userId"])->getDisplayName();
+        $data["userName"] = $this->userManager->getById($this->user->getId())->getDisplayName();
 
         $this->allowDiscussion($resourceId);
         $this->allowCreate($data);
