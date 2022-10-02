@@ -8,7 +8,6 @@ use Nette\Application\LinkGenerator;
 use Nette\Application\UI\ITemplateFactory;
 use Nette\Mail\Mailer;
 use Nette\Mail\Message;
-use Nette\Security\User;
 use Nette\Utils\DateTime;
 use Tymy\Bootstrap;
 use Tymy\Module\Core\Manager\StringsManager;
@@ -34,7 +33,7 @@ class MailService
     private Mailer $mailSender;
     private StringsManager $stringsManager;
 
-    public function __construct(TeamManager $teamManager, LinkGenerator $linkGenerator, ITemplateFactory $templateFactory, Mailer $mailer, StringsManager $stringsManager, Translator $translator, User $user)
+    public function __construct(TeamManager $teamManager, LinkGenerator $linkGenerator, ITemplateFactory $templateFactory, Mailer $mailer, StringsManager $stringsManager, Translator $translator)
     {
         $this->teamManager = $teamManager;
         $this->linkGenerator = $linkGenerator;
@@ -42,7 +41,6 @@ class MailService
         $this->mailSender = $mailer;
         $this->stringsManager = $stringsManager;
         $this->translator = $translator;
-        $this->user = $user;
     }
 
     private function startup()

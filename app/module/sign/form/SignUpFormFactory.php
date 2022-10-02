@@ -2,6 +2,7 @@
 
 namespace Tymy\Module\Sign\Form;
 
+use Kdyby\Translation\Translator;
 use Nette;
 use Nette\Application\UI\Form;
 use Nette\Security\SimpleIdentity;
@@ -20,12 +21,14 @@ class SignUpFormFactory
     public const LOGIN_PATTERN = '^[\w-]{3,20}';
 
     private UserManager $userManager;
+    private Translator $translator;
     private InvitationManager $invitationManager;
 
-    public function __construct(UserManager $userManager, InvitationManager $invitationManager)
+    public function __construct(UserManager $userManager, InvitationManager $invitationManager, Translator $translator)
     {
         $this->userManager = $userManager;
         $this->invitationManager = $invitationManager;
+        $this->translator = $translator;
     }
 
     /**
