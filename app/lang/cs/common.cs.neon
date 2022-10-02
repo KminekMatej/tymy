@@ -60,7 +60,8 @@ alerts:
     loginNotApproved: Tento uživatel zatím nemá povolené přihlášení
     loginNotSuccesfull: Přihlášení bylo neúspěšné
     logoutSuccesfull: Byl jste úspěšně odhlášen
-    registrationSuccesfull: Registrace byla úspěšná. Nyní vyčkejte na schválení registrace administrátorem.
+    registrationSuccesfull: Registrace byla úspěšná.
+    waitForApproval: Nyní vyčkejte na schválení registrace administrátorem.
     userNotFound: "Uživatel nebyl nalezen, je zablokován nebo došlo k chybě. Zkuste to znovu, nebo kontaktujte týmového administrátora."
     resetCodeSent: Kód k resetování byl zaslán na Vaši e-mailovou adresu
     invalidResetCode: Neplatný resetovací kód

@@ -60,7 +60,8 @@ alerts:
     loginNotApproved: Ten użytkownik nie został jeszcze zatwierdzony
     loginNotSuccesfull: Logowanie nieudane
     logoutSuccesfull: Zostałeś pomyślnie wylogowany
-    registrationSuccesfull: Rejestracja ukończona. Czekaj na zatwierdzenie przez administratora.
+    registrationSuccesfull: Rejestracja ukończona.
+    waitForApproval: Czekaj na zatwierdzenie przez administratora.
     userNotFound: "Użytkownik nieodnaleziony, wystąpił błąd. Skontaktuj sięz administratorem."
     resetCodeSent: Kod do zmiany hasła został wysłany na Twój adres e-mail
     invalidResetCode: Nieprawidłowy kod resetowania

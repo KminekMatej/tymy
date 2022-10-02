@@ -60,7 +60,8 @@ alerts:
     loginNotApproved: This user is not allowed to login
     loginNotSuccesfull: Login failure
     logoutSuccesfull: Succesfully logged out
-    registrationSuccesfull: Registration succesfull. Kindly wait for administration approval now.
+    registrationSuccesfull: Registration succesfull.
+    waitForApproval: Kindly wait for administration approval now.
     userNotFound: "User not found, is blocked or other error happened. Please try again, or contact your team administrator."
     resetCodeSent: Reset code has been sent to your e-mail address
     invalidResetCode: Invalid reset code
