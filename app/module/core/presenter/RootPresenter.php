@@ -2,10 +2,10 @@
 
 namespace Tymy\Module\Core\Presenter;
 
+use Kdyby\Translation\Translator;
 use Nette\Application\UI\Presenter;
 use Nette\Caching\Cache;
 use Nette\Caching\Storage;
-use Nette\Localization\Translator;
 use Nette\Utils\DateTime;
 use Tymy\Module\Core\Model\Version;
 use Tymy\Module\Team\Manager\TeamManager;
