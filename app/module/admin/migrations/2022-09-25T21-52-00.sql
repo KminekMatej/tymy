@@ -22,6 +22,7 @@ CREATE TABLE `user_invitation` (
   `last_name` varchar(20) DEFAULT NULL,
   `email` varchar(50) DEFAULT NULL,
   `code` varchar(32) NOT NULL,
+  `lang` VARCHAR(2) NOT NULL DEFAULT 'cs',
   `user_id` int(11) DEFAULT NULL,
   `valid_until` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
