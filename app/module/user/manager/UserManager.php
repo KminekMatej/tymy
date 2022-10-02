@@ -415,6 +415,10 @@ class UserManager extends BaseManager
                 /* @var $admin User */
                 $this->mailService->mailUserRegistered($admin->getCallName(), $admin->getEmail(), $registeredUser->getLogin(), $registeredUser->getEmail(), $registeredUser->getFirstName(), $registeredUser->getLastName(), $array["note"] ?? null);
             }
+        } else {    //mark invitation request as accepted. Cannot from invitationManager, since that would caus circullar reference
+            $this->database->table(Invitation::TABLE)
+                ->where("id", $invitation->getId())
+                ->update(["user_id" => $registeredUser->getId()]);
         }
 
         return $registeredUser;
