@@ -4,6 +4,7 @@ namespace Tymy\Module\Sign\Form;
 
 use Nette;
 use Nette\Application\UI\Form;
+use Nette\Security\SimpleIdentity;
 use Tymy\Module\Core\Exception\MissingInputException;
 use Tymy\Module\User\Manager\InvitationManager;
 use Tymy\Module\User\Manager\UserManager;
