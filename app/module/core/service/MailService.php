@@ -14,7 +14,6 @@ use Tymy\Bootstrap;
 use Tymy\Module\Core\Manager\StringsManager;
 use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\Team\Model\Team;
-use Tymy\Module\User\Model\User as UserTymy;
 
 /**
  * Description of MailService
@@ -118,9 +117,6 @@ class MailService
         $this->startup();
 
         $latte = new Engine();
-
-        /* @var $creator UserTymy */
-        $creator = $this->userManager->getById($this->user->getId());
 
         $subject = $this->translator->translate("mail.invitation.subject");
 
