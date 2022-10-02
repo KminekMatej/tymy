@@ -118,6 +118,8 @@ class MailService
 
         $latte = new Engine();
 
+        $latte->addFilter('translate', [$this->translator, 'translate']);
+
         $subject = $this->translator->translate("mail.invitation.subject");
 
         $body = $latte->renderToString(Bootstrap::MODULES_DIR . "/core/mail/invitation.latte", [
