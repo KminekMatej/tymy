@@ -73,13 +73,6 @@ class InvitationManager extends BaseManager
         if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("USR_CREATE"))) {
             $this->responder->E4004_DELETE_NOT_PERMITTED("Invitiation", $recordId);
         }
-
-        /* @var $invitation Invitation */
-        $invitation = $this->getById($recordId);
-
-        if ($invitation->getStatus() === Invitation::STATUS_ACCEPTED) {
-            $this->responder->E4004_DELETE_NOT_PERMITTED("Invitiation", $recordId);
-        }
     }
 
     protected function allowRead(?int $recordId = null): void
