@@ -17,9 +17,9 @@ class UpPresenter extends BasePresenter
      */
     protected function createComponentSignUpForm()
     {
-        return $this->signUpFactory->create(function () {
-                    $this->flashMessage($this->translator->translate("common.alerts.registrationSuccesfull"), 'success');
-                    $this->redirect(':Sign:In:');
-        });
+        return $this->signUpFactory->create(function (SimpleIdentity $registeredIdentity) {
+                $this->flashMessage($this->translator->translate("common.alerts.registrationSuccesfull"), 'success');
+                $this->redirect(':Sign:In:');
+            });
     }
 }

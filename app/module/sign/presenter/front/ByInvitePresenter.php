@@ -2,6 +2,7 @@
 
 namespace Tymy\Module\Sign\Presenter\Front;
 
+use Nette\Security\SimpleIdentity;
 use Tymy\Module\Core\Presenter\Front\BasePresenter;
 use Tymy\Module\Sign\Form\SignUpFormFactory;
 use Tymy\Module\User\Manager\InvitationManager;
@@ -39,9 +40,11 @@ class ByInvitePresenter extends BasePresenter
     {
         $invitation = $this->invitationManager->getByCode($this->getRequest()->getParameter("invite"));
 
-        return $this->signUpFactory->create(function () {
+        return $this->signUpFactory->create(function (SimpleIdentity $registeredIdentity) {
                 $this->flashMessage($this->translator->translate("common.alerts.registrationSuccesfull"), 'success');
-                $this->redirect(':Sign:In:');
+                $this->user->setExpiration('20 minutes');
+                $this->user->login($registeredIdentity);
+                $this->redirect(':Core:Default:');
             }, $invitation);
     }
 }

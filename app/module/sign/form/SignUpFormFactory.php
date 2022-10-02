@@ -83,7 +83,7 @@ class SignUpFormFactory
                     }
                 }
 
-                $this->userManager->register([
+                $registeredUser = $this->userManager->register([
                     "login" => $values->username,
                     "password" => $values->password,
                     "email" => $values->email,
@@ -92,6 +92,8 @@ class SignUpFormFactory
                     "note" => $values->admin_note,
                     "invitation" => $values->invitation,
                 ], $invitation);
+                
+                $identity = new SimpleIdentity($registeredUser->getId(), $registeredUser->getRoles());
             } catch (\Nette\InvalidArgumentException $exc) {
                 $form['username']->addError($exc->getMessage());
                 return;
@@ -99,7 +101,7 @@ class SignUpFormFactory
                 $form[$exc->getMessage()]->addError("This field is required");
                 return;
             }
-            $onSuccess();
+            $onSuccess($identity);
         };
 
         return $form;

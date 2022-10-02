@@ -397,8 +397,14 @@ class UserManager extends BaseManager
     {
         $this->allowRegister($array);
 
-        $array["status"] = $invitation ? "PLAYER" : "INIT";
+        $array["status"] = "INIT";
         $array["callName"] = $array["login"];
+        
+        if($invitation){
+            $array["status"] = "PLAYER";
+            $array["canLogin"] = true;
+            $array["canEditCallName"] = true;
+        }
 
         $createdRow = $this->createByArray($array);
 
