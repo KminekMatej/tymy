@@ -162,7 +162,7 @@ class InvitationManager extends BaseManager
 
         $creator = $this->userManager->getById($this->user->getId());
 
-        $this->mailService->mailInvitation($name, $invitation->getEmail(), $creator->getFullName() . "({$creator->getDisplayName()})", $this->linkGenerator->link(":Sign:ByInvite:default", ["invite" => $invitation->getCode()]), $invitation->getValidUntil());
+        $this->mailService->mailInvitation($name, $invitation->getEmail(), $creator->getFullName() . "({$creator->getDisplayName()})", $this->linkGenerator->link("Sign:ByInvite:default", ["invite" => $invitation->getCode()]), $invitation->getValidUntil());
     }
 
     /**
