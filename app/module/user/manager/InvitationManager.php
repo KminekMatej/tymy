@@ -116,7 +116,7 @@ class InvitationManager extends BaseManager
     {
         $this->allowDelete($resourceId);
 
-        return parent::delete($resourceId);
+        return parent::deleteRecord($resourceId);
     }
 
     public function getAllowedReaders(BaseModel $record): array

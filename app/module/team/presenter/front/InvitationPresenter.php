@@ -43,6 +43,17 @@ class InvitationPresenter extends SecuredPresenter
         $this->template->trans = $this->translator;
     }
 
+    public function handleDelete(int $id)
+    {
+        if (!$this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('USR_CREATE'))) {
+            $this->flashMessage($this->translator->translate("common.alerts.notPermitted"), "warning");
+            $this->redirect(':Core:Default:');
+        }
+
+        $this->invitationManager->delete($id);
+        $this->redirect(":Team:Invitation:");
+    }
+
     public function createComponentInvitationForm()
     {
         $form = new Form();

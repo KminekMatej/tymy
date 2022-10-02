@@ -50,7 +50,7 @@
                             <div class="col col-md-2 text-center">{_"team.invitation-".$invitation->getStatus()}</div>
                             <div class="col col-md-2 text-right" title="{$invitation->getValidUntil()|date:\Tymy\Module\Core\Model\BaseModel::DATETIME_CZECH_FORMAT}">
                                 {$invitation->getValidUntil()|date:\Tymy\Module\Core\Model\BaseModel::DATE_CZECH_FORMAT}
-                                <button class="btn btn-sm btn-danger ml-4" title="{_common.delete}" onclick="return confirm({_common.alerts.confirmDelete})"><i class="far fa-trash-can" aria-hidden="true"></i></button>
+                                <a n:href="delete! $invitation->getId()" class="btn btn-sm btn-danger ml-4" title="{_common.delete}" onclick="return confirm({_common.alerts.confirmDelete})"><i class="far fa-trash-can" aria-hidden="true"></i></a>
                             </div>
                         </div>
                     </div>
