@@ -148,7 +148,9 @@ class PostManager extends BaseManager
         }
 
         $post->setCreatedAtStr($post->getCreatedAt()->format(BaseModel::DATETIME_CZECH_NO_SECS_FORMAT));
-        $post->setCreatedBy($this->userManager->getSimpleUser($post->getCreatedById()));
+        if ($post->getCreatedById()) {
+            $post->setCreatedBy($this->userManager->getSimpleUser($post->getCreatedById()));
+        }
         if ($post->getUpdatedAt()) {
             $post->setUpdatedAtStr($post->getUpdatedAt()->format(BaseModel::DATETIME_CZECH_NO_SECS_FORMAT));
         }
