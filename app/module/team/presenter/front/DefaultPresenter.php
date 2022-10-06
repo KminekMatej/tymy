@@ -121,7 +121,7 @@ class DefaultPresenter extends SecuredPresenter
     public function handleApprove(int $userId)
     {
         try {
-            $this->userManager->update(["status" => User::STATUS_PLAYER], $userId);
+            $this->userManager->update(["status" => User::STATUS_PLAYER, "canLogin" => true], $userId);
         } catch (TymyResponse $tResp) {
             $this->handleTymyResponse($tResp);
             $this->redirect('this');
