@@ -4,6 +4,7 @@ namespace Tymy\Module\Team\Presenter\Front;
 
 use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
+use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Model\User;
 
 class DefaultPresenter extends SecuredPresenter
