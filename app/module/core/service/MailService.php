@@ -8,7 +8,9 @@ use Nette\Application\LinkGenerator;
 use Nette\Application\UI\ITemplateFactory;
 use Nette\Mail\Mailer;
 use Nette\Mail\Message;
+use Nette\Mail\SendException;
 use Nette\Utils\DateTime;
+use Tracy\Debugger;
 use Tymy\Bootstrap;
 use Tymy\Module\Core\Manager\StringsManager;
 use Tymy\Module\Team\Manager\TeamManager;
@@ -133,16 +135,20 @@ class MailService
 
     private function sendMail(string $name, string $email, string $body, ?string $subject = null, ?string $replyTo = null): void
     {
-        $mail = new Message();
-        $mail->setFrom(sprintf(self::ROBOT_EMAIL_FROM_S, $this->team->getSysName()), $this->team->getSysName())
-            ->addTo(trim($email), $name)
-            ->setSubject($subject)
-            ->setBody($body);
+        try {
+            $mail = new Message();
+            $mail->setFrom(sprintf(self::ROBOT_EMAIL_FROM_S, $this->team->getSysName()), $this->team->getSysName())
+                ->addTo(trim($email), $name)
+                ->setSubject($subject)
+                ->setBody($body);
 
-        if ($replyTo) {
-            $mail->addReplyTo(trim($replyTo));
+            if ($replyTo) {
+                $mail->addReplyTo(trim($replyTo));
+            }
+
+            $this->mailSender->send($mail);
+        } catch (SendException $exc) {
+            Debugger::log("Failed to send email from team {$this->team->getSysName()} to $email. Error: {$exc->getMessage()}");
         }
-
-        $this->mailSender->send($mail);
     }
 }
