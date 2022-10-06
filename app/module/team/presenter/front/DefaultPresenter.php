@@ -120,6 +120,11 @@ class DefaultPresenter extends SecuredPresenter
 
     public function handleApprove(int $userId)
     {
+        if (!$this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("USR_UPDATE"))) {
+            $this->flashMessage($this->translator->translate("common.alerts.notPermitted"));
+            $this->redirect('this');
+        }
+
         try {
             $this->userManager->update(["status" => User::STATUS_PLAYER, "canLogin" => true], $userId);
         } catch (TymyResponse $tResp) {
