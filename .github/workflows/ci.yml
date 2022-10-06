@@ -4,19 +4,19 @@ on:
   push:
 
 jobs:
-  static-analysis:
-      name: Static analysis
+  static-analysis-PHP74:
+      name: Static analysis on PHP 7.4
       runs-on: self-hosted
       
       steps:
         - name: "Checkout"
           uses: actions/checkout@v2
           
-        - name: "Compose"
-          run: /usr/bin/php7.4 /usr/local/bin/composer install --dev
+        - name: "Composer"
+          run: /usr/bin/php7.4 /usr/bin/composer install
           
-        - name: "PHPCs"
+        - name: "PHP Code Sniffer"
           run: /usr/bin/php7.4 vendor/bin/phpcs
           
-        - name: "PHPStan"
+        - name: "PHP Stan"
           run: /usr/bin/php7.4 vendor/bin/phpstan
