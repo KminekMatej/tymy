@@ -1,6 +1,6 @@
 {block player-header}
 <li class="nav-item">
-    {var $cnt = ($player,'tymove-info'|errorsCount)}
+    {var $cnt = ($player|errorsCount:'tymove-info')}
     <a class="flex-sm-fill text-sm-center nav-link" data-toggle="tab" href="#tymove-info" role="tab">{_team.teamData} <span n:class="badge,badge-pill,badge-danger,$cnt == 0 ? d-none">{$cnt}</span></a>
 </li>
 {include parent}

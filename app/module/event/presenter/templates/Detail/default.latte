@@ -48,7 +48,7 @@
                             {/snippet}
                             <input type="text" class="form-control custom-btn-sm" title="{_note.note,1}" id="preStatusDesc-action-{$event->getId()}" placeholder="{_note.note,1}" name="preStatusDesc" value="{$event->getMyAttendance() ? $event->getMyAttendance()->getPreDescription() : ''}" data-value="{$event->getMyAttendance() ? $event->getMyAttendance()->getPreDescription() : ''}" onchange="toggleAttButtons(this)" />
                             <div class="custom-container btn-group input-group pt-2" role="group" aria-label="Attendace setup container" id="action-{$event->getId()}">
-                                <button n:foreach="$eventType->getPreStatusSet() as $preStatus" onclick="updateAttendance(this, {link attendance! $event->getId(), $preStatus->getId()})" class="btn custom-btn-sm {$event->getMyAttendance(),$preStatus->getId(),$event->getCanPlan(),$event->getCloseTime()|prestatusClass}">{$preStatus->getCaption()}</button>
+                                <button n:foreach="$eventType->getPreStatusSet() as $preStatus" onclick="updateAttendance(this, {link attendance! $event->getId(), $preStatus->getId()})" class="btn custom-btn-sm {$event->getMyAttendance()|prestatusClass:$preStatus->getId(),$event->getCanPlan(),$event->getCloseTime()}">{$preStatus->getCaption()}</button>
                             </div>
                         </div>
                     </div>
@@ -135,7 +135,7 @@
                                         </div>
 
                                         <div class="btn-group d-none plan-others" role="group" aria-label="Others plans" n:if="$event->getCanPlanOthers() && $event->getInFuture()">
-                                            <button n:foreach="$eventType->getPreStatusSet() as $preStatus" onclick="updateAttendance(this, {link attendance! $event->getId(), $preStatus->getId(), null, $usr->getId()})" class="btn btn-xs {$event->getAttendance()[$usr->getId()] ?? null,$preStatus->getId(),$event->getCanPlan(),$event->getCloseTime()|prestatusClass}"><i class="{$preStatus->getIcon()}"></i></button>
+                                            <button n:foreach="$eventType->getPreStatusSet() as $preStatus" onclick="updateAttendance(this, {link attendance! $event->getId(), $preStatus->getId(), null, $usr->getId()})" class="btn btn-xs {$event->getAttendance()[$usr->getId()] ?? null|prestatusClass:$preStatus->getId(),$event->getCanPlan(),$event->getCloseTime()}"><i class="{$preStatus->getIcon()}"></i></button>
                                         </div>
 
                                     </figure>
