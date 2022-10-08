@@ -87,7 +87,8 @@ abstract class RootPresenter extends Presenter
         ]);
 
         return $this->teamCache->load("versions", function (): array {
-                $versions = explode("\n", shell_exec('git -C ' . ROOT_DIR . '/../master tag -l --format="%(creatordate:iso8601)|%(refname:short)" --sort=-v:refname'));
+                $dirToCheckVersions = is_dir(ROOT_DIR . '/../master') ? ROOT_DIR . '/../master' : ROOT_DIR;
+                $versions = explode("\n", shell_exec('git -C ' . $dirToCheckVersions . ' tag -l --format="%(creatordate:iso8601)|%(refname:short)" --sort=-v:refname'));
                 $out = [];
             foreach ($versions as $versionStr) {
                 if (empty(trim($versionStr))) {
@@ -110,7 +111,7 @@ abstract class RootPresenter extends Presenter
         } else {
             $cvName = shell_exec("git rev-parse --abbrev-ref HEAD");
         }
-
+        \Tracy\Debugger::barDump($cvName);
         return $cvName == "master" ? new Version($cvName, null) : ($this->getVersions()[$cvName] ?? new Version($cvName, null));
     }
 }
