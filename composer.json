@@ -11,9 +11,9 @@
         }
     ],
     "require": {
-        "php": ">=7.4",
+        "php": ">=8.1",
         "nette/nette": "^3.1",
-        "kdyby/translation": "^3",
+        "contributte/translation": "^2",
         "globalcitizen/php-iban": "^4.0",
         "minishlink/web-push": "v6.0.5",
         "ext-json": "*",

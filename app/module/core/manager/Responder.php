@@ -5,7 +5,7 @@
 namespace Tymy\Module\Core\Manager;
 
 use Exception;
-use Kdyby\Translation\Translator;
+use Contributte\Translation\Translator;
 use Nette\Application\AbortException;
 use Nette\Application\Application;
 use Nette\Http\Request;

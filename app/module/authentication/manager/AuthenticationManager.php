@@ -2,9 +2,9 @@
 
 namespace Tymy\Module\Authentication\Manager;
 
-use Kdyby\Translation\Translator;
+use Contributte\Translation\Translator;
 use Nette\Database\Explorer;
-use Nette\DI\Container;
+use Nette\Database\Table\ActiveRow;
 use Nette\Security\AuthenticationException;
 use Nette\Security\IAuthenticator;
 use Nette\Security\IIdentity;
@@ -53,7 +53,7 @@ class AuthenticationManager implements IAuthenticator
 
         $row = $this->teamDatabase->table(self::TABLE)->where('user_name', $username)->fetch();
 
-        if (!$row instanceof \Nette\Database\Table\ActiveRow) {
+        if (!$row instanceof ActiveRow) {
             throw new AuthenticationException($this->translator->translate("team.alerts.authenticationFailed"), self::INVALID_CREDENTIAL);
         }
 
@@ -87,7 +87,7 @@ class AuthenticationManager implements IAuthenticator
      *
      * @throws AuthenticationException
      */
-    private function authenticateByTk(string $transferKey): \Nette\Security\SimpleIdentity
+    private function authenticateByTk(string $transferKey): SimpleIdentity
     {
         $teamId = $this->mainDatabase->table(Team::TABLE)->where("sys_name", $this->teamSysName)->fetch()->id;
 

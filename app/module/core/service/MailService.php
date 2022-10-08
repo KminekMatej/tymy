@@ -2,7 +2,7 @@
 
 namespace Tymy\Module\Core\Service;
 
-use Kdyby\Translation\Translator;
+use Contributte\Translation\Translator;
 use Nette\Application\LinkGenerator;
 use Nette\Application\UI\ITemplateFactory;
 use Nette\Mail\Mailer;

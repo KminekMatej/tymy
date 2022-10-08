@@ -3,7 +3,7 @@
 namespace Tymy\Module\User\Manager;
 
 use Exception;
-use Kdyby\Translation\Translator;
+use Contributte\Translation\Translator;
 use Nette\Application\AbortException;
 use Nette\Database\IRow;
 use Nette\Database\Table\ActiveRow;

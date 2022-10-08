@@ -23,9 +23,14 @@ services:
 tracy:
     email: matej.kminek@attendees.eu
 extensions:
-    translation: Kdyby\Translation\DI\TranslationExtension
+    translation: Contributte\Translation\DI\TranslationExtension
 translation:
-    default: cs
+    locales:
+        whitelist: [cs, en, fr, pl]
+        default: cs
+        fallback: [cs]
+    dirs:
+        - %appDir%/lang
     debugger: true
 parameters:
     appConfig:

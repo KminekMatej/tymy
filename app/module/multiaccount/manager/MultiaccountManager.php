@@ -2,7 +2,7 @@
 
 namespace Tymy\Module\Multiaccount\Manager;
 
-use Kdyby\Translation\Translator;
+use Contributte\Translation\Translator;
 use Nette\NotImplementedException;
 use Nette\Utils\DateTime;
 use Tymy\Module\Core\Factory\ManagerFactory;

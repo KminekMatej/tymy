@@ -2,7 +2,7 @@
 
 namespace Tymy\Module\Core\Component;
 
-use Kdyby\Translation\Translator;
+use Contributte\Translation\Translator;
 use Nette\Application\UI\Control;
 use Nette\Application\UI\Form;
 use Nette\Http\FileUpload;

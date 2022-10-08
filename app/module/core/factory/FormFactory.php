@@ -2,7 +2,7 @@
 
 namespace Tymy\Module\Core\Factory;
 
-use Kdyby\Translation\Translator;
+use Contributte\Translation\Translator;
 use Nette;
 use Nette\Application\UI\Form;
 use Nette\Application\UI\Multiplier;
