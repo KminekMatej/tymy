@@ -116,13 +116,13 @@
     {* Display bar with celebrations *}
     <div class="row">
         <div class="col" n:inner-foreach="$users as $usr">
-            {var $nameDay = date('m-d', strtotime(date('Y').'-'.$usr->getNameDayMonth().'-'.$usr->getNameDayDay()))}
-            {var $bDay = property_exists($usr, 'birthDate') ? date('m-d', strtotime($usr->getBirthDate())) : '0-0'}
-            {var $years = property_exists($usr, 'birthDate') ? date('Y') - date('Y', strtotime($usr->getBirthDate())) : '0'}
-            <div n:if="$usr->getNameDayMonth() > 0 && $usr->getNameDayDay() > 0 && $today==$nameDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{$usr->getDisplayName(),$usr->getWebName()|namedayToday|noescape}</div>
-            <div n:if="property_exists($usr, 'birthDate') && $today==$bDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{$usr->getDisplayName(),$usr->getWebName(),$years|birthdayToday|noescape}</div>
-            <div n:if="$usr->getNameDayMonth() > 0 && $usr->getNameDayDay() > 0 && $tommorow==$nameDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{$usr->getDisplayName(),$usr->getWebName()|namedayTommorow|noescape}</div>
-            <div n:if="property_exists($usr, 'birthDate') && $tommorow==$bDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{$usr->getDisplayName(),$usr->getWebName(),$years|birthdayTommorow|noescape}</div>
+            {var $nameDay = $usr->getNameDayMonth() && $usr->getNameDayDay() ? date('m-d', strtotime(date('Y').'-'.$usr->getNameDayMonth().'-'.$usr->getNameDayDay())) : null}
+            {var $bDay = $usr->getBirthDate() ? date('m-d', strtotime($usr->getBirthDate())) : '0-0'}
+            {var $years = $usr->getBirthDate() ? date('Y') - date('Y', strtotime($usr->getBirthDate())) : '0'}
+            <div n:if="$usr->getNameDayMonth() > 0 && $usr->getNameDayDay() > 0 && $today==$nameDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{$usr->getDisplayName()|namedayToday:$usr->getWebName()|noescape}</div>
+            <div n:if="property_exists($usr, 'birthDate') && $today==$bDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{$usr->getDisplayName()|birthdayToday:$usr->getWebName(),$years|noescape}</div>
+            <div n:if="$usr->getNameDayMonth() > 0 && $usr->getNameDayDay() > 0 && $tommorow==$nameDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{$usr->getDisplayName()|namedayTommorow:$usr->getWebName()|noescape}</div>
+            <div n:if="property_exists($usr, 'birthDate') && $tommorow==$bDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{$usr->getDisplayName()|birthdayTommorow:$usr->getWebName(),$years|noescape}</div>
         </div>
     </div>
 
