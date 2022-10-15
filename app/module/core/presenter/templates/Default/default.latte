@@ -155,7 +155,7 @@
                                 {var $lastLogin = $usr->getLastLogin() ? ($usr->getLastLogin()|date:'j.n.Y H:i:s') : $neverLogin}
                                 {var $caption = $usr->getLastLogin() ? ($usr->getLastLogin()|lastLogin) : $neverLogin}
                                 <a href="{plink :Team:Player: $usr->getWebName()}" title="{$lastLogin}">
-                                    <img src="{$usr->getPictureUrl()}" class="figure-img img-fluid avatar" n:attr="alt => $usr->getFullName() ?: '')"/>
+                                    <img src="{$usr->getPictureUrl()}" class="figure-img img-fluid avatar" n:attr="alt => $usr->getFullName() ?: ''"/>
                                     <figcaption class="figure-caption">{$usr->getDisplayName()}</figcaption>
                                     <figcaption class="figure-caption" style="font-size: 70%; display: inline-block">{$caption}</figcaption>
                                 </a>
