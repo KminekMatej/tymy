@@ -102,12 +102,4 @@ class DefaultPresenter extends SecuredPresenter
         $tk = $this->multiaccountManager->read($teamSysName);
         $this->redirectUrl("https://$teamSysName.tymy.cz/sign/in?tk=" . $tk->getTransferKey());
     }
-
-    private static function sortUsersComparer($a, $b): int
-    {
-        if (!property_exists($a, "lastLogin") || !property_exists($b, "lastLogin")) {
-            return 1;
-        }
-        return strtotime($a->lastLogin) < strtotime($b->lastLogin) ? 1 : -1;
-    }
 }
