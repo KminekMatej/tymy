@@ -23,9 +23,7 @@ class TeamPresenter extends SettingBasePresenter
 
     public function createComponentStatusSetForm(): Multiplier
     {
-        return $this->formFactory->createStatusSetForm(function (Form $form, $values) : void {
-            $this->statusFormSuccess($form, $values);
-        });
+        return $this->formFactory->createStatusSetForm(fn(Form $form, $values) => $this->statusFormSuccess($form, $values));
     }
 
     public function createComponentTeamConfigForm(): Form

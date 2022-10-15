@@ -29,6 +29,7 @@ use Tymy\Module\User\Model\User;
 class FormFactory
 {
     use Nette\SmartObject;
+
     private array $userPermissions;
 
     public function __construct(private EventTypeManager $eventTypeManager, EventManager $eventManager, private Translator $translator, private StatusSetManager $statusSetManager, private TeamManager $teamManager, private UserManager $userManager, private PermissionManager $permissionManager)
