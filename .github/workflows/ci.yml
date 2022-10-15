@@ -13,10 +13,10 @@ jobs:
           uses: actions/checkout@v2
           
         - name: "Compose"
-          run: /usr/bin/php7.4 /usr/local/bin/composer install --dev
+          run: composer install --dev
           
         - name: "PHPCs"
-          run: /usr/bin/php7.4 vendor/bin/phpcs
+          run: vendor/bin/phpcs
           
         - name: "PHPStan"
-          run: /usr/bin/php7.4 vendor/bin/phpstan
+          run: vendor/bin/phpstan
