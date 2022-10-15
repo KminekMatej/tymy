@@ -134,7 +134,7 @@ class PostManager extends BaseManager
             $post->setPost(BbService::bb2Html($post->getPost()));
         }
 
-        if (property_exists($post, "newPost")) {
+        if (property_exists($row, "newPost")) {
             $post->setNewPost($row->newPost);
         }
 
