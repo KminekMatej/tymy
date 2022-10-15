@@ -25,6 +25,7 @@ use Tymy\Module\Team\Model\Team;
 use Tymy\Module\User\Mapper\UserMapper;
 use Tymy\Module\User\Model\SimpleUser;
 use Tymy\Module\User\Model\User;
+
 use const TEAM_DIR;
 
 /**

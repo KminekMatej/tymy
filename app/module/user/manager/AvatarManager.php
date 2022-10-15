@@ -8,6 +8,7 @@ use Tymy\Module\Core\Manager\Responder;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Model\User as User2;
+
 use const TEAM_DIR;
 
 /**
