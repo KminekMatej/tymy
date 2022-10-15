@@ -42,6 +42,6 @@ class DefaultPresenter extends BasePresenter
             $this->handleException($exc);
         }
 
-        $this->respondOk($rights); /* @phpstan-ignore-line */
+        $this->respondOk($rights);
     }
 }

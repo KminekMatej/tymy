@@ -13,7 +13,6 @@ use Tymy\Module\Attendance\Manager\StatusSetManager;
 use Tymy\Module\Attendance\Model\Status;
 use Tymy\Module\Attendance\Model\StatusSet;
 use Tymy\Module\Core\Model\BaseModel;
-use Tymy\Module\Event\Manager\EventManager;
 use Tymy\Module\Event\Manager\EventTypeManager;
 use Tymy\Module\Event\Model\Event;
 use Tymy\Module\Event\Model\EventType;
@@ -32,7 +31,7 @@ class FormFactory
 
     private array $userPermissions;
 
-    public function __construct(private EventTypeManager $eventTypeManager, EventManager $eventManager, private Translator $translator, private StatusSetManager $statusSetManager, private TeamManager $teamManager, private UserManager $userManager, private PermissionManager $permissionManager)
+    public function __construct(private EventTypeManager $eventTypeManager, private Translator $translator, private StatusSetManager $statusSetManager, private TeamManager $teamManager, private UserManager $userManager, private PermissionManager $permissionManager)
     {
     }
 

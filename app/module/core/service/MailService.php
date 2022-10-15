@@ -3,8 +3,6 @@
 namespace Tymy\Module\Core\Service;
 
 use Contributte\Translation\Translator;
-use Nette\Application\LinkGenerator;
-use Nette\Application\UI\ITemplateFactory;
 use Nette\Mail\Mailer;
 use Nette\Mail\Message;
 use Tymy\Module\Core\Manager\StringsManager;
@@ -23,7 +21,7 @@ class MailService
     private Team $team;
     private string $teamDomain;
 
-    public function __construct(private TeamManager $teamManager, LinkGenerator $linkGenerator, ITemplateFactory $templateFactory, private Mailer $mailSender, private StringsManager $stringsManager, private Translator $translator)
+    public function __construct(private TeamManager $teamManager, private Mailer $mailSender, private StringsManager $stringsManager, private Translator $translator)
     {
     }
 

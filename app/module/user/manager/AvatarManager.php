@@ -7,8 +7,8 @@ use Nette\Utils\Image;
 use Tymy\Module\Core\Manager\Responder;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Permission\Model\Privilege;
-use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\User\Model\User as User2;
+use const TEAM_DIR;
 
 /**
  * Description of AvatarManager
@@ -21,7 +21,7 @@ class AvatarManager
     public const HEIGHT = 500;
     private User2 $userModel;
 
-    public function __construct(string $userPicFolder, private Responder $responder, TeamManager $teamManager, private UserManager $userManager, private User $user)
+    public function __construct(private Responder $responder, private UserManager $userManager, private User $user)
     {
     }
 
@@ -29,7 +29,7 @@ class AvatarManager
     {
         $this->userModel = $this->userManager->getById($userId);
 
-        if (!$this->userModel instanceof \Tymy\Module\Core\Model\BaseModel) {
+        if (!$this->userModel instanceof BaseModel) {
             $this->responder->E4005_OBJECT_NOT_FOUND(User2::MODULE, $userId);
         }
 

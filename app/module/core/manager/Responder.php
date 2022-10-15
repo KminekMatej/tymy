@@ -28,7 +28,7 @@ class Responder
     /** @var mixed */
     private $payload;
 
-    public function __construct(private Application $application, Request $request, public Translator $translator)
+    public function __construct(private Application $application, public Translator $translator)
     {
     }
 

@@ -19,7 +19,7 @@ class FileManager
 {
     public const DOWNLOAD_DIR = TEAM_DIR . "/download";
 
-    public function __construct(User $user, private Responder $responder)
+    public function __construct(private Responder $responder)
     {
     }
 

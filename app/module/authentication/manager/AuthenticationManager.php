@@ -11,7 +11,6 @@ use Nette\Security\IIdentity;
 use Nette\Security\SimpleIdentity;
 use Nette\Utils\DateTime;
 use Tracy\Debugger;
-use Tymy\Module\Core\Manager\Responder;
 use Tymy\Module\Multiaccount\Model\TransferKey;
 use Tymy\Module\Team\Model\Team;
 use Tymy\Module\User\Model\User;
@@ -26,7 +25,7 @@ class AuthenticationManager implements IAuthenticator
     public const TABLE = "user";
     public const HASH_LIMIT = 19;
 
-    public function __construct(private array $ghosts, private string $teamSysName, private Explorer $mainDatabase, private Explorer $teamDatabase, Responder $responder, private Translator $translator)
+    public function __construct(private array $ghosts, private string $teamSysName, private Explorer $mainDatabase, private Explorer $teamDatabase, private Translator $translator)
     {
     }
 

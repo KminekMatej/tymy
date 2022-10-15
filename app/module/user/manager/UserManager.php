@@ -2,23 +2,21 @@
 
 namespace Tymy\Module\User\Manager;
 
-use Exception;
 use Contributte\Translation\Translator;
+use Exception;
 use Nette\Application\AbortException;
 use Nette\Database\IRow;
 use Nette\Database\Table\ActiveRow;
 use Nette\Database\Table\Selection;
-use Nette\Http\Request;
 use Nette\InvalidArgumentException;
-use Nette\Security\User as UserNette;
 use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
-use Tymy\Module\Authentication\Manager\AuthenticationManager;
 use Tymy\Module\Core\Exception\MissingInputException;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Helper\CURLHelper;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Core\Service\MailService;
 use Tymy\Module\Permission\Manager\PermissionManager;
 use Tymy\Module\Permission\Model\Privilege;
@@ -27,7 +25,6 @@ use Tymy\Module\Team\Model\Team;
 use Tymy\Module\User\Mapper\UserMapper;
 use Tymy\Module\User\Model\SimpleUser;
 use Tymy\Module\User\Model\User;
-
 use const TEAM_DIR;
 
 /**
@@ -59,7 +56,7 @@ class UserManager extends BaseManager
     /** @var SimpleUser[] */
     private array $simpleUserCache = [];
 
-    public function __construct(ManagerFactory $managerFactory, private MailService $mailService, private PermissionManager $permissionManager, AuthenticationManager $authenticationManager, Request $request, private Translator $translator, private TeamManager $teamManager)
+    public function __construct(ManagerFactory $managerFactory, private MailService $mailService, private PermissionManager $permissionManager, private Translator $translator, private TeamManager $teamManager)
     {
         parent::__construct($managerFactory);
     }
@@ -121,7 +118,7 @@ class UserManager extends BaseManager
      * @return ActiveRow Created row
      * @throws Exception
      */
-    public function createByArray(array $array): \Nette\Database\Table\ActiveRow
+    public function createByArray(array $array): ActiveRow
     {
         if (isset($array["firstName"]) && strlen($array["firstName"]) > 20) {
             $array["firstName"] = substr($array["firstName"], 0, 20);
@@ -347,7 +344,7 @@ class UserManager extends BaseManager
     /**
      * Register user - create user record in INIT status
      */
-    public function register(array $array): ?\Tymy\Module\User\Model\User
+    public function register(array $array): ?User
     {
         $this->allowRegister($array);
 
@@ -429,7 +426,7 @@ class UserManager extends BaseManager
 
     /**
      * Load list of user object, allowed to operate with given privilege
-     * @return \Tymy\Module\Core\Model\BaseModel[]
+     * @return BaseModel[]
      */
     public function getUsersWithPrivilege(Privilege $privilege): array
     {
@@ -442,7 +439,7 @@ class UserManager extends BaseManager
     }
 
     /**
-     * @return \Tymy\Module\Core\Model\Field[]
+     * @return Field[]
      */
     protected function getScheme(): array
     {
@@ -721,11 +718,11 @@ class UserManager extends BaseManager
                 ->where("reseted", null)
                 ->fetch();
 
-        if (!$resetRow instanceof \Nette\Database\Table\ActiveRow) {
+        if (!$resetRow instanceof ActiveRow) {
             $this->respondBadRequest($this->translator->translate("common.alerts.invalidResetCode"));
         }
         $user = $this->getById($resetRow->user_id);
-        if (!$user instanceof \Tymy\Module\Core\Model\BaseModel) {
+        if (!$user instanceof BaseModel) {
             $this->respondBadRequest($this->translator->translate("common.alerts.invalidResetCode"));
         }
 
@@ -884,7 +881,7 @@ class UserManager extends BaseManager
     }
 
     /**
-     * @return \Tymy\Module\Core\Model\BaseModel[]
+     * @return BaseModel[]
      */
     public function getList(?array $idList = null, string $idField = "id", ?int $limit = null, ?int $offset = null, ?string $order = null): array
     {

@@ -1,2 +1,2 @@
 services:
-    TeamManager: Tymy\Module\Team\Manager\TeamManager(%teamFolder%, %appConfig.allSkins%)
+    TeamManager: Tymy\Module\Team\Manager\TeamManager(%appConfig.allSkins%)

@@ -4,10 +4,10 @@ namespace Tymy\Module\Debt\Manager;
 
 use Nette\Database\IRow;
 use Nette\Utils\Strings;
-use Tymy\Module\Authorization\Manager\AuthorizationManager;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Debt\Mapper\DebtMapper;
 use Tymy\Module\Debt\Model\Debt;
 use Tymy\Module\Permission\Model\Privilege;
@@ -26,7 +26,7 @@ class DebtManager extends BaseManager
 
     private ?Debt $debt = null;
 
-    public function __construct(ManagerFactory $managerFactory, AuthorizationManager $authorizationManager, private UserManager $userManager)
+    public function __construct(ManagerFactory $managerFactory, private UserManager $userManager)
     {
         parent::__construct($managerFactory);
     }
@@ -85,7 +85,7 @@ class DebtManager extends BaseManager
     }
 
     /**
-     * @return \Tymy\Module\Core\Model\Field[]
+     * @return Field[]
      */
     protected function getScheme(): array
     {

@@ -24,7 +24,7 @@ class TeamManager extends BaseManager
     public const DEFAULT_SKIN = "black-panther";
     private Team $team;
 
-    public function __construct(string $teamFolder, public array $allSkins, ManagerFactory $managerFactory, private Request $httpRequest)
+    public function __construct(public array $allSkins, ManagerFactory $managerFactory, private Request $httpRequest)
     {
         parent::__construct($managerFactory);
         $this->database = $this->mainDatabase;

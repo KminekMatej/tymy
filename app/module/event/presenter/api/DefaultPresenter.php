@@ -73,6 +73,6 @@ class DefaultPresenter extends SecuredPresenter
             $this->handleException($exc);
         }
 
-        return $created; /* @phpstan-ignore-line */
+        return $created;
     }
 }

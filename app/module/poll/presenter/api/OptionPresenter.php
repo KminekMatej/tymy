@@ -66,7 +66,7 @@ class OptionPresenter extends SecuredPresenter
             $this->handleException($exc);
         }
 
-        $this->respondOkCreated($this->arrayToJson($created)); /* @phpstan-ignore-line */
+        $this->respondOkCreated($this->arrayToJson($created));
     }
 
     /**

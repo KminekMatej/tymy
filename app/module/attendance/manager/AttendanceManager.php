@@ -16,8 +16,8 @@ use Tymy\Module\Core\Exception\DBException;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Event\Model\Event;
-use Tymy\Module\Permission\Manager\PermissionManager;
 use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Manager\UserManager;
 
@@ -32,7 +32,7 @@ class AttendanceManager extends BaseManager
     private array $myAttendances;
 
 
-    public function __construct(ManagerFactory $managerFactory, private UserManager $userManager, PermissionManager $permissionManager, private HistoryManager $historyManager)
+    public function __construct(ManagerFactory $managerFactory, private UserManager $userManager, private HistoryManager $historyManager)
     {
         parent::__construct($managerFactory);
     }
@@ -40,7 +40,7 @@ class AttendanceManager extends BaseManager
     /**
      * Get attendance using event and user id
      */
-    public function getByEventUserId(int $eventId, int $userId): ?\Tymy\Module\Attendance\Model\Attendance
+    public function getByEventUserId(int $eventId, int $userId): ?Attendance
     {
         return $this->map($this->database->table($this->getTable())->where("event_id", $eventId)->where("user_id", $userId)->fetch());
     }
@@ -98,7 +98,7 @@ class AttendanceManager extends BaseManager
     }
 
     /**
-     * @return \Tymy\Module\Core\Model\Field[]
+     * @return Field[]
      */
     protected function getScheme(): array
     {

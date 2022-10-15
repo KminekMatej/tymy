@@ -103,10 +103,7 @@ class DebtTest extends RequestCase
             }
             $found = false;
         }
-        if (isset($debt) && !$found) {
-            Assert::equal($debt["id"], $recordId, "Debt id $recordId not found in list");
-        }
-
+        Assert::true($found, "Debt id $recordId not found in list");
 
         //user for which that debt is created can see it and set paymentSent, cannot delete or change anything else
         $this->authorizeUser();
@@ -121,9 +118,7 @@ class DebtTest extends RequestCase
             }
             $found = false;
         }
-        if (isset($debt) && !$found) {
-            Assert::equal($debt["id"], $recordId, "Debt id $recordId not found in users list");
-        }
+        Assert::true($found, "Debt id $recordId not found in users list");
 
         $chResponse = $this->request($this->getBasePath() . "/" . $recordId, "PUT", $this->mockChanges())->expect(200, "array");//debtor can edit, but the only field that gets edited is paymentSent
         Assert::equal($origData->getData()["amount"], $chResponse->getData()["amount"]);//amount didnt change

@@ -33,6 +33,6 @@ class RegisterPresenter extends BasePresenter
             $this->handleException($exc);
         }
 
-        $this->respondOkCreated($registeredUser->jsonSerialize()); /* @phpstan-ignore-line */
+        $this->respondOkCreated($registeredUser->jsonSerialize());
     }
 }

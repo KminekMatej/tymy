@@ -64,7 +64,7 @@ class StatusPresenter extends SecuredPresenter
             $this->handleException($exc);
         }
 
-        $this->respondOk($record->jsonSerialize()); /* @phpstan-ignore-line */
+        $this->respondOk($record->jsonSerialize());
     }
 
     private function requestStatusGetList(): void
@@ -76,7 +76,7 @@ class StatusPresenter extends SecuredPresenter
             $this->handleException($exc);
         }
 
-        $this->respondOk($this->arrayToJson($statuses)); /* @phpstan-ignore-line */
+        $this->respondOk($this->arrayToJson($statuses));
     }
 
     private function requestStatusPost(?int $resourceId): void
@@ -88,7 +88,7 @@ class StatusPresenter extends SecuredPresenter
             $this->handleException($exc);
         }
 
-        $this->respondOkCreated($created->jsonSerialize()); /* @phpstan-ignore-line */
+        $this->respondOkCreated($created->jsonSerialize());
     }
 
     private function requestStatusPut(int $resourceId, ?int $subResourceId): void
@@ -100,7 +100,7 @@ class StatusPresenter extends SecuredPresenter
             $this->handleException($exc);
         }
 
-        $this->respondOk($updated->jsonSerialize()); /* @phpstan-ignore-line */
+        $this->respondOk($updated->jsonSerialize());
     }
 
     private function requestStatusDelete(int $resourceId, ?int $subResourceId): void
@@ -112,7 +112,7 @@ class StatusPresenter extends SecuredPresenter
             $this->handleException($exc);
         }
 
-        $this->respondDeleted($deletedId); /* @phpstan-ignore-line */
+        $this->respondDeleted($deletedId);
     }
 
     private function requestStatusSetPost(?int $resourceId): void
@@ -124,7 +124,7 @@ class StatusPresenter extends SecuredPresenter
             $this->handleException($exc);
         }
 
-        $this->respondOkCreated($created->jsonSerialize()); /* @phpstan-ignore-line */
+        $this->respondOkCreated($created->jsonSerialize());
     }
 
     private function requestStatusSetPut(int $resourceId, ?int $subResourceId): void
@@ -136,7 +136,7 @@ class StatusPresenter extends SecuredPresenter
             $this->handleException($exc);
         }
 
-        $this->respondOk($updated->jsonSerialize()); /* @phpstan-ignore-line */
+        $this->respondOk($updated->jsonSerialize());
     }
 
     private function requestStatusSetDelete(int $resourceId, ?int $subResourceId): void
@@ -148,6 +148,6 @@ class StatusPresenter extends SecuredPresenter
             $this->handleException($exc);
         }
 
-        $this->respondDeleted($deletedId); /* @phpstan-ignore-line */
+        $this->respondDeleted($deletedId);
     }
 }
