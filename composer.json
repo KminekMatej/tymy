@@ -20,6 +20,9 @@
         "ext-gmp": "*",
         "lcobucci/jwt": "4.1.5"
     },
+    "suggest": {
+        "ext-memcached": "To use Memcached as CacheStorage (default for tymy.cz). If you dont want to use MemCached, override cache storage in your local/config.neon"
+    },
     "require-dev": {
         "nette/tester": "^2.0",
         "squizlabs/php_codesniffer": "* 4.0.x-dev",
