@@ -103,22 +103,6 @@ class DefaultPresenter extends SecuredPresenter
         $this->redirectUrl("https://$teamSysName.tymy.cz/sign/in?tk=" . $tk->getTransferKey());
     }
 
-    /**
-     * @return mixed[]
-     */
-    private function sortUsersByLastLogin($usersArray): array
-    {
-        $notSetValues = [];
-        foreach ($usersArray as $key => $value) {
-            if (!property_exists($value, "lastLogin")) {
-                $notSetValues[] = $value;
-                unset($usersArray[$key]);
-            }
-        }
-        usort($usersArray, fn($a, $b) => $this::sortUsersComparer($a, $b));
-        return array_merge($usersArray, $notSetValues);
-    }
-
     private static function sortUsersComparer($a, $b): int
     {
         if (!property_exists($a, "lastLogin") || !property_exists($b, "lastLogin")) {
