@@ -87,7 +87,7 @@ abstract class RootPresenter extends Presenter
         ]);
 
         return $this->teamCache->load("versions", function (): array {
-                $dirToCheckVersions = is_dir(ROOT_DIR . '/../master') ? ROOT_DIR . '/../master' : ROOT_DIR;
+                $dirToCheckVersions = is_dir(ROOT_DIR . '/../develop') ? ROOT_DIR . '/../develop' : ROOT_DIR;
                 $versions = explode("\n", shell_exec('git -C ' . $dirToCheckVersions . ' tag -l --format="%(creatordate:iso8601)|%(refname:short)" --sort=-v:refname'));
                 $out = [];
             foreach ($versions as $versionStr) {
