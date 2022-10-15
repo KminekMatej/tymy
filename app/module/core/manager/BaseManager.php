@@ -418,7 +418,7 @@ abstract class BaseManager
 
         foreach ($this->getScheme() as $field) {
             /* @var $field Field */
-            if ($field->getMandatory() && !property_exists($array, $field->getProperty())) {
+            if ($field->getMandatory() && !array_key_exists($field->getProperty(), $array)) {
                 $this->responder->E4013_MISSING_INPUT($field->getProperty());
             }
 
