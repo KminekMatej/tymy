@@ -20,12 +20,6 @@ class Field
     /** @var mixed|null */
     private $property;
 
-    /**
-     * @var mixed|null
-     * @deprecated
-     */
-    private $alias;
-
     private bool $mandatory = false;
 
     private bool $nonempty = false;
@@ -103,12 +97,6 @@ class Field
         return $this->property;
     }
 
-    /** @deprecated */
-    public function getAlias(): string
-    {
-        return $this->alias;
-    }
-
     public function getMandatory(): bool
     {
         return $this->mandatory;
@@ -128,13 +116,6 @@ class Field
     public function setProperty(string $property): static
     {
         $this->property = $property;
-        return $this;
-    }
-
-    /** @deprecated */
-    public function setAlias(string $alias): static
-    {
-        $this->alias = $alias;
         return $this;
     }
 

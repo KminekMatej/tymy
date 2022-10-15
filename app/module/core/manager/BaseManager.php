@@ -188,7 +188,7 @@ abstract class BaseManager
                 continue;
             }
 
-            $input = $field->getAlias() ?: $field->getProperty();
+            $input = $field->getProperty();
             if ($field->getMandatory() && !array_key_exists($input, $array)) {
                 $this->responder->E4015_MISSING_URL_INPUT($input);
             }
