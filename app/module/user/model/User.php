@@ -47,7 +47,6 @@ class User extends BaseModel
     private ?string $firstName = null;
     private ?string $lastName = null;
     private string $fullName;
-    private ?string $userName = null;
     private string $password;
     private ?string $callName = null;
     private ?string $language = null;
@@ -430,17 +429,6 @@ class User extends BaseModel
     public function setFullName(string $fullName): static
     {
         $this->fullName = $fullName;
-        return $this;
-    }
-
-    public function getUserName(): ?string
-    {
-        return $this->userName;
-    }
-
-    public function setUserName(?string $userName): static
-    {
-        $this->userName = $userName;
         return $this;
     }
 
