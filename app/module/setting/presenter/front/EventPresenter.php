@@ -86,22 +86,22 @@ class EventPresenter extends SettingBasePresenter
         $this->redirect(':Setting:Event:');
     }
 
-    public function createComponentNewEventForm(): \Nette\Application\UI\Form
+    public function createComponentNewEventForm(): Form
     {
         return $this->formFactory->createEventLineForm(
             $this->eventTypes,
-            fn(\Nette\Application\UI\Form $form, \stdClass $values) => $this->newEventFormSuccess($form, $values)
+            fn(Form $form, \stdClass $values) => $this->newEventFormSuccess($form, $values)
         );
     }
 
-    public function createComponentEventForm(): \Nette\Application\UI\Multiplier
+    public function createComponentEventForm(): Multiplier
     {
-        return new Multiplier(function (string $eventId): \Nette\Application\UI\Form {
+        return new Multiplier(function (string $eventId): Form {
                 $event = $this->eventManager->getById((int) $eventId);
 
                 return $this->formFactory->createEventLineForm(
                     $this->eventTypes,
-                    fn(\Nette\Application\UI\Form $form, \stdClass $values) => $this->eventFormSuccess($form, $values),
+                    fn(Form $form, \stdClass $values) => $this->eventFormSuccess($form, $values),
                     $event
                 );
         });

@@ -2,6 +2,7 @@
 
 namespace Tymy\Module\Core\Factory;
 
+use Closure;
 use Contributte\Translation\Translator;
 use Nette;
 use Nette\Application\UI\Form;
@@ -51,7 +52,7 @@ class FormFactory
         return $this->userPermissions;
     }
 
-    public function createEventLineForm(array $eventTypesList, array $onSuccess, ?Event $event = null): Form
+    public function createEventLineForm(array $eventTypesList, Closure $onSuccess, ?Event $event = null): Form
     {
         $eventTypes = [];
 
@@ -104,7 +105,7 @@ class FormFactory
         return $form;
     }
 
-    public function createStatusSetForm(array $onSuccess): Multiplier
+    public function createStatusSetForm(Closure $onSuccess): Multiplier
     {
         return new Multiplier(function (string $statusSetId) use ($onSuccess): \Nette\Application\UI\Form {
                 /* @var $statusSet StatusSet */
@@ -144,7 +145,7 @@ class FormFactory
         });
     }
 
-    public function createEventTypeForm(array $onSuccess): Multiplier
+    public function createEventTypeForm(Closure $onSuccess): Multiplier
     {
         $ssList = [];
 
@@ -183,7 +184,7 @@ class FormFactory
         });
     }
 
-    public function createTeamConfigForm(array $onSuccess): Form
+    public function createTeamConfigForm(Closure $onSuccess): Form
     {
         $eventTypes = $this->eventTypeManager->getList();
         $team = $this->teamManager->getTeam();
@@ -210,7 +211,7 @@ class FormFactory
         return $form;
     }
 
-    public function createPollConfigForm(array $onSuccess, ?Poll $poll = null): Form
+    public function createPollConfigForm(Closure $onSuccess, ?Poll $poll = null): Form
     {
         $form = new Form();
         $id = $form->addHidden("id");
@@ -299,7 +300,7 @@ class FormFactory
         return $form;
     }
 
-    public function createUserConfigForm(array $onSuccess, ?User $user): Form
+    public function createUserConfigForm(Closure $onSuccess, ?User $user): Form
     {
         $form = new Form();
         $id = $form->addHidden("id");

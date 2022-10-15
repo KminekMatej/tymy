@@ -94,12 +94,10 @@ class PollPresenter extends SettingBasePresenter
     public function createComponentPollForm(): Form
     {
         $pollId = $this->parseIdFromWebname($this->getRequest()->getParameter("resource"));
-        return $this->formFactory->createPollConfigForm(function (\Nette\Application\UI\Form $form, \stdClass $values) : void {
-            $this->pollFormSuccess($form, $values);
-        }, ($pollId ? $this->pollManager->getById($pollId) : null));
+        return $this->formFactory->createPollConfigForm(fn(Form $form, stdClass $values) => $this->pollFormSuccess($form, $values), ($pollId ? $this->pollManager->getById($pollId) : null));
     }
 
-    public function pollFormSuccess(Form $form, \stdClass $values): void
+    public function pollFormSuccess(Form $form, stdClass $values): void
     {
         /* @var $poll Poll */
         $poll = $values->id ?

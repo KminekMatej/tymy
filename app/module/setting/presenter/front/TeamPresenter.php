@@ -23,23 +23,19 @@ class TeamPresenter extends SettingBasePresenter
 
     public function createComponentStatusSetForm(): Multiplier
     {
-        return $this->formFactory->createStatusSetForm(function (\Nette\Application\UI\Form $form, $values) : void {
+        return $this->formFactory->createStatusSetForm(function (Form $form, $values) : void {
             $this->statusFormSuccess($form, $values);
         });
     }
 
     public function createComponentTeamConfigForm(): Form
     {
-        return $this->formFactory->createTeamConfigForm(function (\Nette\Application\UI\Form $form, $values) : void {
-            $this->teamConfigFormSuccess($form, $values);
-        });
+        return $this->formFactory->createTeamConfigForm(fn(Form $form, $values) => $this->teamConfigFormSuccess($form, $values));
     }
 
     public function createComponentEventTypeForm(): Multiplier
     {
-        return $this->formFactory->createEventTypeForm(function (\Nette\Application\UI\Form $form, $values) : void {
-            $this->eventTypeFormSuccess($form, $values);
-        });
+        return $this->formFactory->createEventTypeForm(fn(Form $form, $values) => $this->eventTypeFormSuccess($form, $values));
     }
 
     public function statusFormSuccess(Form $form, $values): void

@@ -7,6 +7,7 @@ use Nette\Http\FileUpload;
 use Nette\Utils\Image;
 use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Core\Factory\FormFactory;
+use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Manager\AvatarManager;
@@ -92,7 +93,7 @@ class PlayerPresenter extends SecuredPresenter
         $userId = $this->parseIdFromWebname($player);
         $user = $this->userManager->getById($userId);
 
-        if (!$user instanceof \Tymy\Module\Core\Model\BaseModel) {
+        if (!$user instanceof BaseModel) {
             $this->flashMessage($this->translator->translate("common.alerts.userNotFound", null, ['id' => $userId]), "danger");
             $this->redirect(':Team:Default:');
         }
@@ -156,7 +157,7 @@ class PlayerPresenter extends SecuredPresenter
         $userId = $this->parseIdFromWebname($this->getRequest()->getParameter("player"));
 
         return $this->formFactory->createUserConfigForm(
-            fn(\Nette\Application\UI\Form $form, $values) => $this->userConfigFormSuccess($form, $values),
+            fn(Form $form, $values) => $this->userConfigFormSuccess($form, $values),
             $this->getAction() == "new" ? null : $this->userManager->getById($userId),
         );
     }
