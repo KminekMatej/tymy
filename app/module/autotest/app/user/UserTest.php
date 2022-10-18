@@ -10,6 +10,7 @@ use Tymy\Module\Autotest\Entity\Assert;
 use Tymy\Module\Autotest\RequestCase;
 use Tymy\Module\Autotest\SimpleResponse;
 use Tymy\Module\User\Model\User;
+use Vojir\Responses\CsvResponse\ComposedCsvResponse;
 
 require getenv("ROOT_DIR") . '/app/Bootstrap.php';
 $container = Bootstrap::boot();
@@ -197,6 +198,13 @@ class UserTest extends RequestCase
         $this->deleteRecord($registeredData["id"]);
     }
 
+    public function textCsvExport()
+    {
+        $this->request("api/team/export", "PUT")->expect(405);
+        $httpResponse = $this->request("api/team/export", "GET", [], ComposedCsvResponse::class)->expect(200)->getHttpResponse();
+        Assert::equal("text/csv", $httpResponse->getHeader("Content-type"));
+    }
+
     /**
      * @return array<string, mixed>
      */
@@ -361,7 +369,7 @@ class UserTest extends RequestCase
     /**
      * Load data list
      */
-    private function getList(): \Tymy\Module\Autotest\SimpleResponse
+    private function getList(): SimpleResponse
     {
         $this->authorizeAdmin();
         return $this->request($this->getBasePath())->expect(200, "array");
