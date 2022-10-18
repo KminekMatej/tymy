@@ -13,13 +13,14 @@ use Tymy\Module\User\Manager\UserManager;
  */
 class RegisterPresenter extends BasePresenter
 {
-    public function injectManager(UserManager $userManager)
+    public function injectManager(UserManager $userManager): void
     {
         $this->manager = $userManager;
     }
 
-    public function actionDefault()
+    public function actionDefault(): void
     {
+        $registeredUser = null;
         if ($this->getRequest()->getMethod() !== "POST") {
             $this->respondNotAllowed();
         }
@@ -32,6 +33,6 @@ class RegisterPresenter extends BasePresenter
             $this->handleException($exc);
         }
 
-        $this->respondOkCreated($registeredUser->jsonSerialize()); /* @phpstan-ignore-line */
+        $this->respondOkCreated($registeredUser->jsonSerialize());
     }
 }

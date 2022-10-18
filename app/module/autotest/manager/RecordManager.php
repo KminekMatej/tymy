@@ -19,17 +19,11 @@ use Tymy\Module\Autotest\Entity\Assert;
  */
 class RecordManager
 {
-    /** @var RequestCase */
-    private $requestCase;
-    private $config;
-
-    public function __construct(RequestCase $requestCase, $config)
+    public function __construct(private RequestCase $requestCase, private $config)
     {
-        $this->requestCase = $requestCase;
-        $this->config = $config;
     }
 
-    private function createRecord(string $url, $data = null, $changes = null, string $identifier = "ID", ?array $checkSkips = null): int
+    private function createRecord(string $url, array $data = null, $changes = null, string $identifier = "ID", ?array $checkSkips = null): int
     {
         $this->applyChanges($data, $changes);
 
@@ -114,7 +108,7 @@ class RecordManager
         return $this->createRecord("attendanceStatusSet", $data ?: $this->mockStatusSet(), $changes, "id");
     }
 
-    public function mockAttendance(int $eventId, $pre = true, $post = false)
+    public function mockAttendance(int $eventId, $pre = true, $post = false): array
     {
         $data = [
             "eventId" => $eventId
@@ -133,10 +127,13 @@ class RecordManager
         return $data;
     }
 
-    public function mockDebt()
+    /**
+     * @return array<string, mixed>
+     */
+    public function mockDebt(): array
     {
         return [
-            "amount" => (float)rand(10, 1000),
+            "amount" => (float)random_int(10, 1000),
             "currencyIso" => "CZK",
             "countryIso" => "cs",
             "debtorId" => $this->config["user_test_id"],
@@ -149,11 +146,14 @@ class RecordManager
         ];
     }
 
-    public function mockDiscussion()
+    /**
+     * @return array<string, string>|array<string, bool>
+     */
+    public function mockDiscussion(): array
     {
         return [
-            "caption" => "Autotest diskuze " . rand(0, 1000),
-            "description" => "Blablabla " . rand(0, 1000),
+            "caption" => "Autotest diskuze " . random_int(0, 1000),
+            "description" => "Blablabla " . random_int(0, 1000),
             "readRightName" => "",
             "writeRightName" => "",
             "deleteRightName" => "ADMINONLY",
@@ -163,12 +163,15 @@ class RecordManager
         ];
     }
 
-    public function mockEvent()
+    /**
+     * @return array<string, mixed>
+     */
+    public function mockEvent(): array
     {
         return [
-            "caption" => "Autotest event " . rand(0, 1000),
+            "caption" => "Autotest event " . random_int(0, 1000),
             "type" => "TRA",
-            "description" => "Testovací trénink " . rand(0, 1000),
+            "description" => "Testovací trénink " . random_int(0, 1000),
             "closeTime" => $this->toJsonDate(new DateTime("- 2 hours")),
             "startTime" => $this->toJsonDate(new DateTime("+ 2 hours")),
             "endTime" => $this->toJsonDate(new DateTime("+ 3 hours")),
@@ -178,23 +181,26 @@ class RecordManager
         ];
     }
 
-    public function mockOption(int $pollId = null)
+    /**
+     * @return array<string, string>|array<string, int>|array<string, null>
+     */
+    public function mockOption(int $pollId = null): array
     {
-        $type = ["NUMBER","TEXT","BOOLEAN"][rand(0, 2)];
+        $type = ["NUMBER","TEXT","BOOLEAN"][random_int(0, 2)];
 
         return [
-            "caption" => "Poll $type " . rand(0, 1000),
+            "caption" => "Poll $type " . random_int(0, 1000),
             "type" => $type,
             "pollId" => $pollId,
         ];
     }
 
-    public function mockPermission()
+    public function mockPermission(): array
     {
         return [
             "type" => "USR",
-            "caption" => "Autotest event " . rand(0, 1000),
-            "name" => "AUTOPERM " . rand(0, 1000),
+            "caption" => "Autotest event " . random_int(0, 1000),
+            "name" => "AUTOPERM " . random_int(0, 1000),
             "allowedRoles" => ["SUPER", "ATT"],
             "revokedRoles" => ["USR"],
             "allowedStatuses" => ["PLAYER"],
@@ -204,10 +210,13 @@ class RecordManager
         ];
     }
 
-    public function mockPoll()
+    /**
+     * @return array<string, string>|array<string, bool>
+     */
+    public function mockPoll(): array
     {
         return [
-            "caption" => "Autotest poll " . rand(0, 1000),
+            "caption" => "Autotest poll " . random_int(0, 1000),
             "changeableVotes" => true,
             "anonymousResults" => false,
             "showResults" => "ALWAYS",
@@ -215,9 +224,12 @@ class RecordManager
         ];
     }
 
-    public function mockUser()
+    /**
+     * @return string[]|bool[]|int[]
+     */
+    public function mockUser(): array
     {
-        $rand = rand(0, 30000);
+        $rand = random_int(0, 30000);
         return [
             "login" => "MAL_GANIS_" . $rand,
             "password" => md5($rand),
@@ -229,8 +241,8 @@ class RecordManager
             "lastName" => "Svěcený",
             "callName" => "Jožo",
             "language" => "CZ",
-            "jerseyNumber" => (string)rand(0, 100),
-            "gender" => ["MALE", "FEMALE"][rand(0, 1)],
+            "jerseyNumber" => (string)random_int(0, 100),
+            "gender" => ["MALE", "FEMALE"][random_int(0, 1)],
             "street" => "K Marastu 315",
             "city" => "Nový Krobuzon",
             "zipCode" => "91544",
@@ -241,9 +253,12 @@ class RecordManager
         ];
     }
 
-    public function mockStatus(int $statusSetId)
+    /**
+     * @return array<string, mixed>
+     */
+    public function mockStatus(int $statusSetId): array
     {
-        $rand = rand(0, 30000);
+        $rand = random_int(0, 30000);
         return [
             "code" => strtoupper(substr(md5($rand), 0, 3)),//random code
             "caption" => "Why do this? ($rand)",
@@ -252,25 +267,23 @@ class RecordManager
         ];
     }
 
-    public function mockStatusSet()
+    /**
+     * @return array<string, mixed>
+     */
+    public function mockStatusSet(): array
     {
-        $rand = rand(0, 30000);
+        $rand = random_int(0, 30000);
         return [
             "name" => "Autotest status set $rand"
         ];
     }
 
-    public function deleteUser($id)
+    public function deleteUser($id): void
     {
         $this->deleteRecord(User::MODULE, $id);
     }
 
-    private function moduleConfig($module, $key)
-    {
-        return isset($this->config[$module]) ? $this->config[$module][$key] : null;
-    }
-
-    public function deleteRecord($basePath, $id)
+    public function deleteRecord($basePath, $id): void
     {
         $url = "$basePath/$id";
 
@@ -281,10 +294,10 @@ class RecordManager
 
     private function toJsonDate(DateTime $date = null)
     {
-        return $date ? $date->format(BaseModel::DATE_FORMAT) : null;
+        return $date !== null ? $date->format(BaseModel::DATE_FORMAT) : null;
     }
 
-    private function applyChanges(&$data, $changes)
+    private function applyChanges(&$data, $changes): void
     {
         if ($changes && is_array($changes)) {
             foreach ($changes as $key => $value) {

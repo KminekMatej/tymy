@@ -13,7 +13,7 @@ use Tymy\Module\File\Handler\FileManager;
  */
 class DownloadPresenter extends SecuredPresenter
 {
-    public function actionDefault(string $filename, string $folder = "/")
+    public function actionDefault(string $filename, string $folder = "/"): void
     {
         $folderSlashed = rtrim($folder, "/") . "/";
         $fullpath = FileManager::DOWNLOAD_DIR . $folderSlashed . \Tymy\Module\Core\Helper\StringHelper::urldecode($filename);

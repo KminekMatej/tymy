@@ -19,6 +19,9 @@ class ICalItemManager extends BaseManager
         return ICalItem::class;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     protected function getScheme(): array
     {
         return ICalItemMapper::scheme();
@@ -44,6 +47,9 @@ class ICalItemManager extends BaseManager
         return parent::deleteRecord($subResourceId);
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getAllowedReaders(BaseModel $record): array
     {
         return [];

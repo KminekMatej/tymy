@@ -33,26 +33,17 @@ class PostManager extends BaseManager
     // so if discussion has 6 sticky posts, even one new is not displayed at first page
     public const MINIMUM_NUMBER_OF_POSTS_DISPLAYED_WITH_NEW_POSTS = 5;
     public const MAXIMUM_FIRST_PAGE_SIZE = 200;
-
-    private DiscussionManager $discussionManager;
-    private PushNotificationManager $pushNotificationManager;
-    private NotificationGenerator $notificationGenerator;
-    private UserManager $userManager;
     private bool $inBbCode = true;
-    private ?Discussion $discussion;
-    private ?Post $post;
+    private ?Discussion $discussion = null;
+    private ?Post $post = null;
     private array $reactionsCache;
 
-    public function __construct(ManagerFactory $managerFactory, DiscussionManager $discussionManager, UserManager $userManager, PushNotificationManager $pushNotificationManager, NotificationGenerator $notificationGenerator)
+    public function __construct(ManagerFactory $managerFactory, private DiscussionManager $discussionManager, private UserManager $userManager, private PushNotificationManager $pushNotificationManager, private NotificationGenerator $notificationGenerator)
     {
         parent::__construct($managerFactory);
-        $this->discussionManager = $discussionManager;
-        $this->userManager = $userManager;
-        $this->pushNotificationManager = $pushNotificationManager;
-        $this->notificationGenerator = $notificationGenerator;
     }
 
-    public function allowDiscussion($discussionId)
+    public function allowDiscussion($discussionId): void
     {
         $this->discussion = $this->loadRecord($discussionId, $this->discussionManager);
 
@@ -132,7 +123,7 @@ class PostManager extends BaseManager
 
     public function map(?IRow $row, bool $force = false): ?BaseModel
     {
-        if (!$row) {
+        if ($row === null) {
             return null;
         }
 
@@ -143,7 +134,7 @@ class PostManager extends BaseManager
             $post->setPost(BbService::bb2Html($post->getPost()));
         }
 
-        if (property_exists($post, "newPost")) {
+        if (property_exists($row, "newPost")) {
             $post->setNewPost($row->newPost);
         }
 
@@ -163,7 +154,6 @@ class PostManager extends BaseManager
 
     /**
      * Load aray of reactions to a certain posts.
-     * @param int $postId
      * @return array in the form of ["utf8mb4smiley" => [1,2,4]] .. where 1,2,4 are user ids, reacting with this smile
      */
     private function getReactions(int $postId): array
@@ -194,7 +184,7 @@ class PostManager extends BaseManager
                 $postReactions[$reaction] = [];
             }
 
-            $postReactions[$reaction][] = intval($userId);
+            $postReactions[$reaction][] = (int) $userId;
         }
 
         return $postReactions;
@@ -230,10 +220,8 @@ class PostManager extends BaseManager
     /**
      * Update POST with checking permissions
      *
-     * @param array $data
      * @param int $resourceId Id of discussion
      * @param int|null $subResourceId Id of post
-     * @return Post
      */
     public function update(array $data, int $resourceId, ?int $subResourceId = null): Post
     {
@@ -264,12 +252,12 @@ class PostManager extends BaseManager
         if ($jump2Date) {
             try {
                 $page = $this->getPageNumberFromDate($discussionId, $this->discussion->getNewInfo()->getNewsCount(), new DateTime($jump2Date)); //sanitize invalid inputs
-            } catch (Exception $exc) {
+            } catch (Exception) {
                 $page = 1;
             }
         }
 
-        $posts = $this->getPostsFromDiscussion($this->discussion->getId(), $page, $mode == "bb", $search, intval($suser));
+        $posts = $this->getPostsFromDiscussion($this->discussion->getId(), $page, $mode == "bb", $search, (int) $suser);
         return new DiscussionPosts($this->discussion, $page, $this->getNumberOfPages($this->discussion->getId()), $posts);
     }
 
@@ -289,6 +277,9 @@ class PostManager extends BaseManager
         return Post::class;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     protected function getScheme(): array
     {
         return PostMapper::scheme();
@@ -297,10 +288,8 @@ class PostManager extends BaseManager
     /**
      * Check edit permissions
      * @param Post $entity
-     * @param int $userId
-     * @return bool
      */
-    public function canEdit($entity, $userId): bool
+    public function canEdit($entity, int $userId): bool
     {
         return $entity->getCreatedById() == $userId;
     }
@@ -308,10 +297,8 @@ class PostManager extends BaseManager
     /**
      * Check read permissions
      * @param Post $entity
-     * @param int $userId
-     * @return bool
      */
-    public function canRead($entity, $userId): bool
+    public function canRead($entity, int $userId): bool
     {
         return in_array($entity->getDiscussionId(), $this->discussionManager->getIdsUserAllowed($userId));
     }
@@ -329,13 +316,9 @@ class PostManager extends BaseManager
 
     /**
      * Get posts from discussion, selected by page, optionally filtered with search string and/or search user id
-     * @param int $discussionId
-     * @param int $page
-     * @param string|null $search
-     * @param int|null $searchUserId
-     * @return Post[]|null
+     * @return \Tymy\Module\Core\Model\BaseModel[]
      */
-    private function getPostsFromDiscussion(int $discussionId, int $page = 1, $inBBCode = true, ?string $search = null, ?int $searchUserId = null): ?array
+    private function getPostsFromDiscussion(int $discussionId, int $page = 1, bool $inBBCode = true, ?string $search = null, ?int $searchUserId = null): array
     {
         $this->inBbCode = $inBBCode;
         $offset = ($page - 1) * self::POSTS_PER_PAGE;
@@ -363,7 +346,7 @@ class PostManager extends BaseManager
         $query[] = "OFFSET ?";
         $params[] = $offset;
 
-        $posts = $this->mapAll($this->database->query(join(" ", $query), ...$params)->fetchAll());
+        $posts = $this->mapAll($this->database->query(implode(" ", $query), ...$params)->fetchAll());
 
         if (!$this->user->getIdentity()->ghost) {
             $this->markAllAsRead($this->user->getId(), $discussionId);
@@ -374,9 +357,6 @@ class PostManager extends BaseManager
 
     /**
      * Return size of first page - usually its twenty, but with a lot of new posts it can get higher, up until 200
-     *
-     * @param int|null $newPosts
-     * @return int
      */
     private function getFirstPageSize(?int $newPosts = null): int
     {
@@ -387,13 +367,8 @@ class PostManager extends BaseManager
 
     /**
      * Get proper page number when searching for page of specific date
-     *
-     * @param int $dicussionId
-     * @param int $newPosts
-     * @param DateTime $jumpDate
-     * @return int
      */
-    private function getPageNumberFromDate(int $dicussionId, int $newPosts, DateTime $jumpDate): int
+    private function getPageNumberFromDate(int $dicussionId, int $newPosts, DateTime $jumpDate): int|float
     {
         $firstPageSize = $this->getFirstPageSize($newPosts);
         $postCountBeforeDate = $this->database->table($this->getTable())->where("discussion_id", $dicussionId)->where("insert_date > ?", $jumpDate)->count("id");
@@ -405,12 +380,8 @@ class PostManager extends BaseManager
 
     /**
      * Return number of all posts, optionally filtered with search string and/or search user id
-     * @param int $discussionId
-     * @param string|null $search
-     * @param int|null $searchUserId
-     * @return int
      */
-    public function countPosts(int $discussionId, ?string $search = null, ?int $searchUserId = null)
+    public function countPosts(int $discussionId, ?string $search = null, ?int $searchUserId = null): int
     {
         $selector = $this->database->table($this->getTable())
                 ->where("discussion_id", $discussionId);
@@ -428,11 +399,6 @@ class PostManager extends BaseManager
 
     /**
      * Get number of all pages in selected discussion, optionally filtered with search string and/or search user id
-     *
-     * @param int $discussionId
-     * @param string|null $search
-     * @param int|null $searchUserId
-     * @return int
      */
     public function getNumberOfPages(int $discussionId, ?string $search = null, ?int $searchUserId = null): int
     {
@@ -442,10 +408,6 @@ class PostManager extends BaseManager
 
     /**
      * Mark all items in discussion as read for user
-     *
-     * @param int $userId
-     * @param int $discussionId
-     * @return void
      */
     private function markAllAsRead(int $userId, int $discussionId): void
     {
@@ -453,7 +415,7 @@ class PostManager extends BaseManager
             ->where("discussion_id", $discussionId)
             ->where("user_id", $userId);
 
-        if ($selector->count()) {
+        if ($selector->count() !== 0) {
             $selector->update([
                 "last_date" => Explorer::literal("NOW()")
             ]);
@@ -469,11 +431,6 @@ class PostManager extends BaseManager
 
     /**
      * Stick/unstick a post
-     *
-     * @param int $postId
-     * @param int $discussionId
-     * @param bool $stick
-     * @return void
      */
     public function stickPost(int $postId, int $discussionId, bool $stick = true): void
     {
@@ -488,12 +445,6 @@ class PostManager extends BaseManager
 
     /**
      * Create new reaction or delete existing one to a discussion post or update existing reaction
-     * @param int $discussionId
-     * @param int $postId
-     * @param int $userId
-     * @param string $reaction
-     * @param bool $remove
-     * @return void
      */
     public function react(int $discussionId, int $postId, int $userId, string $reaction, bool $remove = false): void
     {
@@ -521,7 +472,7 @@ class PostManager extends BaseManager
             ->where("reaction", $reaction)
             ->count('id');
 
-        if ($reactionsCnt) {
+        if ($reactionsCnt !== 0) {
             //this reaction already exists - dont do anything
             return;
         }

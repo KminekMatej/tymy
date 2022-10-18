@@ -23,23 +23,20 @@ class EventTypeManager extends BaseManager
 {
     private ?EventType $eventType = null;
     private array $colorList;
-    private StatusManager $statusManager;
 
-    public function __construct(ManagerFactory $managerFactory, StatusManager $statusManager)
+    public function __construct(ManagerFactory $managerFactory, private StatusManager $statusManager)
     {
         parent::__construct($managerFactory);
-        $this->statusManager = $statusManager;
     }
 
     /**
      *
-     * @param ActiveRow $row
-     * @param bool $force
+     * @param ActiveRow|null $row
      * @return EventType|null
      */
-    public function map(?IRow $row, $force = false): ?BaseModel
+    public function map(?IRow $row, bool $force = false): ?BaseModel
     {
-        if (!$row) {
+        if ($row === null) {
             return null;
         }
 
@@ -64,6 +61,9 @@ class EventTypeManager extends BaseManager
         return EventType::class;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     protected function getScheme(): array
     {
         return EventTypeMapper::scheme();
@@ -93,7 +93,7 @@ class EventTypeManager extends BaseManager
      * Get list of all event types, with their code as array keys
      * @return EventType[]
      */
-    public function getIndexedList()
+    public function getIndexedList(): array
     {
         $types = $this->getList();
         $typesIndexed = [];
@@ -106,6 +106,9 @@ class EventTypeManager extends BaseManager
         return $typesIndexed;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\BaseModel[]
+     */
     public function getListUserAllowed($userId): array
     {
         //reading is not restricted
@@ -122,6 +125,9 @@ class EventTypeManager extends BaseManager
         throw new NotImplementedException("Not implemented yet");
     }
 
+    /**
+     * @return int[]
+     */
     public function getAllowedReaders(BaseModel $record): array
     {
         return $this->getAllUserIds(); //everyone can read
@@ -141,20 +147,15 @@ class EventTypeManager extends BaseManager
 
     /**
      * Get Event type row from database, using its unique code or null, if this code has not been found
-     *
-     * @param string $code
-     * @return ActiveRow|null
      */
     public function getByCode(string $code): ?ActiveRow
     {
-        $typeRow = $this->database->table($this->getTable())->where("code", $code)->fetch();
-        return $typeRow ? $typeRow : null;
+        return $this->database->table($this->getTable())->where("code", $code)->fetch();
     }
 
     /**
      * Get event type color, cached
      *
-     * @param int $eventTypeId
      * @return string Hexadecimal color value, without leading hashtag
      */
     public function getEventTypeColor(int $eventTypeId): string

@@ -18,7 +18,7 @@ class TestsManager
     public const OUT_JUNIT = ROOT_DIR . "/temp/output.junit";
     public const OUT_CONSOLE = ROOT_DIR . "/temp/output.console";
 
-    public function runTests($folder = "")
+    public function runTests($folder = ""): ?int
     {
         $command = "tester -c " . TEST_DIR . "/php.ini -o junit --setup " . TEST_DIR . "/setup.php -j 4 " . TEST_DIR . "/app";
 
@@ -63,7 +63,7 @@ class TestsManager
      *
      * @return string[] Array of folders, with exceptions set in SKIP constant
      */
-    public function getAllFolders()
+    public function getAllFolders(): array
     {
         $dirs = array_filter(glob(TEST_DIR . '/app/*'), 'is_dir');
         $modules = ["all"];

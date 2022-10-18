@@ -23,52 +23,13 @@ $container = Bootstrap::boot();
  */
 class DiscussionTest extends RequestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
+        $data = null;
         $listResponse = $this->getList();
-        if (count($listResponse->getData()) == 0) {
-            return;
-        }
-        $data = $listResponse->getData();
-        shuffle($data);
-        $iterations = min(5, count($data));
-
-        for ($index = 0; $index < $iterations; $index++) {
-            $d = array_shift($data);
-            $idRecord = $d["id"];
-            $response = $this->request($this->getBasePath() . "/$idRecord")->expect(200, "array")->getData();
-            Assert::hasKey("numberOfPosts", $response);
-            Assert::hasKey("newPosts", $response);
-            Assert::hasKey("id", $response);
-            Assert::hasKey("createdAt", $response);
-            Assert::hasKey("createdById", $response);
-            Assert::hasKey("updatedById", $response);
-            Assert::hasKey("updatedAt", $response);
-            Assert::hasKey("caption", $response);
-            Assert::hasKey("description", $response);
-            Assert::hasKey("readRightName", $response);
-            Assert::hasKey("writeRightName", $response);
-            Assert::hasKey("deleteRightName", $response);
-            Assert::hasKey("stickyRightName", $response);
-            Assert::hasKey("publicRead", $response);
-            Assert::hasKey("status", $response);
-            Assert::hasKey("editablePosts", $response);
-            Assert::hasKey("order", $response);
-            Assert::hasKey("canRead", $response);
-            Assert::hasKey("canWrite", $response);
-            Assert::hasKey("canDelete", $response);
-            Assert::hasKey("canStick", $response);
-            Assert::hasKey("newPosts", $response);
-            Assert::hasKey("numberOfPosts", $response);
-            Assert::hasKey("newInfo", $response);
-            Assert::type("array", $response["newInfo"]);
-            Assert::hasKey("discussionId", $response["newInfo"]);
-            Assert::hasKey("newsCount", $response["newInfo"]);
-            Assert::hasKey("lastVisit", $response["newInfo"]);
-        }
     }
 
-    public function testNewOnly()
+    public function testNewOnly(): void
     {
         $newOnlyResponse = $this->request($this->getBasePath() . "/newOnly")->expect(200, "array");
         $data = $newOnlyResponse->getData();
@@ -79,7 +40,7 @@ class DiscussionTest extends RequestCase
         }
     }
 
-    public function testCRUDNotPermittedDiscussion()
+    public function testCRUDNotPermittedDiscussion(): void
     {
         $dId = $this->recordManager->createDiscussion(null, [
             "readRightName" => "ADMINONLY",
@@ -88,7 +49,7 @@ class DiscussionTest extends RequestCase
             "stickyRightName" => "MAINADMIN",
         ]);
 
-        $pid = $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "ADMIN first post " . rand(0, 10000)])->expect(201)->getData()["id"];
+        $pid = $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "ADMIN first post " . random_int(0, 10000)])->expect(201)->getData()["id"];
 
         $this->authorizeUser();
         //cannot create discussion
@@ -101,7 +62,7 @@ class DiscussionTest extends RequestCase
         $this->request($this->getBasePath() . "/$dId", "DELETE")->expect(403);
 
         //cannot write post to existing disucssion
-        $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "Autotest post " . rand(0, 10000)])->expect(403);
+        $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "Autotest post " . random_int(0, 10000)])->expect(403);
 
         //cannot read post in existing disucssion
         $this->request($this->getBasePath() . "/$dId/post", "GET")->expect(403);
@@ -133,7 +94,7 @@ class DiscussionTest extends RequestCase
         $this->request($this->getBasePath() . "/$dId/bb?search=Autotest&suser=2")->expect(200, "array");
     }
 
-    public function testPostDiscussion()
+    public function testPostDiscussion(): void
     {
         $this->authorizeAdmin();
         $dId = $this->recordManager->createDiscussion(null, [
@@ -142,14 +103,14 @@ class DiscussionTest extends RequestCase
             "stickyRightName" => "MAINADMIN",
         ]);
 
-        $pid = $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "ADMIN first post " . rand(0, 10000)])->expect(201)->getData()["id"];
+        $pid = $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "ADMIN first post " . random_int(0, 10000)])->expect(201)->getData()["id"];
 
         $this->authorizeUser();
 
         //cannot write new post to read-only disucssion
-        $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "Autotest post " . rand(0, 10000)])->expect(403);
+        $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "Autotest post " . random_int(0, 10000)])->expect(403);
         //cannot edit post in read-only
-        $this->request($this->getBasePath() . "/$dId/post/$pid", "PUT", ["post" => "Autotest post " . rand(0, 10000)])->expect(403);
+        $this->request($this->getBasePath() . "/$dId/post/$pid", "PUT", ["post" => "Autotest post " . random_int(0, 10000)])->expect(403);
         //cannot delete post in read-only
         $this->request($this->getBasePath() . "/$dId/post/$pid", "DELETE")->expect(403);
 
@@ -159,12 +120,12 @@ class DiscussionTest extends RequestCase
 
         //unknown post returns 404
         $this->request($this->getBasePath() . "/$dId/post/99999")->expect(404);
-        $this->request($this->getBasePath() . "/$dId/post/99999", "PUT", ["post" => "Autotest post " . rand(0, 10000)])->expect(404);
+        $this->request($this->getBasePath() . "/$dId/post/99999", "PUT", ["post" => "Autotest post " . random_int(0, 10000)])->expect(404);
         $this->request($this->getBasePath() . "/$dId/post/99999", "DELETE")->expect(404);
 
         //post from other discussion returns 404
         $this->request($this->getBasePath() . "/$dId/post/1")->expect(404);
-        $this->request($this->getBasePath() . "/$dId/post/1", "PUT", ["post" => "Autotest post " . rand(0, 10000)])->expect(404);
+        $this->request($this->getBasePath() . "/$dId/post/1", "PUT", ["post" => "Autotest post " . random_int(0, 10000)])->expect(404);
 
         //get as html mode
         $this->request($this->getBasePath() . "/$dId/html")->expect(200);
@@ -177,7 +138,7 @@ class DiscussionTest extends RequestCase
         $this->request($this->getBasePath() . "/$dId/post/$pid", "DELETE")->expect(200);
     }
 
-    public function testBbCodes()
+    public function testBbCodes(): void
     {
         $this->bbTest("[b]Tucnice[/b]", "<strong>Tucnice</strong>");
         $this->bbTest("[i]Kurziva[/i]", "<em>Kurziva</em>");
@@ -230,13 +191,13 @@ class DiscussionTest extends RequestCase
         $this->bbTest("[script type='text/javascript']alert('Uu');[/script]", "[script type='text/javascript']alert('Uu');[/script]");
     }
 
-    private function bbTest(string $bb, string $html)
+    private function bbTest(string $bb, string $html): void
     {
         $out = $this->request($this->getBasePath() . "/preview", "POST", ["post" => $bb])->expect(200, "string")->getData();
         Assert::equal($html, $out);
     }
 
-    public function testSticky()
+    public function testSticky(): void
     {
         $this->authorizeAdmin();
         $dId = $this->recordManager->createDiscussion(null, [
@@ -244,11 +205,11 @@ class DiscussionTest extends RequestCase
             "stickyRightName" => "MAINADMIN",
         ]);
 
-        $pid = $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "ADMIN first post " . rand(0, 10000)])->expect(201)->getData()["id"];
+        $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "ADMIN first post " . random_int(0, 10000)])->expect(201)->getData();
 
         $this->authorizeUser();
 
-        $pid2 = $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "USER first post " . rand(0, 10000)])->expect(201)->getData()["id"];
+        $pid2 = $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "USER first post " . random_int(0, 10000)])->expect(201)->getData()["id"];
 
         //check that user can update, but cannot stick
         $this->request($this->getBasePath() . "/$dId/post/$pid2", "PUT", ["sticky" => true])->expect(403);
@@ -256,27 +217,26 @@ class DiscussionTest extends RequestCase
 
     /**
      * Load data list
-     * @return SimpleResponse
      */
-    private function getList()
+    private function getList(): \Tymy\Module\Autotest\SimpleResponse
     {
         $this->authorizeAdmin();
         return $this->request($this->getBasePath())->expect(200, "array");
     }
 
-    public function testCRUD()
+    public function testCRUD(): void
     {
         $this->authorizeAdmin();
         $recordId = $this->createRecord();
 
-        $readResponse = $this->request($this->getBasePath() . "/" . $recordId)->expect(200, "array");
+        $this->request($this->getBasePath() . "/" . $recordId)->expect(200, "array");
 
         $this->change($recordId);
 
         $this->deleteRecord($recordId);
     }
 
-    public function createRecord()
+    public function createRecord(): int
     {
         return $this->recordManager->createDiscussion();
     }
@@ -291,6 +251,9 @@ class DiscussionTest extends RequestCase
         return Discussion::MODULE;
     }
 
+    /**
+     * @return array<string, string>
+     */
     protected function mockChanges(): array
     {
         return [
@@ -299,7 +262,10 @@ class DiscussionTest extends RequestCase
         ];
     }
 
-    public function mockRecord()
+    /**
+     * @return string[]|bool[]
+     */
+    public function mockRecord(): array
     {
         return $this->recordManager->mockDiscussion();
     }

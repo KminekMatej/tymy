@@ -14,9 +14,6 @@ class Router implements RouterInterface
 {
     public function addRoutes(RouteList &$router): void
     {
-        $router->addApiRoute('attendance<action Status|StatusSet>[/<resourceId>]', array(
-            'module' => 'Attendance',
-            'presenter' => 'Status',
-        ));
+        $router->addApiRoute('attendance<action Status|StatusSet>[/<resourceId>]', ['module' => 'Attendance', 'presenter' => 'Status']);
     }
 }

@@ -20,7 +20,7 @@ class StatusPresenter extends SecuredPresenter
     /** @inject */
     public StatusSetManager $statusSetManager;
 
-    public function actionStatus($resourceId, $subResourceId)
+    public function actionStatus($resourceId, $subResourceId): void
     {
         switch ($this->getRequest()->getMethod()) {
             case "GET":
@@ -39,7 +39,7 @@ class StatusPresenter extends SecuredPresenter
         $this->respondNotAllowed();
     }
 
-    public function actionStatusSet($resourceId, $subResourceId)
+    public function actionStatusSet(int $resourceId, ?int $subResourceId): void
     {
         switch ($this->getRequest()->getMethod()) {
             case "POST":
@@ -55,91 +55,99 @@ class StatusPresenter extends SecuredPresenter
         $this->respondNotAllowed();
     }
 
-    private function requestStatusGet($resourceId, $subResourceId)
+    private function requestStatusGet(int $resourceId, ?int $subResourceId): void
     {
+        $record = null;
         try {
             $record = $this->statusSetManager->read($resourceId, $subResourceId);
         } catch (Exception $exc) {
             $this->handleException($exc);
         }
 
-        $this->respondOk($record->jsonSerialize()); /* @phpstan-ignore-line */
+        $this->respondOk($record->jsonSerialize());
     }
 
-    private function requestStatusGetList()
+    private function requestStatusGetList(): void
     {
+        $statuses = null;
         try {
             $statuses = $this->statusSetManager->getListUserAllowed($this->user->getId());
         } catch (Exception $exc) {
             $this->handleException($exc);
         }
 
-        $this->respondOk($this->arrayToJson($statuses)); /* @phpstan-ignore-line */
+        $this->respondOk($this->arrayToJson($statuses));
     }
 
-    private function requestStatusPost($resourceId)
+    private function requestStatusPost(?int $resourceId): void
     {
+        $created = null;
         try {
             $created = $this->statusManager->create($this->requestData, $resourceId);
         } catch (Exception $exc) {
             $this->handleException($exc);
         }
 
-        $this->respondOkCreated($created->jsonSerialize()); /* @phpstan-ignore-line */
+        $this->respondOkCreated($created->jsonSerialize());
     }
 
-    private function requestStatusPut($resourceId, $subResourceId)
+    private function requestStatusPut(int $resourceId, ?int $subResourceId): void
     {
+        $updated = null;
         try {
             $updated = $this->statusManager->update($this->requestData, $resourceId, $subResourceId);
         } catch (Exception $exc) {
             $this->handleException($exc);
         }
 
-        $this->respondOk($updated->jsonSerialize()); /* @phpstan-ignore-line */
+        $this->respondOk($updated->jsonSerialize());
     }
 
-    private function requestStatusDelete($resourceId, $subResourceId)
+    private function requestStatusDelete(int $resourceId, ?int $subResourceId): void
     {
+        $deletedId = null;
         try {
             $deletedId = $this->statusManager->delete($resourceId, $subResourceId);
         } catch (Exception $exc) {
             $this->handleException($exc);
         }
 
-        $this->respondDeleted($deletedId); /* @phpstan-ignore-line */
+        $this->respondDeleted($deletedId);
     }
 
-    private function requestStatusSetPost($resourceId)
+    private function requestStatusSetPost(?int $resourceId): void
     {
+        $created = null;
         try {
             $created = $this->statusSetManager->create($this->requestData, $resourceId);
         } catch (Exception $exc) {
             $this->handleException($exc);
         }
 
-        $this->respondOkCreated($created->jsonSerialize()); /* @phpstan-ignore-line */
+        $this->respondOkCreated($created->jsonSerialize());
     }
 
-    private function requestStatusSetPut($resourceId, $subResourceId)
+    private function requestStatusSetPut(int $resourceId, ?int $subResourceId): void
     {
+        $updated = null;
         try {
             $updated = $this->statusSetManager->update($this->requestData, $resourceId, $subResourceId);
         } catch (Exception $exc) {
             $this->handleException($exc);
         }
 
-        $this->respondOk($updated->jsonSerialize()); /* @phpstan-ignore-line */
+        $this->respondOk($updated->jsonSerialize());
     }
 
-    private function requestStatusSetDelete($resourceId, $subResourceId)
+    private function requestStatusSetDelete(int $resourceId, ?int $subResourceId): void
     {
+        $deletedId = null;
         try {
             $deletedId = $this->statusSetManager->delete($resourceId, $subResourceId);
         } catch (Exception $exc) {
             $this->handleException($exc);
         }
 
-        $this->respondDeleted($deletedId); /* @phpstan-ignore-line */
+        $this->respondDeleted($deletedId);
     }
 }

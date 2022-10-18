@@ -12,6 +12,9 @@ use Tymy\Module\Core\Model\Field;
  */
 class AttendanceMapper extends BaseMapper
 {
+    /**
+     * @return mixed[]
+     */
     public static function scheme(): array
     {
         return [

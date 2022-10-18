@@ -21,6 +21,9 @@ class ICalManager extends BaseManager
         return ICal::class;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     protected function getScheme(): array
     {
         return ICalMapper::scheme();
@@ -28,13 +31,11 @@ class ICalManager extends BaseManager
 
     /**
      * @param ICal $entity
-     * @param int $userId
-     * @return bool
      */
     public function canEdit(BaseModel $entity, int $userId): bool
     {
         /* @var $entity ICal */
-        return $entity->getUserId() == $userId;
+        return $entity->getUserId() === $userId;
     }
 
     public function canRead(BaseModel $entity, int $userId): bool
@@ -44,7 +45,7 @@ class ICalManager extends BaseManager
 
     public function map(?IRow $row, $force = false): ?BaseModel
     {
-        if (!$row) {
+        if ($row === null) {
             return null;
         }
 
@@ -58,8 +59,6 @@ class ICalManager extends BaseManager
 
     /**
      * Load calendar of specific user
-     * @param int $userId
-     * @return ICal|null
      */
     public function getByUserId(int $userId): ?ICal
     {
@@ -88,6 +87,9 @@ class ICalManager extends BaseManager
         return parent::deleteRecord($resourceId);
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getAllowedReaders(BaseModel $record): array
     {
         /* @var $record ICal */
@@ -138,7 +140,6 @@ class ICalManager extends BaseManager
      * Update statuses which events this ical shall display
      * @param int $exportId
      * @param int[] $statusIds
-     * @return void
      */
     public function updateItems(ICal $iCal, array $statusIds): void
     {

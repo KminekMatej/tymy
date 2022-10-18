@@ -11,34 +11,10 @@ use JsonSerializable;
  */
 class PushNotification implements JsonSerializable
 {
-    private string $type;
-    private int $userId;
-    private int $teamId;
-    private string $title;
-    private string $message;
-    private ?string $imageUrl = null;
-    private ?int $badge = null;
     private array $params;
 
-    /**
-     * @param string $type
-     * @param int $userId
-     * @param int $teamId
-     * @param string $title
-     * @param string $message
-     * @param string|null $imageUrl
-     * @param int|null $badge
-     * @param array $params
-     */
-    public function __construct(string $type, int $userId, int $teamId, string $title, string $message, ?string $imageUrl, ?int $badge, array $params = [])
+    public function __construct(private string $type, private int $userId, private int $teamId, private string $title, private string $message, private ?string $imageUrl, private ?int $badge, array $params = [])
     {
-        $this->type = $type;
-        $this->userId = $userId;
-        $this->teamId = $teamId;
-        $this->title = $title;
-        $this->message = $message;
-        $this->imageUrl = $imageUrl;
-        $this->badge = $badge;
         $this->params = $params + ["type" => $type];
     }
 
@@ -77,18 +53,21 @@ class PushNotification implements JsonSerializable
         return $this->badge;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getParams(): array
     {
         return $this->params;
     }
 
-    public function addParam(string $name, $value)
+    public function addParam(string $name, $value): static
     {
         $this->params[$name] = $value;
         return $this;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $array = [
             "userId" => $this->userId,

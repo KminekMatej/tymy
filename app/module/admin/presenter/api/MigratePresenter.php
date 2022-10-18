@@ -14,7 +14,7 @@ class MigratePresenter extends AdminSecuredPresenter
     /** @inject */
     public MigrationManager $migrationManager;
 
-    public function actionDefault()
+    public function actionDefault(): void
     {
         $output = $this->migrationManager->migrateUp();
         if ($output["success"]) {

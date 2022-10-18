@@ -12,11 +12,11 @@ jobs:
         - name: "Checkout"
           uses: actions/checkout@v2
           
-        - name: "Composer"
-          run: /usr/bin/php7.4 /usr/bin/composer install
+        - name: "Compose"
+          run: composer install --dev
           
-        - name: "PHP Code Sniffer"
-          run: /usr/bin/php7.4 vendor/bin/phpcs
+        - name: "PHPCs"
+          run: vendor/bin/phpcs
           
-        - name: "PHP Stan"
-          run: /usr/bin/php7.4 vendor/bin/phpstan
+        - name: "PHPStan"
+          run: vendor/bin/phpstan

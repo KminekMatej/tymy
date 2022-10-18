@@ -6,7 +6,7 @@ use Nette;
 
 class Error4xxPresenter extends BasePresenter
 {
-    public function startup()
+    public function startup(): void
     {
         parent::startup();
         if (!$this->getRequest()->isMethod(Nette\Application\Request::FORWARD)) {
@@ -15,7 +15,7 @@ class Error4xxPresenter extends BasePresenter
     }
 
 
-    public function renderDefault(Nette\Application\BadRequestException $exception)
+    public function renderDefault(Nette\Application\BadRequestException $exception): void
     {
         // load template 403.latte or 404.latte or ... 4xx.latte
         $file = __DIR__ . "/templates/Error/{$exception->getCode()}.latte";

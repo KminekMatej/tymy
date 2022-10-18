@@ -22,24 +22,17 @@ use Tymy\Module\Team\Model\Team;
 class TeamManager extends BaseManager
 {
     public const DEFAULT_SKIN = "black-panther";
-
-    private string $teamFolder;
-    private Request $httpRequest;
     private Team $team;
-    public array $allSkins;
 
-    public function __construct(string $teamFolder, array $allSkins, ManagerFactory $managerFactory, Request $httpRequest)
+    public function __construct(public array $allSkins, ManagerFactory $managerFactory, private Request $httpRequest)
     {
         parent::__construct($managerFactory);
         $this->database = $this->mainDatabase;
-        $this->teamFolder = $teamFolder;
-        $this->httpRequest = $httpRequest;
-        $this->allSkins = $allSkins;
     }
 
     public function map(?IRow $row, $force = false): ?BaseModel
     {
-        if (!$row) {
+        if ($row === null) {
             return null;
         }
 
@@ -67,9 +60,6 @@ class TeamManager extends BaseManager
 
     /**
      * Get SimpleTeam object from Team
-     *
-     * @param Team $team
-     * @return SimpleTeam
      */
     public function toSimpleTeam(Team $team): SimpleTeam
     {
@@ -83,15 +73,13 @@ class TeamManager extends BaseManager
 
     /**
      * Get team by its sysname
-     * @param string $sysname
-     * @return Team|null
      */
     public function getBySysname(string $sysname): ?Team
     {
         return $this->map($this->database->table(Team::TABLE)->where("sys_name", $sysname)->fetch());
     }
 
-    public function getTeam(): Team
+    public function getTeam(): ?\Tymy\Module\Team\Model\Team
     {
         if (!isset($this->team)) {
             $this->team = $this->getBySysname($this->teamSysName);
@@ -109,6 +97,9 @@ class TeamManager extends BaseManager
         return Team::class;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     protected function getScheme(): array
     {
         return TeamMapper::scheme();
@@ -124,6 +115,9 @@ class TeamManager extends BaseManager
         return true;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getAllowedReaders(BaseModel $record): array
     {
         return [];
@@ -181,15 +175,12 @@ class TeamManager extends BaseManager
 
     /**
      * Get maximum available downloads folder size
-     *
-     * @param Team $team
-     * @return int
      */
     public function getMaxDownloadSize(Team $team): int
     {
         $bytesFree = 1024 * 1024 * 10; //10 MB for free teams
         $bytesFull = 1024 * 1024 * 100; //100 MB for full teams
 
-        return strpos($team->getTariff(), "FULL") !== false ? $bytesFull : $bytesFree;
+        return str_contains($team->getTariff(), "FULL") ? $bytesFull : $bytesFree;
     }
 }

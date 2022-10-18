@@ -14,15 +14,7 @@ class Router implements RouterInterface
 {
     public function addRoutes(RouteList &$router): void
     {
-        $router->addApiRoute('event[s]/withMyAttendance', array(
-                    'module' => 'Event',
-                    'presenter' => 'Default',
-                    'action' => 'default',
-                ))
-                ->addApiRoute('eventTypes', array(
-                    'module' => 'Event',
-                    'presenter' => 'Types',
-                    'action' => 'default',
-                ));
+        $router->addApiRoute('event[s]/withMyAttendance', ['module' => 'Event', 'presenter' => 'Default', 'action' => 'default'])
+                ->addApiRoute('eventTypes', ['module' => 'Event', 'presenter' => 'Types', 'action' => 'default']);
     }
 }

@@ -28,20 +28,16 @@ class StatusManager extends BaseManager
     public const ICON_HEIGHT = 250;
 
     private ?Status $status = null;
-    private TeamManager $teamManager;
     private array $simpleCache = [];
-
-    public function __construct(ManagerFactory $managerFactory, TeamManager $teamManager)
-    {
-        parent::__construct($managerFactory);
-        $this->teamManager = $teamManager;
-    }
 
     protected function getClassName(): string
     {
         return Status::class;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     protected function getScheme(): array
     {
         return StatusMapper::scheme();
@@ -65,7 +61,7 @@ class StatusManager extends BaseManager
 
     public function map(?IRow $row, $force = false): ?BaseModel
     {
-        if (!$row) {
+        if ($row === null) {
             return null;
         }
 
@@ -93,9 +89,6 @@ class StatusManager extends BaseManager
 
     /**
      * Compose and return correct folder of status set, using its ID
-     *
-     * @param int $statusSetId
-     * @return string
      */
     public function getStatusSetFolder(int $statusSetId): string
     {
@@ -108,7 +101,7 @@ class StatusManager extends BaseManager
 
     /**
      * Get all status unique status codes
-     * @return array
+     * @return mixed[]
      */
     public function getAllStatusCodes(): array
     {
@@ -117,7 +110,6 @@ class StatusManager extends BaseManager
 
     /**
      * Get all pre and post statuses by corresponding event type id
-     * @param int $eventTypeId
      * @return array In the form of ["pre" => [..array of Status objects..], "post" => [..array of Status objects..]]
      */
     public function getByEventTypeId(int $eventTypeId): array
@@ -212,10 +204,6 @@ class StatusManager extends BaseManager
 
     /**
      * Save image of status, specified as base64 string
-     *
-     * @param int $statusSetId
-     * @param string $code
-     * @param string $imgB64
      */
     private function saveStatusImage(int $statusSetId, string $code, string $imgB64): void
     {
@@ -226,6 +214,9 @@ class StatusManager extends BaseManager
         $image->save($this->getStatusSetFolder($statusSetId) . "/$code.png");
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\BaseModel[]
+     */
     public function getListUserAllowed($userId): array
     {
         //reading is not restricted
@@ -257,7 +248,7 @@ class StatusManager extends BaseManager
 
         $deleted = parent::deleteRecord($resourceId, $this->getTable());
 
-        if ($deleted) {
+        if ($deleted !== 0) {
             FileSystem::delete($this->getStatusSetFolder($this->status->getStatusSetId()) . "/{$this->status->getCode()}.png");
         }
 
@@ -266,6 +257,9 @@ class StatusManager extends BaseManager
         return $deleted;
     }
 
+    /**
+     * @return int[]
+     */
     public function getAllowedReaders(BaseModel $record): array
     {
         return $this->getAllUserIds(); //everyone can read
@@ -286,7 +280,7 @@ class StatusManager extends BaseManager
 
         $this->allowUpdate($resourceId, $data);
 
-        $updated = parent::updateByArray($resourceId, $data);
+        parent::updateByArray($resourceId, $data);
 
         if (isset($data["image"])) {
             $code = $data["code"] ?? $this->status->getCode();

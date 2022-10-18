@@ -27,7 +27,7 @@ class DiscussionPresenter extends SecuredPresenter
     public UserManager $userManager;
     private array $userList;
 
-    public function beforeRender()
+    public function beforeRender(): void
     {
         parent::beforeRender();
         $this->addBreadcrumb($this->translator->translate("discussion.discussion", 2), $this->link(":Discussion:Default:"));
@@ -45,14 +45,10 @@ class DiscussionPresenter extends SecuredPresenter
             return null;
         });
 
-        $this->template->addFilter('displayNames', function (array $userIds) {
-            return join(", ", array_map(function ($userId) {
-                return $this->userList[$userId]->getCallName();
-            }, $userIds));
-        });
+        $this->template->addFilter('displayNames', fn(array $userIds): string => implode(", ", array_map(fn($userId) => $this->userList[$userId]->getCallName(), $userIds)));
     }
 
-    public function handleReact(int $postId, ?string $reaction = null, bool $remove = false)
+    public function handleReact(int $postId, ?string $reaction = null, bool $remove = false): void
     {
         if (empty($reaction)) {
             $this->sendPayload();   //terminate to avoid jumping into render function
@@ -70,9 +66,9 @@ class DiscussionPresenter extends SecuredPresenter
         $this->sendPayload();   //terminate to avoid jumping into render function
     }
 
-    public function renderDefault(string $discussion, int $page = 1, ?string $search = null, string $suser = "all", ?string $jump2date = null)
+    public function renderDefault(string $discussion, int $page = 1, ?string $search = null, string $suser = "all", ?string $jump2date = null): void
     {
-        $d = (is_int($discussion) || is_numeric($discussion)) ? $this->discussionManager->getById(intval($discussion)) : $this->discussionManager->getByWebName($discussion, $this->user->getId());
+        $d = (is_int($discussion) || is_numeric($discussion)) ? $this->discussionManager->getById((int) $discussion) : $this->discussionManager->getByWebName($discussion, $this->user->getId());
 
         if (empty($d)) {
             $this->error($this->translator->translate("discussion.errors.noDiscussionExists"));
@@ -99,10 +95,10 @@ class DiscussionPresenter extends SecuredPresenter
         }
     }
 
-    public function actionNewPost(string $discussion)
+    public function actionNewPost(string $discussion): void
     {
         $post = $this->getHttpRequest()->getPost("post");
-        $discussionId = intval($discussion);
+        $discussionId = (int) $discussion;
         if (trim($post) != "") {
             $this->postManager->create([
                 "post" => $post,
@@ -113,7 +109,7 @@ class DiscussionPresenter extends SecuredPresenter
         $this->setView('default');
     }
 
-    public function actionEditPost(string $discussion)
+    public function actionEditPost(string $discussion): void
     {
 
         $postId = $this->getHttpRequest()->getPost("postId");
@@ -126,7 +122,7 @@ class DiscussionPresenter extends SecuredPresenter
             $updates["sticky"] = $this->getHttpRequest()->getPost("sticky");
         }
 
-        $discussionId = intval($discussion);
+        $discussionId = (int) $discussion;
 
         try {
             $this->postManager->update($updates, $discussionId, $postId);
@@ -137,7 +133,7 @@ class DiscussionPresenter extends SecuredPresenter
         $this->setView('default');
     }
 
-    public function handleDeletePost($postId, $discussionId, $currentPage)
+    public function handleDeletePost(?int $postId, int $discussionId, $currentPage): void
     {
         try {
             $this->postManager->delete($discussionId, $postId);
@@ -147,17 +143,17 @@ class DiscussionPresenter extends SecuredPresenter
         }
     }
 
-    public function actionStickPost($postId, $discussionId, $sticky)
+    public function actionStickPost(int $postId, int $discussionId, $sticky): void
     {
         try {
-            $this->postManager->stickPost($postId, $discussionId, $sticky ? true : false);
+            $this->postManager->stickPost($postId, $discussionId, (bool) $sticky);
             $this->redirect(":Discussion:Discussion:", ["discussion" => $discussionId, "page" => 1]);
         } catch (TymyResponse $tResp) {
             $this->handleTymyResponse($tResp);
         }
     }
 
-    protected function createComponentNewPost()
+    protected function createComponentNewPost(): \Tymy\Module\Core\Component\NewPostControl
     {
         $newpost = new NewPostControl($this->userManager);
         $newpost->redrawControl();

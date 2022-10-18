@@ -23,13 +23,13 @@ class DefaultPresenter extends SecuredPresenter
     /** @inject */
     public UserManager $userManager;
 
-    public function beforeRender()
+    public function beforeRender(): void
     {
         parent::beforeRender();
         $this->addBreadcrumb($this->translator->translate("discussion.discussion", 2), $this->link(":Discussion:Default:"));
     }
 
-    public function renderDefault()
+    public function renderDefault(): void
     {
         $this->template->discussions = $this->discussionManager->getListUserAllowed($this->user->getId());
     }

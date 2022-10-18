@@ -1,6 +1,6 @@
 {block player-header}
 <li class="nav-item">
-    {var $cnt = ($player,'prihlaseni'|errorsCount)}
+    {var $cnt = ($player|errorsCount:'prihlaseni')}
     <a class="flex-sm-fill text-sm-center nav-link" data-toggle="tab" href="#prihlaseni" role="tab">{_team.loginData} <span n:class="badge,badge-pill,badge-danger,$cnt == 0 ? d-none">{$cnt}</span></a>
 </li>
 {include parent}

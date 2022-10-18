@@ -21,24 +21,19 @@ class InPresenter extends BasePresenter
 
     /**
      * Sign-in form factory.
-     * @return Nette\Application\UI\Form
      */
-    protected function createComponentSignInForm()
+    protected function createComponentSignInForm(): \Nette\Application\UI\Form
     {
-        $form = $this->signInFactory->create(function (Form $form, $values) {
+        return $this->signInFactory->create(function (Form $form, $values): void {
             try {
                 $this->user->setExpiration('20 minutes');
-                $r = $this->user->login($values->name, $values->password);
+                $this->user->login($values->name, $values->password);
                 BaseManager::logg($this->team, "{$values->name} application login");
             } catch (Nette\Security\AuthenticationException $exc) {
-                switch ($exc->getMessage()) {
-                    case "Login not approved":
-                        $this->flashMessage($this->translator->translate("common.alerts.loginNotApproved"), "danger");
-                        break;
-                    default:
-                        $this->flashMessage($this->translator->translate("common.alerts.loginNotSuccesfull") . ' (' . $exc->getMessage() . ")", "danger");
-                        break;
-                }
+                match ($exc->getMessage()) {
+                    "Login not approved" => $this->flashMessage($this->translator->translate("common.alerts.loginNotApproved"), "danger"),
+                    default => $this->flashMessage($this->translator->translate("common.alerts.loginNotSuccesfull") . ' (' . $exc->getMessage() . ")", "danger"),
+                };
             }
             if ($this->user->isLoggedIn()) {
                 $this->initUser();
@@ -46,24 +41,18 @@ class InPresenter extends BasePresenter
             }
             $this->redirect(':Core:Default:');
         });
-
-        return $form;
     }
 
-    public function renderDefault()
+    public function renderDefault(): void
     {
         if ($tk = $this->getRequest()->getParameter("tk")) {
             try {
                 $this->tkLogin($tk);
             } catch (Nette\Security\AuthenticationException $exc) {
-                switch ($exc->getMessage()) {
-                    case "Login not approved":
-                        $this->flashMessage($this->translator->translate("common.alerts.loginNotApproved"), "danger");
-                        break;
-                    default:
-                        $this->flashMessage($this->translator->translate("common.alerts.loginNotSuccesfull") . ' (' . $exc->getMessage() . ")", "danger");
-                        break;
-                }
+                match ($exc->getMessage()) {
+                    "Login not approved" => $this->flashMessage($this->translator->translate("common.alerts.loginNotApproved"), "danger"),
+                    default => $this->flashMessage($this->translator->translate("common.alerts.loginNotSuccesfull") . ' (' . $exc->getMessage() . ")", "danger"),
+                };
             }
             if ($this->user->isLoggedIn()) {
                 $this->initUser();
@@ -75,8 +64,6 @@ class InPresenter extends BasePresenter
 
     /**
      * Validate transfer key and log user if its valid
-     * @param string $tk
-     * @return void
      */
     private function tkLogin(string $tk): void
     {

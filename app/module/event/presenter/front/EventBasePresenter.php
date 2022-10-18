@@ -45,8 +45,8 @@ class EventBasePresenter extends SecuredPresenter
         });
 
         $this->template->addFilter("prestatusClass", function (?Attendance $myAttendance, $statusId, $canPlan, $startTime) {
-            $myPreStatusId = $myAttendance ? $myAttendance->getPreStatusId() : null;
-            $myPostStatusId = $myAttendance ? $myAttendance->getPostStatusId() : null;
+            $myPreStatusId = $myAttendance !== null ? $myAttendance->getPreStatusId() : null;
+            $myPostStatusId = $myAttendance !== null ? $myAttendance->getPostStatusId() : null;
 
             if (!$canPlan) {
                 return $statusId == $myPostStatusId && $myPostStatusId ? "statusBtn$statusId disabled active" : "btn-outline-secondary disabled";
@@ -67,7 +67,6 @@ class EventBasePresenter extends SecuredPresenter
      * Transform array of events into event feed - array in format specified by FullCalendar specifications
      *
      * @param Event[] $events
-     * @return array
      */
     protected function toFeed(array $events): array
     {
@@ -90,7 +89,7 @@ class EventBasePresenter extends SecuredPresenter
         return $feed;
     }
 
-    public function handleAttendance(int $eventId, int $preStatusId, ?string $desc = null, ?int $userId = null)
+    public function handleAttendance(int $eventId, int $preStatusId, ?string $desc = null, ?int $userId = null): void
     {
         $this->attendanceManager->create([
             "userId" => $userId ?: $this->user->getId(),

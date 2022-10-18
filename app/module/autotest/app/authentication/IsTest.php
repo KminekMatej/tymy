@@ -18,22 +18,25 @@ $container = Bootstrap::boot();
  */
 class IsTest extends RequestCase
 {
-    public function testUnauthorized()
+    public function testUnauthorized(): void
     {
         //do nothing, is is always returned
     }
 
-    public function testIs()
+    public function testIs(): void
     {
         $this->request($this->getBasePath())->expect(200, "array");
     }
 
+    /**
+     * @return mixed[]
+     */
     protected function mockChanges(): array
     {
         return [];
     }
 
-    public function createRecord()
+    public function createRecord(): void
     {
         //not used in this test
     }
@@ -48,7 +51,7 @@ class IsTest extends RequestCase
         return "authentication";
     }
 
-    public function mockRecord()
+    public function mockRecord(): void
     {
         //not used in this test
     }

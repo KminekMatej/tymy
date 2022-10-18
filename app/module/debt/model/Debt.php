@@ -42,9 +42,9 @@ class Debt extends BaseModel implements JsonSerializable
     private bool $paymentPending = false;
     private ?string $webName = null;
     private string $class;
-    private ?User $debtor;
-    private ?User $payee;
-    private ?User $author;
+    private ?User $debtor = null;
+    private ?User $payee = null;
+    private ?User $author = null;
     private string $debtorCallName;
     private string $payeeCallName;
     private string $displayString;
@@ -194,175 +194,175 @@ class Debt extends BaseModel implements JsonSerializable
         return $this->displayString;
     }
 
-    public function setCreated(DateTime $created)
+    public function setCreated(DateTime $created): static
     {
         $this->created = $created;
         return $this;
     }
 
-    public function setCreatedUserId(?int $createdUserId)
+    public function setCreatedUserId(?int $createdUserId): static
     {
         $this->createdUserId = $createdUserId;
         return $this;
     }
 
-    public function setAmount(float $amount)
+    public function setAmount(float $amount): static
     {
         $this->amount = $amount;
         return $this;
     }
 
-    public function setCurrencyIso(?string $currencyIso)
+    public function setCurrencyIso(?string $currencyIso): static
     {
         $this->currencyIso = $currencyIso;
         return $this;
     }
 
-    public function setCountryIso(?string $countryIso)
+    public function setCountryIso(?string $countryIso): static
     {
         $this->countryIso = $countryIso;
         return $this;
     }
 
-    public function setDebtorId(?int $debtorId)
+    public function setDebtorId(?int $debtorId): static
     {
         $this->debtorId = $debtorId ?: 0;
         return $this;
     }
 
-    public function setDebtorType(?string $debtorType)
+    public function setDebtorType(?string $debtorType): static
     {
         $this->debtorType = $debtorType;
         return $this;
     }
 
-    public function setPayeeId(?int $payeeId)
+    public function setPayeeId(?int $payeeId): static
     {
         $this->payeeId = $payeeId;
         return $this;
     }
 
-    public function setPayeeType(?string $payeeType)
+    public function setPayeeType(?string $payeeType): static
     {
         $this->payeeType = $payeeType;
         return $this;
     }
 
-    public function setPayeeAccountNumber(?string $payeeAccountNumber)
+    public function setPayeeAccountNumber(?string $payeeAccountNumber): static
     {
         $this->payeeAccountNumber = $payeeAccountNumber;
         return $this;
     }
 
-    public function setVarcode(?string $varcode)
+    public function setVarcode(?string $varcode): static
     {
         $this->varcode = $varcode;
         return $this;
     }
 
-    public function setDebtDate(?DateTime $debtDate)
+    public function setDebtDate(?DateTime $debtDate): static
     {
         $this->debtDate = $debtDate;
         return $this;
     }
 
-    public function setCaption(?string $caption)
+    public function setCaption(?string $caption): static
     {
         $this->caption = $caption;
         return $this;
     }
 
-    public function setPaymentSent(?DateTime $paymentSent)
+    public function setPaymentSent(?DateTime $paymentSent): static
     {
         $this->paymentSent = $paymentSent;
         return $this;
     }
 
-    public function setPaymentReceived(?DateTime $paymentReceived)
+    public function setPaymentReceived(?DateTime $paymentReceived): static
     {
         $this->paymentReceived = $paymentReceived;
         return $this;
     }
 
-    public function setNote(?string $note)
+    public function setNote(?string $note): static
     {
         $this->note = $note;
         return $this;
     }
 
-    public function setCanRead(bool $canRead)
+    public function setCanRead(bool $canRead): static
     {
         $this->canRead = $canRead;
         return $this;
     }
 
-    public function setCanEdit(bool $canEdit)
+    public function setCanEdit(bool $canEdit): static
     {
         $this->canEdit = $canEdit;
         return $this;
     }
 
-    public function setIsTeamDebt(bool $isTeamDebt)
+    public function setIsTeamDebt(bool $isTeamDebt): static
     {
         $this->isTeamDebt = $isTeamDebt;
         return $this;
     }
 
-    public function setCanSetSentDate(bool $canSetSentDate)
+    public function setCanSetSentDate(bool $canSetSentDate): static
     {
         $this->canSetSentDate = $canSetSentDate;
         return $this;
     }
 
-    public function setPaymentPending(bool $paymentPending)
+    public function setPaymentPending(bool $paymentPending): static
     {
         $this->paymentPending = $paymentPending;
         return $this;
     }
 
-    public function setWebName(?string $webName)
+    public function setWebName(?string $webName): static
     {
         $this->webName = $webName;
         return $this;
     }
 
-    public function setClass(string $class)
+    public function setClass(string $class): static
     {
         $this->class = $class;
         return $this;
     }
 
-    public function setDebtor(?User $debtor)
+    public function setDebtor(?User $debtor): static
     {
         $this->debtor = $debtor;
         return $this;
     }
 
-    public function setPayee(?User $payee)
+    public function setPayee(?User $payee): static
     {
         $this->payee = $payee;
         return $this;
     }
 
-    public function setAuthor(?User $author)
+    public function setAuthor(?User $author): static
     {
         $this->author = $author;
         return $this;
     }
 
-    public function setDebtorCallName(string $debtorCallName)
+    public function setDebtorCallName(string $debtorCallName): static
     {
         $this->debtorCallName = $debtorCallName;
         return $this;
     }
 
-    public function setPayeeCallName(string $payeeCallName)
+    public function setPayeeCallName(string $payeeCallName): static
     {
         $this->payeeCallName = $payeeCallName;
         return $this;
     }
 
-    public function setDisplayString(string $displayString)
+    public function setDisplayString(string $displayString): static
     {
         $this->displayString = $displayString;
         return $this;
@@ -373,6 +373,9 @@ class Debt extends BaseModel implements JsonSerializable
         return self::MODULE;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     public function getScheme(): array
     {
         return DebtMapper::scheme();
@@ -383,7 +386,10 @@ class Debt extends BaseModel implements JsonSerializable
         return self::TABLE;
     }
 
-    public function jsonSerialize()
+    /**
+     * @return mixed[]
+     */
+    public function jsonSerialize(): array
     {
         return parent::jsonSerialize() + [
             "canRead" => $this->canRead,

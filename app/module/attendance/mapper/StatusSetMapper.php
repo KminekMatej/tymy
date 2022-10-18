@@ -12,6 +12,9 @@ use Tymy\Module\Core\Model\Field;
  */
 class StatusSetMapper extends BaseMapper
 {
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     public static function scheme(): array
     {
         return [

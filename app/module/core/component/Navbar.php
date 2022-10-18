@@ -2,7 +2,7 @@
 
 namespace Tymy\Module\Core\Component;
 
-use Kdyby\Translation\Translator;
+use Contributte\Translation\Translator;
 use Nette\Application\UI\Control;
 use Nette\Application\UI\Form;
 use Nette\Http\FileUpload;
@@ -29,31 +29,10 @@ use Tymy\Module\User\Model\User as User2;
  */
 class NavbarControl extends Control
 {
-    private SecuredPresenter $presenter;
-    private array $accessibleSettings;
-    private PollManager $pollManager;
-    private DiscussionManager $discussionManager;
-    private EventManager $eventManager;
-    private DebtManager $debtManager;
-    private UserManager $userManager;
-    private MultiaccountManager $multiaccountManager;
-    private TeamManager $teamManager;
     private Translator $translator;
-    private User $user;
-    private EventTypeManager $eventTypeManager;
 
-    public function __construct(SecuredPresenter $presenter, PollManager $pollManager, DiscussionManager $discussionManager, EventManager $eventManager, DebtManager $debtManager, UserManager $userManager, MultiaccountManager $multiaccountManager, User $user, TeamManager $teamManager, EventTypeManager $eventTypeManager)
+    public function __construct(private SecuredPresenter $presenter, private PollManager $pollManager, private DiscussionManager $discussionManager, private EventManager $eventManager, private DebtManager $debtManager, private UserManager $userManager, private MultiaccountManager $multiaccountManager, private User $user, private TeamManager $teamManager, private EventTypeManager $eventTypeManager)
     {
-        $this->presenter = $presenter;
-        $this->discussionManager = $discussionManager;
-        $this->pollManager = $pollManager;
-        $this->eventManager = $eventManager;
-        $this->eventTypeManager = $eventTypeManager;
-        $this->debtManager = $debtManager;
-        $this->userManager = $userManager;
-        $this->multiaccountManager = $multiaccountManager;
-        $this->user = $user;
-        $this->teamManager = $teamManager;
         $this->translator = $this->presenter->translator;
     }
 
@@ -118,12 +97,12 @@ class NavbarControl extends Control
         $form = new Form();
         $form->addUpload("file", $this->translator->translate("file.file"));
         $form->addSubmit("save", "Nahrát");
-        $form->onSuccess[] = [$this, "fileLoad"];
+        $form->onSuccess[] = fn(\Nette\Application\UI\Form $form, $values) => $this->fileLoad($form, $values);
 
         return $form;
     }
 
-    public function fileLoad(Form $form, $values)
+    public function fileLoad(Form $form, $values): void
     {
         /* @var $file FileUpload */
         $file = $values['file'];
@@ -138,7 +117,7 @@ class NavbarControl extends Control
         $this->template->accessibleSettings = $this->presenter->getAccessibleSettings();
     }
 
-    public function render()
+    public function render(): void
     {
         $this->template->setFile(__DIR__ . '/templates/navbar.latte');
         $this->template->levels = $this->presenter->getLevelCaptions();
@@ -160,7 +139,7 @@ class NavbarControl extends Control
         $this->template->render();
     }
 
-    public function handleRefresh()
+    public function handleRefresh(): void
     {
         if ($this->parent->isAjax()) {
             $this->redrawControl('nav');

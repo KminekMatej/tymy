@@ -17,17 +17,16 @@ class MenuPresenter extends SecuredPresenter
         $this->manager = $manager;
     }
 
-    public function actionDefault()
+    public function actionDefault(): void
     {
-        switch ($this->getRequest()->getMethod()) {
-            case 'GET':
-                $this->requestGetMenu();
+        if ($this->getRequest()->getMethod() === 'GET') {
+            $this->requestGetMenu();
         }
 
         $this->respondNotAllowed();
     }
 
-    private function requestGetMenu()
+    private function requestGetMenu(): void
     {
         $polls = $this->manager->getListUserAllowed();
 

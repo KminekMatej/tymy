@@ -14,7 +14,7 @@ use Tymy\Module\Discussion\Model\Discussion;
  */
 class PreviewPresenter extends SecuredPresenter
 {
-    public function actionDefault($resourceId)
+    public function actionDefault($resourceId): void
     {
         if ($this->getRequest()->getMethod() != "POST") {
             $this->respondNotAllowed();
@@ -23,7 +23,7 @@ class PreviewPresenter extends SecuredPresenter
         $this->requestPost($resourceId);
     }
 
-    protected function requestPost($resourceId)
+    protected function requestPost($resourceId): void
     {
         if (!array_key_exists("post", $this->requestData)) {
             $this->responder->E4013_MISSING_INPUT("post");

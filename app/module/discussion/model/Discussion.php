@@ -33,7 +33,6 @@ class Discussion extends BaseModel
     private bool $canWrite = false;
     private bool $canDelete = false;
     private bool $canStick = false;
-    private int $newPosts = 0;
     private int $numberOfPosts = 0;
     private NewInfo $newInfo;
     private string $webName;
@@ -133,115 +132,114 @@ class Discussion extends BaseModel
         return $this->webName;
     }
 
-    public function setCreatedById(?int $createdById)
+    public function setCreatedById(?int $createdById): static
     {
         $this->createdById = $createdById;
         return $this;
     }
 
-    public function setUpdatedById(?int $updatedById)
+    public function setUpdatedById(?int $updatedById): static
     {
         $this->updatedById = $updatedById;
         return $this;
     }
 
-    public function setCreatedAt(?DateTime $createdAt)
+    public function setCreatedAt(?DateTime $createdAt): static
     {
         $this->createdAt = $createdAt;
         return $this;
     }
 
-    public function setUpdatedAt(?DateTime $updatedAt)
+    public function setUpdatedAt(?DateTime $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
         return $this;
     }
 
-    public function setCaption(string $caption)
+    public function setCaption(string $caption): static
     {
         $this->caption = $caption;
         return $this;
     }
 
-    public function setDescription(?string $description)
+    public function setDescription(?string $description): static
     {
         $this->description = $description;
         return $this;
     }
 
-    public function setReadRightName(?string $readRightName)
+    public function setReadRightName(?string $readRightName): static
     {
         $this->readRightName = $readRightName;
         return $this;
     }
 
-    public function setWriteRightName(?string $writeRightName)
+    public function setWriteRightName(?string $writeRightName): static
     {
         $this->writeRightName = $writeRightName;
         return $this;
     }
 
-    public function setDeleteRightName(?string $deleteRightName)
+    public function setDeleteRightName(?string $deleteRightName): static
     {
         $this->deleteRightName = $deleteRightName;
         return $this;
     }
 
-    public function setStickyRightName(?string $stickyRightName)
+    public function setStickyRightName(?string $stickyRightName): static
     {
         $this->stickyRightName = $stickyRightName;
         return $this;
     }
 
-    public function setPublicRead($publicRead)
+    public function setPublicRead($publicRead): static
     {
-        $this->publicRead = $publicRead ? true : false;
+        $this->publicRead = (bool) $publicRead;
         return $this;
     }
 
-    public function setEditablePosts($editablePosts)
+    public function setEditablePosts($editablePosts): static
     {
-        $this->editablePosts = $editablePosts ? true : false;
+        $this->editablePosts = (bool) $editablePosts;
         return $this;
     }
 
-    public function setOrder(?int $order)
+    public function setOrder(?int $order): static
     {
         $this->order = $order;
         return $this;
     }
 
-    public function setCanRead(bool $canRead)
+    public function setCanRead(bool $canRead): static
     {
         $this->canRead = $canRead;
         return $this;
     }
 
-    public function setCanWrite(bool $canWrite)
+    public function setCanWrite(bool $canWrite): static
     {
         $this->canWrite = $canWrite;
         return $this;
     }
 
-    public function setCanDelete(bool $canDelete)
+    public function setCanDelete(bool $canDelete): static
     {
         $this->canDelete = $canDelete;
         return $this;
     }
 
-    public function setCanStick(bool $canStick)
+    public function setCanStick(bool $canStick): static
     {
         $this->canStick = $canStick;
         return $this;
     }
 
-    public function setNewPosts(int $newPosts)
+    public function setNewPosts(int $newPosts): static
     {
-        $this->newPosts = $newPosts;
         return $this;
     }
 
-    public function setNumberOfPosts(int $numberOfPosts)
+    public function setNumberOfPosts(int $numberOfPosts): static
     {
         $this->numberOfPosts = $numberOfPosts;
         return $this;
@@ -252,7 +250,7 @@ class Discussion extends BaseModel
         return $this->newInfo;
     }
 
-    public function setNewInfo(NewInfo $newInfo)
+    public function setNewInfo(NewInfo $newInfo): static
     {
         $this->newInfo = $newInfo;
         return $this;
@@ -268,6 +266,9 @@ class Discussion extends BaseModel
         return self::MODULE;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     public function getScheme(): array
     {
         return DiscussionMapper::scheme();
@@ -278,7 +279,10 @@ class Discussion extends BaseModel
         return self::TABLE;
     }
 
-    public function jsonSerialize()
+    /**
+     * @return mixed[]
+     */
+    public function jsonSerialize(): array
     {
         return parent::jsonSerialize() +
                 [

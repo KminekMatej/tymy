@@ -70,6 +70,9 @@ class Team extends BaseModel
         return $this->dbName;
     }
 
+    /**
+     * @return string[]
+     */
     public function getLanguages(): array
     {
         return $this->languages;
@@ -160,145 +163,148 @@ class Team extends BaseModel
         return $this->skin ?? TeamManager::DEFAULT_SKIN;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getRequiredFields(): array
     {
         return $this->requiredFields;
     }
 
 
-    public function setLanguages($languages)
+    public function setLanguages($languages): static
     {
         $this->languages = is_string($languages) ? explode(",", $languages) : $languages;
         return $this;
     }
 
-    public function setSysName(string $sysName)
+    public function setSysName(string $sysName): static
     {
         $this->sysName = $sysName;
         return $this;
     }
 
-    public function setExtendedSysName(string $extendedSysName)
+    public function setExtendedSysName(string $extendedSysName): static
     {
         $this->extendedSysName = $extendedSysName;
         return $this;
     }
 
-    public function setName(string $name)
+    public function setName(string $name): static
     {
         $this->name = $name;
         return $this;
     }
 
-    public function setDbName(string $dbName)
+    public function setDbName(string $dbName): static
     {
         $this->dbName = $dbName;
         return $this;
     }
 
-    public function setDefaultLanguageCode(string $defaultLanguageCode)
+    public function setDefaultLanguageCode(string $defaultLanguageCode): static
     {
         $this->defaultLanguageCode = $defaultLanguageCode;
         return $this;
     }
 
-    public function setSport(?string $sport)
+    public function setSport(?string $sport): static
     {
         $this->sport = $sport;
         return $this;
     }
 
-    public function setAccountNumber(?string $accountNumber)
+    public function setAccountNumber(?string $accountNumber): static
     {
         $this->accountNumber = $accountNumber;
         return $this;
     }
 
-    public function setWeb(?string $web)
+    public function setWeb(?string $web): static
     {
         $this->web = $web;
         return $this;
     }
 
-    public function setCountryId(?int $countryId)
+    public function setCountryId(?int $countryId): static
     {
         $this->countryId = $countryId;
         return $this;
     }
 
-    public function setMaxUsers(int $maxUsers)
+    public function setMaxUsers(int $maxUsers): static
     {
         $this->maxUsers = $maxUsers;
         return $this;
     }
 
-    public function setMaxEventsMonth(int $maxEventsMonth)
+    public function setMaxEventsMonth(int $maxEventsMonth): static
     {
         $this->maxEventsMonth = $maxEventsMonth;
         return $this;
     }
 
-    public function setAdvertisement(bool $advertisement)
+    public function setAdvertisement(bool $advertisement): static
     {
         $this->advertisement = $advertisement;
         return $this;
     }
 
-    public function setInsertDate(Datetime $insertDate)
+    public function setInsertDate(Datetime $insertDate): static
     {
         $this->insertDate = $insertDate;
         return $this;
     }
 
-    public function setTimeZone(int $timeZone)
+    public function setTimeZone(int $timeZone): static
     {
         $this->timeZone = $timeZone;
         return $this;
     }
 
-    public function setDstFlag(string $dstFlag)
+    public function setDstFlag(string $dstFlag): static
     {
         $this->dstFlag = $dstFlag;
         return $this;
     }
 
-    public function setTariffUntil(?DateTime $tariffUntil)
+    public function setTariffUntil(?DateTime $tariffUntil): static
     {
         $this->tariffUntil = $tariffUntil;
         return $this;
     }
 
-    public function setTariffPayment(?string $tariffPayment)
+    public function setTariffPayment(?string $tariffPayment): static
     {
         $this->tariffPayment = $tariffPayment;
         return $this;
     }
 
-    public function setAttCheckType(string $attCheckType)
+    public function setAttCheckType(string $attCheckType): static
     {
         $this->attCheckType = $attCheckType;
         return $this;
     }
 
-    public function setAttendanceCheckDays(int $attendanceCheckDays)
+    public function setAttendanceCheckDays(int $attendanceCheckDays): static
     {
         $this->attendanceCheckDays = $attendanceCheckDays;
         return $this;
     }
 
-    public function setTariff(string $tariff)
+    public function setTariff(string $tariff): static
     {
         $this->tariff = $tariff;
         return $this;
     }
 
-    public function setSkin(string $skin)
+    public function setSkin(string $skin): static
     {
         $this->skin = $skin;
         return $this;
     }
 
-    public function setRequiredFields(string $requiredFields)
+    public function setRequiredFields(string $requiredFields): static
     {
         $this->requiredFields = explode(",", $requiredFields);
         return $this;
@@ -309,6 +315,9 @@ class Team extends BaseModel
         return self::MODULE;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     public function getScheme(): array
     {
         return TeamMapper::scheme();

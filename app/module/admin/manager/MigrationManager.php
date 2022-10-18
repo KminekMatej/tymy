@@ -18,18 +18,14 @@ use Tymy\Module\Core\Model\BaseModel;
 class MigrationManager
 {
     private const MIGRATION_UP = true;
-    private const MIGRATION_DOWN = false;
     private const REGEX_MIGRATION = "\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}.sql";
     private const REGEX_BASE = "\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-base.sql";
-
-    private Explorer $teamDatabase;
     private array $log = [];
     private bool $tableExists;
     private array $migrationsCache = [];
 
-    public function __construct(Explorer $teamDatabase)
+    public function __construct(private Explorer $teamDatabase)
     {
-        $this->teamDatabase = $teamDatabase;
     }
 
     private function migrationTableExists(): bool
@@ -46,14 +42,13 @@ class MigrationManager
      *
      * @return string[] Array of performed succesfull migrations
      */
-    public function getPerformedSuccesfullMigrations()
+    public function getPerformedSuccesfullMigrations(): array
     {
         return $this->tableExists ? $this->teamDatabase->table(Migration::TABLE)->where("result", Migration::RESULT_OK)->fetchPairs(null, "migration") : $this->migrationsCache;
     }
 
     /**
      * Detect in database latest performed migration and return its number, or null if not found
-     * @return string|null
      */
     public function getLatestMigration(): ?string
     {
@@ -64,7 +59,10 @@ class MigrationManager
         return $this->teamDatabase->table(Migration::TABLE)->where("result", Migration::RESULT_OK)->order("migration DESC")->limit(1)->fetchField("migration");
     }
 
-    public function executeSqlContents($contents, &$log = false)
+    /**
+     * @return mixed[]
+     */
+    public function executeSqlContents(string $contents, &$log = false): array
     {
         if ($log) {
             $this->log = &$log;
@@ -73,13 +71,16 @@ class MigrationManager
         return $this->executeCommands($commands);
     }
 
+    /**
+     * @return mixed[]
+     */
     public function executeCommands(array $sqlCommands): array
     {
         $this->logg("Executing supplied " . count($sqlCommands) . " queries");
         foreach ($sqlCommands as $cmd) {
             $cmd = trim($cmd);
             if (substr($cmd, 0, -1) !== ";") {    //add semicolon to the end if its not there
-                $cmd = $cmd . ";";
+                $cmd .= ";";
             }
             $this->logg("Executing query " . $cmd);
             $this->teamDatabase->query($cmd);
@@ -87,9 +88,9 @@ class MigrationManager
         return $this->log;
     }
 
-    public function saveMigrationRecord(Migration $mig)
+    public function saveMigrationRecord(Migration $mig): void
     {
-        $existed = $this->tableExists ? true : false;
+        $existed = $this->tableExists;
         $this->tableExists = $this->migrationTableExists();
         if (!$existed && $this->tableExists) {
             $this->saveMigrationsCache();
@@ -107,7 +108,7 @@ class MigrationManager
         }
     }
 
-    private function saveMigrationsCache()
+    private function saveMigrationsCache(): void
     {
         if (empty($this->migrationsCache)) {
             return;
@@ -121,9 +122,8 @@ class MigrationManager
     /**
      * Drop all comments from file and get just array of sql queries
      *
-     * @param string $contents
-     * @return array
      * @throws Exception When there are no commands
+     * @return string[]
      */
     public function getCommands(string $contents): array
     {
@@ -140,10 +140,8 @@ class MigrationManager
 
     /**
      * Remove all comments from input
-     * @param string $contents
-     * @return void
      */
-    private function removeComments(string $contents): string
+    private function removeComments(string $contents): ?string
     {
         $this->logg("Removing comments");
 
@@ -159,8 +157,6 @@ class MigrationManager
 
     /**
      * Strip the sql comment lines out of an uploaded sql file
-     * @param string $sql
-     * @return string
      */
     private function removeRemarks(string $sql): string
     {
@@ -173,7 +169,7 @@ class MigrationManager
             $i++;
             $lineT = trim($line);
             $lineT = str_replace('&nbsp;', ' ', $lineT);
-            if (!strlen($lineT)) {
+            if ($lineT === '') {
                 continue;
             }
             if ($lineT[0] == "#") {
@@ -186,15 +182,13 @@ class MigrationManager
             $output[] = $lineT;
         }
 
-        return join(" ", $output);
+        return implode(" ", $output);
     }
 
     /**
      * Split an uploaded sql file into single sql statements.
      * Note: expects trim() to have already been run on $sql.
-     * @param string $sql
-     * @param string $delimiter
-     * @return array
+     * @return string[]
      */
     private function splitSqlFile(string $sql, string $delimiter): array
     {
@@ -216,10 +210,10 @@ class MigrationManager
         $matches = [];
 
         // this is faster than calling count($oktens) every time thru the loop.
-        $token_count = count($tokens);
+        $token_count = is_countable($tokens) ? count($tokens) : 0;
         for ($i = 0; $i < $token_count; $i++) {
             // Don't wanna add an empty string as the last thing in the array.
-            if (($i != ($token_count - 1)) || (strlen($tokens[$i] > 0))) {
+            if (($i !== $token_count - 1) || (strlen($tokens[$i] > 0))) {
                 // This is the total number of single quotes in the token.
                 $total_quotes = preg_match_all("/'/", $tokens[$i], $matches);
                 // Counts single quotes that are preceded by an odd number of backslashes,
@@ -281,7 +275,7 @@ class MigrationManager
         return $output;
     }
 
-    private function logg($text)
+    private function logg($text): void
     {
         $this->log[] = (new DateTime())->format(BaseModel::DATETIME_CZECH_FORMAT) . " " . $text;
     }
@@ -296,7 +290,6 @@ class MigrationManager
 
         //get only the latest found base and all migrations afterwards
         $migrations = [];
-        $base = null;
         foreach ($glob as $file) {
             if (preg_match('/.*\/migrations\/' . self::REGEX_BASE . '/', $file)) {  //this migration is a base. Check if current version is before this base or after
                 if (empty($latestMigration)) {    //if there is no base migration done yet, use this base as migration base and remove all previous migrations
@@ -323,6 +316,7 @@ class MigrationManager
 
     /**
      * Migrate database to latest version
+     * @return array<string, mixed[]>
      */
     public function migrateUp(): array
     {
@@ -357,7 +351,6 @@ class MigrationManager
      * Function automatically checks whether migrations from v1 has already been performed and if not, performs them before it even starts migrating
      *
      * Can be removed after all teams has been switched to new version
-     * @return void
      */
     private function migrateFromVersion1(): void
     {
@@ -389,10 +382,7 @@ class MigrationManager
         if (!$usersHasBirthcodeField) {  //this database does not have birth_code field in users
             $this->executeSqlContents(file_get_contents("/var/www/vhosts/tymy.cz/src/v1/1.1.23/sql/0018_birthcode.sql"), $this->log);
         }
-
-
-        if (!$migrationTableExists) {   //create table with first basic migration
-            $this->teamDatabase->query("CREATE TABLE `migration` (
+        $this->teamDatabase->query("CREATE TABLE `migration` (
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
                 `created` timestamp NOT NULL DEFAULT current_timestamp(),
                 `migration_from` varchar(19) NOT NULL,
@@ -400,25 +390,23 @@ class MigrationManager
                 `time` double NOT NULL,
                 `result` enum('OK','ERROR') NOT NULL
               ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-
-            $this->teamDatabase->table("migration")->insert([
-                "migration_from" => "0",
-                "migration" => "2021-10-25T11-00-00",
-                "time" => "0",
-                "result" => "OK",
-            ]);
-        }
+        $this->teamDatabase->table("migration")->insert([
+            "migration_from" => "0",
+            "migration" => "2021-10-25T11-00-00",
+            "time" => "0",
+            "result" => "OK",
+        ]);
     }
 
     /**
      * @todo when migrations DOWN are enabled
      */
-    public function migrateDown()
+    public function migrateDown(): void
     {
         $this->logg("Migration DOWN started");
     }
 
-    private function migrateBatch(array $migrations)
+    private function migrateBatch(array $migrations): bool
     {
         $this->teamDatabase->beginTransaction();
         Debugger::timer("migration");
@@ -464,9 +452,7 @@ class MigrationManager
     /**
      * Migrate one migration file
      *
-     * @param Migration $mig
      * @param type $direction
-     * @return void
      */
     private function migrateOne(Migration $mig, $direction = self::MIGRATION_UP): void
     {

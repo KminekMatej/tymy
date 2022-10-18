@@ -157,6 +157,9 @@ class Event extends BaseModel
         return $this->myAttendance;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getAttendance(): array
     {
         return $this->attendance;
@@ -187,138 +190,141 @@ class Event extends BaseModel
         return $this->eventType;
     }
 
-    public function setCaption(string $caption)
+    public function setCaption(string $caption): static
     {
         $this->caption = $caption;
         return $this;
     }
 
-    public function setCreated(DateTime $created)
+    public function setCreated(DateTime $created): static
     {
         $this->created = $created;
         return $this;
     }
 
-    public function setCreatedUserId(?int $createdUserId)
+    public function setCreatedUserId(?int $createdUserId): static
     {
         $this->createdUserId = $createdUserId;
         return $this;
     }
 
-    public function setEventTypeId(int $eventTypeId)
+    public function setEventTypeId(int $eventTypeId): static
     {
         $this->eventTypeId = $eventTypeId;
         return $this;
     }
 
-    public function setType(string $type)
+    public function setType(string $type): static
     {
         $this->type = $type;
         return $this;
     }
 
-    public function setDescription(?string $description)
+    public function setDescription(?string $description): static
     {
         $this->description = $description;
         return $this;
     }
 
-    public function setCloseTime(DateTime $closeTime)
+    public function setCloseTime(DateTime $closeTime): static
     {
         $this->closeTime = $closeTime;
         return $this;
     }
 
-    public function setStartTime(DateTime $startTime)
+    public function setStartTime(DateTime $startTime): static
     {
         $this->startTime = $startTime;
         return $this;
     }
 
-    public function setEndTime(DateTime $endTime)
+    public function setEndTime(DateTime $endTime): static
     {
         $this->endTime = $endTime;
         return $this;
     }
 
-    public function setLink(?string $link)
+    public function setLink(?string $link): static
     {
         $this->link = $link;
         return $this;
     }
 
-    public function setPlace(?string $place)
+    public function setPlace(?string $place): static
     {
         $this->place = $place;
         return $this;
     }
 
-    public function setViewRightName(?string $viewRightName)
+    public function setViewRightName(?string $viewRightName): static
     {
         $this->viewRightName = $viewRightName;
         return $this;
     }
 
-    public function setPlanRightName(?string $planRightName)
+    public function setPlanRightName(?string $planRightName): static
     {
         $this->planRightName = $planRightName;
         return $this;
     }
 
-    public function setResultRightName(?string $resultRightName)
+    public function setResultRightName(?string $resultRightName): static
     {
         $this->resultRightName = $resultRightName;
         return $this;
     }
 
-    public function setWebName(?string $webName)
+    public function setWebName(?string $webName): static
     {
         $this->webName = $webName;
         return $this;
     }
 
-    public function setCanView(bool $canView)
+    public function setCanView(bool $canView): static
     {
         $this->canView = $canView;
         return $this;
     }
 
-    public function setCanPlan(bool $canPlan)
+    public function setCanPlan(bool $canPlan): static
     {
         $this->canPlan = $canPlan;
         return $this;
     }
 
-    public function setCanPlanOthers(bool $canPlanOthers)
+    public function setCanPlanOthers(bool $canPlanOthers): static
     {
         $this->canPlanOthers = $canPlanOthers;
         return $this;
     }
 
-    public function setCanResult(bool $canResult)
+    public function setCanResult(bool $canResult): static
     {
         $this->canResult = $canResult;
         return $this;
     }
 
-    public function setInPast(bool $inPast)
+    public function setInPast(bool $inPast): static
     {
         $this->inPast = $inPast;
         return $this;
     }
 
-    public function setInFuture(bool $inFuture)
+    public function setInFuture(bool $inFuture): static
     {
         $this->inFuture = $inFuture;
         return $this;
     }
 
-    public function setMyAttendance(?Attendance $myAttendance)
+    public function setMyAttendance(?Attendance $myAttendance): static
     {
         $this->myAttendance = $myAttendance;
         return $this;
     }
 
+    /**
+     * @param mixed[] $attendance
+     */
     public function setAttendance(array $attendance): void
     {
         $this->attendance = $attendance;
@@ -344,13 +350,13 @@ class Event extends BaseModel
         $this->textColor = $textColor;
     }
 
-    public function setEventType(EventType $eventType)
+    public function setEventType(EventType $eventType): static
     {
         $this->eventType = $eventType;
         return $this;
     }
 
-    public function addAttendance(Attendance $attendance)
+    public function addAttendance(Attendance $attendance): static
     {
         $this->attendance[] = $attendance;
         return $this;
@@ -361,6 +367,9 @@ class Event extends BaseModel
         return self::MODULE;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     public function getScheme(): array
     {
         return EventMapper::scheme();
@@ -371,7 +380,10 @@ class Event extends BaseModel
         return self::TABLE;
     }
 
-    public function jsonSerialize()
+    /**
+     * @return mixed[]
+     */
+    public function jsonSerialize(): array
     {
         $json = parent::jsonSerialize() + [
             "type" => $this->getType(),
@@ -385,8 +397,8 @@ class Event extends BaseModel
             "eventType" => $this->getEventType()->jsonSerialize(),
         ];
 
-        if ($this->getMyAttendance()) {   //set myAttendance property only if there is some
-            $json = $json + ["myAttendance" => $this->getMyAttendance()->jsonSerialize()];
+        if ($this->getMyAttendance() !== null) {   //set myAttendance property only if there is some
+            $json += ["myAttendance" => $this->getMyAttendance()->jsonSerialize()];
         }
         return $json;
     }

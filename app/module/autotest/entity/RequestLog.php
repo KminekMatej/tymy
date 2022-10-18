@@ -12,22 +12,10 @@ use Nette\Utils\DateTime;
 class RequestLog
 {
     private DateTime $time;
-    private string $method;
-    private string $url;
-    private $postData = null;
-    private ?int $expectCode = null;
-    private ?int $httpResponseCode = null;
-    private ?int $customResponseCode = null;
 
-    public function __construct(string $method, string $url, $postData, ?int $expectCode = null, ?int $httpResponseCode = null, ?int $customResponseCode = null)
+    public function __construct(private string $method, private string $url, private $postData, private ?int $expectCode = null, private ?int $httpResponseCode = null, private ?int $customResponseCode = null)
     {
         $this->time = new DateTime();
-        $this->method = $method;
-        $this->url = $url;
-        $this->postData = $postData;
-        $this->expectCode = $expectCode;
-        $this->httpResponseCode = $httpResponseCode;
-        $this->customResponseCode = $customResponseCode;
     }
 
     public function getTime(): DateTime
@@ -65,43 +53,43 @@ class RequestLog
         return $this->customResponseCode;
     }
 
-    public function setTime(DateTime $time)
+    public function setTime(DateTime $time): static
     {
         $this->time = $time;
         return $this;
     }
 
-    public function setMethod(string $method)
+    public function setMethod(string $method): static
     {
         $this->method = $method;
         return $this;
     }
 
-    public function setUrl(string $url)
+    public function setUrl(string $url): static
     {
         $this->url = $url;
         return $this;
     }
 
-    public function setPostData($postData)
+    public function setPostData($postData): static
     {
         $this->postData = $postData;
         return $this;
     }
 
-    public function setExpectCode(?int $expectCode)
+    public function setExpectCode(?int $expectCode): static
     {
         $this->expectCode = $expectCode;
         return $this;
     }
 
-    public function setHttpResponseCode(?int $httpResponseCode)
+    public function setHttpResponseCode(?int $httpResponseCode): static
     {
         $this->httpResponseCode = $httpResponseCode;
         return $this;
     }
 
-    public function setCustomResponseCode(?int $customResponseCode)
+    public function setCustomResponseCode(?int $customResponseCode): static
     {
         $this->customResponseCode = $customResponseCode;
         return $this;

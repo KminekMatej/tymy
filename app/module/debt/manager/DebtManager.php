@@ -4,10 +4,10 @@ namespace Tymy\Module\Debt\Manager;
 
 use Nette\Database\IRow;
 use Nette\Utils\Strings;
-use Tymy\Module\Authorization\Manager\AuthorizationManager;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Debt\Mapper\DebtMapper;
 use Tymy\Module\Debt\Model\Debt;
 use Tymy\Module\Permission\Model\Privilege;
@@ -24,15 +24,11 @@ class DebtManager extends BaseManager
     public const TYPE_TEAM = "team";
     public const TYPE_OTHER = "other";
 
-    private ?Debt $debt;
-    private AuthorizationManager $authorizationManager;
-    private UserManager $userManager;
+    private ?Debt $debt = null;
 
-    public function __construct(ManagerFactory $managerFactory, AuthorizationManager $authorizationManager, UserManager $userManager)
+    public function __construct(ManagerFactory $managerFactory, private UserManager $userManager)
     {
         parent::__construct($managerFactory);
-        $this->authorizationManager = $authorizationManager;
-        $this->userManager = $userManager;
     }
 
     public function map(?IRow $row, $force = false): ?BaseModel
@@ -88,6 +84,9 @@ class DebtManager extends BaseManager
         return Debt::class;
     }
 
+    /**
+     * @return Field[]
+     */
     protected function getScheme(): array
     {
         return DebtMapper::scheme();
@@ -96,10 +95,8 @@ class DebtManager extends BaseManager
     /**
      * Check edit permission
      * @param Debt $entity
-     * @param int $userId
-     * @return bool
      */
-    public function canEdit($entity, $userId): bool
+    public function canEdit($entity, int $userId): bool
     {
         return $this->canEditDebtData($entity->getPayeeId(), $entity->getPayeeType());
     }
@@ -109,8 +106,6 @@ class DebtManager extends BaseManager
      *
      * @param int $userId
      * @param ?int $payeeId (null for team payee)
-     * @param string $payeeType
-     * @return bool
      */
     private function canEditDebtData(?int $payeeId, string $payeeType): bool
     {
@@ -121,12 +116,10 @@ class DebtManager extends BaseManager
     /**
      * Check read permission
      * @param Debt $entity
-     * @param int $userId
-     * @return bool
      */
-    public function canRead($entity, $userId): bool
+    public function canRead($entity, int $userId): bool
     {
-        return ($entity->getDebtorType() == self::TYPE_USER && $entity->getDebtorId() == $userId) || $entity->getCanEdit();
+        return ($entity->getDebtorType() == self::TYPE_USER && $entity->getDebtorId() === $userId) || $entity->getCanEdit();
     }
 
     /**
@@ -242,15 +235,12 @@ class DebtManager extends BaseManager
 
     /**
      * Autoset debtor id and debtor type
-     * @param array &$debtData
-     * @param Debt|null $originalDebt
-     * @return void
      */
     private function autosetType(array &$debtData, ?Debt $originalDebt = null): void
     {
-        if ($originalDebt) {
-            $debtData["debtorId"] = $debtData["debtorId"] ?? $originalDebt->getDebtorId();
-            $debtData["payeeId"] = $debtData["payeeId"] ?? $originalDebt->getPayeeId();
+        if ($originalDebt !== null) {
+            $debtData["debtorId"] ??= $originalDebt->getDebtorId();
+            $debtData["payeeId"] ??= $originalDebt->getPayeeId();
         }
 
         $debtData["debtorType"] = empty($debtData["debtorId"]) ? self::TYPE_TEAM : self::TYPE_USER;
@@ -286,7 +276,6 @@ class DebtManager extends BaseManager
      * Get sum of all debts with pending payment
      *
      * @param Debt[] $debts
-     * @return int
      */
     public function getWarnings(array $debts): int
     {

@@ -11,22 +11,28 @@ use Iterator;
  */
 class Row implements Iterator
 {
-    private array $cells = [];
-    private array $classes = [];
     private ?string $style = null;
-    private $position = 0;
+    private int $position = 0;
 
-    public function __construct(array $cells, array $classes = [])
+    /**
+     * @param mixed[] $cells
+     * @param mixed[] $classes
+     */
+    public function __construct(private array $cells, private array $classes = [])
     {
-        $this->cells = $cells;
-        $this->classes = $classes;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getCells(): array
     {
         return $this->cells;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getClasses(): array
     {
         return $this->classes;
@@ -37,35 +43,35 @@ class Row implements Iterator
         return $this->style;
     }
 
-    public function setStyle(?string $style)
+    public function setStyle(?string $style): static
     {
         $this->style = $style;
         return $this;
     }
 
-    public function classStr()
+    public function classStr(): string
     {
-        return join(",", $this->classes);
+        return implode(",", $this->classes);
     }
 
-    public function addCell(mixed $cell)
+    public function addCell(mixed $cell): static
     {
         $this->cells[] = $cell;
         return $this;
     }
 
-    public function addClass(string $class)
+    public function addClass(string $class): static
     {
         $this->classes[] = $class;
         return $this;
     }
 
-    public function current()
+    public function current(): mixed
     {
         return $this->cells[$this->position];
     }
 
-    public function key()
+    public function key(): int
     {
         return $this->position;
     }

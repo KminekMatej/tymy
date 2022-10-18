@@ -13,38 +13,14 @@ use Tymy\Module\Autotest\Entity\Assert;
  */
 class SimpleResponse
 {
-    /** @var int */
-    private $code;
-
-    /** @var string */
-    private $data;
-
     private ?string $message = null;
 
-    /** @var Request */
-    private $httpRequest;
-
-    /** @var Response */
-    private $httpResponse;
-
-    /** @var IResponse */
-    private $response;
-
-    /** @var Presenter */
-    private $presenter;
-
-    /** @var RequestLog */
-    private $log;
-
-    public function __construct($code, $data, Request $httpRequest, Response $httpResponse, IResponse $response, Presenter $presenter, RequestLog &$log)
+    /**
+     * @param int $code
+     * @param string $data
+     */
+    public function __construct(private $code, private $data, private Request $httpRequest, private Response $httpResponse, private IResponse $response, private Presenter $presenter, private RequestLog &$log)
     {
-        $this->code = $code;
-        $this->data = $data;
-        $this->httpRequest = $httpRequest;
-        $this->httpResponse = $httpResponse;
-        $this->response = $response;
-        $this->presenter = $presenter;
-        $this->log = $log;
         $this->log->setHttpResponseCode($httpResponse->getCode());
         if ($data && is_array($data) && array_key_exists("code", $data)) {
             $this->log->setCustomResponseCode((int) $data["code"]);
@@ -54,73 +30,73 @@ class SimpleResponse
         }
     }
 
-    public function getCode()
+    public function getCode(): int
     {
         return $this->code;
     }
 
-    public function getData()
+    public function getData(): string
     {
         return $this->data;
     }
 
-    public function getHttpRequest()
+    public function getHttpRequest(): \Nette\Application\Request
     {
         return $this->httpRequest;
     }
 
-    public function getHttpResponse()
+    public function getHttpResponse(): \Nette\Http\Response
     {
         return $this->httpResponse;
     }
 
-    public function getResponse()
+    public function getResponse(): \Nette\Application\IResponse
     {
         return $this->response;
     }
 
-    public function setCode($code)
+    public function setCode(int $code): static
     {
         $this->code = $code;
         return $this;
     }
 
-    public function setData($data)
+    public function setData(string $data): static
     {
         $this->data = $data;
         return $this;
     }
 
-    public function setHttpRequest(Request $httpRequest)
+    public function setHttpRequest(Request $httpRequest): static
     {
         $this->httpRequest = $httpRequest;
         return $this;
     }
 
-    public function setHttpResponse(Response $httpResponse)
+    public function setHttpResponse(Response $httpResponse): static
     {
         $this->httpResponse = $httpResponse;
         return $this;
     }
 
-    public function setResponse(IResponse $jsonResponse)
+    public function setResponse(IResponse $jsonResponse): static
     {
         $this->response = $jsonResponse;
         return $this;
     }
 
-    public function getPresenter()
+    public function getPresenter(): \Nette\Application\UI\Presenter
     {
         return $this->presenter;
     }
 
-    public function setPresenter(Presenter $presenter)
+    public function setPresenter(Presenter $presenter): static
     {
         $this->presenter = $presenter;
         return $this;
     }
 
-    public function expect(int $code, ?string $type = null)
+    public function expect(int $code, ?string $type = null): static
     {
         $this->log->setExpectCode($code);
         if ($code < 999) {

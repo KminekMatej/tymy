@@ -41,25 +41,25 @@ class ICalItem extends BaseModel
         return $this->statusId;
     }
 
-    public function setCreated(DateTime $created)
+    public function setCreated(DateTime $created): static
     {
         $this->created = $created;
         return $this;
     }
 
-    public function setCreatedUserId(?int $createdUserId)
+    public function setCreatedUserId(?int $createdUserId): static
     {
         $this->createdUserId = $createdUserId;
         return $this;
     }
 
-    public function setIcalId(int $icalId)
+    public function setIcalId(int $icalId): static
     {
         $this->icalId = $icalId;
         return $this;
     }
 
-    public function setStatusId(int $statusId)
+    public function setStatusId(int $statusId): static
     {
         $this->statusId = $statusId;
         return $this;
@@ -70,6 +70,9 @@ class ICalItem extends BaseModel
         return self::MODULE;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     public function getScheme(): array
     {
         return ICalItemMapper::scheme();

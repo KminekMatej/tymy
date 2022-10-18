@@ -32,6 +32,6 @@ class Assert extends \Tester\Assert
         $newDateTime = DateTime::createFromFormat(BaseModel::DATE_FORMAT, $actual, "UTC");
         $oldDateTime = DateTime::createFromFormat(BaseModel::DATE_FORMAT, $expected);
 
-        Assert::true($oldDateTime == $newDateTime, "Error on datetime field, $expected !== $actual"); //comparing by equal fails due to different timezones
+        Assert::true($oldDateTime === $newDateTime, "Error on datetime field, $expected !== $actual"); //comparing by equal fails due to different timezones
     }
 }

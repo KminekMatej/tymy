@@ -16,25 +16,25 @@ class DefaultPresenter extends SecuredPresenter
     /** @inject */
     public VoteManager $voteManager;
 
-    public function actionDefault(?string $resource = null)
+    public function actionDefault(?string $resource = null): void
     {
         if ($resource) {
             $this->setView("poll");
         }
     }
 
-    public function beforeRender()
+    public function beforeRender(): void
     {
         parent::beforeRender();
         $this->addBreadcrumb($this->translator->translate("poll.poll", 2), $this->link(":Poll:Default:"));
     }
 
-    public function renderDefault()
+    public function renderDefault(): void
     {
         $this->template->polls = $this->pollManager->getListUserAllowed();
     }
 
-    public function renderPoll(?string $resource = null)
+    public function renderPoll(?string $resource = null): void
     {
         /* @var $poll Poll */
         $poll = $this->pollManager->getById($this->parseIdFromWebname($resource));

@@ -2,10 +2,8 @@
 
 namespace Tymy\Module\Core\Service;
 
-use Kdyby\Translation\Translator;
+use Contributte\Translation\Translator;
 use Latte\Engine;
-use Nette\Application\LinkGenerator;
-use Nette\Application\UI\ITemplateFactory;
 use Nette\Mail\Mailer;
 use Nette\Mail\Message;
 use Nette\Mail\SendException;
@@ -25,27 +23,14 @@ class MailService
 {
     public const TEMPLATES_PATH = __DIR__ . "/../templates/mail";
     public const ROBOT_EMAIL_FROM_S = "robot@%s.tymy.cz";
-
-    private TeamManager $teamManager;
-    private Translator $translator;
     private Team $team;
     private string $teamDomain;
-    private LinkGenerator $linkGenerator;
-    private ITemplateFactory $templateFactory;
-    private Mailer $mailSender;
-    private StringsManager $stringsManager;
 
-    public function __construct(TeamManager $teamManager, LinkGenerator $linkGenerator, ITemplateFactory $templateFactory, Mailer $mailer, StringsManager $stringsManager, Translator $translator)
+    public function __construct(private TeamManager $teamManager, private Mailer $mailSender, private StringsManager $stringsManager, private Translator $translator)
     {
-        $this->teamManager = $teamManager;
-        $this->linkGenerator = $linkGenerator;
-        $this->templateFactory = $templateFactory;
-        $this->mailSender = $mailer;
-        $this->stringsManager = $stringsManager;
-        $this->translator = $translator;
     }
 
-    private function startup()
+    private function startup(): void
     {
         if (empty($this->team)) {
             $this->team = $this->teamManager->getTeam();
@@ -53,14 +38,7 @@ class MailService
         }
     }
 
-    private function createTemplate($templateName, $params)
-    {
-        $template = $this->templateFactory->createTemplate();
-        $template->getLatte()->addProvider('uiControl', $this->linkGenerator);
-        return $template->renderToString(self::TEMPLATES_PATH . "$templateName.latte", $params);
-    }
-
-    public function mailUserRegistered(string $nameTo, string $emailTo, string $login, string $email, ?string $firstName = null, ?string $lastName = null, ?string $note = "")
+    public function mailUserRegistered(string $nameTo, string $emailTo, string $login, string $email, ?string $firstName = null, ?string $lastName = null, ?string $note = ""): void
     {
         $this->startup();
         $body = $this->stringsManager->translateBy("register", "reg_mail_body_5s", $login, $firstName, $lastName, $email, $note);
@@ -70,9 +48,6 @@ class MailService
 
     /**
      * Send email to user that his registration has been approved
-     * @param string $name
-     * @param string $email
-     * @return void
      */
     public function mailLoginApproved(string $name, string $email): void
     {
@@ -84,8 +59,6 @@ class MailService
 
     /**
      * Send email to user that his registration has been denied
-     * @param string $name
-     * @param string $email
      */
     public function mailLoginDenied(string $name, string $email): void
     {
@@ -95,7 +68,7 @@ class MailService
         $this->sendMail($name, $email, $body, $subject);
     }
 
-    public function mailPwdReset(string $name, string $email, string $callbackUri, string $hostName, string $resetCode)
+    public function mailPwdReset(string $name, string $email, string $callbackUri, string $hostName, string $resetCode): void
     {
         $this->startup();
         $body = $this->stringsManager->translateBy("pswd_reset", "rc_mail_body_4s", $hostName, $this->teamDomain, $resetCode, sprintf($callbackUri, $resetCode));
@@ -105,12 +78,6 @@ class MailService
 
     /**
      * Compose & send email with invitation of user into this team
-     * @param string $nameTo
-     * @param string $emailTo
-     * @param string $nameFrom
-     * @param string $invitationUrl
-     * @param DateTime $invitationValidity
-     * @return void
      */
     public function mailInvitation(string $nameTo, string $emailTo, string $nameFrom, string $invitationUrl, DateTime $invitationValidity): void
     {
@@ -118,7 +85,7 @@ class MailService
 
         $latte = new Engine();
 
-        $latte->addFilter('translate', [$this->translator, 'translate']);
+        $latte->addFilter('translate', fn($message, $parameters): string => $this->translator->translate($message, $parameters));
 
         $subject = $this->translator->translate("mail.invitation.subject");
 

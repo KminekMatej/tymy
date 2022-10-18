@@ -21,7 +21,7 @@ class PwdPresenter extends BasePresenter
     /** @inject */
     public UserManager $userManager;
 
-    public function renderReset()
+    public function renderReset(): void
     {
         $resetCode = $this->getRequest()->getParameter("code");
         if (!empty($resetCode)) {
@@ -35,19 +35,18 @@ class PwdPresenter extends BasePresenter
         }
     }
 
-    public function renderNew()
+    public function renderNew(): void
     {
         $this->template->pwdNew = $this->getRequest()->getParameter("pwd");
     }
 
     /**
      * PWD Lost form factory.
-     * @return Nette\Application\UI\Form
      */
-    protected function createComponentPwdLostForm()
+    protected function createComponentPwdLostForm(): \Nette\Application\UI\Form
     {
         $form = $this->pwdLostFactory->create();
-        $form->onSuccess[] = function (Nette\Application\UI\Form $form, stdClass $values) {
+        $form->onSuccess[] = function (Nette\Application\UI\Form $form, stdClass $values): void {
             try {
                 $this->userManager->pwdLost(trim($values->email), $this->getHttpRequest()->getRemoteHost(), $this->link('//:Sign:Pwd:reset') . "?code=%2s");
                 $this->flashMessage($this->translator->translate("common.alerts.resetCodeSent"));
@@ -61,12 +60,11 @@ class PwdPresenter extends BasePresenter
 
     /**
      * PWD Reset form factory.
-     * @return Nette\Application\UI\Form
      */
-    protected function createComponentPwdResetForm()
+    protected function createComponentPwdResetForm(): \Nette\Application\UI\Form
     {
         $form = $this->pwdResetFactory->create();
-        $form->onSuccess[] = function (Nette\Application\UI\Form $form, stdClass $values) {
+        $form->onSuccess[] = function (Nette\Application\UI\Form $form, stdClass $values): void {
             try {
                 $newPassword = $this->userManager->pwdReset($values->code);
                 $this->flashMessage($this->translator->translate("common.alerts.pwdResetSuccesfull"));

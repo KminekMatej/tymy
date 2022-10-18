@@ -23,24 +23,20 @@ use Tymy\Module\User\Model\User;
  */
 class HistoryManager extends BaseManager
 {
-    private UserManager $userManager;
-
-    public function __construct(ManagerFactory $managerFactory, UserManager $userManager)
+    public function __construct(ManagerFactory $managerFactory, private UserManager $userManager)
     {
         parent::__construct($managerFactory);
-        $this->userManager = $userManager;
         $this->idCol = null;
     }
 
     /**
      *
-     * @param ActiveRow $row
-     * @param bool $force
+     * @param ActiveRow|null $row
      * @return History|null
      */
-    public function map(?IRow $row, $force = false): ?BaseModel
+    public function map(?IRow $row, bool $force = false): ?BaseModel
     {
-        if (!$row) {
+        if ($row === null) {
             return null;
         }
 
@@ -67,6 +63,9 @@ class HistoryManager extends BaseManager
         return History::class;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     protected function getScheme(): array
     {
         return HistoryMapper::scheme();
@@ -82,10 +81,8 @@ class HistoryManager extends BaseManager
      * Check read permissions
      *
      * @param History $entity
-     * @param int $userId
-     * @return bool
      */
-    public function canRead($entity, $userId): bool
+    public function canRead($entity, int $userId): bool
     {
         /* @var $entity Event */
         return $entity->getViewRightName() ? $this->user->isAllowed($this->user->getId(), Privilege::USR($entity->getViewRightName())) : true;
@@ -94,7 +91,7 @@ class HistoryManager extends BaseManager
     protected function allowRead(?int $recordId = null): void
     {
         $eventRow = $this->database->table(Event::TABLE)->where("id", $recordId)->fetch();
-        if (!$eventRow) {
+        if (!$eventRow instanceof \Nette\Database\Table\ActiveRow) {
             $this->responder->E4005_OBJECT_NOT_FOUND(Event::MODULE, $recordId);
         }
 
@@ -107,7 +104,6 @@ class HistoryManager extends BaseManager
     /**
      * Load all history records for users which are not DELETED
      *
-     * @param int $eventId
      * @return History[]
      */
     public function getEventHistory(int $eventId): array
@@ -129,11 +125,17 @@ class HistoryManager extends BaseManager
         throw new NotImplementedException("Not implemented yet");
     }
 
+    /**
+     * @return int[]
+     */
     public function getAllowedReaders(BaseModel $record): array
     {
         return $this->getAllUserIds(); //everyone can read
     }
 
+    /**
+     * @return \Tymy\Module\Attendance\Model\History[]
+     */
     public function readForEvent(int $eventId): array
     {
         $this->allowRead($eventId);

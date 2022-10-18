@@ -74,61 +74,61 @@ class Invitation extends BaseModel
         return $this->validUntil;
     }
 
-    public function setCreated(DateTime $created)
+    public function setCreated(DateTime $created): static
     {
         $this->created = $created;
         return $this;
     }
 
-    public function setCreatedUserId(?int $createdUserId)
+    public function setCreatedUserId(?int $createdUserId): static
     {
         $this->createdUserId = $createdUserId;
         return $this;
     }
 
-    public function setFirstName(?string $firstName)
+    public function setFirstName(?string $firstName): static
     {
         $this->firstName = $firstName;
         return $this;
     }
 
-    public function setLastName(?string $lastName)
+    public function setLastName(?string $lastName): static
     {
         $this->lastName = $lastName;
         return $this;
     }
 
-    public function setEmail(?string $email)
+    public function setEmail(?string $email): static
     {
         $this->email = $email;
         return $this;
     }
 
-    public function setCode(string $code)
+    public function setCode(string $code): static
     {
         $this->code = $code;
         return $this;
     }
 
-    public function setLang(string $lang)
+    public function setLang(string $lang): static
     {
         $this->lang = $lang;
         return $this;
     }
 
-    public function setUserId(?int $userId)
+    public function setUserId(?int $userId): static
     {
         $this->userId = $userId;
         return $this;
     }
 
-    public function setValidUntil(DateTime $validUntil)
+    public function setValidUntil(DateTime $validUntil): static
     {
         $this->validUntil = $validUntil;
         return $this;
     }
 
-    public function getStatus()
+    public function getStatus(): string
     {
         if ($this->userId) {
             return self::STATUS_ACCEPTED;
@@ -142,6 +142,9 @@ class Invitation extends BaseModel
         return self::MODULE;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     public function getScheme(): array
     {
         return InvitationMapper::scheme();

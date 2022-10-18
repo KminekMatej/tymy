@@ -47,7 +47,6 @@ class User extends BaseModel
     private ?string $firstName = null;
     private ?string $lastName = null;
     private string $fullName;
-    private ?string $userName = null;
     private string $password;
     private ?string $callName = null;
     private ?string $language = null;
@@ -59,7 +58,6 @@ class User extends BaseModel
     private ?string $zipCode = null;
     private ?string $phone = null;
     private ?string $phone2 = null;
-    private ?string $displayName = null;
     private ?DateTime $birthDate = null;
     private int $nameDayMonth = 0;
     private int $nameDayDay = 0;
@@ -106,6 +104,9 @@ class User extends BaseModel
         return $this->status;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getRoles(): array
     {
         return empty($this->roles) ? [] : explode(",", $this->roles);
@@ -171,7 +172,7 @@ class User extends BaseModel
         return $this->phone2;
     }
 
-    public function getDisplayName(): ?string
+    public function getDisplayName(): string
     {
         if (!empty($this->callName)) {
             return $this->callName;
@@ -230,6 +231,9 @@ class User extends BaseModel
         return $this->warnings;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getErrFields(): array
     {
         return $this->errFields;
@@ -250,169 +254,168 @@ class User extends BaseModel
         return $this->hideDiscDesc;
     }
 
-    public function setLogin(string $login)
+    public function setLogin(string $login): static
     {
         $this->login = $login;
         return $this;
     }
 
-    public function setCanLogin($canLogin)
+    public function setCanLogin($canLogin): static
     {
-        $this->canLogin = $canLogin ? true : false;
+        $this->canLogin = (bool) $canLogin;
         return $this;
     }
 
-    public function setCanEditCallName($canEditCallName)
+    public function setCanEditCallName($canEditCallName): static
     {
-        $this->canEditCallName = $canEditCallName ? true : false;
+        $this->canEditCallName = (bool) $canEditCallName;
         return $this;
     }
 
-    public function setCreatedAt(DateTime $createdAt)
+    public function setCreatedAt(DateTime $createdAt): static
     {
         $this->createdAt = $createdAt;
         return $this;
     }
 
-    public function setLastLogin(?DateTime $lastLogin)
+    public function setLastLogin(?DateTime $lastLogin): static
     {
         $this->lastLogin = $lastLogin;
         return $this;
     }
 
-    public function setStatus(string $status)
+    public function setStatus(string $status): static
     {
         $this->status = $status;
         return $this;
     }
 
-    public function setRoles(string $roles)
+    public function setRoles(string $roles): static
     {
         $this->roles = $roles;
         return $this;
     }
 
-    public function setFirstName(?string $firstName)
+    public function setFirstName(?string $firstName): static
     {
         $this->firstName = $firstName;
         return $this;
     }
 
-    public function setLastName(?string $lastName)
+    public function setLastName(?string $lastName): static
     {
         $this->lastName = $lastName;
         return $this;
     }
 
-    public function setCallName(?string $callName)
+    public function setCallName(?string $callName): static
     {
         $this->callName = $callName;
         return $this;
     }
 
-    public function setLanguage(?string $language)
+    public function setLanguage(?string $language): static
     {
         $this->language = $language;
         return $this;
     }
 
-    public function setEmail(?string $email)
+    public function setEmail(?string $email): static
     {
         $this->email = $email;
         return $this;
     }
 
-    public function setJerseyNumber(?string $jerseyNumber)
+    public function setJerseyNumber(?string $jerseyNumber): static
     {
         $this->jerseyNumber = $jerseyNumber;
         return $this;
     }
 
-    public function setGender(?string $gender)
+    public function setGender(?string $gender): static
     {
         $this->gender = strtoupper($gender);
         return $this;
     }
 
-    public function setStreet(?string $street)
+    public function setStreet(?string $street): static
     {
         $this->street = $street;
         return $this;
     }
 
-    public function setCity(?string $city)
+    public function setCity(?string $city): static
     {
         $this->city = $city;
         return $this;
     }
 
-    public function setZipCode(?string $zipCode)
+    public function setZipCode(?string $zipCode): static
     {
         $this->zipCode = $zipCode;
         return $this;
     }
 
-    public function setPhone(?string $phone)
+    public function setPhone(?string $phone): static
     {
         $this->phone = $phone;
         return $this;
     }
 
-    public function setPhone2(?string $phone2)
+    public function setPhone2(?string $phone2): static
     {
         $this->phone2 = $phone2;
         return $this;
     }
 
-    public function setDisplayName(?string $displayName)
+    public function setDisplayName(?string $displayName): static
     {
-        $this->displayName = $displayName;
         return $this;
     }
 
-    public function setBirthDate(?DateTime $birthDate)
+    public function setBirthDate(?DateTime $birthDate): static
     {
         $this->birthDate = $birthDate;
         return $this;
     }
 
-    public function setNameDayMonth(int $nameDayMonth)
+    public function setNameDayMonth(int $nameDayMonth): static
     {
         $this->nameDayMonth = $nameDayMonth;
         return $this;
     }
 
-    public function setNameDayDay(int $nameDayDay)
+    public function setNameDayDay(int $nameDayDay): static
     {
         $this->nameDayDay = $nameDayDay;
         return $this;
     }
 
-    public function setAccountNumber(?string $accountNumber)
+    public function setAccountNumber(?string $accountNumber): static
     {
         $this->accountNumber = $accountNumber;
         return $this;
     }
 
-    public function setBirthCode(?string $birthCode)
+    public function setBirthCode(?string $birthCode): static
     {
         $this->birthCode = $birthCode;
         return $this;
     }
 
-    public function setGdprAccepted(?DateTime $gdprAccepted)
+    public function setGdprAccepted(?DateTime $gdprAccepted): static
     {
         $this->gdprAccepted = $gdprAccepted;
         return $this;
     }
 
-    public function setGdprRevoked(?DateTime $gdprRevoked)
+    public function setGdprRevoked(?DateTime $gdprRevoked): static
     {
         $this->gdprRevoked = $gdprRevoked;
         return $this;
     }
 
-    public function setLastReadNews(?DateTime $lastReadNews)
+    public function setLastReadNews(?DateTime $lastReadNews): static
     {
         $this->lastReadNews = $lastReadNews;
         return $this;
@@ -423,20 +426,9 @@ class User extends BaseModel
         return $this->fullName;
     }
 
-    public function setFullName(string $fullName)
+    public function setFullName(string $fullName): static
     {
         $this->fullName = $fullName;
-        return $this;
-    }
-
-    public function getUserName(): ?string
-    {
-        return $this->userName;
-    }
-
-    public function setUserName(?string $userName)
-    {
-        $this->userName = $userName;
         return $this;
     }
 
@@ -445,7 +437,7 @@ class User extends BaseModel
         return $this->password;
     }
 
-    public function setPassword(string $password)
+    public function setPassword(string $password): static
     {
         $this->password = $password;
         return $this;
@@ -456,7 +448,7 @@ class User extends BaseModel
         return $this->pictureUrl;
     }
 
-    public function setPictureUrl(string $pictureUrl)
+    public function setPictureUrl(string $pictureUrl): static
     {
         $this->pictureUrl = $pictureUrl;
         return $this;
@@ -467,7 +459,7 @@ class User extends BaseModel
         return $this->isNew;
     }
 
-    public function setIsNew(bool $isNew): User
+    public function setIsNew(bool $isNew): static
     {
         $this->isNew = $isNew;
         return $this;
@@ -478,7 +470,7 @@ class User extends BaseModel
         return $this->ghost;
     }
 
-    public function setGhost(bool $ghost)
+    public function setGhost(bool $ghost): static
     {
         $this->ghost = $ghost;
         return $this;
@@ -490,6 +482,9 @@ class User extends BaseModel
         return $this;
     }
 
+    /**
+     * @param mixed[] $errFields
+     */
     public function setErrFields(array $errFields): self
     {
         $this->errFields = $errFields;
@@ -502,19 +497,19 @@ class User extends BaseModel
         return $this;
     }
 
-    public function setSkin(?string $skin = null)
+    public function setSkin(?string $skin = null): static
     {
         $this->skin = $skin;
         return $this;
     }
 
-    public function setHideDiscDesc(int $hideDiscDesc)
+    public function setHideDiscDesc(int $hideDiscDesc): static
     {
-        $this->hideDiscDesc = $hideDiscDesc ? true : false;
+        $this->hideDiscDesc = (bool) $hideDiscDesc;
         return $this;
     }
 
-    public function addErrField(string $fieldName)
+    public function addErrField(string $fieldName): void
     {
         $this->errFields[] = $fieldName;
         $this->warnings++;
@@ -525,6 +520,9 @@ class User extends BaseModel
         return self::MODULE;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     public function getScheme(): array
     {
         return UserMapper::scheme();
@@ -535,17 +533,20 @@ class User extends BaseModel
         return self::TABLE;
     }
 
-    public function jsonSerialize()
+    /**
+     * @return mixed[]
+     */
+    public function jsonSerialize(): array
     {
         $data = parent::jsonSerialize();
         unset($data["password"]);
         unset($data["userName"]);
-        $data["birthDate"] = $this->getBirthDate() ? $this->getBirthDate()->format(self::DATE_ENG_FORMAT) : null;
+        $data["birthDate"] = $this->getBirthDate() !== null ? $this->getBirthDate()->format(self::DATE_ENG_FORMAT) : null;
 
         return $data + [
             "email" => $this->getEmail(),
             "fullName" => $this->getFullName(),
-            "rolesAsString" => join(",", $this->getRoles()),
+            "rolesAsString" => implode(",", $this->getRoles()),
             "pictureUrl" => $this->getPictureUrl(),
             "displayName" => $this->getDisplayName(),
         ];

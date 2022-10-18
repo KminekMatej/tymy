@@ -9,18 +9,12 @@ namespace Tymy\Module\Admin\Manager;
  */
 class AdminManager
 {
-    private array $ghosts;
-
-    public function __construct(array $ghosts)
+    public function __construct(private array $ghosts)
     {
-        $this->ghosts = $ghosts;
     }
 
     /**
      * Returns validity of given token
-     *
-     * @param string $token
-     * @return bool
      */
     public function allowToken(string $token): bool
     {

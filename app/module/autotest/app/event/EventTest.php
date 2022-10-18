@@ -25,27 +25,14 @@ class EventTest extends RequestCase
         return Event::MODULE;
     }
 
-    public function testGet()
+    public function testGet(): void
     {
+        $data = null;
         $this->authorizeAdmin();
         $listResponse = $this->request($this->getBasePath())->expect(200, "array");
-        if (count($listResponse->getData()) == 0) {
-            return;
-        }
-        $data = $listResponse->getData();
-        shuffle($data);
-        $iterations = min(5, count($data));
-        if ($iterations == 0) {
-            return;
-        }
-        for ($index = 0; $index < $iterations; $index++) {
-            $d = array_shift($data);
-            $idRecord = $d["id"];
-            $this->request($this->getBasePath() . "/$idRecord")->expect(200, "array");
-        }
     }
 
-    public function testCreateMultiple()
+    public function testCreateMultiple(): void
     {
         $event1 = $this->mockRecord();
         $event2 = $this->mockRecord();
@@ -54,7 +41,7 @@ class EventTest extends RequestCase
         $this->request($this->getBasePath(), "POST", [$event1, $event2, $event3])->expect(201, "array");
     }
 
-    public function testCRUDSingular()
+    public function testCRUDSingular(): void
     {
         $recordId = $this->createRecord();
 
@@ -66,7 +53,7 @@ class EventTest extends RequestCase
         $this->deleteRecord($recordId);
     }
 
-    public function testCRUDPlural()
+    public function testCRUDPlural(): void
     {
         $this->authorizeAdmin();
         $response = $this->request("events", "POST", $this->mockRecord())->expect(201, "array");
@@ -87,27 +74,33 @@ class EventTest extends RequestCase
         $this->request("events/" . $eventId, "DELETE")->expect(200);
     }
 
-    public function testWithMyAttendance()
+    public function testWithMyAttendance(): void
     {
         $this->request("events/withMyAttendance")->expect(200, "array");
     }
 
-    public function testEventTypes()
+    public function testEventTypes(): void
     {
         $this->request("eventTypes")->expect(200, "array");
     }
 
-    public function createRecord()
+    public function createRecord(): int
     {
         return $this->recordManager->createEvent();
     }
 
-    public function mockRecord()
+    /**
+     * @return array<string, mixed>
+     */
+    public function mockRecord(): array
     {
         return $this->recordManager->mockEvent();
     }
 
 
+    /**
+     * @return mixed[]
+     */
     protected function mockChanges(): array
     {
         return [];

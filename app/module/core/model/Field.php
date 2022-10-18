@@ -14,61 +14,48 @@ class Field
     public const TYPE_STRING = "string";
     public const TYPE_DATETIME = "datetime";
 
-    /** @var string */
-    private $column;
+    /** @var mixed|null */
+    private ?string $column = null;
 
-    /** @var string */
-    private $property;
+    /** @var mixed|null */
+    private ?string $property = null;
 
-    /** @var string
-     * @deprecated
-     */
-    private $alias;
+    private bool $mandatory = false;
 
-    /** @var bool */
-    private $mandatory = false;
+    private bool $nonempty = false;
 
-    /** @var bool */
-    private $nonempty = false;
+    private bool $changeable = true;
 
-    /** @var bool */
-    private $changeable = true;
-
-    /** @var string */
-    private $type = self::TYPE_STRING;
+    private string $type = self::TYPE_STRING;
 
     /**
      * Return new field as int type
-     * @return Field
      */
-    public static function int()
+    public static function int(): \Tymy\Module\Core\Model\Field
     {
         return (new Field())->setType(self::TYPE_INT);
     }
 
     /**
      * Return new field as float type
-     * @return Field
      */
-    public static function float()
+    public static function float(): \Tymy\Module\Core\Model\Field
     {
         return (new Field())->setType(self::TYPE_FLOAT);
     }
 
     /**
      * Return new field as string type
-     * @return Field
      */
-    public static function string()
+    public static function string(): \Tymy\Module\Core\Model\Field
     {
         return (new Field())->setType(self::TYPE_STRING);
     }
 
     /**
      * Return new field as datetime type
-     * @return Field
      */
-    public static function datetime()
+    public static function datetime(): \Tymy\Module\Core\Model\Field
     {
         return (new Field())->setType(self::TYPE_DATETIME);
     }
@@ -78,9 +65,8 @@ class Field
      * @param string $name Database column name and property name
      * @param bool $mandatory If field is mandatory, then value cannot be null
      * @param bool $changeable If field is not changeable, any future changes are prohibited
-     * @return Field
      */
-    public function withPropertyAndColumn($name, $mandatory = false, $changeable = true)
+    public function withPropertyAndColumn(string $name, bool $mandatory = false, bool $changeable = true): static
     {
         return $this->setColumn($name)
                         ->setProperty($name)
@@ -93,89 +79,75 @@ class Field
      * @param string $name Database column name
      * @param bool $mandatory If field is mandatory, then value cannot be null
      * @param bool $changeable If field is not changeable, any future changes are prohibited
-     * @return Field
      */
-    public function withColumn($name, $mandatory = false, $changeable = true)
+    public function withColumn(string $name, bool $mandatory = false, bool $changeable = true): static
     {
         return $this->setColumn($name)
                         ->setMandatory($mandatory)
                         ->setChangeable($changeable);
     }
 
-    public function getColumn()
+    public function getColumn(): string
     {
         return $this->column;
     }
 
-    public function getProperty()
+    public function getProperty(): string
     {
         return $this->property;
     }
 
-    /** @deprecated */
-    public function getAlias()
-    {
-        return $this->alias;
-    }
-
-    public function getMandatory()
+    public function getMandatory(): bool
     {
         return $this->mandatory;
     }
 
-    public function getChangeable()
+    public function getChangeable(): bool
     {
         return $this->changeable;
     }
 
-    public function setColumn($column)
+    public function setColumn(string $column): static
     {
         $this->column = $column;
         return $this;
     }
 
-    public function setProperty($property)
+    public function setProperty(string $property): static
     {
         $this->property = $property;
         return $this;
     }
 
-    /** @deprecated */
-    public function setAlias($alias)
-    {
-        $this->alias = $alias;
-        return $this;
-    }
-
-    public function setMandatory($mandatory)
+    public function setMandatory(bool $mandatory): static
     {
         $this->mandatory = $mandatory;
         return $this;
     }
 
-    public function setChangeable($changeable)
+    public function setChangeable(bool $changeable): static
     {
         $this->changeable = $changeable;
         return $this;
     }
 
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
 
-    public function setType($type)
+    public function setType(string $type): static
     {
         $this->type = $type;
         return $this;
     }
 
-    public function getNonempty()
+    public function getNonempty(): bool
     {
         return $this->nonempty;
     }
 
-    public function setNonempty($nonempty = true)
+    public function setNonempty(bool $nonempty = true): static
     {
         $this->nonempty = $nonempty;
         return $this;

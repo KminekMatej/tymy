@@ -12,12 +12,12 @@ use Tymy\Module\Discussion\Manager\DiscussionManager;
  */
 class DefaultPresenter extends SecuredPresenter
 {
-    public function injectManager(DiscussionManager $discussionManager)
+    public function injectManager(DiscussionManager $discussionManager): void
     {
         $this->manager = $discussionManager;
     }
 
-    public function actionDefault($resourceId, $subResourceId)
+    public function actionDefault($resourceId, $subResourceId): void
     {
         if (empty($resourceId) && in_array($this->getRequest()->getMethod(), ["PUT", "DELETE"])) {
             $resourceId = $this->requestData["id"];
@@ -42,7 +42,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->respondNotAllowed();
     }
 
-    private function requestGetList()
+    private function requestGetList(): void
     {
         $discussions = $this->manager->getListUserAllowed($this->user->getId());
 

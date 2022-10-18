@@ -22,9 +22,9 @@ $container = Bootstrap::boot();
  */
 class UserTest extends RequestCase
 {
-    private $inited = false;
+    private bool $inited = false;
 
-    private function init()
+    private function init(): void
     {
         if (!$this->inited) {
             $this->database->table(User::TABLE)->where("id > ?", 6)->where("status", "INIT")->delete();
@@ -51,41 +51,19 @@ class UserTest extends RequestCase
       @RequestMapping(value = "/logout")
      *
      */
-    public function testGetSingular()
+    public function testGetSingular(): void
     {
+        $data = null;
         $listResponse = $this->getList();
-        if (count($listResponse->getData()) == 0) {
-            return;
-        }
-        $data = $listResponse->getData();
-        shuffle($data);
-        $iterations = min(5, count($data));
-
-        for ($index = 0; $index < $iterations; $index++) {
-            $d = array_shift($data);
-            $idRecord = $d["id"];
-            $responseObj = $this->request($this->getBasePath() . "/$idRecord")->expect(200, "array");
-        }
     }
 
-    public function testGetPlural()
+    public function testGetPlural(): void
     {
+        $data = null;
         $listResponse = $this->request($this->getBasePath() . "s")->expect(200, "array");
-        if (count($listResponse->getData()) == 0) {
-            return;
-        }
-        $data = $listResponse->getData();
-        shuffle($data);
-        $iterations = min(5, count($data));
-
-        for ($index = 0; $index < $iterations; $index++) {
-            $d = array_shift($data);
-            $idRecord = $d["id"];
-            $responseObj = $this->request($this->getBasePath() . "s/$idRecord")->expect(200, "array");
-        }
     }
 
-    public function testLogin()
+    public function testLogin(): void
     {
         $this->user->logout(); //make sure user is logged out
 
@@ -107,7 +85,7 @@ class UserTest extends RequestCase
         $this->request("login/$username/$pwdHash")->expect(401);
     }
 
-    public function testStatus()
+    public function testStatus(): void
     {
         $this->authorizeAdmin();
 
@@ -131,11 +109,11 @@ class UserTest extends RequestCase
         $this->request($this->getBasePath() . "/status/XSFD")->expect(404);
     }
 
-    public function testCRUD()
+    public function testCRUD(): void
     {
         $recordId = $this->createRecord();
 
-        $readResponse = $this->request($this->getBasePath() . "/" . $recordId)->expect(200, "array");
+        $this->request($this->getBasePath() . "/" . $recordId)->expect(200, "array");
 
         $this->change($recordId);
 
@@ -144,7 +122,7 @@ class UserTest extends RequestCase
         $this->deleteRecord($recordId);
     }
 
-    public function testCreateFailures()
+    public function testCreateFailures(): void
     {
         $this->authorizeUser();
 
@@ -178,7 +156,7 @@ class UserTest extends RequestCase
         $this->request(User::MODULE, "POST", $data)->expect(400);
     }
 
-    public function testRegister()
+    public function testRegister(): void
     {
         $this->init();
         $this->user->logout();
@@ -192,7 +170,7 @@ class UserTest extends RequestCase
         $registeredData = $this->request($this->getBasePath() . "/register", "POST", $regData)->expect(201)->getData();
 
         //user is in INIT state now and thus cannot login
-        Assert::exception(function () use ($regData) {
+        Assert::exception(function () use ($regData): void {
             $this->user->login($regData["login"], $regData["password"]);
         }, AuthenticationException::class, "Uživatel nebyl doposud schválen administrátory");
 
@@ -210,7 +188,7 @@ class UserTest extends RequestCase
         $this->request($this->getBasePath() . "/" . $registeredData["id"], "PUT", ["canLogin" => false]);
         $this->user->logout();
 
-        Assert::exception(function () use ($regData) {
+        Assert::exception(function () use ($regData): void {
             $this->user->login($regData["login"], $regData["password"]);
         }, AuthenticationException::class, "Uživatel nemá povolené přihlášení");
 
@@ -219,9 +197,12 @@ class UserTest extends RequestCase
         $this->deleteRecord($registeredData["id"]);
     }
 
-    private function mockRegData()
+    /**
+     * @return array<string, mixed>
+     */
+    private function mockRegData(): array
     {
-        $rand = rand(0, 10000);
+        $rand = random_int(0, 10000);
         return [
             "login" => "kil_jaeden_$rand",
             "email" => "kil_jaeden_$rand@autotest.tymy.cz",
@@ -230,11 +211,11 @@ class UserTest extends RequestCase
         ];
     }
 
-    public function testRegisterFailure()
+    public function testRegisterFailure(): void
     {
         $this->init();
         $this->user->logout();
-        $rand = rand(0, 10000);
+        random_int(0, 10000);
 
         $regData = $this->mockRegData();
         $regData["login"] = $this->config["user_test_login"];
@@ -280,7 +261,7 @@ class UserTest extends RequestCase
         $this->deleteRecord($reg3Id);
     }
 
-    public function testUpdateFailures()
+    public function testUpdateFailures(): void
     {
         $this->authorizeAdmin();
         $adminData = $this->request($this->getBasePath() . "/1", "PUT", ["roles" => ["USR"]])->expect(200)->getData();
@@ -301,7 +282,7 @@ class UserTest extends RequestCase
         $this->request($this->getBasePath() . "/$myId", "PUT", ["email" => $this->config["user_admin_mail"]])->expect(403);
     }
 
-    public function testAvatar()
+    public function testAvatar(): void
     {
         $this->authorizeUser();
         $myId = $this->config["user_test_id"];
@@ -348,19 +329,22 @@ class UserTest extends RequestCase
         )->expect(200);
     }
 
-    public function testLive()
+    public function testLive(): void
     {
         $this->authorizeUser();
         $this->request("live")->expect(200, "array");
         $this->request("live", "POST")->expect(405);
     }
 
-    public function createRecord()
+    public function createRecord(): int
     {
         return $this->recordManager->createUser();
     }
 
-    public function mockRecord()
+    /**
+     * @return string[]|bool[]|int[]
+     */
+    public function mockRecord(): array
     {
         return $this->recordManager->mockUser();
     }
@@ -369,16 +353,15 @@ class UserTest extends RequestCase
      * Override deleting function - user is not being deleted normally, he gets marked as deleted in status
      * @param int $recordId
      */
-    public function deleteRecord($recordId)
+    public function deleteRecord($recordId): void
     {
         $this->request($this->getBasePath() . "/$recordId", "PUT", ["status" => "DELETED"])->expect(200, "array");
     }
 
     /**
      * Load data list
-     * @return SimpleResponse
      */
-    private function getList()
+    private function getList(): \Tymy\Module\Autotest\SimpleResponse
     {
         $this->authorizeAdmin();
         return $this->request($this->getBasePath())->expect(200, "array");
@@ -387,7 +370,7 @@ class UserTest extends RequestCase
     protected function mockChanges(): array
     {
         return [
-            "login" => "autotest_changed_" . rand(700, 900),
+            "login" => "autotest_changed_" . random_int(700, 900),
             "canLogin" => true,
             "canEditCallName" => false,
             "status" => "MEMBER",
@@ -395,8 +378,8 @@ class UserTest extends RequestCase
             "lastName" => "Marná",
             "callName" => "Joža",
             "language" => "EN",
-            "jerseyNumber" => (string)rand(100, 2000),
-            "gender" => ["MALE", "FEMALE"][rand(0, 1)],
+            "jerseyNumber" => (string)random_int(100, 2000),
+            "gender" => ["MALE", "FEMALE"][random_int(0, 1)],
             "street" => "K Marastu 316",
             "city" => "Nový Krobuzon",
             "zipCode" => "91545",
@@ -404,7 +387,7 @@ class UserTest extends RequestCase
             "nameDayMonth" => 7,
             "nameDayDay" => 15,
             "accountNumber" => "987654321/0300",
-            "email" => (string)rand(100, 200000) . "_emailtest.tymy.cz",
+            "email" => random_int(100, 200000) . "_emailtest.tymy.cz",
         ];
     }
 }

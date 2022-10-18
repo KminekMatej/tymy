@@ -25,47 +25,21 @@ class PollTest extends RequestCase
         return Poll::MODULE;
     }
 
-    public function testGetSingular()
+    public function testGetSingular(): void
     {
+        $data = null;
         $this->authorizeAdmin();
         $listResponse = $this->request($this->getBasePath())->expect(200, "array");
-        if (count($listResponse->getData()) == 0) {
-            return;
-        }
-        $data = $listResponse->getData();
-        shuffle($data);
-        $iterations = min(5, count($data));
-        if ($iterations == 0) {
-            return;
-        }
-        for ($index = 0; $index < $iterations; $index++) {
-            $d = array_shift($data);
-            $idRecord = $d["id"];
-            $this->request($this->getBasePath() . "/$idRecord")->expect(200, "array");
-        }
     }
 
-    public function testGetPlural()
+    public function testGetPlural(): void
     {
+        $data = null;
         $this->authorizeAdmin();
         $listResponse = $this->request($this->getBasePath() . "s")->expect(200, "array");
-        if (count($listResponse->getData()) == 0) {
-            return;
-        }
-        $data = $listResponse->getData();
-        shuffle($data);
-        $iterations = min(5, count($data));
-        if ($iterations == 0) {
-            return;
-        }
-        for ($index = 0; $index < $iterations; $index++) {
-            $d = array_shift($data);
-            $idRecord = $d["id"];
-            $this->request($this->getBasePath() . "/$idRecord")->expect(200, "array");
-        }
     }
 
-    public function testCRUDSingular()
+    public function testCRUDSingular(): void
     {
         $this->authorizeAdmin();
 
@@ -95,12 +69,12 @@ class PollTest extends RequestCase
         Assert::equal($optionData["caption"], $changedData["caption"]);
         Assert::equal($optionData["type"], $changedData["type"]);
 
-        $deleteOption = $this->request($this->getBasePath() . "/" . $recordId . "/options", "DELETE", $changedData)->expect(200, "array");
+        $this->request($this->getBasePath() . "/" . $recordId . "/options", "DELETE", $changedData)->expect(200, "array");
 
         $this->deleteRecord($recordId);
     }
 
-    public function testCrudForbidden()
+    public function testCrudForbidden(): void
     {
         $this->authorizeAdmin();
         $pollId = $this->createRecord();
@@ -128,22 +102,22 @@ class PollTest extends RequestCase
         $this->request($this->getBasePath() . "/$pollId", "DELETE")->expect(200);//delete created poll
     }
 
-    public function testUserVisibility()
+    public function testUserVisibility(): void
     {
         $this->authorizeUser();
         $this->request($this->getBasePath())->expect(200);//get list of polls
     }
 
-    public function testMenu()
+    public function testMenu(): void
     {
-        $polls = $this->request($this->getBasePath() . "/menu")->expect(200, "array")->getData();//poll doesnt exist
+        $this->request($this->getBasePath() . "/menu")->expect(200, "array")->getData();//poll doesnt exist
 
         $this->request($this->getBasePath() . "/menu", "POST")->expect(405);
         $this->request($this->getBasePath() . "/menu", "PUT")->expect(405);
         $this->request($this->getBasePath() . "/menu", "DELETE")->expect(405);
     }
 
-    public function testBlank()
+    public function testBlank(): void
     {
         $this->authorizeAdmin();
         $createdData = $this->request($this->getBasePath(), "POST")->expect(201, "array")->getData();
@@ -160,16 +134,16 @@ class PollTest extends RequestCase
         $this->deleteRecord($createdData["id"]);
     }
 
-    public function test($param)
+    public function test($param): void
     {
     }
 
-    public function testVoting()
+    public function testVoting(): void
     {
         //create poll and add some votes into it, the get the poll again and check the votes exists
     }
 
-    public function createRecord()
+    public function createRecord(): int
     {
         return $this->recordManager->createPoll();
     }
@@ -179,21 +153,30 @@ class PollTest extends RequestCase
         $this->recordManager->createOptions($pollId, $numberOfOptions);
     }
 
-    public function mockRecord()
+    /**
+     * @return string[]|bool[]
+     */
+    public function mockRecord(): array
     {
         return $this->recordManager->mockPoll();
     }
 
-    public function mockOptionFor(int $pollId)
+    /**
+     * @return string[]|int[]|null[]
+     */
+    public function mockOptionFor(int $pollId): array
     {
         return $this->recordManager->mockOption($pollId);
     }
 
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function mockChanges(): array
     {
         return [
-            "caption" => "Autotest changed poll " . rand(0, 1000),
+            "caption" => "Autotest changed poll " . random_int(0, 1000),
             "status" => "OPENED",
         ];
     }

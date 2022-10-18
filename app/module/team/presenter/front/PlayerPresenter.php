@@ -7,6 +7,7 @@ use Nette\Http\FileUpload;
 use Nette\Utils\Image;
 use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Core\Factory\FormFactory;
+use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Manager\AvatarManager;
@@ -20,13 +21,13 @@ class PlayerPresenter extends SecuredPresenter
     /** @inject */
     public FormFactory $formFactory;
 
-    public function beforeRender()
+    public function beforeRender(): void
     {
         parent::beforeRender();
         $this->addBreadcrumb($this->translator->translate("team.team", 1), $this->link(":Team:Default:"));
 
         $allFields = $this->userManager->getAllFields();
-        $this->template->addFilter('errorsCount', function ($player, $tabName) use ($allFields) {
+        $this->template->addFilter('errorsCount', function ($player, $tabName) use ($allFields): int {
             $errFields = [];
             switch ($tabName) {
                 case "osobni-udaje":
@@ -50,7 +51,7 @@ class PlayerPresenter extends SecuredPresenter
         });
     }
 
-    public function renderNew($player = null)
+    public function renderNew($player = null): void
     {
         if (!$this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('USR_CREATE'))) {
             $this->flashMessage($this->translator->translate("common.alerts.notPermitted"), "warning");
@@ -86,13 +87,13 @@ class PlayerPresenter extends SecuredPresenter
         $this->template->allRoles = $this->getAllRoles();
     }
 
-    public function renderDefault($player)
+    public function renderDefault($player): void
     {
         /* @var $user User */
         $userId = $this->parseIdFromWebname($player);
         $user = $this->userManager->getById($userId);
 
-        if (!$user) {
+        if (!$user instanceof BaseModel) {
             $this->flashMessage($this->translator->translate("common.alerts.userNotFound", null, ['id' => $userId]), "danger");
             $this->redirect(':Team:Default:');
         }
@@ -108,7 +109,7 @@ class PlayerPresenter extends SecuredPresenter
         $this->template->isNew = false;
     }
 
-    public function handleDelete($player)
+    public function handleDelete($player): void
     {
         /* @var $user User */
         $userId = $this->parseIdFromWebname($player);
@@ -124,9 +125,9 @@ class PlayerPresenter extends SecuredPresenter
         $this->redirect(':Team:Default:');
     }
 
-    public function handleUpload()
+    public function handleUpload(): void
     {
-        $bind = $this->getRequest()->getPost();
+        $this->getRequest()->getPost();
         $files = $this->getRequest()->getFiles();
         /* @var $file FileUpload */
         $file = $files["files"][0] ?? null;
@@ -156,20 +157,20 @@ class PlayerPresenter extends SecuredPresenter
         $userId = $this->parseIdFromWebname($this->getRequest()->getParameter("player"));
 
         return $this->formFactory->createUserConfigForm(
-            [$this, "userConfigFormSuccess"],
+            fn(Form $form, $values) => $this->userConfigFormSuccess($form, $values),
             $this->getAction() == "new" ? null : $this->userManager->getById($userId),
         );
     }
 
-    public function userConfigFormSuccess(Form $form, $values)
+    public function userConfigFormSuccess(Form $form, $values): void
     {
-        $userId = intval($values->id);
+        $userId = (int) $values->id;
 
         /* @var $oldUser User */
-        $oldUser = $this->userManager->getById($userId);
+        $this->userManager->getById($userId);
 
         try {
-            if ($userId) {
+            if ($userId !== 0) {
                 $this->userManager->update((array) $values, $userId);
                 $this->flashMessage($this->translator->translate("common.alerts.configSaved"), "success");
                 $this->redirect('this');

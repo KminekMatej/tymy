@@ -2,11 +2,12 @@
 
 namespace Tymy\Module\Core\Presenter;
 
-use Kdyby\Translation\Translator;
+use Contributte\Translation\Translator;
 use Nette\Application\UI\Presenter;
 use Nette\Caching\Cache;
 use Nette\Caching\Storage;
 use Nette\Utils\DateTime;
+use Tracy\Debugger;
 use Tymy\Module\Core\Model\Version;
 use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\Team\Model\Team;
@@ -59,7 +60,6 @@ abstract class RootPresenter extends Presenter
 
     /**
      * After succesful login, load logged user into tymyUser variable
-     * @return void
      */
     protected function initUser(): void
     {
@@ -87,8 +87,9 @@ abstract class RootPresenter extends Presenter
             Cache::ALL => true,
         ]);
 
-        return $this->teamCache->load("versions", function () {
-                $versions = explode("\n", shell_exec('git -C ' . ROOT_DIR . '/../master tag -l --format="%(creatordate:iso8601)|%(refname:short)" --sort=-v:refname'));
+        return $this->teamCache->load("versions", function (): array {
+                $dirToCheckVersions = is_dir(ROOT_DIR . '/../develop') ? ROOT_DIR . '/../develop' : ROOT_DIR;
+                $versions = explode("\n", shell_exec('git -C ' . $dirToCheckVersions . ' tag -l --format="%(creatordate:iso8601)|%(refname:short)" --sort=-v:refname'));
                 $out = [];
             foreach ($versions as $versionStr) {
                 if (empty(trim($versionStr))) {
@@ -103,7 +104,6 @@ abstract class RootPresenter extends Presenter
 
     /**
      * Get current version object
-     * @return Version
      */
     protected function getCurrentVersion(): Version
     {
@@ -112,7 +112,7 @@ abstract class RootPresenter extends Presenter
         } else {
             $cvName = shell_exec("git rev-parse --abbrev-ref HEAD");
         }
-
+        Debugger::barDump($cvName);
         return $cvName == "master" ? new Version($cvName, null) : ($this->getVersions()[$cvName] ?? new Version($cvName, null));
     }
 }

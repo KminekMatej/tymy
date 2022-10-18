@@ -8,19 +8,16 @@ class CURLHelper
 {
     /**
      * Get content from url
-     * @param string $url
-     * @param bool $isJson
      * @return string|array If its json data
      */
-    public static function get(string $url, bool $isJson = false)
+    public static function get(string $url, bool $isJson = false): string|array
     {
         $handle = self::getCurl($url);
         $response = curl_exec($handle);
-        $info = curl_getinfo($handle);
         curl_close($handle);
 
         if ($isJson) {
-            $response = json_decode($response, true);
+            $response = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
         }
 
         return $response;
@@ -33,7 +30,7 @@ class CURLHelper
      * @param int $entityId
      * @return CustomFieldValue[]
      */
-    public static function sendPost($url, $data, $isJson = false)
+    public static function sendPost(string $url, $data, $isJson = false): array
     {
         $handle = self::getCurl($url);
         curl_setopt($handle, CURLOPT_CUSTOMREQUEST, 'POST');
@@ -43,17 +40,15 @@ class CURLHelper
         curl_close($handle);
 
         if ($isJson) {
-            $response = json_decode($response, true);
+            $response = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
         }
         return $response;
     }
 
     /**
      * Initialize curl handle with common settings
-     * @param string $url
-     * @return \CurlHandle
      */
-    private static function getCurl(string $url)
+    private static function getCurl(string $url): \CurlHandle|bool
     {
         $handle = curl_init($url);
         curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);

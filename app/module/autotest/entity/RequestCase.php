@@ -41,14 +41,11 @@ abstract class RequestCase extends TestCase
 
     protected JsonResponse $jsonResponse;
     protected Explorer $database;
-    protected Container $container;
     protected User $user;
     protected array $config;
     protected array $moduleConfig;
     protected RecordManager $recordManager;
     private RouteList $routeList;
-    private Request2 $httpRequest;
-    private RequestFactory $requestFactory;
     private PresenterFactory $presenterFactory;
     protected AuthenticationManager $authenticationManager;
     protected Responder $responder;
@@ -56,30 +53,26 @@ abstract class RequestCase extends TestCase
     /** @var RequestLog[] */
     private array $logs = [];
 
-    public function __construct(Container $container)
+    public function __construct(protected Container $container)
     {
         define('TEST_DIR', Bootstrap::normalizePath(Bootstrap::MODULES_DIR . "/autotest"));
         define('WWW_DIR', Bootstrap::normalizePath(TEAM_DIR . "/www"));
-        $this->container = $container;
         $this->user = $this->container->getByType(User::class);
         $this->authenticationManager = $this->container->getByType(AuthenticationManager::class);
-        $this->httpRequest = $this->container->getService("http.request");
-        $this->requestFactory = $this->container->getService("http.requestFactory");
         $this->presenterFactory = $this->container->getService("application.presenterFactory");
         $this->responder = $this->container->getService("Responder");
         $this->database = $this->container->getService("database.team.explorer");
         $this->routeList = $this->container->getService("router");
         $this->config = Neon::decode(file_get_contents(TEST_DIR . '/autotest.records.map.neon'));
-        $this->moduleConfig = isset($this->config[$this->getModule()]) ? $this->config[$this->getModule()] : [];
+        $this->moduleConfig = $this->config[$this->getModule()] ?? [];
         $this->recordManager = new RecordManager($this, $this->config);
         Environment::setup();
     }
 
     /**
      * Function should return string of module name, preferably from constant
-     * @return string
      */
-    abstract public function getModule();
+    abstract public function getModule(): string;
 
     protected function getBasePath(): string
     {
@@ -95,6 +88,9 @@ abstract class RequestCase extends TestCase
 
     abstract public function mockRecord();
 
+    /**
+     * @return mixed[]
+     */
     abstract protected function mockChanges(): array;
 
     public function getRecordManager(): RecordManager
@@ -102,7 +98,7 @@ abstract class RequestCase extends TestCase
         return $this->recordManager;
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         //process request logs and save them to file
         if (empty($this->logs)) {
@@ -122,14 +118,12 @@ abstract class RequestCase extends TestCase
                     $codeStr = ", code: {$requestLog->getCustomResponseCode()}/{$requestLog->getExpectCode()}";
                     $success = false;
                 }
+            } elseif ($requestLog->getHttpResponseCode() == $requestLog->getExpectCode()) {
+                $codeStr = ", code: {$requestLog->getExpectCode()}";
+                $success = true;
             } else {
-                if ($requestLog->getHttpResponseCode() == $requestLog->getExpectCode()) {
-                    $codeStr = ", code: {$requestLog->getExpectCode()}";
-                    $success = true;
-                } else {
-                    $codeStr = ", code: {$requestLog->getHttpResponseCode()}/{$requestLog->getExpectCode()}";
-                    $success = false;
-                }
+                $codeStr = ", code: {$requestLog->getHttpResponseCode()}/{$requestLog->getExpectCode()}";
+                $success = false;
             }
             /* @var $requestLog RequestLog */
             $data = $requestLog->getPostData();
@@ -146,7 +140,7 @@ abstract class RequestCase extends TestCase
             }
             $string = ($requestLog->getTime())->format(BaseModel::DATETIME_CZECH_FORMAT) . "$clrStart {$requestLog->getMethod()}: {$requestLog->getUrl()}";
             if (!empty($data)) {
-                $string .= ", data: " . json_encode($data);
+                $string .= ", data: " . json_encode($data, JSON_THROW_ON_ERROR);
             }
             if (!empty($coded)) {
                 $string .= $codeStr;
@@ -234,7 +228,7 @@ abstract class RequestCase extends TestCase
         }
     }
 
-    private function createInitialRequest($httpRequest): Request
+    private function createInitialRequest(\Nette\Http\IRequest $httpRequest): Request
     {
         $params = $this->routeList->match($httpRequest);
 
@@ -261,21 +255,21 @@ abstract class RequestCase extends TestCase
     {
         $this->user->logout(true);
         $this->user->setAuthenticator($this->authenticationManager);
-        $this->user->login($userName ? $userName : $this->config["user_test_login"], $password ? $password : $this->config["user_test_pwd"]);
+        $this->user->login($userName ?: $this->config["user_test_login"], $password ?: $this->config["user_test_pwd"]);
 
         Assert::true($this->user->isLoggedIn());
-        Assert::equal($this->user->id, $this->config["user_test_id"]);
+        Assert::equal($this->user->getId(), $this->config["user_test_id"]);
     }
 
     public function authorizeAdmin($userName = null, $password = null)
     {
         $this->user->logout(true);
         $this->user->setAuthenticator($this->authenticationManager);
-        $this->user->login($userName ? $userName : $this->config["user_admin_login"], $password ? $password : $this->config["user_admin_pwd"]);
+        $this->user->login($userName ?: $this->config["user_admin_login"], $password ?: $this->config["user_admin_pwd"]);
 
         Assert::true($this->user->isLoggedIn());
         if (empty($userName)) {
-            Assert::equal($this->user->id, $this->config["user_admin_id"]);
+            Assert::equal($this->user->getId(), $this->config["user_admin_id"]);
         }
     }
 
@@ -306,15 +300,17 @@ abstract class RequestCase extends TestCase
         }
     }
 
-    /** @return Presenter */
-    protected function loadPresenter($name)
+    protected function loadPresenter(string $name): \Nette\Application\IPresenter
     {
         $presenter = $this->presenterFactory->createPresenter($name);
         $presenter->autoCanonicalize = false;
         return $presenter;
     }
 
-    public function getConfig()
+    /**
+     * @return mixed[]
+     */
+    public function getConfig(): array
     {
         return $this->config;
     }
@@ -325,8 +321,9 @@ abstract class RequestCase extends TestCase
      * @param type $requestUrl
      * @return Request2
      */
-    private function mockHttpRequest($method, $requestUrl, $data)
+    private function mockHttpRequest($method, $requestUrl, $data): Request2
     {
+        $SERVER = [];
         $requestMockFactory = new RequestMockFactory();
 
         $SERVER["HTTPS"] = "on";
@@ -342,6 +339,6 @@ abstract class RequestCase extends TestCase
 
     public function toJsonDate(DateTime $date = null)
     {
-        return $date ? $date->format(BaseModel::DATE_FORMAT) : null;
+        return $date !== null ? $date->format(BaseModel::DATE_FORMAT) : null;
     }
 }

@@ -16,7 +16,7 @@ class AvatarPresenter extends SecuredPresenter
     /** @var @inject */
     public AvatarManager $avatarManager;
 
-    public function actionDefault($resourceId)
+    public function actionDefault(int $resourceId): void
     {
         if ($this->getRequest()->getMethod() !== "POST") {
             $this->respondNotAllowed();

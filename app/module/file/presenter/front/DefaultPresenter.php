@@ -27,41 +27,28 @@ class DefaultPresenter extends SecuredPresenter
     /** @inject */
     public FileManager $fileManager;
     private array $fileStats;
-    private array $contents;
 
-    public function beforeRender()
+    public function beforeRender(): void
     {
         parent::beforeRender();
         $this->addBreadcrumb($this->translator->translate("file.file", 2), $this->link(":File:Default:"));
         $this->initFileStats();
 
-        $this->template->addFilter('filesize', function ($sizeInBytes) {
-            return $this->formatBytes($sizeInBytes);
-        });
+        $this->template->addFilter('filesize', fn($sizeInBytes): string => $this->formatBytes($sizeInBytes));
 
         $this->template->addFilter('filetype', function ($filename) {
             $mime = mime_content_type($filename);
-            switch (true) {
-                case array_key_exists($mime, FileManager::getArchiveMimeTypes()):
-                    return "ARCHIVE";
-                    break;
-                case array_key_exists($mime, FileManager::getAudioMimeTypes()):
-                    return "AUDIO";
-                    break;
-                case array_key_exists($mime, FileManager::getDocumentMimeTypes()):
-                    return FileManager::getDocumentMimeTypes()[$mime] ?? "DOCUMENT";   //separate pdf, xls etc.
-                    break;
-                case array_key_exists($mime, FileManager::getImageMimeTypes()):
-                    return "IMAGE";
-                    break;
-                default:
-                    return "OTHER";
-                    break;
-            }
+            return match (true) {
+                array_key_exists($mime, FileManager::getArchiveMimeTypes()) => "ARCHIVE",
+                array_key_exists($mime, FileManager::getAudioMimeTypes()) => "AUDIO",
+                array_key_exists($mime, FileManager::getDocumentMimeTypes()) => FileManager::getDocumentMimeTypes()[$mime] ?? "DOCUMENT",
+                array_key_exists($mime, FileManager::getImageMimeTypes()) => "IMAGE",
+                default => "OTHER",
+            };
         });
     }
 
-    public function renderDefault(string $folder = "/")
+    public function renderDefault(string $folder = "/"): void
     {
         $folderSanitized = "/" . trim($folder, "/");
         $i = 3;
@@ -96,13 +83,13 @@ class DefaultPresenter extends SecuredPresenter
         $this->template->folder = $folderSanitized;
         $this->template->folderSlashed = rtrim($folderSanitized, "/") . "/";
         array_pop($folderParts);
-        $this->template->parentFolder = join("/", $folderParts);
+        $this->template->parentFolder = implode("/", $folderParts);
 
         $this->template->fileTypes = $this->fileStats["fileTypes"];
         $this->template->contents = $this->getContents($folderSanitized);
     }
 
-    public function createComponentNewFolderForm()
+    public function createComponentNewFolderForm(): \Nette\Application\UI\Form
     {
         $form = new Form();
 
@@ -114,7 +101,7 @@ class DefaultPresenter extends SecuredPresenter
             ->addRule(Form::PATTERN_ICASE, $this->translator->translate("file.dirNameError"), self::DIR_NAME_REGEX);
 
         $form->addSubmit('send', $this->translator->translate("file.add"));
-        $form->onSuccess[] = function (Form $form, $values) {
+        $form->onSuccess[] = function (Form $form, $values): void {
             $currentFolder = $values->folder;
             $folderName = $values->name;
             mkdir(FileManager::DOWNLOAD_DIR . $currentFolder . "/" . $folderName);
@@ -124,7 +111,7 @@ class DefaultPresenter extends SecuredPresenter
         return $form;
     }
 
-    public function createComponentRenameForm()
+    public function createComponentRenameForm(): \Nette\Application\UI\Form
     {
         $form = new Form();
 
@@ -136,7 +123,7 @@ class DefaultPresenter extends SecuredPresenter
             ->addRule(Form::PATTERN_ICASE, $this->translator->translate("file.dirNameError"), self::DIR_NAME_REGEX);
 
         $form->addSubmit('send', $this->translator->translate("file.rename"));
-        $form->onSuccess[] = function (Form $form, $values) {
+        $form->onSuccess[] = function (Form $form, $values): void {
             $oldpath = FileManager::DOWNLOAD_DIR . $values->folder . "/" . trim($values->oldName, "/. ");
             if (file_exists($oldpath)) {
                 $newpath = FileManager::DOWNLOAD_DIR . $values->folder . "/" . trim($values->name, "/. ");
@@ -149,22 +136,22 @@ class DefaultPresenter extends SecuredPresenter
         return $form;
     }
 
-    public function createComponentUploadFileForm()
+    public function createComponentUploadFileForm(): \Nette\Application\UI\Form
     {
         $form = new Form();
 
         $form->addHidden("folder")->addRule(Form::PATTERN_ICASE, $this->translator->translate("file.dirNameError"), self::DIR_NAME_REGEX);
 
         $form->addUpload('upload');
-        $form->onError[] = function (Form $form) {
-            foreach ($form->errors as $error) {
+        $form->onError[] = function (Form $form): void {
+            foreach ($form->getErrors() as $error) {
                 $this->presenter->flashMessage($error, "danger");
             }
 
             $this->presenter->redrawControl("flashes");
         };
 
-        $form->onSuccess[] = function (Form $form, $values) {
+        $form->onSuccess[] = function (Form $form, $values): void {
             $folder = trim($values->folder, "/. ");
             try {
                 $this->fileManager->save($values->upload, $folder);
@@ -181,9 +168,7 @@ class DefaultPresenter extends SecuredPresenter
 
     /**
      * Get download folder contents
-     *
-     * @param string $folder
-     * @return array
+     * @return array<string, mixed[]>
      */
     private function getContents(string $folder): array
     {
@@ -221,7 +206,7 @@ class DefaultPresenter extends SecuredPresenter
         $timestamp = new DateTime();
 
         if (file_exists($cachedSizeFile)) {
-            $decoded = \json_decode(file_get_contents($cachedSizeFile), true);
+            $decoded = \json_decode(file_get_contents($cachedSizeFile), true, 512, JSON_THROW_ON_ERROR);
             if ($decoded) {
                 $this->fileStats = $decoded;
                 $timestamp = DateTime::createFromFormat("U", (string) filemtime($cachedSizeFile));
@@ -234,11 +219,11 @@ class DefaultPresenter extends SecuredPresenter
             ];
 
             $this->loadFileTypeSizes(FileManager::DOWNLOAD_DIR);
-            file_put_contents($cachedSizeFile, \json_encode($this->fileStats));
+            file_put_contents($cachedSizeFile, \json_encode($this->fileStats, JSON_THROW_ON_ERROR));
         }
     }
 
-    private function loadFileTypeSizes(string $folder)
+    private function loadFileTypeSizes(string $folder): void
     {
         if (!array_key_exists("fileTypes", $this->fileStats)) {
             $this->fileStats["fileTypes"] = [
@@ -317,17 +302,13 @@ class DefaultPresenter extends SecuredPresenter
      * 805 = 805 B
      * 824320 = 805 KB
      * etc
-     *
-     * @param int $bytes
-     * @param int $precision
-     * @return string
      */
     private function formatBytes(int $bytes, int $precision = 2): string
     {
-        $units = array('B', 'KB', 'MB', 'GB', 'TB');
+        $units = ['B', 'KB', 'MB', 'GB', 'TB'];
 
         $bytes = max($bytes, 0);
-        $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+        $pow = floor(($bytes !== 0 ? log($bytes) : 0) / log(1024));
         $pow = min($pow, count($units) - 1);
 
         // Uncomment one of the following alternatives
@@ -337,7 +318,7 @@ class DefaultPresenter extends SecuredPresenter
         return round($bytes, $precision) . ' ' . $units[$pow];
     }
 
-    public function handleDelete(string $folder = "/", string $filename = "")
+    public function handleDelete(string $folder = "/", string $filename = ""): void
     {
         if (empty($filename)) {
             return;
@@ -354,7 +335,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->reloadFileList($folder);
     }
 
-    private function rrmdir($dir)
+    private function rrmdir($dir): void
     {
         if (is_link($dir)) {
             unlink($dir);
@@ -373,7 +354,7 @@ class DefaultPresenter extends SecuredPresenter
         }
     }
 
-    private function reloadFileList(string $folder)
+    private function reloadFileList(string $folder): void
     {
         $this->template->contents = $this->getContents("/" . $folder);
         $this->redrawControl("file-list");

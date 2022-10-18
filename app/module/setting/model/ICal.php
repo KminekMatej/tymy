@@ -48,42 +48,48 @@ class ICal extends BaseModel
         return $this->enabled;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getStatusIds(): array
     {
         return $this->statusIds;
     }
 
-    public function setCreated(DateTime $created)
+    public function setCreated(DateTime $created): static
     {
         $this->created = $created;
         return $this;
     }
 
-    public function setCreatedUserId(?int $createdUserId)
+    public function setCreatedUserId(?int $createdUserId): static
     {
         $this->createdUserId = $createdUserId;
         return $this;
     }
 
-    public function setUserId(int $userId)
+    public function setUserId(int $userId): static
     {
         $this->userId = $userId;
         return $this;
     }
 
-    public function setHash(string $hash)
+    public function setHash(string $hash): static
     {
         $this->hash = $hash;
         return $this;
     }
 
-    public function setEnabled(?bool $enabled)
+    public function setEnabled(?bool $enabled): static
     {
-        $this->enabled = $enabled ? true : false;
+        $this->enabled = (bool) $enabled;
         return $this;
     }
 
-    public function setStatusIds(array $statusIds)
+    /**
+     * @param mixed[] $statusIds
+     */
+    public function setStatusIds(array $statusIds): static
     {
         $this->statusIds = $statusIds;
         return $this;
@@ -94,6 +100,9 @@ class ICal extends BaseModel
         return self::MODULE;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     public function getScheme(): array
     {
         return ICalMapper::scheme();

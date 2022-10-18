@@ -37,19 +37,19 @@ class Option extends BaseModel
         return $this->type;
     }
 
-    public function setPollId(int $pollId)
+    public function setPollId(int $pollId): static
     {
         $this->pollId = $pollId;
         return $this;
     }
 
-    public function setCaption(?string $caption)
+    public function setCaption(?string $caption): static
     {
         $this->caption = $caption;
         return $this;
     }
 
-    public function setType(string $type)
+    public function setType(string $type): static
     {
         $this->type = $type;
         return $this;
@@ -60,6 +60,9 @@ class Option extends BaseModel
         return self::MODULE;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     public function getScheme(): array
     {
         return OptionMapper::scheme();

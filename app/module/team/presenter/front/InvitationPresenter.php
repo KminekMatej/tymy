@@ -19,20 +19,18 @@ class InvitationPresenter extends SecuredPresenter
     /** @inject */
     public InvitationManager $invitationManager;
 
-    public function beforeRender()
+    public function beforeRender(): void
     {
         parent::beforeRender();
 
         $this->addBreadcrumb($this->translator->translate("team.team", 1), $this->link(":Team:Default:"));
         $this->addBreadcrumb($this->translator->translate("team.invitation", 2), $this->link(":Team:Invitation:"));
 
-        $this->template->addFilter("loadUser", function (int $userId) {
-            /* @var $user User */
-            return $this->userManager->getById($userId);
-        });
+        $this->template->addFilter("loadUser", fn(int $userId): ?\Tymy\Module\Core\Model\BaseModel => /* @var $user User */
+$this->userManager->getById($userId));
     }
 
-    public function renderDefault()
+    public function renderDefault(): void
     {
         if (!$this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('USR_CREATE'))) {
             $this->flashMessage($this->translator->translate("common.alerts.notPermitted"), "warning");
@@ -43,7 +41,7 @@ class InvitationPresenter extends SecuredPresenter
         $this->template->trans = $this->translator;
     }
 
-    public function handleDelete(int $id)
+    public function handleDelete(int $id): void
     {
         if (!$this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('USR_CREATE'))) {
             $this->flashMessage($this->translator->translate("common.alerts.notPermitted"), "warning");
@@ -54,7 +52,7 @@ class InvitationPresenter extends SecuredPresenter
         $this->redirect(":Team:Invitation:");
     }
 
-    public function createComponentInvitationForm()
+    public function createComponentInvitationForm(): \Nette\Application\UI\Form
     {
         $form = new Form();
 
@@ -66,12 +64,12 @@ class InvitationPresenter extends SecuredPresenter
 
         $form->addSubmit("save");
 
-        $form->onSuccess[] = [$this, "invitationFormSuccess"];
+        $form->onSuccess[] = fn(\Nette\Application\UI\Form $form, \stdClass $values) => $this->invitationFormSuccess($form, $values);
 
         return $form;
     }
 
-    public function invitationFormSuccess(Form $form, stdClass $values)
+    public function invitationFormSuccess(Form $form, stdClass $values): void
     {
         $this->invitationManager->create((array) $values);
 

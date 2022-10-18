@@ -55,7 +55,7 @@ class SecuredPresenter extends BasePresenter
     public $eventTypeList;
     public $noteList;
     public $statusList;
-    public $accessibleSettings = [];
+    public array $accessibleSettings = [];
 
     public function getLevelCaptions()
     {
@@ -77,7 +77,7 @@ class SecuredPresenter extends BasePresenter
         if ($this->tymyUser) {
         }
 
-        if ($this->tymyUser->getSkin()) {//set user defined skin instead of team one after login
+        if ($this->tymyUser->getSkin() !== '' && $this->tymyUser->getSkin() !== '0') {//set user defined skin instead of team one after login
             $this->template->skin = $this->skin = $this->tymyUser->getSkin();
         }
         $this->template->tymyUser = $this->tymyUser;
@@ -86,7 +86,7 @@ class SecuredPresenter extends BasePresenter
         $this->addBreadcrumb($this->translator->translate("common.mainPage"), $this->link(":Core:Default:"));
     }
 
-    protected function startup()
+    protected function startup(): void
     {
         parent::startup();
         Debugger::$maxDepth = 7;
@@ -110,8 +110,8 @@ class SecuredPresenter extends BasePresenter
         if (strpos($webName, "-")) {
             return substr($webName, 0, strpos($webName, "-"));
         }
-        if (intval($webName)) {
-            return intval($webName);
+        if ((int) $webName !== 0) {
+            return (int) $webName;
         }
     }
 
@@ -122,7 +122,6 @@ class SecuredPresenter extends BasePresenter
      * @param int $perPage Number of items per page
      * @param int $currentPage Number of current page
      * @param int $shownCount Number of shown links
-     * @return array
      */
     protected function pagination(int $totalCount, int $perPage, int $currentPage, int $shownCount): array
     {
@@ -133,7 +132,7 @@ class SecuredPresenter extends BasePresenter
         $result = range(1, ceil($totalCount / $perPage));
 
         if (($shownCount = floor($shownCount / 2) * 2 + 1) >= 1) {
-            $result = array_slice($result, max(0, min(count($result) - $shownCount, intval($currentPage) - ceil($shownCount / 2))), $shownCount);
+            $result = array_slice($result, max(0, min(count($result) - $shownCount, $currentPage - ceil($shownCount / 2))), $shownCount);
         }
 
         return $result;
@@ -201,7 +200,7 @@ class SecuredPresenter extends BasePresenter
         ];
     }
 
-    protected function redrawNavbar()
+    protected function redrawNavbar(): void
     {
         $this['navbar']->redrawControl("nav");
     }

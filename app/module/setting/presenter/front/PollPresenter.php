@@ -22,20 +22,20 @@ class PollPresenter extends SettingBasePresenter
     public OptionManager $optionManager;
     private ?Poll $poll = null;
 
-    public function actionDefault(?string $resource = null)
+    public function actionDefault(?string $resource = null): void
     {
         if ($resource) {
             $this->setView("poll");
         }
     }
 
-    public function beforeRender()
+    public function beforeRender(): void
     {
         parent::beforeRender();
         $this->addBreadcrumb($this->translator->translate("poll.poll", 2), $this->link(":Setting:Poll:"));
     }
 
-    public function renderDefault()
+    public function renderDefault(): void
     {
         $this->template->cols = [
             null,
@@ -63,14 +63,14 @@ class PollPresenter extends SettingBasePresenter
         $this->template->polls = $polls;
     }
 
-    public function renderNew()
+    public function renderNew(): void
     {
         $this->allowPermission('ASK.VOTE_UPDATE');
 
         $this->addBreadcrumb($this->translator->translate("poll.new"));
     }
 
-    public function renderPoll(?string $resource = null)
+    public function renderPoll(?string $resource = null): void
     {
         $this->allowPermission('ASK.VOTE_UPDATE');
 
@@ -86,7 +86,7 @@ class PollPresenter extends SettingBasePresenter
         $this->template->poll = $this->poll;
     }
 
-    public function handlePollDelete(string $resource)
+    public function handlePollDelete(string $resource): void
     {
         $pollId = $this->parseIdFromWebname($resource);
         $this->pollManager->delete($pollId);
@@ -96,15 +96,10 @@ class PollPresenter extends SettingBasePresenter
     public function createComponentPollForm(): Form
     {
         $pollId = $this->parseIdFromWebname($this->getRequest()->getParameter("resource"));
-        return $this->formFactory->createPollConfigForm([$this, "pollFormSuccess"], ($pollId ? $this->pollManager->getById($pollId) : null));
+        return $this->formFactory->createPollConfigForm(fn(Form $form, stdClass $values) => $this->pollFormSuccess($form, $values), ($pollId ? $this->pollManager->getById($pollId) : null));
     }
 
-    /**
-     * @param Form $form
-     * @param stdClass $values
-     * @return void
-     */
-    public function pollFormSuccess(Form $form, $values): void
+    public function pollFormSuccess(Form $form, stdClass $values): void
     {
         /* @var $poll Poll */
         $poll = $values->id ?

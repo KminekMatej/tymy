@@ -24,15 +24,11 @@ use Tymy\Module\User\Manager\UserManager;
  */
 class DiscussionManager extends BaseManager
 {
-    private PermissionManager $permissionManager;
-    private UserManager $userManager;
-    private ?Discussion $discussion;
+    private ?Discussion $discussion = null;
 
-    public function __construct(ManagerFactory $managerFactory, PermissionManager $permissionManager, UserManager $userManager)
+    public function __construct(ManagerFactory $managerFactory, private PermissionManager $permissionManager, private UserManager $userManager)
     {
         parent::__construct($managerFactory);
-        $this->permissionManager = $permissionManager;
-        $this->userManager = $userManager;
     }
 
     protected function allowCreate(?array &$data = null): void
@@ -69,13 +65,13 @@ class DiscussionManager extends BaseManager
 
     /**
      * Maps one active row to object
-     * @param ActiveRow|false $row
+     * @param ActiveRow|false|null $row
      * @param bool $force True to skip cache
      * @return Discussion|null
      */
     public function map(?IRow $row, bool $force = false): ?BaseModel
     {
-        if (!$row) {
+        if ($row === null) {
             return null;
         }
 
@@ -120,9 +116,6 @@ class DiscussionManager extends BaseManager
 
     /**
      * Get discussion object using its webname, optionally with check for user permissions
-     *
-     * @param string $webName
-     * @return Discussion|null
      */
     public function getByWebName(string $webName, ?int $userId = null): ?Discussion
     {
@@ -140,10 +133,9 @@ class DiscussionManager extends BaseManager
 
     /**
      * Get array of discussion objects which user is allowed to read
-     * @param int $userId
      * @return Discussion[]
      */
-    public function getListUserAllowed($userId)
+    public function getListUserAllowed(int $userId): array
     {
         $readPerms = $this->permissionManager->getUserAllowedPermissionNames($this->userManager->getById($this->user->getId()), Permission::TYPE_USER);
         $readPermsQ = empty($readPerms) ? "" : "`discussion`.`read_rights` IN (?) OR";
@@ -168,6 +160,9 @@ class DiscussionManager extends BaseManager
         return $this->mapAll($selector->fetchAll());
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\BaseModel[]
+     */
     public function getList(?array $idList = null, string $idField = "id", ?int $limit = null, ?int $offset = null, ?string $order = null): array
     {
         $query = "
@@ -191,10 +186,9 @@ class DiscussionManager extends BaseManager
 
     /**
      * Get array of discussion ids which user is allowed to read
-     * @param int $userId
      * @return int[]
      */
-    public function getIdsUserAllowed($userId)
+    public function getIdsUserAllowed(int $userId): array
     {
         $readPerms = $this->permissionManager->getUserAllowedPermissionNames($this->userManager->getById($userId), Permission::TYPE_USER);
         return $this->database->table($this->getTable())->where("read_rights IS NULL OR read_rights = '' OR read_rights IN (?)", $readPerms)->fetchPairs(null, "id");
@@ -205,6 +199,9 @@ class DiscussionManager extends BaseManager
         return Discussion::class;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     protected function getScheme(): array
     {
         return DiscussionMapper::scheme();
@@ -213,10 +210,8 @@ class DiscussionManager extends BaseManager
     /**
      * Check edit permission
      * @param Discussion $entity
-     * @param int $userId
-     * @return bool
      */
-    public function canEdit($entity, $userId): bool
+    public function canEdit($entity, int $userId): bool
     {
         return in_array($userId, $this->userManager->getUserIdsWithPrivilege(Privilege::SYS("DSSETUP")));
     }
@@ -224,10 +219,8 @@ class DiscussionManager extends BaseManager
     /**
      * Check read permission
      * @param Discussion $entity
-     * @param int $userId
-     * @return bool
      */
-    public function canRead($entity, $userId): bool
+    public function canRead($entity, int $userId): bool
     {
         return in_array($entity->getId(), $this->getIdsUserAllowed($userId));
     }
@@ -235,7 +228,7 @@ class DiscussionManager extends BaseManager
     /**
      * Get user ids allowed to read given discussion
      * @param Discussion $record
-     * @return int[]
+     * @return int[]|mixed[]
      */
     public function getAllowedReaders(BaseModel $record): array
     {
@@ -285,7 +278,6 @@ class DiscussionManager extends BaseManager
      * Get sum of all warnings of desired discussions
      *
      * @param Discussion[] $discussions
-     * @return int
      */
     public function getWarnings(array $discussions): int
     {

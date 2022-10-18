@@ -38,7 +38,7 @@ class DetailPresenter extends BasePresenter
 
     private array $statusNameCache = [];
 
-    public function beforeRender()
+    public function beforeRender(): void
     {
         parent::beforeRender();
 
@@ -46,23 +46,23 @@ class DetailPresenter extends BasePresenter
             if (!array_key_exists($statusId, $this->statusNameCache)) {
                 /* @var $status Status */
                 $status = $this->statusManager->getById($statusId);
-                $this->statusNameCache[$statusId] = $status ? $status->getCaption() : "?";
+                $this->statusNameCache[$statusId] = $status !== null ? $status->getCaption() : "?";
             }
 
             return $this->statusNameCache[$statusId];
         });
 
-        $this->template->addFilter("splitDescription", function (?string $description = null) {
+        $this->template->addFilter("splitDescription", function (?string $description = null): ?string {
             if (empty($description)) {
                 return $description;
             }
 
             $separatedParts = mb_str_split(str_replace(["\r\n", "\n", ";", ","], ["\\n", "\\n", "\;", "\,"], $description), 62);
-            return Strings::normalize(join(PHP_EOL . " ", $separatedParts));
+            return Strings::normalize(implode(PHP_EOL . " ", $separatedParts));
         });
     }
 
-    public function renderCalendar(int $resource, string $hash)
+    public function renderCalendar(int $resource, string $hash): void
     {
         $iCal = $this->iCalManager->getByUserId($resource);
 
@@ -82,10 +82,9 @@ class DetailPresenter extends BasePresenter
 
     /**
      * Send response in iCal formatting, with respect to some ical specific formatting
-     * @param Template $template
      * @return never
      */
-    private function sendAsIcal(Template $template)
+    private function sendAsIcal(Template $template): void
     {
         $files = $this->formatTemplateFiles();
         foreach ($files as $file) {

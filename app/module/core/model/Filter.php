@@ -11,15 +11,8 @@ use Nette\Database\Table\Selection;
  */
 class Filter
 {
-    private string $column;
-    private string $operator;
-    private $value;
-
-    public function __construct(string $column, string $operator, $value)
+    public function __construct(private string $column, private string $operator, private $value)
     {
-        $this->column = $column;
-        $this->operator = $operator;
-        $this->value = $value;
     }
 
     public function getColumn(): string
@@ -39,10 +32,6 @@ class Filter
 
     /**
      * Add filters, one by one, to existing selector, using ->where functions
-     *
-     * @param Selection $selector
-     * @param array $filters
-     * @return void
      */
     public static function addFilter(Selection &$selector, array $filters): void
     {

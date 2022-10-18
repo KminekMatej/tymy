@@ -147,6 +147,9 @@ class Poll extends BaseModel
         return $this->webName;
     }
 
+    /**
+     * @return \Tymy\Module\Poll\Model\Option[]
+     */
     public function getOptions(): array
     {
         return $this->options;
@@ -183,155 +186,167 @@ class Poll extends BaseModel
         return $this->votePending;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getOrderedVotes(): array
     {
         return $this->orderedVotes;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getMyVotes(): array
     {
         return $this->myVotes;
     }
 
-    public function setCreatedById(?int $createdById)
+    public function setCreatedById(?int $createdById): static
     {
         $this->createdById = $createdById;
         return $this;
     }
 
-    public function setCreatedAt(?DateTime $createdAt)
+    public function setCreatedAt(?DateTime $createdAt): static
     {
         $this->createdAt = $createdAt;
         return $this;
     }
 
-    public function setUpdatedById(?int $updatedById)
+    public function setUpdatedById(?int $updatedById): static
     {
         $this->updatedById = $updatedById;
         return $this;
     }
 
-    public function setUpdatedAt(?DateTime $updatedAt)
+    public function setUpdatedAt(?DateTime $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
         return $this;
     }
 
-    public function setCaption(?string $caption)
+    public function setCaption(?string $caption): static
     {
         $this->caption = $caption;
         return $this;
     }
 
-    public function setDescription(?string $description)
+    public function setDescription(?string $description): static
     {
         $this->description = $description;
         return $this;
     }
 
-    public function setDescriptionHtml(?string $descriptionHtml)
+    public function setDescriptionHtml(?string $descriptionHtml): static
     {
         $this->descriptionHtml = $descriptionHtml;
         return $this;
     }
 
-    public function setMinItems(?int $minItems)
+    public function setMinItems(?int $minItems): static
     {
         $this->minItems = $minItems;
         return $this;
     }
 
-    public function setMaxItems(?int $maxItems)
+    public function setMaxItems(?int $maxItems): static
     {
         $this->maxItems = $maxItems;
         return $this;
     }
 
-    public function setChangeableVotes(string $changeableVotes)
+    public function setChangeableVotes(string $changeableVotes): static
     {
-        $this->changeableVotes = $changeableVotes ? true : false;
+        $this->changeableVotes = (bool) $changeableVotes;
         return $this;
     }
 
-    public function setAnonymousResults($anonymousResults)
+    public function setAnonymousResults($anonymousResults): static
     {
-        $this->anonymousResults = $anonymousResults ? true : false;
+        $this->anonymousResults = (bool) $anonymousResults;
         return $this;
     }
 
-    public function setShowResults(string $showResults)
+    public function setShowResults(string $showResults): static
     {
         $this->showResults = $showResults;
         return $this;
     }
 
-    public function setStatus(string $status)
+    public function setStatus(string $status): static
     {
         $this->status = $status;
         return $this;
     }
 
-    public function setResultRightName(?string $resultRightName)
+    public function setResultRightName(?string $resultRightName): static
     {
         $this->resultRightName = $resultRightName;
         return $this;
     }
 
-    public function setVoteRightName(?string $voteRightName)
+    public function setVoteRightName(?string $voteRightName): static
     {
         $this->voteRightName = $voteRightName;
         return $this;
     }
 
-    public function setAlienVoteRightName(?string $alienVoteRightName)
+    public function setAlienVoteRightName(?string $alienVoteRightName): static
     {
         $this->alienVoteRightName = $alienVoteRightName;
         return $this;
     }
 
-    public function setOrderFlag(?int $orderFlag)
+    public function setOrderFlag(?int $orderFlag): static
     {
         $this->orderFlag = $orderFlag;
         return $this;
     }
 
-    public function setWebName(?string $webName)
+    public function setWebName(?string $webName): static
     {
         $this->webName = $webName;
         return $this;
     }
 
-    public function setOptions(array $options)
+    /**
+     * @param \Tymy\Module\Poll\Model\Option[] $options
+     */
+    public function setOptions(array $options): static
     {
         $this->options = $options;
         return $this;
     }
 
-    public function setVotes(array $votes)
+    /**
+     * @param \Tymy\Module\Poll\Model\Vote[] $votes
+     */
+    public function setVotes(array $votes): static
     {
         $this->votes = $votes;
         return $this;
     }
 
-    public function setCanSeeResults(bool $canSeeResults)
+    public function setCanSeeResults(bool $canSeeResults): static
     {
         $this->canSeeResults = $canSeeResults;
         return $this;
     }
 
-    public function setCanVote(bool $canVote)
+    public function setCanVote(bool $canVote): static
     {
         $this->canVote = $canVote;
         return $this;
     }
 
-    public function setCanAlienVote(bool $canAlienVote)
+    public function setCanAlienVote(bool $canAlienVote): static
     {
         $this->canAlienVote = $canAlienVote;
         return $this;
     }
 
-    public function setVoted(bool $voted)
+    public function setVoted(bool $voted): static
     {
         $this->voted = $voted;
         return $this;
@@ -342,11 +357,17 @@ class Poll extends BaseModel
         $this->votePending = $votePending;
     }
 
+    /**
+     * @param mixed[] $orderedVotes
+     */
     public function setOrderedVotes(array $orderedVotes): void
     {
         $this->orderedVotes = $orderedVotes;
     }
 
+    /**
+     * @param mixed[] $myVotes
+     */
     public function setMyVotes(array $myVotes): void
     {
         $this->myVotes = $myVotes;
@@ -354,7 +375,7 @@ class Poll extends BaseModel
 
 //adders
 
-    public function addVote(Vote $vote, int $userId)
+    public function addVote(Vote $vote, int $userId): static
     {
         $this->votes[] = $vote;
 
@@ -363,7 +384,7 @@ class Poll extends BaseModel
         }
         $this->orderedVotes[$vote->getUserId()][$vote->getOptionId()] = $vote;
 
-        if (!$this->getAnonymousResults() && $vote->getUserId() == $userId) {
+        if (!$this->getAnonymousResults() && $vote->getUserId() === $userId) {
             $this->myVotes[$vote->getOptionId()] = $vote;
         }
 
@@ -375,6 +396,9 @@ class Poll extends BaseModel
         return Poll::MODULE;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     public function getScheme(): array
     {
         return PollMapper::scheme();
@@ -385,7 +409,10 @@ class Poll extends BaseModel
         return Poll::TABLE;
     }
 
-    public function jsonSerialize()
+    /**
+     * @return mixed[]
+     */
+    public function jsonSerialize(): array
     {
         return parent::jsonSerialize() + [
             "descriptionHtml" => $this->getDescriptionHtml(),

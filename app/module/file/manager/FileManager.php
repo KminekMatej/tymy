@@ -19,20 +19,13 @@ class FileManager
 {
     public const DOWNLOAD_DIR = TEAM_DIR . "/download";
 
-    private User $user;
-    private Responder $responder;
-
-    public function __construct(User $user, Responder $responder)
+    public function __construct(private Responder $responder)
     {
-        $this->user = $user;
-        $this->responder = $responder;
     }
 
     /**
      * Uložení nahraného souboru.
      *
-     * @param FileUpload   $file
-     * @param string $folder
      * @return string Saved file path
      */
     public function save(FileUpload $file, string $folder): string
@@ -63,6 +56,9 @@ class FileManager
         return $targetFile;
     }
 
+    /**
+     * @return mixed[]
+     */
     private function getMimeTypes(): array
     {
         return self::getArchiveMimeTypes() +
@@ -81,6 +77,9 @@ class FileManager
         ];
     }
 
+    /**
+     * @return array<string, string>
+     */
     public static function getAudioMimeTypes(): array
     {
         return [

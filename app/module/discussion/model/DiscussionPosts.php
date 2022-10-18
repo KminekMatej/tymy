@@ -9,17 +9,8 @@ namespace Tymy\Module\Discussion\Model;
  */
 class DiscussionPosts implements \JsonSerializable
 {
-    private Discussion $discussion;
-    private int $currentPage;
-    private int $numberOfPages;
-    private array $posts;
-
-    public function __construct(Discussion $discussion, int $currentPage, int $numberOfPages, array $posts)
+    public function __construct(private Discussion $discussion, private int $currentPage, private int $numberOfPages, private array $posts)
     {
-        $this->discussion = $discussion;
-        $this->currentPage = $currentPage;
-        $this->numberOfPages = $numberOfPages;
-        $this->posts = $posts;
     }
 
     public function getDiscussion(): Discussion
@@ -37,12 +28,18 @@ class DiscussionPosts implements \JsonSerializable
         return $this->numberOfPages;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getPosts(): array
     {
         return $this->posts;
     }
 
-    public function jsonSerialize()
+    /**
+     * @return array<string, \Tymy\Module\Discussion\Model\Discussion>|array<string, mixed[]>
+     */
+    public function jsonSerialize(): array
     {
         return [
             "discussion" => $this->getDiscussion(),

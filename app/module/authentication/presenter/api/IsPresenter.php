@@ -15,7 +15,7 @@ class IsPresenter extends BasePresenter
     /** @inject */
     public TeamManager $teamManager;
 
-    public function actionDefault()
+    public function actionDefault(): void
     {
         if ($this->getRequest()->getMethod() !== "GET") {
             $this->respondNotAllowed();

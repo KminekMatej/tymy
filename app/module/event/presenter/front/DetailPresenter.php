@@ -24,7 +24,7 @@ class DetailPresenter extends EventBasePresenter
     /** @inject */
     public HistoryManager $historyManager;
 
-    public function renderDefault(string $resource)
+    public function renderDefault(string $resource): void
     {
         $this->template->cptNotDecidedYet = $this->translator->translate('event.notDecidedYet');
 
@@ -32,7 +32,7 @@ class DetailPresenter extends EventBasePresenter
         /* @var $event Event */
         $event = $this->eventManager->getById($eventId);
 
-        if (!$event) {
+        if (!$event instanceof \Tymy\Module\Core\Model\BaseModel) {
             $this->flashMessage($this->translator->translate("event.errors.eventNotExists", null, ['id' => $eventId]), "danger");
             $this->redirect(':Event:Default:');
         }
@@ -55,8 +55,7 @@ class DetailPresenter extends EventBasePresenter
 
     /**
      * Compose attendance array to be easily used on template
-     * @param Event $event
-     * @return array
+     * @return array<int|string, array<int|string, mixed[]>>
      */
     private function loadEventAttendance(Event $event): array
     {
@@ -90,7 +89,10 @@ class DetailPresenter extends EventBasePresenter
         return $attendances;
     }
 
-    private function getEventCaptions($event, $eventTypes)
+    /**
+     * @return array<string, mixed>
+     */
+    private function getEventCaptions($event, $eventTypes): array
     {
         return [
             "myPreStatusCaption" => empty($event->myAttendance->preStatus) || $event->myAttendance->preStatus == "UNKNOWN" ? "not-set" : $eventTypes[$event->type]->preStatusSet[$event->myAttendance->preStatus]->code,
@@ -98,7 +100,7 @@ class DetailPresenter extends EventBasePresenter
         ];
     }
 
-    public function handleLoadHistory($udalost)
+    public function handleLoadHistory($udalost): void
     {
         $eventId = $this->parseIdFromWebname($udalost);
         $this->loadEventHistory($eventId);
@@ -106,7 +108,7 @@ class DetailPresenter extends EventBasePresenter
         $this->redrawControl("historyBtn");
     }
 
-    public function handleAttendanceResult($id)
+    public function handleAttendanceResult($id): void
     {
         $results = $this->getRequest()->getPost()["resultSet"];
 
@@ -120,7 +122,7 @@ class DetailPresenter extends EventBasePresenter
         }
     }
 
-    private function loadEventHistory($eventId)
+    private function loadEventHistory(int $eventId): void
     {
         $this->template->histories = $this->historyManager->getEventHistory($eventId);
         $this->template->emptyStatus = (new Status())->setCode("")->setCaption($this->translator->translate('team.unknownSex'));

@@ -18,7 +18,7 @@ class PostPresenter extends SecuredPresenter
         $this->manager = $manager;
     }
 
-    public function actionDefault($resourceId, $subResourceId)
+    public function actionDefault($resourceId, $subResourceId): void
     {
         if (empty($subResourceId) && isset($this->requestData["id"]) && in_array($this->getRequest()->getMethod(), ["PUT", "DELETE"])) {
             $subResourceId = $this->requestData["id"];  //if subresourceid is not specified, take it from data
@@ -39,7 +39,7 @@ class PostPresenter extends SecuredPresenter
         }
     }
 
-    public function actionReact($resourceId, $subResourceId)
+    public function actionReact($resourceId, $subResourceId): void
     {
         if (!in_array($this->getRequest()->getMethod(), ["POST", "DELETE"])) {
             $this->respondNotAllowed();
@@ -60,7 +60,7 @@ class PostPresenter extends SecuredPresenter
         $this->respondOk();
     }
 
-    public function actionMode($resourceId, $subResourceId, $mode)
+    public function actionMode($resourceId, $subResourceId, $mode): void
     {
         if ($this->getRequest()->getMethod() !== "GET") {
             $this->respondNotAllowed();
@@ -75,14 +75,15 @@ class PostPresenter extends SecuredPresenter
         $this->respondOk($posts->jsonSerialize());
     }
 
-    private function requestGetList($resourceId, $page = 1)
+    private function requestGetList($resourceId, $page = 1): void
     {
+        $posts = null;
         try {
             $posts = $this->manager->mode($resourceId, $page, "html", $this->getRequest()->getParameter("search"), $this->getRequest()->getParameter("suser"), $this->getRequest()->getParameter("jump2date"));
         } catch (Exception $exc) {
             $this->handleException($exc);
         }
 
-        $this->respondOk($posts->jsonSerialize()); /* @phpstan-ignore-line */
+        $this->respondOk($posts->jsonSerialize());
     }
 }

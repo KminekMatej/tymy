@@ -14,9 +14,6 @@ class Router implements RouterInterface
 {
     public function addRoutes(RouteList &$router): void
     {
-        $router->addApiRoute('permission<action Name|Type>[/<name \D+>]', array(
-            'module' => 'Permission',
-            'presenter' => 'Default',
-        ));
+        $router->addApiRoute('permission<action Name|Type>[/<name \D+>]', ['module' => 'Permission', 'presenter' => 'Default']);
     }
 }

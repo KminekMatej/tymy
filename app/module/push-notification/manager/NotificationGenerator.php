@@ -24,18 +24,11 @@ class NotificationGenerator
     public const DELETE_EVENT = "delete-event";
     public const UPDATE_EVENT_TIME = "update-event-time";
 
-    private User $user;
-    private TeamManager $teamManager;
-    private UserManager $userManager;
-
-    public function __construct(User $user, TeamManager $teamManager, UserManager $userManager)
+    public function __construct(private User $user, private TeamManager $teamManager, private UserManager $userManager)
     {
-        $this->user = $user;
-        $this->teamManager = $teamManager;
-        $this->userManager = $userManager;
     }
 
-    public function createPost(Discussion $discussion, Post $post)
+    public function createPost(Discussion $discussion, Post $post): \Tymy\Module\PushNotification\Model\PushNotification
     {
         return new PushNotification(
             self::CREATE_POST,
@@ -51,7 +44,7 @@ class NotificationGenerator
         );
     }
 
-    public function createEvent(Event $event)
+    public function createEvent(Event $event): \Tymy\Module\PushNotification\Model\PushNotification
     {
         $user = $this->userManager->getById($this->user->getId());
 
@@ -68,7 +61,7 @@ class NotificationGenerator
         );
     }
 
-    public function deleteEvent(Event $event)
+    public function deleteEvent(Event $event): \Tymy\Module\PushNotification\Model\PushNotification
     {
         $user = $this->userManager->getById($this->user->getId());
 
@@ -85,7 +78,7 @@ class NotificationGenerator
         );
     }
 
-    public function changeEventTime(Event $event, DateTime $previousStartTime)
+    public function changeEventTime(Event $event, DateTime $previousStartTime): \Tymy\Module\PushNotification\Model\PushNotification
     {
         $user = $this->userManager->getById($this->user->getId());
 

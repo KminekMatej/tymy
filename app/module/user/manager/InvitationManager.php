@@ -2,12 +2,13 @@
 
 namespace Tymy\Module\User\Manager;
 
-use Kdyby\Translation\Translator;
+use Contributte\Translation\Translator;
 use Nette\Application\LinkGenerator;
 use Nette\Utils\DateTime;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Core\Service\MailService;
 use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Mapper\InvitationMapper;
@@ -20,18 +21,9 @@ use Tymy\Module\User\Model\Invitation;
  */
 class InvitationManager extends BaseManager
 {
-    private UserManager $userManager;
-    private MailService $mailService;
-    private LinkGenerator $linkGenerator;
-    private Translator $translator;
-
-    public function __construct(ManagerFactory $managerFactory, UserManager $userManager, LinkGenerator $linkGenerator, Translator $translator, MailService $mailService)
+    public function __construct(ManagerFactory $managerFactory, private UserManager $userManager, private LinkGenerator $linkGenerator, private Translator $translator, private MailService $mailService)
     {
         parent::__construct($managerFactory);
-        $this->userManager = $userManager;
-        $this->linkGenerator = $linkGenerator;
-        $this->translator = $translator;
-        $this->mailService = $mailService;
     }
 
     protected function getClassName(): string
@@ -39,6 +31,9 @@ class InvitationManager extends BaseManager
         return Invitation::class;
     }
 
+    /**
+     * @return Field[]
+     */
     protected function getScheme(): array
     {
         return InvitationMapper::scheme();
@@ -89,12 +84,6 @@ class InvitationManager extends BaseManager
         }
     }
 
-    /**
-     *
-     * @param BaseModel $entity
-     * @param int $userId
-     * @return bool
-     */
     public function canRead(BaseModel $entity, int $userId): bool
     {
         return in_array($userId, $this->userManager->getUserIdsWithPrivilege(Privilege::SYS("USR_CREATE")));
@@ -126,6 +115,9 @@ class InvitationManager extends BaseManager
         return parent::deleteRecord($resourceId);
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getAllowedReaders(BaseModel $record): array
     {
         return $this->userManager->getUserIdsWithPrivilege(Privilege::SYS("USR_CREATE"));
@@ -149,9 +141,9 @@ class InvitationManager extends BaseManager
         return $this->getById($resourceId, true);
     }
 
-    private function notifyByEmail(Invitation $invitation)
+    private function notifyByEmail(Invitation $invitation): void
     {
-        $name = $invitation->getFirstName() || $invitation->getLastName() ? join(" ", [$invitation->getFirstName(), $invitation->getLastName()]) : null;
+        $name = $invitation->getFirstName() || $invitation->getLastName() ? implode(" ", [$invitation->getFirstName(), $invitation->getLastName()]) : null;
 
         $creator = $this->userManager->getById($this->user->getId());
 
@@ -160,8 +152,6 @@ class InvitationManager extends BaseManager
 
     /**
      * Get Invitation by its code
-     * @param string $code
-     * @return Invitation|null
      */
     public function getByCode(string $code): ?Invitation
     {
