@@ -553,7 +553,7 @@ class User extends BaseModel
             "displayName" => $this->getDisplayName(),
         ];
     }
-    
+
     /**
      * Serialize to one-dimensional array
      * @return array
@@ -561,9 +561,9 @@ class User extends BaseModel
     public function csvSerialize(): array
     {
         $array = $this->jsonSerialize();
-        
+
         $array["roles"] = join(",", $array["roles"]);
-        
+
         return Arrays::flatten($array, true);
     }
 }
