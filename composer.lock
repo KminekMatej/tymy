@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a7b2e6b5b5984d520e292eef2f76d32f",
+    "content-hash": "c353205e816e5b65d2cb5ccc7ee5200a",
     "packages": [
         {
             "name": "brick/math",
@@ -3243,6 +3243,59 @@
                 "source": "https://github.com/nette/tracy/tree/v2.9.4"
             },
             "time": "2022-07-19T14:06:15+00:00"
+        },
+        {
+            "name": "vojir/nette-csv-response",
+            "version": "v1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vojir/nette-CsvResponse.git",
+                "reference": "0922003b651ee8614479e7da5db74ce102e91cc0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vojir/nette-CsvResponse/zipball/0922003b651ee8614479e7da5db74ce102e91cc0",
+                "reference": "0922003b651ee8614479e7da5db74ce102e91cc0",
+                "shasum": ""
+            },
+            "require": {
+                "nette/http": ">=2.4",
+                "nette/utils": ">=2.4",
+                "php": ">=7.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Vojir\\Responses\\CsvResponse\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Stanislav Vojíř",
+                    "email": "stanislav.vojir@gmail.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Vladislav Hejda",
+                    "email": "hejda@vspdata.cz",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Ondra Hlaváč",
+                    "email": "ondra@hlavac.cz",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Nette CSV Responses",
+            "homepage": "https://github.com/vojir/nette-csv-response",
+            "support": {
+                "source": "https://github.com/vojir/nette-CsvResponse/tree/v1.2"
+            },
+            "time": "2019-10-19T20:30:10+00:00"
         },
         {
             "name": "web-token/jwt-core",
