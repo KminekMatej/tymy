@@ -90,7 +90,7 @@ class EventPresenter extends SettingBasePresenter
     {
         return $this->formFactory->createEventLineForm(
             $this->eventTypes,
-            fn(Form $form, \stdClass $values): void => $this->newEventFormSuccess($form, $values)
+            fn(Form $form, \stdClass $values) => $this->newEventFormSuccess($form, $values)
         );
     }
 
@@ -101,7 +101,7 @@ class EventPresenter extends SettingBasePresenter
 
                 return $this->formFactory->createEventLineForm(
                     $this->eventTypes,
-                    fn(Form $form, \stdClass $values): void => $this->eventFormSuccess($form, $values),
+                    fn(Form $form, \stdClass $values) => $this->eventFormSuccess($form, $values),
                     $event
                 );
         });

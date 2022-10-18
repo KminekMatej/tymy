@@ -97,7 +97,7 @@ class NavbarControl extends Control
         $form = new Form();
         $form->addUpload("file", $this->translator->translate("file.file"));
         $form->addSubmit("save", "Nahrát");
-        $form->onSuccess[] = fn(\Nette\Application\UI\Form $form, $values): void => $this->fileLoad($form, $values);
+        $form->onSuccess[] = fn(\Nette\Application\UI\Form $form, $values) => $this->fileLoad($form, $values);
 
         return $form;
     }
