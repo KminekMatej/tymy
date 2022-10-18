@@ -13,7 +13,6 @@ use Vojir\Responses\CsvResponse\ComposedCsvResponse;
  */
 class ExportPresenter extends SecuredPresenter
 {
-
     public function actionDefault(?string $status = null): void
     {
         if ($this->getRequest()->getMethod() != 'GET') {
