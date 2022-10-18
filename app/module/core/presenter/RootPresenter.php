@@ -2,11 +2,12 @@
 
 namespace Tymy\Module\Core\Presenter;
 
-use Kdyby\Translation\Translator;
+use Contributte\Translation\Translator;
 use Nette\Application\UI\Presenter;
 use Nette\Caching\Cache;
 use Nette\Caching\Storage;
 use Nette\Utils\DateTime;
+use Tracy\Debugger;
 use Tymy\Module\Core\Model\Version;
 use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\Team\Model\Team;
@@ -111,7 +112,7 @@ abstract class RootPresenter extends Presenter
         } else {
             $cvName = shell_exec("git rev-parse --abbrev-ref HEAD");
         }
-        \Tracy\Debugger::barDump($cvName);
+        Debugger::barDump($cvName);
         return $cvName == "master" ? new Version($cvName, null) : ($this->getVersions()[$cvName] ?? new Version($cvName, null));
     }
 }

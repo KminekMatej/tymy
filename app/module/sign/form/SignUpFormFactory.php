@@ -2,10 +2,10 @@
 
 namespace Tymy\Module\Sign\Form;
 
-use Kdyby\Translation\Translator;
 use Nette;
 use Nette\Application\UI\Form;
 use Nette\Security\SimpleIdentity;
+use Symfony\Component\Translation\Translator;
 use Tymy\Module\Core\Exception\MissingInputException;
 use Tymy\Module\User\Manager\InvitationManager;
 use Tymy\Module\User\Manager\UserManager;
@@ -66,7 +66,7 @@ class SignUpFormFactory
                 $invitation = null;
                 if ($values->invitation && !empty($values->invitation)) {
                     $invitation = $this->invitationManager->getByCode($values->invitation);
-                    if (!$invitation instanceof \Tymy\Module\User\Model\Invitation) {
+                    if (!$invitation instanceof Invitation) {
                         if ($invitation->getStatus() == Invitation::STATUS_EXPIRED) { //already expired
                             $form->addError($this->translator->translate("team.errors.invitationExpired", 1));
                             return;

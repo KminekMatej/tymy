@@ -2,12 +2,13 @@
 
 namespace Tymy\Module\User\Manager;
 
-use Kdyby\Translation\Translator;
+use Contributte\Translation\Translator;
 use Nette\Application\LinkGenerator;
 use Nette\Utils\DateTime;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Core\Service\MailService;
 use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Mapper\InvitationMapper;
@@ -31,7 +32,7 @@ class InvitationManager extends BaseManager
     }
 
     /**
-     * @return \Tymy\Module\Core\Model\Field[]
+     * @return Field[]
      */
     protected function getScheme(): array
     {

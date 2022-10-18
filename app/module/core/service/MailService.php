@@ -3,6 +3,7 @@
 namespace Tymy\Module\Core\Service;
 
 use Contributte\Translation\Translator;
+use Latte\Engine;
 use Nette\Mail\Mailer;
 use Nette\Mail\Message;
 use Nette\Mail\SendException;
