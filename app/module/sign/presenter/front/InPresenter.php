@@ -21,11 +21,10 @@ class InPresenter extends BasePresenter
 
     /**
      * Sign-in form factory.
-     * @return Nette\Application\UI\Form
      */
-    protected function createComponentSignInForm()
+    protected function createComponentSignInForm(): \Nette\Application\UI\Form
     {
-        return $this->signInFactory->create(function (Form $form, $values) {
+        return $this->signInFactory->create(function (Form $form, $values): void {
             try {
                 $this->user->setExpiration('20 minutes');
                 $this->user->login($values->name, $values->password);
@@ -44,7 +43,7 @@ class InPresenter extends BasePresenter
         });
     }
 
-    public function renderDefault()
+    public function renderDefault(): void
     {
         if ($tk = $this->getRequest()->getParameter("tk")) {
             try {

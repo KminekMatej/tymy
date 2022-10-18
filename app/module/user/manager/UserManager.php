@@ -355,14 +355,14 @@ class UserManager extends BaseManager
     /**
      * Register user - create user record in INIT status
      */
-    public function register(array $array, ?Invitation $invitation = null): User
+    public function register(array $array, ?Invitation $invitation = null): ?\Tymy\Module\User\Model\User
     {
         $this->allowRegister($array);
 
         $array["status"] = "INIT";
         $array["callName"] = $array["login"];
 
-        if ($invitation) {
+        if ($invitation !== null) {
             $array["status"] = "PLAYER";
             $array["canLogin"] = true;
             $array["canEditCallName"] = true;
@@ -375,7 +375,7 @@ class UserManager extends BaseManager
 
         $allAdmins = $this->getUsersWithPrivilege(Privilege::SYS("USR_UPDATE"));
 
-        if (!$invitation) { //send registration email only if this is blank registration from web, not from invitation
+        if ($invitation === null) { //send registration email only if this is blank registration from web, not from invitation
             foreach ($allAdmins as $admin) {
                 if (empty($admin->getEmail())) {  //skip admins without email
                     continue;

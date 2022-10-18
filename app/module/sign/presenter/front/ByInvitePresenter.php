@@ -16,11 +16,11 @@ class ByInvitePresenter extends BasePresenter
     /** @inject */
     public InvitationManager $invitationManager;
 
-    public function renderDefault(string $invite)
+    public function renderDefault(string $invite): void
     {
         $invitation = $this->invitationManager->getByCode($invite);
 
-        if (!$invitation) {
+        if (!$invitation instanceof \Tymy\Module\User\Model\Invitation) {
             $this->flashMessage($this->translator->translate("team.invitation", 1) . " $invite " . $this->translator->translate("common.alerts.notFound", 2), "danger");
             $this->redirect(":Sign:In:");
         }
@@ -36,11 +36,11 @@ class ByInvitePresenter extends BasePresenter
         $this->template->invitation = $invitation;
     }
 
-    protected function createComponentSignUpForm()
+    protected function createComponentSignUpForm(): \Nette\Application\UI\Form
     {
         $invitation = $this->invitationManager->getByCode($this->getRequest()->getParameter("invite"));
 
-        return $this->signUpFactory->create(function (SimpleIdentity $registeredIdentity) {
+        return $this->signUpFactory->create(function (SimpleIdentity $registeredIdentity): void {
                 $this->flashMessage($this->translator->translate("common.alerts.registrationSuccesfull"), 'success');
                 $this->user->setExpiration('20 minutes');
                 $this->user->login($registeredIdentity);

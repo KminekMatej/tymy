@@ -65,31 +65,31 @@ class Vote extends BaseModel
         return $this->updatedAt;
     }
 
-    public function setPollId(int $pollId)
+    public function setPollId(int $pollId): static
     {
         $this->pollId = $pollId;
         return $this;
     }
 
-    public function setUserId(int $userId)
+    public function setUserId(int $userId): static
     {
         $this->userId = $userId;
         return $this;
     }
 
-    public function setOptionId(int $optionId)
+    public function setOptionId(int $optionId): static
     {
         $this->optionId = $optionId;
         return $this;
     }
 
-    public function setNumericValue(?int $numericValue)
+    public function setNumericValue(?int $numericValue): static
     {
         $this->numericValue = $numericValue;
         return $this;
     }
 
-    public function setBooleanValue($booleanValue)
+    public function setBooleanValue($booleanValue): static
     {
         $this->booleanValue = match (true) {
             is_string($booleanValue) => in_array(strtoupper($booleanValue), ["YES", "TRUE", "ANO"]),
@@ -100,19 +100,19 @@ class Vote extends BaseModel
         return $this;
     }
 
-    public function setStringValue(?string $stringValue)
+    public function setStringValue(?string $stringValue): static
     {
         $this->stringValue = $stringValue;
         return $this;
     }
 
-    public function setUpdatedById(?int $updatedById)
+    public function setUpdatedById(?int $updatedById): static
     {
         $this->updatedById = $updatedById;
         return $this;
     }
 
-    public function setUpdatedAt(?DateTime $updatedAt)
+    public function setUpdatedAt(?DateTime $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
         return $this;
@@ -123,6 +123,9 @@ class Vote extends BaseModel
         return self::MODULE;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getScheme(): array
     {
         return VoteMapper::scheme();

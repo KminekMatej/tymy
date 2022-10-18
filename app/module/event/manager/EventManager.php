@@ -399,7 +399,7 @@ class EventManager extends BaseManager
     /**
      * Get user ids allowed to read given event
      * @param Event $record
-     * @return int[]
+     * @return mixed[]|int[]
      */
     public function getAllowedReaders(BaseModel $record): array
     {

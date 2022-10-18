@@ -15,10 +15,10 @@ class Field
     public const TYPE_DATETIME = "datetime";
 
     /** @var mixed|null */
-    private $column;
+    private ?string $column = null;
 
     /** @var mixed|null */
-    private $property;
+    private ?string $property = null;
 
     private bool $mandatory = false;
 
@@ -31,7 +31,7 @@ class Field
     /**
      * Return new field as int type
      */
-    public static function int(): static
+    public static function int(): \Tymy\Module\Core\Model\Field
     {
         return (new Field())->setType(self::TYPE_INT);
     }
@@ -39,7 +39,7 @@ class Field
     /**
      * Return new field as float type
      */
-    public static function float(): static
+    public static function float(): \Tymy\Module\Core\Model\Field
     {
         return (new Field())->setType(self::TYPE_FLOAT);
     }
@@ -47,7 +47,7 @@ class Field
     /**
      * Return new field as string type
      */
-    public static function string(): static
+    public static function string(): \Tymy\Module\Core\Model\Field
     {
         return (new Field())->setType(self::TYPE_STRING);
     }
@@ -55,7 +55,7 @@ class Field
     /**
      * Return new field as datetime type
      */
-    public static function datetime(): static
+    public static function datetime(): \Tymy\Module\Core\Model\Field
     {
         return (new Field())->setType(self::TYPE_DATETIME);
     }
@@ -66,7 +66,7 @@ class Field
      * @param bool $mandatory If field is mandatory, then value cannot be null
      * @param bool $changeable If field is not changeable, any future changes are prohibited
      */
-    public function withPropertyAndColumn(string $name, bool $mandatory = false, bool $changeable = true): \Tymy\Module\Core\Model\Field
+    public function withPropertyAndColumn(string $name, bool $mandatory = false, bool $changeable = true): static
     {
         return $this->setColumn($name)
                         ->setProperty($name)
@@ -80,7 +80,7 @@ class Field
      * @param bool $mandatory If field is mandatory, then value cannot be null
      * @param bool $changeable If field is not changeable, any future changes are prohibited
      */
-    public function withColumn(string $name, bool $mandatory = false, bool $changeable = true): \Tymy\Module\Core\Model\Field
+    public function withColumn(string $name, bool $mandatory = false, bool $changeable = true): static
     {
         return $this->setColumn($name)
                         ->setMandatory($mandatory)

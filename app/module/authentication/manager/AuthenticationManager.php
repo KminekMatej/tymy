@@ -29,7 +29,7 @@ class AuthenticationManager implements IAuthenticator
     {
     }
 
-    public function authenticate(array $credentials): IIdentity
+    public function authenticate(array $credentials): \Nette\Security\SimpleIdentity
     {
         if (count($credentials) == 1) {   //if there is only username sent, it can possibly be login using transfer key
             $parts = explode("|", $credentials[0]);

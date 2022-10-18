@@ -71,9 +71,8 @@ abstract class RequestCase extends TestCase
 
     /**
      * Function should return string of module name, preferably from constant
-     * @return string
      */
-    abstract public function getModule();
+    abstract public function getModule(): string;
 
     protected function getBasePath(): string
     {
@@ -89,6 +88,9 @@ abstract class RequestCase extends TestCase
 
     abstract public function mockRecord();
 
+    /**
+     * @return mixed[]
+     */
     abstract protected function mockChanges(): array;
 
     public function getRecordManager(): RecordManager
@@ -298,15 +300,17 @@ abstract class RequestCase extends TestCase
         }
     }
 
-    /** @return Presenter */
-    protected function loadPresenter(string $name)
+    protected function loadPresenter(string $name): \Nette\Application\IPresenter
     {
         $presenter = $this->presenterFactory->createPresenter($name);
         $presenter->autoCanonicalize = false;
         return $presenter;
     }
 
-    public function getConfig()
+    /**
+     * @return mixed[]
+     */
+    public function getConfig(): array
     {
         return $this->config;
     }
@@ -317,7 +321,7 @@ abstract class RequestCase extends TestCase
      * @param type $requestUrl
      * @return Request2
      */
-    private function mockHttpRequest($method, $requestUrl, $data)
+    private function mockHttpRequest($method, $requestUrl, $data): Request2
     {
         $SERVER = [];
         $requestMockFactory = new RequestMockFactory();

@@ -17,7 +17,7 @@ class UpPresenter extends BasePresenter
      */
     protected function createComponentSignUpForm(): \Nette\Application\UI\Form
     {
-        return $this->signUpFactory->create(function (SimpleIdentity $registeredIdentity) {
+        return $this->signUpFactory->create(function (SimpleIdentity $registeredIdentity): void {
                 $this->flashMessage($this->translator->translate("common.alerts.registrationSuccesfull") . " " . $this->translator->translate("common.alerts.waitForApproval"), 'success');
                 $this->redirect(':Sign:In:');
         });

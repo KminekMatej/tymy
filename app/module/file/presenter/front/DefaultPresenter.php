@@ -28,13 +28,13 @@ class DefaultPresenter extends SecuredPresenter
     public FileManager $fileManager;
     private array $fileStats;
 
-    public function beforeRender()
+    public function beforeRender(): void
     {
         parent::beforeRender();
         $this->addBreadcrumb($this->translator->translate("file.file", 2), $this->link(":File:Default:"));
         $this->initFileStats();
 
-        $this->template->addFilter('filesize', fn($sizeInBytes) => $this->formatBytes($sizeInBytes));
+        $this->template->addFilter('filesize', fn($sizeInBytes): string => $this->formatBytes($sizeInBytes));
 
         $this->template->addFilter('filetype', function ($filename) {
             $mime = mime_content_type($filename);
@@ -48,7 +48,7 @@ class DefaultPresenter extends SecuredPresenter
         });
     }
 
-    public function renderDefault(string $folder = "/")
+    public function renderDefault(string $folder = "/"): void
     {
         $folderSanitized = "/" . trim($folder, "/");
         $i = 3;
@@ -89,7 +89,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->template->contents = $this->getContents($folderSanitized);
     }
 
-    public function createComponentNewFolderForm()
+    public function createComponentNewFolderForm(): \Nette\Application\UI\Form
     {
         $form = new Form();
 
@@ -101,7 +101,7 @@ class DefaultPresenter extends SecuredPresenter
             ->addRule(Form::PATTERN_ICASE, $this->translator->translate("file.dirNameError"), self::DIR_NAME_REGEX);
 
         $form->addSubmit('send', $this->translator->translate("file.add"));
-        $form->onSuccess[] = function (Form $form, $values) {
+        $form->onSuccess[] = function (Form $form, $values): void {
             $currentFolder = $values->folder;
             $folderName = $values->name;
             mkdir(FileManager::DOWNLOAD_DIR . $currentFolder . "/" . $folderName);
@@ -111,7 +111,7 @@ class DefaultPresenter extends SecuredPresenter
         return $form;
     }
 
-    public function createComponentRenameForm()
+    public function createComponentRenameForm(): \Nette\Application\UI\Form
     {
         $form = new Form();
 
@@ -123,7 +123,7 @@ class DefaultPresenter extends SecuredPresenter
             ->addRule(Form::PATTERN_ICASE, $this->translator->translate("file.dirNameError"), self::DIR_NAME_REGEX);
 
         $form->addSubmit('send', $this->translator->translate("file.rename"));
-        $form->onSuccess[] = function (Form $form, $values) {
+        $form->onSuccess[] = function (Form $form, $values): void {
             $oldpath = FileManager::DOWNLOAD_DIR . $values->folder . "/" . trim($values->oldName, "/. ");
             if (file_exists($oldpath)) {
                 $newpath = FileManager::DOWNLOAD_DIR . $values->folder . "/" . trim($values->name, "/. ");
@@ -136,14 +136,14 @@ class DefaultPresenter extends SecuredPresenter
         return $form;
     }
 
-    public function createComponentUploadFileForm()
+    public function createComponentUploadFileForm(): \Nette\Application\UI\Form
     {
         $form = new Form();
 
         $form->addHidden("folder")->addRule(Form::PATTERN_ICASE, $this->translator->translate("file.dirNameError"), self::DIR_NAME_REGEX);
 
         $form->addUpload('upload');
-        $form->onError[] = function (Form $form) {
+        $form->onError[] = function (Form $form): void {
             foreach ($form->getErrors() as $error) {
                 $this->presenter->flashMessage($error, "danger");
             }
@@ -151,7 +151,7 @@ class DefaultPresenter extends SecuredPresenter
             $this->presenter->redrawControl("flashes");
         };
 
-        $form->onSuccess[] = function (Form $form, $values) {
+        $form->onSuccess[] = function (Form $form, $values): void {
             $folder = trim($values->folder, "/. ");
             try {
                 $this->fileManager->save($values->upload, $folder);
@@ -168,6 +168,7 @@ class DefaultPresenter extends SecuredPresenter
 
     /**
      * Get download folder contents
+     * @return array<string, mixed[]>
      */
     private function getContents(string $folder): array
     {
@@ -222,7 +223,7 @@ class DefaultPresenter extends SecuredPresenter
         }
     }
 
-    private function loadFileTypeSizes(string $folder)
+    private function loadFileTypeSizes(string $folder): void
     {
         if (!array_key_exists("fileTypes", $this->fileStats)) {
             $this->fileStats["fileTypes"] = [
@@ -317,7 +318,7 @@ class DefaultPresenter extends SecuredPresenter
         return round($bytes, $precision) . ' ' . $units[$pow];
     }
 
-    public function handleDelete(string $folder = "/", string $filename = "")
+    public function handleDelete(string $folder = "/", string $filename = ""): void
     {
         if (empty($filename)) {
             return;
@@ -334,7 +335,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->reloadFileList($folder);
     }
 
-    private function rrmdir($dir)
+    private function rrmdir($dir): void
     {
         if (is_link($dir)) {
             unlink($dir);
@@ -353,7 +354,7 @@ class DefaultPresenter extends SecuredPresenter
         }
     }
 
-    private function reloadFileList(string $folder)
+    private function reloadFileList(string $folder): void
     {
         $this->template->contents = $this->getContents("/" . $folder);
         $this->redrawControl("file-list");

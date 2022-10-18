@@ -128,7 +128,7 @@ class RequestMockFactory
     }
 
 
-    private function getScriptPath(Url $url): string|bool
+    private function getScriptPath(Url $url): string
     {
         $i = null;
         $path = $url->getPath();

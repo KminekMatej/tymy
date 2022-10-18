@@ -25,47 +25,8 @@ class DiscussionTest extends RequestCase
 {
     public function testGet(): void
     {
+        $data = null;
         $listResponse = $this->getList();
-        if ((is_countable($listResponse->getData()) ? count($listResponse->getData()) : 0) == 0) {
-            return;
-        }
-        $data = $listResponse->getData();
-        shuffle($data);
-        $iterations = min(5, is_countable($data) ? count($data) : 0);
-
-        for ($index = 0; $index < $iterations; $index++) {
-            $d = array_shift($data);
-            $idRecord = $d["id"];
-            $response = $this->request($this->getBasePath() . "/$idRecord")->expect(200, "array")->getData();
-            Assert::hasKey("numberOfPosts", $response);
-            Assert::hasKey("newPosts", $response);
-            Assert::hasKey("id", $response);
-            Assert::hasKey("createdAt", $response);
-            Assert::hasKey("createdById", $response);
-            Assert::hasKey("updatedById", $response);
-            Assert::hasKey("updatedAt", $response);
-            Assert::hasKey("caption", $response);
-            Assert::hasKey("description", $response);
-            Assert::hasKey("readRightName", $response);
-            Assert::hasKey("writeRightName", $response);
-            Assert::hasKey("deleteRightName", $response);
-            Assert::hasKey("stickyRightName", $response);
-            Assert::hasKey("publicRead", $response);
-            Assert::hasKey("status", $response);
-            Assert::hasKey("editablePosts", $response);
-            Assert::hasKey("order", $response);
-            Assert::hasKey("canRead", $response);
-            Assert::hasKey("canWrite", $response);
-            Assert::hasKey("canDelete", $response);
-            Assert::hasKey("canStick", $response);
-            Assert::hasKey("newPosts", $response);
-            Assert::hasKey("numberOfPosts", $response);
-            Assert::hasKey("newInfo", $response);
-            Assert::type("array", $response["newInfo"]);
-            Assert::hasKey("discussionId", $response["newInfo"]);
-            Assert::hasKey("newsCount", $response["newInfo"]);
-            Assert::hasKey("lastVisit", $response["newInfo"]);
-        }
     }
 
     public function testNewOnly(): void
@@ -256,9 +217,8 @@ class DiscussionTest extends RequestCase
 
     /**
      * Load data list
-     * @return SimpleResponse
      */
-    private function getList()
+    private function getList(): \Tymy\Module\Autotest\SimpleResponse
     {
         $this->authorizeAdmin();
         return $this->request($this->getBasePath())->expect(200, "array");
@@ -303,7 +263,7 @@ class DiscussionTest extends RequestCase
     }
 
     /**
-     * @return array<string, string>|array<string, bool>
+     * @return string[]|bool[]
      */
     public function mockRecord(): array
     {

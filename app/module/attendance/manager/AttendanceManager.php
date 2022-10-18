@@ -111,7 +111,7 @@ class AttendanceManager extends BaseManager
      */
     public function canEdit($entity, int $userId): bool
     {
-        return $entity->getUserId() == $userId;
+        return $entity->getUserId() === $userId;
     }
 
     /**
@@ -249,8 +249,8 @@ class AttendanceManager extends BaseManager
                 . "LEFT JOIN event_types ON event_types.post_status_set_id=status_set.id "
                 . "LEFT JOIN events ON events.event_type_id=event_types.id WHERE events.id=?", $eventId)->fetchPairs("id", "code");
 
-        if (is_numeric($postStatus) && array_key_exists((int) $postStatus, $allowedStatuses)) { //postStatus is ID
-            return (int) $postStatus;
+        if (is_numeric($postStatus) && array_key_exists($postStatus, $allowedStatuses)) { //postStatus is ID
+            return $postStatus;
         }
 
         //postStatus is code - return and fill statusId automatically
@@ -300,7 +300,7 @@ class AttendanceManager extends BaseManager
         $existingAttendance = $this->getByEventUserId($data["eventId"], $data["userId"]);
 
         $this->allowCreate($data); //allowCreate checks right for both creating and updating already created attendance
-        if (!$existingAttendance) {
+        if (!$existingAttendance instanceof \Tymy\Module\Attendance\Model\Attendance) {
             $created = $this->createByArray($data);
             if ($created && isset($data["preStatusId"])) {
                 $this->createHistory($data["userId"], $data["eventId"], $data["preStatusId"], $data["preDescription"] ?? null);

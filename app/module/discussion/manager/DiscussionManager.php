@@ -228,7 +228,7 @@ class DiscussionManager extends BaseManager
     /**
      * Get user ids allowed to read given discussion
      * @param Discussion $record
-     * @return int[]
+     * @return int[]|mixed[]
      */
     public function getAllowedReaders(BaseModel $record): array
     {

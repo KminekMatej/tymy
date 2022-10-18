@@ -47,9 +47,8 @@ class CURLHelper
 
     /**
      * Initialize curl handle with common settings
-     * @return \CurlHandle
      */
-    private static function getCurl(string $url)
+    private static function getCurl(string $url): \CurlHandle|bool
     {
         $handle = curl_init($url);
         curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);

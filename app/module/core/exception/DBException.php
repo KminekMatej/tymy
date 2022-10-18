@@ -87,7 +87,7 @@ class DeleteIntegrityException extends IntegrityException
 {
     public $blockingIds = [];
 
-    public function withIds($blockingIds)
+    public function withIds($blockingIds): static
     {
         $this->blockingIds = $blockingIds;
         return $this;
@@ -96,9 +96,9 @@ class DeleteIntegrityException extends IntegrityException
 
 class UpdateIntegrityException extends IntegrityException
 {
-    public $blockingIds = [];
+    public array $blockingIds = [];
 
-    public static function withIds($failingField, $relatedTable, $relatedColumn, $fkTable, $fkName, array $blockingIds)
+    public static function withIds($failingField, $relatedTable, $relatedColumn, $fkTable, $fkName, array $blockingIds): \Tymy\Module\Core\Exception\UpdateIntegrityException
     {
         $e = new UpdateIntegrityException($failingField, $relatedTable, $relatedColumn, $fkTable, $fkName);
         $e->blockingIds = $blockingIds;

@@ -119,7 +119,7 @@ class DebtManager extends BaseManager
      */
     public function canRead($entity, int $userId): bool
     {
-        return ($entity->getDebtorType() == self::TYPE_USER && $entity->getDebtorId() == $userId) || $entity->getCanEdit();
+        return ($entity->getDebtorType() == self::TYPE_USER && $entity->getDebtorId() === $userId) || $entity->getCanEdit();
     }
 
     /**

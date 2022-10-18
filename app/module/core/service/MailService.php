@@ -77,12 +77,6 @@ class MailService
 
     /**
      * Compose & send email with invitation of user into this team
-     * @param string $nameTo
-     * @param string $emailTo
-     * @param string $nameFrom
-     * @param string $invitationUrl
-     * @param DateTime $invitationValidity
-     * @return void
      */
     public function mailInvitation(string $nameTo, string $emailTo, string $nameFrom, string $invitationUrl, DateTime $invitationValidity): void
     {
@@ -90,7 +84,7 @@ class MailService
 
         $latte = new Engine();
 
-        $latte->addFilter('translate', [$this->translator, 'translate']);
+        $latte->addFilter('translate', fn($message, $parameters): string => $this->translator->translate($message, $parameters));
 
         $subject = $this->translator->translate("mail.invitation.subject");
 

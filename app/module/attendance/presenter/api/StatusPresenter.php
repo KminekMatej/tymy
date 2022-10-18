@@ -39,7 +39,7 @@ class StatusPresenter extends SecuredPresenter
         $this->respondNotAllowed();
     }
 
-    public function actionStatusSet($resourceId, $subResourceId): void
+    public function actionStatusSet(int $resourceId, ?int $subResourceId): void
     {
         switch ($this->getRequest()->getMethod()) {
             case "POST":

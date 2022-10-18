@@ -204,13 +204,10 @@ class Timer
             $previousName = $name;
             $previousTime = $time;
         }
-
-        if ($line) {
-            $logTxt = str_replace("_NEXTTIMERNAME_", "end", $line);
-            Debugger::log($logTxt, "timer");
-            self::addServerTime("sum:" . $previousName, "end", $previousTime ?? 0.0);
-            self::$dumps["timer_sumpoints"][] = $logTxt;
-        }
+        $logTxt = str_replace("_NEXTTIMERNAME_", "end", $line);
+        Debugger::log($logTxt, "timer");
+        self::addServerTime("sum:" . $previousName, "end", $previousTime ?? 0.0);
+        self::$dumps["timer_sumpoints"][] = $logTxt;
     }
 
     private static function toMs($time): string
