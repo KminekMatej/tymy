@@ -1,0 +1,23 @@
+hello: Salut
+bestRegards: Meilleures salutations
+teamAdministrator: Administrateur de
+invitation:
+    subject: "Invitation dans l'équipe"
+    body: 
+        invited: "vous avez été invité dans le portail d'équipe"
+        registerHere: Veuillez vous inscrire ici
+        validity: Cette invitation expire le
+        dontHesitate: "Alors n'hésitez pas"
+        tymyDescription: "Le portail tymy.cz sert à maintenir et à administrer les équipes sportives"
+        tymyApproval: "est administré ici et cette invitation vous permet de rejoindre l'équipe"
+
+
+
+
+
+
+
+
+
+
+

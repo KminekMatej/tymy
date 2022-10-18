@@ -26,8 +26,9 @@
                     {include $componentsDir . '/tymy-table.latte'}
                     <div class="card-footer text-right">
                         <a n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))" class="btn btn-lg btn-success" href="{plink :Setting:Poll:new}" onclick="btnRotate($(this), true)" title="{_poll.createPoll}" style="margin-right: 10px">
-                        <i class="fa fa-plus" aria-hidden="true"></i>
-                    </a>
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

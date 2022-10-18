@@ -139,7 +139,9 @@ class PostManager extends BaseManager
         }
 
         $post->setCreatedAtStr($post->getCreatedAt()->format(BaseModel::DATETIME_CZECH_NO_SECS_FORMAT));
-        $post->setCreatedBy($this->userManager->getSimpleUser($post->getCreatedById()));
+        if ($post->getCreatedById()) {
+            $post->setCreatedBy($this->userManager->getSimpleUser($post->getCreatedById()));
+        }
         if ($post->getUpdatedAt()) {
             $post->setUpdatedAtStr($post->getUpdatedAt()->format(BaseModel::DATETIME_CZECH_NO_SECS_FORMAT));
         }
@@ -192,7 +194,7 @@ class PostManager extends BaseManager
     {
         $data["discussionId"] = $resourceId;
         $data["createdAt"] = new DateTime();
-        $data["userName"] = $this->userManager->getById($data["createdById"])->getDisplayName();
+        $data["userName"] = $this->userManager->getById($this->user->getId())->getDisplayName();
 
         $this->allowDiscussion($resourceId);
         $this->allowCreate($data);

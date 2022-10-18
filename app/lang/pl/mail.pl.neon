@@ -1,0 +1,22 @@
+hello: Cześć
+bestRegards: Z poważaniem
+teamAdministrator: Administrator
+invitation:
+    subject: Zaproszenie do zespołu
+    body: 
+        invited: "zostałeś zaproszony do portalu zespołu"
+        registerHere: "Zarejestruj się tutaj"
+        validity: To zaproszenie wygasa w dniu
+        dontHesitate: "Więc nie wahaj się"
+        tymyDescription: Portal tymy.cz służy do utrzymywania i administrowania drużynami sportowymi
+        tymyApproval: "jest tutaj administrowana, a to zaproszenie pozwala dołączyć do zespołu"
+
+
+
+
+
+
+
+
+
+

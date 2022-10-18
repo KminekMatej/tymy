@@ -63,9 +63,18 @@ sport: Sport
 defaultLanguage: Domyślny język
 hideDiscDesc: Ukryj opis dyskusji
 approveAsPlayer: Zatwierdź jako gracz
+invitation: Zaproszenie|Zaproszenia
+invite: Zapraszać
+createInvitation: Zaproś nowego gracza
+invitation-sent: Wysłano
+invitation-accepted: Przyjęty
+invitation-expired: Wygasły
 errors:
     imgFileCorrupted: "Plik nie jest obrazkiem, lub jest uszkodzony"
     passwordMismatch: Hasło różni się
+    invitationAtLeast: "Przynajmniej jedno z pól Imię, Nazwisko i E-Mail musi być wypełnione"
+    invitationExpired: Zaproszenie już wygasło
+    invitationAccepted: Zaproszenie już wykorzystane
 alerts:
     signOffNeeded: Language changed - please logout & login for language to change
     registrationApprovedSubject: Rejestracja do %s zatwierdzona
@@ -88,3 +97,5 @@ alerts:
     emailFailure: Niewłaściwy format wiadomości email
     usernameFailure: Nazwa użytkownika musi mieć co najmniej 3 i maksymalnie 20 znaki
     targetTeamExists: Ten zespół został już dodany
+    invitationCreated: Utworzono zaproszenie
+    invitationSent: Zaproszenie wysłane

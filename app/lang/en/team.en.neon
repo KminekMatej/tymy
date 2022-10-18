@@ -63,9 +63,18 @@ sport: Sport
 defaultLanguage: Default language
 hideDiscDesc: Hide discussion description
 approveAsPlayer: Approve as player
+invitation: Invitation|Invitations
+invite: Pozvat
+createInvitation: Invite new player
+invitation-sent: Sent
+invitation-accepted: Accepted
+invitation-expired: Expired
 errors:
     imgFileCorrupted: "File is not a pictute, or is corrupted"
     passwordMismatch: Passwords mismatch
+    invitationAtLeast: "At least one of fields Name, Surname and E-Mail must be filled"
+    invitationExpired: Invitation already expired
+    invitationAccepted: Invitation already used
 alerts:
     signOffNeeded: Language changed - please logout & login for language to change
     registrationApprovedSubject: Registration to %s approved
@@ -88,3 +97,5 @@ alerts:
     emailFailure: Invalid e-mail format
     usernameFailure: Username must be at least 3 and at most 20 characters long
     targetTeamExists: This team was already added into multiaccount
+    invitationCreated: Invitation created
+    invitationSent: Invitation sent

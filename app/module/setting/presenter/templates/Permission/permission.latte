@@ -42,7 +42,7 @@
                                 </div>
                                 <div class="col-9">
                                     <div class="btn-group">
-                                        <button name="statuses[{$key}]" data-value="-1" n:foreach="$statuses as $key => $status" data-key="{$key}" class="btn btn-outline-secondary {if !empty($statusesRule) && in_array($status, $perm->{$statusesRule.'Statuses'})}active{/if}" onclick="stateCheck(this)">{$status}</button>
+                                        <button name="statuses[{$key}]" data-value="-1" n:foreach="$statuses as $key => $status" data-key="{$key}" class="btn btn-outline-secondary {if !empty($statusesRule) && in_array($key, $perm->{$statusesRule.'Statuses'})}active{/if}" onclick="stateCheck(this)">{$status}</button>
                                     </div>
                                 </div>
                             </td>

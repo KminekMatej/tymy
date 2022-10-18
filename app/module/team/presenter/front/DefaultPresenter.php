@@ -4,6 +4,7 @@ namespace Tymy\Module\Team\Presenter\Front;
 
 use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
+use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Model\User;
 
 class DefaultPresenter extends SecuredPresenter
@@ -37,11 +38,7 @@ class DefaultPresenter extends SecuredPresenter
 
             return count($errFields);
         });
-    }
 
-    public function startup(): void
-    {
-        parent::startup();
         $this->addBreadcrumb($this->translator->translate("team.team", 1), $this->link(":Team:Default:"));
     }
 
@@ -124,8 +121,13 @@ class DefaultPresenter extends SecuredPresenter
 
     public function handleApprove(int $userId): void
     {
+        if (!$this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("USR_UPDATE"))) {
+            $this->flashMessage($this->translator->translate("common.alerts.notPermitted"));
+            $this->redirect('this');
+        }
+
         try {
-            $this->userManager->update(["status" => User::STATUS_PLAYER], $userId);
+            $this->userManager->update(["status" => User::STATUS_PLAYER, "canLogin" => true], $userId);
         } catch (TymyResponse $tResp) {
             $this->handleTymyResponse($tResp);
             $this->redirect('this');

@@ -75,7 +75,7 @@ class NavbarControl extends Control
 
     private function initEvents(): void
     {
-        $events = $this->eventManager->getEventsInterval($this->user->getId(), new DateTime(), new DateTime("+ 1 year"));
+        $events = $this->eventManager->getEventsInterval($this->user->getId(), new DateTime(), new DateTime("+ 1 year"), "startTime__asc");
         $this->template->events = $events;
         $this->template->eventWarnings = $this->eventManager->getWarnings($events);
         $this->template->eventTypes = $this->eventTypeManager->getIndexedList();

@@ -402,7 +402,7 @@ class FormFactory
             $city->setValue($user->getCity())->setHtmlAttribute("data-value", $user->getCity());
             $zipCode->setValue($user->getZipCode())->setHtmlAttribute("data-value", $user->getZipCode());
 
-            $roles->setValue(array_intersect($user->getRoles(), $rolesList));
+            $roles->setValue(array_intersect($user->getRoles(), array_keys($rolesList)));
         } else {    //creating new user, login and password are mandatory as well
             $login->setRequired();
             $password->setRequired();

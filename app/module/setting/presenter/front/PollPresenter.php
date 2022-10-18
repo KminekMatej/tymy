@@ -7,6 +7,7 @@ use stdClass;
 use Tymy\Module\Core\Helper\ArrayHelper;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Model\Cell;
+use Tymy\Module\Core\Model\Row;
 use Tymy\Module\Poll\Manager\OptionManager;
 use Tymy\Module\Poll\Manager\PollManager;
 use Tymy\Module\Poll\Model\Poll;
@@ -46,19 +47,20 @@ class PollPresenter extends SettingBasePresenter
         ];
 
         $this->template->rows = [];
-        foreach ($this->pollManager->getList() as $poll) {
+        $polls = $this->pollManager->getList();
+        foreach ($polls as $poll) {
             /* @var $poll Poll */
-            $this->template->rows[] = [
+            $this->template->rows[] = new Row([
                 Cell::detail($this->link(":Setting:Poll:", [$poll->getWebName()])),
                 $poll->getId(),
                 $poll->getCaption(),
                 $poll->getDescription(),
                 $this->translator->translate("poll." . strtolower($poll->getStatus())),
                 $poll->getCreatedAt()->format(BaseModel::DATE_CZECH_FORMAT) . ", " . $this->userManager->getById($poll->getCreatedById())->getDisplayName(),
-            ];
+            ]);
         }
 
-        $this->template->polls = $this->pollManager->getList();
+        $this->template->polls = $polls;
     }
 
     public function renderNew(): void

@@ -101,7 +101,7 @@ class Post extends BaseModel
         return $this->userName;
     }
 
-    public function setDiscussionId(int $discussionId): static
+    public function setDiscussionId(int $discussionId)
     {
         $this->discussionId = $discussionId;
         return $this;

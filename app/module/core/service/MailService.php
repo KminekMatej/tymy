@@ -5,6 +5,10 @@ namespace Tymy\Module\Core\Service;
 use Contributte\Translation\Translator;
 use Nette\Mail\Mailer;
 use Nette\Mail\Message;
+use Nette\Mail\SendException;
+use Nette\Utils\DateTime;
+use Tracy\Debugger;
+use Tymy\Bootstrap;
 use Tymy\Module\Core\Manager\StringsManager;
 use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\Team\Model\Team;
@@ -71,18 +75,52 @@ class MailService
         $this->sendMail($name, $email, $body, $subject);
     }
 
+    /**
+     * Compose & send email with invitation of user into this team
+     * @param string $nameTo
+     * @param string $emailTo
+     * @param string $nameFrom
+     * @param string $invitationUrl
+     * @param DateTime $invitationValidity
+     * @return void
+     */
+    public function mailInvitation(string $nameTo, string $emailTo, string $nameFrom, string $invitationUrl, DateTime $invitationValidity): void
+    {
+        $this->startup();
+
+        $latte = new Engine();
+
+        $latte->addFilter('translate', [$this->translator, 'translate']);
+
+        $subject = $this->translator->translate("mail.invitation.subject");
+
+        $body = $latte->renderToString(Bootstrap::MODULES_DIR . "/core/mail/invitation.latte", [
+            "teamPortalUrl" => $this->teamDomain,
+            "invitationUrl" => $invitationUrl,
+            "validity" => $invitationValidity,
+            "teamName" => $this->team->getName(),
+            "invitationCreator" => $nameFrom,
+        ]);
+
+        $this->sendMail($nameTo, $emailTo, $body, $subject);
+    }
+
     private function sendMail(string $name, string $email, string $body, ?string $subject = null, ?string $replyTo = null): void
     {
-        $mail = new Message();
-        $mail->setFrom(sprintf(self::ROBOT_EMAIL_FROM_S, $this->team->getSysName()), $this->team->getSysName())
-            ->addTo(trim($email), $name)
-            ->setSubject($subject)
-            ->setBody($body);
+        try {
+            $mail = new Message();
+            $mail->setFrom(sprintf(self::ROBOT_EMAIL_FROM_S, $this->team->getSysName()), $this->team->getSysName())
+                ->addTo(trim($email), $name)
+                ->setSubject($subject)
+                ->setBody($body);
 
-        if ($replyTo) {
-            $mail->addReplyTo(trim($replyTo));
+            if ($replyTo) {
+                $mail->addReplyTo(trim($replyTo));
+            }
+
+            $this->mailSender->send($mail);
+        } catch (SendException $exc) {
+            Debugger::log("Failed to send email from team {$this->team->getSysName()} to $email. Error: {$exc->getMessage()}");
         }
-
-        $this->mailSender->send($mail);
     }
 }

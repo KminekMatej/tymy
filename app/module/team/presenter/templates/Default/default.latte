@@ -25,7 +25,7 @@
                     <a href="{plink :Team:Player: $u->getWebName()}">
                         <div class="card-header py-1 {$u->getGender()}">
                             <span class="name">{$u->getDisplayName()}{if $u->getJerseyNumber() != ""} (#{$u->getJerseyNumber()}){/if}</span>
-                            <span n:if="$u->getIsNew()" class="badge badge-success float-right">{_common.new}</span>
+                            <span n:if="$u->getIsNew() && $userType != 'INIT'" class="badge badge-success float-right">{_common.new}</span>
                         </div>
                         <div class="card-body">
                             <div class="row">
