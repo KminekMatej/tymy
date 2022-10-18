@@ -32,11 +32,4 @@ class ExportPresenter extends SecuredPresenter
         $response->setGlue(ComposedCsvResponse::COMMA);
         $this->sendResponse($response);
     }
-
-    private function requestGetList(): void
-    {
-        $users = $this->rightManager->getList();
-
-        $this->respondOk($this->arrayToJson($users));
-    }
 }
