@@ -346,7 +346,7 @@ class UserManager extends BaseManager
     /**
      * Get userId by email
      */
-    public function getIdByEmail(string $email): bool
+    public function getIdByEmail(string $email): ?int
     {
         $row = $this->database->table(User::TABLE_MAILS)->where("email", $email)->fetch();
         return $row !== null ? $row->user_id : null;
