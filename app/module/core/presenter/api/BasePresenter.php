@@ -274,7 +274,7 @@ class BasePresenter extends RootPresenter
         }
 
         return array_map(fn($entity) => /* @var $entity BaseModel */
-$entity->jsonSerialize(), $entities);
+            $entity->jsonSerialize(), $entities);
     }
 
     /**

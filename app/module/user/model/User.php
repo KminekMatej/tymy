@@ -3,7 +3,9 @@
 namespace Tymy\Module\User\Model;
 
 use Nette\Utils\DateTime;
+use RectorPrefix202209\Nette\Utils\Arrays;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\User\Mapper\UserMapper;
 
@@ -521,7 +523,7 @@ class User extends BaseModel
     }
 
     /**
-     * @return \Tymy\Module\Core\Model\Field[]
+     * @return Field[]
      */
     public function getScheme(): array
     {
@@ -550,5 +552,18 @@ class User extends BaseModel
             "pictureUrl" => $this->getPictureUrl(),
             "displayName" => $this->getDisplayName(),
         ];
+    }
+
+    /**
+     * Serialize to one-dimensional array
+     * @return array
+     */
+    public function csvSerialize(): array
+    {
+        $array = $this->jsonSerialize();
+
+        $array["roles"] = join(",", $array["roles"]);
+
+        return Arrays::flatten($array, true);
     }
 }
