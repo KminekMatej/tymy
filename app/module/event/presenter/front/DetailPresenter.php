@@ -1,12 +1,7 @@
 <?php
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/PHPClass.php to edit this template
- */
 namespace Tymy\Module\Event\Presenter\Front;
 
-use Tracy\Debugger;
 use Tymy\Module\Attendance\Manager\HistoryManager;
 use Tymy\Module\Attendance\Model\Attendance;
 use Tymy\Module\Attendance\Model\Status;
@@ -32,7 +27,7 @@ class DetailPresenter extends EventBasePresenter
         /* @var $event Event */
         $event = $this->eventManager->getById($eventId);
 
-        if (!$event instanceof \Tymy\Module\Core\Model\BaseModel) {
+        if (!$event instanceof Event) {
             $this->flashMessage($this->translator->translate("event.errors.eventNotExists", null, ['id' => $eventId]), "danger");
             $this->redirect(':Event:Default:');
         }
@@ -66,6 +61,11 @@ class DetailPresenter extends EventBasePresenter
             /* @var $attendance Attendance */
             $statusId = $attendance->getPostStatusId() ?: $attendance->getPreStatusId();
             $gender = $attendance->getUser()->getGender();
+
+            if ($statusId == null && $attendance->getUser()->getStatus() !== User::STATUS_PLAYER) {
+                //skip other non-players when status id is empty (not-decided)
+                continue;
+            }
 
             if (!array_key_exists($statusId, $attendances)) {//init code
                 $attendances[$statusId] = [];
