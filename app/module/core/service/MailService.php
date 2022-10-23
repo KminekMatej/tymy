@@ -22,7 +22,7 @@ use Tymy\Module\Team\Model\Team;
 class MailService
 {
     public const TEMPLATES_PATH = __DIR__ . "/../templates/mail";
-    public const ROBOT_EMAIL_FROM_S = "robot@%s.tymy.cz";
+    public const ROBOT_EMAIL_FROM_S = "robot@tymy.cz";
     private Team $team;
     private string $teamDomain;
 
@@ -104,9 +104,10 @@ class MailService
     {
         try {
             $mail = new Message();
-            $mail->setFrom(sprintf(self::ROBOT_EMAIL_FROM_S, $this->team->getSysName()), $this->team->getSysName())
+            $mail->setFrom(self::ROBOT_EMAIL_FROM_S, "Robot " . ucfirst($this->team->getSysName()) . ".tymy.cz")
                 ->addTo(trim($email), $name)
                 ->setSubject($subject)
+                ->setReturnPath(self::ROBOT_EMAIL_FROM_S)
                 ->setBody($body);
 
             if ($replyTo) {
