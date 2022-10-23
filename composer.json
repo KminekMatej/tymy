@@ -15,7 +15,7 @@
         "nette/nette": "^3.1",
         "contributte/translation": "^2",
         "globalcitizen/php-iban": "^4.0",
-        "minishlink/web-push": "v6.0.5",
+        "minishlink/web-push": "^7",
         "ext-curl": "*",
         "ext-gmp": "*",
         "lcobucci/jwt": "4.1.5",
