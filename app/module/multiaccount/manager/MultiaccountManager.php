@@ -223,7 +223,7 @@ class MultiaccountManager extends BaseManager
     /**
      * Generate new transfer key to current user's multiaccount and stores it into database for future login
      */
-    private function generateNewTk(string $targetTeamSysName): TransferKey
+    public function generateNewTk(string $targetTeamSysName): TransferKey
     {
         $targetTeam = $this->teamManager->getBySysname($targetTeamSysName);
 

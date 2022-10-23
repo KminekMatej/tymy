@@ -99,7 +99,7 @@ class DefaultPresenter extends SecuredPresenter
     public function actionJump(string $teamSysName): void
     {
         /* @var $tk TransferKey */
-        $tk = $this->multiaccountManager->read($teamSysName);
+        $tk = $this->multiaccountManager->generateNewTk($teamSysName);
         $this->redirectUrl("https://$teamSysName.tymy.cz/sign/in?tk=" . $tk->getTransferKey());
     }
 }
