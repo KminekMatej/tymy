@@ -94,11 +94,10 @@ class DefaultPresenter extends DebtBasePresenter
 
     private function generateQRCodeString(string $payeeCallName, $payeeEmail, $accountNumber, $amount, $varcode, string $message, $currencyISO = "CZK", $countryISO = "CZ"): ?string
     {
-        Debugger::barDump(func_get_args());
         $accPrefix = null;
         $accountNumberBody = $accountNumber;
 
-        if (!str_contains($accountNumber, "/")) {
+        if (empty($accountNumber) || !str_contains($accountNumber, "/")) {
             return null;
         }
 
