@@ -11,11 +11,11 @@ use JsonSerializable;
  */
 class SimpleUser implements JsonSerializable
 {
-    public function __construct(private string $id, private string $login, private ?string $callName, private string $pictureUrl, private ?string $gender, private string $status, private ?string $email)
+    public function __construct(private int $id, private string $login, private ?string $callName, private string $pictureUrl, private ?string $gender, private string $status, private ?string $email)
     {
     }
 
-    public function getId(): string
+    public function getId(): int
     {
         return $this->id;
     }
