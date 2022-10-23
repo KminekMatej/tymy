@@ -99,7 +99,7 @@ class DiscussionPresenter extends SecuredPresenter
     {
         $post = $this->getHttpRequest()->getPost("post");
         $discussionId = (int) $discussion;
-        if (trim($post) != "") {
+        if (!empty($post) && trim($post) != "") {
             $this->postManager->create([
                 "post" => $post,
                 "discussionId" => $discussionId,
