@@ -106,7 +106,7 @@ class BasePresenter extends RootPresenter
             $this->handleException($exc);
         }
 
-        $this->respondOk($record->jsonSerialize());
+        $this->respondOk($record->jsonSerialize()); /* @phpstan-ignore-line */
     }
 
     protected function requestPost(?int $resourceId): void
@@ -118,7 +118,7 @@ class BasePresenter extends RootPresenter
             $this->handleException($exc);
         }
 
-        $this->respondOkCreated($created->jsonSerialize());
+        $this->respondOkCreated($created->jsonSerialize()); /* @phpstan-ignore-line */
     }
 
     protected function requestPut(int $resourceId, ?int $subResourceId): void
@@ -130,7 +130,7 @@ class BasePresenter extends RootPresenter
             $this->handleException($exc);
         }
 
-        $this->respondOk($updated->jsonSerialize());
+        $this->respondOk($updated->jsonSerialize()); /* @phpstan-ignore-line */
     }
 
     protected function requestDelete(int $resourceId, ?int $subResourceId): void
@@ -142,7 +142,7 @@ class BasePresenter extends RootPresenter
             $this->handleException($exc);
         }
 
-        $this->respondDeleted($deletedId);
+        $this->respondDeleted($deletedId); /* @phpstan-ignore-line */
     }
 
     /**
@@ -278,12 +278,21 @@ class BasePresenter extends RootPresenter
     }
 
     /**
-     * Check that supplied array is arrray of objects - used to detect whether POST or PUT request input data are single or multiple objects
-     * @param mixed[] $array
+     * Check that supplied input is arrray of objects - used to detect whether POST or PUT request input data are single or multiple objects
      */
-    public function isMultipleObjects(array $array): bool
+    public function isMultipleObjects(mixed $input): bool
     {
-        return false;
+        if (!is_array($input)) {
+            return false;
+        }
+
+        foreach ($input as $innArr) {
+            if (!is_array($innArr)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
