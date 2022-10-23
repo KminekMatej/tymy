@@ -106,7 +106,7 @@ class BasePresenter extends RootPresenter
             $this->handleException($exc);
         }
 
-        $this->respondOk($record->jsonSerialize()); /* @phpstan-ignore-line */
+        $this->respondOk($record->jsonSerialize());
     }
 
     protected function requestPost(?int $resourceId): void
@@ -118,7 +118,7 @@ class BasePresenter extends RootPresenter
             $this->handleException($exc);
         }
 
-        $this->respondOkCreated($created->jsonSerialize()); /* @phpstan-ignore-line */
+        $this->respondOkCreated($created->jsonSerialize());
     }
 
     protected function requestPut(int $resourceId, ?int $subResourceId): void
@@ -130,7 +130,7 @@ class BasePresenter extends RootPresenter
             $this->handleException($exc);
         }
 
-        $this->respondOk($updated->jsonSerialize()); /* @phpstan-ignore-line */
+        $this->respondOk($updated->jsonSerialize());
     }
 
     protected function requestDelete(int $resourceId, ?int $subResourceId): void
@@ -142,7 +142,7 @@ class BasePresenter extends RootPresenter
             $this->handleException($exc);
         }
 
-        $this->respondDeleted($deletedId); /* @phpstan-ignore-line */
+        $this->respondDeleted($deletedId);
     }
 
     /**
