@@ -22,6 +22,7 @@ services:
 
 tracy:
     email: matej.kminek@attendees.eu
+    fromEmail: robot@tymy.cz
 extensions:
     translation: Contributte\Translation\DI\TranslationExtension
 translation:
