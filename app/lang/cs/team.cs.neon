@@ -100,3 +100,4 @@ alerts:
     targetTeamExists: Tento tým již v multiúčtu máte
     invitationCreated: Pozvánka vytvořena
     invitationSent: Pozvánka odeslána
+    changeOutlookEmail: 'Vypadá to že používáte e-mail jedné z domén Microsoftu (outlook.com / mns.com / live.com / hotmail.com). Tyto e-mailové schránky mají často problémy s nedoručitelností e-mailu. Doporučujeme použít jinou e-mailovou adresu - jinak maily nemusejí být doručeny'

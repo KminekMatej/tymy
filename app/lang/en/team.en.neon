@@ -99,3 +99,4 @@ alerts:
     targetTeamExists: This team was already added into multiaccount
     invitationCreated: Invitation created
     invitationSent: Invitation sent
+    changeOutlookEmail: 'It appears you are using Microsoft e-mail provider (outlook.com / mns.com / live.com / hotmail.com). These mailboxes has often problems with e-mail deliverance. We suggest you to use different e-mail address - or info e-mails may not be delivered correctly'

@@ -99,3 +99,4 @@ alerts:
     targetTeamExists: Ten zespół został już dodany
     invitationCreated: Utworzono zaproszenie
     invitationSent: Zaproszenie wysłane
+    changeOutlookEmail: 'Wygląda na to, że korzystasz z dostawcy poczty e-mail firmy Microsoft (outlook.com/mns.com/live.com/hotmail.com). Te skrzynki pocztowe mają często problemy z dostarczaniem poczty. Sugerujemy użycie innego adresu e-mail - w przeciwnym razie e-maile informacyjne mogą nie zostać dostarczone poprawnie'

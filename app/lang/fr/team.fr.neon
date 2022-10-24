@@ -99,3 +99,4 @@ alerts:
     targetTeamExists: Cette équipe a déjà ajouté
     invitationCreated: Invitation créée
     invitationSent: Invitation envoyée
+    changeOutlookEmail: "Il semble que vous utilisez le fournisseur de messagerie Microsoft (outlook.com / mns.com / live.com / hotmail.com). Ces boîtes aux lettres ont souvent des problèmes avec la délivrance des e-mails. Nous vous suggérons d'utiliser une adresse e-mail différente - ou les e-mails d'information pourraient ne pas être livrés correctement"
