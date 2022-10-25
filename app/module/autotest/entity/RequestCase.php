@@ -3,6 +3,7 @@
 namespace Tymy\Module\Autotest;
 
 use Nette\Application\BadRequestException;
+use Nette\Application\IPresenter;
 use Nette\Application\IResponse;
 use Nette\Application\PresenterFactory;
 use Nette\Application\Request;
@@ -11,8 +12,8 @@ use Nette\Application\Responses\TextResponse;
 use Nette\Application\UI\Presenter;
 use Nette\Database\Explorer;
 use Nette\DI\Container;
+use Nette\Http\IRequest;
 use Nette\Http\Request as Request2;
-use Nette\Http\RequestFactory;
 use Nette\InvalidStateException;
 use Nette\Neon\Neon;
 use Nette\Security\User;
@@ -49,6 +50,7 @@ abstract class RequestCase extends TestCase
     private PresenterFactory $presenterFactory;
     protected AuthenticationManager $authenticationManager;
     protected Responder $responder;
+    private IRequest $httpRequest;
 
     /** @var RequestLog[] */
     private array $logs = [];
@@ -66,6 +68,7 @@ abstract class RequestCase extends TestCase
         $this->config = Neon::decode(file_get_contents(TEST_DIR . '/autotest.records.map.neon'));
         $this->moduleConfig = $this->config[$this->getModule()] ?? [];
         $this->recordManager = new RecordManager($this, $this->config);
+        $this->httpRequest = $this->container->getService("http.request");
         Environment::setup();
     }
 
@@ -203,11 +206,11 @@ abstract class RequestCase extends TestCase
     public function request($url, $method = "GET", $data = [], $responseClass = null)
     {
         $url = "/api/" . trim($url, "/ ");
-        $httpRequest = $this->mockHttpRequest($method, $url, $data);
 
         $this->logs[] = $log = new RequestLog($method, $url, $data);
+        $this->mockHttpRequest($method, $url, $data, $headers);
 
-        $request = $this->createInitialRequest($httpRequest);
+        $request = $this->createInitialRequest($this->httpRequest);
 
         Assert::type(Request::class, $request, "No route found for url $url");
         $presenterMock = $this->loadPresenter($request->getPresenterName());
@@ -228,7 +231,7 @@ abstract class RequestCase extends TestCase
         }
     }
 
-    private function createInitialRequest(\Nette\Http\IRequest $httpRequest): Request
+    private function createInitialRequest(IRequest $httpRequest): Request
     {
         $params = $this->routeList->match($httpRequest);
 
@@ -300,7 +303,7 @@ abstract class RequestCase extends TestCase
         }
     }
 
-    protected function loadPresenter(string $name): \Nette\Application\IPresenter
+    protected function loadPresenter(string $name): IPresenter
     {
         $presenter = $this->presenterFactory->createPresenter($name);
         $presenter->autoCanonicalize = false;
@@ -316,25 +319,21 @@ abstract class RequestCase extends TestCase
     }
 
     /**
-     * Mock http request based on method and request url. Request url must always be relative, starting with /module (do not add /api here)
-     * @param type $method
-     * @param type $requestUrl
-     * @return Request2
+     * Inject mocks to http request based on method, request url, data and headers.
+     * Request url must always be relative, starting with /module (do not add /api here)
+     *
+     * @param string $method
+     * @param string $requestUrl
+     * @param array|null $data
+     * @param array|null $headers
+     * @return void
      */
-    private function mockHttpRequest($method, $requestUrl, $data): Request2
+    private function mockHttpRequest(string $method, string $requestUrl, ?array $data = null, ?array $headers = null): void
     {
-        $SERVER = [];
-        $requestMockFactory = new RequestMockFactory();
-
-        $SERVER["HTTPS"] = "on";
-        $SERVER["HTTP_HOST"] = getenv("SERVER_NAME") ?: "autotest.tymy.cz";
-        $SERVER["SERVER_NAME"] = getenv("SERVER_NAME") ?: "autotest.tymy.cz";
-        $SERVER["SERVER_PORT"] = "443";
-        $SERVER["REQUEST_URI"] = "/api$requestUrl";
-        $SERVER["SCRIPT_NAME"] = "/api/www/index.php";
-        $SERVER["REQUEST_METHOD"] = $method;
-
-        return $requestMockFactory->fromMock($SERVER, $data);
+        $this->httpRequest->setMockMethod($method);
+        $this->httpRequest->setMockUrl($requestUrl);
+        $this->httpRequest->setMockPost($data);
+        $this->httpRequest->setMockHeaders($headers);
     }
 
     public function toJsonDate(DateTime $date = null)
