@@ -127,16 +127,22 @@ class RequestMockFactory
         $url->setPassword($this->SERVERMOCK['PHP_AUTH_PW'] ?? '');
     }
 
-
     private function getScriptPath(Url $url): string
     {
-        $i = null;
+        if (PHP_SAPI === 'cli-server') {
+            return '/';
+        }
+
         $path = $url->getPath();
         $lpath = strtolower($path);
-        $script = strtolower($this->SERVERMOCK['SCRIPT_NAME'] ?? '');
+        $script = strtolower($_SERVER['SCRIPT_NAME'] ?? '');
         if ($lpath !== $script) {
-            $path = $i !== 0 ? substr($path, 0, strrpos($path, '/', $i - strlen($path) - 1) + 1) : '/';
+            $max = min(strlen($lpath), strlen($script));
+            for ($i = 0; $i < $max && $lpath[$i] === $script[$i]; $i++) {
+                $path = $i ? substr($path, 0, strrpos($path, '/', $i - strlen($path) - 1) + 1) : '/';
+            }
         }
+
         return $path;
     }
 
