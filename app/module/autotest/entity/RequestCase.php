@@ -208,7 +208,7 @@ abstract class RequestCase extends TestCase
         $url = "/api/" . trim($url, "/ ");
 
         $this->logs[] = $log = new RequestLog($method, $url, $data);
-        $this->mockHttpRequest($method, $url, $data, $headers);
+        $this->mockHttpRequest($method, $url, $data);
 
         $request = $this->createInitialRequest($this->httpRequest);
 
@@ -234,6 +234,7 @@ abstract class RequestCase extends TestCase
     private function createInitialRequest(IRequest $httpRequest): Request
     {
         $params = $this->routeList->match($httpRequest);
+        \Tracy\Debugger::barDump([$this->httpRequest, $params]);
 
         $presenter = $params[Presenter::PRESENTER_KEY] ?? null;
 
@@ -333,7 +334,9 @@ abstract class RequestCase extends TestCase
         $this->httpRequest->setMockMethod($method);
         $this->httpRequest->setMockUrl($requestUrl);
         $this->httpRequest->setMockPost($data);
-        $this->httpRequest->setMockHeaders($headers);
+        if($headers){
+            $this->httpRequest->setMockHeaders($headers);
+        }
     }
 
     public function toJsonDate(DateTime $date = null)
