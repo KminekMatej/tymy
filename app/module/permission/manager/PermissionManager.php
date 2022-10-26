@@ -9,6 +9,7 @@ use Tymy\Module\Authorization\Manager\AuthorizationManager;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Permission\Mapper\PermissionMapper;
 use Tymy\Module\Permission\Model\Permission;
 use Tymy\Module\Permission\Model\Privilege;
@@ -34,7 +35,7 @@ class PermissionManager extends BaseManager
     }
 
     /**
-     * @return \Tymy\Module\Core\Model\Field[]
+     * @return Field[]
      */
     protected function getScheme(): array
     {
@@ -80,7 +81,7 @@ class PermissionManager extends BaseManager
     /**
      * Find permissions by its name - returns the first one that matches
      */
-    public function getByTypeName(string $type, string $name): ?\Tymy\Module\Core\Model\BaseModel
+    public function getByTypeName(string $type, string $name): ?BaseModel
     {
         return $this->map($this->database->table($this->getTable())->where("right_type", $type)->where("name", $name)->limit(1)->fetch());
     }
@@ -88,7 +89,7 @@ class PermissionManager extends BaseManager
     /**
      * Find permissions by its name - returns the first one that matches
      */
-    public function getByName(string $name): ?\Tymy\Module\Core\Model\BaseModel
+    public function getByName(string $name): ?BaseModel
     {
         return $this->map($this->database->table($this->getTable())->where("name", $name)->limit(1)->fetch());
     }
@@ -168,7 +169,9 @@ class PermissionManager extends BaseManager
 
         $this->checkInputs($data);
 
-        $this->respondBadRequest("Name already used");
+        if ($this->getByName($data["name"])) {
+            $this->respondBadRequest("Name already used");
+        }
 
         $this->precedenceCheck($data);
     }
@@ -179,7 +182,7 @@ class PermissionManager extends BaseManager
 
         $this->permission = $this->getById($recordId);
 
-        if (!$this->permission instanceof \Tymy\Module\Core\Model\BaseModel) {
+        if (!$this->permission instanceof BaseModel) {
             $this->respondNotFound();
         }
 
@@ -201,7 +204,7 @@ class PermissionManager extends BaseManager
 
         $this->permission = $this->getById($recordId);
 
-        if (!$this->permission instanceof \Tymy\Module\Core\Model\BaseModel) {
+        if (!$this->permission instanceof BaseModel) {
             $this->respondNotFound();
         }
 
@@ -287,7 +290,7 @@ class PermissionManager extends BaseManager
         $this->allowUpdate($resourceId, $data);
 
         $this->transformArrayToString($data);
-        \Tracy\Debugger::barDump($data);
+
         parent::updateByArray($resourceId, $data);
 
         $this->authorizationManager->dropPermissionCache();
