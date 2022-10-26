@@ -15,10 +15,9 @@ use Nette\Utils\Strings;
  */
 class MockRequestFactory extends RequestFactory
 {
-
     public function from(string $url, string $method, string $data): Request
     {
-        if(!isset($_SERVER['SERVER_NAME'])){
+        if (!isset($_SERVER['SERVER_NAME'])) {
             $_SERVER['SERVER_NAME'] = "autotest.tymy.cz";
         }
 
@@ -27,11 +26,11 @@ class MockRequestFactory extends RequestFactory
         if (getenv("AUTOTEST")) {
             $rqUrl = $request->getUrl();
 
-            $mockUrl = (new Url ($url))
+            $mockUrl = (new Url($url))
                 ->setScheme($rqUrl->getScheme())
                 ->setHost($rqUrl->getHost())
                 ->setPort($rqUrl->getPort());
-            
+
             $this->addPathAndQuery($mockUrl, $url);
 
             $urlScript = new UrlScript($mockUrl, "/");

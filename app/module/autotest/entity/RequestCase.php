@@ -27,6 +27,7 @@ use Tymy\Module\Authentication\Manager\AuthenticationManager;
 use Tymy\Module\Autotest\Entity\Assert;
 use Tymy\Module\Core\Manager\Responder;
 use Tymy\Module\Core\Model\BaseModel;
+
 use const TEAM_DIR;
 use const TEST_DIR;
 
@@ -315,7 +316,7 @@ abstract class RequestCase extends TestCase
         $this->httpRequest->setMockMethod($method);
         $this->httpRequest->setMockUrl($requestUrl);
         $this->httpRequest->setMockPost($data);
-        if($headers){
+        if ($headers) {
             $this->httpRequest->setMockHeaders($headers);
         }
     }

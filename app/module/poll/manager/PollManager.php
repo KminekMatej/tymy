@@ -59,10 +59,10 @@ class PollManager extends BaseManager
         /* @var $poll Poll */
         $poll = parent::map($row, $force);
 
-        if($poll->getDescription()){
+        if ($poll->getDescription()) {
             $poll->setDescriptionHtml(BbService::bb2Html($poll->getDescription()));
         }
-        
+
         /* @var $row ActiveRow */
         $optionRows = $row->related(Option::TABLE, "quest_id")->fetchAll();
 
