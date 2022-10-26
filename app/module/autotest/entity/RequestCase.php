@@ -13,9 +13,10 @@ use Nette\Application\UI\Presenter;
 use Nette\Database\Explorer;
 use Nette\DI\Container;
 use Nette\Http\IRequest;
-use Nette\Http\Request as Request2;
+use Nette\Http\RequestFactory;
 use Nette\InvalidStateException;
 use Nette\Neon\Neon;
+use Nette\Routing\Router;
 use Nette\Security\User;
 use Nette\Utils\DateTime;
 use Tester\Environment;
@@ -26,8 +27,6 @@ use Tymy\Module\Authentication\Manager\AuthenticationManager;
 use Tymy\Module\Autotest\Entity\Assert;
 use Tymy\Module\Core\Manager\Responder;
 use Tymy\Module\Core\Model\BaseModel;
-use Tymy\Module\Core\Router\RouteList;
-
 use const TEAM_DIR;
 use const TEST_DIR;
 
@@ -46,11 +45,12 @@ abstract class RequestCase extends TestCase
     protected array $config;
     protected array $moduleConfig;
     protected RecordManager $recordManager;
-    private RouteList $routeList;
+    private Router $router;
     private PresenterFactory $presenterFactory;
     protected AuthenticationManager $authenticationManager;
     protected Responder $responder;
     private IRequest $httpRequest;
+    private RequestFactory $httpRequestFactory;
 
     /** @var RequestLog[] */
     private array $logs = [];
@@ -64,11 +64,12 @@ abstract class RequestCase extends TestCase
         $this->presenterFactory = $this->container->getService("application.presenterFactory");
         $this->responder = $this->container->getService("Responder");
         $this->database = $this->container->getService("database.team.explorer");
-        $this->routeList = $this->container->getService("router");
+        $this->router = $this->container->getService("router");
         $this->config = Neon::decode(file_get_contents(TEST_DIR . '/autotest.records.map.neon'));
         $this->moduleConfig = $this->config[$this->getModule()] ?? [];
         $this->recordManager = new RecordManager($this, $this->config);
         $this->httpRequest = $this->container->getService("http.request");
+        $this->httpRequestFactory = $this->container->getService("http.requestFactory");
         Environment::setup();
     }
 
@@ -143,7 +144,7 @@ abstract class RequestCase extends TestCase
             }
             $string = ($requestLog->getTime())->format(BaseModel::DATETIME_CZECH_FORMAT) . "$clrStart {$requestLog->getMethod()}: {$requestLog->getUrl()}";
             if (!empty($data)) {
-                $string .= ", data: " . json_encode($data, JSON_THROW_ON_ERROR);
+                $string .= ", data: " . \json_encode($data, JSON_THROW_ON_ERROR);
             }
             if (!empty($coded)) {
                 $string .= $codeStr;
@@ -208,9 +209,9 @@ abstract class RequestCase extends TestCase
         $url = "/api/" . trim($url, "/ ");
 
         $this->logs[] = $log = new RequestLog($method, $url, $data);
-        $this->mockHttpRequest($method, $url, $data);
 
-        $request = $this->createInitialRequest($this->httpRequest);
+        $httpRequest = $this->httpRequestFactory->from($url, $method, json_encode($data));
+        $request = $this->createInitialRequest($httpRequest);
 
         Assert::type(Request::class, $request, "No route found for url $url");
         $presenterMock = $this->loadPresenter($request->getPresenterName());
@@ -233,9 +234,7 @@ abstract class RequestCase extends TestCase
 
     private function createInitialRequest(IRequest $httpRequest): Request
     {
-        $params = $this->routeList->match($httpRequest);
-        \Tracy\Debugger::barDump([$this->httpRequest, $params]);
-
+        $params = $this->router->match($httpRequest);
         $presenter = $params[Presenter::PRESENTER_KEY] ?? null;
 
         if ($params === null) {
