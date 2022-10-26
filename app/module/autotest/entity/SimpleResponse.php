@@ -15,11 +15,7 @@ class SimpleResponse
 {
     private ?string $message = null;
 
-    /**
-     * @param int $code
-     * @param string $data
-     */
-    public function __construct(private $code, private $data, private Request $httpRequest, private Response $httpResponse, private IResponse $response, private Presenter $presenter, private RequestLog &$log)
+    public function __construct(private $code, private string|array $data, private Request $httpRequest, private Response $httpResponse, private IResponse $response, private Presenter $presenter, private RequestLog &$log)
     {
         $this->log->setHttpResponseCode($httpResponse->getCode());
         if ($data && is_array($data) && array_key_exists("code", $data)) {
@@ -35,7 +31,7 @@ class SimpleResponse
         return $this->code;
     }
 
-    public function getData(): string
+    public function getData(): string|array
     {
         return $this->data;
     }
@@ -61,7 +57,7 @@ class SimpleResponse
         return $this;
     }
 
-    public function setData(string $data): static
+    public function setData(string|array $data): static
     {
         $this->data = $data;
         return $this;
