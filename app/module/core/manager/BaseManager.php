@@ -13,14 +13,13 @@ use PDOException;
 use Tracy\Debugger;
 use Tymy\Module\Core\Exception\DBException;
 use Tymy\Module\Core\Factory\ManagerFactory;
+use Tymy\Module\Core\Helper\DateHelper;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Core\Model\Filter;
 use Tymy\Module\Core\Model\Order;
 use Tymy\Module\Team\Model\Team;
 use Tymy\Module\User\Model\User as UserEntity;
-
-use const ROOT_DIR;
 
 /**
  * Description of BaseManager
@@ -364,28 +363,7 @@ abstract class BaseManager
      */
     public function updateByArray(int $id, array $array)
     {
-        $updates = [];
-
-        foreach ($this->getScheme() as $field) {
-            /* @var $field Field */
-            if (array_key_exists($field->getProperty(), $array)) {
-                $value = $array[$field->getProperty()];
-                if (!$field->getChangeable()) {
-                    continue;
-                }
-                if ($field->getNonempty() && $value === null) {
-                    $this->responder->E4014_EMPTY_INPUT($field->getProperty());
-                }
-                $updates[$field->getColumn()] = $value;
-            } elseif (!$field->getChangeable()) {
-                if ($field->getColumn() == "updated_user_id" && !empty($this->user)) {
-                    $updates[$field->getColumn()] = $this->user->getId();
-                }
-                if ($field->getColumn() == "updated") {
-                    $updates[$field->getColumn()] = new DateTime();
-                }
-            }
-        }
+        $updates = $this->composeUpdateArray($array);
 
         return $this->updateRecord($this->getTable(), $id, $updates);
     }
@@ -442,10 +420,58 @@ abstract class BaseManager
                 }
             }
 
+            if (!empty($value)) {
+                $this->sanitizeValue($field, $value);
+            }
+
             $inserts[$field->getColumn()] = $value;
         }
 
         return $inserts;
+    }
+
+    /**
+     * Use mapper data to compose array of database fields to update from specified input array
+     * @param array $array Input data (usually $this->requestData)
+     * @param array $scheme Scheme upon which wo work (optional)
+     * @return array Update output
+     */
+    protected function composeUpdateArray(array $array, ?array $scheme = null): array
+    {
+        $updates = $additionalUpdates = [];
+        $sch = $scheme ?: $this->getScheme();
+
+        foreach ($sch as $field) {
+            /* @var $field Field */
+            if (!array_key_exists($field->getProperty(), $array)) { //this field is not mentioned in update data, fill it only if its update field
+                if ($field->getColumn() == "updated_user_id" && !empty($this->user)) {
+                    $additionalUpdates[$field->getColumn()] = $this->user->getId();
+                }
+                if ($field->getColumn() == "updated") {
+                    $additionalUpdates[$field->getColumn()] = new DateTime();
+                }
+                continue;
+            }
+
+            $value = $array[$field->getProperty()];
+            if (!$field->getChangeable()) {
+                continue;
+            }
+
+            if ($field->getNonempty() && $value === null) {
+                $this->responder->E4014_EMPTY_INPUT($field->getProperty());
+            }
+
+            $this->sanitizeValue($field, $value);
+
+            $updates[$field->getColumn()] = $value;
+        }
+
+        if (!empty($updates) && !empty($additionalUpdates)) { //if there has been some fileds updated, merge also fields updated holding update informations
+            $updates += $additionalUpdates;
+        }
+
+        return $updates;
     }
 
     /**
@@ -569,7 +595,7 @@ abstract class BaseManager
     {
         $record = $manager !== null ? $manager->getById($recordId) : $this->getById($recordId);
 
-        if (!$record instanceof \Tymy\Module\Core\Model\BaseModel) {
+        if (!$record instanceof BaseModel) {
             $this->respondNotFound();
         }
 
@@ -698,5 +724,37 @@ abstract class BaseManager
         }
 
         return (bool) $value;
+    }
+
+    /**
+     * Sanitize value from Field specification
+     * @param Field $field
+     * @param mixed $value
+     * @return void
+     */
+    private function sanitizeValue(Field $field, mixed &$value): void
+    {
+        switch ($field->getType()) {
+            case Field::TYPE_DATETIME:
+                $value = empty($value) ? null : $value; //format DateTime only if its not null or empty
+                break;
+            case Field::TYPE_DATE:
+                $value = $value ? DateHelper::createLc($value)->format(BaseEntity::DATE_ENG_FORMAT) : $value; //format DateTime only if its not null or empty
+                break;
+            case Field::TYPE_FLOAT:
+                if (is_numeric($value)) {
+                    $value = round(floatval($value), 6);
+                } elseif (is_null($value)) {
+                    $value = null;
+                } else {    //float value not supported, empty string or null - simply skip it then
+                    return;
+                }
+                break;
+            case Field::TYPE_STRING:
+                if ($field->getMaxLength() && strlen($value) > $field->getMaxLength()) {
+                    $value = substr($value, 0, $field->getMaxLength());
+                }
+                break;
+        }
     }
 }
