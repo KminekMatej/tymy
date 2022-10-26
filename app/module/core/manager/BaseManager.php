@@ -736,10 +736,7 @@ abstract class BaseManager
     {
         switch ($field->getType()) {
             case Field::TYPE_DATETIME:
-                $value = empty($value) ? null : $value; //format DateTime only if its not null or empty
-                break;
-            case Field::TYPE_DATE:
-                $value = $value ? DateHelper::createLc($value)->format(BaseEntity::DATE_ENG_FORMAT) : $value; //format DateTime only if its not null or empty
+                $value = !empty($value) ? DateHelper::createLc($value) : $value; //format DateTime only if its not null or empty
                 break;
             case Field::TYPE_FLOAT:
                 if (is_numeric($value)) {
@@ -748,11 +745,6 @@ abstract class BaseManager
                     $value = null;
                 } else {    //float value not supported, empty string or null - simply skip it then
                     return;
-                }
-                break;
-            case Field::TYPE_STRING:
-                if ($field->getMaxLength() && strlen($value) > $field->getMaxLength()) {
-                    $value = substr($value, 0, $field->getMaxLength());
                 }
                 break;
         }

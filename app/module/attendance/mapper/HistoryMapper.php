@@ -20,7 +20,7 @@ class HistoryMapper extends BaseMapper
         return [
             Field::int()->withColumn("event_id", true)->setProperty("eventId"),
             Field::int()->withColumn("user_id", true)->setProperty("userId"),
-            Field::string()->withColumn("created")->setProperty("updatedAt"),
+            Field::datetime()->withColumn("created")->setProperty("updatedAt"),
             Field::int()->withColumn("updated_user_id")->setProperty("updatedById"),
             Field::int()->withColumn("status_id_from")->setProperty("statusIdFrom"),
             Field::int()->withColumn("status_id_to", true)->setProperty("statusIdTo"),

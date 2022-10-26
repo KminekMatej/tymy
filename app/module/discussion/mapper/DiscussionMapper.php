@@ -19,7 +19,7 @@ class DiscussionMapper extends BaseMapper
     {
         return [
             Field::int()->withPropertyAndColumn("id", false, false),
-            Field::int()->withColumn("created")->setProperty("createdAt")->setChangeable(false),
+            Field::datetime()->withColumn("created")->setProperty("createdAt")->setChangeable(false),
             Field::int()->withColumn("created_user_id")->setProperty("createdById")->setChangeable(false),
             Field::int()->withColumn("updated_user_id")->setProperty("updatedById")->setChangeable(false),
             Field::datetime()->withColumn("updated")->setProperty("updatedAt")->setChangeable(false),
