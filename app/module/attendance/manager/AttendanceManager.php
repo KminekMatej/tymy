@@ -213,6 +213,7 @@ class AttendanceManager extends BaseManager
      * Check if supplied PRE status can be assigned to this eventId and if can, return correct preStatusId (transforming code to id)
      * (Check using event_type and so on)
      *
+     * @param int $eventId
      * @param int|string $preStatus Either id or code
      * @return int|null Return correct statusId or null for invalid code
      */
@@ -239,10 +240,11 @@ class AttendanceManager extends BaseManager
      * Check if supplied POST status can be assigned to this eventId and if can, return correct postStatusId (transforming code to id)
      * (Check using event_type and so on)
      *
-     * @param int $postStatus Either id or code
+     * @param int $eventId
+     * @param int|string $postStatus Either id or code
      * @return int|null Return correct statusId or null for invalid code
      */
-    private function getPostStatusId(int $eventId, int $postStatus): ?int
+    private function getPostStatusId(int $eventId, int|string $postStatus): ?int
     {
         $allowedStatuses = $this->database->query("SELECT status.id, status.code FROM status "
                 . "LEFT JOIN status_set ON status_set.id=status.status_set_id "
