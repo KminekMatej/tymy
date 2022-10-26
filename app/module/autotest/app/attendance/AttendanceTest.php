@@ -51,7 +51,7 @@ class AttendanceTest extends RequestCase
 
         $eventHistoryData = $this->request("event/{$this->eventId}/history")->expect(200, "array")->getData();
         $lastHistory = array_pop($eventHistoryData);
-        Assert::equal($mocked["preStatus"], $lastHistory["preStatusTo"], print_r($lastHistory, true));
+        Assert::equal($mocked["preStatus"], $lastHistory["preStatusTo"], "Last history preStatusTo is {$lastHistory["preStatusTo"]} but should be {$mocked["preStatus"]}");
         Assert::equal($mocked["preDescription"], $lastHistory["preDescTo"], print_r($lastHistory, true));
 
         $mocked["preStatus"] = "NO";
@@ -64,7 +64,7 @@ class AttendanceTest extends RequestCase
 
         $eventHistoryData = $this->request("event/{$this->eventId}/history")->expect(200, "array")->getData();
         $lastHistory = array_pop($eventHistoryData);
-        Assert::equal($mocked["preStatus"], $lastHistory["preStatusTo"]);
+        Assert::equal($mocked["preStatus"], $lastHistory["preStatusTo"], "Last history preStatusTo is {$lastHistory["preStatusTo"]} but should be {$mocked["preStatus"]}");
         Assert::equal($mocked["preDescription"], $lastHistory["preDescTo"]);
 
         //read attendance
