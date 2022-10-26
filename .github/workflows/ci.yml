@@ -4,8 +4,8 @@ on:
   push:
 
 jobs:
-  static-analysis-PHP74:
-      name: Static analysis on PHP 7.4
+  static-analysis:
+      name: Static analysis
       runs-on: self-hosted
       
       steps:
