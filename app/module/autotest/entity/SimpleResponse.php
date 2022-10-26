@@ -15,7 +15,7 @@ class SimpleResponse
 {
     private ?string $message = null;
 
-    public function __construct(private $code, private string|array $data, private Request $httpRequest, private Response $httpResponse, private IResponse $response, private Presenter $presenter, private RequestLog &$log)
+    public function __construct(private $code, private string|array|null $data, private Request $httpRequest, private Response $httpResponse, private IResponse $response, private Presenter $presenter, private RequestLog &$log)
     {
         $this->log->setHttpResponseCode($httpResponse->getCode());
         if ($data && is_array($data) && array_key_exists("code", $data)) {
@@ -31,22 +31,22 @@ class SimpleResponse
         return $this->code;
     }
 
-    public function getData(): string|array
+    public function getData(): string|array|null
     {
         return $this->data;
     }
 
-    public function getHttpRequest(): \Nette\Application\Request
+    public function getHttpRequest(): Request
     {
         return $this->httpRequest;
     }
 
-    public function getHttpResponse(): \Nette\Http\Response
+    public function getHttpResponse(): Response
     {
         return $this->httpResponse;
     }
 
-    public function getResponse(): \Nette\Application\IResponse
+    public function getResponse(): IResponse
     {
         return $this->response;
     }
@@ -81,7 +81,7 @@ class SimpleResponse
         return $this;
     }
 
-    public function getPresenter(): \Nette\Application\UI\Presenter
+    public function getPresenter(): Presenter
     {
         return $this->presenter;
     }
