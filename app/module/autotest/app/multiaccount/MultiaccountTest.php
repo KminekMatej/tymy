@@ -39,13 +39,13 @@ class MultiaccountTest extends RequestCase
     public function testAddMultiAccount(): void
     {
         $this->request($this->getBasePath() . "/dev", "POST", [
-            "login" => "autotest",
+            "login" => "tester",
             "password" => "b5be656a7060dd3525027d6763c33ca0",
-        ])->expect(201, "array");
+        ])->expect(201);
 
         //add again should fail
         $this->request($this->getBasePath() . "/dev", "POST", [
-            "login" => "autotest",
+            "login" => "tester",
             "password" => "b5be656a7060dd3525027d6763c33ca0",
         ])->expect(400);
 
@@ -60,7 +60,7 @@ class MultiaccountTest extends RequestCase
         Assert::count(2, $list);
 
         $this->request($this->getBasePath() . "/asdfasdf", "DELETE")->expect(404);  //test deleting non-existing team
-        $this->request($this->getBasePath() . "/dev", "DELETE")->expect(200, "array");
+        $this->request($this->getBasePath() . "/dev", "DELETE")->expect(200);
     }
 
     public function testNonExistingTeam(): void
