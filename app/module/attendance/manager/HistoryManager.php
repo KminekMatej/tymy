@@ -112,6 +112,7 @@ class HistoryManager extends BaseManager
                     ->where("event_id", $eventId)
                     ->where(User::TABLE . ".status != ?", User::STATUS_DELETED)
                     ->order("created DESC")
+                    ->order("id ASC")
                     ->fetchAll());
     }
 
