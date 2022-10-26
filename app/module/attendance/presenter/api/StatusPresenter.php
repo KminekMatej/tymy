@@ -20,7 +20,7 @@ class StatusPresenter extends SecuredPresenter
     /** @inject */
     public StatusSetManager $statusSetManager;
 
-    public function actionStatus($resourceId, $subResourceId): void
+    public function actionStatus(?int $resourceId, ?int $subResourceId): void
     {
         switch ($this->getRequest()->getMethod()) {
             case "GET":
@@ -39,7 +39,7 @@ class StatusPresenter extends SecuredPresenter
         $this->respondNotAllowed();
     }
 
-    public function actionStatusSet(int $resourceId, ?int $subResourceId): void
+    public function actionStatusSet(?int $resourceId, ?int $subResourceId): void
     {
         switch ($this->getRequest()->getMethod()) {
             case "POST":
