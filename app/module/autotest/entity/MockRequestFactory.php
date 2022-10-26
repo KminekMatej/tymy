@@ -44,9 +44,7 @@ class MockRequestFactory extends RequestFactory
                 $method,
                 $request->getRemoteAddress(),
                 $request->getRemoteHost(),
-                function (): string {
-                    return $data;
-                }
+                fn() => $data,
             );
         } else {
             return $request;
