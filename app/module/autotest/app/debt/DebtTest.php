@@ -56,11 +56,12 @@ class DebtTest extends RequestCase
 
         //user, which is the actual debtor, can set only sent date, nothing else
         $this->authorizeUser();
-        $chResponse = $this->request($this->getBasePath() . "/" . $recordId, "PUT", $this->mockChanges())->expect(200, "array");//debtor can edit, but the only field that gets edited is paymentSent
-        Assert::equal($origData->getData()["amount"], $chResponse->getData()["amount"]);//amount didnt change
-        $this->request($this->getBasePath() . "/" . $recordId, "PUT", ["paymentSent" => new DateTime()])->expect(200, "array");
+        $chResponse = $this->request($this->getBasePath() . "/" . $recordId, "PUT", $this->mockChanges())->expect(200, "array"); //debtor can edit, but the only field that gets edited is paymentSent
+        Assert::equal($origData->getData()["amount"], $chResponse->getData()["amount"]); //amount didnt change
+        $now = new DateTime();
+        $this->request($this->getBasePath() . "/" . $recordId, "PUT", ["paymentSent" => $this->toJsonDate($now)])->expect(200, "array");
         $debtData = $this->request($this->getBasePath() . "/" . $recordId)->expect(200, "array");
-        Assert::datetimeEquals($this->toJsonDate(new DateTime()), $debtData->getData()["paymentSent"]);
+        Assert::equal($this->toJsonDate($now), $debtData->getData()["paymentSent"]);
         $this->request($this->getBasePath() . "/" . $recordId, "DELETE")->expect(403);
 
         //back to admin, which can mark the debt as paymentReceived and then delete it
@@ -110,10 +111,10 @@ class DebtTest extends RequestCase
         $chResponse = $this->request($this->getBasePath() . "/" . $recordId, "PUT", $this->mockChanges())->expect(200, "array");//debtor can edit, but the only field that gets edited is paymentSent
         Assert::equal($origData->getData()["amount"], $chResponse->getData()["amount"]);//amount didnt change
         $now = new DateTime();
-        $this->request($this->getBasePath() . "/" . $recordId, "PUT", ["paymentSent" => $now])->expect(200, "array");
+        $this->request($this->getBasePath() . "/" . $recordId, "PUT", ["paymentSent" => $this->toJsonDate($now)])->expect(200, "array");
         sleep(1);//sleep for one second, to make sure that current datetime is now different than $now variable. So we can check that the paymentSent would be actually changed if something changes it
         $debtData = $this->request($this->getBasePath() . "/" . $recordId)->expect(200, "array");
-        Assert::datetimeEquals($this->toJsonDate($now), $debtData->getData()["paymentSent"]);
+        Assert::equal($this->toJsonDate($now), $debtData->getData()["paymentSent"]);
         $this->request($this->getBasePath() . "/" . $recordId, "DELETE")->expect(403);
 
         //another admin can mark it as paymentReceived
