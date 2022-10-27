@@ -34,6 +34,7 @@ or: or
 day: Day
 week: Week
 month: Month
+year: Year
 name: Name
 created: Created
 create: Create

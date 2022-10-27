@@ -31,9 +31,10 @@ no: Non
 user: utilisateur
 error: erreur
 or: ou
-day: jour
-week: semaine
-month: moi
+day: Jour
+week: Semaine
+month: Moi
+year: An
 name: Nom
 created: Établi
 create: Créer
