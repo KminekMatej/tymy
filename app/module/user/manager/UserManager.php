@@ -135,7 +135,6 @@ class UserManager extends BaseManager
         $array["login"] = strtoupper($array["login"]);
 
         $array["gender"] = isset($array["gender"]) && $array["gender"] == "FEMALE" ? "FEMALE" : "MALE";
-        $array["jerseyNumber"] ??= "";
 
         $array["password"] = $this->hashPassword($array["password"]);
 
