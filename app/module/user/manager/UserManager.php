@@ -583,7 +583,7 @@ class UserManager extends BaseManager
             }
         }
 
-        if (array_key_exists("email", $data)) {
+        if (isset($data["email"])) {
             $userIdWithThatEmail = $this->getIdByEmail($data["email"]);
             if ($userIdWithThatEmail && $userIdWithThatEmail !== $this->userModel->getId()) { //changing mail to already existing one
                 $this->responder->E403_FORBIDDEN($this->translator->translate("team.alerts.emailExists"));
