@@ -1,7 +1,9 @@
 /nbproject/
 /log/*
+/log_autotest/*
 !/log/.gitkeep 
 /temp/*
+/temp_autotest/*
 !/temp/.gitkeep 
 /tests/setup_DEV.php
 /tests/setup_MONKEYS.php
