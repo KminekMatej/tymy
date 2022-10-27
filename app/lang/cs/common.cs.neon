@@ -39,6 +39,8 @@ month: Měsíc
 year: Rok
 name: Název
 validity: Platnost do
+after: po
+onDay: dne
 navigationBlock:
     first: První
     previous: Předchozí

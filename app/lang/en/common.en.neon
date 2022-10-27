@@ -39,6 +39,8 @@ name: Name
 created: Created
 create: Create
 validity: Valid until
+after: after
+onDay: on
 navigationBlock:
     first: First
     previous: Previous

@@ -39,6 +39,8 @@ name: Nom
 created: Établi
 create: Créer
 validity: Valide
+after: après
+onDay: á la
 navigationBlock:
     first: premier
     previous: précédent
