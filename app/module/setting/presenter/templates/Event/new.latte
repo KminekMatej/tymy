@@ -2,7 +2,6 @@
 
 {block scripts}
 {include parent}
-<script src="{$publicPath}/public/js/Binder.js?ver={$appver}"></script>
 <script src="{$publicPath}/public/js/md5.js?ver={$appver}"></script>
 {/block}
 
@@ -20,7 +19,6 @@
     <div class="row justify-content-center">
         <div class="col">
             <div class="card sh-box my-3">
-                {var $randhash = md5(rand(0,100000))}
                 {form newEventForm}
                     <div class="card-header">
                         <h4>{_event.newEvents}</h4>
@@ -80,10 +78,36 @@
                                 </td>
                             </tr>
                         </table>
-                        <div class="text-center">
-                            <button type="button" class="btn btn-sm btn-outline-success" title="{_event.duplicateEventDay}" onclick="duplicateEventRow('day')"><i class="fa fa-plus" aria-hidden="true"></i> {_common.day}</button>
-                            <button type="button" class="btn btn-sm btn-outline-success" title="{_event.duplicateEventWeek}" onclick="duplicateEventRow('week')"><i class="fa fa-plus" aria-hidden="true"></i> {_common.week}</button>
-                            <button type="button" class="btn btn-sm btn-outline-success" title="{_settievent.duplicateEventMonth}" onclick="duplicateEventRow('month')"><i class="fa fa-plus" aria-hidden="true"></i> {_common.month}</button>
+                        <div class="mt-2 input-group input-group-sm mb-3 justify-content-center">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Opakovat každý:</span>
+                            </div>
+                            <input type="number" class="form-control" aria-describedby="basic-addon3" style="max-width: 60px" value="1" id="repeatPeriod">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false" data-selected="week" id="periodPick">{_common.week}</button>
+                                <div class="dropdown-menu">
+                                    <li class="dropdown-item" onclick="pickPeriod('day')">{_common.day}</li>
+                                    <li class="dropdown-item" onclick="pickPeriod('week')">{_common.week}</li>
+                                    <li class="dropdown-item" onclick="pickPeriod('month')">{_common.month}</li>
+                                    <li class="dropdown-item" onclick="pickPeriod('year')">{_common.year}</li>
+                                </div>
+                            </div>
+                            <div class="input-group-append">
+                                <span class="input-group-text">a skončit:</span>
+                            </div>
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false" data-selected="after" id="endPick">{_common.after}</button>
+                                <div class="dropdown-menu">
+                                    <li class="dropdown-item" onclick="pickEnd('after')">{_common.after}</li>
+                                    <li class="dropdown-item" onclick="pickEnd('onDay')">{_common.onDay}</li>
+                                </div>
+                            </div>
+                            <input type="date" class="form-control d-none rounded-right" style="max-width: 250px" id="repeatEndDate">
+                            <input type="number" class="form-control" style="max-width: 60px" value="1" id="repeatEndNumber">
+                            <div class="input-group-append" id="repeatEndNumberLabel">
+                                <span class="input-group-text rounded-right">výskytech</span>
+                            </div>
+                            <button type="button" class=" ml-3 btn btn-sm btn-outline-success" title="{_event.duplicateEventDay}" onclick="repeatEvent()"><i class="fa fa-plus" aria-hidden="true"></i> Vygenerovat</button>
                         </div>
                     </div>
                     <div class="card-footer text-right">

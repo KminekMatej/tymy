@@ -34,10 +34,13 @@ or: or
 day: Day
 week: Week
 month: Month
+year: Year
 name: Name
 created: Created
 create: Create
 validity: Valid until
+after: after
+onDay: on
 navigationBlock:
     first: First
     previous: Previous

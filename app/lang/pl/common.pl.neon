@@ -34,10 +34,13 @@ or: albo
 day: Dzień
 week: Tydzień
 month: Miesiąc
+year: Rok
 name: Nazwa
 created: Utworzony
 create: Tworzyć
 validity: Ważne do
+after: po
+onDay: w
 navigationBlock:
     first: Pierwsza
     previous: Poprzednia
