@@ -49,9 +49,10 @@ function duplicateLastRow() {
     var table = $("DIV.settings TABLE");
     var lastRow = table.find("TR:last");
     var newRow = lastRow.clone();
-    newRow.find("SELECT[name='viewRightName']").val(lastRow.find("SELECT[name='viewRightName']").val());
-    newRow.find("SELECT[name='planRightName']").val(lastRow.find("SELECT[name='planRightName']").val());
-    newRow.find("SELECT[name='resultRightName']").val(lastRow.find("SELECT[name='resultRightName']").val());
+    newRow.find("SELECT[data-name='eventTypeId']").val(lastRow.find("SELECT[data-name='eventTypeId']").val());
+    newRow.find("SELECT[data-name='viewRightName']").val(lastRow.find("SELECT[data-name='viewRightName']").val());
+    newRow.find("SELECT[data-name='planRightName']").val(lastRow.find("SELECT[data-name='planRightName']").val());
+    newRow.find("SELECT[data-name='resultRightName']").val(lastRow.find("SELECT[data-name='resultRightName']").val());
     table.append(newRow);
 }
 
