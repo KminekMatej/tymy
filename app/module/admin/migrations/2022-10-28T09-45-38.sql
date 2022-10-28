@@ -182,6 +182,8 @@ ALTER TABLE `user` CHARACTER SET utf8;
 ALTER TABLE `user_invitation` CHARACTER SET utf8;
 ALTER TABLE `usr_mails` CHARACTER SET utf8;
 
+ALTER TABLE `live` ADD PRIMARY KEY(`user_id`);
+
 -- DOWN:
 -- commands that reverts updates from UP section shall be written here:
 
