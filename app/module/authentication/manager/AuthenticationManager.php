@@ -7,7 +7,6 @@ use Nette\Database\Explorer;
 use Nette\Database\Table\ActiveRow;
 use Nette\Security\AuthenticationException;
 use Nette\Security\IAuthenticator;
-use Nette\Security\IIdentity;
 use Nette\Security\SimpleIdentity;
 use Nette\Utils\DateTime;
 use Tracy\Debugger;
@@ -29,7 +28,7 @@ class AuthenticationManager implements IAuthenticator
     {
     }
 
-    public function authenticate(array $credentials): \Nette\Security\SimpleIdentity
+    public function authenticate(array $credentials): SimpleIdentity
     {
         if (count($credentials) == 1) {   //if there is only username sent, it can possibly be login using transfer key
             $parts = explode("|", $credentials[0]);
