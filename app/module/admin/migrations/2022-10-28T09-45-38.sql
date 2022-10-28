@@ -22,6 +22,7 @@ DROP TABLE IF EXISTS `pages_log`;
 DROP TABLE IF EXISTS `settings`;
 DROP TABLE IF EXISTS `rights_cache`;
 DROP TABLE IF EXISTS `web_data`;
+DROP TABLE IF EXISTS `web_news`;
 
 ALTER TABLE `rights` 
 CHANGE `right_type` `right_type` ENUM('SYS','PAGE','USR') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'USR', 
@@ -107,7 +108,6 @@ CHANGE `account_number` `account_number` VARCHAR(32) CHARACTER SET utf8 COLLATE 
 CHANGE `birth_code` `birth_code` VARCHAR(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL, 
 CHANGE `language` `language` VARCHAR(3) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'CZ', 
 CHANGE `sex` `sex` ENUM('male','female','unknown') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'unknown', 
-CHANGE `jersey_number` `jersey_number` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '', 
 CHANGE `password2` `password2` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL, 
 CHANGE `skin` `skin` VARCHAR(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
 
