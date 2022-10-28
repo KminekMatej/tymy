@@ -102,7 +102,10 @@ class SecuredPresenter extends BasePresenter
         return $navbar;
     }
 
-    protected function parseIdFromWebname($webName)
+    /**
+     * Load ID from webname, if exists
+     */
+    protected function parseIdFromWebname(string $webName): ?int
     {
         if (strpos($webName, "-")) {
             return substr($webName, 0, strpos($webName, "-"));
@@ -110,6 +113,8 @@ class SecuredPresenter extends BasePresenter
         if ((int) $webName !== 0) {
             return (int) $webName;
         }
+
+        return null;
     }
 
     /**
