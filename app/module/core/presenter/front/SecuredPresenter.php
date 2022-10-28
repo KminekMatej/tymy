@@ -74,10 +74,7 @@ class SecuredPresenter extends BasePresenter
     {
         parent::beforeRender();
 
-        if ($this->tymyUser) {
-        }
-
-        if ($this->tymyUser->getSkin() !== '' && $this->tymyUser->getSkin() !== '0') {//set user defined skin instead of team one after login
+        if ($this->tymyUser && $this->tymyUser->getSkin() !== '' && $this->tymyUser->getSkin() !== '0') {//set user defined skin instead of team one after login
             $this->template->skin = $this->skin = $this->tymyUser->getSkin();
         }
         $this->template->tymyUser = $this->tymyUser;

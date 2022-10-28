@@ -41,7 +41,7 @@ abstract class RootPresenter extends Presenter
     /** @inject */
     public Storage $cacheStorage;
     protected Cache $teamCache;
-    protected User $tymyUser;
+    protected ?User $tymyUser;
 
     protected function startup()
     {
@@ -65,7 +65,7 @@ abstract class RootPresenter extends Presenter
     {
         $this->tymyUser = $this->userManager->getById($this->getUser()->getId());
 
-        if ($this->tymyUser->getLanguage()) {
+        if ($this->tymyUser && $this->tymyUser->getLanguage()) {
             $this->setLanguage($this->tymyUser->getLanguage());
         }
     }
