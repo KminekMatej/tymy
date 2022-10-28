@@ -918,4 +918,16 @@ class UserManager extends BaseManager
 
         return $this->mapAll($rows->fetchAll());
     }
+
+    /**
+     * Adds user to live table or update time if user is already there.
+     * Also deletes old records
+     * @param int $userId
+     * @return void
+     */
+    public function setUserLive(int $userId): void
+    {
+        $this->database->query("INSERT INTO `live`(`user_id`) VALUES (?) ON DUPLICATE KEY UPDATE `time` = CURRENT_TIMESTAMP()", $userId);
+        $this->database->query("DELETE FROM `live` WHERE `time` < NOW() - INTERVAL ? MINUTE", self::VALIDITYMIN);
+    }
 }
