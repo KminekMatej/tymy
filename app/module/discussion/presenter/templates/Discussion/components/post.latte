@@ -13,7 +13,7 @@
                 <i class="fas fa-thumbtack text-warning" n:if="$item->getSticky()"></i>
                 <span class="badge badge-primary" n:if="$item->getNewPost()">N</span>
             </div>
-            <div class="col-4 text-right created" {if $item->getUpdatedAt()}title="{_common.edited} {$userList[$item->getUpdatedById()]?->getDisplayName()}, {$item->getUpdatedAt()|date:'j.n.Y G:i'}"{/if}>
+            <div class="col-4 text-right created" {if $item->getUpdatedAt()}title="{_common.edited} {isset($userList[$item->getUpdatedById()]) ? $userList[$item->getUpdatedById()]->getDisplayName() : '?'}, {$item->getUpdatedAt()|date:'j.n.Y G:i'}"{/if}>
                 {$item->getCreatedAt()|date:'j.n.Y G:i'}
                 <i class="fas fa-info-circle text-warning" n:if="$item->getUpdatedAt()"></i>
             </div>
