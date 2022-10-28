@@ -82,7 +82,7 @@ class Migration
         return $this->downContents;
     }
 
-    public function getTime(): float
+    public function getTime(): ?float
     {
         return $this->time;
     }
@@ -92,7 +92,7 @@ class Migration
         return $this->result;
     }
 
-    public function setTime(float $time): static
+    public function setTime(?float $time): static
     {
         $this->time = $time;
         return $this;
