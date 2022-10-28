@@ -2,7 +2,6 @@
 
 namespace Tymy\Module\Setting\Presenter\Front;
 
-use Nette\Utils\Strings;
 use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Permission\Manager\PermissionManager;
 use Tymy\Module\Permission\Model\Permission;
@@ -57,7 +56,7 @@ class PermissionPresenter extends SettingBasePresenter
         $this->allowPermission("IS_ADMIN");
 
         $permission = $this->permissionManager->getByWebName($resource);
-        if (!$permission instanceof \Tymy\Module\Permission\Model\Permission) {
+        if (!$permission instanceof Permission) {
             $this->flashMessage($this->translator->translate("permission.errors.permissionNotExists", null, ['id' => $permission]), "danger");
             $this->redirect(':Setting:Event:');
         }
