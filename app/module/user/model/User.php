@@ -2,8 +2,8 @@
 
 namespace Tymy\Module\User\Model;
 
+use Nette\Utils\Arrays;
 use Nette\Utils\DateTime;
-use RectorPrefix202209\Nette\Utils\Arrays;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Team\Manager\TeamManager;
