@@ -19,7 +19,7 @@ class Vote extends BaseModel
     private int $pollId;
     private int $userId;
     private int $optionId;
-    private ?int $numericValue = null;
+    private ?float $numericValue = null;
     private ?bool $booleanValue = null;
     private ?string $stringValue = null;
     private ?int $updatedById = null;
@@ -40,7 +40,7 @@ class Vote extends BaseModel
         return $this->optionId;
     }
 
-    public function getNumericValue(): ?int
+    public function getNumericValue(): ?float
     {
         return $this->numericValue;
     }
@@ -65,62 +65,54 @@ class Vote extends BaseModel
         return $this->updatedAt;
     }
 
-    public function setPollId(int $pollId)
+    public function setPollId(int $pollId): static
     {
         $this->pollId = $pollId;
         return $this;
     }
 
-    public function setUserId(int $userId)
+    public function setUserId(int $userId): static
     {
         $this->userId = $userId;
         return $this;
     }
 
-    public function setOptionId(int $optionId)
+    public function setOptionId(int $optionId): static
     {
         $this->optionId = $optionId;
         return $this;
     }
 
-    public function setNumericValue(?int $numericValue)
+    public function setNumericValue(?float $numericValue): static
     {
         $this->numericValue = $numericValue;
         return $this;
     }
 
-    public function setBooleanValue($booleanValue)
+    public function setBooleanValue($booleanValue): static
     {
-        switch (true) {
-            case is_string($booleanValue):
-                $this->booleanValue = in_array(strtoupper($booleanValue), ["YES", "TRUE", "ANO"]) ? true : false;
-                break;
-            case is_int($booleanValue):
-                $this->booleanValue = $booleanValue ? true : false;
-                break;
-            case is_bool($booleanValue):
-                $this->booleanValue = $booleanValue;
-                break;
-            default:
-                $this->booleanValue = null;
-                break;
-        }
+        $this->booleanValue = match (true) {
+            is_string($booleanValue) => in_array(strtoupper($booleanValue), ["YES", "TRUE", "ANO"]),
+            is_int($booleanValue) => (bool) $booleanValue,
+            is_bool($booleanValue) => $booleanValue,
+            default => null,
+        };
         return $this;
     }
 
-    public function setStringValue(?string $stringValue)
+    public function setStringValue(?string $stringValue): static
     {
         $this->stringValue = $stringValue;
         return $this;
     }
 
-    public function setUpdatedById(?int $updatedById)
+    public function setUpdatedById(?int $updatedById): static
     {
         $this->updatedById = $updatedById;
         return $this;
     }
 
-    public function setUpdatedAt(?DateTime $updatedAt)
+    public function setUpdatedAt(?DateTime $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
         return $this;
@@ -131,6 +123,9 @@ class Vote extends BaseModel
         return self::MODULE;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getScheme(): array
     {
         return VoteMapper::scheme();

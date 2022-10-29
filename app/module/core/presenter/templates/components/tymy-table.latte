@@ -1,0 +1,64 @@
+{*
+Tymy table custom design
+Max. 6 columns
+input parameters:
+
+$cols = ["col1", "col2", ...];
+$rows = [
+    [    
+        "detail: https://www.google.com", //record detail opener
+        "Sherlock Holmes",
+        "Baker Street 222",
+        "East London",
+        {
+            "type": "badge",
+            "content": 32,
+            "title": "Solved cases",
+        },
+    ],
+    [    
+        "Irene Adler",
+        "Worker Street 221",
+        "Clapham",
+        {
+            "type": "badge",
+            "content": 4,
+            "title": "Lovers",
+        },
+    ],
+];
+
+*}
+
+{var $grid = intval(floor(12 / count($cols)))}
+{var $spacers = 12 - (count($cols) * $grid)}
+{var $leftCols = ceil($spacers/2)} {* fill left empty columns in grid if neccessary*}
+{var $rightCols = $spacers - $leftCols} {* fill right empty columns in grid if neccessary*}
+
+<div class="container-fluid tymy-table">
+    <div class="row table-head">
+        <div n:if="$leftCols" class="col col-md-{$leftCols}"></div>
+        <div class="col col-md-{$grid}" n:foreach="$cols as $col">{$col}</div>
+        <div n:if="$rightCols" class="col col-md-{$rightCols}"></div>
+    </div>
+    <div n:foreach="$rows as $row" class="row striped {$row->classStr()}" {if $row->getStyle()}style="{$row->getStyle()|noescape}"{/if}>
+        <div n:if="$leftCols" class="col col-md-{$leftCols}"></div>
+        <div class="col col-md-{$grid}" n:foreach="$row as $cell">
+            {if is_string($cell)}
+                <span>{$cell}</span>
+            {elseif $cell instanceof \Tymy\Module\Core\Model\Cell}
+                {switch $cell->getType()}
+                    {case 'badge'}
+                        <span class="badge badge-pill {ifset $cell->class}{$cell->class}{/ifset}">{$cell->value}</span>
+                    {case 'detail'}
+                        <a href="{$cell->getHref()}" class="btn btn-sm btn-light btn-light-bordered {$cell->getClass()}" {if $cell->getTitle()}title="{$cell->getTitle()}"{/if} {if $cell->getStyle()}style="{$cell->getStyle()}"{/if}>
+                            <i class="fa fa-external-link-alt" aria-hidden="true"></i>
+                        </a>
+                {/switch}
+            {else}
+                <span {ifset $cell->class}class="{$cell->class}"{/ifset}>{$cell}</span>
+            {/if}
+        </div>
+        <div n:if="$rightCols" class="col col-md-{$rightCols}"></div>
+    </div>
+</div>

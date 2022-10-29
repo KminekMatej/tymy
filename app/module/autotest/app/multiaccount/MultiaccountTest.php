@@ -25,27 +25,27 @@ class MultiaccountTest extends RequestCase
         return TransferKey::MODULE;
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $this->authorizeAdmin();
         $this->request($this->getBasePath())->expect(200, "array");
     }
 
-    public function testPutForbidden()
+    public function testPutForbidden(): void
     {
         $this->request($this->getBasePath(), "PUT")->expect(405);
     }
 
-    public function testAddMultiAccount()
+    public function testAddMultiAccount(): void
     {
         $this->request($this->getBasePath() . "/dev", "POST", [
-            "login" => "autotest",
+            "login" => "tester",
             "password" => "b5be656a7060dd3525027d6763c33ca0",
-        ])->expect(201, "array");
+        ])->expect(201);
 
         //add again should fail
         $this->request($this->getBasePath() . "/dev", "POST", [
-            "login" => "autotest",
+            "login" => "tester",
             "password" => "b5be656a7060dd3525027d6763c33ca0",
         ])->expect(400);
 
@@ -60,15 +60,15 @@ class MultiaccountTest extends RequestCase
         Assert::count(2, $list);
 
         $this->request($this->getBasePath() . "/asdfasdf", "DELETE")->expect(404);  //test deleting non-existing team
-        $this->request($this->getBasePath() . "/dev", "DELETE")->expect(200, "array");
+        $this->request($this->getBasePath() . "/dev", "DELETE")->expect(200);
     }
 
-    public function testNonExistingTeam()
+    public function testNonExistingTeam(): void
     {
         $this->request($this->getBasePath() . "/asdkfjbasldf", "POST")->expect(404);
     }
 
-    public function testWrongCredentials()
+    public function testWrongCredentials(): void
     {
         $this->request($this->getBasePath() . "/dev", "POST", [
             "login" => "autotest",
@@ -87,26 +87,35 @@ class MultiaccountTest extends RequestCase
         $this->request($this->getBasePath() . "/dev", "POST")->expect(400);
     }
 
-    public function testDeleteAgain()
+    public function testDeleteAgain(): void
     {
         $this->request($this->getBasePath() . "/dev", "DELETE")->expect(404);
     }
 
-    public function testGetNonExistingTeam()
+    public function testGetNonExistingTeam(): void
     {
         $this->request($this->getBasePath() . "/dev")->expect(404);
     }
 
-    public function createRecord()
+    /**
+     * @return mixed[]
+     */
+    public function createRecord(): array
     {
         return []; //unused
     }
 
-    public function mockRecord()
+    /**
+     * @return mixed[]
+     */
+    public function mockRecord(): array
     {
         return []; //unused
     }
 
+    /**
+     * @return mixed[]
+     */
     protected function mockChanges(): array
     {
         return []; //unused

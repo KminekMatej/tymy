@@ -1,25 +1,91 @@
-$(document).ready(function () {
-    $("[data-binder-id]").each(function () {
-        $(this).data("data-binder", new Binder({
-            area: this,
-            checkboxValueChecked: 1,
-            checkboxValueUnChecked: 0,
-            deleteConfirmation: translate.common.alerts.confirmDelete,
-            isValid: function (name, value1, value2) {
-                switch (name) {
-                    case "startTime":
-                    case "endTime":
-                    case "closeTime":
-                        var re = /^(0?[1-9]|[12][0-9]|3[01])\.(0?[1-9]|1[012])\.(19|20)\d\d ([01]\d|2[0-3]):([0-5]\d)$/;
-                        return re.test(value1);
-                    case "link":
-                        var re = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i;
-                        return value1 == "" || re.test(value1);
-                    case "caption":
-                        return value1.trim() != "";
-                }
-                return true;
-            }
-        }));
+function pickPeriod(period) {
+    $("#periodPick").html(translate.common[period]);
+    $("#periodPick").attr("data-selected", period);
+}
+
+function pickEnd(end) {
+    $("#endPick").html(translate.common[end]);
+    $("#endPick").attr("data-selected", end);
+
+    if (end == 'after') {
+        $("#repeatEndDate").addClass("d-none");
+        $("#repeatEndNumber").removeClass("d-none");
+        $("#repeatEndNumberLabel").removeClass("d-none");
+    } else if (end == 'onDay') {
+        $("#repeatEndDate").removeClass("d-none");
+        $("#repeatEndNumber").addClass("d-none");
+        $("#repeatEndNumberLabel").addClass("d-none");
+    }
+}
+
+function repeatEvent() {
+    var repeatPeriod = parseInt($("#repeatPeriod").val());
+    var periodPick = $("#periodPick").attr("data-selected"); //day/week/month/year
+    var endPick = $("#endPick").attr("data-selected"); //after/onDay
+
+
+    var iterator = 0;
+    var lastDT = moment($("DIV.settings TABLE").find("TR:last").find("INPUT[name='startTime']").val());
+
+    var lastIteration = parseInt($("#repeatEndNumber").val());
+    var latestDate = moment($("#repeatEndDate").val());
+    var nextDate = lastDT.clone().add(repeatPeriod, periodPick);
+
+    while (endPick == "onDay" ? nextDate < latestDate : iterator < lastIteration && iterator < 50) { //always do maximally 50 iterations
+        iterator++;
+        lastDT = duplicateEventRow(repeatPeriod, periodPick); //moment date
+        nextDate = lastDT.add(repeatPeriod, periodPick);
+    }
+}
+
+function removeRow(elm) {
+    var row = $(elm).closest("TR");
+    if (!row.is(':nth-child(2)') || row.closest("TABLE").find("TR").length > 2) { //keep if its the only row
+        row.remove();
+    }
+}
+
+function duplicateLastRow() {
+    var table = $("DIV.settings TABLE");
+    var lastRow = table.find("TR:last");
+    var newRow = lastRow.clone();
+    newRow.find("SELECT[data-name='eventTypeId']").val(lastRow.find("SELECT[data-name='eventTypeId']").val());
+    newRow.find("SELECT[data-name='viewRightName']").val(lastRow.find("SELECT[data-name='viewRightName']").val());
+    newRow.find("SELECT[data-name='planRightName']").val(lastRow.find("SELECT[data-name='planRightName']").val());
+    newRow.find("SELECT[data-name='resultRightName']").val(lastRow.find("SELECT[data-name='resultRightName']").val());
+    table.append(newRow);
+}
+
+function duplicateEventRow(count, period) {
+    var table = $("DIV.settings TABLE");
+    var formId = $("DIV.settings FORM").attr("id");
+
+    var lastRow = table.find("TR:last");
+
+    var rowIndex = table.find("TR").length - 1;
+
+    var type = lastRow.find("SELECT[name=type]").val();
+    var startTime = moment(lastRow.find("INPUT[data-name=startTime]").val());
+    var endTime = moment(lastRow.find("INPUT[data-name=endTime]").val());
+    var closeTime = moment(lastRow.find("INPUT[data-name=closeTime]").val());
+
+    duplicateLastRow();
+
+    startTime.add(count, period);
+    endTime.add(count, period);
+    closeTime.add(count, period);
+
+    lastRow = table.find("TR:last");
+    lastRow.find("SELECT[data-name=type]").val(type);
+    lastRow.find("INPUT[data-name=startTime]").val(startTime.format("YYYY-MM-DDTHH:mm"));
+    lastRow.find("INPUT[data-name=endTime]").val(endTime.format("YYYY-MM-DDTHH:mm"));
+    lastRow.find("INPUT[data-name=closeTime]").val(closeTime.format("YYYY-MM-DDTHH:mm"));
+
+    lastRow.find("INPUT, TEXTAREA, SELECT").each(function () {
+        var name = $(this).attr("name").split("-")[0];
+        $(this).attr("id", formId + '-' + name + '-' + rowIndex);
+        $(this).attr("name", name + '-' + rowIndex);
     });
-});
+    
+    return startTime;
+}

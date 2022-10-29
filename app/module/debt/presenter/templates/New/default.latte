@@ -63,7 +63,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>{_debt.varcode}:</th><td><input name="varcode" data-value type="text" value="{$debt->getCountryIso()}" {if !$debt->getCanEdit()}readonly{/if} n:class="col, col-md-6, form-control" /></td>
+                                    <th>{_debt.varcode}:</th><td><input name="varcode" data-value type="text" {if !$debt->getCanEdit()}readonly{/if} n:class="col, col-md-6, form-control" /></td>
                                 </tr>
                                 <tr>
                                     <th>{_debt.paymentReceived}:</th><td><input name="paymentReceived" data-value type="date" value="{$debt->getPaymentReceived()|date:\Tymy\Module\Core\Model\BaseModel::DATE_ENG_FORMAT}" {if !$debt->getCanEdit()}readonly{/if} n:class="col, col-md-6, form-control" /></td>

@@ -28,6 +28,8 @@ lastName: Nazwisko
 phone: Telefon
 email: E-mail
 birthDate: Data urodzenia
+birthCode: PESEL
+nameDay: Imieniny
 nameDayMonth: Miesiąc imienin
 chooseMonth: Wybierz miesiąc
 nameDayDay: Dzień imienin
@@ -61,8 +63,18 @@ sport: Sport
 defaultLanguage: Domyślny język
 hideDiscDesc: Ukryj opis dyskusji
 approveAsPlayer: Zatwierdź jako gracz
+invitation: Zaproszenie|Zaproszenia
+invite: Zapraszać
+createInvitation: Zaproś nowego gracza
+invitation-sent: Wysłano
+invitation-accepted: Przyjęty
+invitation-expired: Wygasły
 errors:
     imgFileCorrupted: "Plik nie jest obrazkiem, lub jest uszkodzony"
+    passwordMismatch: Hasło różni się
+    invitationAtLeast: "Przynajmniej jedno z pól Imię, Nazwisko i E-Mail musi być wypełnione"
+    invitationExpired: Zaproszenie już wygasło
+    invitationAccepted: Zaproszenie już wykorzystane
 alerts:
     signOffNeeded: Language changed - please logout & login for language to change
     registrationApprovedSubject: Rejestracja do %s zatwierdzona
@@ -72,3 +84,19 @@ alerts:
     loginForbidden: Użytkownik nie może się zalogować
     loginNotApproved: Użytkownik nie został jeszcze zatwierdzony przez administratorów
     authenticationFailed: Niezgodność loginu lub hasła
+    loginExists: Ten login już istnieje
+    changingRolesForbidden: Zmiana ról zabroniona
+    changingCanEditCallnameForbidden: Zmiana canEditCallName jest zabroniona
+    changingStatusForbidden: Zmiana statusu jest zabroniona
+    changingLoginForbidden: Zmiana loginu jest zabroniona
+    editingCallNameForbidden: Zmiana nicku jest zabroniona
+    emailExists: Ten email już istnieje
+    userQuotaReached: Osiągnięto limit przydziału użytkowników
+    registrationsLimitReached: Zbyt wiele oczekujących rejestracji
+    passwordTooShort: Hasło jest za krótkie
+    emailFailure: Niewłaściwy format wiadomości email
+    usernameFailure: Nazwa użytkownika musi mieć co najmniej 3 i maksymalnie 20 znaki
+    targetTeamExists: Ten zespół został już dodany
+    invitationCreated: Utworzono zaproszenie
+    invitationSent: Zaproszenie wysłane
+    changeOutlookEmail: 'Wygląda na to, że korzystasz z dostawcy poczty e-mail firmy Microsoft (outlook.com/mns.com/live.com/hotmail.com). Te skrzynki pocztowe mają często problemy z dostarczaniem poczty. Sugerujemy użycie innego adresu e-mail - w przeciwnym razie e-maile informacyjne mogą nie zostać dostarczone poprawnie'

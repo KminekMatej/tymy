@@ -47,8 +47,6 @@ class SecuredPresenter extends BasePresenter
     /** @inject */
     public TeamManager $teamManager;
 
-    protected User $tymyUser;
-
     /** @inject */
     public MultiaccountManager $multiaccountManager;
     public $discussionNews;
@@ -57,7 +55,7 @@ class SecuredPresenter extends BasePresenter
     public $eventTypeList;
     public $noteList;
     public $statusList;
-    public $accessibleSettings = [];
+    public array $accessibleSettings = [];
 
     public function getLevelCaptions()
     {
@@ -76,22 +74,19 @@ class SecuredPresenter extends BasePresenter
     {
         parent::beforeRender();
 
-        $this->tymyUser = $this->userManager->getById($this->getUser()->getId());
-        if ($this->tymyUser->getLanguage()) {
-            $this->setLanguage($this->tymyUser->getLanguage());
-        }
-
-        if ($this->tymyUser->getSkin()) {//set user defined skin instead of team one after login
+        if ($this->tymyUser && $this->tymyUser->getSkin() !== '' && $this->tymyUser->getSkin() !== '0') {//set user defined skin instead of team one after login
             $this->template->skin = $this->skin = $this->tymyUser->getSkin();
         }
-
+        if ($this->tymyUser && !$this->tymyUser->getGhost()) {// mark user as live if this aint ghost access
+            $this->userManager->setUserLive($this->tymyUser->getId());
+        }
         $this->template->tymyUser = $this->tymyUser;
 
         $this->setAccessibleSettings();
         $this->addBreadcrumb($this->translator->translate("common.mainPage"), $this->link(":Core:Default:"));
     }
 
-    protected function startup()
+    protected function startup(): void
     {
         parent::startup();
         Debugger::$maxDepth = 7;
@@ -110,14 +105,19 @@ class SecuredPresenter extends BasePresenter
         return $navbar;
     }
 
-    protected function parseIdFromWebname($webName)
+    /**
+     * Load ID from webname, if exists
+     */
+    protected function parseIdFromWebname(string $webName): ?int
     {
         if (strpos($webName, "-")) {
             return substr($webName, 0, strpos($webName, "-"));
         }
-        if (intval($webName)) {
-            return intval($webName);
+        if ((int) $webName !== 0) {
+            return (int) $webName;
         }
+
+        return null;
     }
 
     /**
@@ -127,7 +127,6 @@ class SecuredPresenter extends BasePresenter
      * @param int $perPage Number of items per page
      * @param int $currentPage Number of current page
      * @param int $shownCount Number of shown links
-     * @return array
      */
     protected function pagination(int $totalCount, int $perPage, int $currentPage, int $shownCount): array
     {
@@ -138,7 +137,7 @@ class SecuredPresenter extends BasePresenter
         $result = range(1, ceil($totalCount / $perPage));
 
         if (($shownCount = floor($shownCount / 2) * 2 + 1) >= 1) {
-            $result = array_slice($result, max(0, min(count($result) - $shownCount, intval($currentPage) - ceil($shownCount / 2))), $shownCount);
+            $result = array_slice($result, max(0, min(count($result) - $shownCount, $currentPage - ceil($shownCount / 2))), $shownCount);
         }
 
         return $result;
@@ -151,8 +150,10 @@ class SecuredPresenter extends BasePresenter
 
     private function setAccessibleSettings()
     {
+        $separate = false;
         if ($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("DSSETUP"))) {
             $this->accessibleSettings[] = new SettingMenu("discussions", $this->translator->translate("discussion.discussion", 2), $this->link(":Setting:Discussion:"), "fa-comments", true);
+            $separate = true;
         }
         if (
             $this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('EVE_UPDATE')) ||
@@ -160,26 +161,37 @@ class SecuredPresenter extends BasePresenter
                 $this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('EVE_DELETE'))
         ) {
             $this->accessibleSettings[] = new SettingMenu("events", $this->translator->translate("event.event", 2), $this->link(":Setting:Event:"), "fa-calendar", true);
+            $separate = true;
         }
 
         if ($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("TEAM_UPDATE"))) {
             $this->accessibleSettings[] = new SettingMenu("team", $this->translator->translate("team.team", 1), $this->link(":Setting:Team:"), "fa-users", true);
+            $separate = true;
         }
 
         if ($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('ASK.VOTE_UPDATE'))) {
             $this->accessibleSettings[] = new SettingMenu("polls", $this->translator->translate("poll.poll", 2), $this->link(":Setting:Poll:"), "fa-chart-pie", true);
+            $separate = true;
         }
 
-        if ($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("REP_SETUP"))) {
+        /*if ($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("REP_SETUP"))) {
             $this->accessibleSettings[] = new SettingMenu("reports", $this->translator->translate("report.report", 2), $this->link(":Setting:Report:"), "fa-chart-area", false);
-        }
+            $separate = true;
+        }*/
 
         if ($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('IS_ADMIN'))) {
             $this->accessibleSettings[] = new SettingMenu("permissions", $this->translator->translate("permission.permission", 2), $this->link(":Setting:Permission:"), "fa-gavel", true);
+            $separate = true;
         }
 
-        $this->accessibleSettings[] = new SettingMenu("multiaccounts", $this->translator->translate("settings.multiaccount", 1), $this->link(":Setting:Multiaccount:"), "fa-sitemap", true); //user can always look into multiaccount settings
-        $this->accessibleSettings[] = new SettingMenu("app", $this->translator->translate("settings.application"), $this->link(":Setting:App:"), "fa-laptop", true); //user can always look into app settings to setup his own properties
+        if ($separate) {
+            $this->accessibleSettings[] = new SettingMenu("separator"); //to separate user settings from admin settings
+        }
+
+        //user always accessible settings
+        $this->accessibleSettings[] = new SettingMenu("multiaccounts", $this->translator->translate("settings.multiaccount", 1), $this->link(":Setting:Multiaccount:"), "fa-sitemap", true);
+        $this->accessibleSettings[] = new SettingMenu("export", $this->translator->translate("settings.export", 1), $this->link(":Setting:Export:"), "far fa-calendar", true);
+        $this->accessibleSettings[] = new SettingMenu("app", $this->translator->translate("settings.application"), $this->link(":Setting:App:"), "fa-laptop", true);
 
         return $this;
     }
@@ -193,7 +205,7 @@ class SecuredPresenter extends BasePresenter
         ];
     }
 
-    protected function redrawNavbar()
+    protected function redrawNavbar(): void
     {
         $this['navbar']->redrawControl("nav");
     }

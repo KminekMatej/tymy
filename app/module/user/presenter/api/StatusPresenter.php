@@ -12,12 +12,12 @@ use Tymy\Module\User\Manager\UserManager;
  */
 class StatusPresenter extends SecuredPresenter
 {
-    public function injectManager(UserManager $userManager)
+    public function injectManager(UserManager $userManager): void
     {
         $this->manager = $userManager;
     }
 
-    public function actionDefault($status)
+    public function actionDefault($status): void
     {
         if ($this->getRequest()->getMethod() !== "GET") {
             $this->respondNotAllowed();

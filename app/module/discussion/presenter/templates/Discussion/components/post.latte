@@ -1,18 +1,19 @@
 {*TODO: enphasize sticky post and new posts*}
-    
+
 <div n:class="row,post,post-other,$item->getSticky() ? post-sticky,$item->getNewPost() ? post-new" id="row-{$item->getId()}">
     <div class="col-2 col-lg-1 text-center">
-        <img class="avatar" src="{$item->getCreatedBy()->getPictureUrl()}" />
+        <img n:if="$item->getCreatedBy()" class="avatar" src="{$item->getCreatedBy()->getPictureUrl()}" />
     </div>
-    <div class="col-10 col-lg-11 content">
+    <div class="col-10 col-lg-11 content pb-2">
         <div class="arrow-left"></div>
         <div class="row header">
             <div class="col-8 created-by">
-                <a href="{plink :Team:Player: $item->getCreatedBy()->getId()}" title="{$item->getCreatedBy()->getCallName()}">{$item->getCreatedBy()->getCallName()}</a>
+                <a n:if="$item->getCreatedBy()" href="{plink :Team:Player: $item->getCreatedBy()->getId()}" title="{$item->getCreatedBy()->getCallName()}">{$item->getCreatedBy()->getCallName()}</a>
+                <span n:if="!$item->getCreatedBy()">???</span>
                 <i class="fas fa-thumbtack text-warning" n:if="$item->getSticky()"></i>
                 <span class="badge badge-primary" n:if="$item->getNewPost()">N</span>
             </div>
-            <div class="col-4 text-right created" {if $item->getUpdatedAt()}title="{_common.edited} {$userList[$item->getUpdatedById()]->getDisplayName()}, {$item->getUpdatedAt()|date:'j.n.Y G:i'}"{/if}>
+            <div class="col-4 text-right created" {if $item->getUpdatedAt()}title="{_common.edited} {isset($userList[$item->getUpdatedById()]) ? $userList[$item->getUpdatedById()]->getDisplayName() : '?'}, {$item->getUpdatedAt()|date:'j.n.Y G:i'}"{/if}>
                 {$item->getCreatedAt()|date:'j.n.Y G:i'}
                 <i class="fas fa-info-circle text-warning" n:if="$item->getUpdatedAt()"></i>
             </div>
@@ -22,11 +23,15 @@
                 {$item->getPost()|noescape}
             {/if}
         </div>
+
+        {include 'reaction-bar.latte', item => $item}
         <div class="edit-bar btn-group btn-group-sm float-md-right" role="group">
+            <button class="btn btn-sm btn-light btn-light-bordered emoji-toggler">👍</button>
+            {include 'emoji-picker.latte', rowId => $item->getId()}
             <a n:if="$discussionPosts->getDiscussion()->getCanStick()" n:class="btn,btn-sm,$item->getSticky() ? active,$item->getSticky() ? btn-dark:btn-light,!$item->getSticky() ? btn-light-bordered" href="{plink :Discussion:Discussion:stickPost $item->getId(), $discussionPosts->getDiscussion()->getId(), $item->getSticky() ? false : true}" title="{if $item->getSticky()}{_discussion.unpin}{else}{_discussion.pin}{/if}"><i class="fa fa-thumbtack" aria-hidden="true"></i></a>
             <button class="btn btn-sm btn-light btn-light-bordered clipboard-btn" data-clipboard-target="DIV.post#row-{$item->getId()} DIV.text" title="{_common.copyToClipboard}"><i class="far fa-copy" aria-hidden="true"></i></button>
             <button n:if="$discussionPosts->getDiscussion()->getEditablePosts() && $item->getCreatedById() == $user->getId()" class="btn btn-sm btn-light btn-light-bordered" onclick="loadPost({$item->getId()})" title="{_common.edit} / {_common.copy}"><i class="far fa-edit" aria-hidden="true"></i></button>
             <a n:if="$discussionPosts->getDiscussion()->getCanDelete() || ($discussionPosts->getDiscussion()->getEditablePosts() && $item->getCreatedById() == $user->getId()) " onclick="return confirm({_discussion.alerts.confirmDeletePost})" class="btn btn-sm btn-light btn-light-bordered delete ajax" href="{plink deletePost! $item->getId(), $discussionPosts->getDiscussion()->getId(), $currentPage}" title="{_common.delete}"><i class="far fa-trash-can" aria-hidden="true"></i></a>
-        </div>
+        </div>   
     </div>
 </div>

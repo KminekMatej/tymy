@@ -22,15 +22,11 @@ use Tymy\Module\User\Manager\UserManager;
  */
 class StatusSetManager extends BaseManager
 {
-    private ?StatusSet $statusSet;
-    private StatusManager $statusManager;
-    private UserManager $userManager;
+    private ?StatusSet $statusSet = null;
 
-    public function __construct(ManagerFactory $managerFactory, StatusManager $statusManager, UserManager $userManager)
+    public function __construct(ManagerFactory $managerFactory, private StatusManager $statusManager, private UserManager $userManager)
     {
         parent::__construct($managerFactory);
-        $this->statusManager = $statusManager;
-        $this->userManager = $userManager;
     }
 
     public function map(?IRow $row, $force = false): ?BaseModel
@@ -52,6 +48,9 @@ class StatusSetManager extends BaseManager
         return StatusSet::class;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     protected function getScheme(): array
     {
         return StatusSetMapper::scheme();
@@ -96,9 +95,6 @@ class StatusSetManager extends BaseManager
 
     /**
      * Check this status set is used, by checking if any of its statuses is used
-     *
-     * @param int $statusSetId
-     * @return bool
      */
     public function isUsed(int $statusSetId): bool
     {
@@ -122,7 +118,6 @@ class StatusSetManager extends BaseManager
 
     /**
      * Create status set folder
-     * @param int $statusSetId
      */
     private function createStatusSetDir(int $statusSetId): void
     {
@@ -149,6 +144,9 @@ class StatusSetManager extends BaseManager
         return parent::deleteRecord($resourceId);
     }
 
+    /**
+     * @return int[]
+     */
     public function getAllowedReaders(BaseModel $record): array
     {
         return $this->getAllUserIds();
@@ -161,10 +159,9 @@ class StatusSetManager extends BaseManager
 
     /**
      * Get array of StatusSet objects which user is allowed to read
-     * @param int $userId
      * @return Discussion[]
      */
-    public function getListUserAllowed($userId)
+    public function getListUserAllowed(int $userId): array
     {
         return $this->mapAll($this->database->table($this->getTable())->fetchAll());
     }
@@ -175,8 +172,6 @@ class StatusSetManager extends BaseManager
 
         parent::updateByArray($resourceId, $data);
 
-        $updatedSS = $this->getById($resourceId);
-
-        return $updatedSS;
+        return $this->getById($resourceId);
     }
 }

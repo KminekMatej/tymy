@@ -12,12 +12,12 @@ use Tymy\Module\User\Manager\UserManager;
  */
 class DefaultPresenter extends SecuredPresenter
 {
-    public function injectManager(UserManager $userManager)
+    public function injectManager(UserManager $userManager): void
     {
         $this->manager = $userManager;
     }
 
-    public function actionDefault($resourceId, $subResourceId)
+    public function actionDefault($resourceId, $subResourceId): void
     {
         switch ($this->getRequest()->getMethod()) {
             case 'GET':
@@ -34,7 +34,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->respondNotAllowed();
     }
 
-    private function requestGetList()
+    private function requestGetList(): void
     {
         $users = $this->manager->getList();
 

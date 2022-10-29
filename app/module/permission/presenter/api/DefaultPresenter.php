@@ -20,7 +20,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->manager = $manager;
     }
 
-    public function actionDefault($resourceId, $subResourceId)
+    public function actionDefault($resourceId, $subResourceId): void
     {
         switch ($this->getRequest()->getMethod()) {
             case 'GET':
@@ -39,7 +39,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->respondNotAllowed();
     }
 
-    public function actionName(string $name)
+    public function actionName(string $name): void
     {
         $this->allowAdmin();
 
@@ -56,7 +56,7 @@ class DefaultPresenter extends SecuredPresenter
         }
     }
 
-    public function actionType(string $name)
+    public function actionType(string $name): void
     {
         $this->allowAdmin();
 
@@ -69,7 +69,7 @@ class DefaultPresenter extends SecuredPresenter
         }
     }
 
-    private function requestGetList()
+    private function requestGetList(): void
     {
         $this->allowAdmin();
 

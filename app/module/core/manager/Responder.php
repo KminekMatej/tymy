@@ -5,7 +5,7 @@
 namespace Tymy\Module\Core\Manager;
 
 use Exception;
-use Kdyby\Translation\Translator;
+use Contributte\Translation\Translator;
 use Nette\Application\AbortException;
 use Nette\Application\Application;
 use Nette\Http\Request;
@@ -21,24 +21,18 @@ use Tymy\Module\User\Model\User;
  */
 class Responder
 {
-    private Application $application;
     public ?RootPresenter $presenter = null;
     public ?RootPresenter $presenterMock = null;
-    public Translator $translator;
     private int $httpCode = Response::S403_FORBIDDEN;
 
-    /** @var mixed */
+    /** @var null|mixed|mixed[] */
     private $payload;
-    private Request $request;
 
-    public function __construct(Application $application, Request $request, Translator $translator)
+    public function __construct(private Application $application, public Translator $translator)
     {
-        $this->application = $application;
-        $this->request = $request;
-        $this->translator = $translator;
     }
 
-    private function init($httpCode = Response::S403_FORBIDDEN)
+    private function init(int $httpCode = Response::S403_FORBIDDEN): void
     {
         $this->presenter = $this->application->getPresenter();
         $this->payload = null;
@@ -55,8 +49,7 @@ class Responder
      *
      * @param int $code Specific tymy app response code
      * @param string $message Additional response message
-     * @param string $sessionKey SessionKey - used only for auth responses
-     * @return void
+     * @param string|null $sessionKey SessionKey - used only for auth responses
      * @throws TymyResponse
      */
     private function respond(int $code, string $message, string $sessionKey = null): void
@@ -71,7 +64,7 @@ class Responder
         );
     }
 
-    private function throw(string $message)
+    private function throw(string $message): void
     {
         $this->presenter->getHttpResponse()->setCode($this->httpCode);
 
@@ -81,7 +74,7 @@ class Responder
     //***********  ACCEPTED RESPONSES:
 
 
-    public function A200_OK($payload = null)
+    public function A200_OK($payload = null): void
     {
         $this->init(Response::S200_OK);
         if ($payload !== null) {
@@ -90,7 +83,7 @@ class Responder
         $this->respond(200, "A200");
     }
 
-    public function A201_CREATED($payload = null)
+    public function A201_CREATED($payload = null): void
     {
         $this->init(Response::S201_CREATED);
         if ($payload) {
@@ -99,7 +92,7 @@ class Responder
         $this->respond(201, "A201");
     }
 
-    public function A304_NOT_MODIFIED($payload = null)
+    public function A304_NOT_MODIFIED($payload = null): void
     {
         $this->init(Response::S304_NOT_MODIFIED);
         if ($payload) {
@@ -108,7 +101,7 @@ class Responder
         $this->respond(304, "A304");
     }
 
-    public function A2001_LOGGED_IN($userData, $tsid)
+    public function A2001_LOGGED_IN($userData, string $tsid): void
     {
         $this->init(Response::S200_OK);
         $this->payload = $userData;
@@ -117,155 +110,151 @@ class Responder
     //***********  ERROR RESPONSES:
 
     /** @throws AbortException */
-    public function E400_BAD_REQUEST($message = null)
+    public function E400_BAD_REQUEST($message = null): void
     {
         $this->init(Response::S400_BAD_REQUEST);
-        $this->respond(400, ($message ? $message : ""));
+        $this->respond(400, ($message ?: ""));
     }
 
     /** @throws AbortException */
-    public function E401_UNAUTHORIZED($message = null)
+    public function E401_UNAUTHORIZED($message = null): void
     {
         $this->init(Response::S401_UNAUTHORIZED);
-        $this->respond(401, ($message ? $message : "Unauthorized"));
+        $this->respond(401, ($message ?: "Unauthorized"));
     }
 
     /** @throws AbortException */
-    public function E403_FORBIDDEN($message = null)
+    public function E403_FORBIDDEN($message = null): void
     {
         $this->init();
-        $this->respond(403, ($message ? $message : "Forbidden"));
+        $this->respond(403, ($message ?: "Forbidden"));
     }
 
     /** @throws AbortException */
-    public function E404_NOT_FOUND(?string $module = null, $identifier = null)
+    public function E404_NOT_FOUND(?string $module = null, $identifier = null): void
     {
         $this->init(Response::S404_NOT_FOUND);
-        switch ($module) {
-            case User::MODULE:
-                $message = $this->translator->translate("common.alerts.userNotFound");
-                break;
-            default:
-                $message = "Not-found";
-                break;
-        }
+        $message = match ($module) {
+            User::MODULE => $this->translator->translate("common.alerts.userNotFound"),
+            default => "Not-found",
+        };
         $this->respond(404, $message, "Not-found");
     }
 
     /** @throws AbortException */
-    public function E405_METHOD_NOT_ALLOWED()
+    public function E405_METHOD_NOT_ALLOWED(): void
     {
         $this->init(Response::S405_METHOD_NOT_ALLOWED);
         $this->respond(405, "E405", "Method not allowed");
     }
 
     /** @throws AbortException */
-    public function E500_INTERNAL_SERVER_ERROR($throw = false)
+    public function E500_INTERNAL_SERVER_ERROR($throw = false): void
     {
         $this->init(Response::S500_INTERNAL_SERVER_ERROR);
         $throw ? $this->throw("E500") : $this->respond(500, "E500");
     }
 
     /** @throws AbortException */
-    public function E4001_VIEW_NOT_PERMITTED($module, $id)
+    public function E4001_VIEW_NOT_PERMITTED($module, $id): void
     {
         $this->init();
         $this->respond(4001, "Forbidden to view `$id@$module`");
     }
 
     /** @throws AbortException */
-    public function E4002_EDIT_NOT_PERMITTED($module, $id)
+    public function E4002_EDIT_NOT_PERMITTED($module, $id): void
     {
         $this->init();
         $this->respond(4002, "Forbidden to edit `$id@$module`");
     }
 
     /** @throws AbortException */
-    public function E4003_CREATE_NOT_PERMITTED($module)
+    public function E4003_CREATE_NOT_PERMITTED($module): void
     {
         $this->init();
         $this->respond(4003, "Forbidden to create record in `$module`");
     }
 
     /** @throws AbortException */
-    public function E4004_DELETE_NOT_PERMITTED($module, $id)
+    public function E4004_DELETE_NOT_PERMITTED($module, $id): void
     {
         $this->init();
         $this->respond(4004, "Forbidden to delete `$id@$module`");
     }
 
     /** @throws AbortException */
-    public function E4005_OBJECT_NOT_FOUND($module, $id)
+    public function E4005_OBJECT_NOT_FOUND($module, $id): void
     {
         $this->init(Response::S404_NOT_FOUND);
         $this->respond(4005, "Object `$id@$module` not found");
     }
 
     /** @throws AbortException */
-    public function E4006_INVALID_REQUEST_DATA()
+    public function E4006_INVALID_REQUEST_DATA(): void
     {
         $this->init(Response::S400_BAD_REQUEST);
         $this->respond(4006, "Invalid request data");
     }
 
     /** @throws AbortException */
-    public function E4007_RELATION_PROHIBITS($field)
+    public function E4007_RELATION_PROHIBITS($field): void
     {
         $this->init(Response::S400_BAD_REQUEST);
         $this->respond(4007, "Relation prohibits this operation on field `$field`");
     }
 
     /** @throws AbortException */
-    public function E4008_CHILD_NOT_RELATED_TO_PARENT($childModule, $childId, $parentModule, $parentId)
+    public function E4008_CHILD_NOT_RELATED_TO_PARENT($childModule, $childId, $parentModule, $parentId): void
     {
         $this->init();
         $this->respond(4008, "Child `$childId@$childModule` not related to `$parentId@$parentModule`");
     }
 
     /** @throws AbortException */
-    public function E4009_CREATE_FAILED($module)
+    public function E4009_CREATE_FAILED($module): void
     {
         $this->init(Response::S400_BAD_REQUEST);
         $this->respond(4009, "Creating record in module `$module` failed");
     }
 
     /** @throws AbortException */
-    public function E4010_UPDATE_FAILED($module, $id)
+    public function E4010_UPDATE_FAILED($module, $id): void
     {
         $this->init(Response::S400_BAD_REQUEST);
         $this->respond(4010, "Updating `$id@$module` failed");
     }
 
     /** @throws AbortException */
-    public function E4011_DELETE_FAILED($module, $id)
+    public function E4011_DELETE_FAILED($module, $id): void
     {
         $this->init(Response::S400_BAD_REQUEST);
         $this->respond(4011, "Deleting `$id@$module` failed");
     }
 
     /** @throws AbortException */
-    public function E4012_IMAGE_UPDATE_FAILED($module, $id)
+    public function E4012_IMAGE_UPDATE_FAILED($module, $id): void
     {
         $this->init(Response::S400_BAD_REQUEST);
         $this->respond(4012, "Updating image at `$id@$module` failed");
     }
 
     /** @throws AbortException */
-    public function E4013_MISSING_INPUT($inputName)
+    public function E4013_MISSING_INPUT($inputName): void
     {
         $this->init(Response::S400_BAD_REQUEST);
         $this->respond(4013, "Missing input `$inputName`");
     }
 
     /** @throws AbortException */
-    public function E4014_EMPTY_INPUT($inputName)
+    public function E4014_EMPTY_INPUT($inputName): void
     {
         $this->init(Response::S400_BAD_REQUEST);
         $this->respond(4014, "Empty input `$inputName`");
     }
 
     /** @throws AbortException */
-    public function E4015_MISSING_URL_INPUT($inputName)
+    public function E4015_MISSING_URL_INPUT($inputName): void
     {
         $this->init(Response::S400_BAD_REQUEST);
         $this->respond(4015, "Missing url input `$inputName`");
@@ -274,30 +263,28 @@ class Responder
     /**
      * @param string $module
      * @param int $recordId
-     * @param string $blockingModule
      * @param int[] $blockingIds
      * @throws AbortException
      */
-    public function E4016_DELETE_BLOCKED_BY(string $blockingModule, array $blockingIds)
+    public function E4016_DELETE_BLOCKED_BY(string $blockingModule, array $blockingIds): void
     {
         $this->init(Response::S403_FORBIDDEN);
-        $this->respond(4016, "Delete blocked by `$blockingModule` `" . join(", ", $blockingIds) . "`");
+        $this->respond(4016, "Delete blocked by `$blockingModule` `" . implode(", ", $blockingIds) . "`");
     }
 
     /**
      * @param string $module
      * @param int $recordId
-     * @param string $blockingModule
      * @param int[] $blockingIds
      * @throws AbortException
      */
-    public function E4017_UPDATE_BLOCKED_BY(string $blockingModule, array $blockingIds)
+    public function E4017_UPDATE_BLOCKED_BY(string $blockingModule, array $blockingIds): void
     {
         $this->init();
-        $this->respond(4017, "Update blocked by `$blockingModule` `" . join(", ", $blockingIds) . "`");
+        $this->respond(4017, "Update blocked by `$blockingModule` `" . implode(", ", $blockingIds) . "`");
     }
 
-    public function E4018_MIGRATION_FAILED(array $log = [])
+    public function E4018_MIGRATION_FAILED(array $log = []): void
     {
         $this->init(500);
         $this->payload = $log;

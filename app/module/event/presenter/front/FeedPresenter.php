@@ -11,7 +11,7 @@ class FeedPresenter extends EventBasePresenter
     /** @inject */
     public EventManager $eventManager;
 
-    public function actionDefault(string $start, string $end)
+    public function actionDefault(string $start, string $end): void
     {
         $events = $this->eventManager->getEventsInterval($this->user->getId(), new DateTime($start), new DateTime($end));
 

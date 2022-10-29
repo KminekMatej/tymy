@@ -16,25 +16,25 @@ class DefaultPresenter extends SecuredPresenter
     /** @inject */
     public VoteManager $voteManager;
 
-    public function actionDefault(?string $resource = null)
+    public function actionDefault(?string $resource = null): void
     {
         if ($resource) {
             $this->setView("poll");
         }
     }
 
-    public function beforeRender()
+    public function beforeRender(): void
     {
         parent::beforeRender();
         $this->addBreadcrumb($this->translator->translate("poll.poll", 2), $this->link(":Poll:Default:"));
     }
 
-    public function renderDefault()
+    public function renderDefault(): void
     {
-        $this->template->polls = $this->pollManager->getListMenu();
+        $this->template->polls = $this->pollManager->getListUserAllowed();
     }
 
-    public function renderPoll(?string $resource = null)
+    public function renderPoll(?string $resource = null): void
     {
         /* @var $poll Poll */
         $poll = $this->pollManager->getById($this->parseIdFromWebname($resource));
@@ -52,7 +52,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->template->resultsDisplayedWhenClosed = $this->translator->translate("poll.resultsDisplayedWhenClosed");
     }
 
-    public function handleVote(int $pollId): void
+    public function handleVote(int $pollId, ?int $userId = null): void
     {
         $votes = [];
         $post = $this->getRequest()->getPost();
@@ -65,8 +65,8 @@ class DefaultPresenter extends SecuredPresenter
 
             $votes[] = [
                 "optionId" => $optId,
-                "userId" => $this->user->getId(),
-                $opt["type"] => $opt["type"] == "numericValue" ? (int) $opt["value"] : $opt["value"]
+                "userId" => $userId ?: $this->user->getId(),    //make alien voting possible
+                $opt["type"] => $opt["type"] == "numericValue" ? (float) $opt["value"] : $opt["value"]
             ];
         }
         $this->redrawControl("poll-results");

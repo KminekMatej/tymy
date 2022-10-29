@@ -24,20 +24,20 @@ class Bootstrap
         // absolute filesystem path to the application root
         define("ROOT_DIR", getenv("ROOT_DIR") ? self::normalizePath(getenv("ROOT_DIR")) : self::normalizePath(__DIR__ . "/.."));
         define("TEAM_DIR", getenv("TEAM_DIR") ?: str_replace("//", "/", dirname($_SERVER['SCRIPT_FILENAME'], 2)));
-        define('MODULES', array_diff(scandir(self::MODULES_DIR), array('..', '.')));
+        define('MODULES', array_diff(scandir(self::MODULES_DIR), ['..', '.']));
 
-        $autotestMode = getenv("AUTOTEST") || isset($_GET["AUTOTEST"]) ? true : false;
+        $autotestMode = getenv("AUTOTEST") || isset($_GET["AUTOTEST"]);
 
         $configurator = new Configurator();
 
         try {   // debug.local.neon contains either true, to generally enable debug, or array of IP addresses
             $debugFile = TEAM_DIR . '/local/debug.neon';
             $debug = file_exists($debugFile) ? Neon::decode(file_get_contents($debugFile)) : false;
-        } catch (Exception $exc) {
+        } catch (Exception) {
             $debug = false;
         }
 
-        $configurator->setDebugMode($debug ? $debug : false);
+        $configurator->setDebugMode($debug ?: false);
 
         $configurator->enableTracy($autotestMode ? TEAM_DIR . '/log_autotest' : TEAM_DIR . '/log');
 
@@ -59,24 +59,21 @@ class Bootstrap
 
     /**
      * Path normalizer - removes double dots from path to make it look clearer
-     *
-     * @param string $path
-     * @return string
      */
     public static function normalizePath(string $path): string
     {
         $root = ($path[0] === '/') ? '/' : '';
 
         $segments = explode('/', trim($path, '/'));
-        $ret = array();
+        $ret = [];
         foreach ($segments as $segment) {
-            if (($segment == '.') || strlen($segment) === 0) {
+            if (($segment == '.') || $segment === '') {
                 continue;
             }
             if ($segment == '..') {
                 array_pop($ret);
             } else {
-                array_push($ret, $segment);
+                $ret[] = $segment;
             }
         }
         return $root . implode('/', $ret);
@@ -84,10 +81,6 @@ class Bootstrap
 
     /**
      * Enrich configurator with config files from all of the submodules
-     *
-     * @param Configurator $configurator
-     * @param array $modules
-     * @return void
      */
     private static function addModuleConfig(Configurator &$configurator, array $modules): void
     {

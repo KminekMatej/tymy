@@ -2,9 +2,14 @@
 
 namespace Tymy\Module\Setting\Presenter\Front;
 
+use Nette\Application\UI\Form;
+use stdClass;
+use Tymy\Module\Core\Helper\ArrayHelper;
+use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Model\Cell;
+use Tymy\Module\Core\Model\Row;
 use Tymy\Module\Poll\Manager\OptionManager;
 use Tymy\Module\Poll\Manager\PollManager;
-use Tymy\Module\Poll\Model\Option;
 use Tymy\Module\Poll\Model\Poll;
 use Tymy\Module\Setting\Presenter\Front\SettingBasePresenter;
 
@@ -15,135 +20,122 @@ class PollPresenter extends SettingBasePresenter
 
     /** @inject */
     public OptionManager $optionManager;
+    private ?Poll $poll = null;
 
-    public function actionDefault(?string $resource = null)
+    public function actionDefault(?string $resource = null): void
     {
         if ($resource) {
             $this->setView("poll");
         }
     }
 
-    public function beforeRender()
+    public function beforeRender(): void
     {
         parent::beforeRender();
         $this->addBreadcrumb($this->translator->translate("poll.poll", 2), $this->link(":Setting:Poll:"));
     }
 
-    public function renderDefault()
+    public function renderDefault(): void
     {
-        $this->template->polls = $this->pollManager->getList();
+        $this->template->cols = [
+            null,
+            "Id",
+            $this->translator->translate("settings.title"),
+            $this->translator->translate("settings.description"),
+            $this->translator->translate("settings.status"),
+            $this->translator->translate("common.created"),
+        ];
+
+        $this->template->rows = [];
+        $polls = $this->pollManager->getList();
+        foreach ($polls as $poll) {
+            /* @var $poll Poll */
+            $this->template->rows[] = new Row([
+                Cell::detail($this->link(":Setting:Poll:", [$poll->getWebName()])),
+                $poll->getId(),
+                $poll->getCaption(),
+                $poll->getDescription(),
+                $this->translator->translate("poll." . strtolower($poll->getStatus())),
+                $poll->getCreatedAt()->format(BaseModel::DATE_CZECH_FORMAT) . ", " . $this->userManager->getById($poll->getCreatedById())->getDisplayName(),
+            ]);
+        }
+
+        $this->template->polls = $polls;
     }
 
-    public function renderNew()
+    public function renderNew(): void
     {
         $this->allowPermission('ASK.VOTE_UPDATE');
 
         $this->addBreadcrumb($this->translator->translate("poll.new"));
-
-        $this->template->polls = [(new Poll())
-                ->setId(-1)
-                ->setCaption("")
-                ->setDescription("")
-                ->setStatus("DESIGN")
-                ->setMinItems(1)
-                ->setMaxItems(99)
-                ->setAnonymousResults("")
-                ->setChangeableVotes("")
-                ->setShowResults("NEVER")
-        ];
     }
 
-    public function renderPoll(?string $resource = null)
+    public function renderPoll(?string $resource = null): void
     {
         $this->allowPermission('ASK.VOTE_UPDATE');
 
         //RENDERING POLL DETAIL
         $pollId = $this->parseIdFromWebname($resource);
-        /* @var $pollObj Poll */
-        $pollObj = $this->pollManager->getById($pollId);
-        if ($pollObj == null) {
+        /* @var $this->poll Poll */
+        $this->poll = $this->pollManager->getById($pollId);
+        if ($this->poll == null) {
             $this->flashMessage($this->translator->translate("poll.errors.pollNotExists", null, ['id' => $pollId]), "danger");
             $this->redirect(':Setting:Poll:');
         }
-        if (count($pollObj->getOptions()) == 0) {
-            $pollObj->setOptions([(new Option())->setId(-1)->setPollId($pollId)->setCaption("")->setType("TEXT")]);
-        }
-        $this->addBreadcrumb($pollObj->getCaption(), $this->link(":Setting:Poll:", $pollObj->getWebName()));
-        $this->template->poll = $pollObj;
+        $this->addBreadcrumb($this->poll->getCaption(), $this->link(":Setting:Poll:", $this->poll->getWebName()));
+        $this->template->poll = $this->poll;
     }
 
-    public function handlePollsEdit()
+    public function handlePollDelete(string $resource): void
     {
-        $post = $this->getRequest()->getPost();
-        $binders = $post["binders"];
-        foreach ($binders as $bind) {
-            $this->pollManager->update($bind["changes"], $bind["id"]);
-        }
-    }
-
-    public function handlePollCreate()
-    {
-        $this->pollManager->create($this->getRequest()->getPost()["changes"]);
+        $pollId = $this->parseIdFromWebname($resource);
+        $this->pollManager->delete($pollId);
         $this->redirect(':Setting:Poll:');
     }
 
-    public function handlePollEdit()
+    public function createComponentPollForm(): Form
     {
-        $bind = $this->getRequest()->getPost();
-        $this->pollManager->update($bind["changes"], $bind["id"]);
+        $pollId = $this->parseIdFromWebname($this->getRequest()->getParameter("resource"));
+        return $this->formFactory->createPollConfigForm(fn(Form $form, stdClass $values) => $this->pollFormSuccess($form, $values), ($pollId ? $this->pollManager->getById($pollId) : null));
     }
 
-    public function handlePollDelete()
+    public function pollFormSuccess(Form $form, stdClass $values): void
     {
-        $bind = $this->getRequest()->getPost();
-        $this->pollManager->delete($bind["id"]);
-    }
+        /* @var $poll Poll */
+        $poll = $values->id ?
+            $this->pollManager->update((array) $values, $values->id) :
+            $this->pollManager->create((array) $values);
 
-    public function handlePollOptionsEdit($poll)
-    {
-        $post = $this->getRequest()->getPost();
-        $binders = $post["binders"];
-        $pollId = $this->parseIdFromWebname($poll);
-        foreach ($binders as $bind) {
-            $bind["changes"]["pollId"] = $pollId;
-            $this->editPollOption($bind);
+        $existingOptionIds = ArrayHelper::entityIds($poll->getOptions());
+        $optionsToDel = [];
+
+        foreach ($form->getHttpData() as $name => $value) { //get options from http data instead of $values to read also dynamically adde option rows
+            if (preg_match('/option_id_(.+)/m', $name, $matches)) {
+                $id = $matches[1];
+
+                if ($id === '0') {   //skip template row
+                    continue;
+                }
+                if ($value == 'null') {
+                    $optionsToDel[] = $id;
+                    continue;
+                }
+
+                $optionData = [
+                    "caption" => $form->getHttpData()["option_caption_$id"] ?? null,
+                    "type" => $form->getHttpData()["option_type_$id"] ?? null,
+                ];
+
+                in_array($id, $existingOptionIds) ?
+                        $this->optionManager->update($optionData, $poll->getId(), $id) :
+                        $this->optionManager->create($optionData, $poll->getId());
+            }
         }
-    }
 
-    public function handlePollOptionCreate($poll)
-    {
-        $pollData = $this->getRequest()->getPost()[1]; // new poll option is always as item 1
-        $pollId = $this->parseIdFromWebname($poll);
-        $pollData["pollId"] = $pollId;
-        $this->optionManager->create($pollData);
-    }
-
-    public function handlePollOptionEdit($poll)
-    {
-        $bind = $this->getRequest()->getPost();
-        $bind["changes"]["pollId"] = $this->parseIdFromWebname($poll);
-        $this->editPollOption($bind);
-    }
-
-    public function handlePollOptionDelete($poll)
-    {
-        $bind = $this->getRequest()->getPost();
-        $bind["pollId"] = $this->parseIdFromWebname($poll);
-        $this->optionManager->delete($bind["pollId"], $bind["id"]);
-    }
-
-    /**
-     * Update or create poll option
-     *
-     * @param array $bind
-     * @return Option Created / updated option
-     */
-    private function editPollOption($bind): Option
-    {
-        if ($bind["id"] == -1) {
-            return $this->optionManager->create($bind["changes"]);
-        } else {
-            return $this->optionManager->update($bind["changes"], $bind["id"]);
+        if (!empty($optionsToDel)) {
+            $this->optionManager->deleteOptions($poll->getId(), $optionsToDel);
         }
+
+        $this->redirect(':Setting:Poll:', [$poll->getWebName()]);
     }
 }

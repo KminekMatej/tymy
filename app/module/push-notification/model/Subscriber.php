@@ -39,25 +39,25 @@ class Subscriber extends BaseModel
         return $this->created;
     }
 
-    public function setType(string $type)
+    public function setType(string $type): static
     {
         $this->type = $type;
         return $this;
     }
 
-    public function setUserId(int $userId)
+    public function setUserId(int $userId): static
     {
         $this->userId = $userId;
         return $this;
     }
 
-    public function setSubscription(string $subscription)
+    public function setSubscription(string $subscription): static
     {
         $this->subscription = $subscription;
         return $this;
     }
 
-    public function setCreated(DateTime $created)
+    public function setCreated(DateTime $created): static
     {
         $this->created = $created;
         return $this;
@@ -68,6 +68,9 @@ class Subscriber extends BaseModel
         return self::MODULE;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     public function getScheme(): array
     {
         return SubscriberMapper::scheme();

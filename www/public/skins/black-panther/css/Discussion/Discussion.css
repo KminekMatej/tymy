@@ -82,7 +82,7 @@ DIV.post.post-sticky .content{
 /* Discussion post settings toolbar styling */
 
 DIV.post .content:hover > DIV.edit-bar {
-    display: block;
+    display: inline-flex;
 }
 
 DIV.post .content DIV.edit-bar {
@@ -91,7 +91,6 @@ DIV.post .content DIV.edit-bar {
     margin: 1px;
     bottom: 3px;
     right: 3px;
-    z-index: 10;
 }
 
 DIV.post .content DIV.edit-bar BUTTON.btn.delete:hover, A.btn.delete:hover{
@@ -101,10 +100,6 @@ DIV.post .content DIV.edit-bar BUTTON.btn.delete:hover, A.btn.delete:hover{
 }
 
 /* Discussion post text content styling */
-
-DIV.post .content .text{
-    margin-bottom: 15px;
-}
 
 DIV.post .content .text OL{
     display: inline-block;

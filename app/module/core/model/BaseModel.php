@@ -65,30 +65,24 @@ abstract class BaseModel implements JsonSerializable
      * @param BaseModel[] $entities
      * @return array
      */
-    protected function arrayToJson($entities)
+    protected function arrayToJson(array $entities)
     {
         if (empty($entities)) {
             return [];
         }
 
-        return array_map(function ($entity) {
-            /* @var $entity BaseModel */
-            return $entity->jsonSerialize();
-        }, $entities);
+        return array_map(fn($entity) => /* @var $entity BaseModel */
+$entity->jsonSerialize(), $entities);
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         $ret = [];
         foreach ($this->getScheme() as $field) {
             $getField = "get" . ucfirst($field->getProperty());
             $output = $this->$getField();
             $value = $output instanceof DateTime ? (clone $output)->setTimezone(new \DateTimeZone("UTC"))->format(self::DATE_FORMAT) : $output; //API takes datetime, stored in local timezone and prints it always in UTC timezone
-            if ($field->getAlias()) {
-                $ret[$field->getAlias()] = $value;
-            } else {
-                $ret[$field->getProperty()] = $value;
-            }
+            $ret[$field->getProperty()] = $value;
         }
         return $ret;
     }

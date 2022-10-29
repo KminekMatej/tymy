@@ -14,9 +14,12 @@ class Option extends BaseModel
 {
     public const MODULE = "poll";
     public const TABLE = "ask_items";
+    public const TYPE_NUMBER = "NUMBER";
+    public const TYPE_TEXT = "TEXT";
+    public const TYPE_BOOLEAN = "BOOLEAN";
 
     private int $pollId;
-    private string $caption;
+    private ?string $caption = null;
     private string $type;
 
     public function getPollId(): int
@@ -24,7 +27,7 @@ class Option extends BaseModel
         return $this->pollId;
     }
 
-    public function getCaption(): string
+    public function getCaption(): ?string
     {
         return $this->caption;
     }
@@ -34,19 +37,19 @@ class Option extends BaseModel
         return $this->type;
     }
 
-    public function setPollId(int $pollId)
+    public function setPollId(int $pollId): static
     {
         $this->pollId = $pollId;
         return $this;
     }
 
-    public function setCaption(string $caption)
+    public function setCaption(?string $caption): static
     {
         $this->caption = $caption;
         return $this;
     }
 
-    public function setType(string $type)
+    public function setType(string $type): static
     {
         $this->type = $type;
         return $this;
@@ -57,6 +60,9 @@ class Option extends BaseModel
         return self::MODULE;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     public function getScheme(): array
     {
         return OptionMapper::scheme();

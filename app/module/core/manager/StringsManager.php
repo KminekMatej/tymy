@@ -7,6 +7,7 @@ use Nette\Security\User;
 use Tracy\Debugger;
 use Tracy\ILogger;
 use Tymy\Module\Team\Manager\TeamManager;
+use Tymy\Module\User\Manager\UserManager;
 
 /**
  * Description of StringsManager
@@ -17,16 +18,10 @@ class StringsManager
 {
     public const TABLE = "strings";
     public const LC = ["CZ" => "cs", "EN" => "en", "FR" => "fr", "PL" => "pl"];
+    private UserManager $userManager;
 
-    private TeamManager $teamManager;
-    private Explorer $database;
-    private User $user;
-
-    public function __construct(Explorer $mainDatabase, User $user, TeamManager $teamManager)
+    public function __construct(private Explorer $database, private User $user, private TeamManager $teamManager)
     {
-        $this->database = $mainDatabase;
-        $this->user = $user;
-        $this->teamManager = $teamManager;
     }
 
     public function translate($message, ...$parameters): string
@@ -44,30 +39,24 @@ class StringsManager
 
     /**
      * Get language code - either from registered user, or system default
-     * @return string
      */
     private function getLc(): string
     {
-        $code = $this->user->isLoggedIn() ? $this->user->getIdentity()->getData()["language"] : $this->teamManager->getTeam()->getDefaultLanguageCode();
+        $code = $this->user->isLoggedIn() ? $this->userManager->getById($this->user->getId())->getLanguage() : $this->teamManager->getTeam()->getDefaultLanguageCode();
         return self::LC[$code];
     }
 
     /**
      * Translate by domain and code
-     *
-     * @param string $domain
-     * @param string $code
-     * @param mixed $parameters
-     * @return string
      */
-    public function translateBy(string $domain, string $code, ...$parameters): string
+    public function translateBy(string $domain, string $code, mixed ...$parameters): string
     {
         $translation = $this->database->table(self::TABLE)->where("domain", $domain)->where("code", $code)->where("language", $this->getLc())->limit(1)->fetch();
 
-        if (!$translation) {
+        if (!$translation instanceof \Nette\Database\Table\ActiveRow) {
             Debugger::log("Missing translation: $domain.$code", ILogger::ERROR);
         }
 
-        return $translation ? sprintf($translation->value, ...$parameters) : "Missing translation: $domain.$code";
+        return $translation !== null ? sprintf($translation->value, ...$parameters) : "Missing translation: $domain.$code";
     }
 }

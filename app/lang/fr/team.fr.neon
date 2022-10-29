@@ -28,9 +28,11 @@ lastName: Nom de famille
 phone: Téléphone
 email: E-mail
 birthDate: Date de naissance
-nameDayMonth: Mois de la fête
+birthCode: NIR
+nameDay: Jour de nom
+nameDayMonth: Mois du jour du nom
 chooseMonth: Choisir le mois
-nameDayDay: Jour de la fête
+nameDayDay: Jour du jour du nom
 language: Langue
 dateOfRegistration: "Jour d'enregistrement"
 callName: Nom à afficher
@@ -61,8 +63,18 @@ sport: Sport
 defaultLanguage: Langage par défaut
 hideDiscDesc: Masquer la description de la discussion
 approveAsPlayer: Approuver en tant que joueur
+invitation: Invitation|Invitations
+invite: Inviter
+createInvitation: Inviter un nouveau joueur
+invitation-sent: Expédié
+invitation-accepted: Accepté
+invitation-expired: Expiré
 errors:
     imgFileCorrupted: "Le fichier n'est pas une image ou il est endommagé"
+    passwordMismatch: Non concordance des mots de passe
+    invitationAtLeast: "Au moins un des champs Nom, Prénom et E-Mail doit être rempli"
+    invitationExpired: Invitation déjà expirée
+    invitationAccepted: Invitation déjà utilisée
 alerts:
     signOffNeeded: Language changed - please logout & login for language to change
     registrationApprovedSubject: Inscription à %s approuvée
@@ -72,3 +84,19 @@ alerts:
     loginForbidden: "Joueur n'est pas autorisé à se connecter"
     loginNotApproved: "Joueur n'a pas encore été approuvé par les administrateurs"
     authenticationFailed: Niezgodność loginu lub hasła
+    loginExists: Ce login existe déjà
+    changingRolesForbidden: Interdiction de changer de rôle
+    changingCanEditCallnameForbidden: Le changement de canEditCallName est interdite
+    changingStatusForbidden: Le changement de statut est interdit
+    changingLoginForbidden: Le changement de login est interdit
+    editingCallNameForbidden: Changement de nom à afficher interdit
+    emailExists: E-mail existe déjà
+    userQuotaReached: "Limite de quota d'utilisateurs atteinte"
+    registrationsLimitReached: "Trop d'inscriptions en attente"
+    passwordTooShort: Le mot de passe est trop court
+    emailFailure: "Format d'email invalide"
+    usernameFailure: "Le nom d'utilisateur doit comporter au moins 3 et au plus 20 caractères"
+    targetTeamExists: Cette équipe a déjà ajouté
+    invitationCreated: Invitation créée
+    invitationSent: Invitation envoyée
+    changeOutlookEmail: "Il semble que vous utilisez le fournisseur de messagerie Microsoft (outlook.com / mns.com / live.com / hotmail.com). Ces boîtes aux lettres ont souvent des problèmes avec la délivrance des e-mails. Nous vous suggérons d'utiliser une adresse e-mail différente - ou les e-mails d'information pourraient ne pas être livrés correctement"

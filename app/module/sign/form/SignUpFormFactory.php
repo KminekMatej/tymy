@@ -4,8 +4,12 @@ namespace Tymy\Module\Sign\Form;
 
 use Nette;
 use Nette\Application\UI\Form;
+use Nette\Security\SimpleIdentity;
+use Symfony\Component\Translation\Translator;
 use Tymy\Module\Core\Exception\MissingInputException;
+use Tymy\Module\User\Manager\InvitationManager;
 use Tymy\Module\User\Manager\UserManager;
+use Tymy\Module\User\Model\Invitation;
 
 class SignUpFormFactory
 {
@@ -16,19 +20,16 @@ class SignUpFormFactory
     public const EMAIL_PATTERN = "^[-a-zA-Z0-9!#$%&'*+/=?^_`{|}~]+(\\.[-a-zA-Z0-9!#$%&'*+/=?^_`{|}~]+)*@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)+";
     public const LOGIN_PATTERN = '^[\w-]{3,20}';
 
-    private UserManager $userManager;
-
-    public function __construct(UserManager $userManager)
+    public function __construct(private UserManager $userManager, private InvitationManager $invitationManager, private Translator $translator)
     {
-        $this->userManager = $userManager;
     }
 
-    /**
-     * @return Form
-     */
-    public function create(callable $onSuccess)
+    public function create(callable $onSuccess, ?Invitation $invitation = null): \Nette\Application\UI\Form
     {
         $form = new Form();
+
+        $form->addHidden("invitation", $invitation !== null ? $invitation->getCode() : null);
+
         $form->addText('username', 'Uživatelské jméno:')
             ->setRequired('Uživatelské jméno je povinné')
             ->addRule($form::PATTERN, "Uživatelské jméno musí mít 3-20 znaků", self::LOGIN_PATTERN);
@@ -53,16 +54,40 @@ class SignUpFormFactory
 
         $form->addSubmit('send', 'Registrovat');
 
-        $form->onSuccess[] = function (Form $form, $values) use ($onSuccess) {
+        // fill details from invitation
+        if ($invitation !== null) {
+            $form['firstName']->setValue($invitation->getFirstName());
+            $form['lastName']->setValue($invitation->getLastName());
+            $form['email']->setValue($invitation->getEmail());
+        }
+
+        $form->onSuccess[] = function (Form $form, $values) use ($onSuccess): void {
             try {
-                $this->userManager->register([
+                $invitation = null;
+                if ($values->invitation && !empty($values->invitation)) {
+                    $invitation = $this->invitationManager->getByCode($values->invitation);
+                    if (!$invitation instanceof Invitation) {
+                        if ($invitation->getStatus() == Invitation::STATUS_EXPIRED) { //already expired
+                            $form->addError($this->translator->translate("team.errors.invitationExpired", 1));
+                            return;
+                        } elseif ($invitation->getStatus() == Invitation::STATUS_ACCEPTED) {
+                            $form->addError($this->translator->translate("team.errors.invitationAccepted", 1));
+                            return;
+                        }
+                    }
+                }
+
+                $registeredUser = $this->userManager->register([
                     "login" => $values->username,
                     "password" => $values->password,
                     "email" => $values->email,
                     "firstName" => $values->firstName,
                     "lastName" => $values->lastName,
                     "note" => $values->admin_note,
-                ]);
+                    "invitation" => $values->invitation,
+                ], $invitation);
+
+                $identity = new SimpleIdentity($registeredUser->getId(), $registeredUser->getRoles());
             } catch (\Nette\InvalidArgumentException $exc) {
                 $form['username']->addError($exc->getMessage());
                 return;
@@ -70,7 +95,7 @@ class SignUpFormFactory
                 $form[$exc->getMessage()]->addError("This field is required");
                 return;
             }
-            $onSuccess();
+            $onSuccess($identity);
         };
 
         return $form;

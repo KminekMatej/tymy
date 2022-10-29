@@ -15,17 +15,16 @@ class UserPresenter extends SecuredPresenter
     /** @var RightManager @inject */
     public RightManager $rightManager;
 
-    public function actionDefault()
+    public function actionDefault(): void
     {
-        switch ($this->getRequest()->getMethod()) {
-            case 'GET':
-                $this->requestGetList();
+        if ($this->getRequest()->getMethod() === 'GET') {
+            $this->requestGetList();
         }
 
         $this->respondNotAllowed();
     }
 
-    private function requestGetList()
+    private function requestGetList(): void
     {
         $records = $this->rightManager->getListAllowed($this->user->getId());
 

@@ -2,10 +2,9 @@
 
 namespace Tymy\Module\Setting\Presenter\Front;
 
-use Nette\Utils\Strings;
+use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Permission\Manager\PermissionManager;
 use Tymy\Module\Permission\Model\Permission;
-use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\Setting\Presenter\Front\SettingBasePresenter;
 
 class PermissionPresenter extends SettingBasePresenter
@@ -13,21 +12,21 @@ class PermissionPresenter extends SettingBasePresenter
     /** @inject */
     public PermissionManager $permissionManager;
 
-    public function beforeRender()
+    public function beforeRender(): void
     {
         parent::beforeRender();
         $this->allowPermission('IS_ADMIN');
         $this->addBreadcrumb($this->translator->translate("permission.permission", 2), $this->link(":Setting:Permission:"));
     }
 
-    public function actionDefault(?string $resource = null)
+    public function actionDefault(?string $resource = null): void
     {
         if ($resource) {
             $this->setView("permission");
         }
     }
 
-    public function renderNew()
+    public function renderNew(): void
     {
         $this->allowPermission("IS_ADMIN");
 
@@ -52,12 +51,12 @@ class PermissionPresenter extends SettingBasePresenter
         $this->template->usersRule = "revoked";
     }
 
-    public function renderPermission(?string $resource = null)
+    public function renderPermission(?string $resource = null): void
     {
         $this->allowPermission("IS_ADMIN");
 
         $permission = $this->permissionManager->getByWebName($resource);
-        if (!$permission) {
+        if (!$permission instanceof Permission) {
             $this->flashMessage($this->translator->translate("permission.errors.permissionNotExists", null, ['id' => $permission]), "danger");
             $this->redirect(':Setting:Event:');
         }
@@ -67,8 +66,8 @@ class PermissionPresenter extends SettingBasePresenter
         $users = $this->userManager->getIdList();
 
         $this->template->lastEditedUser = $users[$permission->getUpdatedById()] ?? null;
-        $this->template->allowances = ["allowed" => "Povoleno", "revoked" => "Zakázáno"];
-        $this->template->statuses = ["PLAYER" => "Hráč", "SICK" => "Marod", "MEMBER" => "Člen"];
+        $this->template->allowances = ["allowed" => $this->translator->translate("permission.allowed"), "revoked" => $this->translator->translate("permission.revoked")];
+        $this->template->statuses = ["PLAYER" => $this->translator->translate("team.PLAYER", 1), "SICK" => $this->translator->translate("team.SICK", 1), "MEMBER" => $this->translator->translate("team.MEMBER", 1)];
         $this->template->roles = $this->getAllRoles();
 
         $this->template->rolesRule = empty($permission->getAllowedRoles()) && empty($permission->getRevokedRoles()) ? null : (empty($permission->getRevokedRoles()) ? "allowed" : "revoked");
@@ -80,38 +79,51 @@ class PermissionPresenter extends SettingBasePresenter
         $this->template->isNew = false;
     }
 
-    public function handlePermissionCreate()
+    public function handlePermissionCreate(): void
     {
         $bind = $this->getRequest()->getPost();
-        /* @var $createdPermission Permission */
-        $createdPermission = $this->permissionManager->create($this->composePermissionData($bind["changes"]));
-
-        $this->redirect(":Setting:Permission:", [Strings::webalize($createdPermission->getName())]);
+        try {
+            /* @var $createdPermission Permission */
+            $createdPermission = $this->permissionManager->create($this->composePermissionData($bind["changes"]));
+            $this->flashMessage($this->translator->translate("common.alerts.created"), 'success');
+            $this->redirect(":Setting:Permission:", $createdPermission->getWebname());
+        } catch (TymyResponse $tResp) {
+            $this->handleTymyResponse($tResp);
+        }
     }
 
-    public function handlePermissionEdit()
+    public function handlePermissionEdit(): void
     {
         $bind = $this->getRequest()->getPost();
 
         $data = $this->composePermissionData($bind["changes"]);
-
-        $updatedPermission = $this->permissionManager->update($data, $bind["id"]);
-
-        if (array_key_exists("name", $data)) {   //if name has been changed, redirect to a new name is neccessary
-            $this->redirect(":Setting:Permission:", [Strings::webalize($updatedPermission->getName())]);
+        try {
+            $updatedPermission = $this->permissionManager->update($data, $bind["id"]);
+            $this->flashMessage($this->translator->translate("common.alerts.updated"), 'success');
+            if (array_key_exists("name", $data)) {   //if name has been changed, redirect to a new name is neccessary
+                $this->redirect(":Setting:Permission:", $updatedPermission->getName());
+            }
+        } catch (TymyResponse $tResp) {
+            $this->handleTymyResponse($tResp);
         }
     }
 
-    public function handlePermissionDelete()
+    public function handlePermissionDelete(): void
     {
         $bind = $this->getRequest()->getPost();
-        $this->permissionManager->delete($bind["id"]);
+
+        try {
+            $this->permissionManager->delete($bind["id"]);
+            $this->flashMessage($this->translator->translate("common.alerts.deleted"), 'success');
+            $this->redirect(":Setting:Permission:");
+        } catch (TymyResponse $tResp) {
+            $this->handleTymyResponse($tResp);
+        }
     }
 
     /**
      * Create input array for permission, containing name, caption, allowedRoles (or revokedRoles), allowedStatuses (or revokedStatuses) and , allowedUsers (or revokedUsers)
-     * @param array $changes
-     * @return array
+     * @return array<string, mixed>
      */
     private function composePermissionData(array $changes): array
     {
@@ -137,7 +149,7 @@ class PermissionPresenter extends SettingBasePresenter
         if (array_key_exists("userAllowance", $changes)) { //set either allowed or revoked users
             $userList = [];
             foreach ($changes as $key => $value) {
-                if (strpos($key, "userCheck") !== false && $value == "true") {
+                if (str_contains($key, "userCheck") && $value == "true") {
                     $userList[] = (int) explode("_", $key)[1];
                 }
             }

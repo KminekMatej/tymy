@@ -3,6 +3,7 @@
 namespace Tymy\Module\Sign\Presenter\Front;
 
 use Nette;
+use Nette\Security\SimpleIdentity;
 use Tymy\Module\Core\Presenter\Front\BasePresenter;
 use Tymy\Module\Sign\Form\SignUpFormFactory;
 
@@ -13,13 +14,12 @@ class UpPresenter extends BasePresenter
 
     /**
      * Sign-up form factory.
-     * @return Nette\Application\UI\Form
      */
-    protected function createComponentSignUpForm()
+    protected function createComponentSignUpForm(): \Nette\Application\UI\Form
     {
-        return $this->signUpFactory->create(function () {
-                    $this->flashMessage($this->translator->translate("common.alerts.registrationSuccesfull"), 'success');
-                    $this->redirect(':Sign:In:');
+        return $this->signUpFactory->create(function (SimpleIdentity $registeredIdentity): void {
+                $this->flashMessage($this->translator->translate("common.alerts.registrationSuccesfull") . " " . $this->translator->translate("common.alerts.waitForApproval"), 'success');
+                $this->redirect(':Sign:In:');
         });
     }
 }

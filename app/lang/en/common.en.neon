@@ -24,6 +24,7 @@ chooseFile: Choose file
 chooseSex: Choose sex
 chooseType: Choose type
 chooseState: Choose state
+choose: Choose
 ok: Ok
 yes: Yes
 no: No
@@ -33,7 +34,13 @@ or: or
 day: Day
 week: Week
 month: Month
+year: Year
 name: Name
+created: Created
+create: Create
+validity: Valid until
+after: after
+onDay: on
 navigationBlock:
     first: First
     previous: Previous
@@ -50,12 +57,14 @@ lastLogin:
     dayAgo: 1 day ago
     daysAgo: %n% days ago
 alerts:
+    notFound: not found
     nobodyFound: No-one found
     userSuccesfullyDeleted: User has been succesfully deleted
     loginNotApproved: This user is not allowed to login
     loginNotSuccesfull: Login failure
     logoutSuccesfull: Succesfully logged out
-    registrationSuccesfull: Registration succesfull. Kindly wait for administration approval now.
+    registrationSuccesfull: Registration succesfull.
+    waitForApproval: Kindly wait for administration approval now.
     userNotFound: "User not found, is blocked or other error happened. Please try again, or contact your team administrator."
     resetCodeSent: Reset code has been sent to your e-mail address
     invalidResetCode: Invalid reset code
@@ -68,6 +77,9 @@ alerts:
     notPermitted: Insufficient permissions
     configSaved: Settings saved
     avatarSaved: Avatar saved
+    created: Created
+    updated: Updated
+    deleted: Deleted
     newsOnTymy: News on Tymy.CZ
     newsOnTymyDescription: Portal has been upgraded since your last visit. What are the latest news?
     newsOnTymyFooter: You can checkout news also on
@@ -89,3 +101,7 @@ months:
     october: October
     november: November
     december: December
+errors:
+    valueInvalid: Invalid value entered
+    teamValueRequired: Your team requires this field
+    savingNotAllowedErrors: Cannot save - form contains errors

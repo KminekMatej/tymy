@@ -1,87 +1,91 @@
 {block player-header}
 <li class="nav-item">
-    {var $cnt = ($player,'osobni-udaje'|errorsCount)}
-    <a class="flex-sm-fill text-sm-center nav-link active" data-toggle="tab" href="#osobni-udaje" role="tab">{_team.personalData} <span n:if="$cnt > 0" class="badge badge-pill badge-danger">{$cnt}</span></a>
+    {var $cnt = ($player|errorsCount:'osobni-udaje')}
+    <a class="flex-sm-fill text-sm-center nav-link active" data-toggle="tab" href="#osobni-udaje" role="tab">{_team.personalData} <span n:class="badge,badge-pill,badge-danger,$cnt == 0 ? d-none">{$cnt}</span></a>
 </li>
 {include parent}
 {/block}
 
 {block player-content}
 <div class="tab-pane fade show active" id="osobni-udaje" role="tabpanel">
-    <table class="table">
-        <tr>
-            <th>{_team.profilePhoto}:</th><td n:class="in_array('pictureUrl',$player->getErrFields()) ? is-invalid">
+    <div class="tymy-table">
+        <div class="row" n:if="!$isNew">
+            <div class="col-12 col-md-4 table-head">{_team.profilePhoto}:</div>
+            <div class="col-12 col-md-1 text-center">
+                <a href="{$baseUrl}{$player->getPictureUrl()}" target="_blank"><img class="avatar" src="{$player->getPictureUrl()}" /></a>
+            </div>
+            <div class="col-12 col-md-7" n:if="$isMe">
                 <div class="row">
-                    <div class="col-1">
-                        <a href="{$baseUrl}{$player->getPictureUrl()}" target="_blank"><img class="avatar" src="{$player->getPictureUrl()}" /></a>
-                    </div>
-                    <div class="col-10" n:if="$canUpdate">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="custom-file mb-1">
-                                    <input id="fileupload" type="file" name="files[]" data-url="{link upload!}" class="custom-file-input" lang="cs">
-                                    <label class="custom-file-label" for="fileupload">{_common.chooseFile} ...</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="progress">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="height: 6px;"></div>
-                                </div>
-                            </div>
+                    <div class="col-12 col-lg-6 col-md-8">
+                        <div class="custom-file mb-1">
+                            <input id="fileupload" type="file" name="files[]" data-url="{link upload!}" class="custom-file-input" lang="cs">
+                            <label class="custom-file-label" for="fileupload">{_common.chooseFile} ...</label>
                         </div>
                     </div>
                 </div>
-            </td>
-        </tr>
-        <tr>
-            <th>{_team.gender}:</th><td>
-                <select n:class="col-3, form-control, in_array('gender',$player->getErrFields()) ? is-invalid" style="min-width: 80px" name="gender" data-value="{$player->getGender()}">
-                    <option value="UNKNOWN">{_common.chooseSex} ↓</option>
-                    <option value="MALE" n:attr="selected => $player->getGender()=='MALE'">{_team.male, 1}</option>
-                    <option value="FEMALE" n:attr="selected => $player->getGender()=='FEMALE'">{_team.female, 1}</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <th>{_team.firstName}:</th><td><input name="firstName" data-value="{$player->getFirstName()}" type="text" value="{$player->getFirstName()}" n:class="col-6, form-control, in_array('firstName',$player->getErrFields()) ? is-invalid" /></td>
-        </tr>
-        <tr>
-            <th>{_team.lastName}:</th><td><input name="lastName" data-value="{$player->getLastName()}" type="text" value="{$player->getLastName()}" n:class="col-6, form-control, in_array('lastName',$player->getErrFields()) ? is-invalid" /></td>
-        </tr>
-        <tr>
-            <th>{_team.phone}:</th><td><input name="phone" data-value="{$player->getPhone()}" type="text" value="{$player->getPhone()}" n:class="col-6, form-control, in_array('phone',$player->getErrFields()) ? is-invalid" /></td>
-        </tr>
-        <tr>
-            <th>{_team.email}:</th><td><div class="input-group"><input name="email" data-value="{$player->getEmail()}" type="text" value="{$player->getEmail()}" n:class="col-6, form-control, in_array('email',$player->getErrFields()) ? is-invalid" style="min-width: 200px"/><div class="input-group-append"><span class="input-group-text"><a n:tag-if="$player->getEmail() != ''" href="mailto:{$player->getEmail()}"><i class="fa fa-envelope" aria-hidden="true"></i></a></span></div></div></td>
-        </tr>
-        <tr>
-            <th>{_team.birthDate}:</th><td><input name="birthDate" data-value="{$player->getBirthDate()}" type="date" value="{$player->getBirthDate()}" n:class="col-6, form-control, in_array('birthDate',$player->getErrFields()) ? is-invalid" /></td>
-        </tr>
-        <tr>
-            <th>{_team.nameDayMonth}:</th><td>
-                <select n:class="col-3, form-control, in_array('nameDayMonth',$player->getErrFields()) ? is-invalid" style="min-width: 160px" name="nameDayMonth" data-value="{$player->getNameDayMonth() == 0 ? '' : $player->getNameDayMonth()}">
-                    <option value="">{_team.chooseMonth} ↓</option>
-                    <option n:for="$m=1; $m<=12; $m++" value="{$m}" n:attr="selected => $player->getNameDayMonth()==$m">{$m|monthName}</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <th>{_team.nameDayDay}:</th><td><input name="nameDayDay" data-value="{$player->getNameDayDay()}" type="number" value="{$player->getNameDayDay()}" min="1" max="31" n:class="col-2, form-control, in_array('nameDayDay',$player->getErrFields()) ? is-invalid" style="min-width: 160px" /></td>
-        </tr>
-        <tr>
-            <th>{_team.language}:</th>
-            <td>
-                <select n:class="col-3, form-control, in_array('language',$player->getErrFields()) ? is-invalid"  style="min-width: 120px" name="language" data-value="{$player->getLanguage()}">
-                    <option value="CZ" n:attr="selected => $player->getLanguage()=='CZ'">Česky</option>
-                    <option value="EN" n:attr="selected => $player->getLanguage()=='EN'">English</option>
-                    <option value="FR" n:attr="selected => $player->getLanguage()=='FR'">Le français</option>
-                    <option value="PL" n:attr="selected => $player->getLanguage()=='PL'">Polski</option>
-                </select>
-            </td>
-        </tr>
-    </table>
+                <div class="row">
+                    <div class="col">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="height: 6px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-4 table-head">{label gender /}:</div>
+            <div class="col-12 col-md-8">{input gender, class => 'col-12 col-md-3 form-control', style => 'min-width: 80px'}</div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-4 table-head">{_team.firstName}:</div>
+            <div class="col-12 col-md-8">{input firstName, class => 'col-12 col-md-6 form-control'}</div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-4 table-head">{_team.lastName}:</div>
+            <div class="col-12 col-md-8">{input lastName, class => 'col-12 col-md-6 form-control'}</div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-4 table-head">{_team.phone}:</div>
+            <div class="col-12 col-md-8">{input phone, class => 'col-12 col-md-6 form-control'}</div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-4 table-head">{_team.email}:</div>
+            <div class="col-12 col-md-8">
+                <div class="input-group">
+                    {input email, class => 'col-12 col-md-6 form-control', style => 'min-width: 200px'}
+                    <div class="input-group-append">
+                        <span class="input-group-text text-danger" n:if="in_array(explode('@', $player->getEmail())[1], ['msn.com', 'outlook.com', 'hotmail.com', 'live.com'])" title="{_team.alerts.changeOutlookEmail}">
+                            <i class="fa fa-triangle-exclamation fa-bounce" aria-hidden="true"></i>
+                        </span>
+                        <span class="input-group-text">
+                            <a n:tag-if="$player->getEmail() != ''" href="mailto:{$player->getEmail()}"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-4 table-head">{_team.birthDate}:</div>
+            <div class="col-12 col-md-8">{input birthDate, class => 'col-12 col-md-6 form-control'}</div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-4 table-head">{_team.birthCode}:</div>
+            <div class="col-12 col-md-8">{input birthCode, class => 'col-12 col-md-6 form-control'}</div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-4 table-head">{_team.nameDay}:</div>
+            <div class="col-12 col-md-8">
+                <div class="input-group col-12 col-md-6 px-0">
+                    {input nameDayDay, class => 'form-control'}
+                    {input nameDayMonth, class => 'form-control'}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-4 table-head">{_debt.accountNumber}:</div>
+            <div class="col-12 col-md-8">{input accountNumber, class => 'col-12 col-md-6 form-control'}</div>
+        </div>
+    </div>
 </div>
 {include parent}
 {/block}

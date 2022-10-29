@@ -25,11 +25,11 @@ class ArrayHelper
      *
      * @param array $inputArray E.g. [[id => 1, value => foo],[id => 2, value => bar]]
      * @param mixed $where E.g. id
-     * @param string $equals E.g. 1
-     * @param string $outputField E.g. value
+     * @param string|null $equals E.g. 1
+     * @param string|null $outputField E.g. value
      * @return array|mixed If output field is specified, returns exact output field from sub-array, found by $key and $value. E.g. would return "foo" or [id => 1, value => foo] if $outputField is not specified. Return null if nothing has been found
      */
-    public static function subValue(array $inputArray, $where, string $equals = null, string $outputField = null)
+    public static function subValue(array $inputArray, mixed $where, string $equals = null, string $outputField = null)
     {
         $foundIndex = array_search($equals, array_column($inputArray, $where));
         if ($foundIndex === false) {
@@ -42,12 +42,10 @@ class ArrayHelper
     /**
      * Get sub-arrrays frorm multidimensional array, where property equals field or is in array of fields
      *
-     * @param array $inputArray
-     * @param mixed $where
      * @param string|string[]|int|int[]|bool $equals
-     * @return array
+     * @return mixed[]
      */
-    public static function filter(array $inputArray, $where, mixed $equals)
+    public static function filter(array $inputArray, mixed $where, string|array|int|bool $equals): array
     {
         return array_filter($inputArray, function ($elm) use ($where, $equals) {
             if (is_string($equals) || is_int($equals) || is_bool($equals)) {
@@ -60,20 +58,14 @@ class ArrayHelper
 
     /**
      * Sum specified $sumKey field in all sub-arrays, filtered by $whereKey and $whereValue conditions.
-     *
-     * @param array $inputArray
-     * @param string|int $whereKey
-     * @param string $whereValue
-     * @param string $sumKey
-     * @return float
      */
-    public static function sum(array $inputArray, $whereKey, string $whereValue, string $sumKey): float
+    public static function sum(array $inputArray, string|int $whereKey, string $whereValue, string $sumKey): float
     {
         $sum = 0.0;
 
-        array_walk($inputArray, function ($elm) use (&$sum, $whereKey, $whereValue, $sumKey) {
+        array_walk($inputArray, function ($elm) use (&$sum, $whereKey, $whereValue, $sumKey): void {
             if ($elm[$whereKey] == $whereValue) {
-                $sum += floatval($elm[$sumKey]);
+                $sum += (float) $elm[$sumKey];
             }
         });
 
@@ -91,10 +83,9 @@ class ArrayHelper
      * @param mixed $actual
      * @param int $level = 0 (internal usage to avoid recursion overflow)
      * @param type $objects
-     * @return bool
      * @throws Exception
      */
-    public static function isEqual($expected, $actual, int $level = 0, $objects = null): bool
+    public static function isEqual(mixed $expected, mixed $actual, int $level = 0, $objects = null): bool
     {
         switch (true) {
             case $level > 10:
@@ -104,8 +95,8 @@ class ArrayHelper
                 $diff = abs($expected - $actual);
                 return ($diff < self::EPSILON) || ($diff / max(abs($expected), abs($actual)) < self::EPSILON);
 
-            case is_object($expected) && is_object($actual) && get_class($expected) === get_class($actual):
-                $objects = $objects ? clone $objects : new SplObjectStorage();
+            case is_object($expected) && is_object($actual) && $expected::class === $actual::class:
+                $objects = $objects !== null ? clone $objects : new SplObjectStorage();
                 if (isset($objects[$expected])) {
                     return $objects[$expected] === $actual;
                 } elseif ($expected === $actual) {
@@ -139,10 +130,6 @@ class ArrayHelper
 
     /**
      * Sort entities array according another array specifying the actual sort order
-     *
-     * @param array $entities
-     * @param array $idArray
-     * @return void
      */
     public static function idSort(array &$entities, array $idArray, string $column = "id"): void
     {
@@ -156,7 +143,7 @@ class ArrayHelper
     /**
      * Transform array of entities to array of its json representation
      * @param BaseModel[]|null $entities
-     * @return array
+     * @return mixed[]
      */
     public static function arrayToJson(?array $entities = null): array
     {
@@ -164,10 +151,8 @@ class ArrayHelper
             return [];
         }
 
-        return array_map(function ($entity) {
-            /* @var $entity BaseModel */
-            return $entity->jsonSerialize();
-        }, $entities);
+        return array_map(fn($entity) => /* @var $entity BaseModel */
+$entity->jsonSerialize(), $entities);
     }
 
     /**
@@ -205,12 +190,10 @@ class ArrayHelper
 
     /**
      * Checks whether this array is actually an associative array with numeric indexes
-     * @param array $array
-     * @return bool
      */
     public static function isAssoc(array $array): bool
     {
-        if (array() === $array) {
+        if ([] === $array) {
             return false;
         }
 
@@ -219,10 +202,6 @@ class ArrayHelper
 
     /**
      * Compare array values - check if values in each array are equal, nevermind order, nevermind keys
-     *
-     * @param array $array1
-     * @param array $array2
-     * @return bool
      */
     public static function valuesEqual(array $array1, array $array2): bool
     {
@@ -231,10 +210,7 @@ class ArrayHelper
 
     /**
      * Function to process absolute array diff - will return array of items which are not in BOTH arrays
-     *
-     * @param array $array1
-     * @param array $array2
-     * @return array
+     * @return mixed[]
      */
     public static function diffAbs(array $array1, array $array2): array
     {
@@ -246,8 +222,7 @@ class ArrayHelper
 
     /**
      * Cast all entities in array to int
-     * @param array $array
-     * @return array
+     * @return int[]
      */
     public static function ints(array $array): array
     {
@@ -256,13 +231,11 @@ class ArrayHelper
 
     /**
      * Explode string by separator and cast all explded values to int
-     * @param string $separator
-     * @param string $string
-     * @return array
+     * @return mixed[]
      */
     public static function explodeInts(string $separator, string $string): array
     {
-        return $string ? array_map('intval', explode($separator, $string)) : [];
+        return $string !== '' && $string !== '0' ? array_map('intval', explode($separator, $string)) : [];
     }
 
 
@@ -287,9 +260,7 @@ class ArrayHelper
      * Rows of type ActiveRow are transformed into array and outputed.
      * Any other types of rows are skipped and not outputed.
      * Array keys and order are maintained.
-     *
-     * @param array $rows
-     * @return array
+     * @return mixed[][]
      */
     public static function rowsToArrays(array $rows): array
     {
@@ -303,5 +274,51 @@ class ArrayHelper
         }
 
         return $arrays;
+    }
+
+    /**
+     * Transform two-dimensional array to key-pair array, using array index to be taken as key and array index to be treated as value.
+     * If both keyIndex and valueIndex are null, returns the input array unchanged
+     *
+     * @param string|null $keyIndex - If null, output array is numerically indexed
+     * @param string|null $valueIndex - If null, returns full item specified by its key
+     * @return mixed[]|array<int|string, mixed>
+     */
+    public static function pairs(array $inputArray, ?string $keyIndex = null, ?string $valueIndex = null): array
+    {
+        if (is_null($keyIndex) && is_null($valueIndex)) {
+            return $inputArray;
+        }
+
+        $pairs = [];
+        foreach ($inputArray as $value) {
+            $extractedValue = is_null($valueIndex) ? $value : $value[$valueIndex];
+
+            if (is_null($keyIndex)) {
+                $pairs[] = $extractedValue;
+            } else {
+                $pairs[$value[$keyIndex]] = $extractedValue;
+            }
+        }
+        return $pairs;
+    }
+
+    /**
+     * Transform two-dimensional array to key->value pair array, getting key from object getter, formed from property name
+     * If no value is specified, returns complete model
+     * @param BaseModel[] $inputArray
+     * @return array|BaseModel[]
+     */
+    public static function pairsEntity(array $inputArray, string $keyProperty = 'id', ?string $valueProperty = null): array
+    {
+        $pairs = [];
+        $keyGetter = "get" . ucfirst($keyProperty);
+        if ($valueProperty) {
+            $valueGetter = "get" . ucfirst($valueProperty);
+        }
+        foreach ($inputArray as $baseEntity) {
+            $pairs[$baseEntity->$keyGetter()] = isset($valueGetter) ? $baseEntity->$valueGetter() : $baseEntity;
+        }
+        return $pairs;
     }
 }

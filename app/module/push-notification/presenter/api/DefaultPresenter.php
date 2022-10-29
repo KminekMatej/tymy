@@ -18,24 +18,22 @@ class DefaultPresenter extends SecuredPresenter
         $this->manager = $manager;
     }
 
-    public function actionDefault($resourceId, $subResourceId)
+    public function actionDefault($resourceId, $subResourceId): void
     {
-        switch ($this->getRequest()->getMethod()) {
-            case 'POST':
-                $this->requestPost($resourceId);
-            // no break
+        if ($this->getRequest()->getMethod() === 'POST') {
+            $this->requestPost($resourceId);
         }
 
         $this->respondNotAllowed();
     }
 
-    protected function requestPost($resourceId)
+    protected function requestPost($resourceId): void
     {
         if (empty($this->requestData)) {
             $this->respondBadRequest("Missing request data");
         }
 
-        $subscription = \json_encode($this->requestData);
+        $subscription = \json_encode($this->requestData, JSON_THROW_ON_ERROR);
         /* @var $subscriber Subscriber */
         $subscriber = $this->manager->getByUserAndSubscription($this->user->getId(), $subscription);
 

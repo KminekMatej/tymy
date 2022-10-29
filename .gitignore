@@ -1,7 +1,9 @@
 /nbproject/
 /log/*
+/log_autotest/*
 !/log/.gitkeep 
 /temp/*
+/temp_autotest/*
 !/temp/.gitkeep 
 /tests/setup_DEV.php
 /tests/setup_MONKEYS.php
@@ -14,5 +16,8 @@
 /tests/test_XDEV_COMPONENTS.sh
 /tests/test_XDEV_PRESENTERS.sh
 /vendor/
-/local/config.neon
+user_pics
+download
+www/user_pics
+/local/*.neon
 /config/debug.neon

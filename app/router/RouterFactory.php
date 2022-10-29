@@ -9,16 +9,10 @@ use Tymy\Module\Core\Router\RouteList;
 
 class RouterFactory
 {
-    private Container $container;
-
-    public function __construct(Container $container)
+    public function __construct(private Container $container)
     {
-        $this->container = $container;
     }
 
-    /**
-     * @return RouteList
-     */
     public function createRouter(): RouteList
     {
         /* @var $router RouteList */

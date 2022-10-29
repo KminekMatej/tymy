@@ -52,7 +52,7 @@ class BasePresenter extends RootPresenter
         parent::__construct();
     }
 
-    protected function startup()
+    protected function startup(): void
     {
         Debugger::timer("request");
         parent::startup();
@@ -69,8 +69,6 @@ class BasePresenter extends RootPresenter
 
     /**
      * Decode input request data passed as url-encoded string
-     *
-     * @return void
      */
     private function decodeUrlEncodedData(): void
     {
@@ -84,7 +82,6 @@ class BasePresenter extends RootPresenter
 
     /**
      * Decode input request data passed as json-encoded string
-     * @return void
      * @throws JsonException
      */
     private function decodeJsonData(): void
@@ -100,56 +97,58 @@ class BasePresenter extends RootPresenter
         }
     }
 
-    protected function requestGet($resourceId, $subResourceId)
+    protected function requestGet(int $resourceId, ?int $subResourceId): void
     {
+        $record = null;
         try {
             $record = $this->manager->read($resourceId, $subResourceId);
         } catch (\Exception $exc) {
             $this->handleException($exc);
         }
 
-        $this->respondOk($record->jsonSerialize()); /* @phpstan-ignore-line */
+        $this->respondOk($record->jsonSerialize());
     }
 
-    protected function requestPost($resourceId)
+    protected function requestPost(?int $resourceId): void
     {
+        $created = null;
         try {
             $created = $this->manager->create($this->requestData, $resourceId);
         } catch (\Exception $exc) {
             $this->handleException($exc);
         }
 
-        $this->respondOkCreated($created->jsonSerialize()); /* @phpstan-ignore-line */
+        $this->respondOkCreated($created->jsonSerialize());
     }
 
-    protected function requestPut($resourceId, $subResourceId)
+    protected function requestPut(int $resourceId, ?int $subResourceId): void
     {
+        $updated = null;
         try {
             $updated = $this->manager->update($this->requestData, $resourceId, $subResourceId);
         } catch (\Exception $exc) {
             $this->handleException($exc);
         }
 
-        $this->respondOk($updated->jsonSerialize()); /* @phpstan-ignore-line */
+        $this->respondOk($updated->jsonSerialize());
     }
 
-    protected function requestDelete($resourceId, $subResourceId)
+    protected function requestDelete(int $resourceId, ?int $subResourceId): void
     {
+        $deletedId = null;
         try {
             $deletedId = $this->manager->delete($resourceId, $subResourceId);
         } catch (\Exception $exc) {
             $this->handleException($exc);
         }
 
-        $this->respondDeleted($deletedId); /* @phpstan-ignore-line */
+        $this->respondDeleted($deletedId);
     }
 
     /**
      * Simple exception handler. If any exception gets throws, logs message into exception.log file and then either responds proper response, or continue throwing the response
-     *
-     * @param \Exception $exc
      */
-    protected function handleException(\Exception $exc)
+    protected function handleException(\Throwable $exc): void
     {
         if ($exc instanceof AbortException) {
             throw $exc; //when its aborted, simply continue with abortion
@@ -157,22 +156,22 @@ class BasePresenter extends RootPresenter
 
         Debugger::log($exc->getMessage(), ILogger::EXCEPTION);
 
-        if (is_a($exc, DeleteIntegrityException::class)) {
+        if ($exc instanceof \Tymy\Module\Core\Exception\DeleteIntegrityException) {
             /* @var $exc DeleteIntegrityException */
             $this->responder->E4016_DELETE_BLOCKED_BY($exc->fkTable, $exc->blockingIds);
         }
 
-        if (is_a($exc, UpdateIntegrityException::class)) {
+        if ($exc instanceof \Tymy\Module\Core\Exception\UpdateIntegrityException) {
             /* @var $exc UpdateIntegrityException */
             $this->responder->E4017_UPDATE_BLOCKED_BY($exc->fkTable, $exc->blockingIds);
         }
 
-        if (is_a($exc, IntegrityException::class)) {
+        if ($exc instanceof \Tymy\Module\Core\Exception\IntegrityException) {
             /* @var $exc IntegrityException */
             $this->responder->E4007_RELATION_PROHIBITS($exc->failingField);
         }
 
-        if (is_a($exc, MissingInputException::class)) {
+        if ($exc instanceof \Tymy\Module\Core\Exception\MissingInputException) {
             /* @var $exc IntegrityException */
             $this->responder->E4013_MISSING_INPUT($exc->getMessage());
         }
@@ -180,42 +179,42 @@ class BasePresenter extends RootPresenter
         throw $exc;
     }
 
-    protected function respondOk($payload = null)
+    protected function respondOk($payload = null): void
     {
         $this->responder->A200_OK($payload);
     }
 
-    protected function respondOkCreated($payload = null)
+    protected function respondOkCreated($payload = null): void
     {
         $this->responder->A201_CREATED($payload);
     }
 
-    protected function respondDeleted($id)
+    protected function respondDeleted($id): void
     {
         $this->respondOk(["id" => (int) $id]);
     }
 
-    protected function respondBadRequest($message = null)
+    protected function respondBadRequest($message = null): void
     {
         $this->responder->E400_BAD_REQUEST($message);
     }
 
-    protected function respondUnauthorized()
+    protected function respondUnauthorized(): void
     {
         $this->responder->E401_UNAUTHORIZED();
     }
 
-    protected function respondForbidden()
+    protected function respondForbidden(): void
     {
         $this->responder->E403_FORBIDDEN("Nedostatečná práva");
     }
 
-    protected function respondNotFound()
+    protected function respondNotFound(): void
     {
         $this->responder->E404_NOT_FOUND();
     }
 
-    protected function respondNotAllowed()
+    protected function respondNotAllowed(): void
     {
         $this->responder->E405_METHOD_NOT_ALLOWED();
     }
@@ -224,10 +223,9 @@ class BasePresenter extends RootPresenter
      * If resourceId is supplied, load desired object using supplied manager.
      * Fills resourceRow property and returns BaseModel (resourceRow mapped using BaseManager)
      *
-     * @param int $resourceId
-     * @return BaseModel|false Model mapped
+     * @return BaseModel|false|null Model mapped
      */
-    protected function loadResource($resourceId, BaseManager $manager)
+    protected function loadResource(int $resourceId, BaseManager $manager): ?\Tymy\Module\Core\Model\BaseModel
     {
         if (empty($resourceId)) {
             return null;
@@ -235,7 +233,7 @@ class BasePresenter extends RootPresenter
 
         $this->resourceRow = $manager->getRow($resourceId);
 
-        if (!$this->resourceRow) {
+        if (!$this->resourceRow instanceof \Nette\Database\Table\ActiveRow) {
             $this->responder->E4005_OBJECT_NOT_FOUND($manager->getModule(), $resourceId);
         }
 
@@ -246,10 +244,9 @@ class BasePresenter extends RootPresenter
      * If subResourceId is supplied, load desired object using supplied manager.
      * Fills subResourceRow property and returns BaseModel (subResourceRow mapped using BaseManager)
      *
-     * @param int $subResourceId
-     * @return BaseModel|false Model mapped
+     * @return BaseModel|false|null Model mapped
      */
-    protected function loadSubResource($subResourceId, BaseManager $manager)
+    protected function loadSubResource(int $subResourceId, BaseManager $manager): ?\Tymy\Module\Core\Model\BaseModel
     {
         if (empty($subResourceId)) {
             return null;
@@ -257,7 +254,7 @@ class BasePresenter extends RootPresenter
 
         $this->subResourceRow = $manager->getRow($subResourceId);
 
-        if (!$this->subResourceRow) {
+        if (!$this->subResourceRow instanceof \Nette\Database\Table\ActiveRow) {
             $this->responder->E4005_OBJECT_NOT_FOUND($manager->getModule(), $subResourceId);
         }
 
@@ -268,32 +265,28 @@ class BasePresenter extends RootPresenter
      * Transform array of entities into jsonizable array
      *
      * @param BaseModel[] $entities
-     * @return array
+     * @return mixed[]
      */
-    protected function arrayToJson($entities)
+    protected function arrayToJson(array $entities): array
     {
         if (empty($entities)) {
             return [];
         }
 
-        return array_map(function ($entity) {
-            /* @var $entity BaseModel */
-            return $entity->jsonSerialize();
-        }, $entities);
+        return array_map(fn($entity) => /* @var $entity BaseModel */
+            $entity->jsonSerialize(), $entities);
     }
 
     /**
-     * Check that supplied array is arrray of objects - used to detect whether POST or PUT request input data are single or multiple objects
-     * @param array $array
-     * @return boolean
+     * Check that supplied input is arrray of objects - used to detect whether POST or PUT request input data are single or multiple objects
      */
-    public function isMultipleObjects($array)
+    public function isMultipleObjects(mixed $input): bool
     {
-        if (!is_array($array)) {
+        if (!is_array($input)) {
             return false;
         }
 
-        foreach ($array as $innArr) {
+        foreach ($input as $innArr) {
             if (!is_array($innArr)) {
                 return false;
             }
@@ -304,16 +297,15 @@ class BasePresenter extends RootPresenter
 
     /**
      * Simple function to throw Bad Request if suplied parametr is non-truthy
-     * @param mixed $parameter
      */
-    protected function needs($parameter = null)
+    protected function needs(mixed $parameter = null): void
     {
         if (!$parameter) {
             $this->respondBadRequest();
         }
     }
 
-    public function setRequestData($requestData)
+    public function setRequestData($requestData): void
     {
         $this->requestData = $requestData;
     }
@@ -324,7 +316,7 @@ class BasePresenter extends RootPresenter
         $this->mainDatabase->table("api_log")->insert(
             [
                     "remote_host" => $this->httpRequest->getRemoteHost(),
-                    "request_url" => $this->httpRequest->getUrl()->absoluteUrl,
+                    "request_url" => $this->httpRequest->getUrl()->getAbsoluteUrl(),
                     "response_status" => $this->httpResponse->getCode(),
                     "time_in_ms" => round(Debugger::timer("request") * 1000),
             ]

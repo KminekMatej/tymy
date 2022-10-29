@@ -13,14 +13,13 @@ use PDOException;
 use Tracy\Debugger;
 use Tymy\Module\Core\Exception\DBException;
 use Tymy\Module\Core\Factory\ManagerFactory;
+use Tymy\Module\Core\Helper\DateHelper;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Core\Model\Filter;
 use Tymy\Module\Core\Model\Order;
 use Tymy\Module\Team\Model\Team;
 use Tymy\Module\User\Model\User as UserEntity;
-
-use const ROOT_DIR;
 
 /**
  * Description of BaseManager
@@ -56,9 +55,6 @@ abstract class BaseManager
 
     /**
      * Exception safe global team log
-     * @param Team $team
-     * @param string $log
-     * @return void
      */
     public static function logg(Team $team, string $log): void
     {
@@ -80,7 +76,6 @@ abstract class BaseManager
 
     abstract public function delete(int $resourceId, ?int $subResourceId = null): int;
 
-    /** @return string */
     protected function getTable(): string
     {
         $class = $this->getClassName();
@@ -121,12 +116,12 @@ abstract class BaseManager
 
     /**
      * Maps one active row to object
-     * @param ActiveRow|false $row
+     * @param ActiveRow|false|null $row
      * @return BaseModel
      */
     public function map(?IRow $row, bool $force = false): ?BaseModel
     {
-        if (!$row) {
+        if ($row === null) {
             return null;
         }
 
@@ -151,7 +146,6 @@ abstract class BaseManager
 
     /**
      * Maps active rows to array of objects
-     * @param array $rows
      * @return BaseModel[]
      */
     public function mapAll(array $rows): array
@@ -169,7 +163,6 @@ abstract class BaseManager
 
     /**
      * Maps active rows to array of objects, where keys are id fields
-     * @param array $rows
      * @return BaseModel[]
      */
     public function mapAllWithId(array $rows): array
@@ -186,7 +179,6 @@ abstract class BaseManager
      *
      * @param array $array - Input array to check
      * @throws AbortException
-     * @return void
      */
     public function checkInputs(array $array): void
     {
@@ -195,7 +187,7 @@ abstract class BaseManager
                 continue;
             }
 
-            $input = $field->getAlias() ? $field->getAlias() : $field->getProperty();
+            $input = $field->getProperty();
             if ($field->getMandatory() && !array_key_exists($input, $array)) {
                 $this->responder->E4015_MISSING_URL_INPUT($input);
             }
@@ -209,7 +201,6 @@ abstract class BaseManager
     /**
      * Get row from database with given id
      *
-     * @param int $id
      * @return ActiveRow $row
      */
     public function getRow(int $id): ?ActiveRow
@@ -217,12 +208,6 @@ abstract class BaseManager
         return $this->database->table($this->getTable())->where("id", $id)->fetch();
     }
 
-    /**
-     *
-     * @param int $id
-     * @param bool $force
-     * @return BaseModel|null
-     */
     public function getById(int $id, bool $force = false): ?BaseModel
     {
         if (!is_numeric($id)) {
@@ -283,31 +268,11 @@ abstract class BaseManager
     }
 
     /**
-     * Return field associated with given property
-     * Used for filter validation
-     *
-     * @param string $propertyName
-     * @return Field|null
-     */
-    private function getFieldFromProperty(string $propertyName)
-    {
-        foreach ($this->getScheme() as $field) {
-            $property = $field->getAlias() ? $field->getAlias() : $field->getProperty();
-            if ($property === $propertyName) {
-                return $field;
-            }
-        }
-        return null;
-    }
-
-    /**
      * Check if record, specified by ID, exists - performs a quick db check
-     * @param int $id
-     * @return bool
      */
     public function exists(int $id, string $table = null): bool
     {
-        $table = $table ? $table : $this->getTable();
+        $table = $table ?: $this->getTable();
         return $this->database->table($table)->where("id", $id)->count("id") > 0;
     }
 
@@ -318,9 +283,9 @@ abstract class BaseManager
      */
     public function existsList(array $idList, string $table = null)
     {
-        $table = $table ? $table : $this->getTable();
+        $table = $table ?: $this->getTable();
         $ids = $this->database->table($table)->where("id", $idList)->fetchPairs(null, "id");
-        if (count($ids) == count($idList)) {
+        if (count($ids) === count($idList)) {
             return true;
         }
         return array_diff($ids, $idList);
@@ -337,7 +302,7 @@ abstract class BaseManager
      * @return int number of affected rows
      * @throws Exception
      */
-    protected function updateRecord($table, $id, array $updates, $idColumn = "id")
+    protected function updateRecord(string $table, int $id, array $updates, string $idColumn = "id")
     {
         try {
             $updated = $this->database->table($table)->where($idColumn, $id)->update($updates);
@@ -351,13 +316,10 @@ abstract class BaseManager
      * Creates table row based on given table, inserts array. Function throws correct exception using class DBException
      * IDColumn can be changed if primary key is different than classic `id`
      *
-     * @param string $table
-     * @param array $inserts
-     * @param string $idColumn
      * @return ActiveRow
      * @throws Exception
      */
-    protected function createRecord($table, array $inserts, $idColumn = "id")
+    protected function createRecord(string $table, array $inserts, string $idColumn = "id")
     {
         try {
             $inserted = $this->database->table($table)->insert($inserts);
@@ -371,8 +333,6 @@ abstract class BaseManager
      * Delete table row based on given table and id.
      * IDColumn can be changed if primary key is different than classic `id`
      *
-     * @param int $id
-     * @param string|null $table
      * @param type $idColumn
      * @return int number of affected rows
      * @throws @static.mtd:DBException.from
@@ -387,7 +347,7 @@ abstract class BaseManager
             throw $e;
         }
 
-        if (!$deleted) {
+        if ($deleted === 0) {
             $this->responder->E4005_OBJECT_NOT_FOUND($this->getModule(), $id);
         }
 
@@ -403,31 +363,7 @@ abstract class BaseManager
      */
     public function updateByArray(int $id, array $array)
     {
-        $updates = [];
-
-        foreach ($this->getScheme() as $field) {
-            /* @var $field Field */
-            if (array_key_exists($field->getProperty(), $array)) {
-                $value = $array[$field->getProperty()];
-                if (!$field->getChangeable()) {
-                    continue;
-                }
-                if ($field->getNonempty() && $value === null) {
-                    $this->responder->E4014_EMPTY_INPUT($field->getProperty());
-                }
-                $updates[$field->getColumn()] = $value;
-            } else {
-                //update also update timestamp
-                if (!$field->getChangeable()) {
-                    if ($field->getColumn() == "usr_mod" && !empty($this->user)) {
-                        $updates[$field->getColumn()] = $this->user->id;
-                    }
-                    if ($field->getColumn() == "dat_mod") {
-                        $updates[$field->getColumn()] = new DateTime();
-                    }
-                }
-            }
-        }
+        $updates = $this->composeUpdateArray($array);
 
         return $this->updateRecord($this->getTable(), $id, $updates);
     }
@@ -438,7 +374,7 @@ abstract class BaseManager
      * @return ActiveRow Created row
      * @throws Exception
      */
-    public function createByArray($array)
+    public function createByArray(array $array)
     {
         $created = $this->createRecord($this->getTable(), $this->composeInsertArray($array));
 
@@ -454,7 +390,7 @@ abstract class BaseManager
      * @param array $array Input data (usually $this->requestData)
      * @return array Insert output
      */
-    public function composeInsertArray($array)
+    public function composeInsertArray(array $array)
     {
         $inserts = [];
 
@@ -468,8 +404,8 @@ abstract class BaseManager
 
             if (!$field->getChangeable()) {
                 if (in_array($field->getColumn(), ["user_id", "usr_cre", "created_user_id"]) && !empty($this->user)) {
-                    $value = $this->user->id;
-                } elseif (in_array($field->getColumn(), ["dat_cre", "insert_date"])) {
+                    $value = $this->user->getId();
+                } elseif (in_array($field->getColumn(), ["dat_cre", "insert_date", "created"])) {
                     $value = new DateTime();
                 } else {
                     continue;
@@ -484,10 +420,58 @@ abstract class BaseManager
                 }
             }
 
+            if (!empty($value)) {
+                $this->sanitizeValue($field, $value);
+            }
+
             $inserts[$field->getColumn()] = $value;
         }
 
         return $inserts;
+    }
+
+    /**
+     * Use mapper data to compose array of database fields to update from specified input array
+     * @param array $array Input data (usually $this->requestData)
+     * @param array $scheme Scheme upon which wo work (optional)
+     * @return array Update output
+     */
+    protected function composeUpdateArray(array $array, ?array $scheme = null): array
+    {
+        $updates = $additionalUpdates = [];
+        $sch = $scheme ?: $this->getScheme();
+
+        foreach ($sch as $field) {
+            /* @var $field Field */
+            if (!array_key_exists($field->getProperty(), $array)) { //this field is not mentioned in update data, fill it only if its update field
+                if ($field->getColumn() == "updated_user_id" && !empty($this->user)) {
+                    $additionalUpdates[$field->getColumn()] = $this->user->getId();
+                }
+                if ($field->getColumn() == "updated") {
+                    $additionalUpdates[$field->getColumn()] = new DateTime();
+                }
+                continue;
+            }
+
+            $value = $array[$field->getProperty()];
+            if (!$field->getChangeable()) {
+                continue;
+            }
+
+            if ($field->getNonempty() && $value === null) {
+                $this->responder->E4014_EMPTY_INPUT($field->getProperty());
+            }
+
+            $this->sanitizeValue($field, $value);
+
+            $updates[$field->getColumn()] = $value;
+        }
+
+        if (!empty($updates) && !empty($additionalUpdates)) { //if there has been some fileds updated, merge also fields updated holding update informations
+            $updates += $additionalUpdates;
+        }
+
+        return $updates;
     }
 
     /**
@@ -520,7 +504,7 @@ abstract class BaseManager
 
     /**
      * Basic allow function to be overriden - otherwise throw 405:Not allowed
-     * @param ?int $recordId Id of record to read (optional)
+     * @param int $recordId Id of record to read (optional)
      */
     protected function allowDelete(int $recordId): void
     {
@@ -555,7 +539,6 @@ abstract class BaseManager
     /**
      * Get user ids allowed to read given id
      *
-     * @param int $modelId
      * @return int[]
      */
     public function getAllowedReadersById(int $modelId)
@@ -583,9 +566,9 @@ abstract class BaseManager
         $this->responder->E400_BAD_REQUEST($message);
     }
 
-    protected function respondUnauthorized()
+    protected function respondUnauthorized(?string $message = null)
     {
-        $this->responder->E401_UNAUTHORIZED();
+        $this->responder->E401_UNAUTHORIZED($message);
     }
 
     protected function respondForbidden(?string $message = null)
@@ -606,14 +589,13 @@ abstract class BaseManager
     /**
      * Load record using id. Responds with 404 if not found
      *
-     * @param int $recordId
      * @return BaseModel
      */
     protected function loadRecord(int $recordId, ?BaseManager $manager = null)
     {
-        $record = $manager ? $manager->getById($recordId) : $this->getById($recordId);
+        $record = $manager !== null ? $manager->getById($recordId) : $this->getById($recordId);
 
-        if (!$record) {
+        if (!$record instanceof BaseModel) {
             $this->respondNotFound();
         }
 
@@ -623,7 +605,6 @@ abstract class BaseManager
     /**
      * Iterate through filterString, parse out all filters and return from them the array or Filter objects for further processing
      *
-     * @param string $filterString
      * @return Filter[]
      */
     protected function filterToArray(string $filterString): array
@@ -660,7 +641,6 @@ abstract class BaseManager
     /**
      * Iterate through $orderString, parse out all orders and return from them the array or Order objects for further processing
      *
-     * @param string $orderString
      * @return Order[]
      */
     protected function orderToArray(string $orderString): array
@@ -700,7 +680,6 @@ abstract class BaseManager
      * Check if current scheme contains property and return its corresponding column name
      *
      * @param string $propertyName Property to get
-     * @return string|null
      */
     private function getColumnName(string $propertyName): ?string
     {
@@ -725,9 +704,6 @@ abstract class BaseManager
 
     /**
      * Change all fields in input $data array to proper bool value (if the fields are correctly specified)
-     * @param array $data
-     * @param array $fields
-     * @return void
      */
     protected function toBoolData(array &$data, array $fields): void
     {
@@ -740,15 +716,37 @@ abstract class BaseManager
 
     /**
      * Retype various boolean stored variables like YES, ANO etc. to proper boolean value
-     * @param mixed $value
-     * @return bool
      */
-    protected function toBool($value): bool
+    protected function toBool(mixed $value): bool
     {
         if (is_string($value)) {
             return in_array(strtolower($value), ["yes", "true", "ano"]);
         }
 
         return (bool) $value;
+    }
+
+    /**
+     * Sanitize value from Field specification
+     * @param Field $field
+     * @param mixed $value
+     * @return void
+     */
+    private function sanitizeValue(Field $field, mixed &$value): void
+    {
+        switch ($field->getType()) {
+            case Field::TYPE_DATETIME:
+                $value = !empty($value) ? DateHelper::createLc($value) : $value; //format DateTime only if its not null or empty
+                break;
+            case Field::TYPE_FLOAT:
+                if (is_numeric($value)) {
+                    $value = round(floatval($value), 6);
+                } elseif (is_null($value)) {
+                    $value = null;
+                } else {    //float value not supported, empty string or null - simply skip it then
+                    return;
+                }
+                break;
+        }
     }
 }

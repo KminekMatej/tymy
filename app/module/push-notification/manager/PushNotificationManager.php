@@ -21,25 +21,15 @@ use Tymy\Module\PushNotification\Model\Subscriber;
  */
 class PushNotificationManager extends BaseManager
 {
-    private WebPush $webPush;
-    private ApplePush $applePush;
-    private FirebasePush $firebasePush;
-
-    public function __construct(ManagerFactory $managerFactory, WebPush $webPush, ApplePush $applePush, FirebasePush $firebasePush)
+    public function __construct(ManagerFactory $managerFactory, private WebPush $webPush, private ApplePush $applePush, private FirebasePush $firebasePush)
     {
         parent::__construct($managerFactory);
-        $this->webPush = $webPush;
-        $this->applePush = $applePush;
-        $this->firebasePush = $firebasePush;
     }
 
     /**
      * Get Push Notification subscription based on user ID and subscription
-     * @param int $userId
-     * @param string $subscription
-     * @return Subscriber
      */
-    public function getByUserAndSubscription(int $userId, string $subscription)
+    public function getByUserAndSubscription(int $userId, string $subscription): ?\Tymy\Module\Core\Model\BaseModel
     {
         return $this->map($this->database->table(Subscriber::TABLE)
                     ->where("user_id", $userId)
@@ -52,7 +42,7 @@ class PushNotificationManager extends BaseManager
      * @param int[] User ids
      * @return Subscriber[]
      */
-    private function getByUsers(array $userIds)
+    private function getByUsers(array $userIds): array
     {
         return $this->mapAll($this->database->table(Subscriber::TABLE)
                     ->where("user_id", $userIds)
@@ -62,9 +52,8 @@ class PushNotificationManager extends BaseManager
 
     /**
      * Flush (send) all push notification in queue
-     * @return void
      */
-    public function flush()
+    public function flush(): void
     {
         $this->webPush->flush();
     }
@@ -74,6 +63,9 @@ class PushNotificationManager extends BaseManager
         return Subscriber::class;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     protected function getScheme(): array
     {
         return SubscriberMapper::scheme();
@@ -99,6 +91,9 @@ class PushNotificationManager extends BaseManager
         return $this->deleteRecord($resourceId);
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getAllowedReaders(BaseModel $record): array
     {
         //no-one is allowed
@@ -123,7 +118,6 @@ class PushNotificationManager extends BaseManager
      * @param PushNotification $notification Push notification object to be sent. Can be generated using NotificationGenerator
      * @param int $userId ID of user to send Push notification
      * @param bool $flush Instant flush message
-     * @return void
      */
     public function notifyUser(PushNotification $notification, int $userId): void
     {
@@ -132,9 +126,7 @@ class PushNotificationManager extends BaseManager
 
     /**
      * Notify all subscribers registered through Web push messaging
-     * @param PushNotification $notification
      * @param Subscriber[] $subscribers
-     * @return void
      */
     private function webPushBulk(PushNotification $notification, array $subscribers): void
     {
@@ -142,8 +134,8 @@ class PushNotificationManager extends BaseManager
             foreach ($subscribers as $subscriber) {
                 /* @var $subscriber Subscriber */
                 $report = $this->webPush->sendOneNotification(
-                    Subscription::create(\json_decode($subscriber->getSubscription(), true)), // subscription
-                    \json_encode($notification->jsonSerialize()) // payload
+                    Subscription::create(\json_decode($subscriber->getSubscription(), true, 512, JSON_THROW_ON_ERROR)), // subscription
+                    \json_encode($notification->jsonSerialize(), JSON_THROW_ON_ERROR) // payload
                 );
                 $this->processReport($subscriber, $report);
             }
@@ -154,10 +146,9 @@ class PushNotificationManager extends BaseManager
 
     /**
      *
-     * @param PushNotification $notification
      * @param Subscriber[] $subscribers
      */
-    private function applePushBulk(PushNotification $notification, array $subscribers)
+    private function applePushBulk(PushNotification $notification, array $subscribers): void
     {
         $this->applePush->sendBulkNotifications($subscribers, $notification);
 
@@ -170,11 +161,10 @@ class PushNotificationManager extends BaseManager
 
     /**
      *
-     * @param PushNotification $notification
      * @param Subscriber[] $subscribers
      * @todo
      */
-    private function firebasePushBulk(PushNotification $notification, array $subscribers)
+    private function firebasePushBulk(PushNotification $notification, array $subscribers): void
     {
         try {
             $this->firebasePush->sendBulkNotifications($subscribers, $notification);
@@ -187,9 +177,7 @@ class PushNotificationManager extends BaseManager
     /**
      * Notify multiple users by their ids
      *
-     * @param PushNotification $notification
      * @param int[] $userIds
-     * @return void
      */
     public function notifyUsers(PushNotification $notification, array $userIds): void
     {
@@ -228,9 +216,7 @@ class PushNotificationManager extends BaseManager
     /**
      * Notify every subscriber with PushNotification object.
      *
-     * @param PushNotification $notification
      * @param int[] $userIds
-     * @return void
      */
     public function notifyEveryone(PushNotification $notification): void
     {
@@ -273,10 +259,6 @@ class PushNotificationManager extends BaseManager
     /**
      * Deletes subscriber from database if its already expired.
      * May contain another post-processing tasks
-     *
-     * @param Subscriber $subscriber
-     * @param MessageSentReport $report
-     * @return void
      */
     private function processReport(Subscriber $subscriber, MessageSentReport $report): void
     {

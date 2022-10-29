@@ -2,6 +2,7 @@
 
 namespace Tymy\Module\Multiaccount\Manager;
 
+use Contributte\Translation\Translator;
 use Nette\NotImplementedException;
 use Nette\Utils\DateTime;
 use Tymy\Module\Core\Factory\ManagerFactory;
@@ -20,14 +21,9 @@ use Tymy\Module\User\Manager\UserManager;
  */
 class MultiaccountManager extends BaseManager
 {
-    private UserManager $userManager;
-    private TeamManager $teamManager;
-
-    public function __construct(ManagerFactory $managerFactory, UserManager $userManager, TeamManager $teamManager)
+    public function __construct(ManagerFactory $managerFactory, private UserManager $userManager, private TeamManager $teamManager, private Translator $translator)
     {
         parent::__construct($managerFactory);
-        $this->teamManager = $teamManager;
-        $this->userManager = $userManager;
         $this->database = $this->mainDatabase;
         $this->idCol = null;    //there is no simple primary key column in database - so avoid errors from BaseManager
     }
@@ -37,6 +33,9 @@ class MultiaccountManager extends BaseManager
         return TransferKey::class;
     }
 
+    /**
+     * @return mixed[]
+     */
     protected function getScheme(): array
     {
         return []; //no entity considered here
@@ -52,6 +51,9 @@ class MultiaccountManager extends BaseManager
         return false;   //there is actually no entity
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getAllowedReaders(BaseModel $record): array
     {
         return [];
@@ -60,11 +62,9 @@ class MultiaccountManager extends BaseManager
     /**
      * Generate new transfer key to jump to desired account and return it as object
      *
-     * @param int $resourceId
-     * @param int|null $subResourceId
      * @return TransferKey
      */
-    public function read($resourceId, ?int $subResourceId = null): BaseModel
+    public function read(int $resourceId, ?int $subResourceId = null): BaseModel
     {
         return $this->generateNewTk($resourceId);
     }
@@ -76,7 +76,7 @@ class MultiaccountManager extends BaseManager
         $sourceTeam = $this->teamManager->getTeam();
         $sourceUserId = $this->user->getId();
 
-        if (!$targetTeam) {
+        if (!$targetTeam instanceof \Tymy\Module\Team\Model\Team) {
             $this->respondNotFound();
         }
 
@@ -95,7 +95,7 @@ class MultiaccountManager extends BaseManager
 
         $userId = $this->userManager->checkCredentials($targetTeam, $username, $password);
         if (!$userId) {
-            $this->respondUnauthorized();
+            $this->respondUnauthorized($this->translator->translate("team.alerts.authenticationFailed"));
         }
 
         $sourceAccountId = $this->getAccountId();
@@ -105,10 +105,10 @@ class MultiaccountManager extends BaseManager
             ->where("team_id", $targetTeam->getId())
             ->fetch();
 
-        $targetAccountId = $existingAccountRow ? $existingAccountRow->account_id : null;
+        $targetAccountId = $existingAccountRow !== null ? $existingAccountRow->account_id : null;
 
         if ($sourceAccountId && $targetAccountId == $sourceAccountId) {
-            $this->responder->E400_BAD_REQUEST("Target team already exists in your multiaccount");
+            $this->responder->E400_BAD_REQUEST($this->translator->translate("team.alerts.targetTeamExists"));
         }
 
         //four scenarios can happen now:
@@ -131,9 +131,6 @@ class MultiaccountManager extends BaseManager
 
     /**
      * Add team underneath account id
-     * @param int $teamId
-     * @param int|null $accountId
-     * @return int
      */
     private function addTeamUnderAccount(int $teamId, int $userId, ?int $accountId = null): int
     {
@@ -166,7 +163,7 @@ class MultiaccountManager extends BaseManager
         //delete multi account
         $targetTeam = $this->teamManager->getBySysname($resourceId);
 
-        if (!$targetTeam) {
+        if (!$targetTeam instanceof \Tymy\Module\Team\Model\Team) {
             $this->responder->E4005_OBJECT_NOT_FOUND(Team::MODULE, $resourceId);
         }
 
@@ -192,7 +189,7 @@ class MultiaccountManager extends BaseManager
      * Get list of users multiaccounts
      * @return SimpleTeam[]
      */
-    public function getListUserAllowed()
+    public function getListUserAllowed(): array
     {
         $accountId = $this->getAccountId();
 
@@ -212,8 +209,6 @@ class MultiaccountManager extends BaseManager
 
     /**
      * Get account id, related to current team & user
-     *
-     * @return int|null
      */
     private function getAccountId(): ?int
     {
@@ -222,20 +217,17 @@ class MultiaccountManager extends BaseManager
             ->where("user_id", $this->user->getId())
             ->fetch();
 
-        return $accountRow ? $accountRow->account_id : null;
+        return $accountRow !== null ? $accountRow->account_id : null;
     }
 
     /**
      * Generate new transfer key to current user's multiaccount and stores it into database for future login
-     *
-     * @param string $targetTeamSysName
-     * @return TransferKey
      */
-    private function generateNewTk(string $targetTeamSysName): TransferKey
+    public function generateNewTk(string $targetTeamSysName): TransferKey
     {
         $targetTeam = $this->teamManager->getBySysname($targetTeamSysName);
 
-        if (!$targetTeam) {
+        if (!$targetTeam instanceof \Tymy\Module\Team\Model\Team) {
             $this->respondNotFound();
         }
 
@@ -247,7 +239,7 @@ class MultiaccountManager extends BaseManager
 
         $targetUserId = $this->getTargetUserId($accountId, $targetTeam->getId());
 
-        $newTk = sha1($accountId . rand(0, 100000));
+        $newTk = sha1($accountId . random_int(0, 100000));
         $this->mainDatabase->table(TransferKey::TABLE)
             ->where("account_id", $accountId)
             ->where("team_id", $targetTeam->getId())
@@ -261,10 +253,6 @@ class MultiaccountManager extends BaseManager
 
     /**
      * Get id of target user, based on accountId and team
-     *
-     * @param int $accountId
-     * @param int $teamId
-     * @return int
      */
     private function getTargetUserId(int $accountId, int $teamId): int
     {
@@ -273,7 +261,7 @@ class MultiaccountManager extends BaseManager
             ->where("team_id", $teamId)
             ->fetch();
 
-        if (!$row) {
+        if (!$row instanceof \Nette\Database\Table\ActiveRow) {
             $this->responder->E4005_OBJECT_NOT_FOUND(Team::MODULE, $teamId);
         }
 

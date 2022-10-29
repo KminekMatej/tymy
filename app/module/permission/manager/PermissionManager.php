@@ -9,6 +9,7 @@ use Tymy\Module\Authorization\Manager\AuthorizationManager;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Permission\Mapper\PermissionMapper;
 use Tymy\Module\Permission\Model\Permission;
 use Tymy\Module\Permission\Model\Privilege;
@@ -22,12 +23,10 @@ use Tymy\Module\User\Model\User;
 class PermissionManager extends BaseManager
 {
     private ?Permission $permission = null;
-    private AuthorizationManager $authorizationManager;
 
-    public function __construct(ManagerFactory $managerFactory, AuthorizationManager $authorizationManager)
+    public function __construct(ManagerFactory $managerFactory, private AuthorizationManager $authorizationManager)
     {
         parent::__construct($managerFactory);
-        $this->authorizationManager = $authorizationManager;
     }
 
     protected function getClassName(): string
@@ -35,6 +34,9 @@ class PermissionManager extends BaseManager
         return Permission::class;
     }
 
+    /**
+     * @return Field[]
+     */
     protected function getScheme(): array
     {
         return PermissionMapper::scheme();
@@ -57,7 +59,7 @@ class PermissionManager extends BaseManager
     protected function metaMap(BaseModel &$model, $userId = null): void
     {
         $privilege = $model->getType() == Permission::TYPE_SYSTEM ? Privilege::SYS($model->getName()) : Privilege::USR($model->getName());
-        $model->setMeAllowed($this->user->isLoggedIn() ? $this->user->isAllowed($this->user->getId(), $privilege) : false);
+        $model->setMeAllowed($this->user->isLoggedIn() && $this->user->isAllowed($this->user->getId(), $privilege));
     }
 
     public function canEdit($entity, $userId): bool
@@ -78,40 +80,31 @@ class PermissionManager extends BaseManager
 
     /**
      * Find permissions by its name - returns the first one that matches
-     *
-     * @param string $name
-     * @return Permission
      */
-    public function getByTypeName(string $type, string $name)
+    public function getByTypeName(string $type, string $name): ?BaseModel
     {
         return $this->map($this->database->table($this->getTable())->where("right_type", $type)->where("name", $name)->limit(1)->fetch());
     }
 
     /**
      * Find permissions by its name - returns the first one that matches
-     *
-     * @param string $name
-     * @return Permission
      */
-    public function getByName(string $name)
+    public function getByName(string $name): ?BaseModel
     {
         return $this->map($this->database->table($this->getTable())->where("name", $name)->limit(1)->fetch());
     }
 
     /**
      * Find permissions by its type
-     * @param string $type
      * @return Permission[]
      */
-    public function getByType(string $type)
+    public function getByType(string $type): array
     {
         return $this->mapAll($this->database->table($this->getTable())->where("right_type", $type)->fetchAll());
     }
 
     /**
      * Get all permission names which are allowed for user
-     * @param User $user
-     * @param string|null $type
      * @return array of names
      */
     public function getUserAllowedPermissionNames(User $user, ?string $type = null): array
@@ -121,8 +114,6 @@ class PermissionManager extends BaseManager
 
     /**
      * Get all permission objects which are allowed for user
-     * @param User $user
-     * @param string|null $type
      * @return Permission[]
      */
     public function getUserAllowedPermissionObjects(User $user, ?string $type = null): array
@@ -132,9 +123,6 @@ class PermissionManager extends BaseManager
 
     /**
      * Get all permissions which are allowed for user
-     * @param User $user
-     * @param string|null $type
-     * @return Selection
      */
     public function getUserAllowedPermissions(User $user, ?string $type = null): Selection
     {
@@ -145,11 +133,9 @@ class PermissionManager extends BaseManager
         $selector = $this->database->table($this->getTable());
         $conditions = [];
         $params = [];
-        if (!empty($roles)) {
-            foreach ($roles as $allowedRole) {
-                $conditions[] = "FIND_IN_SET(?, a_roles) > 0";
-                $params[] = "$allowedRole";
-            }
+        foreach ($roles as $allowedRole) {
+            $conditions[] = "FIND_IN_SET(?, a_roles) > 0";
+            $params[] = "$allowedRole";
         }
 
         $conditions[] = "FIND_IN_SET(?, a_statuses) > 0";
@@ -158,13 +144,11 @@ class PermissionManager extends BaseManager
         $conditions[] = "FIND_IN_SET(?, a_users) > 0";
         $params[] = "$userId";
 
-        $selector->where("(" . join(") OR (", $conditions) . ")", ...$params);
+        $selector->where("(" . implode(") OR (", $conditions) . ")", ...$params);
 
         //add revokes
-        if (!empty($roles)) {
-            foreach ($roles as $revokedRole) {
-                $selector->where("(FIND_IN_SET(?, r_roles) = 0 OR r_roles IS NULL)", "$revokedRole");
-            }
+        foreach ($roles as $revokedRole) {
+            $selector->where("(FIND_IN_SET(?, r_roles) = 0 OR r_roles IS NULL)", "$revokedRole");
         }
 
         $selector->where("FIND_IN_SET(?, r_statuses) = 0 OR r_statuses IS NULL", "$status");
@@ -181,13 +165,11 @@ class PermissionManager extends BaseManager
     {
         $this->allowAdmin();
 
+        $data["type"] = Permission::TYPE_USER; //new permissions must always be USR permissions
+
         $this->checkInputs($data);
 
-        if ($data["type"] !== Permission::TYPE_USER) {
-            $this->respondBadRequest("Type must be USR");
-        }
-
-        if (!empty($this->getByName($data["name"]))) {
+        if ($this->getByName($data["name"])) {
             $this->respondBadRequest("Name already used");
         }
 
@@ -200,7 +182,7 @@ class PermissionManager extends BaseManager
 
         $this->permission = $this->getById($recordId);
 
-        if (!$this->permission) {
+        if (!$this->permission instanceof BaseModel) {
             $this->respondNotFound();
         }
 
@@ -222,13 +204,13 @@ class PermissionManager extends BaseManager
 
         $this->permission = $this->getById($recordId);
 
-        if (!$this->permission) {
+        if (!$this->permission instanceof BaseModel) {
             $this->respondNotFound();
         }
 
         if (isset($data["name"]) && $data["name"] !== $this->permission->getName()) {
             $namedPermission = $this->getByName($data["name"]);
-            if ($namedPermission->getId() != $this->permission->getId()) {
+            if ($namedPermission->getId() !== $this->permission->getId()) {
                 $this->respondBadRequest("Name already used");
             }
         }
@@ -243,8 +225,6 @@ class PermissionManager extends BaseManager
 
     /**
      * Transform input data passed as array of strings, to one string, comma separated (which is what database wants)
-     * @param array $data
-     * @return void
      */
     private function transformArrayToString(array &$data): void
     {
@@ -258,7 +238,7 @@ class PermissionManager extends BaseManager
         ];
         foreach ($inputsToProcess as $input) {
             if (array_key_exists($input, $data) && is_array($data[$input])) {
-                    $data[$input] = join(",", $data[$input]);
+                    $data[$input] = implode(",", $data[$input]);
             }
         }
 
@@ -295,7 +275,7 @@ class PermissionManager extends BaseManager
 
         $this->authorizationManager->dropPermissionCache();
 
-        return $deleted ? $resourceId : null;
+        return $deleted !== 0 ? $resourceId : null;
     }
 
     public function read(int $resourceId, ?int $subResourceId = null): BaseModel
@@ -310,7 +290,7 @@ class PermissionManager extends BaseManager
         $this->allowUpdate($resourceId, $data);
 
         $this->transformArrayToString($data);
-        \Tracy\Debugger::barDump($data);
+
         parent::updateByArray($resourceId, $data);
 
         $this->authorizationManager->dropPermissionCache();

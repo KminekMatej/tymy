@@ -15,40 +15,31 @@ class Migration
     public const RESULT_OK = "OK";
     public const RESULT_ERROR = "ERROR";
 
-    /** @var string */
-    private $file;
+    private string $migration;
 
-    /** @var string */
-    private $migration;
+    /** @var mixed|null */
+    private ?string $migratingFrom = null;
 
-    /** @var string */
-    private $migratingFrom;
+    private \Nette\Utils\DateTime $datetime;
 
-    /** @var DateTime */
-    private $datetime;
+    private string $fileContents;
 
-    /** @var string */
-    private $fileContents;
+    private string $upContents;
 
-    /** @var string */
-    private $upContents;
+    private string $downContents;
 
-    /** @var string */
-    private $downContents;
+    /** @var mixed|null */
+    private ?float $time = null;
 
-    /** @var double */
-    private $time;
+    private bool $result = false;
 
-    /** @var bool */
-    private $result = false;
+    private bool $pastMigration = false;
 
-    /** @var bool */
-    private $pastMigration = false;
-
-    public function __construct($file)
+    /**
+     * @param string $file
+     */
+    public function __construct(private $file)
     {
-        $this->file = $file;
-
         $migFileInfo = pathinfo($file);
         $this->migration = str_replace("base-", "", $migFileInfo["filename"]); //remove base prefix, if exists
         $this->datetime = DateTime::createFromFormat("Y-m-d?H-i-s", $this->migration);
@@ -61,12 +52,12 @@ class Migration
         $this->downContents = $migSections[1];
     }
 
-    public function getFile()
+    public function getFile(): string
     {
         return $this->file;
     }
 
-    public function getMigration()
+    public function getMigration(): string
     {
         return $this->migration;
     }
@@ -76,60 +67,60 @@ class Migration
         return $this->datetime;
     }
 
-    public function getFileContents()
+    public function getFileContents(): string
     {
         return $this->fileContents;
     }
 
-    public function getUpContents()
+    public function getUpContents(): string
     {
         return $this->upContents;
     }
 
-    public function getDownContents()
+    public function getDownContents(): string
     {
         return $this->downContents;
     }
 
-    public function getTime()
+    public function getTime(): ?float
     {
         return $this->time;
     }
 
-    public function getResult()
+    public function getResult(): bool
     {
         return $this->result;
     }
 
-    public function setTime($time)
+    public function setTime(?float $time): static
     {
         $this->time = $time;
         return $this;
     }
 
-    public function setResult($result)
+    public function setResult(bool $result): static
     {
         $this->result = $result;
         return $this;
     }
 
-    public function getMigratingFrom()
+    public function getMigratingFrom(): string
     {
         return $this->migratingFrom;
     }
 
-    public function setMigratingFrom($migratingFrom)
+    public function setMigratingFrom(string $migratingFrom): static
     {
         $this->migratingFrom = $migratingFrom;
         return $this;
     }
 
-    public function isPastMigration()
+    public function isPastMigration(): bool
     {
         return $this->pastMigration;
     }
 
-    public function setPastMigration($pastMigration)
+    public function setPastMigration(bool $pastMigration): static
     {
         $this->pastMigration = $pastMigration;
         return $this;

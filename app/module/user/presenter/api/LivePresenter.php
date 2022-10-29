@@ -12,12 +12,12 @@ use Tymy\Module\User\Manager\UserManager;
  */
 class LivePresenter extends SecuredPresenter
 {
-    public function injectManager(UserManager $userManager)
+    public function injectManager(UserManager $userManager): void
     {
         $this->manager = $userManager;
     }
 
-    public function actionDefault($resourceId, $subResourceId)
+    public function actionDefault($resourceId, $subResourceId): void
     {
         if ($this->getRequest()->getMethod() !== "GET") {
             $this->respondNotAllowed();

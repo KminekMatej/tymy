@@ -11,21 +11,8 @@ use JsonSerializable;
  */
 class SimpleUser implements JsonSerializable
 {
-    private int $id;
-    private string $login;
-    private ?string $callName = null;
-    private string $pictureUrl;
-    private ?string $gender = null;
-    private string $status;
-
-    public function __construct(string $id, string $login, ?string $callName, string $pictureUrl, ?string $gender, string $status)
+    public function __construct(private int $id, private string $login, private ?string $callName, private string $pictureUrl, private ?string $gender, private string $status, private ?string $email)
     {
-        $this->id = $id;
-        $this->login = $login;
-        $this->callName = $callName;
-        $this->pictureUrl = $pictureUrl;
-        $this->gender = $gender;
-        $this->status = $status;
     }
 
     public function getId(): int
@@ -58,7 +45,15 @@ class SimpleUser implements JsonSerializable
         return $this->status;
     }
 
-    public function jsonSerialize()
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    /**
+     * @return array<string, string>|array<string, null>
+     */
+    public function jsonSerialize(): array
     {
         return [
             "id" => $this->id,

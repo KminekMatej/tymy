@@ -29,19 +29,11 @@ use Tymy\Module\User\Manager\UserManager;
  */
 class PollManager extends BaseManager
 {
-    private ?Poll $poll;
-    private OptionManager $optionManager;
-    private VoteManager $voteManager;
-    private PermissionManager $permissionManager;
-    private UserManager $userManager;
+    private ?Poll $poll = null;
 
-    public function __construct(ManagerFactory $managerFactory, OptionManager $optionManager, VoteManager $voteManager, PermissionManager $permissionManager, UserManager $userManager)
+    public function __construct(ManagerFactory $managerFactory, private OptionManager $optionManager, private VoteManager $voteManager, private PermissionManager $permissionManager, private UserManager $userManager)
     {
         parent::__construct($managerFactory);
-        $this->optionManager = $optionManager;
-        $this->voteManager = $voteManager;
-        $this->permissionManager = $permissionManager;
-        $this->userManager = $userManager;
         $this->optionManager->setPollManager($this);
     }
 
@@ -50,6 +42,9 @@ class PollManager extends BaseManager
         return Poll::class;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     protected function getScheme(): array
     {
         return PollMapper::scheme();
@@ -64,7 +59,9 @@ class PollManager extends BaseManager
         /* @var $poll Poll */
         $poll = parent::map($row, $force);
 
-        $poll->setDescriptionHtml(BbService::bb2Html($poll->getDescription()));
+        if ($poll->getDescription()) {
+            $poll->setDescriptionHtml(BbService::bb2Html($poll->getDescription()));
+        }
 
         /* @var $row ActiveRow */
         $optionRows = $row->related(Option::TABLE, "quest_id")->fetchAll();
@@ -173,16 +170,19 @@ class PollManager extends BaseManager
         if (!isset($data["maxItems"])) {
             $data["maxItems"] = -1;
         }
-        $data["showResults"] = $data["showResults"] ?? Poll::RESULTS_NEVER;
-        $data["status"] = $data["status"] ?? Poll::STATUS_DESIGN;
-        $data["orderFlag"] = $data["orderFlag"] ?? 0;
+        if ($data["maxItems"] < $data["minItems"]) {
+            $this->respondBadRequest("Max Items must be bigger or equal to Min items");
+        }
+        $data["showResults"] ??= Poll::RESULTS_NEVER;
+        $data["status"] ??= Poll::STATUS_DESIGN;
+        $data["orderFlag"] ??= 0;
 
         $this->checkInputs($data);
     }
 
     protected function allowDelete(?int $recordId): void
     {
-        if (!$this->poll) {
+        if ($this->poll === null) {
             $this->responder->E4005_OBJECT_NOT_FOUND(Poll::MODULE, $recordId);
         }
 
@@ -195,7 +195,7 @@ class PollManager extends BaseManager
 
     protected function allowRead(?int $recordId = null): void
     {
-        if (!$this->poll) {
+        if ($this->poll === null) {
             $this->responder->E4005_OBJECT_NOT_FOUND(Poll::MODULE, $recordId);
         }
     }
@@ -230,6 +230,9 @@ class PollManager extends BaseManager
         return parent::deleteRecord($resourceId);
     }
 
+    /**
+     * @return int[]
+     */
     public function getAllowedReaders(BaseModel $record): array
     {
         return $this->getAllUserIds();
@@ -258,40 +261,21 @@ class PollManager extends BaseManager
     }
 
     /**
-     * Get list of polls, which currently logged user is allowed to vote in
+     * Get list of polls, which currently logged user is allowed to see
      * @return Poll[]
      */
-    public function getListUserAllowed()
-    {
-        $userPermissions = $this->permissionManager->getUserAllowedPermissionNames($this->userManager->getById($this->user->getId()), Permission::TYPE_USER);
-
-        $selector = $this->database->table($this->getTable())->order("order_flag ASC");
-
-        if (!empty($userPermissions)) {
-            $selector->where("vote_rights IS NULL OR vote_rights = '' OR vote_rights IN ?", $userPermissions);
-        } else {
-            $selector->where("vote_rights IS NULL OR vote_rights = ''");
-        }
-
-        return $this->mapAll($selector->fetchAll());
-    }
-
-    /**
-     * Get list of polls, which are supposed to be seen in menu
-     * @return Poll[]
-     */
-    public function getListMenu(): array
+    public function getListUserAllowed(): array
     {
         $userPermissions = $this->permissionManager->getUserAllowedPermissionNames($this->userManager->getById($this->user->getId()), Permission::TYPE_USER);
 
         $selector = $this->database->table($this->getTable())
-            ->where("status != ?", "DESIGN")
-            ->order("order_flag ASC");   //in menu there are not polls in DESIGN status
+            ->where("status IN (?)", [Poll::STATUS_OPENED, Poll::STATUS_CLOSED])
+            ->order("order_flag ASC");   //display only polls which are not in status DESIGN (display CLOSED and OPENED)
 
         if (!empty($userPermissions)) {
-            $selector->where("vote_rights IS NULL OR vote_rights = '' OR vote_rights IN ?", $userPermissions);
+            $selector->where("result_rights IS NULL OR result_rights = '' OR result_rights IN ?", $userPermissions);
         } else {
-            $selector->where("vote_rights IS NULL OR vote_rights = ''");
+            $selector->where("result_rights IS NULL OR result_rights = ''");
         }
 
         return $this->mapAll($selector->fetchAll());
@@ -299,9 +283,6 @@ class PollManager extends BaseManager
 
     /**
      * If supplied poll is set to have anonymouse results, then this function process all votes, and sets random userId to each vote and drops updatedAt and updatedById properties
-     *
-     * @param Poll $poll
-     * @return void
      */
     private function anonymizeIfNeeded(Poll &$poll): void
     {
@@ -313,7 +294,7 @@ class PollManager extends BaseManager
 
         foreach ($poll->getVotes() as &$vote) {
             do {
-                $cloakId = rand(100000, 200000);
+                $cloakId = random_int(100000, 200000);
             } while (in_array($cloakId, $cloakIds));
             $cloakIds[] = $cloakId;
 
@@ -326,9 +307,6 @@ class PollManager extends BaseManager
 
     /**
      * If user is not allowed to see poll results, this function removes results from the poll
-     *
-     * @param Poll $poll
-     * @return void
      */
     private function hideResultsIfNeeded(Poll &$poll): void
     {
@@ -341,7 +319,6 @@ class PollManager extends BaseManager
      * Get sum of all polls with pending vote
      *
      * @param Poll[] $polls
-     * @return int
      */
     public function getWarnings(array $polls): int
     {

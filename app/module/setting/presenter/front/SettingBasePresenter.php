@@ -3,6 +3,7 @@
 namespace Tymy\Module\Setting\Presenter\Front;
 
 use Tymy\Module\Attendance\Manager\StatusManager;
+use Tymy\Module\Core\Factory\FormFactory;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Event\Manager\EventTypeManager;
 use Tymy\Module\Permission\Manager\PermissionManager;
@@ -24,10 +25,14 @@ class SettingBasePresenter extends SecuredPresenter
 
     /** @inject */
     public StatusManager $statusManager;
+
+    /** @inject */
+    public FormFactory $formFactory;
+
     protected array $eventTypes;
     protected array $userPermissions;
 
-    protected function startup()
+    protected function startup(): void
     {
         parent::startup();
         $this->eventTypes = $this->eventTypeManager->getIndexedList();
@@ -38,7 +43,6 @@ class SettingBasePresenter extends SecuredPresenter
     {
         parent::beforeRender();
         $this->template->eventTypes = $this->eventTypes;
-        $this->template->statusList = $this->statusManager->getAllStatusCodes();
         $this->template->userPermissions = $this->userPermissions;
         $this->template->systemPermissions = $this->permissionManager->getByType(Permission::TYPE_SYSTEM);
 
@@ -51,7 +55,6 @@ class SettingBasePresenter extends SecuredPresenter
      *
      * @param string $permissionName Permission name
      * @param string $type Permission type, default SYS
-     * @return void
      */
     protected function allowPermission(string $permissionName, string $type = "SYS"): void
     {

@@ -9,9 +9,6 @@ class SignInFormFactory
 {
     use SmartObject;
 
-    /**
-     * @return Form
-     */
     public function create(callable $onSuccess): Form
     {
 
@@ -26,7 +23,7 @@ class SignInFormFactory
             ->setRequired('Vyplňte své heslo');
 
         $form->addSubmit('send', 'LOGIN');
-        $form->onSuccess[] = function (Form $form, $values) use ($onSuccess) {
+        $form->onSuccess[] = function (Form $form, $values) use ($onSuccess): void {
             $onSuccess($form, $values);
         };
 

@@ -23,22 +23,12 @@ class MissingInputException extends Exception
 
 class TymyResponse extends Exception
 {
-    private ?int $httpCode = null;
-    private bool $success = true;
-    private ?string $sessionKey = null;
     private ?string $redirect = null;
 
-    /** @var mixed */
-    private $payload = null;
-
-    public function __construct(string $message = "", int $httpCode = Response::S200_OK, ?int $code = null, $payload = null, bool $success = true, ?string $sessionKey = null, Throwable $previous = null)
+    public function __construct(string $message = "", private ?int $httpCode = Response::S200_OK, ?int $code = null, private mixed $payload = null, private bool $success = true, private ?string $sessionKey = null, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
-        $this->success = $success;
-        $this->sessionKey = $sessionKey;
         $this->code = $code;
-        $this->payload = $payload;
-        $this->httpCode = $httpCode;
     }
 
     public function getHttpCode(): ?int
@@ -66,31 +56,31 @@ class TymyResponse extends Exception
         return $this->redirect;
     }
 
-    public function setHttpCode(?int $httpCode)
+    public function setHttpCode(?int $httpCode): static
     {
         $this->httpCode = $httpCode;
         return $this;
     }
 
-    public function setSuccess(bool $success)
+    public function setSuccess(bool $success): static
     {
         $this->success = $success;
         return $this;
     }
 
-    public function setSessionKey(?string $sessionKey)
+    public function setSessionKey(?string $sessionKey): static
     {
         $this->sessionKey = $sessionKey;
         return $this;
     }
 
-    public function setPayload($payload)
+    public function setPayload($payload): static
     {
         $this->payload = $payload;
         return $this;
     }
 
-    public function setRedirect(?string $redirect)
+    public function setRedirect(?string $redirect): static
     {
         $this->redirect = $redirect;
         return $this;

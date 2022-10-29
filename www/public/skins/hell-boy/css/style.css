@@ -50,10 +50,6 @@ A.disabled:hover{
     color: white;
 }
 
-BUTTON.btn, BUTTON.dropdown-item, A.btn, INPUT.btn{
-    cursor: pointer;
-}
-
 #ajax-spinner {
 	margin: 15px 0 0 15px;
 	padding: 13px;

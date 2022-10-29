@@ -3,7 +3,7 @@
 namespace Tymy\Module\Debt\Presenter\Front;
 
 use Nette\Utils\DateTime;
-use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Debt\Manager\DebtManager;
 use Tymy\Module\Debt\Model\Debt;
 
@@ -17,7 +17,7 @@ class NewPresenter extends DebtBasePresenter
     /** @inject */
     public DebtManager $debtManager;
 
-    public function renderDefault()
+    public function renderDefault(): void
     {
         $this->template->debt = (new Debt())
             ->setAmount(1)
@@ -43,15 +43,17 @@ class NewPresenter extends DebtBasePresenter
         $this->template->countryList = $this->getCountryList();
     }
 
-    public function handleDebtCreate()
+    public function handleDebtCreate(): void
     {
         $bind = $this->getRequest()->getPost();
 
-        /* @var $createdDebt Debt */
-        $createdDebt = $this->debtManager->create($bind["changes"]);
-
-        $this->flashMessage($this->translator->translate("common.alerts.debtAdded"), "success");
-
-        $this->redirect(":Debt:Default:", $createdDebt->getWebName());
+        try {
+            /* @var $createdDebt Debt */
+            $createdDebt = $this->debtManager->create($bind["changes"]);
+            $this->flashMessage($this->translator->translate("common.alerts.debtAdded"), "success");
+            $this->redirect(":Debt:Default:", $createdDebt->getWebName());
+        } catch (TymyResponse $tResp) {
+            $this->handleTymyResponse($tResp);
+        }
     }
 }

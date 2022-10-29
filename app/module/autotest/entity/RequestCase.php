@@ -3,6 +3,7 @@
 namespace Tymy\Module\Autotest;
 
 use Nette\Application\BadRequestException;
+use Nette\Application\IPresenter;
 use Nette\Application\IResponse;
 use Nette\Application\PresenterFactory;
 use Nette\Application\Request;
@@ -11,10 +12,11 @@ use Nette\Application\Responses\TextResponse;
 use Nette\Application\UI\Presenter;
 use Nette\Database\Explorer;
 use Nette\DI\Container;
-use Nette\Http\Request as Request2;
+use Nette\Http\IRequest;
 use Nette\Http\RequestFactory;
 use Nette\InvalidStateException;
 use Nette\Neon\Neon;
+use Nette\Routing\Router;
 use Nette\Security\User;
 use Nette\Utils\DateTime;
 use Tester\Environment;
@@ -25,7 +27,6 @@ use Tymy\Module\Authentication\Manager\AuthenticationManager;
 use Tymy\Module\Autotest\Entity\Assert;
 use Tymy\Module\Core\Manager\Responder;
 use Tymy\Module\Core\Model\BaseModel;
-use Tymy\Module\Core\Router\RouteList;
 
 use const TEAM_DIR;
 use const TEST_DIR;
@@ -41,45 +42,42 @@ abstract class RequestCase extends TestCase
 
     protected JsonResponse $jsonResponse;
     protected Explorer $database;
-    protected Container $container;
     protected User $user;
     protected array $config;
     protected array $moduleConfig;
     protected RecordManager $recordManager;
-    private RouteList $routeList;
-    private Request2 $httpRequest;
-    private RequestFactory $requestFactory;
+    private Router $router;
     private PresenterFactory $presenterFactory;
     protected AuthenticationManager $authenticationManager;
     protected Responder $responder;
+    private IRequest $httpRequest;
+    private RequestFactory $httpRequestFactory;
 
     /** @var RequestLog[] */
     private array $logs = [];
 
-    public function __construct(Container $container)
+    public function __construct(protected Container $container)
     {
         define('TEST_DIR', Bootstrap::normalizePath(Bootstrap::MODULES_DIR . "/autotest"));
         define('WWW_DIR', Bootstrap::normalizePath(TEAM_DIR . "/www"));
-        $this->container = $container;
         $this->user = $this->container->getByType(User::class);
         $this->authenticationManager = $this->container->getByType(AuthenticationManager::class);
-        $this->httpRequest = $this->container->getService("http.request");
-        $this->requestFactory = $this->container->getService("http.requestFactory");
         $this->presenterFactory = $this->container->getService("application.presenterFactory");
         $this->responder = $this->container->getService("Responder");
         $this->database = $this->container->getService("database.team.explorer");
-        $this->routeList = $this->container->getService("router");
+        $this->router = $this->container->getService("router");
         $this->config = Neon::decode(file_get_contents(TEST_DIR . '/autotest.records.map.neon'));
-        $this->moduleConfig = isset($this->config[$this->getModule()]) ? $this->config[$this->getModule()] : [];
+        $this->moduleConfig = $this->config[$this->getModule()] ?? [];
         $this->recordManager = new RecordManager($this, $this->config);
+        $this->httpRequest = $this->container->getService("http.request");
+        $this->httpRequestFactory = $this->container->getService("http.requestFactory");
         Environment::setup();
     }
 
     /**
      * Function should return string of module name, preferably from constant
-     * @return string
      */
-    abstract public function getModule();
+    abstract public function getModule(): string;
 
     protected function getBasePath(): string
     {
@@ -95,6 +93,9 @@ abstract class RequestCase extends TestCase
 
     abstract public function mockRecord();
 
+    /**
+     * @return mixed[]
+     */
     abstract protected function mockChanges(): array;
 
     public function getRecordManager(): RecordManager
@@ -102,7 +103,7 @@ abstract class RequestCase extends TestCase
         return $this->recordManager;
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         //process request logs and save them to file
         if (empty($this->logs)) {
@@ -122,14 +123,12 @@ abstract class RequestCase extends TestCase
                     $codeStr = ", code: {$requestLog->getCustomResponseCode()}/{$requestLog->getExpectCode()}";
                     $success = false;
                 }
+            } elseif ($requestLog->getHttpResponseCode() == $requestLog->getExpectCode()) {
+                $codeStr = ", code: {$requestLog->getExpectCode()}";
+                $success = true;
             } else {
-                if ($requestLog->getHttpResponseCode() == $requestLog->getExpectCode()) {
-                    $codeStr = ", code: {$requestLog->getExpectCode()}";
-                    $success = true;
-                } else {
-                    $codeStr = ", code: {$requestLog->getHttpResponseCode()}/{$requestLog->getExpectCode()}";
-                    $success = false;
-                }
+                $codeStr = ", code: {$requestLog->getHttpResponseCode()}/{$requestLog->getExpectCode()}";
+                $success = false;
             }
             /* @var $requestLog RequestLog */
             $data = $requestLog->getPostData();
@@ -146,7 +145,7 @@ abstract class RequestCase extends TestCase
             }
             $string = ($requestLog->getTime())->format(BaseModel::DATETIME_CZECH_FORMAT) . "$clrStart {$requestLog->getMethod()}: {$requestLog->getUrl()}";
             if (!empty($data)) {
-                $string .= ", data: " . json_encode($data);
+                $string .= ", data: " . \json_encode($data, JSON_THROW_ON_ERROR);
             }
             if (!empty($coded)) {
                 $string .= $codeStr;
@@ -166,20 +165,9 @@ abstract class RequestCase extends TestCase
     {
         $changes = $changes ?: $this->mockChanges();
 
-        $changedData = $this->request($this->getBasePath() . "/" . $recordId, "PUT", $changes)->expect(200);
+        $changedData = $this->request($this->getBasePath() . "/" . $recordId, "PUT", $changes)->expect(200, "array")->getData();
 
-        foreach ($changes as $key => $value) {
-            $new = $changedData->getData();
-            Assert::hasKey($key, $new, "Output key [$key] missing");
-
-            $newDateTime = $new[$key] && !empty($new[$key]) && is_string($new[$key]) ? DateTime::createFromFormat(BaseModel::DATE_FORMAT, $new[$key], "UTC") : null;
-            if ($newDateTime) {
-                $oldDateTime = DateTime::createFromFormat(BaseModel::DATE_FORMAT, $value);
-                Assert::true($oldDateTime == $newDateTime, "Error on `$key` datetime field"); //comparing by equal fails due to different timezones
-            } else {
-                Assert::equal($value, $new[$key], "Output key [$key] mismatch (expected $value, returned " . $new[$key] . ")");
-            }
-        }
+        $this->assertObjectEquality($changes, $changedData);
     }
 
     //*************** COMMON TESTS, SAME FOR ALL MODULES
@@ -209,10 +197,10 @@ abstract class RequestCase extends TestCase
     public function request($url, $method = "GET", $data = [], $responseClass = null)
     {
         $url = "/api/" . trim($url, "/ ");
-        $httpRequest = $this->mockHttpRequest($method, $url, $data);
 
         $this->logs[] = $log = new RequestLog($method, $url, $data);
 
+        $httpRequest = $this->httpRequestFactory->from($url, $method, json_encode($data));
         $request = $this->createInitialRequest($httpRequest);
 
         Assert::type(Request::class, $request, "No route found for url $url");
@@ -234,10 +222,9 @@ abstract class RequestCase extends TestCase
         }
     }
 
-    private function createInitialRequest($httpRequest): Request
+    private function createInitialRequest(IRequest $httpRequest): Request
     {
-        $params = $this->routeList->match($httpRequest);
-
+        $params = $this->router->match($httpRequest);
         $presenter = $params[Presenter::PRESENTER_KEY] ?? null;
 
         if ($params === null) {
@@ -261,21 +248,21 @@ abstract class RequestCase extends TestCase
     {
         $this->user->logout(true);
         $this->user->setAuthenticator($this->authenticationManager);
-        $this->user->login($userName ? $userName : $this->config["user_test_login"], $password ? $password : $this->config["user_test_pwd"]);
+        $this->user->login($userName ?: $this->config["user_test_login"], $password ?: $this->config["user_test_pwd"]);
 
         Assert::true($this->user->isLoggedIn());
-        Assert::equal($this->user->id, $this->config["user_test_id"]);
+        Assert::equal($this->user->getId(), $this->config["user_test_id"]);
     }
 
     public function authorizeAdmin($userName = null, $password = null)
     {
         $this->user->logout(true);
         $this->user->setAuthenticator($this->authenticationManager);
-        $this->user->login($userName ? $userName : $this->config["user_admin_login"], $password ? $password : $this->config["user_admin_pwd"]);
+        $this->user->login($userName ?: $this->config["user_admin_login"], $password ?: $this->config["user_admin_pwd"]);
 
         Assert::true($this->user->isLoggedIn());
         if (empty($userName)) {
-            Assert::equal($this->user->id, $this->config["user_admin_id"]);
+            Assert::equal($this->user->getId(), $this->config["user_admin_id"]);
         }
     }
 
@@ -283,11 +270,11 @@ abstract class RequestCase extends TestCase
      * Assert that all props of two objects are equal.
      * WARNING: Datetime, sent in local timezone are stored to DB in local timezone, but API responds them in UTC timezone
      *
-     * @param type $original
-     * @param type $new
-     * @param type $skip
+     * @param array $original
+     * @param array $new
+     * @param array|null $skip Fields to skip
      */
-    public function assertObjectEquality(array $original, array $new, $skip = null)
+    public function assertObjectEquality(array $original, array $new, ?array $skip = null)
     {
         foreach ($original as $key => $value) {
             if ($skip && ((is_array($skip) && in_array($key, $skip)) || $key == $skip)) {
@@ -295,53 +282,47 @@ abstract class RequestCase extends TestCase
             }
 
             Assert::hasKey($key, $new);
-
-            $newDateTime = $new[$key] && !empty($new[$key]) && is_string($new[$key]) ? DateTime::createFromFormat(BaseModel::DATE_FORMAT, $new[$key], "UTC") : null;
-            if ($newDateTime) {
-                $oldDateTime = DateTime::createFromFormat(BaseModel::DATE_FORMAT, $value);
-                Assert::true($oldDateTime == $newDateTime, "Error on `$key` datetime field"); //comparing by equal fails due to different timezones
-            } else {
-                Assert::equal($value, $new[$key], "Error on `$key` field");
-            }
+            Assert::equal($value, $new[$key], "Error on `$key` field");
         }
     }
 
-    /** @return Presenter */
-    protected function loadPresenter($name)
+    protected function loadPresenter(string $name): IPresenter
     {
         $presenter = $this->presenterFactory->createPresenter($name);
         $presenter->autoCanonicalize = false;
         return $presenter;
     }
 
-    public function getConfig()
+    /**
+     * @return mixed[]
+     */
+    public function getConfig(): array
     {
         return $this->config;
     }
 
     /**
-     * Mock http request based on method and request url. Request url must always be relative, starting with /module (do not add /api here)
-     * @param type $method
-     * @param type $requestUrl
-     * @return Request2
+     * Inject mocks to http request based on method, request url, data and headers.
+     * Request url must always be relative, starting with /module (do not add /api here)
+     *
+     * @param string $method
+     * @param string $requestUrl
+     * @param array|null $data
+     * @param array|null $headers
+     * @return void
      */
-    private function mockHttpRequest($method, $requestUrl, $data)
+    private function mockHttpRequest(string $method, string $requestUrl, ?array $data = null, ?array $headers = null): void
     {
-        $requestMockFactory = new RequestMockFactory();
-
-        $SERVER["HTTPS"] = "on";
-        $SERVER["HTTP_HOST"] = getenv("SERVER_NAME") ?: "autotest.tymy.cz";
-        $SERVER["SERVER_NAME"] = getenv("SERVER_NAME") ?: "autotest.tymy.cz";
-        $SERVER["SERVER_PORT"] = "443";
-        $SERVER["REQUEST_URI"] = "/api$requestUrl";
-        $SERVER["SCRIPT_NAME"] = "/api/www/index.php";
-        $SERVER["REQUEST_METHOD"] = $method;
-
-        return $requestMockFactory->fromMock($SERVER, $data);
+        $this->httpRequest->setMockMethod($method);
+        $this->httpRequest->setMockUrl($requestUrl);
+        $this->httpRequest->setMockPost($data);
+        if ($headers) {
+            $this->httpRequest->setMockHeaders($headers);
+        }
     }
 
     public function toJsonDate(DateTime $date = null)
     {
-        return $date ? $date->format(BaseModel::DATE_FORMAT) : null;
+        return $date !== null ? $date->format(BaseModel::DATE_FORMAT) : null;
     }
 }

@@ -24,16 +24,23 @@ chooseFile: choisir fichier
 chooseSex: choisir sexe
 chooseType: choisir type
 chooseState: choisir état
+choose: Choisir
 ok: Ok
 yes: oui
 no: Non
 user: utilisateur
 error: erreur
 or: ou
-day: jour
-week: semaine
-month: moi
+day: Jour
+week: Semaine
+month: Moi
+year: An
 name: Nom
+created: Établi
+create: Créer
+validity: Valide
+after: après
+onDay: á la
 navigationBlock:
     first: premier
     previous: précédent
@@ -50,12 +57,14 @@ lastLogin:
     dayAgo: il y a un jour
     daysAgo: il y a %n% jours
 alerts:
+    notFound: pas trouvé
     nobodyFound: personne trouvé
     userSuccesfullyDeleted: utilisateur supprimé avec succès
     loginNotApproved: connexion non validée
     loginNotSuccesfull: Echec de connexion
     logoutSuccesfull: Déconnexion réussie
-    registrationSuccesfull: "Inscription validée. Merci de patienter afin que l'administrateur valide votre inscription."
+    registrationSuccesfull: Inscription validée. 
+    waitForApproval: "Merci de patienter afin que l'administrateur valide votre inscription."
     userNotFound: "Nom d'utilisateur inconnu. Merci de ré-essayer ou contacter l'administrateur"
     resetCodeSent: Le code réinitialisé a été envoyé sur votre adresse mail.
     invalidResetCode: Code de réinitialisation invalide
@@ -68,6 +77,9 @@ alerts:
     notPermitted: Permissions insuffisantes
     configSaved: Paramètres sauvegardés
     avatarSaved: Photo sauvegardés
+    created: Établi
+    updated: Actualisé
+    deleted: Supprimé
     newsOnTymy: Nouvelles en application Tymy.CZ
     newsOnTymyDescription: Le portail a été mis à jour depuis votre dernière visite. Quelles sont les dernières nouvelles?
     newsOnTymyFooter: Vous pouvez commander des nouvelles aussi sur
@@ -87,3 +99,7 @@ months:
     october: Octobre
     november: Novembre
     december: Décembre
+errors:
+    valueInvalid: Valeur invalide saisie
+    teamValueRequired: Votre équipe a besoin de ce champ
+    savingNotAllowedErrors: "Impossible d'enregistrer - le formulaire contient des erreurs"

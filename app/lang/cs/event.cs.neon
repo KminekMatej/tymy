@@ -36,5 +36,6 @@ plan: Plán
 result: Výsledek
 displayHistory: Zobrazit historii
 eventType: Typ události|Typy událostí
+currently: Právě probíhá událost
 errors:
     eventNotExists: Událost %id% neexistuje

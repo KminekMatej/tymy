@@ -7,11 +7,20 @@
 
 {block player-content}
 <div class="tab-pane fade" id="role" role="tabpanel">
-    {foreach $allRoles as $role}
-        {var $hasRole = in_array($role->code,$player->getRoles())}
-        <button name="roles[{$role->code}]" class="btn btn-outline-{$role->class} {if $hasRole}active{/if}" style="min-width:69px" data-role="{$role->code}" data-value="{implode(',', $player->getRoles())}" onclick="checkRole(this)">{$role->caption}</button>
-    {/foreach}
-
+    <div class="tymy-table">
+        <div class="row">
+            <div class="col-12 col-md-4 table-head">{label roles /}:</div>
+            <div class="col-12 col-md-8" data-toggle="buttons">
+                <div class="btn-group-toggle" data-toggle="buttons">
+                    {foreach $form[roles]->items as $key => $label}
+                        {label roles:$key, class => 'btn btn-outline-dark'}
+                            {input roles:$key, onclick => "toggleCheck(this)"} {$label}
+                        {/label}
+                    {/foreach}
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {*include parent*}
 {/block}

@@ -12,14 +12,17 @@ use Tymy\Module\Core\Model\Field;
  */
 class DiscussionMapper extends BaseMapper
 {
+    /**
+     * @return mixed[]
+     */
     public static function scheme(): array
     {
         return [
             Field::int()->withPropertyAndColumn("id", false, false),
-            Field::int()->withColumn("dat_cre")->setProperty("createdAt")->setChangeable(false),
-            Field::int()->withColumn("usr_cre")->setProperty("createdById")->setChangeable(false),
-            Field::int()->withColumn("usr_mod")->setProperty("updatedById")->setChangeable(false),
-            Field::datetime()->withColumn("dat_mod")->setProperty("updatedAt")->setChangeable(false),
+            Field::datetime()->withColumn("created")->setProperty("createdAt")->setChangeable(false),
+            Field::int()->withColumn("created_user_id")->setProperty("createdById")->setChangeable(false),
+            Field::int()->withColumn("updated_user_id")->setProperty("updatedById")->setChangeable(false),
+            Field::datetime()->withColumn("updated")->setProperty("updatedAt")->setChangeable(false),
             Field::string()->withPropertyAndColumn("caption", true),
             Field::string()->withColumn("descr")->setProperty("description"),
             Field::string()->withColumn("read_rights")->setProperty("readRightName"),

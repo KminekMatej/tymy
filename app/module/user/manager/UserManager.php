@@ -2,31 +2,32 @@
 
 namespace Tymy\Module\User\Manager;
 
+use Contributte\Translation\Translator;
 use Exception;
-use Kdyby\Translation\Translator;
 use Nette\Application\AbortException;
 use Nette\Database\IRow;
 use Nette\Database\Table\ActiveRow;
 use Nette\Database\Table\Selection;
-use Nette\Http\Request;
 use Nette\InvalidArgumentException;
-use Nette\Security\User as UserNette;
 use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
-use Tracy\Debugger;
-use Tymy\Module\Authentication\Manager\AuthenticationManager;
 use Tymy\Module\Core\Exception\MissingInputException;
 use Tymy\Module\Core\Factory\ManagerFactory;
+use Tymy\Module\Core\Helper\CURLHelper;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Core\Service\MailService;
 use Tymy\Module\Permission\Manager\PermissionManager;
 use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\Team\Model\Team;
 use Tymy\Module\User\Mapper\UserMapper;
+use Tymy\Module\User\Model\Invitation;
 use Tymy\Module\User\Model\SimpleUser;
 use Tymy\Module\User\Model\User;
+
+use const TEAM_DIR;
 
 /**
  * Description of UserManager
@@ -38,9 +39,9 @@ class UserManager extends BaseManager
     public const HASH_LIMIT = 20;
     public const VALIDITYMIN = 10;
     public const MAX_PWD_REQUESTS = 3;
-    private const FIELDS_PERSONAL = ["gender", "firstName", "lastName", "phone", "email", "birthDate", "nameDayMonth", "nameDayDay", "language"];
+    private const FIELDS_PERSONAL = ["gender", "firstName", "lastName", "phone", "email", "birthDate", "nameDayMonth", "nameDayDay"];
     private const FIELDS_LOGIN = ["callName", "canEditCallName", "login", "password", "canLogin"];
-    private const FIELDS_UI = ["skin"];
+    private const FIELDS_UI = ["language", "skin", "hideDiscDesc"];
     private const FIELDS_TEAMINFO = ["status", "jerseyNumber"];
     private const FIELDS_ADDRESS = ["street", "city", "zipCode"];
     private const TABS = [
@@ -50,69 +51,54 @@ class UserManager extends BaseManager
         "TEAMINFO" => self::FIELDS_TEAMINFO,
         "ADDRESS" => self::FIELDS_ADDRESS,
     ];
-
-    private MailService $mailService;
-    private Request $request;
-    private PermissionManager $permissionManager;
-    private AuthenticationManager $authenticationManager;
-    private TeamManager $teamManager;
-    private Translator $translator;
     private ?User $userModel = null;
-    private UserNette $netteUser;
     private array $userFields;
     private array $userCounts;
 
     /** @var SimpleUser[] */
     private array $simpleUserCache = [];
 
-    public function __construct(ManagerFactory $managerFactory, MailService $mailService, PermissionManager $permissionManager, AuthenticationManager $authenticationManager, Request $request, Translator $translator, TeamManager $teamManager, UserNette $netteUser)
+    public function __construct(ManagerFactory $managerFactory, private MailService $mailService, private PermissionManager $permissionManager, private Translator $translator, private TeamManager $teamManager)
     {
         parent::__construct($managerFactory);
-        $this->mailService = $mailService;
-        $this->permissionManager = $permissionManager;
-        $this->authenticationManager = $authenticationManager;
-        $this->translator = $translator;
-        $this->request = $request;
-        $this->teamManager = $teamManager;
-        $this->netteUser = $netteUser;
     }
 
     /**
-     * Get simple user based on his id
-     *
-     * @param int $userId
-     * @return SimpleUser
+     * Get simple user based on his id or null if hasnt been found
      */
-    public function getSimpleUser(int $userId): SimpleUser
+    public function getSimpleUser(int $userId): ?SimpleUser
     {
         if (empty($this->simpleUserCache) || !array_key_exists($userId, $this->simpleUserCache)) {
-            $allRows = $this->database->table($this->getTable())->fetchAll();
+            $allRows = $this->database->table(User::VIEW)->fetchAll();
             foreach ($allRows as $userRow) {
-                $this->simpleUserCache[$userRow->id] = new SimpleUser($userRow->id, $userRow->user_name, $userRow->call_name, $this->getPictureUrl($userRow->id), (strtoupper($userRow->sex) == "FEMALE" ? "FEMALE" : "MALE"), $userRow->status);
+                $this->simpleUserCache[$userRow->id] = new SimpleUser($userRow->id, $userRow->user_name, $userRow->call_name, $this->getPictureUrl($userRow->id), (strtoupper($userRow->sex) == "FEMALE" ? "FEMALE" : "MALE"), $userRow->status, $userRow->email);
             }
         }
 
-        return $this->simpleUserCache[$userId];
+        return $this->simpleUserCache[$userId] ?? null;
     }
 
     /**
      * Get simple users by array of ids
      *
-     * @param array $userIds
+     * @param array|null $userIds Null returns all users
      * @return SimpleUser[]
      */
-    public function getSimpleUsers(array $userIds): array
+    public function getSimpleUsers(?array $userIds = null): array
     {
-        $userRows = $this->database->table($this->getTable())->where("id", $userIds)->fetchAll();
+        $selector = $this->database->table(User::VIEW);
+        if ($userIds) {
+            $selector->where("id", $userIds);
+        }
 
         $simples = [];
-        foreach ($userRows as $userRow) {
+        foreach ($selector->fetchAll() as $userRow) {
             $userId = $userRow->id;
             if (array_key_exists($userId, $this->simpleUserCache)) {
-                $simples[] = $this->simpleUserCache[$userId];
+                $simples[$userId] = $this->simpleUserCache[$userId];
             } else {
-                $this->simpleUserCache[$userId] = new SimpleUser($userRow->id, $userRow->user_name, $userRow->call_name, $this->getPictureUrl($userRow->id), ($userRow->sex == "FEMALE" ? "FEMALE" : "MALE"), $userRow->status);
-                $simples[] = $this->simpleUserCache[$userId];
+                $this->simpleUserCache[$userId] = new SimpleUser($userRow->id, $userRow->user_name, $userRow->call_name, $this->getPictureUrl($userRow->id), ($userRow->sex == "FEMALE" ? "FEMALE" : "MALE"), $userRow->status, $userRow->email);
+                $simples[$userId] = $this->simpleUserCache[$userId];
             }
         }
 
@@ -134,7 +120,7 @@ class UserManager extends BaseManager
      * @return ActiveRow Created row
      * @throws Exception
      */
-    public function createByArray($array)
+    public function createByArray(array $array): ActiveRow
     {
         if (isset($array["firstName"]) && strlen($array["firstName"]) > 20) {
             $array["firstName"] = substr($array["firstName"], 0, 20);
@@ -149,12 +135,11 @@ class UserManager extends BaseManager
         $array["login"] = strtoupper($array["login"]);
 
         $array["gender"] = isset($array["gender"]) && $array["gender"] == "FEMALE" ? "FEMALE" : "MALE";
-        $array["jerseyNumber"] = isset($array["jerseyNumber"]) ? $array["jerseyNumber"] : "";
 
         $array["password"] = $this->hashPassword($array["password"]);
 
         if (array_key_exists("roles", $array) && is_array($array["roles"])) {
-            $array["roles"] = join(",", $array["roles"]);
+            $array["roles"] = implode(",", $array["roles"]);
         }
 
         $createdRow = parent::createByArray($array);
@@ -166,8 +151,6 @@ class UserManager extends BaseManager
 
     /**
      * Function to save email for given user.
-     * @param int $userId
-     * @param string $email
      * @param string $type Default DEF
      * @throws AbortException
      */
@@ -175,7 +158,7 @@ class UserManager extends BaseManager
     {
         $updated = $this->database->table(User::TABLE_MAILS)->where("user_id", $userId)->where("type", $type)->update(["email" => $email]);
 
-        if (!$updated) {
+        if ($updated === 0) {
             $created = $this->database->table(User::TABLE_MAILS)->insert(
                 [
                         "user_id" => $userId,
@@ -192,16 +175,13 @@ class UserManager extends BaseManager
 
     /**
      * Update users last read news to current timestamp
-     *
-     * @param int $userId
-     * @return void
      */
     public function updateLastReadNews(int $userId): void
     {
         $this->database->table(User::TABLE)->where("id", $userId)->update(["last_read_news" => new DateTime()]);
     }
 
-    public function updateByArray(int $id, array $array)
+    public function updateByArray(int $id, array $array): int
     {
         parent::toBoolData($array, ["anonymousResults", "changeableVotes"]);
 
@@ -218,12 +198,12 @@ class UserManager extends BaseManager
             }
         }
 
-        if (array_key_exists("email", $array) && !empty($array["email"])) {
+        if (array_key_exists("email", $array) && !empty($array["email"]) && $array["email"] !== $userModel->getEmail()) {
             $this->saveEmail($id, $array["email"]);
         }
 
         if (array_key_exists("roles", $array) && is_array($array["roles"])) {
-            $array["roles"] = join(",", $array["roles"]);
+            $array["roles"] = implode(",", $array["roles"]);
         }
 
         if (array_key_exists("password", $array)) {
@@ -233,13 +213,14 @@ class UserManager extends BaseManager
         return parent::updateByArray($id, $array);
     }
 
-    /** @return User */
+    /**
+     * @return User|null */
     public function map(?IRow $row, bool $force = false): ?BaseModel
     {
         /* @var $user User */
         $user = parent::map($row, $force);
 
-        if (!$row) {
+        if ($row === null) {
             return null;
         }
 
@@ -258,7 +239,7 @@ class UserManager extends BaseManager
         return $user;
     }
 
-    private function addWarnings(User $user)
+    private function addWarnings(User $user): void
     {
         foreach ($this->teamManager->getTeam()->getRequiredFields() as $requiredField) {
             $getter = "get" . ucfirst($requiredField);
@@ -281,8 +262,6 @@ class UserManager extends BaseManager
     /**
      * Get url of users avatar.
      * Hint: appends file modification time, so the image gets dropped from browser cache after avatar upload
-     * @param int $userId
-     * @return string
      */
     private function getPictureUrl(int $userId): string
     {
@@ -298,30 +277,47 @@ class UserManager extends BaseManager
     /**
      * Get users based on their status
      *
-     * @param string $status
      * @return User[]
      */
-    public function getByStatus(string $status)
+    public function getByStatus(string $status): array
     {
         return $this->mapAll($this->database->table($this->getTable())->where("status", $status)->fetchAll());
     }
 
     /**
      * Check if login is already taken
-     *
-     * @param string $login
-     * @return bool
      */
-    public function loginExists(string $login)
+    public function loginExists(string $login): bool
     {
         return $this->database->table($this->getTable())->select("id")->where("user_name", $login)->count("id") > 0;
+    }
+
+    /**
+     * Load logins that already exists - for form validation
+     * @return string[]
+     */
+    public function getExistingLoginsExcept(?string $exceptLogin = null): array
+    {
+        $selector = $this->database->table($this->getTable());
+        if ($exceptLogin) {
+            $selector->where("user_name != ?", $exceptLogin);
+        }
+        return $selector->fetchPairs(null, "user_name");
+    }
+
+    /**
+     * Load e-mails that already exists - for form validation
+     * @return string[]
+     */
+    public function getExistingEmails(): array
+    {
+        return $this->database->table(User::VIEW)->fetchPairs(null, "email");
     }
 
     /**
      * Check if user limit has been reached
      *
      * @param string $login
-     * @return bool
      */
     public function limitUsersReached(): bool
     {
@@ -333,40 +329,43 @@ class UserManager extends BaseManager
     /**
      * Check credentials of user in specified team and returns its id if exists and credentials are valid
      *
-     * @param Team $team
-     * @param string $username
-     * @param string $password
      * @return int|null User id if credentials match or null if they dont
      */
     public function checkCredentials(Team $team, string $username, string $password): ?int
     {
-        $userId = file_get_contents("https://tymy.cz/api/check-credentials?username={$username}&teamId={$team->getId()}&password={$password}");    //this request is accessible from localhost only
+        $userId = CURLHelper::get("https://tymy.cz/api/check-credentials?" . http_build_query([
+                    "username" => $username,
+                    "teamId" => $team->getId(),
+                    "password" => $password,
+        ]));    //this request is accessible from localhost only
+
         return $userId && $userId !== "null" ? $userId : null;
     }
 
     /**
      * Get userId by email
-     *
-     * @param string $email
-     * @return bool
      */
     public function getIdByEmail(string $email): ?int
     {
         $row = $this->database->table(User::TABLE_MAILS)->where("email", $email)->fetch();
-        return $row ? $row->user_id : null;
+        return $row !== null ? $row->user_id : null;
     }
 
     /**
      * Register user - create user record in INIT status
-     * @param array $array
-     * @return User
      */
-    public function register(array $array): User
+    public function register(array $array, ?Invitation $invitation = null): ?\Tymy\Module\User\Model\User
     {
         $this->allowRegister($array);
 
         $array["status"] = "INIT";
         $array["callName"] = $array["login"];
+
+        if ($invitation !== null) {
+            $array["status"] = "PLAYER";
+            $array["canLogin"] = true;
+            $array["canEditCallName"] = true;
+        }
 
         $createdRow = $this->createByArray($array);
 
@@ -375,12 +374,18 @@ class UserManager extends BaseManager
 
         $allAdmins = $this->getUsersWithPrivilege(Privilege::SYS("USR_UPDATE"));
 
-        foreach ($allAdmins as $admin) {
-            if (empty($admin->getEmail())) {  //skip admins without email
-                continue;
+        if ($invitation === null) { //send registration email only if this is blank registration from web, not from invitation
+            foreach ($allAdmins as $admin) {
+                if (empty($admin->getEmail())) {  //skip admins without email
+                    continue;
+                }
+                /* @var $admin User */
+                $this->mailService->mailUserRegistered($admin->getCallName(), $admin->getEmail(), $registeredUser->getLogin(), $registeredUser->getEmail(), $registeredUser->getFirstName(), $registeredUser->getLastName(), $array["note"] ?? null);
             }
-            /* @var $admin User */
-            $this->mailService->mailUserRegistered($admin->getCallName(), $admin->getEmail(), $registeredUser->getLogin(), $registeredUser->getEmail(), $registeredUser->getFirstName(), $registeredUser->getLastName(), $array["note"] ?? null);
+        } else {    //mark invitation request as accepted. Cannot from invitationManager, since that would caus circullar reference
+            $this->database->table(Invitation::TABLE)
+                ->where("id", $invitation->getId())
+                ->update(["user_id" => $registeredUser->getId()]);
         }
 
         return $registeredUser;
@@ -388,7 +393,6 @@ class UserManager extends BaseManager
 
     /**
      * Function selects all users allowed on given permission
-     * @param Privilege $privilege
      * @return Selection Selection to operate with
      */
     private function selectUsersByPrivilege(Privilege $privilege): Selection
@@ -415,7 +419,7 @@ class UserManager extends BaseManager
             $conditions[] = "id IN ?";
             $params[] = $permission->getAllowedUsers();
         }
-        $usersSelector->where("(" . join(") OR (", $conditions) . ")", ...$params);
+        $usersSelector->where("(" . implode(") OR (", $conditions) . ")", ...$params);
 
         //add revokes
         if (!empty($permission->getRevokedRoles())) {
@@ -435,8 +439,7 @@ class UserManager extends BaseManager
 
     /**
      * Load list of user ids, allowed to operate with given privilege
-     * @param Privilege $privilege
-     * @return int[]|null
+     * @return mixed[]
      */
     public function getUserIdsWithPrivilege(Privilege $privilege): array
     {
@@ -445,8 +448,7 @@ class UserManager extends BaseManager
 
     /**
      * Load list of user object, allowed to operate with given privilege
-     * @param Privilege $privilege
-     * @return User[]|null
+     * @return BaseModel[]
      */
     public function getUsersWithPrivilege(Privilege $privilege): array
     {
@@ -458,6 +460,9 @@ class UserManager extends BaseManager
         return User::class;
     }
 
+    /**
+     * @return Field[]
+     */
     protected function getScheme(): array
     {
         return UserMapper::scheme();
@@ -473,6 +478,9 @@ class UserManager extends BaseManager
         return true;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getAllowedReaders(BaseModel $record): array
     {
         return [];
@@ -480,13 +488,11 @@ class UserManager extends BaseManager
 
     /**
      * Hash password 1-20 times
-     * @param string $password
-     * @return string
      */
     private function hashPassword(string $password): string
     {
         $hash = md5($password);
-        for ($index = 1; $index < (rand(0, 1) * self::HASH_LIMIT); $index++) {// when password is being edited, save password hashed 1 - 20 times into database. Starting from and hashing in init makes sure that hash is made at least once
+        for ($index = 1; $index < (random_int(0, 1) * self::HASH_LIMIT); $index++) {// when password is being edited, save password hashed 1 - 20 times into database. Starting from and hashing in init makes sure that hash is made at least once
             $hash = md5($password);
         }
         return $hash; //TODO neccessary to update oldPassword to enable login from old gui
@@ -507,22 +513,22 @@ class UserManager extends BaseManager
         }
 
         if (strlen($data["password"]) < 3) {
-            $this->respondBadRequest("Password failure");
+            $this->respondBadRequest($this->translator->translate("team.alerts.passwordTooShort"));
         }
         if (!preg_match(BaseModel::MAIL_REGEX, $data["email"])) {
-            $this->respondBadRequest("E-mail failure");
+            $this->respondBadRequest($this->translator->translate("team.alerts.emailFailure"));
         }
         if (strlen($data["login"]) < 3 || strlen($data["login"]) > 20) {
-            $this->respondBadRequest("Username failure");
+            $this->respondBadRequest($this->translator->translate("team.alerts.usernameFailure"));
         }
         if ($this->loginExists($data["login"])) {
-            $this->respondBadRequest("Username taken");
+            $this->respondBadRequest($this->translator->translate("team.alerts.loginExists"));
         }
         if ($this->limitUsersReached()) {
-            $this->respondForbidden("User quota limit reached");
+            $this->respondForbidden($this->translator->translate("team.alerts.userQuotaReached"));
         }
         if ($this->getIdByEmail($data["email"])) {
-            $this->respondBadRequest("E-mail taken");
+            $this->respondBadRequest($this->translator->translate("team.alerts.emailExists"));
         }
     }
 
@@ -561,32 +567,32 @@ class UserManager extends BaseManager
         if (!$canEditFull) {
             //editing myself - cannot edit roles, canEditCallName, status, login and callName (when user cannot edit callName)
             if (isset($data["roles"]) && $data["roles"] !== $this->userModel->getRoles()) {
-                $this->responder->E403_FORBIDDEN("Changing roles is forbidden");
+                $this->responder->E403_FORBIDDEN($this->translator->translate("team.alerts.changingRolesForbidden"));
             }
             if (isset($data["canEditCallName"]) && $data["canEditCallName"] !== $this->userModel->getCanEditCallName()) {
-                $this->responder->E403_FORBIDDEN("Changing canEditCallName is forbidden");
+                $this->responder->E403_FORBIDDEN($this->translator->translate("team.alerts.changingCanEditCallnameForbidden"));
             }
             if (isset($data["status"]) && $data["status"] !== $this->userModel->getStatus()) {
-                $this->responder->E403_FORBIDDEN("Changing status is forbidden");
+                $this->responder->E403_FORBIDDEN($this->translator->translate("team.alerts.changingStatusForbidden"));
             }
             if (isset($data["login"]) && $data["login"] !== $this->userModel->getLogin()) {
-                $this->responder->E403_FORBIDDEN("Changing login is forbidden");
+                $this->responder->E403_FORBIDDEN($this->translator->translate("team.alerts.changingLoginForbidden"));
             }
-            if (isset($data["callName"]) && !$this->userModel->getCanEditCallName()) {
-                $this->responder->E403_FORBIDDEN("Editing call name forbidden");
+            if (isset($data["callName"]) && $data["callName"] !== $this->userModel->getCallName() && !$this->userModel->getCanEditCallName()) {
+                $this->responder->E403_FORBIDDEN($this->translator->translate("team.alerts.editingCallNameForbidden"));
             }
         }
 
-        if (array_key_exists("email", $data)) {
+        if (isset($data["email"])) {
             $userIdWithThatEmail = $this->getIdByEmail($data["email"]);
             if ($userIdWithThatEmail && $userIdWithThatEmail !== $this->userModel->getId()) { //changing mail to already existing one
-                $this->responder->E403_FORBIDDEN("This e-mail already exists");
+                $this->responder->E403_FORBIDDEN($this->translator->translate("team.alerts.emailExists"));
             }
         }
 
         //changing user status from deleted?
         if ($this->userModel->getStatus() == "DELETED" && array_key_exists("status", $data) && $data["status"] !== "DELETED" && $this->limitUsersReached()) {
-            $this->respondForbidden("User quota limit reached");
+            $this->respondForbidden($this->translator->translate("team.alerts.userQuotaReached"));
         }
 
         //surge that user with ID 1 will always stay Admin
@@ -598,8 +604,6 @@ class UserManager extends BaseManager
     /**
      * Check if registration is allowed
      *
-     * @param array $data
-     * @return void
      * @throws InvalidArgumentException
      */
     private function allowRegister(array &$data): void
@@ -617,33 +621,31 @@ class UserManager extends BaseManager
         }
 
         if ($this->loginExists($data["login"])) {
-            throw new InvalidArgumentException("Username taken");
+            throw new InvalidArgumentException($this->translator->translate("team.alerts.loginExists"));
         }
-
         if (count($inits) > 3) {
-            throw new InvalidArgumentException("Registrations limit reached");
+            throw new InvalidArgumentException($this->translator->translate("team.alerts.registrationsLimitReached"));
         }
-
         if (strlen($data["password"]) < 3) {
-            throw new InvalidArgumentException("Password failure");
+            throw new InvalidArgumentException($this->translator->translate("team.alerts.passwordTooShort"));
         }
         if (!preg_match(BaseModel::MAIL_REGEX, $data["email"])) {
-            throw new InvalidArgumentException("E-mail failure");
+            throw new InvalidArgumentException($this->translator->translate("team.alerts.emailFailure"));
         }
         if (strlen($data["login"]) < 3 || strlen($data["login"]) > 20) {
-            throw new InvalidArgumentException("Username failure");
-        }
-        if ($this->loginExists($data["login"])) {
-            throw new InvalidArgumentException("Username taken");
+            throw new InvalidArgumentException($this->translator->translate("team.alerts.usernameFailure"));
         }
         if ($this->limitUsersReached()) {
-            throw new InvalidArgumentException("User quota limit reached");
+            throw new InvalidArgumentException($this->translator->translate("team.alerts.userQuotaReached"));
         }
         if ($this->getIdByEmail($data["email"])) {
-            throw new InvalidArgumentException("E-mail taken");
+            throw new InvalidArgumentException($this->translator->translate("team.alerts.emailExists"));
         }
     }
 
+    /**
+     * @return User
+     */
     public function create(array $data, ?int $resourceId = null): BaseModel
     {
         parent::toBoolData($data, ["canEditCallName", "canLogin", "hideDiscDesc"]);
@@ -694,11 +696,8 @@ class UserManager extends BaseManager
      * Checks prerequisities, generate reset code, store it into database and send informational mail to the resetting user
      *
      * @param int $userId
-     * @param string $email
-     * @param string $hostname
-     * @param string $callbackUri
      */
-    public function pwdLost(string $email, string $hostname, string $callbackUri)
+    public function pwdLost(string $email, string $hostname, string $callbackUri): void
     {
         $userId = $this->getIdByEmail($email);
         if (empty($userId)) {
@@ -716,7 +715,7 @@ class UserManager extends BaseManager
             $this->respondBadRequest($this->translator->translate("common.alerts.tooManyTries"));
         }
 
-        $resetCode = substr(md5(rand()), 0, 20);
+        $resetCode = substr(md5(random_int(0, mt_getrandmax())), 0, 20);
 
         $this->database->table(User::TABLE_PWD_RESET)->insert([
             "from_host" => $hostname,
@@ -731,7 +730,6 @@ class UserManager extends BaseManager
     /**
      * Check conditions, reset password and return the new password
      *
-     * @param string $resetCode
      * @return string New password
      */
     public function pwdReset(string $resetCode): string
@@ -742,15 +740,15 @@ class UserManager extends BaseManager
                 ->where("reseted", null)
                 ->fetch();
 
-        if (!$resetRow) {
+        if (!$resetRow instanceof ActiveRow) {
             $this->respondBadRequest($this->translator->translate("common.alerts.invalidResetCode"));
         }
         $user = $this->getById($resetRow->user_id);
-        if (!$user) {
+        if (!$user instanceof BaseModel) {
             $this->respondBadRequest($this->translator->translate("common.alerts.invalidResetCode"));
         }
 
-        $newPwd = substr(md5($resetCode . rand(0, 100000)), 0, 8);
+        $newPwd = substr(md5($resetCode . random_int(0, 100000)), 0, 8);
 
         $this->database->table(User::TABLE)
                 ->where("id", $user->getId())
@@ -767,9 +765,6 @@ class UserManager extends BaseManager
 
     /**
      * Count password reset requests in last hour
-     *
-     * @param int $userId
-     * @return int
      */
     private function pwdLostCount(int $userId): int
     {
@@ -827,7 +822,6 @@ class UserManager extends BaseManager
      * Get sum of all warnings of desired users
      *
      * @param User[] $users
-     * @return int
      */
     public function getWarnings(array $users): int
     {
@@ -882,8 +876,7 @@ class UserManager extends BaseManager
 
     /**
      * Get array of user fields
-     *
-     * @return array
+     * @return mixed[]|array<string, array<string, string>>
      */
     public function getAllFields(): array
     {
@@ -909,6 +902,9 @@ class UserManager extends BaseManager
         return $this->userFields;
     }
 
+    /**
+     * @return BaseModel[]
+     */
     public function getList(?array $idList = null, string $idField = "id", ?int $limit = null, ?int $offset = null, ?string $order = null): array
     {
         $rows = $this->database->table($this->getTable())->where("status != ?", User::STATUS_DELETED);
@@ -921,5 +917,17 @@ class UserManager extends BaseManager
         }
 
         return $this->mapAll($rows->fetchAll());
+    }
+
+    /**
+     * Adds user to live table or update time if user is already there.
+     * Also deletes old records
+     * @param int $userId
+     * @return void
+     */
+    public function setUserLive(int $userId): void
+    {
+        $this->database->query("INSERT INTO `live`(`user_id`) VALUES (?) ON DUPLICATE KEY UPDATE `time` = CURRENT_TIMESTAMP()", $userId);
+        $this->database->query("DELETE FROM `live` WHERE `time` < NOW() - INTERVAL ? MINUTE", self::VALIDITYMIN);
     }
 }

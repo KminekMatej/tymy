@@ -17,7 +17,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->manager = $manager;
     }
 
-    public function actionDefault($resourceId, $subResourceId)
+    public function actionDefault($resourceId, $subResourceId): void
     {
         switch ($this->getRequest()->getMethod()) {
             case 'GET':
@@ -38,7 +38,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->respondNotAllowed();
     }
 
-    private function requestGetList()
+    private function requestGetList(): void
     {
         $debts = $this->manager->getListUserAllowed($this->user->getId());
 

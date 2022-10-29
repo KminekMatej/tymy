@@ -2,11 +2,14 @@
 
 namespace Tymy\Module\Multiaccount\Presenter\Api;
 
+use Exception;
 use Tymy\Module\Core\Presenter\Api\SecuredPresenter;
 use Tymy\Module\Multiaccount\Manager\MultiaccountManager;
+use Tymy\Module\Multiaccount\Model\TransferKey;
 
 /**
  * Description of DefaultPresenter
+ * @RequestMapping(value = "/multiaccount", method = RequestMethod.GET)
  * @RequestMapping(value = "/multiaccount/{team}", method = RequestMethod.GET)
  * @RequestMapping(value = "/multiaccount/{team}", method = RequestMethod.POST)
  * @RequestMapping(value = "/multiaccount/{team}", method = RequestMethod.DELETE)
@@ -20,25 +23,58 @@ class DefaultPresenter extends SecuredPresenter
         $this->manager = $manager;
     }
 
-    public function actionDefault($resourceId, $subResourceId)
+    public function actionDefault(?string $resourceId): void
     {
         switch ($this->getRequest()->getMethod()) {
             case 'GET':
-                $resourceId ? $this->requestGet($resourceId, $subResourceId) : $this->requestGetList();
+                $resourceId ? $this->requestGenerateKey($resourceId) : $this->requestGetList();
                 // no break
             case 'POST':
                 $this->needs($resourceId);
-                $this->requestPost($resourceId);
+                $this->requestAddTeam($resourceId);
                 // no break
             case 'DELETE':
                 $this->needs($resourceId);
-                $this->requestDelete($resourceId, $subResourceId);
+                $this->requestRemoveTeam($resourceId);
         }
 
         $this->respondNotAllowed();
     }
 
-    private function requestGetList()
+    private function requestGenerateKey(string $team): void
+    {
+        /* @var $tk TransferKey */
+        $tk = $this->manager->generateNewTk($team);
+
+        $this->respondOk([
+            "transferKey" => $tk->getTransferKey(),
+            "uid" => $tk->getUid(),
+        ]);
+    }
+
+    private function requestAddTeam(string $team)
+    {
+        try {
+            $this->manager->create($this->requestData, $team);
+        } catch (Exception $exc) {
+            $this->handleException($exc);
+        }
+
+        $this->respondOkCreated();
+    }
+
+    private function requestRemoveTeam(string $team)
+    {
+        try {
+            $this->manager->delete($team);
+        } catch (Exception $exc) {
+            $this->handleException($exc);
+        }
+
+        $this->respondOk();
+    }
+
+    private function requestGetList(): void
     {
         $teams = $this->manager->getListUserAllowed();
 

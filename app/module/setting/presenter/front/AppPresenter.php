@@ -5,6 +5,8 @@ namespace Tymy\Module\Setting\Presenter\Front;
 use Nette\Application\UI\Form;
 use stdClass;
 use Tymy\Module\Attendance\Manager\StatusManager;
+use Tymy\Module\Core\Helper\ArrayHelper;
+use Tymy\Module\Core\Helper\CURLHelper;
 use Tymy\Module\Event\Manager\EventManager;
 use Tymy\Module\Event\Manager\EventTypeManager;
 use Tymy\Module\Permission\Manager\PermissionManager;
@@ -36,24 +38,24 @@ class AppPresenter extends SettingBasePresenter
     /** @inject */
     public StatusManager $statusManager;
 
-    public function beforeRender()
+    public function beforeRender(): void
     {
         parent::beforeRender();
         $this->addBreadcrumb($this->translator->translate("settings.application"), $this->link(":Setting:App:"));
     }
 
-    public function renderDefault()
+    public function renderDefault(): void
     {
         $currentVersion = $this->getCurrentVersion();
         $this->template->version = $currentVersion;
         $previousPatch = null;
         $firstMinor = null;
         foreach ($this->getVersions() as $version) {
-            if (empty($previousPatch) && ($currentVersion->getMajor() != $version->getMajor() || $currentVersion->getMinor() != $version->getMinor() || $currentVersion->getPatch() != $version->getPatch())) {
+            if (empty($previousPatch) && ($currentVersion->getMajor() !== $version->getMajor() || $currentVersion->getMinor() !== $version->getMinor() || $currentVersion->getPatch() !== $version->getPatch())) {
                 $previousPatch = $version;
             }
 
-            if (!isset($firstMinor) && $version->getPatch() == 0) {
+            if (!isset($firstMinor) && $version->getMinor() !== $currentVersion->getMinor() && $version->getPatch() == 0) {
                 $firstMinor = $version;
             }
         }
@@ -63,18 +65,29 @@ class AppPresenter extends SettingBasePresenter
         $this->template->previousPatchVersion = $previousPatch;
         $this->template->firstMinorVersion = $firstMinor;
 
-        $this->template->allSkins = TeamManager::SKINS;
+        $this->template->allSkins = $this->teamManager->allSkins;
+        $this->getNextMilestone();
     }
 
-    public function createComponentUserConfigForm()
+    private function getNextMilestone(): void
+    {
+        $milestones = CURLHelper::get("https://api.github.com/repos/KminekMatej/tymy/milestones", true);
+        $versions = ArrayHelper::pairs($milestones, "title", "html_url");
+
+        uksort($versions, "version_compare");
+        $nextVersion = array_key_first($versions);
+        $this->template->nextMilestoneVersion = $nextVersion;
+        $this->template->nextMilestoneUrl = $versions[$nextVersion];
+    }
+
+    public function createComponentUserConfigForm(): \Nette\Application\UI\Form
     {
         $form = new Form();
-        $form->addSelect("skin", "Skin", TeamManager::SKINS)->setValue($this->skin);
+        $form->addSelect("skin", "Skin", $this->teamManager->allSkins)->setValue($this->skin);
         $form->addSubmit("save");
 
-        $form->onSuccess[] = function (Form $form, stdClass $values) {
+        $form->onSuccess[] = function (Form $form, stdClass $values): void {
             $this->userManager->update(["skin" => $values->skin], $this->user->getId());
-            $this->user->getIdentity()->skin = $values->skin;
         };
 
         return $form;

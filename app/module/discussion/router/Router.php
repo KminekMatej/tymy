@@ -14,20 +14,8 @@ class Router implements RouterInterface
 {
     public function addRoutes(RouteList &$router): void
     {
-        $router->addApiRoute('discussion[s][/accessible][/withNew]', array(
-                    'module' => 'Discussion',
-                    'presenter' => 'Default',
-                    'action' => 'default',
-                ))
-                ->addApiRoute('discussion[s][/newOnly]', array(
-                    'module' => 'Discussion',
-                    'presenter' => 'NewOnly',
-                    'action' => 'default',
-                ))
-                ->addApiRoute('discussion[s][/<resourceId \d+>]/<mode html|bb>[/<subResourceId \d+>]', array(
-                    'module' => 'Discussion',
-                    'presenter' => 'Post',
-                    'action' => 'mode',
-                ));
+        $router->addApiRoute('discussion[s][/accessible][/withNew]', ['module' => 'Discussion', 'presenter' => 'Default', 'action' => 'default'])
+                ->addApiRoute('discussion[s][/newOnly]', ['module' => 'Discussion', 'presenter' => 'NewOnly', 'action' => 'default'])
+                ->addApiRoute('discussion[s][/<resourceId \d+>]/<mode html|bb>[/<subResourceId \d+>]', ['module' => 'Discussion', 'presenter' => 'Post', 'action' => 'mode']);
     }
 }

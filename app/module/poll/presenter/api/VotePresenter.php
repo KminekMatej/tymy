@@ -17,12 +17,10 @@ class VotePresenter extends SecuredPresenter
         $this->manager = $manager;
     }
 
-    public function actionDefault($resourceId, $subResourceId)
+    public function actionDefault($resourceId, $subResourceId): void
     {
-        switch ($this->getRequest()->getMethod()) {
-            case 'POST':
-                $this->requestPost($resourceId);
-            // no break
+        if ($this->getRequest()->getMethod() === 'POST') {
+            $this->requestPost($resourceId);
         }
 
         $this->respondNotAllowed();

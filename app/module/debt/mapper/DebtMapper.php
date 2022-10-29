@@ -12,12 +12,15 @@ use Tymy\Module\Core\Model\Field;
  */
 class DebtMapper extends BaseMapper
 {
+    /**
+     * @return mixed[]
+     */
     public static function scheme(): array
     {
         return [
             Field::int()->withPropertyAndColumn("id", false, false),
             Field::datetime()->withPropertyAndColumn("created", false, false),
-            Field::int()->withColumn("created_user_id")->setProperty("createdUserId"),
+            Field::int()->withColumn("created_user_id", false, false)->setProperty("createdUserId"),
             Field::float()->withPropertyAndColumn("amount", true),
             Field::string()->withColumn("currency_iso")->setProperty("currencyIso"),
             Field::string()->withColumn("country_iso")->setProperty("countryIso"),

@@ -24,16 +24,23 @@ chooseFile: Vyberte soubor
 chooseSex: Vyberte pohlaví
 chooseType: Vyberte typ
 chooseState: Vyberte stav
+choose: Vyberte
 ok: Ok
 yes: Ano
 no: Ne
 user: Uživatel
 error: Chyba
+created: Vytvořil
+create: Vytvořit
 or: nebo
 day: Den
 week: Týden
 month: Měsíc
+year: Rok
 name: Název
+validity: Platnost do
+after: po
+onDay: dne
 navigationBlock:
     first: První
     previous: Předchozí
@@ -50,12 +57,14 @@ lastLogin:
     dayAgo: před 1 dnem
     daysAgo: před %n% dny
 alerts:
+    notFound: nenalezen|nenalezena
     nobodyFound: Nikdo nenalezen
     userSuccesfullyDeleted: Uživatel byl úspešně smazán
     loginNotApproved: Tento uživatel zatím nemá povolené přihlášení
     loginNotSuccesfull: Přihlášení bylo neúspěšné
     logoutSuccesfull: Byl jste úspěšně odhlášen
-    registrationSuccesfull: Registrace byla úspěšná. Nyní vyčkejte na schválení registrace administrátorem.
+    registrationSuccesfull: Registrace byla úspěšná.
+    waitForApproval: Nyní vyčkejte na schválení registrace administrátorem.
     userNotFound: "Uživatel nebyl nalezen, je zablokován nebo došlo k chybě. Zkuste to znovu, nebo kontaktujte týmového administrátora."
     resetCodeSent: Kód k resetování byl zaslán na Vaši e-mailovou adresu
     invalidResetCode: Neplatný resetovací kód
@@ -68,6 +77,9 @@ alerts:
     notPermitted: Nemáte dostatečná práva
     configSaved: Nastavení bylo uloženo
     avatarSaved: Profilová fotka uložena
+    created: Vytvořeno
+    updated: Aktualizováno
+    deleted: Smazáno
     newsOnTymy: Novinky v aplikaci Tymy.CZ
     newsOnTymyDescription: Aplikace byla od Vašeho posledního přihlášení upgradována. Co je nového?
     newsOnTymyFooter: Přehled novinek zároveň naleznete na
@@ -89,3 +101,7 @@ months:
     october: Říjen
     november: Listopad
     december: Prosinec
+errors:
+    valueInvalid: Chybně zadaná hodnota
+    teamValueRequired: Váš tým vyžaduje vyplnit toto pole
+    savingNotAllowedErrors: Nelze uložit - formulář obsahuje chyby

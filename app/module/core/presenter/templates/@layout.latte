@@ -24,6 +24,7 @@
         <link rel="stylesheet" href="{$publicPath}/resources/bootstrap4/css/bootstrap.{$css}?ver={$appver}" />
         <link rel="stylesheet" href="{$publicPath}/resources/fontawesome/css/all.{$css}?ver={$appver}" />
         <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet" />
+        <link rel="stylesheet" href="{$publicPath}/skins/common/css/style.css?ver={$appver}" />
         <link rel="stylesheet" href="{$publicPath}/skins/{$skin}/css/style.css?ver={$appver}" />
         {/block}
         {block scripts}
@@ -41,8 +42,16 @@
         <script src="{$publicPath}/resources/fileUpload/js/jquery.fileupload-image.js" type="text/javascript"></script>
         <script src="{$publicPath}/resources/fileUpload/js/jquery.fileupload-video.js" type="text/javascript"></script>
         <script src="{$publicPath}/resources/fileUpload/controller.js" type="text/javascript"></script>
-                
+
         <script src="{$publicPath}/js/nette.ajax.js?ver={$appver}"></script>
+        <script src="{$publicPath}/js/live-form-validation.js?ver={$appver}"></script>
+        <script>    
+            LiveForm.setOptions({
+                controlErrorClass: 'is-invalid',
+                controlValidClass: 'is-valid',
+                wait: 300
+            });
+        </script>
         <script defer src="{$publicPath}/resources/fontawesome/js/all.{$js}?ver={$appver}"></script>
         {/block}
 
@@ -54,14 +63,14 @@
         <img src="{$publicPath}/skins/{$skin}/img/skin-logo.png?ver={$appver}" class="skin-logo">
         {block navbar}{/block}
         {snippet flashes}
-        <div n:if="$flashes" class="container">
-            <div n:foreach="$flashes as $flash" class="row">
-                <div class="col">
-                    {var $msgItems = explode('||', $flash->message)}
-                    <div class="alert alert-{$flash->type} my-1">{$msgItems[0]}<strong n:if="array_key_exists(1, $msgItems)" style="color: red">{$msgItems[1]}</strong></div>
+            <div n:if="$flashes" class="container">
+                <div n:foreach="$flashes as $flash" class="row">
+                    <div class="col">
+                        {var $msgItems = explode('||', $flash->message)}
+                        <div class="alert alert-{$flash->type} my-1">{$msgItems[0]}<strong n:if="array_key_exists(1, $msgItems)" style="color: red">{$msgItems[1]}</strong></div>
+                    </div>
                 </div>
             </div>
-        </div>
         {/snippet}
         {include content}
 

@@ -13,6 +13,9 @@ $(document).ready(function () {
             $.each(data.result.files, function (index, file) {
                 $('<p></p>').text(file.name).appendTo(document.body);
             });
+            if (data.result.snippets) {
+                $.nette.ext('snippets').updateSnippets(data.result.snippets);
+            }
         }
     });
 
@@ -57,7 +60,7 @@ function isPushNotificationSupported() {
  * 
  */
 function registerServiceWorker() {
-    return navigator.serviceWorker.register('/service-worker.js')
+    return navigator.serviceWorker.register('/public/service-worker.js')
             .then(function (registration) {
                 console.log('Service worker successfully registered with scope ' + registration.scope);
                 return registration;

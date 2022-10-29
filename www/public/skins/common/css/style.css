@@ -1,0 +1,62 @@
+/*
+Common css commands, included in each skin
+*/
+/* 
+    Created on : 1. 6. 2022, 23:02:21
+    Author     : kminekmatej
+*/
+
+.lfv-diff {
+    font-style: italic;
+    color: #feb20f;
+}
+
+input[type='checkbox'].lfv-diff + .custom-control-label:before {
+    border: 2px solid #feb20f;
+}
+
+/* Standard rows responsive table */
+.tymy-table div.row > div.table-head{
+    font-weight: bold;
+    text-align: center;
+}
+
+.tymy-table div.row.table-head{
+    font-weight: bold;
+}
+
+.tymy-table > .row > div {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+
+.tymy-table.table-striped > .row:nth-child(odd){
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.tymy-table.table-striped > .row:focus,.tymy-table.table-striped > .row:hover{
+    background: rgba(0, 0, 0, 0.075);
+}
+
+@media (max-width: 767.98px) {
+    .tymy-table.container-fluid .table-head {
+        display: none;
+    }
+    
+    .tymy-table div:not(.table-head) {
+        border-top: 0px;
+    }
+
+    .tymy-table.table-striped > .row:nth-child(odd){
+        background: #fff;
+    }
+
+    .tymy-table > .row div {
+        text-align: center;
+    }
+}
+
+BUTTON.btn:not(:disabled):not(.disabled), BUTTON.dropdown-item:not(:disabled):not(.disabled), A.btn:not(:disabled):not(.disabled), INPUT.btn:not(:disabled):not(.disabled){
+    cursor: pointer;
+}

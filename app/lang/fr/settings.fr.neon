@@ -5,6 +5,7 @@ cacheDropped: Cache effacé
 appSettings: "Paramètres de l'application"
 teamSettings: Paramètres de équipe
 appVersion: "Version de l'application"
+roadmap: Modifications entrantes
 released: Délivré
 changeList: Liste des modifications
 authors: Auteurs
@@ -26,3 +27,7 @@ eventColors: Couleurs des événements
 statusColors: "Couleurs d'arrivée"
 multiaccount: Multi-compte|Multi-compte
 addAccount: Ajouter multi-compte
+export: Exportation
+enableExport: "Activer l 'exportation"
+calendarExport: "Exportation du calendrier (ical)"
+displayStatuses: Afficher les événements ayant un statut

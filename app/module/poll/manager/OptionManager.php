@@ -17,12 +17,8 @@ use Tymy\Module\Poll\Model\Poll;
  */
 class OptionManager extends BaseManager
 {
-    private PollManager $pollManager;
-    private Option $option;
-
-    public function setPollManager(PollManager $pollManager)
+    public function setPollManager(PollManager $pollManager): static
     {
-        $this->pollManager = $pollManager;
         return $this;
     }
 
@@ -31,6 +27,9 @@ class OptionManager extends BaseManager
         return Option::class;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     protected function getScheme(): array
     {
         return OptionMapper::scheme();
@@ -48,6 +47,10 @@ class OptionManager extends BaseManager
 
     protected function allowCreate(?array &$data = null): void
     {
+        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("ASK.VOTE_UPDATE"))) {
+            $this->respondForbidden();
+        }
+
         $this->checkInputs($data);
     }
 
@@ -55,6 +58,10 @@ class OptionManager extends BaseManager
     {
         if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("ASK.VOTE_UPDATE"))) {
             $this->respondForbidden();
+        }
+
+        if ($data && array_key_exists("pollId", $data)) {
+            unset($data["pollId"]); //pollId is not changeable
         }
     }
 
@@ -64,6 +71,9 @@ class OptionManager extends BaseManager
     }
 
 
+    /**
+     * @return \Tymy\Module\Core\Model\BaseModel[]|null[]
+     */
     public function createMultiple(array $options, ?int $resourceId = null): array
     {
         if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("ASK.VOTE_UPDATE"))) {
@@ -84,9 +94,7 @@ class OptionManager extends BaseManager
 
     public function create(array $data, ?int $resourceId = null): BaseModel
     {
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("ASK.VOTE_UPDATE"))) {
-            $this->respondForbidden();
-        }
+        $data["pollId"] = $resourceId;
 
         $this->allowCreate($data);
 
@@ -102,6 +110,9 @@ class OptionManager extends BaseManager
         return parent::deleteRecord($subResourceId);
     }
 
+    /**
+     * @return int[]
+     */
     public function getAllowedReaders(BaseModel $record): array
     {
         return $this->getAllUserIds();
@@ -116,7 +127,7 @@ class OptionManager extends BaseManager
     {
         $this->allowPoll($resourceId);
 
-        $this->allowUpdate($subResourceId);
+        $this->allowUpdate($subResourceId, $data);
 
         parent::updateByArray($subResourceId, $data);
 
@@ -126,7 +137,6 @@ class OptionManager extends BaseManager
     /**
      * Get options of specified poll
      *
-     * @param int $pollId
      * @return Option[]
      */
     public function getPollOptions(int $pollId): array
@@ -134,6 +144,17 @@ class OptionManager extends BaseManager
         $this->allowPoll($pollId);
 
         return $this->mapAll($this->database->table(Option::TABLE)->where("quest_id", $pollId)->fetchAll());
+    }
+
+    /**
+     * Delete multiple poll options
+     */
+    public function deleteOptions(int $pollId, array $ids): void
+    {
+        $this->allowPoll($pollId);
+        $this->allowUpdate($pollId);
+
+        $this->database->table($this->getTable())->where("quest_id", $pollId)->where("id", $ids)->delete();
     }
 
     private function allowPoll(int $pollId): void

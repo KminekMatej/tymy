@@ -27,32 +27,19 @@ class DebtTest extends RequestCase
         return Debt::MODULE;
     }
 
-    public function testGet()
+    public function testGet(): void
     {
+        $data = null;
         $this->authorizeAdmin();
         $listResponse = $this->request($this->getBasePath())->expect(200, "array");
-        if (count($listResponse->getData()) == 0) {
-            return;
-        }
-        $data = $listResponse->getData();
-        shuffle($data);
-        $iterations = min(5, count($data));
-        if ($iterations == 0) {
-            return;
-        }
-        for ($index = 0; $index < $iterations; $index++) {
-            $d = array_shift($data);
-            $idRecord = $d["id"];
-            $this->request($this->getBasePath() . "/$idRecord")->expect(200, "array");
-        }
     }
 
-    public function testCRUDSingular()
+    public function testCRUDSingular(): void
     {
         $this->authorizeAdmin();
         $recordId = $this->createRecord();
 
-        $data = $this->request($this->getBasePath() . "/" . $recordId)->expect(200, "array");
+        $this->request($this->getBasePath() . "/" . $recordId)->expect(200, "array");
 
         $this->change($recordId);
 
@@ -69,11 +56,12 @@ class DebtTest extends RequestCase
 
         //user, which is the actual debtor, can set only sent date, nothing else
         $this->authorizeUser();
-        $chResponse = $this->request($this->getBasePath() . "/" . $recordId, "PUT", $this->mockChanges())->expect(200, "array");//debtor can edit, but the only field that gets edited is paymentSent
-        Assert::equal($origData->getData()["amount"], $chResponse->getData()["amount"]);//amount didnt change
-        $this->request($this->getBasePath() . "/" . $recordId, "PUT", ["paymentSent" => new DateTime()])->expect(200, "array");
+        $chResponse = $this->request($this->getBasePath() . "/" . $recordId, "PUT", $this->mockChanges())->expect(200, "array"); //debtor can edit, but the only field that gets edited is paymentSent
+        Assert::equal($origData->getData()["amount"], $chResponse->getData()["amount"]); //amount didnt change
+        $now = new DateTime();
+        $this->request($this->getBasePath() . "/" . $recordId, "PUT", ["paymentSent" => $this->toJsonDate($now)])->expect(200, "array");
         $debtData = $this->request($this->getBasePath() . "/" . $recordId)->expect(200, "array");
-        Assert::datetimeEquals($this->toJsonDate(new DateTime()), $debtData->getData()["paymentSent"]);
+        Assert::equal($this->toJsonDate($now), $debtData->getData()["paymentSent"]);
         $this->request($this->getBasePath() . "/" . $recordId, "DELETE")->expect(403);
 
         //back to admin, which can mark the debt as paymentReceived and then delete it
@@ -82,7 +70,7 @@ class DebtTest extends RequestCase
         $this->request($this->getBasePath() . "/" . $recordId, "DELETE")->expect(200);
     }
 
-    public function testTeamDebts()
+    public function testTeamDebts(): void
     {
         //admin can create team debt
         $this->authorizeAdmin();
@@ -103,10 +91,7 @@ class DebtTest extends RequestCase
             }
             $found = false;
         }
-        if (isset($debt) && !$found) {
-            Assert::equal($debt["id"], $recordId, "Debt id $recordId not found in list");
-        }
-
+        Assert::true($found, "Debt id $recordId not found in list");
 
         //user for which that debt is created can see it and set paymentSent, cannot delete or change anything else
         $this->authorizeUser();
@@ -121,17 +106,15 @@ class DebtTest extends RequestCase
             }
             $found = false;
         }
-        if (isset($debt) && !$found) {
-            Assert::equal($debt["id"], $recordId, "Debt id $recordId not found in users list");
-        }
+        Assert::true($found, "Debt id $recordId not found in users list");
 
         $chResponse = $this->request($this->getBasePath() . "/" . $recordId, "PUT", $this->mockChanges())->expect(200, "array");//debtor can edit, but the only field that gets edited is paymentSent
         Assert::equal($origData->getData()["amount"], $chResponse->getData()["amount"]);//amount didnt change
         $now = new DateTime();
-        $this->request($this->getBasePath() . "/" . $recordId, "PUT", ["paymentSent" => $now])->expect(200, "array");
+        $this->request($this->getBasePath() . "/" . $recordId, "PUT", ["paymentSent" => $this->toJsonDate($now)])->expect(200, "array");
         sleep(1);//sleep for one second, to make sure that current datetime is now different than $now variable. So we can check that the paymentSent would be actually changed if something changes it
         $debtData = $this->request($this->getBasePath() . "/" . $recordId)->expect(200, "array");
-        Assert::datetimeEquals($this->toJsonDate($now), $debtData->getData()["paymentSent"]);
+        Assert::equal($this->toJsonDate($now), $debtData->getData()["paymentSent"]);
         $this->request($this->getBasePath() . "/" . $recordId, "DELETE")->expect(403);
 
         //another admin can mark it as paymentReceived
@@ -143,7 +126,7 @@ class DebtTest extends RequestCase
         $this->request($this->getBasePath() . "/" . $recordId, "DELETE")->expect(200);
     }
 
-    public function testBlankCaption()
+    public function testBlankCaption(): void
     {
         $data = $this->mockRecord();
         $data["caption"] = "";
@@ -153,7 +136,7 @@ class DebtTest extends RequestCase
         $this->request($this->getBasePath() . "/" . $recordId, "PUT", ["caption" => ""])->expect(400);
     }
 
-    public function testDifferentUsersDebt()
+    public function testDifferentUsersDebt(): void
     {
         $this->authorizeUser();
         $data = $this->mockRecord();
@@ -161,7 +144,7 @@ class DebtTest extends RequestCase
         $this->request($this->getBasePath(), "POST", $data)->expect(403);
     }
 
-    public function testDebtNegative()
+    public function testDebtNegative(): void
     {
         $this->authorizeAdmin();
         $data = $this->mockRecord();
@@ -172,7 +155,7 @@ class DebtTest extends RequestCase
         $this->request($this->getBasePath() . "/" . $recordId, "PUT", ["amount" => "-14"])->expect(400);
     }
 
-    public function testTeamOwesMe()
+    public function testTeamOwesMe(): void
     {
         $this->authorizeUser();
 
@@ -192,33 +175,39 @@ class DebtTest extends RequestCase
         $this->deleteRecord($recordId);
     }
 
-    public function testCRUDPlural()
+    public function testCRUDPlural(): void
     {
         $this->authorizeAdmin();
         $recordId = $this->createRecord();
 
-        $data = $this->request($this->getBasePath() . "s/" . $recordId)->expect(200, "array");
+        $this->request($this->getBasePath() . "s/" . $recordId)->expect(200, "array");
 
         $this->change($recordId);
 
         $this->deleteRecord($recordId);
     }
 
-    public function createRecord()
+    public function createRecord(): int
     {
         return $this->recordManager->createDebt();
     }
 
-    public function mockRecord()
+    /**
+     * @return array<string, mixed>
+     */
+    public function mockRecord(): array
     {
         return $this->recordManager->mockDebt();
     }
 
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function mockChanges(): array
     {
         return [
-            "amount" => (float)rand(1000, 10000),
+            "amount" => (float)random_int(1000, 10000),
             "payeeAccountNumber" => "214700539/0800",
             "varcode" => "654321",
             "debtDate" => $this->toJsonDate(new DateTime("- 14 days")),

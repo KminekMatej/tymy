@@ -48,31 +48,31 @@ class Notice extends BaseModel implements JsonSerializable
         return $this->team;
     }
 
-    public function setCaption(?string $caption)
+    public function setCaption(?string $caption): static
     {
         $this->caption = $caption;
         return $this;
     }
 
-    public function setDescription(?string $description)
+    public function setDescription(?string $description): static
     {
         $this->description = $description;
         return $this;
     }
 
-    public function setLanguageCode(?string $languageCode)
+    public function setLanguageCode(?string $languageCode): static
     {
         $this->languageCode = $languageCode;
         return $this;
     }
 
-    public function setCreated(DateTime $created)
+    public function setCreated(DateTime $created): static
     {
         $this->created = $created;
         return $this;
     }
 
-    public function setTeam(?string $team)
+    public function setTeam(?string $team): static
     {
         $this->team = $team;
         return $this;
@@ -83,6 +83,9 @@ class Notice extends BaseModel implements JsonSerializable
         return self::MODULE;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     public function getScheme(): array
     {
         return NewsMapper::scheme();

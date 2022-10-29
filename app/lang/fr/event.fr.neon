@@ -36,5 +36,6 @@ plan: Plan
 result: Résultat
 displayHistory: "Afficher l'historique"
 eventType: Type d\'événement|Types d'événement
+currently: Actuellement en cours
 errors:
     eventNotExists: "L'événement %id% n'existe pas"

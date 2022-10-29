@@ -24,41 +24,44 @@ class RightTest extends RequestCase
         return Right::MODULE;
     }
 
-    public function testGetSingular()
+    public function testGetSingular(): void
     {
         $this->authorizeAdmin();
-        $listResponse = $this->request($this->getBasePath())->expect(200, "array");
+        $this->request($this->getBasePath())->expect(200, "array");
     }
 
-    public function testGetPlural()
+    public function testGetPlural(): void
     {
         $this->authorizeAdmin();
-        $listResponse = $this->request($this->getBasePath() . "s")->expect(200, "array");
+        $this->request($this->getBasePath() . "s")->expect(200, "array");
     }
 
-    public function testRightUserSingular()
+    public function testRightUserSingular(): void
     {
         $this->authorizeAdmin();
-        $listResponse = $this->request($this->getBasePath() . "/user")->expect(200, "array");
+        $this->request($this->getBasePath() . "/user")->expect(200, "array");
     }
 
-    public function testRightUserPlural()
+    public function testRightUserPlural(): void
     {
         $this->authorizeAdmin();
-        $listResponse = $this->request($this->getBasePath() . "s/user")->expect(200, "array");
+        $this->request($this->getBasePath() . "s/user")->expect(200, "array");
     }
 
-    public function createRecord()
+    public function createRecord(): void
     {
         //cannot create
     }
 
-    public function mockRecord()
+    public function mockRecord(): void
     {
         //cannot mock
     }
 
 
+    /**
+     * @return mixed[]
+     */
     protected function mockChanges(): array
     {
         return [];

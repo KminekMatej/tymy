@@ -14,10 +14,6 @@ class Router implements RouterInterface
 {
     public function addRoutes(RouteList &$router): void
     {
-        $router->addRoute('file/download/<filename>', array(
-            'module' => 'File',
-            'presenter' => 'Download',
-            'action' => 'default',
-        ));
+        $router->addRoute('file/download/<filename>', ['module' => 'File', 'presenter' => 'Download', 'action' => 'default']);
     }
 }

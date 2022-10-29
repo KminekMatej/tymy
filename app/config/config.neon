@@ -14,7 +14,6 @@ http:
 session:
         expiration: 14 days
 
-
 services:
         routerFactory: Tymy\RouterFactory
         router: @routerFactory::createRouter
@@ -23,10 +22,16 @@ services:
 
 tracy:
     email: matej.kminek@attendees.eu
+    fromEmail: robot@tymy.cz
 extensions:
-    translation: Kdyby\Translation\DI\TranslationExtension
+    translation: Contributte\Translation\DI\TranslationExtension
 translation:
-    default: cs
+    locales:
+        whitelist: [cs, en, fr, pl]
+        default: cs
+        fallback: [cs]
+    dirs:
+        - %appDir%/lang
     debugger: true
 parameters:
     appConfig:

@@ -1,10 +1,5 @@
 {import $componentsDir . '/secured.latte'}
 
-{block scripts}
-{include parent}
-<script src="{$publicPath}/js/Binder.js?ver={$appver}"></script>
-{/block}
-
 {block styles}
 {include parent}
 <link rel='stylesheet' href="{$basePath}/skins/{$skin}/css/table-xs.css?ver={$appver}" />
@@ -18,116 +13,122 @@
 <div class="container-fluid container-md settings">
     <div class="row">
         <div class="col">
-            <div class="card sh-box my-3" data-binder-id="{$poll->getId()}">
-                <div class="card-header">
-                    <h4>{_poll.editPoll} {$poll->getId()}</h4>
-                </div>
-                <div class="card-body">
-                    <table class="table">
-                        <tr><th>{_settings.title}</th>
-                            <td>
-                                <input type="text" name="caption" value="{$poll->getCaption()}" data-value="{$poll->getCaption()}" class="col-6 form-control" />
-                            </td></tr>
-                        <tr><th>{_settings.description}</th><td><textarea name="description" data-value="{$poll->getDescription()}" class="form-control col-6">{$poll->getDescription()}</textarea></td></tr>
-                        <tr><th>{_settings.status}</th>
-                            <td>
-                                <select name="status" value="{$poll->getStatus()}" data-value="{$poll->getStatus()}" class="col-6 form-control">
-                                    <option>{_settings.chooseState} ...</option>
-                                    <option value="DESIGN" n:attr="selected => $poll->getStatus() == 'DESIGN'">{_poll.design}</option>
-                                    <option value="OPENED" n:attr="selected => $poll->getStatus() == 'OPENED'">{_poll.opened}</option>
-                                    <option value="CLOSED" n:attr="selected => $poll->getStatus() == 'CLOSED'">{_poll.closed}</option>
-                                </select>
-                            </td></tr>
-                        
-                        <tr><th>{_poll.minItems}</th><td><input type="number" name="minItems" data-value="{$poll->getMinItems()}" value="{$poll->getMinItems()}" class="col-6 form-control" required /></td></tr>
-                        <tr><th>{_poll.maxItems}</th><td><input type="number" name="maxItems" data-value="{$poll->getMaxItems()}" value="{$poll->getMaxItems()}" class="col-6 form-control" required /></td></tr>
-                        
-                        <tr><th>{_poll.anonymousVotes}</th><td><label class="custom-control custom-checkbox"><input type="checkbox" name="anonymousResults" data-value="{$poll->getAnonymousResults() ? 1 : 0}" n:attr="checked => $poll->getAnonymousResults()" class="col-6 form-control custom-control-input" /><span class="custom-control-label"></span></label></td></tr>
-                        <tr><th>{_poll.setChangeableVotes}</th><td><label class="custom-control custom-checkbox"><input type="checkbox" name="changeableVotes" data-value="{$poll->getChangeableVotes() ? 1 : 0}" n:attr="checked => $poll->getChangeableVotes()" class="col-6 form-control custom-control-input" /><span class="custom-control-label"></span></label></td></tr>
-
-                        <tr><th>{_poll.displayResults}</th>
-                            <td>
-                                <select name="showResults" value="{$poll->getShowResults()}" data-value="{$poll->getShowResults()}" class="col-6 form-control">
-                                    <option>Vyberte ...</option>
-                                    <option value="NEVER" n:attr="selected => $poll->getShowResults() == 'NEVER'">{_poll.never}</option>
-                                    <option value="ALWAYS" n:attr="selected => $poll->getShowResults() == 'ALWAYS'">{_poll.always}</option>
-                                    <option value="AFTER_VOTE" n:attr="selected => $poll->getShowResults() == 'AFTER_VOTE'">{_poll.afterVote}</option>
-                                    <option value="WHEN_CLOSED" n:attr="selected => $poll->getShowResults() == 'WHEN_CLOSED'">{_poll.whenClosed}</option>
-                                </select>
-                            </td></tr>
-                        <tr><th>{_poll.canVote}</th>
-                            <td>
-                                <select name="voteRightName" data-value="{$poll->getVoteRightName()}" class="col-6 form-control">
-                                    <option value="">-- {_common.everyone} --</option>
-                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $poll->getVoteRightName() == $userPermission->getName()">{$userPermission->getCaption()}</option>
-                                </select>
-                            </td>
-                        </tr>
-
-                        <tr><th>{_poll.canDisplayResults}</th>
-                            <td>
-                                <select name="resultRightName" data-value="{$poll->getResultRightName()}" class="col-6 form-control">
-                                    <option value="">-- {_common.everyone} --</option>
-                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $poll->getResultRightName() == $userPermission->getName()">{$userPermission->getCaption()}</option>
-                                </select>
-                            </td>
-                        </tr>
-
-                        <tr><th>{_poll.canAlienVote}</th>
-                            <td>
-                                <select name="alienVoteRightName" data-value="{$poll->getAlienVoteRightName()}" class="col-6 form-control">
-                                    <option value="">-- {_common.everyone} --</option>
-                                    <option n:foreach="$userPermissions as $userPermission" value="{$userPermission->getName()}" n:attr="selected => $poll->getAlienVoteRightName() == $userPermission->getName()">{$userPermission->getCaption()}</option>
-                                </select>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="card-footer text-right">
-                    <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))" href="{link pollDelete!}" class="btn btn-danger mx-2 binder-delete-btn" title="{_common.delete}"><i class="far fa-trash-can" aria-hidden="true"></i></button>
-                    <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))" href="{link pollEdit!}" class="btn btn-lg btn-primary binder-save-btn" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
-                </div>
-            </div>
-        </div>
-    </div>
-                
-    <div class="row">
-        <div class="col">
             <div class="card sh-box my-3">
-                <div class="card-header">
-                    <h4>{_poll.pollItems}</h4>
-                </div>
-                <div class="card-body">
-                    <div class="row my-1" n:foreach="$poll->getOptions() as $opt" data-binder-id="{$opt->getId()}" data-option>
-                        <div class="col-5 input-group">
-                            <div class="input-group-prepend"><span class="input-group-text">{_poll.itemCaption}:</span></div>
-                            <input name="caption" class="form-control" type="text" data-value="{$opt->getCaption()}" value="{$opt->getCaption()}" />
-                        </div>
-                        <div class="col-5 input-group">
-                            <div class="input-group-prepend"><span class="input-group-text">{_settings.type}:</span></div>
-                            <select name="type" class="form-control" data-value="{$opt->getType()}">
-                                <option value="TEXT" n:attr="selected => $opt->getType() == 'TEXT'">{_poll.text}</option>
-                                <option value="NUMBER" n:attr="selected => $opt->getType() == 'NUMBER'">{_poll.number}</option>
-                                <option value="BOOLEAN" n:attr="selected => $opt->getType() == 'BOOLEAN'">{_poll.bool}</option>
-                            </select>
-                        </div>
-                        <div class="col-2 text-right">
-                            <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))" href="{link pollOptionEdit! $poll->getId()}" class="btn btn-sm btn-primary binder-save-btn" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
-                            <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE')) && $opt->getId() != -1" href="{link pollOptionDelete! $poll->getId()}" class="btn btn-sm btn-danger binder-delete-btn" title="{_common.delete}"><i class="fa fa-times" aria-hidden="true"></i></button>
-                        </div>
+                {form pollForm id => $poll->getId()}
+                    {input id}
+                    <div class="card-header">
+                        <h4>{_poll.editPoll} {$poll->getId()}</h4>
                     </div>
-                    <div class="row my-3 text-center">
-                        <div class="col">
-                            <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))" class="btn btn-sm btn-outline-success" onclick="createNewRow()" title="{_poll.createItem}">
-                                <i class="fa fa-plus" aria-hidden="true"></i>
-                            </button>
+                    <div class="card-body tymy-table table-bordered">
+                        <div class="row">
+                            <div class="col-12 col-md-4 table-head">{label caption /}</div>
+                            <div class="col-12 col-md-8">{input caption, class => 'col-12 col-md-6 form-control'}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-4 table-head">{label description /}</div>
+                            <div class="col-12 col-md-8">{input description, class => 'col-12 col-md-6 form-control'}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-4 table-head">{label status /}</div>
+                            <div class="col-12 col-md-8">{input status, class => 'col-12 col-md-6 form-control'}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-4 table-head">{label minItems /}</div>
+                            <div class="col-12 col-md-8">{input minItems, class => 'col-12 col-md-6 form-control'}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-4 table-head">{label maxItems /}</div>
+                            <div class="col-12 col-md-8">{input maxItems, class => 'col-12 col-md-6 form-control'}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-4 table-head">{_poll.anonymousVotes}</div>
+                            <div class="col-12 col-md-8">
+                                <label n:name="anonymousVotes" class="custom-control custom-checkbox">
+                                    <input n:name="anonymousVotes" class="col-12 col-md-6 form-control custom-control-input" />
+                                    <span class="custom-control-label"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-4 table-head">{_poll.setChangeableVotes}</div>
+                            <div class="col-12 col-md-8">
+                                <label n:name="changeableVotes" class="custom-control custom-checkbox">
+                                    <input n:name="changeableVotes" class="col-12 col-md-6 form-control custom-control-input" />
+                                    <span class="custom-control-label"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-4 table-head">{label displayResults /}</div>
+                            <div class="col-12 col-md-8">{input displayResults, class => 'col-12 col-md-6 form-control'}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-4 table-head">{label resultRightName /}</div>
+                            <div class="col-12 col-md-8">{input resultRightName, class => 'col-12 col-md-6 form-control'}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-4 table-head">{label voteRightName /}</div>
+                            <div class="col-12 col-md-8">{input voteRightName, class => 'col-12 col-md-6 form-control'}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-4 table-head">{label alienVoteRightName /}</div>
+                            <div class="col-12 col-md-8">{input alienVoteRightName, class => 'col-12 col-md-6 form-control'}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-4 table-head">{_poll.pollItems}</div>
+                            <div class="col-12 col-md-8">
+
+                                {*display empty line - as a template for new rows*}
+                                <div class="row my-1 option-row-template d-none" data-row-id="0">
+                                    {input option_id_0}
+                                    <div class="col-6 input-group">
+                                        <div class="input-group-prepend"><span class="input-group-text">{_poll.itemCaption}:</span></div>
+                                        {input option_caption_0, class => 'form-control'}
+                                    </div>
+                                    <div class="col-6 input-group">
+                                        <div class="input-group-prepend"><span class="input-group-text">{_settings.type}:</span></div>
+                                        {input option_type_0, class => 'form-control'}
+                                        <button class="btn btn-danger" title="{_poll.createItem}" onclick="removeOptionRow(this)" type="button">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="row my-1 option-row" n:foreach="$poll->getOptions() as $opt" data-row-id="{$opt->getId()}">
+                                    {input "option_id_{$opt->getId()}"}
+                                    <div class="col-6 input-group">
+                                        <div class="input-group-prepend"><span class="input-group-text">{_poll.itemCaption}:</span></div>
+                                        {input option_caption_{$opt->getId()}, class => 'form-control'}
+                                        <span n:ifcontent>{inputError "option_caption_{$opt->getId()}"}</span>
+                                    </div>
+                                    <div class="col-6 input-group">
+                                        <div class="input-group-prepend"><span class="input-group-text">{_settings.type}:</span></div>
+                                        {input option_type_{$opt->getId()}, class => 'form-control'}
+                                        <button class="btn btn-danger ml-1" title="{_poll.createItem}" onclick="removeOptionRow(this)" type="button">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </button>
+                                        <span n:ifcontent>{inputError "option_type_{$opt->getId()}"}</span>
+                                    </div>
+                                </div>
+
+                                {*display line with add button*}
+                                <div class="row my-1">
+                                    <div class="col text-right">
+                                        <button class="btn btn-success" title="{_poll.createItem}" onclick="duplicateLastOptionRow()" type="button">
+                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="card-footer text-right">
-                    
+                    <a href="{link pollDelete!}" type="button" class="btn btn-danger mx-2" title="{_common.delete}"><i class="far fa-trash-can" aria-hidden="true"></i></a>
+                    <button n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('ASK.VOTE_UPDATE'))" n:name="save" class="btn btn-lg btn-primary"><i class="fa fa-save" aria-hidden="true"></i></button>
                 </div>
-            </div>
+            {/form}
         </div>
     </div>
+</div>
 </div>

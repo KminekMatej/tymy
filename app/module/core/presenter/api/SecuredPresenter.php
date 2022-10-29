@@ -13,29 +13,28 @@ class SecuredPresenter extends BasePresenter
 {
     private const TSID = "TSID";
 
-    public function startup()
+    public function startup(): void
     {
         parent::startup();
 
         if ($tsid = $this->getParameter(self::TSID) ?: $this->httpRequest->getHeader(self::TSID)) {
-            if ($this->session->getId()) {
+            if ($this->session->getId() !== '' && $this->session->getId() !== '0') {
                 $this->session->close();
             }
             session_id($tsid);
             $this->session->start();
+            $this->user->refreshStorage();
         }
 
-        if (!isset($this->user) || !$this->user->isLoggedIn()) {
+        if ($this->user === null || !$this->user->isLoggedIn()) {
             $this->respondUnauthorized();
         }
-
-        $this->setLanguage($this->user->getIdentity()->getData()["language"] ?? $this->team->getDefaultLanguageCode());
     }
 
     /**
      * Function responds immediately 403:FORBIDDEN for non-admin users
      */
-    protected function allowAdmin()
+    protected function allowAdmin(): void
     {
         if (!$this->user->isInRole(User::ROLE_SUPER)) {
             $this->respondForbidden();

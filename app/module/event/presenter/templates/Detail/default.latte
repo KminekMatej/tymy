@@ -46,9 +46,9 @@
                             {snippet attendanceWarning}
                                 <div class="alert alert-danger" n:if="$event->getAttendancePending()"><i class="fa fa-arrow-down" aria-hidden="true"></i> {_event.attendanceNotFilled} ! <i class="fa fa-arrow-down" aria-hidden="true"></i></div>
                             {/snippet}
-                            <input type="text" class="form-control custom-btn-sm" title="{_note.note,1}" id="preStatusDesc-action-{$event->getId()}" placeholder="{_note.note,1}" name="preStatusDesc" value="{$event->getMyAttendance() ? $event->getMyAttendance()->getPreDescription() : ''}" />
+                            <input type="text" class="form-control custom-btn-sm" title="{_note.note,1}" id="preStatusDesc-action-{$event->getId()}" placeholder="{_note.note,1}" name="preStatusDesc" value="{$event->getMyAttendance() ? $event->getMyAttendance()->getPreDescription() : ''}" data-value="{$event->getMyAttendance() ? $event->getMyAttendance()->getPreDescription() : ''}" onchange="toggleAttButtons(this)" />
                             <div class="custom-container btn-group input-group pt-2" role="group" aria-label="Attendace setup container" id="action-{$event->getId()}">
-                                <button n:foreach="$eventType->getPreStatusSet() as $preStatus" onclick="updateAttendance(this, {link attendance! $event->getId(), $preStatus->getId()})" class="btn custom-btn-sm {$event->getMyAttendance(),$preStatus->getId(),$event->getCanPlan(),$event->getCloseTime()|prestatusClass}">{$preStatus->getCaption()}</button>
+                                <button n:foreach="$eventType->getPreStatusSet() as $preStatus" onclick="updateAttendance(this, {link attendance! $event->getId(), $preStatus->getId()})" class="btn custom-btn-sm {$event->getMyAttendance()|prestatusClass:$preStatus->getId(),$event->getCanPlan(),$event->getCloseTime()}">{$preStatus->getCaption()}</button>
                             </div>
                         </div>
                     </div>
@@ -59,7 +59,7 @@
                             </div>
                             <div class="col-lg-10">
                                 <table class="table table-hover table-sm tymy-event-history">
-                                    <tr n:foreach="$histories as $history">
+                                    <tr n:foreach="$histories as $history" n:if="$history->getUser()">
                                         {var $prestatusFrom = empty($history->getPreStatusFrom()) ? $emptyStatus : ($eventType->getPreStatusSet()[$history->getPreStatusFrom()] ?? $emptyStatus)}
                                         {var $prestatusTo = empty($history->getPreStatusTo()) ? $emptyStatus : ($eventType->getPreStatusSet()[$history->getPreStatusTo()] ?? $emptyStatus)}
                                         <th scope="row">
@@ -103,46 +103,52 @@
                     </ul>
                 </div>
 
-                <div class="card-body">
-                    <!-- Tab panes -->
-                    <div class="tab-content">
-                        {foreach  $attendances as $statusId => $genders}
-                            {var $status = $statusList[$statusId] ?? null}
-                            {var $caption = $status ? $status->getCaption() : $cptNotDecidedYet}
-                            <div n:class="tab-pane, fade, $iterator->first ? show, $iterator->first ? active, player-list" id="{$caption|webalize}" role="tabpanel">
-                                <div n:if="count($genders)>0" n:foreach="$genders as $gender => $usrs" class="row my-2">
-                                    <div class="col-2 player-heading">
-                                        <h6 style="font-weight: bold">{$gender|genderTranslate} ({count($usrs)}):</h6>
+                <!-- Tab panes -->
+                <div class="tab-content card-body">
+                    {foreach  $attendances as $statusId => $genders}
+                        {var $status = $statusList[$statusId] ?? null}
+                        {var $caption = $status ? $status->getCaption() : $cptNotDecidedYet}
+                        {var $statusMails = []}
+                        <div n:class="tab-pane, fade, $iterator->first ? show, $iterator->first ? active, player-list" id="{$caption|webalize}" role="tabpanel">
+                            <div n:if="count($genders)>0" n:foreach="$genders as $gender => $usrs" class="row my-2">
+                                <div class="col-2 player-heading">
+                                    <h6 style="font-weight: bold">{$gender|genderTranslate} ({count($usrs)}):</h6>
 
-                                        <div n:class="btn-group,result,$resultsClosed ? d-none" role="group" aria-label="{_event.attendanceResult} ({$gender|genderTranslate})" n:if="$event->getCanResult() && $event->getInPast()">
-                                            <button n:foreach="$eventType->getPostStatusSet() as $postStatus" class="btn btn-xs statusBtn{$postStatus->getId()}" title="{$postStatus->getCaption()}" onclick="genderToggle(this, {$postStatus->getId()})">
-                                                <i class="{$postStatus->getIcon()}"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="col-10">
-                                        <figure n:foreach="$usrs as $usr" id="player-{$usr->getId()}" class="figure text-center player" style="width: 100px">
-                                            <div>
-                                                <a href="{plink :Team:Player: $usr->getId()}">
-                                                    <img src="{$usr->getPictureUrl()}" class="figure-img img-fluid avatar" alt="{$usr->getCallName()}" />
-                                                    <figcaption class="figure-caption">{$usr->getCallName()}</figcaption>
-                                                    <figcaption n:ifset="$event->getAttendance()[$usr->getId()]" class="figure-caption" style="font-size: 70%; display: inline-block">{$event->getAttendance()[$usr->getId()]->getPreDescription()}</figcaption>
-                                                </a>
-                                            </div>
-                                            <div n:class="btn-group,result,$resultsClosed ? d-none" role="group" aria-label="{_event.attendanceResult}" n:if="$event->getCanResult() && $event->getInPast()">
-                                                <button n:foreach="$eventType->getPostStatusSet() as $postStatus" class="btn btn-xs statusBtn{$postStatus->getId()}" data-status-id="{$postStatus->getId()}" onclick="togglePostStatus(this)" title="{$postStatus->getCaption()}"><i class="{$postStatus->getIcon()}"></i></button>
-                                            </div>
-
-                                            <div class="btn-group d-none plan-others" role="group" aria-label="Others plans" n:if="$event->getCanPlanOthers() && $event->getInFuture()">
-                                                <button n:foreach="$eventType->getPreStatusSet() as $preStatus" onclick="updateAttendance(this, {link attendance! $event->getId(), $preStatus->getId(), null, $usr->getId()})" class="btn btn-xs {$event->getAttendance()[$usr->getId()] ?? null,$preStatus->getId(),$event->getCanPlan(),$event->getCloseTime()|prestatusClass}"><i class="{$preStatus->getIcon()}"></i></button>
-                                            </div>
-
-                                        </figure>
+                                    <div n:class="btn-group,result,$resultsClosed ? d-none" role="group" aria-label="{_event.attendanceResult} ({$gender|genderTranslate})" n:if="$event->getCanResult() && $event->getInPast()">
+                                        <button n:foreach="$eventType->getPostStatusSet() as $postStatus" class="btn btn-xs statusBtn{$postStatus->getId()}" title="{$postStatus->getCaption()}" onclick="genderToggle(this, {$postStatus->getId()})">
+                                            <i class="{$postStatus->getIcon()}"></i>
+                                        </button>
                                     </div>
                                 </div>
+                                <div class="col-10">
+                                    <figure n:foreach="$usrs as $usr" id="player-{$usr->getId()}" class="figure text-center player" style="width: 100px">
+                                        {var $statusMails[] = $usr->getEmail()}
+                                        <div>
+                                            <a href="{plink :Team:Player: $usr->getId()}">
+                                                <img src="{$usr->getPictureUrl()}" class="figure-img img-fluid avatar" alt="{$usr->getCallName()}" />
+                                                <figcaption class="figure-caption">{$usr->getCallName()}</figcaption>
+                                                <figcaption n:ifset="$event->getAttendance()[$usr->getId()]" class="figure-caption" style="font-size: 70%; display: inline-block">{$event->getAttendance()[$usr->getId()]->getPreDescription()}</figcaption>
+                                            </a>
+                                        </div>
+                                        <div n:class="btn-group,result,$resultsClosed ? d-none" role="group" aria-label="{_event.attendanceResult}" n:if="$event->getCanResult() && $event->getInPast()">
+                                            <button n:foreach="$eventType->getPostStatusSet() as $postStatus" class="btn btn-xs statusBtn{$postStatus->getId()}" data-status-id="{$postStatus->getId()}" onclick="togglePostStatus(this)" title="{$postStatus->getCaption()}"><i class="{$postStatus->getIcon()}"></i></button>
+                                        </div>
+
+                                        <div class="btn-group d-none plan-others" role="group" aria-label="Others plans" n:if="$event->getCanPlanOthers() && $event->getInFuture()">
+                                            <button n:foreach="$eventType->getPreStatusSet() as $preStatus" onclick="updateAttendance(this, {link attendance! $event->getId(), $preStatus->getId(), null, $usr->getId()})" class="btn btn-xs {$event->getAttendance()[$usr->getId()] ?? null|prestatusClass:$preStatus->getId(),$event->getCanPlan(),$event->getCloseTime()}"><i class="{$preStatus->getIcon()}"></i></button>
+                                        </div>
+
+                                    </figure>
+                                </div>
                             </div>
-                        {/foreach}
-                    </div>
+                            {* button to send email to all users based on event attendance*}
+                            <div class="row justify-content-end">
+                                <div class="col text-right">
+                                    <a href="mailto:{join(',', $statusMails)}" class="btn btn-sm btn-outline-dark" title="{_team.newMailToAll}" role="button" aria-pressed="true"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    {/foreach}
                 </div>
                 <div class="card-footer text-right" n:if="$event->getCanResult() && $event->getInPast()">
                     <button class="btn btn-lg btn-light btn-light-bordered results-btn" n:if="$resultsClosed" onclick="resultsToggle(true)" title="{_event.setAttendanceResult}"><i class="fa fa-list-check" aria-hidden="true"></i></button>

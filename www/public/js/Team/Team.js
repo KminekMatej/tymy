@@ -63,9 +63,36 @@ $(document).ready(function () {
     });
 });
 
-function checkRole(btn){
-    if($(btn).hasClass("active"))
-        $(btn).removeClass("active");
-    else
-        $(btn).addClass("active");
+function toggleCheck(input) {
+    var btnLabel = $(input).closest("label");
+    if (btnLabel.hasClass("active")) {
+        btnLabel.removeClass("active");
+        $(input).prop('checked', false);
+        $(input).removeAttr("checked");
+    } else {
+        btnLabel.addClass("active");
+        $(input).prop('checked', true);
+        $(input).attr("checked", '');
+    }
+}
+
+function checkPlayer() {
+    //list all checked emails
+    var checked = $(".player-check:checked");
+    var mails = [];
+    for (const element of checked) {
+        var mail = $(element).attr("data-email");
+        if (mail) {
+            mails.push(mail);
+        }
+    }
+    var cntChecked = checked.length;
+
+    if (cntChecked > 0) {
+        $("A.mail-picked").removeClass("d-none");
+        $("A.mail-picked").find("SPAN.badge").html(cntChecked);
+        $("A.mail-picked").attr("href", "mailto:" + mails.join());
+    } else {
+        $("A.mail-picked").addClass("d-none");
+    }
 }

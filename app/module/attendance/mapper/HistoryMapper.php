@@ -12,13 +12,16 @@ use Tymy\Module\Core\Model\Field;
  */
 class HistoryMapper extends BaseMapper
 {
+    /**
+     * @return mixed[]
+     */
     public static function scheme(): array
     {
         return [
             Field::int()->withColumn("event_id", true)->setProperty("eventId"),
             Field::int()->withColumn("user_id", true)->setProperty("userId"),
-            Field::string()->withColumn("dat_mod")->setProperty("updatedAt"),
-            Field::int()->withColumn("usr_mod")->setProperty("updatedById"),
+            Field::datetime()->withColumn("created")->setProperty("updatedAt"),
+            Field::int()->withColumn("updated_user_id")->setProperty("updatedById"),
             Field::int()->withColumn("status_id_from")->setProperty("statusIdFrom"),
             Field::int()->withColumn("status_id_to", true)->setProperty("statusIdTo"),
             Field::string()->withColumn("pre_desc_to")->setProperty("preDescTo"),

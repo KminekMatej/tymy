@@ -16,7 +16,7 @@
                             <select class="form-control custom-select" name="suser">
                                 <option  n:attr="selected => !$suser || $suser == 'all'" value="all">{_common.everyone}</option>
                                 {foreach $userList as $key => $type}
-                                    <option disabled style="color: #d14836; font-weight: bold ">*** {_team.$key,2} ***</option>
+                                    <option disabled style="color: #d14836; font-weight: bold ">*** {_"team.$key",2} ***</option>
                                     <option n:foreach="$type as $pickUser" value="{$pickUser->getId()}" n:attr="selected => $pickUser->getId() == $suser">{$pickUser->getCallName()}</option>
                                 {/foreach}
                             </select>

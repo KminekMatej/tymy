@@ -16,24 +16,24 @@ class TeamPresenter extends SettingBasePresenter
     /** @inject */
     public FormFactory $formFactory;
 
-    public function renderDefault()
+    public function renderDefault(): void
     {
         $this->template->statusSets = $this->statusSetManager->getList();
     }
 
     public function createComponentStatusSetForm(): Multiplier
     {
-        return $this->formFactory->createStatusSetForm([$this, 'statusFormSuccess']);
+        return $this->formFactory->createStatusSetForm(fn(Form $form, $values) => $this->statusFormSuccess($form, $values));
     }
 
     public function createComponentTeamConfigForm(): Form
     {
-        return $this->formFactory->createTeamConfigForm([$this, 'teamConfigFormSuccess']);
+        return $this->formFactory->createTeamConfigForm(fn(Form $form, $values) => $this->teamConfigFormSuccess($form, $values));
     }
 
     public function createComponentEventTypeForm(): Multiplier
     {
-        return $this->formFactory->createEventTypeForm([$this, 'eventTypeFormSuccess']);
+        return $this->formFactory->createEventTypeForm(fn(Form $form, $values) => $this->eventTypeFormSuccess($form, $values));
     }
 
     public function statusFormSuccess(Form $form, $values): void
@@ -43,11 +43,11 @@ class TeamPresenter extends SettingBasePresenter
         }
 
         //update status name
-        $this->statusSetManager->updateByArray(intval($values->id), ["name" => $values->name]);
+        $this->statusSetManager->updateByArray((int) $values->id, ["name" => $values->name]);
 
         //update statuses
         /* @var $statusSet StatusSet */
-        $statusSet = $this->statusSetManager->getById(intval($values->id));
+        $statusSet = $this->statusSetManager->getById((int) $values->id);
 
         foreach ($statusSet->getStatuses() as $status) {
             $this->statusManager->updateByArray($status->getId(), [
@@ -69,7 +69,7 @@ class TeamPresenter extends SettingBasePresenter
         }
 
         //update eventTypes
-        $this->eventTypeManager->updateByArray(intval($values->id), [
+        $this->eventTypeManager->updateByArray((int) $values->id, [
             "code" => $values->code,
             "caption" => $values->caption,
             "color" => ltrim($values->color, " #"),
@@ -96,7 +96,7 @@ class TeamPresenter extends SettingBasePresenter
                 "sport" => $values->sport,
                 "skin" => $values->skin,
                 "defaultLanguageCode" => $values->defaultLanguage,
-                "requiredFields" => join(",", $values->requiredFields),
+                "requiredFields" => implode(",", $values->requiredFields),
                 ], $teamData->getId());
         }
 

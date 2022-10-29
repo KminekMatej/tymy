@@ -12,11 +12,14 @@ use Tymy\Module\Core\Model\Field;
  */
 class NewsMapper extends BaseMapper
 {
+    /**
+     * @return mixed[]
+     */
     public static function scheme(): array
     {
         return [
             Field::int()->withPropertyAndColumn("id", false, false),
-            Field::datetime()->withColumn("inserted")->setProperty("created", false, false),
+            Field::datetime()->withColumn("inserted")->setProperty("created"),
             Field::string()->withPropertyAndColumn("caption"),
             Field::string()->withColumn("descr")->setProperty("description"),
             Field::string()->withColumn("lc")->setProperty("languageCode"),

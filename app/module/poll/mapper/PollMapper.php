@@ -12,20 +12,22 @@ use Tymy\Module\Core\Model\Field;
  */
 class PollMapper extends BaseMapper
 {
+    /**
+     * @return mixed[]
+     */
     public static function scheme(): array
     {
         return [
             Field::int()->withPropertyAndColumn("id", false, false),
-            Field::int()->withColumn("usr_cre")->setProperty("createdById")->setChangeable(false),
-            Field::int()->withColumn("dat_cre")->setProperty("createdAt")->setChangeable(false),
-            Field::int()->withColumn("usr_mod")->setProperty("updatedById")->setChangeable(false),
-            Field::datetime()->withColumn("dat_mod")->setProperty("updatedAt")->setChangeable(false),
+            Field::int()->withColumn("created_user_id")->setProperty("createdById")->setChangeable(false),
+            Field::datetime()->withColumn("created")->setProperty("createdAt")->setChangeable(false),
+            Field::int()->withColumn("updated_user_id")->setProperty("updatedById")->setChangeable(false),
+            Field::datetime()->withColumn("updated")->setProperty("updatedAt")->setChangeable(false),
             Field::string()->withPropertyAndColumn("caption"),
             Field::string()->withColumn("descr")->setProperty("description"),
             Field::int()->withColumn("min_items")->setProperty("minItems"),
             Field::int()->withColumn("max_items")->setProperty("maxItems"),
             Field::int()->withColumn("changeable_votes")->setProperty("changeableVotes"),
-            Field::int()->withColumn("main_menu")->setProperty("mainMenu"), /** @deprecated since 2.2.4 */
             Field::int()->withColumn("anonymous_results")->setProperty("anonymousResults"),
             Field::string()->withColumn("show_results")->setProperty("showResults"),
             Field::string()->withPropertyAndColumn("status"),

@@ -19,12 +19,9 @@ use Tymy\Module\User\Model\User;
  */
 class NewsManager extends BaseManager
 {
-    private UserManager $userManager;
-
-    public function __construct(ManagerFactory $managerFactory, UserManager $userManager)
+    public function __construct(ManagerFactory $managerFactory, private UserManager $userManager)
     {
         parent::__construct($managerFactory);
-        $this->userManager = $userManager;
     }
 
     protected function getClassName(): string
@@ -32,6 +29,9 @@ class NewsManager extends BaseManager
         return Notice::class;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     protected function getScheme(): array
     {
         return NewsMapper::scheme();
@@ -40,10 +40,8 @@ class NewsManager extends BaseManager
     /**
      * Check edit permission
      * @param Notice $entity
-     * @param int $userId
-     * @return bool
      */
-    public function canEdit($entity, $userId): bool
+    public function canEdit($entity, int $userId): bool
     {
         return false;
     }
@@ -51,10 +49,8 @@ class NewsManager extends BaseManager
     /**
      * Check read permission
      * @param Notice $entity
-     * @param int $userId
-     * @return bool
      */
-    public function canRead($entity, $userId): bool
+    public function canRead($entity, int $userId): bool
     {
         return true;
     }
@@ -91,7 +87,10 @@ class NewsManager extends BaseManager
         throw new Exception("Not implemented yet");
     }
 
-    public function getListUserAllowed()
+    /**
+     * @return \Tymy\Module\Core\Model\BaseModel[]
+     */
+    public function getListUserAllowed(): array
     {
         /* @var $user User */
         $user = $this->userManager->getById($this->user->getId());

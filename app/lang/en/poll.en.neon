@@ -33,6 +33,7 @@ notEnoughItems: Minimal items not reached
 design: Design
 opened: Active
 closed: Closed
+hidden: Hidden
 displayInMainMenu: Display in main menu
 never: Never
 always: Always
@@ -50,6 +51,7 @@ text: Text
 number: Number
 bool: Yes / No
 new: New
+voteAs: Vote as
 alerts:
     succesfullyCreated: Poll has been created succesfully
 errors:

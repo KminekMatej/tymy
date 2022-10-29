@@ -22,7 +22,7 @@ class OptionPresenter extends SecuredPresenter
         $this->manager = $manager;
     }
 
-    public function actionDefault($resourceId, $subResourceId)
+    public function actionDefault(int $resourceId, $subResourceId): void
     {
         switch ($this->getRequest()->getMethod()) {
             case 'GET':
@@ -45,15 +45,16 @@ class OptionPresenter extends SecuredPresenter
         $this->respondNotAllowed();
     }
 
-    private function requestGetList(int $pollId)
+    private function requestGetList(int $pollId): void
     {
         $options = $this->manager->getPollOptions($pollId);
 
         $this->respondOk($this->arrayToJson($options));
     }
 
-    protected function requestPost($resourceId)
+    protected function requestPost($resourceId): void
     {
+        $created = null;
         if (!$this->isMultipleObjects($this->requestData)) {
             parent::requestPost($resourceId);   //if creating just one poll, use parent post handler
         }
@@ -65,13 +66,11 @@ class OptionPresenter extends SecuredPresenter
             $this->handleException($exc);
         }
 
-        $this->respondOkCreated($this->arrayToJson($created)); /* @phpstan-ignore-line */
+        $this->respondOkCreated($this->arrayToJson($created));
     }
 
     /**
      * Parse out option id from request data
-     *
-     * @return int
      */
     private function getOptionIdFromData(): int
     {

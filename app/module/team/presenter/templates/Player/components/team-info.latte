@@ -1,30 +1,23 @@
 {block player-header}
 <li class="nav-item">
-    {var $cnt = ($player,'tymove-info'|errorsCount)}
-    <a class="flex-sm-fill text-sm-center nav-link" data-toggle="tab" href="#tymove-info" role="tab">{_team.teamData} <span n:if="$cnt > 0" class="badge badge-pill badge-danger">{$cnt}</span></a>
+    {var $cnt = ($player|errorsCount:'tymove-info')}
+    <a class="flex-sm-fill text-sm-center nav-link" data-toggle="tab" href="#tymove-info" role="tab">{_team.teamData} <span n:class="badge,badge-pill,badge-danger,$cnt == 0 ? d-none">{$cnt}</span></a>
 </li>
 {include parent}
 {/block}
 
 {block player-content}
 <div class="tab-pane fade" id="tymove-info" role="tabpanel">
-    <table class="table">
-        <tr>
-            <th>{_team.status}:</th>
-            <td>
-                <select n:class="col-3, form-control, in_array('status',$player->getErrFields()) ? is-invalid" style="min-width: 120px" name="status" data-value="{$player->getStatus()}">
-                    <option value="INIT" selected n:if="$player->getStatus()=='INIT'">{_team.INIT,1}</option>
-                    <option value="PLAYER" n:attr="selected => $player->getStatus()=='PLAYER'">{_team.PLAYER,1}</option>
-                    <option value="SICK" n:attr="selected => $player->getStatus()=='SICK'">{_team.SICK,1}</option>
-                    <option value="MEMBER" n:attr="selected => $player->getStatus()=='MEMBER'">{_team.MEMBER,1}</option>
-                    <option value="DELETED" n:attr="selected => $player->getStatus()=='DELETED'">{_team.DELETED,1}</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <th>{_team.jerseyNumber}:</th><td><input name="jerseyNumber" data-value="{$player->getJerseyNumber()}" type="number" value="{$player->getJerseyNumber()}" n:class="col-3, form-control, in_array('jerseyNumber',$player->getErrFields()) ? is-invalid" /></td>
-        </tr>
-    </table>
+    <div class="tymy-table">
+        <div class="row">
+            <div class="col-12 col-md-4 table-head">{label status /}:</div>
+            <div class="col-12 col-md-8">{input status, class => 'col-12 col-md-3 form-control'}</div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-4 table-head">{_team.jerseyNumber}:</div>
+            <div class="col-12 col-md-8">{input jerseyNumber, class => 'col-12 col-md-3 form-control'}</div>
+        </div>
+    </div>
 </div>
 {include parent}
 {/block}

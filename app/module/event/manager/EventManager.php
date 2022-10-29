@@ -8,6 +8,7 @@ use Nette\Database\Table\Selection;
 use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
 use Tymy\Module\Attendance\Manager\AttendanceManager;
+use Tymy\Module\Attendance\Model\Attendance;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Helper\ArrayHelper;
 use Tymy\Module\Core\Manager\BaseManager;
@@ -20,6 +21,8 @@ use Tymy\Module\Event\Model\EventType;
 use Tymy\Module\Permission\Manager\PermissionManager;
 use Tymy\Module\Permission\Model\Permission;
 use Tymy\Module\Permission\Model\Privilege;
+use Tymy\Module\PushNotification\Manager\NotificationGenerator;
+use Tymy\Module\PushNotification\Manager\PushNotificationManager;
 use Tymy\Module\User\Manager\UserManager;
 
 /**
@@ -30,33 +33,24 @@ use Tymy\Module\User\Manager\UserManager;
 class EventManager extends BaseManager
 {
     public const EVENTS_PER_PAGE = 15;
-
-    private PermissionManager $permissionManager;
-    private AttendanceManager $attendanceManager;
-    private EventTypeManager $eventTypeManager;
-    private UserManager $userManager;
     private DateTime $now;
     private ?Event $event = null;
 
-    public function __construct(ManagerFactory $managerFactory, PermissionManager $permissionManager, UserManager $userManager, AttendanceManager $attendanceManager, EventTypeManager $eventTypeManager)
+    public function __construct(ManagerFactory $managerFactory, private PermissionManager $permissionManager, private UserManager $userManager, private AttendanceManager $attendanceManager, private EventTypeManager $eventTypeManager, private NotificationGenerator $notificationGenerator, private PushNotificationManager $pushNotificationManager)
     {
         parent::__construct($managerFactory);
-        $this->permissionManager = $permissionManager;
-        $this->eventTypeManager = $eventTypeManager;
-        $this->userManager = $userManager;
-        $this->attendanceManager = $attendanceManager;
         $this->now = new DateTime();
     }
 
     /**
      * Maps one active row to object
-     * @param ActiveRow|false $row
+     * @param ActiveRow|false|null $row
      * @param bool $force True to skip cache
      * @return Event|null
      */
     public function map(?IRow $row, bool $force = false): ?BaseModel
     {
-        if (!$row) {
+        if ($row === null) {
             return null;
         }
 
@@ -88,7 +82,7 @@ class EventManager extends BaseManager
 
         $myAttendance = $this->attendanceManager->getMyAttendance($model->getId());
 
-        if ($myAttendance) {
+        if ($myAttendance !== null) {
             $model->setMyAttendance($this->attendanceManager->map($myAttendance));
         } elseif ($model->getCloseTime() > $this->now) { //my attendance doesnt exist and this event is still open
             $model->setAttendancePending(true);
@@ -104,43 +98,36 @@ class EventManager extends BaseManager
     {
         $event = parent::getById($id);
 
-        if (!$event) {
+        if (!$event instanceof \Tymy\Module\Core\Model\BaseModel) {
             return null;
         }
 
-        $attendances = $this->attendanceManager->getByEvents([$event->getId()]);
-
-        $event->setAttendance($attendances[$event->getId()] ?? []);
+        $this->addAttendancesToEvent($event);
 
         return $event;
     }
 
     /**
      * Returns filter array, based on provided $from and $until datetimes
-     * @param DateTime $from
-     * @param DateTime $until
      * @return string Filter syntax string
      */
     private function getIntervalFilter(DateTime $from, DateTime $until): string
     {
-        return join("~", [
+        return implode("~", [
             "startTime>" . $from->format(BaseModel::DATETIME_ISO_FORMAT),
             "startTime<" . $until->format(BaseModel::DATETIME_ISO_FORMAT),
         ]);
     }
 
     /**
-     * Get year events for event report. Also autodetects page to show if no page is specified
-     *
-     * @param int $userId
-     * @param int $year
-     * @param int|null $page
-     * @return array [
-      "page" => (int),    //number of current page. Either supplied or auto detected
-      "totalCount" => (int), //total number of events for given year (needed for pagination script)
-      "events" => array , //Event[]
-      ]
-     */
+    * Get year events for event report. Also autodetects page to show if no page is specified
+    *
+    * @return array [
+     "page" => (int),    //number of current page. Either supplied or auto detected
+     "totalCount" => (int), //total number of events for given year (needed for pagination script)
+     "events" => array , //Event[]
+     ]
+    */
     public function getYearEvents(int $userId, int $year, ?int $page = null): array
     {
         $yearEventsSelector = $this->selectUserEvents($userId)->where("start_time LIKE ?", "$year-%");
@@ -150,7 +137,7 @@ class EventManager extends BaseManager
                 ->where("start_time < ?", new DateTime())
                 ->count("id");
 
-            $page = intval(floor($eventsBeforeToday / EventManager::EVENTS_PER_PAGE)) + 1;
+            $page = (int) floor($eventsBeforeToday / EventManager::EVENTS_PER_PAGE) + 1;
         }
 
         $totalCount = (clone $yearEventsSelector)->count("id");
@@ -164,8 +151,8 @@ class EventManager extends BaseManager
         return [
             "page" => $page,
             "totalCount" => $totalCount,
-            "firstYear" => $lastDates->lowestDate->format("Y"),
-            "lastYear" => $lastDates->latestDate->format("Y"),
+            "firstYear" => $lastDates->lowestDate ? $lastDates->lowestDate->format("Y") : date("Y"),
+            "lastYear" => $lastDates->latestDate ? $lastDates->latestDate->format("Y") : date("Y"),
             "lastPage" => ceil($totalCount / EventManager::EVENTS_PER_PAGE),
             "events" => $events,
         ];
@@ -173,10 +160,9 @@ class EventManager extends BaseManager
 
     /**
      * Get array of event objects which user is allowed to view
-     * @param int $userId
      * @return Event[]
      */
-    public function getListUserAllowed(int $userId, ?string $filter = null, ?string $order = null, ?int $limit = null, ?int $offset = null)
+    public function getListUserAllowed(int $userId, ?string $filter = null, ?string $order = null, ?int $limit = null, ?int $offset = null): array
     {
         $selector = $this->selectUserEvents($userId);
 
@@ -195,25 +181,88 @@ class EventManager extends BaseManager
     }
 
     /**
+     * Load events of user in specified interval and where users attendance is one of selected
+     * @return ActiveRow[]
+     */
+    public function getEventsOfPrestatus(int $userId, array $prestatusIds, DateTime $since): array
+    {
+        $selector = $this->selectUserEvents($userId)
+            ->select($this->getTable() . ".*")
+            ->select(":" . Attendance::TABLE . "(event).pre_status_id")
+            ->joinWhere(":" . Attendance::TABLE . "(event)", ":" . Attendance::TABLE . "(event).user_id = ?", $userId)
+            ->where("end_time > ?", $since) //do not load older events than since
+            ->where(":" . Attendance::TABLE . "(event).pre_status_id IN (?) OR :" . Attendance::TABLE . "(event).pre_status_id IS NULL", $prestatusIds)
+            ->order("start_time DESC")->group($this->getTable() . ".id");
+
+        return $selector->fetchAll();
+    }
+
+    /**
+     * Get currently active events
+     * @return Event[]
+     */
+    public function getCurrentEvents(int $userId): array
+    {
+        $selector = $this->selectUserEvents($userId)
+            ->where("start_time < NOW()") //has already started
+            ->where("end_time > NOW()") //but has not already ended
+            ->order(Order::toString($this->orderToArray("startTime__desc")))
+            ->limit(5, 0);
+
+        $events = $this->mapAll($selector->fetchAll());
+
+        $this->addAttendances($events);
+
+        return $events;
+    }
+
+    /**
      * Load attendances from database and automatically adds all of them to input array of events
-     * @param array $events
-     * @return void
      */
     private function addAttendances(array &$events): void
     {
         $eventIds = ArrayHelper::entityIds($events);
         $attendances = $this->attendanceManager->getByEvents($eventIds);
-        foreach ($events as $event) {
-            /* @var $event Event */
-            $event->setAttendance($attendances[$event->getId()] ?? []);
+        $allSimpleUsers = $this->userManager->getSimpleUsers();
+
+        foreach ($events as &$event) {
+            $this->addAttendancesToEvent($event, $attendances[$event->getId()] ?? [], $allSimpleUsers);
+        }
+    }
+
+    /**
+     * Add attendance to one event
+     * @param array|null $eventAttendances Cached attendances - null loads them from database for just this one event
+     * @param array|null $allSimpleUsers Cached all simple users, null loads them from database
+     */
+    private function addAttendancesToEvent(Event $event, ?array $eventAttendances = null, ?array $allSimpleUsers = null): void
+    {
+        if ($eventAttendances == null) {
+            $eventAttendances = $this->attendanceManager->getByEvents([$event->getId()])[$event->getId()] ?? [];
+        }
+
+        if ($allSimpleUsers == null) {
+            $allSimpleUsers = $this->userManager->getSimpleUsers();
+        }
+        $allUserIds = array_keys($allSimpleUsers);
+
+        /* @var $event Event */
+        $event->setAttendance($eventAttendances);
+
+        //now add attendances to all users that doesnt have any attendance
+        $remainingUserIds = array_diff($allUserIds, array_keys($eventAttendances));
+        foreach ($remainingUserIds as $remainingUserId) {
+            $event->addAttendance(
+                (new Attendance())
+                    ->setEventId($event->getId())
+                    ->setUserId($remainingUserId)
+                    ->setUser($allSimpleUsers[$remainingUserId])
+            );
         }
     }
 
     /**
      * Get basic selector for user permitted events
-     *
-     * @param int $userId
-     * @return Selection
      */
     private function selectUserEvents(int $userId): Selection
     {
@@ -225,15 +274,14 @@ class EventManager extends BaseManager
         }
 
         return $this->database->table($this->getTable())
-                ->where(join(" OR ", $readPermsQ), empty($readPerms) ? null : $readPerms);
+                ->where(implode(" OR ", $readPermsQ), empty($readPerms) ? null : $readPerms);
     }
 
     /**
      * Get array of event ids which user is allowed to view
-     * @param int $userId
      * @return int[]
      */
-    public function getIdsUserAllowed($userId)
+    public function getIdsUserAllowed(int $userId): array
     {
         return $this->selectUserEvents($userId)->fetchPairs(null, "id");
     }
@@ -248,7 +296,6 @@ class EventManager extends BaseManager
             $data["endTime"] = $data["startTime"];
         }
         if (!isset($data["closeTime"])) {
-            $data["closeTime"] = $data["closeTime"];
         }
 
         $closeTimeDT = new DateTime($data["closeTime"]);
@@ -323,6 +370,9 @@ class EventManager extends BaseManager
         return Event::class;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     protected function getScheme(): array
     {
         return EventMapper::scheme();
@@ -331,10 +381,8 @@ class EventManager extends BaseManager
     /**
      * Check edit permission
      * @param Event $entity
-     * @param int $userId
-     * @return bool
      */
-    public function canEdit($entity, $userId): bool
+    public function canEdit($entity, int $userId): bool
     {
         return in_array($userId, $this->userManager->getUserIdsWithPrivilege(Privilege::SYS("EVE_UPDATE")));
     }
@@ -342,10 +390,8 @@ class EventManager extends BaseManager
     /**
      * Check read permission
      * @param Event $entity
-     * @param int $userId
-     * @return bool
      */
-    public function canRead($entity, $userId): bool
+    public function canRead($entity, int $userId): bool
     {
         return empty($entity->getViewRightName()) || in_array($entity->getViewRightName(), $this->permissionManager->getUserAllowedPermissionNames($this->userManager->getById($userId), Permission::TYPE_USER));
     }
@@ -353,7 +399,7 @@ class EventManager extends BaseManager
     /**
      * Get user ids allowed to read given event
      * @param Event $record
-     * @return int[]
+     * @return mixed[]|int[]
      */
     public function getAllowedReaders(BaseModel $record): array
     {
@@ -368,8 +414,12 @@ class EventManager extends BaseManager
         $this->allowCreate($data);
 
         $createdRow = parent::createByArray($data);
+        $createdEvent = $this->getById($createdRow->id);
 
-        return $this->getById($createdRow->id);
+        $notification = $this->notificationGenerator->createEvent($createdEvent);
+        $this->pushNotificationManager->notifyUsers($notification, $this->getAllowedReaders($createdEvent));
+
+        return $createdEvent;
     }
 
     public function delete(int $resourceId, ?int $subResourceId = null): int
@@ -378,7 +428,10 @@ class EventManager extends BaseManager
 
         $deleted = parent::deleteRecord($resourceId);
 
-        return $deleted ? $resourceId : null;
+        $notification = $this->notificationGenerator->deleteEvent($this->event);
+        $this->pushNotificationManager->notifyUsers($notification, $this->getAllowedReaders($this->event));
+
+        return $deleted !== 0 ? $resourceId : null;
     }
 
     public function read(int $resourceId, ?int $subResourceId = null): BaseModel
@@ -394,19 +447,24 @@ class EventManager extends BaseManager
 
         parent::updateByArray($resourceId, $data);
 
-        return $this->getById($resourceId);
+        $oldStartTime = $this->event->getStartTime();
+
+        $this->event = $this->getById($resourceId);
+
+        if ($this->event->getStartTime()->format(BaseModel::DATETIME_ENG_FORMAT) !== $oldStartTime->format(BaseModel::DATETIME_ENG_FORMAT)) {
+            $notification = $this->notificationGenerator->changeEventTime($this->event, $this->event->getStartTime());
+            $this->pushNotificationManager->notifyUsers($notification, $this->getAllowedReaders($this->event));
+        }
+
+        return $this->event;
     }
 
     /**
      * Return events specified by interval
      *
-     * @param int $userId
-     * @param DateTime $from
-     * @param DateTime $until
-     * @param string|null $order
      * @return Event[]
      */
-    public function getEventsInterval(int $userId, DateTime $from, DateTime $until, ?string $order = null)
+    public function getEventsInterval(int $userId, DateTime $from, DateTime $until, ?string $order = null): array
     {
         return $this->getListUserAllowed($userId, $this->getIntervalFilter($from, $until), $order);
     }
@@ -415,14 +473,13 @@ class EventManager extends BaseManager
      * Get sum of all events with pending attendances
      *
      * @param Event[] $events
-     * @return int
      */
     public function getWarnings(array $events): int
     {
         $count = 0;
         foreach ($events as $event) {
             /* @var $event Event */
-            if ($event->getAttendancePending()) {
+            if ($event->getAttendancePending() && $event->getCanPlan()) {
                 $count++;
             }
         }
@@ -433,10 +490,9 @@ class EventManager extends BaseManager
     /**
      * Get list of events, separated in array with year-month as key
      *
-     * @param array $events
      * @return array in the form of ["2021-01" => [...events...], "2021-02" => [...events...], ...]
      */
-    public function getAsMonthArray(array $events)
+    public function getAsMonthArray(array $events): array
     {
         $monthArray = [];
 
@@ -456,9 +512,8 @@ class EventManager extends BaseManager
 
     /**
      * Count all events
-     * @return int
      */
-    public function countAllEvents()
+    public function countAllEvents(): int
     {
         return $this->database->table(Event::TABLE)->count("id");
     }

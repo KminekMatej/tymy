@@ -19,7 +19,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->manager = $manager;
     }
 
-    public function actionDefault()
+    public function actionDefault(): void
     {
         if ($this->getRequest()->getMethod() !== "POST") {
             $this->respondNotAllowed();
@@ -39,14 +39,15 @@ class DefaultPresenter extends SecuredPresenter
         }
     }
 
-    private function performPost(array $data): Attendance
+    private function performPost(array $data): ?\Tymy\Module\Core\Model\BaseModel
     {
+        $created = null;
         try {
             $created = $this->manager->create($data);
         } catch (Exception $exc) {
             $this->handleException($exc);
         }
 
-        return $created; /* @phpstan-ignore-line */
+        return $created;
     }
 }

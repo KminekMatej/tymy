@@ -2,14 +2,17 @@
 
 namespace Tymy\Module\Core\Presenter;
 
+use Contributte\Translation\Translator;
 use Nette\Application\UI\Presenter;
 use Nette\Caching\Cache;
 use Nette\Caching\Storage;
 use Nette\Utils\DateTime;
-use Symfony\Component\Translation\Translator;
+use Tracy\Debugger;
 use Tymy\Module\Core\Model\Version;
 use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\Team\Model\Team;
+use Tymy\Module\User\Manager\UserManager;
+use Tymy\Module\User\Model\User;
 
 use const ROOT_DIR;
 use const TEAM_DIR;
@@ -33,8 +36,12 @@ abstract class RootPresenter extends Presenter
     public TeamManager $teamManager;
 
     /** @inject */
+    public UserManager $userManager;
+
+    /** @inject */
     public Storage $cacheStorage;
     protected Cache $teamCache;
+    protected ?User $tymyUser;
 
     protected function startup()
     {
@@ -42,9 +49,25 @@ abstract class RootPresenter extends Presenter
 
         $this->team = $this->teamManager->getTeam();
         $this->setLanguage($this->team->getDefaultLanguageCode());
-        $timezoneName = str_replace("Europe/Paris", "Europe/Prague", timezone_name_from_abbr("", $this->team->getTimeZone() * 3600, false));//get tz name from hours of shift but dont display paris, display prague ;)
+        $timezoneName = str_replace("Europe/Paris", "Europe/Prague", timezone_name_from_abbr("", $this->team->getTimeZone() * 3600, false)); //get tz name from hours of shift but dont display paris, display prague ;)
         date_default_timezone_set($timezoneName);
         $this->teamCache = new Cache($this->cacheStorage, $this->team->getSysName());
+
+        if ($this->getUser()->isLoggedIn()) {
+            $this->initUser();
+        }
+    }
+
+    /**
+     * After succesful login, load logged user into tymyUser variable
+     */
+    protected function initUser(): void
+    {
+        $this->tymyUser = $this->userManager->getById($this->getUser()->getId());
+
+        if ($this->tymyUser && $this->tymyUser->getLanguage()) {
+            $this->setLanguage($this->tymyUser->getLanguage());
+        }
     }
 
     protected function setLanguage(string $languageCode): void
@@ -64,8 +87,9 @@ abstract class RootPresenter extends Presenter
             Cache::ALL => true,
         ]);
 
-        return $this->teamCache->load("versions", function () {
-                $versions = explode("\n", shell_exec('git -C ' . ROOT_DIR . '/../master tag -l --format="%(creatordate:iso8601)|%(refname:short)" --sort=-v:refname'));
+        return $this->teamCache->load("versions", function (): array {
+                $dirToCheckVersions = is_dir(ROOT_DIR . '/../develop') ? ROOT_DIR . '/../develop' : ROOT_DIR;
+                $versions = explode("\n", shell_exec('git -C ' . $dirToCheckVersions . ' tag -l --format="%(creatordate:iso8601)|%(refname:short)" --sort=-v:refname'));
                 $out = [];
             foreach ($versions as $versionStr) {
                 if (empty(trim($versionStr))) {
@@ -80,7 +104,6 @@ abstract class RootPresenter extends Presenter
 
     /**
      * Get current version object
-     * @return Version
      */
     protected function getCurrentVersion(): Version
     {
@@ -89,7 +112,7 @@ abstract class RootPresenter extends Presenter
         } else {
             $cvName = shell_exec("git rev-parse --abbrev-ref HEAD");
         }
-
+        Debugger::barDump($cvName);
         return $cvName == "master" ? new Version($cvName, null) : ($this->getVersions()[$cvName] ?? new Version($cvName, null));
     }
 }

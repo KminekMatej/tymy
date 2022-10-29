@@ -34,10 +34,10 @@ class DefaultPresenter extends SecuredPresenter
     /** @inject */
     public MultiaccountManager $multiaccountManager;
 
-    public function beforeRender()
+    public function beforeRender(): void
     {
         parent::beforeRender();
-        $this->template->addFilter('lastLogin', function ($lastLogin) {
+        $this->template->addFilter('lastLogin', function ($lastLogin): string {
             $diff = date("U") - strtotime($lastLogin);
             if ($diff == 1) {
                 return $this->translator->translate("common.lastLogin.secondAgo");
@@ -70,25 +70,18 @@ class DefaultPresenter extends SecuredPresenter
             ;
         });
 
-        $this->template->addFilter('namedayToday', function ($name, $webname) {
-            return $this->translator->translate("team.hasNamedayToday", null, ["name" => '<strong><a href=' . $this->link(":Team:Player:", $webname) . '>' . $name . '</a></strong>']);
-        });
-        $this->template->addFilter('namedayTommorow', function ($name, $webname) {
-            return $this->translator->translate("team.hasNamedayTommorow", null, ["name" => '<strong><a href=' . $this->link(":Team:Player:", $webname) . '>' . $name . '</a></strong>']);
-        });
-        $this->template->addFilter('birthdayToday', function ($name, $webname, $year) {
-            return $this->translator->translate("team.hasBirthdayToday", null, ["name" => '<strong><a href=' . $this->link(":Team:Player:", $webname) . '>' . $name . '</a></strong>', "year" => '<strong>' . $year . '.</strong>']);
-        });
-        $this->template->addFilter('birthdayTommorow', function ($name, $webname, $year) {
-            return $this->translator->translate("team.hasBirthdayTommorow", null, ["name" => '<strong><a href=' . $this->link(":Team:Player:", $webname) . '>' . $name . '</a></strong>', "year" => '<strong>' . $year . '.</strong>']);
-        });
+        $this->template->addFilter('namedayToday', fn($name, $webname): string => $this->translator->translate("team.hasNamedayToday", null, ["name" => '<strong><a href=' . $this->link(":Team:Player:", $webname) . '>' . $name . '</a></strong>']));
+        $this->template->addFilter('namedayTommorow', fn($name, $webname): string => $this->translator->translate("team.hasNamedayTommorow", null, ["name" => '<strong><a href=' . $this->link(":Team:Player:", $webname) . '>' . $name . '</a></strong>']));
+        $this->template->addFilter('birthdayToday', fn($name, $webname, $year): string => $this->translator->translate("team.hasBirthdayToday", null, ["name" => '<strong><a href=' . $this->link(":Team:Player:", $webname) . '>' . $name . '</a></strong>', "year" => '<strong>' . $year . '.</strong>']));
+        $this->template->addFilter('birthdayTommorow', fn($name, $webname, $year): string => $this->translator->translate("team.hasBirthdayTommorow", null, ["name" => '<strong><a href=' . $this->link(":Team:Player:", $webname) . '>' . $name . '</a></strong>', "year" => '<strong>' . $year . '.</strong>']));
     }
 
-    public function renderDefault()
+    public function renderDefault(): void
     {
         $this->template->liveUsers = $this->userManager->getLiveUsers();
         $this->template->discussions = $this->discussionManager->getListUserAllowed($this->user->getId());
         $this->template->users = $this->userManager->getListOrder(null, "id", "last_login DESC");
+        $this->template->currentEvents = $this->eventManager->getCurrentEvents($this->user->getId());
 
         //$this->debtList->postProcessWithUsers($this->userList->getById(), $debts);    //@todo
         $this->template->debts = $this->debtManager->getListUserAllowed();
@@ -103,31 +96,10 @@ class DefaultPresenter extends SecuredPresenter
         $this->template->neverLogin = $this->translator->translate("common.never");
     }
 
-    public function actionJump(string $teamSysName)
+    public function actionJump(string $teamSysName): void
     {
         /* @var $tk TransferKey */
-        $tk = $this->multiaccountManager->read($teamSysName);
+        $tk = $this->multiaccountManager->generateNewTk($teamSysName);
         $this->redirectUrl("https://$teamSysName.tymy.cz/sign/in?tk=" . $tk->getTransferKey());
-    }
-
-    private function sortUsersByLastLogin($usersArray)
-    {
-        $notSetValues = [];
-        foreach ($usersArray as $key => $value) {
-            if (!property_exists($value, "lastLogin")) {
-                $notSetValues[] = $value;
-                unset($usersArray[$key]);
-            }
-        }
-        usort($usersArray, array( $this, 'sortUsersComparer' ));
-        return array_merge($usersArray, $notSetValues);
-    }
-
-    private static function sortUsersComparer($a, $b)
-    {
-        if (!property_exists($a, "lastLogin") || !property_exists($b, "lastLogin")) {
-            return 1;
-        }
-        return strtotime($a->lastLogin) < strtotime($b->lastLogin) ? 1 : -1;
     }
 }

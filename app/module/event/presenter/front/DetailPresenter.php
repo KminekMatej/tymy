@@ -1,12 +1,7 @@
 <?php
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/PHPClass.php to edit this template
- */
 namespace Tymy\Module\Event\Presenter\Front;
 
-use Tracy\Debugger;
 use Tymy\Module\Attendance\Manager\HistoryManager;
 use Tymy\Module\Attendance\Model\Attendance;
 use Tymy\Module\Attendance\Model\Status;
@@ -24,7 +19,7 @@ class DetailPresenter extends EventBasePresenter
     /** @inject */
     public HistoryManager $historyManager;
 
-    public function renderDefault(string $resource)
+    public function renderDefault(string $resource): void
     {
         $this->template->cptNotDecidedYet = $this->translator->translate('event.notDecidedYet');
 
@@ -32,7 +27,7 @@ class DetailPresenter extends EventBasePresenter
         /* @var $event Event */
         $event = $this->eventManager->getById($eventId);
 
-        if (!$event) {
+        if (!$event instanceof Event) {
             $this->flashMessage($this->translator->translate("event.errors.eventNotExists", null, ['id' => $eventId]), "danger");
             $this->redirect(':Event:Default:');
         }
@@ -55,8 +50,7 @@ class DetailPresenter extends EventBasePresenter
 
     /**
      * Compose attendance array to be easily used on template
-     * @param Event $event
-     * @return array
+     * @return array<int|string, array<int|string, mixed[]>>
      */
     private function loadEventAttendance(Event $event): array
     {
@@ -67,6 +61,11 @@ class DetailPresenter extends EventBasePresenter
             /* @var $attendance Attendance */
             $statusId = $attendance->getPostStatusId() ?: $attendance->getPreStatusId();
             $gender = $attendance->getUser()->getGender();
+
+            if ($statusId == null && $attendance->getUser()->getStatus() !== User::STATUS_PLAYER) {
+                //skip other non-players when status id is empty (not-decided)
+                continue;
+            }
 
             if (!array_key_exists($statusId, $attendances)) {//init code
                 $attendances[$statusId] = [];
@@ -90,7 +89,10 @@ class DetailPresenter extends EventBasePresenter
         return $attendances;
     }
 
-    private function getEventCaptions($event, $eventTypes)
+    /**
+     * @return array<string, mixed>
+     */
+    private function getEventCaptions($event, $eventTypes): array
     {
         return [
             "myPreStatusCaption" => empty($event->myAttendance->preStatus) || $event->myAttendance->preStatus == "UNKNOWN" ? "not-set" : $eventTypes[$event->type]->preStatusSet[$event->myAttendance->preStatus]->code,
@@ -98,7 +100,7 @@ class DetailPresenter extends EventBasePresenter
         ];
     }
 
-    public function handleLoadHistory($udalost)
+    public function handleLoadHistory($udalost): void
     {
         $eventId = $this->parseIdFromWebname($udalost);
         $this->loadEventHistory($eventId);
@@ -106,7 +108,7 @@ class DetailPresenter extends EventBasePresenter
         $this->redrawControl("historyBtn");
     }
 
-    public function handleAttendanceResult($id)
+    public function handleAttendanceResult($id): void
     {
         $results = $this->getRequest()->getPost()["resultSet"];
 
@@ -120,7 +122,7 @@ class DetailPresenter extends EventBasePresenter
         }
     }
 
-    private function loadEventHistory($eventId)
+    private function loadEventHistory(int $eventId): void
     {
         $this->template->histories = $this->historyManager->getEventHistory($eventId);
         $this->template->emptyStatus = (new Status())->setCode("")->setCaption($this->translator->translate('team.unknownSex'));

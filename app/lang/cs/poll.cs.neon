@@ -33,6 +33,7 @@ notEnoughItems: Nedosažen minimální počet hlasů
 design: Design
 opened: Aktivní
 closed: Uzavřená
+hidden: Skrytá
 displayInMainMenu: Uvést v hlavním menu
 never: Nikdy
 always: Vždy
@@ -50,6 +51,7 @@ text: Text
 number: Číslo
 bool: Ano / Ne
 new: Nová
+voteAs: Hlasovat za
 alerts:
     succesfullyCreated: Anketa byla úspěšně vytvořena
 errors:

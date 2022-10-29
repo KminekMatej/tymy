@@ -16,8 +16,8 @@ use Tymy\Module\Core\Exception\DBException;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Event\Model\Event;
-use Tymy\Module\Permission\Manager\PermissionManager;
 use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Manager\UserManager;
 
@@ -28,37 +28,26 @@ use Tymy\Module\User\Manager\UserManager;
  */
 class AttendanceManager extends BaseManager
 {
-    private UserManager $userManager;
-    private HistoryManager $historyManager;
-    private PermissionManager $permissionManager;
-    private ?ActiveRow $eventRow;
+    private ?ActiveRow $eventRow = null;
     private array $myAttendances;
 
 
-    public function __construct(ManagerFactory $managerFactory, UserManager $userManager, PermissionManager $permissionManager, HistoryManager $historyManager)
+    public function __construct(ManagerFactory $managerFactory, private UserManager $userManager, private HistoryManager $historyManager)
     {
         parent::__construct($managerFactory);
-        $this->userManager = $userManager;
-        $this->permissionManager = $permissionManager;
-        $this->historyManager = $historyManager;
     }
 
     /**
      * Get attendance using event and user id
-     * @param int $eventId
-     * @param int $userId
-     * @return Attendance
      */
-    public function getByEventUserId(int $eventId, int $userId)
+    public function getByEventUserId(int $eventId, int $userId): ?Attendance
     {
         return $this->map($this->database->table($this->getTable())->where("event_id", $eventId)->where("user_id", $userId)->fetch());
     }
 
     /**
      * Get array of attendanced related to events
-     *
-     * @param array $eventIds
-     * @return array
+     * @return array<int|string, array<\Tymy\Module\Attendance\Model\Attendance|null>>
      */
     public function getByEvents(array $eventIds): array
     {
@@ -77,14 +66,14 @@ class AttendanceManager extends BaseManager
 
     /**
      * Maps one active row to object
-     * @param ActiveRow|false $row
+     * @param ActiveRow|false|null $row
      * @param bool $force True to skip cache
      * @return Attendance|null
      */
     public function map(?IRow $row, bool $force = false): ?BaseModel
     {
         /* @var $row ActiveRow */
-        if (!$row) {
+        if ($row === null) {
             return null;
         }
 
@@ -108,6 +97,9 @@ class AttendanceManager extends BaseManager
         return Attendance::class;
     }
 
+    /**
+     * @return Field[]
+     */
     protected function getScheme(): array
     {
         return AttendanceMapper::scheme();
@@ -116,21 +108,17 @@ class AttendanceManager extends BaseManager
     /**
      * Check edit permission
      * @param Attendance $entity
-     * @param int $userId
-     * @return bool
      */
-    public function canEdit($entity, $userId): bool
+    public function canEdit($entity, int $userId): bool
     {
-        return $entity->getUserId() == $userId;
+        return $entity->getUserId() === $userId;
     }
 
     /**
      * Check read permission
      * @param Attendance $entity
-     * @param int $userId
-     * @return bool
      */
-    public function canRead($entity, $userId): bool
+    public function canRead($entity, int $userId): bool
     {
         return true;
     }
@@ -194,31 +182,25 @@ class AttendanceManager extends BaseManager
     /**
      * Check permissions if user, specified in data, can create attendance result for this event
      */
-    private function allowSetResult()
+    private function allowSetResult(): void
     {
         $resultRightName = $this->eventRow->result_rights;
         if ($resultRightName) {
             if (!$this->user->isAllowed($this->user->getId(), Privilege::USR($resultRightName))) {
                 $this->respondForbidden();
             }
-        } else {
-            if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("EVE_ATT_UPDATE"))) {
-                $this->respondForbidden();
-            }
+        } elseif (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("EVE_ATT_UPDATE"))) {
+            $this->respondForbidden();
         }
     }
 
     /**
      * Check permissions if user, specified in data, can create attendance for this event
-     *
-     * @param array $data
      */
-    private function allowAttend(array $data)
+    private function allowAttend(array $data): void
     {
-        if ($this->user->getId() !== $data["userId"]) {
-            if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("ATT_UPDATE"))) {
-                $this->respondForbidden();
-            }
+        if ($this->user->getId() !== $data["userId"] && !$this->user->isAllowed($this->user->getId(), Privilege::SYS("ATT_UPDATE"))) {
+            $this->respondForbidden();
         }
 
         $planRightName = $this->eventRow->plan_rights;
@@ -235,20 +217,20 @@ class AttendanceManager extends BaseManager
      * @param int|string $preStatus Either id or code
      * @return int|null Return correct statusId or null for invalid code
      */
-    private function getPreStatusId(int $eventId, $preStatus): ?int
+    private function getPreStatusId(int $eventId, int|string $preStatus): ?int
     {
         $allowedStatuses = $this->database->query("SELECT status.id, status.code FROM status "
                 . "LEFT JOIN status_set ON status_set.id=status.status_set_id "
                 . "LEFT JOIN event_types ON event_types.pre_status_set_id=status_set.id "
                 . "LEFT JOIN events ON events.event_type_id=event_types.id WHERE events.id=?", $eventId)->fetchPairs("id", "code");
 
-        if (is_numeric($preStatus) && array_key_exists(intval($preStatus), $allowedStatuses)) { //preStatus is ID
-            return intval($preStatus);
+        if (is_numeric($preStatus) && array_key_exists((int) $preStatus, $allowedStatuses)) { //preStatus is ID
+            return (int) $preStatus;
         }
 
         //preStatus is code - return and fill statusId automatically
         if (in_array($preStatus, $allowedStatuses)) {
-            return intval(array_flip($allowedStatuses)[$preStatus]);
+            return (int) array_flip($allowedStatuses)[$preStatus];
         }
 
         return null;
@@ -259,23 +241,23 @@ class AttendanceManager extends BaseManager
      * (Check using event_type and so on)
      *
      * @param int $eventId
-     * @param int $postStatus Either id or code
+     * @param int|string $postStatus Either id or code
      * @return int|null Return correct statusId or null for invalid code
      */
-    private function getPostStatusId(int $eventId, $postStatus): ?int
+    private function getPostStatusId(int $eventId, int|string $postStatus): ?int
     {
         $allowedStatuses = $this->database->query("SELECT status.id, status.code FROM status "
                 . "LEFT JOIN status_set ON status_set.id=status.status_set_id "
                 . "LEFT JOIN event_types ON event_types.post_status_set_id=status_set.id "
                 . "LEFT JOIN events ON events.event_type_id=event_types.id WHERE events.id=?", $eventId)->fetchPairs("id", "code");
 
-        if (is_numeric($postStatus) && array_key_exists(intval($postStatus), $allowedStatuses)) { //postStatus is ID
-            return intval($postStatus);
+        if (is_numeric($postStatus) && array_key_exists($postStatus, $allowedStatuses)) { //postStatus is ID
+            return $postStatus;
         }
 
         //postStatus is code - return and fill statusId automatically
         if (in_array($postStatus, $allowedStatuses)) {
-            return intval(array_flip($allowedStatuses)[$postStatus]);
+            return (int) array_flip($allowedStatuses)[$postStatus];
         }
 
         return null;
@@ -283,14 +265,6 @@ class AttendanceManager extends BaseManager
 
     /**
      * Create row of attendance history
-     *
-     * @param int $userId
-     * @param int $eventId
-     * @param int $statusIdTo
-     * @param string|null $preDescTo
-     * @param int|null $statusIdFrom
-     * @param string|null $preDescFrom
-     * @return ActiveRow
      */
     private function createHistory(int $userId, int $eventId, int $statusIdTo, ?string $preDescTo = null, ?int $statusIdFrom = null, ?string $preDescFrom = null): ActiveRow
     {
@@ -328,7 +302,7 @@ class AttendanceManager extends BaseManager
         $existingAttendance = $this->getByEventUserId($data["eventId"], $data["userId"]);
 
         $this->allowCreate($data); //allowCreate checks right for both creating and updating already created attendance
-        if (!$existingAttendance) {
+        if (!$existingAttendance instanceof \Tymy\Module\Attendance\Model\Attendance) {
             $created = $this->createByArray($data);
             if ($created && isset($data["preStatusId"])) {
                 $this->createHistory($data["userId"], $data["eventId"], $data["preStatusId"], $data["preDescription"] ?? null);
@@ -356,7 +330,7 @@ class AttendanceManager extends BaseManager
      * @return int number of affected rows
      * @throws Exception
      */
-    protected function updateRecord($table, $id, array $updates, $idColumn = "id")
+    protected function updateRecord(string $table, int $id, array $updates, string $idColumn = "id"): int
     {
         try {
             $updated = $this->database->table($table)->where("event_id", $id)->where("user_id", $updates["user_id"])->update($updates);
@@ -383,9 +357,6 @@ class AttendanceManager extends BaseManager
 
     /**
      * Get my attendance on specific event id, using cache
-     *
-     * @param int $eventId
-     * @return ActiveRow|null
      */
     public function getMyAttendance(int $eventId): ?ActiveRow
     {

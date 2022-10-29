@@ -24,15 +24,11 @@ use Tymy\Module\User\Manager\UserManager;
  */
 class DiscussionManager extends BaseManager
 {
-    private PermissionManager $permissionManager;
-    private UserManager $userManager;
-    private ?Discussion $discussion;
+    private ?Discussion $discussion = null;
 
-    public function __construct(ManagerFactory $managerFactory, PermissionManager $permissionManager, UserManager $userManager)
+    public function __construct(ManagerFactory $managerFactory, private PermissionManager $permissionManager, private UserManager $userManager)
     {
         parent::__construct($managerFactory);
-        $this->permissionManager = $permissionManager;
-        $this->userManager = $userManager;
     }
 
     protected function allowCreate(?array &$data = null): void
@@ -69,13 +65,13 @@ class DiscussionManager extends BaseManager
 
     /**
      * Maps one active row to object
-     * @param ActiveRow|false $row
+     * @param ActiveRow|false|null $row
      * @param bool $force True to skip cache
      * @return Discussion|null
      */
     public function map(?IRow $row, bool $force = false): ?BaseModel
     {
-        if (!$row) {
+        if ($row === null) {
             return null;
         }
 
@@ -101,28 +97,25 @@ class DiscussionManager extends BaseManager
     public function getById(int $id, bool $force = false): ?BaseModel
     {
         return $this->map($this->database->query("
-            SELECT `discussions`.*, `ds_read`.`last_date` AS `lastVisit`, 
+            SELECT `discussion`.*, `discussion_read`.`last_date` AS `lastVisit`, 
             (
-                SELECT COUNT(`ds_items`.`id`) 
-                FROM `ds_items` 
-                WHERE `ds_items`.`insert_date` > `ds_read`.`last_date` AND `ds_items`.`ds_id` = `discussions`.`id`
+                SELECT COUNT(`discussion_post`.`id`) 
+                FROM `discussion_post` 
+                WHERE `discussion_post`.`insert_date` > `discussion_read`.`last_date` AND `discussion_post`.`discussion_id` = `discussion`.`id`
             ) AS `newInfo`, 
             (
-                SELECT COUNT(`ds_items`.`id`) 
-                FROM `ds_items` 
-                WHERE `ds_items`.`ds_id` = `discussions`.`id`
+                SELECT COUNT(`discussion_post`.`id`) 
+                FROM `discussion_post` 
+                WHERE `discussion_post`.`discussion_id` = `discussion`.`id`
             ) AS `numberOfPosts` 
-            FROM `discussions` 
-            LEFT JOIN `ds_read` ON `discussions`.`id` = `ds_read`.`ds_id` AND
-            (`ds_read`.`ds_id`=`discussions`.`id`) AND (`ds_read`.`user_id` = ?) 
-            WHERE `discussions`.`id` = ? ORDER BY `discussions`.`order_flag` ASC", $this->user->getId(), $id)->fetch());
+            FROM `discussion` 
+            LEFT JOIN `discussion_read` ON `discussion`.`id` = `discussion_read`.`discussion_id` AND
+            (`discussion_read`.`discussion_id`=`discussion`.`id`) AND (`discussion_read`.`user_id` = ?) 
+            WHERE `discussion`.`id` = ? ORDER BY `discussion`.`order_flag` ASC", $this->user->getId(), $id)->fetch());
     }
 
     /**
      * Get discussion object using its webname, optionally with check for user permissions
-     *
-     * @param string $webName
-     * @return Discussion|null
      */
     public function getByWebName(string $webName, ?int $userId = null): ?Discussion
     {
@@ -140,61 +133,62 @@ class DiscussionManager extends BaseManager
 
     /**
      * Get array of discussion objects which user is allowed to read
-     * @param int $userId
      * @return Discussion[]
      */
-    public function getListUserAllowed($userId)
+    public function getListUserAllowed(int $userId): array
     {
         $readPerms = $this->permissionManager->getUserAllowedPermissionNames($this->userManager->getById($this->user->getId()), Permission::TYPE_USER);
-        $readPermsQ = empty($readPerms) ? "" : "`discussions`.`read_rights` IN (?) OR";
+        $readPermsQ = empty($readPerms) ? "" : "`discussion`.`read_rights` IN (?) OR";
         $query = "
-            SELECT `discussions`.*, `ds_read`.`last_date` AS `lastVisit`, 
+            SELECT `discussion`.*, `discussion_read`.`last_date` AS `lastVisit`, 
             (
-                SELECT COUNT(`ds_items`.`id`) 
-                FROM `ds_items` 
-                WHERE `ds_items`.`insert_date` > `ds_read`.`last_date` AND `ds_items`.`ds_id` = `discussions`.`id`
+                SELECT COUNT(`discussion_post`.`id`) 
+                FROM `discussion_post` 
+                WHERE `discussion_post`.`insert_date` > `discussion_read`.`last_date` AND `discussion_post`.`discussion_id` = `discussion`.`id`
             ) AS `newInfo`, 
             (
-                SELECT COUNT(`ds_items`.`id`) 
-                FROM `ds_items` 
-                WHERE `ds_items`.`ds_id` = `discussions`.`id`
+                SELECT COUNT(`discussion_post`.`id`) 
+                FROM `discussion_post` 
+                WHERE `discussion_post`.`discussion_id` = `discussion`.`id`
             ) AS `numberOfPosts` 
-            FROM `discussions` 
-            LEFT JOIN `ds_read` ON `discussions`.`id` = `ds_read`.`ds_id` AND
-            (`ds_read`.`ds_id`=`discussions`.`id`) AND (`ds_read`.`user_id` = ?) 
-            WHERE ($readPermsQ `discussions`.`read_rights` IS NULL OR
-            TRIM(`discussions`.`read_rights`) = '') ORDER BY `discussions`.`order_flag` ASC";
+            FROM `discussion` 
+            LEFT JOIN `discussion_read` ON `discussion`.`id` = `discussion_read`.`discussion_id` AND
+            (`discussion_read`.`discussion_id`=`discussion`.`id`) AND (`discussion_read`.`user_id` = ?) 
+            WHERE ($readPermsQ `discussion`.`read_rights` IS NULL OR
+            TRIM(`discussion`.`read_rights`) = '') ORDER BY `discussion`.`order_flag` ASC";
         $selector = empty($readPerms) ? $this->database->query($query, $userId) : $this->database->query($query, $userId, $readPerms ?: "");
         return $this->mapAll($selector->fetchAll());
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\BaseModel[]
+     */
     public function getList(?array $idList = null, string $idField = "id", ?int $limit = null, ?int $offset = null, ?string $order = null): array
     {
         $query = "
-            SELECT `discussions`.*, `ds_read`.`last_date` AS `lastVisit`, 
+            SELECT `discussion`.*, `discussion_read`.`last_date` AS `lastVisit`, 
             (
-                SELECT COUNT(`ds_items`.`id`) 
-                FROM `ds_items` 
-                WHERE `ds_items`.`insert_date` > `ds_read`.`last_date` AND `ds_items`.`ds_id` = `discussions`.`id`
+                SELECT COUNT(`discussion_post`.`id`) 
+                FROM `discussion_post` 
+                WHERE `discussion_post`.`insert_date` > `discussion_read`.`last_date` AND `discussion_post`.`discussion_id` = `discussion`.`id`
             ) AS `newInfo`, 
             (
-                SELECT COUNT(`ds_items`.`id`) 
-                FROM `ds_items` 
-                WHERE `ds_items`.`ds_id` = `discussions`.`id`
+                SELECT COUNT(`discussion_post`.`id`) 
+                FROM `discussion_post` 
+                WHERE `discussion_post`.`discussion_id` = `discussion`.`id`
             ) AS `numberOfPosts` 
-            FROM `discussions` 
-            LEFT JOIN `ds_read` ON `discussions`.`id` = `ds_read`.`ds_id` AND
-            (`ds_read`.`ds_id`=`discussions`.`id`) AND (`ds_read`.`user_id` = ?) 
-            WHERE 1 ORDER BY `discussions`.`order_flag` ASC";
+            FROM `discussion` 
+            LEFT JOIN `discussion_read` ON `discussion`.`id` = `discussion_read`.`discussion_id` AND
+            (`discussion_read`.`discussion_id`=`discussion`.`id`) AND (`discussion_read`.`user_id` = ?) 
+            WHERE 1 ORDER BY `discussion`.`order_flag` ASC";
         return $this->mapAll($this->database->query($query, $this->user->getId())->fetchAll());
     }
 
     /**
      * Get array of discussion ids which user is allowed to read
-     * @param int $userId
      * @return int[]
      */
-    public function getIdsUserAllowed($userId)
+    public function getIdsUserAllowed(int $userId): array
     {
         $readPerms = $this->permissionManager->getUserAllowedPermissionNames($this->userManager->getById($userId), Permission::TYPE_USER);
         return $this->database->table($this->getTable())->where("read_rights IS NULL OR read_rights = '' OR read_rights IN (?)", $readPerms)->fetchPairs(null, "id");
@@ -205,6 +199,9 @@ class DiscussionManager extends BaseManager
         return Discussion::class;
     }
 
+    /**
+     * @return \Tymy\Module\Core\Model\Field[]
+     */
     protected function getScheme(): array
     {
         return DiscussionMapper::scheme();
@@ -213,10 +210,8 @@ class DiscussionManager extends BaseManager
     /**
      * Check edit permission
      * @param Discussion $entity
-     * @param int $userId
-     * @return bool
      */
-    public function canEdit($entity, $userId): bool
+    public function canEdit($entity, int $userId): bool
     {
         return in_array($userId, $this->userManager->getUserIdsWithPrivilege(Privilege::SYS("DSSETUP")));
     }
@@ -224,10 +219,8 @@ class DiscussionManager extends BaseManager
     /**
      * Check read permission
      * @param Discussion $entity
-     * @param int $userId
-     * @return bool
      */
-    public function canRead($entity, $userId): bool
+    public function canRead($entity, int $userId): bool
     {
         return in_array($entity->getId(), $this->getIdsUserAllowed($userId));
     }
@@ -235,7 +228,7 @@ class DiscussionManager extends BaseManager
     /**
      * Get user ids allowed to read given discussion
      * @param Discussion $record
-     * @return int[]
+     * @return int[]|mixed[]
      */
     public function getAllowedReaders(BaseModel $record): array
     {
@@ -285,7 +278,6 @@ class DiscussionManager extends BaseManager
      * Get sum of all warnings of desired discussions
      *
      * @param Discussion[] $discussions
-     * @return int
      */
     public function getWarnings(array $discussions): int
     {

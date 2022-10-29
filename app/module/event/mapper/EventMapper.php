@@ -12,6 +12,9 @@ use Tymy\Module\Core\Model\Field;
  */
 class EventMapper extends BaseMapper
 {
+    /**
+     * @return mixed[]
+     */
     public static function scheme(): array
     {
         return [
@@ -21,9 +24,9 @@ class EventMapper extends BaseMapper
             Field::string()->withPropertyAndColumn("caption", true),
             Field::int()->withColumn("event_type_id")->setProperty("eventTypeId"),
             Field::string()->withColumn("descr")->setProperty("description"),
-            Field::string()->withColumn("close_time")->setProperty("closeTime"),
-            Field::string()->withColumn("start_time", true)->setProperty("startTime"),
-            Field::string()->withColumn("end_time")->setProperty("endTime"),
+            Field::datetime()->withColumn("close_time")->setProperty("closeTime"),
+            Field::datetime()->withColumn("start_time", true)->setProperty("startTime"),
+            Field::datetime()->withColumn("end_time")->setProperty("endTime"),
             Field::string()->withPropertyAndColumn("link"),
             Field::string()->withPropertyAndColumn("place"),
             Field::string()->withColumn("view_rights")->setProperty("viewRightName"),

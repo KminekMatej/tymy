@@ -9,9 +9,6 @@ class PwdResetFormFactory
 {
     use SmartObject;
 
-    /**
-     * @return Form
-     */
     public function create(): Form
     {
 

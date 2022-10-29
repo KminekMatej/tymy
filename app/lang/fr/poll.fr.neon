@@ -33,6 +33,7 @@ notEnoughItems: "Le nombre minimum de votes n'a pas été atteint"
 design: Design
 opened: Actif
 closed: Clotûré
+hidden: Caché
 displayInMainMenu: Afficher dans le menu principal
 never: Jamais
 always: Toujours
@@ -50,6 +51,7 @@ text: Texte
 number: Numéro
 bool: Oui/ Non
 new: Nouveau
+voteAs: Votez comme
 alerts:
     succesfullyCreated: Le sondage a été créé avec succès
 errors:

@@ -1,4 +1,4 @@
-/* 
+    /* 
     Created on : 8.4.2022, 22:46
     Author     : kminekmatej
 */
@@ -31,4 +31,44 @@ DIV#cke_addPost .cke_inner .cke_bottom
 
 .addPost:not([data-postId='']) BUTTON#insertPost{
     display: none;
+}
+
+.reaction-bar .badge{
+    cursor: pointer;
+    font-size: 95%;
+}
+
+.emoji-icon {
+    padding: 5px;
+}
+
+.emoji-icon:hover,.emoji-featured:hover {
+    background-color: #f1f1f1;
+    text-decoration: none;
+}
+
+.emoji-card{
+    padding: 2px;
+    text-align: center;
+}
+
+.emoji-card .emoji-body{
+    height: 300px;
+    max-height: 300px;
+    overflow: auto;
+}
+
+.emoji-featured, .emoji-card .emoji-header .fa-solid{
+    font-size: 1.6rem;
+    padding: 5px;
+    vertical-align: baseline;
+}
+
+.emoji-toggler .popover .popover-body{
+    padding: 0px;
+}
+
+.emoji-toggler .popover{
+    width: 320px;
+    max-width: 320px;
 }

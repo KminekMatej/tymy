@@ -5,6 +5,7 @@ cacheDropped: Cache vymazána
 appSettings: Nastavení aplikace
 teamSettings: Nastavení týmu
 appVersion: Verze aplikace
+roadmap: Co se chystá
 released: Vydáno
 changeList: Seznam změn
 authors: Autoři
@@ -26,3 +27,7 @@ eventColors: Barvy událostí
 statusColors: Barvy účastí
 multiaccount: Multiúčet|Multiúčty
 addAccount: Přidat účet
+export: Export
+enableExport: Povolit export
+calendarExport: "Export kalendáře (ical)"
+displayStatuses: "Zobrazit události mající status"

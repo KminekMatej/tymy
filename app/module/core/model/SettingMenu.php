@@ -9,18 +9,7 @@ namespace Tymy\Module\Core\Model;
  */
 class SettingMenu
 {
-    public string $code;
-    public string $name;
-    public string $href;
-    public string $icon;
-    public bool $enabled;
-
-    public function __construct(string $code, string $name, string $href, string $icon, bool $enabled)
+    public function __construct(public string $code, public ?string $name = null, public ?string $href = null, public ?string $icon = null, public bool $enabled = true)
     {
-        $this->code = $code;
-        $this->name = $name;
-        $this->href = $href;
-        $this->icon = $icon;
-        $this->enabled = $enabled;
     }
 }

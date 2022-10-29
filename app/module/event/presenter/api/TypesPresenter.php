@@ -12,12 +12,12 @@ use Tymy\Module\Event\Manager\EventTypeManager;
  */
 class TypesPresenter extends SecuredPresenter
 {
-    public function injectManager(EventTypeManager $manager)
+    public function injectManager(EventTypeManager $manager): void
     {
         $this->manager = $manager;
     }
 
-    public function actionDefault($resourceId, $subResourceId)
+    public function actionDefault($resourceId, $subResourceId): void
     {
         if ($this->getRequest()->getMethod() != "GET") {
             $this->respondNotAllowed();
@@ -26,7 +26,7 @@ class TypesPresenter extends SecuredPresenter
         $this->requestGetList();
     }
 
-    private function requestGetList()
+    private function requestGetList(): void
     {
         $events = $this->manager->getListUserAllowed($this->user->getId());
 

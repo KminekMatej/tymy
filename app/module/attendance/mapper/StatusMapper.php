@@ -12,6 +12,9 @@ use Tymy\Module\Core\Model\Field;
  */
 class StatusMapper extends BaseMapper
 {
+    /**
+     * @return mixed[]
+     */
     public static function scheme(): array
     {
         return [
@@ -21,8 +24,8 @@ class StatusMapper extends BaseMapper
             Field::string()->withPropertyAndColumn("icon"),
             Field::string()->withPropertyAndColumn("caption", true),
             Field::int()->withColumn("status_set_id", true)->setProperty("statusSetId"),
-            Field::int()->withColumn("usr_mod")->setProperty("updatedById"),
-            Field::int()->withColumn("dat_mod")->setProperty("updatedAt"),
+            Field::int()->withColumn("updated_user_id")->setProperty("updatedById"),
+            Field::datetime()->withColumn("updated")->setProperty("updatedAt"),
 
         ];
     }

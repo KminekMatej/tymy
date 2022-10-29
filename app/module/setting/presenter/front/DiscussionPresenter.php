@@ -6,20 +6,20 @@ use Tymy\Module\Discussion\Model\Discussion;
 
 class DiscussionPresenter extends SettingBasePresenter
 {
-    public function actionDefault(?string $resource = null)
+    public function actionDefault(?string $resource = null): void
     {
         if ($resource) {
             $this->setView("discussion");
         }
     }
 
-    public function beforeRender()
+    public function beforeRender(): void
     {
         parent::beforeRender();
         $this->addBreadcrumb($this->translator->translate("discussion.discussion", 2), $this->link(":Setting:Discussion:"));
     }
 
-    public function renderDefault()
+    public function renderDefault(): void
     {
         $this->template->isNew = false;
         $discussions = $this->discussionManager->getList();
@@ -27,7 +27,7 @@ class DiscussionPresenter extends SettingBasePresenter
         $this->template->discussionsCount = count($discussions);
     }
 
-    public function renderNew()
+    public function renderNew(): void
     {
         $this->allowPermission("DSSETUP");
 
@@ -45,7 +45,7 @@ class DiscussionPresenter extends SettingBasePresenter
         $this->setView("discussion");
     }
 
-    public function renderDiscussion(?string $resource = null)
+    public function renderDiscussion(?string $resource = null): void
     {
         $this->allowPermission("DSSETUP");
 
@@ -60,7 +60,7 @@ class DiscussionPresenter extends SettingBasePresenter
         $this->template->discussion = $discussionObj;
     }
 
-    public function handleDiscussionsEdit()
+    public function handleDiscussionsEdit(): void
     {
         $post = $this->getRequest()->getPost();
         $binders = $post["binders"];
@@ -69,20 +69,20 @@ class DiscussionPresenter extends SettingBasePresenter
         }
     }
 
-    public function handleDiscussionCreate()
+    public function handleDiscussionCreate(): void
     {
         $discussionData = (object) $this->getRequest()->getPost()["changes"]; // new discussion is always as ID 1
-        $this->discussionManager->create($discussionData);
+        $this->discussionManager->create((array) $discussionData);
         $this->redirect(':Setting:Discussion:');
     }
 
-    public function handleDiscussionEdit()
+    public function handleDiscussionEdit(): void
     {
         $bind = $this->getRequest()->getPost();
         $this->discussionManager->update($bind["changes"], $bind["id"]);
     }
 
-    public function handleDiscussionDelete()
+    public function handleDiscussionDelete(): void
     {
         $bind = $this->getRequest()->getPost();
         $this->discussionManager->delete($bind["id"]);

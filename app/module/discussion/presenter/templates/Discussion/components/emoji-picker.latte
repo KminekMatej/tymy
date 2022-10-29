@@ -1,0 +1,31 @@
+<div id="emoji-area-{$rowId}">
+    <div class="emoji-card" style="display: none">
+        <div class="emoji-header">
+            <span class="emoji-featured" onclick="react(this)">👍</span>
+            <span class="emoji-featured" onclick="react(this)">❤</span>
+            <span class="emoji-featured" onclick="react(this)">😁</span>
+            <span class="emoji-featured" onclick="react(this)">😮</span>
+            <span class="emoji-featured" onclick="react(this)">😥</span>
+            <span class="emoji-featured" onclick="react(this)">😡</span>
+            <span class="emoji-featured" onclick="toggleEmojis(this)">
+                ↓
+            </span>
+        </div>
+        <div class="emoji-body p-0 d-none fade">
+            <hr />
+            {include 'emoji/smiley.latte'}
+            <hr />
+            {include 'emoji/animals.latte'}
+            <hr />
+            {include 'emoji/food.latte'}
+            <hr />
+            {include 'emoji/sport.latte'}
+            <hr />
+            {include 'emoji/travel.latte'}
+            <hr />
+            {include 'emoji/object.latte'}
+            <hr />
+            {include 'emoji/symbol.latte'}
+        </div>
+    </div>
+</div>

@@ -28,9 +28,11 @@ lastName: Surname
 phone: Phone
 email: E-mail
 birthDate: Date of birth
-nameDayMonth: Month of nameday
+birthCode: Personal ID
+nameDay: Name day
+nameDayMonth: Month of name day
 chooseMonth: Pick month
-nameDayDay: Day of nameday
+nameDayDay: Day of name day
 language: Language
 dateOfRegistration: Registered
 callName: Displayed name
@@ -44,10 +46,10 @@ jerseyNumber: Jersey number
 street: Street
 city: City
 zipCode: Postal
-hasNamedayToday: %name% celebrates his nameday today
-hasBirthdayToday: %name% celebrates his %year% birthday today
-hasNamedayTommorow: %name% celebrates his nameday tommorow
-hasBirthdayTommorow: %name% celebrates his %year% birthday tommorow
+hasNamedayToday: %name% celebrates nameday today
+hasBirthdayToday: %name% celebrates %year% birthday today
+hasNamedayTommorow: %name% celebrates nameday tommorow  
+hasBirthdayTommorow: %name% celebrates %year% birthday tommorow
 currentlyOnline: Online
 lastLogin: Last login
 nobodyIsOnline: Nobody online
@@ -61,8 +63,18 @@ sport: Sport
 defaultLanguage: Default language
 hideDiscDesc: Hide discussion description
 approveAsPlayer: Approve as player
+invitation: Invitation|Invitations
+invite: Pozvat
+createInvitation: Invite new player
+invitation-sent: Sent
+invitation-accepted: Accepted
+invitation-expired: Expired
 errors:
     imgFileCorrupted: "File is not a pictute, or is corrupted"
+    passwordMismatch: Passwords mismatch
+    invitationAtLeast: "At least one of fields Name, Surname and E-Mail must be filled"
+    invitationExpired: Invitation already expired
+    invitationAccepted: Invitation already used
 alerts:
     signOffNeeded: Language changed - please logout & login for language to change
     registrationApprovedSubject: Registration to %s approved
@@ -72,3 +84,19 @@ alerts:
     loginForbidden: "User isn't allowed to sign in"
     loginNotApproved: User has not yet been approved by administrators
     authenticationFailed: Login or password mismatch
+    loginExists: This login already exists
+    changingRolesForbidden: Changing roles is forbidden
+    changingCanEditCallnameForbidden: Changing canEditCallName is forbidden
+    changingStatusForbidden: Changing status is forbidden
+    changingLoginForbidden: Changing login is forbidden
+    editingCallNameForbidden: Editing call name forbidden
+    emailExists: This e-mail already exists
+    userQuotaReached: User quota limit reached
+    registrationsLimitReached: Too many pending registrations
+    passwordTooShort: Password is too short
+    emailFailure: Invalid e-mail format
+    usernameFailure: Username must be at least 3 and at most 20 characters long
+    targetTeamExists: This team was already added into multiaccount
+    invitationCreated: Invitation created
+    invitationSent: Invitation sent
+    changeOutlookEmail: 'It appears you are using Microsoft e-mail provider (outlook.com / mns.com / live.com / hotmail.com). These mailboxes has often problems with e-mail deliverance. We suggest you to use different e-mail address - or info e-mails may not be delivered correctly'

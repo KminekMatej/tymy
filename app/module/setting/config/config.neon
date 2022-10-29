@@ -1,0 +1,3 @@
+services:
+    ICalManager: Tymy\Module\Settings\Manager\ICalManager
+    ICalItemManager: Tymy\Module\Settings\Manager\ICalItemManager

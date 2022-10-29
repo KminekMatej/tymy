@@ -36,5 +36,6 @@ plan: Plan
 result: Result
 displayHistory: Display history
 eventType: Event type|Event types
+currently: Currently in progress
 errors:
     eventNotExists: Event %id% does not exist
