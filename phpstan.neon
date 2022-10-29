@@ -11,3 +11,6 @@ parameters:
             - '/Constant ROOT_DIR not found/'
             - '/Constant TEAM_DIR not found/'
             - '/Constant TEST_DIR not found/'
+includes:
+    - vendor/phpstan/phpstan-nette/extension.neon
+    - vendor/phpstan/phpstan-nette/rules.neon
