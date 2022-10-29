@@ -2,12 +2,12 @@
 
 namespace Tymy\Module\Core\Presenter\Front;
 
+use Nette\Bridges\ApplicationLatte\Template;
 use Nette\Utils\DateTime;
 use Tracy\Debugger;
 use Tymy\Bootstrap;
 use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Core\Presenter\RootPresenter;
-
 use const ROOT_DIR;
 
 /**
@@ -29,6 +29,7 @@ abstract class BasePresenter extends RootPresenter
     public function beforeRender()
     {
         parent::beforeRender();
+        assert($this->template instanceof Template);
         $this->template->componentsDir = Bootstrap::MODULES_DIR . "/core/presenter/templates/components";
         $this->template->setTranslator($this->translator);
 

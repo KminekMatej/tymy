@@ -2,6 +2,7 @@
 
 namespace Tymy\Module\Team\Presenter\Front;
 
+use Nette\Bridges\ApplicationLatte\Template;
 use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Permission\Model\Privilege;
@@ -16,6 +17,7 @@ class DefaultPresenter extends SecuredPresenter
         parent::beforeRender();
 
         $allFields = $this->userManager->getAllFields();
+        assert($this->template instanceof Template);
         $this->template->addFilter('errorsCount', function ($player, $tabName) use ($allFields): int {
             $errFields = [];
             switch ($tabName) {

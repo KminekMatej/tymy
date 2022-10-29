@@ -2,6 +2,7 @@
 
 namespace Tymy\Module\Discussion\Presenter\Front;
 
+use Nette\Bridges\ApplicationLatte\Template;
 use Tymy\Module\Core\Component\NewPostControl;
 use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
@@ -32,9 +33,12 @@ class DiscussionPresenter extends SecuredPresenter
         parent::beforeRender();
         $this->addBreadcrumb($this->translator->translate("discussion.discussion", 2), $this->link(":Discussion:Default:"));
 
+        assert($this->template instanceof Template);
+
         //set users
         $this->template->userList = $this->userList = $this->userManager->getIdList();
 
+        assert($this->template instanceof Template);
         $this->template->addFilter('myReaction', function (Post $post) {
             foreach ($post->getReactions() as $emoji => $userIds) {
                 if (in_array($this->user->getId(), $userIds)) {
@@ -153,7 +157,7 @@ class DiscussionPresenter extends SecuredPresenter
         }
     }
 
-    protected function createComponentNewPost(): \Tymy\Module\Core\Component\NewPostControl
+    protected function createComponentNewPost(): NewPostControl
     {
         $newpost = new NewPostControl($this->userManager);
         $newpost->redrawControl();

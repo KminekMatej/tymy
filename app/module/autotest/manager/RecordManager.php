@@ -3,6 +3,7 @@
 namespace Tymy\Module\Autotest;
 
 use Nette\Utils\DateTime;
+use Tymy\Module\Autotest\Entity\Assert;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Debt\Model\Debt;
 use Tymy\Module\Discussion\Model\Discussion;
@@ -10,7 +11,6 @@ use Tymy\Module\Event\Model\Event;
 use Tymy\Module\Permission\Model\Permission;
 use Tymy\Module\Poll\Model\Poll;
 use Tymy\Module\User\Model\User;
-use Tymy\Module\Autotest\Entity\Assert;
 
 /**
  * Description of RecordManager
@@ -68,7 +68,6 @@ class RecordManager
         return $this->createRecord(Event::MODULE, $data ?: $this->mockEvent(), $changes, "id");
     }
 
-    /** @return int $recordId */
     public function createOptions(int $pollId, int $numberOfOptions, ?array $data = null, ?array $changes = null): void
     {
         if (empty($data)) {

@@ -3,6 +3,7 @@
 namespace Tymy\Module\Team\Presenter\Front;
 
 use Nette\Application\UI\Form;
+use Nette\Bridges\ApplicationLatte\Template;
 use Nette\Http\FileUpload;
 use Nette\Utils\Image;
 use Tymy\Module\Core\Exception\TymyResponse;
@@ -27,6 +28,7 @@ class PlayerPresenter extends SecuredPresenter
         $this->addBreadcrumb($this->translator->translate("team.team", 1), $this->link(":Team:Default:"));
 
         $allFields = $this->userManager->getAllFields();
+        assert($this->template instanceof Template);
         $this->template->addFilter('errorsCount', function ($player, $tabName) use ($allFields): int {
             $errFields = [];
             switch ($tabName) {

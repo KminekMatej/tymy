@@ -96,7 +96,7 @@ abstract class BaseManager
 
     /**
      * Get list of user ids, allowed to read given entity
-     * @param int|ActiveRow|BusinessCase $record
+     * @param BaseModel $record
      * @return int[]
      */
     abstract public function getAllowedReaders(BaseModel $record): array;

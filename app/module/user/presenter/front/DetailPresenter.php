@@ -16,6 +16,7 @@ use Tymy\Module\Core\Manager\Responder;
 use Tymy\Module\Core\Presenter\Front\BasePresenter;
 use Tymy\Module\Event\Manager\EventManager;
 use Tymy\Module\Settings\Manager\ICalManager;
+use function mb_str_split;
 
 /**
  * Description of DetailPresenter
@@ -42,6 +43,7 @@ class DetailPresenter extends BasePresenter
     {
         parent::beforeRender();
 
+        assert($this->template instanceof Template);
         $this->template->addFilter("statusName", function (int $statusId) {
             if (!array_key_exists($statusId, $this->statusNameCache)) {
                 $status = $this->statusManager->getById($statusId);

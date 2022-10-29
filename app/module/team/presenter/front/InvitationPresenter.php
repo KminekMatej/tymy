@@ -3,6 +3,7 @@
 namespace Tymy\Module\Team\Presenter\Front;
 
 use Nette\Application\UI\Form;
+use Nette\Bridges\ApplicationLatte\Template;
 use stdClass;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Permission\Model\Privilege;
@@ -26,6 +27,7 @@ class InvitationPresenter extends SecuredPresenter
         $this->addBreadcrumb($this->translator->translate("team.team", 1), $this->link(":Team:Default:"));
         $this->addBreadcrumb($this->translator->translate("team.invitation", 2), $this->link(":Team:Invitation:"));
 
+        assert($this->template instanceof Template);
         $this->template->addFilter("loadUser", fn(int $userId): ?User => $this->userManager->getById($userId));
     }
 
@@ -51,7 +53,7 @@ class InvitationPresenter extends SecuredPresenter
         $this->redirect(":Team:Invitation:");
     }
 
-    public function createComponentInvitationForm(): \Nette\Application\UI\Form
+    public function createComponentInvitationForm(): Form
     {
         $form = new Form();
 
@@ -63,7 +65,7 @@ class InvitationPresenter extends SecuredPresenter
 
         $form->addSubmit("save");
 
-        $form->onSuccess[] = fn(\Nette\Application\UI\Form $form, \stdClass $values) => $this->invitationFormSuccess($form, $values);
+        $form->onSuccess[] = fn(Form $form, \stdClass $values) => $this->invitationFormSuccess($form, $values);
 
         return $form;
     }

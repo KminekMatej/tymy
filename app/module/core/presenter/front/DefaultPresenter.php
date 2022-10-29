@@ -2,6 +2,7 @@
 
 namespace Tymy\Module\Core\Presenter\Front;
 
+use Nette\Bridges\ApplicationLatte\Template;
 use Tymy\Module\Debt\Manager\DebtManager;
 use Tymy\Module\Discussion\Manager\DiscussionManager;
 use Tymy\Module\Event\Manager\EventManager;
@@ -37,6 +38,7 @@ class DefaultPresenter extends SecuredPresenter
     public function beforeRender(): void
     {
         parent::beforeRender();
+        assert($this->template instanceof Template);
         $this->template->addFilter('lastLogin', function ($lastLogin): string {
             $diff = date("U") - strtotime($lastLogin);
             if ($diff == 1) {
@@ -78,6 +80,7 @@ class DefaultPresenter extends SecuredPresenter
 
     public function renderDefault(): void
     {
+        assert($this->template instanceof Template);
         $this->template->liveUsers = $this->userManager->getLiveUsers();
         $this->template->discussions = $this->discussionManager->getListUserAllowed($this->user->getId());
         $this->template->users = $this->userManager->getListOrder(null, "id", "last_login DESC");

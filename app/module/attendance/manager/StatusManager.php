@@ -64,6 +64,7 @@ class StatusManager extends BaseManager
         if ($row === null) {
             return null;
         }
+        assert($row instanceof ActiveRow);
 
         $status = parent::map($row, $force);
         assert($status instanceof Status);
