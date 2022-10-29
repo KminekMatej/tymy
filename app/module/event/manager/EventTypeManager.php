@@ -39,10 +39,10 @@ class EventTypeManager extends BaseManager
         if ($row === null) {
             return null;
         }
+        assert($row instanceof ActiveRow);
 
-        /* @var $eventType EventType */
-        /* @var $row ActiveRow */
         $eventType = parent::map($row, $force);
+        assert($eventType instanceof EventType);
 
         $statuses = $this->statusManager->getByEventTypeId($row->id);
 
@@ -99,7 +99,7 @@ class EventTypeManager extends BaseManager
         $typesIndexed = [];
 
         foreach ($types as $type) {
-            /* @var $type EventType */
+            assert($type instanceof EventType);
             $typesIndexed[$type->getCode()] = $type;
         }
 

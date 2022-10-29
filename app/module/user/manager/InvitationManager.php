@@ -98,8 +98,8 @@ class InvitationManager extends BaseManager
 
         $createdRow = $this->createByArray($data);
 
-        /* @var $invitation Invitation */
         $invitation = $this->map($createdRow);
+        assert($invitation instanceof Invitation);
 
         if ($invitation->getEmail()) {
             $this->notifyByEmail($invitation);

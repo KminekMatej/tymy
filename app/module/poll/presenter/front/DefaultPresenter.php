@@ -36,8 +36,8 @@ class DefaultPresenter extends SecuredPresenter
 
     public function renderPoll(?string $resource = null): void
     {
-        /* @var $poll Poll */
         $poll = $this->pollManager->getById($this->parseIdFromWebname($resource));
+        assert($poll instanceof Poll);
         $this->template->users = $this->userManager->getIdList();
 
         $this->addBreadcrumb($poll->getCaption(), $this->link(":Poll:Default:", $poll->getWebName()));

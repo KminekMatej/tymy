@@ -37,8 +37,8 @@ class FcmPresenter extends SecuredPresenter
 
         $deviceId = $this->requestData;
 
-        /* @var $subscriber Subscriber */
         $subscriber = $this->manager->getByUserAndSubscription($this->user->getId(), $deviceId);
+        assert($subscriber instanceof Subscriber);
 
         if ($subscriber) {
             $this->respondOk($subscriber->jsonSerialize());

@@ -25,8 +25,7 @@ class ExportPresenter extends SecuredPresenter
             $this->respondNotFound();
         }
 
-        $csvData = array_map(fn($entity) => /* @var $entity User */
-            $entity->csvSerialize(), $users);
+        $csvData = array_map(fn($entity) => $entity->csvSerialize(), $users);
 
         $response = new ComposedCsvResponse($csvData, 'users' . ($status ? "-$status" : "") . '.csv', true);
         $response->setGlue(ComposedCsvResponse::COMMA);

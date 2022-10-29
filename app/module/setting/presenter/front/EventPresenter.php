@@ -69,8 +69,8 @@ class EventPresenter extends SettingBasePresenter
 
         //RENDERING EVENT DETAIL
         $eventId = $this->parseIdFromWebname($resource);
-        /* @var $eventObj Event */
         $eventObj = $this->eventManager->getById($eventId);
+        assert($eventObj instanceof Event);
         if ($eventObj == null) {
             $this->flashMessage($this->translator->translate("event.errors.eventNotExists", null, ['id' => $eventId]), "danger");
             $this->redirect(':Setting:Event:');

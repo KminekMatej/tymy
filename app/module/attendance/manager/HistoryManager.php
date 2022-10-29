@@ -40,9 +40,9 @@ class HistoryManager extends BaseManager
             return null;
         }
 
-        /* @var $history History */
-        /* @var $row ActiveRow */
+        assert($row instanceof ActiveRow);
         $history = parent::map($row, $force);
+        assert($history instanceof History);
 
         $history->setUser($this->userManager->getSimpleUser($history->getUserId()));
 
@@ -84,7 +84,7 @@ class HistoryManager extends BaseManager
      */
     public function canRead($entity, int $userId): bool
     {
-        /* @var $entity Event */
+        assert($entity instanceof Event);
         return $entity->getViewRightName() ? $this->user->isAllowed($this->user->getId(), Privilege::USR($entity->getViewRightName())) : true;
     }
 

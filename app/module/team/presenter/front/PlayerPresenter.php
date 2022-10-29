@@ -89,9 +89,9 @@ class PlayerPresenter extends SecuredPresenter
 
     public function renderDefault($player): void
     {
-        /* @var $user User */
         $userId = $this->parseIdFromWebname($player);
         $user = $this->userManager->getById($userId);
+        assert($user instanceof User);
 
         if (!$user instanceof BaseModel) {
             $this->flashMessage($this->translator->translate("common.alerts.userNotFound", null, ['id' => $userId]), "danger");
@@ -111,7 +111,6 @@ class PlayerPresenter extends SecuredPresenter
 
     public function handleDelete($player): void
     {
-        /* @var $user User */
         $userId = $this->parseIdFromWebname($player);
 
         try {
@@ -132,6 +131,7 @@ class PlayerPresenter extends SecuredPresenter
         /* @var $file FileUpload */
         $file = $files["files"][0] ?? null;
         if ($file && $file->isImage() && $file->isOk()) {
+            assert($file instanceof FileUpload);
             $type = null;
             $image = Image::fromFile($file->getTemporaryFile(), $type);
             try {
@@ -165,9 +165,6 @@ class PlayerPresenter extends SecuredPresenter
     public function userConfigFormSuccess(Form $form, $values): void
     {
         $userId = (int) $values->id;
-
-        /* @var $oldUser User */
-        $this->userManager->getById($userId);
 
         try {
             if ($userId !== 0) {

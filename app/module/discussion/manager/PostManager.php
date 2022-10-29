@@ -126,10 +126,11 @@ class PostManager extends BaseManager
         if ($row === null) {
             return null;
         }
+        assert($row instanceof ActiveRow);
 
         $post = parent::map($row, $force);
 
-        /* @var $post Post */
+        assert($post instanceof Post);
         if (!$this->inBbCode) {
             $post->setPost(BbService::bb2Html($post->getPost()));
         }
@@ -146,7 +147,6 @@ class PostManager extends BaseManager
             $post->setUpdatedAtStr($post->getUpdatedAt()->format(BaseModel::DATETIME_CZECH_NO_SECS_FORMAT));
         }
 
-        /* @var $row ActiveRow */
         $post->setReactions($this->getReactions($post->getId()));
 
         return $post;
@@ -310,7 +310,7 @@ class PostManager extends BaseManager
      */
     public function getAllowedReaders(BaseModel $record): array
     {
-        /* @var $record Post */
+        assert($record instanceof Post);
         return $this->discussionManager->getAllowedReadersById($record->getDiscussionId());
     }
 

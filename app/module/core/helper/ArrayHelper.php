@@ -151,8 +151,7 @@ class ArrayHelper
             return [];
         }
 
-        return array_map(fn($entity) => /* @var $entity BaseModel */
-$entity->jsonSerialize(), $entities);
+        return array_map(fn($entity) => $entity->jsonSerialize(), $entities);
     }
 
     /**

@@ -48,8 +48,8 @@ class PermissionManager extends BaseManager
             return null;
         }
 
-        /* @var $permission Permission */
         $permission = parent::map($row, $force);
+        assert($permission instanceof Permission);
 
         $permission->setWebname(Strings::webalize($permission->getId() . "-" . $permission->getName()));
 
@@ -337,7 +337,7 @@ class PermissionManager extends BaseManager
         $permissions = $this->getList();
 
         foreach ($permissions as $permission) {
-            /* @var $permission Permission */
+            assert($permission instanceof Permission);
             if ($permission->getWebname() == $webname) {
                 return $permission;
             }

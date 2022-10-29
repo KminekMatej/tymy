@@ -31,8 +31,8 @@ class StatusSetManager extends BaseManager
 
     public function map(?IRow $row, $force = false): ?BaseModel
     {
-        /* @var $statusSet StatusSet */
         $statusSet = parent::map($row, $force);
+        assert($statusSet instanceof StatusSet);
 
         $statusSet->setWebname($statusSet->getId() . "-" . Strings::webalize($statusSet->getName()));
 

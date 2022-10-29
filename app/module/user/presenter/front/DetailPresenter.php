@@ -44,8 +44,8 @@ class DetailPresenter extends BasePresenter
 
         $this->template->addFilter("statusName", function (int $statusId) {
             if (!array_key_exists($statusId, $this->statusNameCache)) {
-                /* @var $status Status */
                 $status = $this->statusManager->getById($statusId);
+                assert($status instanceof Status);
                 $this->statusNameCache[$statusId] = $status !== null ? $status->getCaption() : "?";
             }
 

@@ -26,8 +26,7 @@ class InvitationPresenter extends SecuredPresenter
         $this->addBreadcrumb($this->translator->translate("team.team", 1), $this->link(":Team:Default:"));
         $this->addBreadcrumb($this->translator->translate("team.invitation", 2), $this->link(":Team:Invitation:"));
 
-        $this->template->addFilter("loadUser", fn(int $userId): ?\Tymy\Module\Core\Model\BaseModel => /* @var $user User */
-$this->userManager->getById($userId));
+        $this->template->addFilter("loadUser", fn(int $userId): ?User => $this->userManager->getById($userId));
     }
 
     public function renderDefault(): void

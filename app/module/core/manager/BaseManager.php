@@ -395,7 +395,7 @@ abstract class BaseManager
         $inserts = [];
 
         foreach ($this->getScheme() as $field) {
-            /* @var $field Field */
+            assert($field instanceof Field);
             if ($field->getMandatory() && !array_key_exists($field->getProperty(), $array)) {
                 $this->responder->E4013_MISSING_INPUT($field->getProperty());
             }
@@ -442,7 +442,7 @@ abstract class BaseManager
         $sch = $scheme ?: $this->getScheme();
 
         foreach ($sch as $field) {
-            /* @var $field Field */
+            assert($field instanceof Field);
             if (!array_key_exists($field->getProperty(), $array)) { //this field is not mentioned in update data, fill it only if its update field
                 if ($field->getColumn() == "updated_user_id" && !empty($this->user)) {
                     $additionalUpdates[$field->getColumn()] = $this->user->getId();
@@ -688,7 +688,7 @@ abstract class BaseManager
         }
 
         foreach ($this->getScheme() as $dbField) {
-            /* @var $dbField Field */
+            assert($dbField instanceof Field);
             if ($dbField->getProperty() === $propertyName) {
                 return $dbField->getColumn();
             }

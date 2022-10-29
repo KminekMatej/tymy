@@ -43,8 +43,8 @@ class DefaultPresenter extends SecuredPresenter
 
     private function requestGenerateKey(string $team): void
     {
-        /* @var $tk TransferKey */
         $tk = $this->manager->generateNewTk($team);
+        assert($tk instanceof TransferKey);
 
         $this->respondOk([
             "transferKey" => $tk->getTransferKey(),

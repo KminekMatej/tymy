@@ -65,8 +65,8 @@ class StatusManager extends BaseManager
             return null;
         }
 
-        /* @var $status Status */
         $status = parent::map($row, $force);
+        assert($status instanceof Status);
 
         $status->setStatusSetName($row->ref(StatusSet::TABLE)->name);
 

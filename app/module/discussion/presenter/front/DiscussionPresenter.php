@@ -54,8 +54,8 @@ class DiscussionPresenter extends SecuredPresenter
             $this->sendPayload();   //terminate to avoid jumping into render function
         }
 
-        /* @var $post Post */
         $post = $this->postManager->getById($postId);
+        assert($post instanceof Post);
 
         $this->postManager->react($post->getDiscussionId(), $postId, $this->user->getId(), $reaction, $remove);
 

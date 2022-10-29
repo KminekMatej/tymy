@@ -83,8 +83,8 @@ class PermissionPresenter extends SettingBasePresenter
     {
         $bind = $this->getRequest()->getPost();
         try {
-            /* @var $createdPermission Permission */
             $createdPermission = $this->permissionManager->create($this->composePermissionData($bind["changes"]));
+            assert($createdPermission instanceof Permission);
             $this->flashMessage($this->translator->translate("common.alerts.created"), 'success');
             $this->redirect(":Setting:Permission:", $createdPermission->getWebname());
         } catch (TymyResponse $tResp) {

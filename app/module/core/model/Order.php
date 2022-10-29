@@ -31,7 +31,7 @@ class Order
         $outOrders = [];
 
         foreach ($orders as $order) {
-            /* @var $order Order */
+            assert($order instanceof Order);
             $outOrders[] = "{$order->getColumn()} {$order->getOrder()}";
         }
 

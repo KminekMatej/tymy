@@ -96,7 +96,7 @@ class DefaultPresenter extends SecuredPresenter
         $max = 0;
         $jerseyList = [];
         foreach ($allPlayers as $player) {
-            /* @var $player User */
+            assert($player instanceof User);
             if ($player->getJerseyNumber() != "") {
                 $jNumber = (int) $player->getJerseyNumber();
                 if ($jNumber < $min && $jNumber > -100) {

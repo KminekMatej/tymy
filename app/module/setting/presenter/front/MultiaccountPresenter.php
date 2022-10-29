@@ -38,7 +38,6 @@ class MultiaccountPresenter extends SettingBasePresenter
 
         $form->onSuccess[] = function (Form $form, stdClass $values): void {
             try {
-                /* @var $multiaccountManager MultiaccountManager */
                 $this->multiaccountManager->create([
                     "login" => $values->username,
                     "password" => $values->password,

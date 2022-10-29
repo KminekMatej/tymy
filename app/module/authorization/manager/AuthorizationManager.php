@@ -53,7 +53,7 @@ class AuthorizationManager implements IAuthorizator
         $object = new $class();
 
         foreach ($scheme as $field) {
-            /* @var $field Field */
+            assert($field instanceof Field);
             $setField = "set" . ucfirst($field->getProperty());
             $column = $field->getColumn();
 
@@ -75,8 +75,8 @@ class AuthorizationManager implements IAuthorizator
             $this->permissionCache[$type] = [];
             $typePermissions = $this->teamDatabase->table(Permission::TABLE)->where("right_type", $type)->fetchAll();
             foreach ($typePermissions as $typePermissionRow) {
-                /* @var $permission Permission */
                 $permission = $typePermissionRow ? $this->map(Permission::class, PermissionMapper::scheme(), $typePermissionRow) : null;
+                assert($permission instanceof Permission);
                 $this->permissionCache[$type][$permission->getName()] = $permission;
             }
         }

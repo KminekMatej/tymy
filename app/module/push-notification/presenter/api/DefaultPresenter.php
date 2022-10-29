@@ -34,8 +34,8 @@ class DefaultPresenter extends SecuredPresenter
         }
 
         $subscription = \json_encode($this->requestData, JSON_THROW_ON_ERROR);
-        /* @var $subscriber Subscriber */
         $subscriber = $this->manager->getByUserAndSubscription($this->user->getId(), $subscription);
+        assert($subscriber instanceof Subscriber);
 
         if ($subscriber) {
             $this->respondOk($subscriber->jsonSerialize());

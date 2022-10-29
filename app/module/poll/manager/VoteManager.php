@@ -121,7 +121,7 @@ class VoteManager extends BaseManager
     private function userVoted(Poll $poll, int $userId): bool
     {
         foreach ($poll->getVotes() as $vote) {
-            /* @var $vote Vote */
+            assert($vote instanceof Vote);
             if ($vote->getUserId() === $userId) {
                 return true;
             }

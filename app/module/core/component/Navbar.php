@@ -57,8 +57,8 @@ class NavbarControl extends Control
 
     private function initPlayers(): void
     {
-        /* @var $me User2 */
         $me = $this->userManager->getById($this->user->getId());
+        assert($me instanceof User2);
         $users = $this->userManager->getList();
         $this->template->counts = $this->userManager->getCounts($users);
         $this->template->playersWarnings = $me->getWarnings();
@@ -104,7 +104,7 @@ class NavbarControl extends Control
 
     public function fileLoad(Form $form, $values): void
     {
-        /* @var $file FileUpload */
+        assert($file instanceof FileUpload);
         $file = $values['file'];
 
         if ($file->isOk()) {

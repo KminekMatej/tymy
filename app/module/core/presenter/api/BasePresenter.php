@@ -157,22 +157,22 @@ class BasePresenter extends RootPresenter
         Debugger::log($exc->getMessage(), ILogger::EXCEPTION);
 
         if ($exc instanceof \Tymy\Module\Core\Exception\DeleteIntegrityException) {
-            /* @var $exc DeleteIntegrityException */
+            assert($exc instanceof DeleteIntegrityException);
             $this->responder->E4016_DELETE_BLOCKED_BY($exc->fkTable, $exc->blockingIds);
         }
 
         if ($exc instanceof \Tymy\Module\Core\Exception\UpdateIntegrityException) {
-            /* @var $exc UpdateIntegrityException */
+            assert($exc instanceof UpdateIntegrityException);
             $this->responder->E4017_UPDATE_BLOCKED_BY($exc->fkTable, $exc->blockingIds);
         }
 
         if ($exc instanceof \Tymy\Module\Core\Exception\IntegrityException) {
-            /* @var $exc IntegrityException */
+            assert($exc instanceof IntegrityException);
             $this->responder->E4007_RELATION_PROHIBITS($exc->failingField);
         }
 
         if ($exc instanceof \Tymy\Module\Core\Exception\MissingInputException) {
-            /* @var $exc IntegrityException */
+            assert($exc instanceof IntegrityException);
             $this->responder->E4013_MISSING_INPUT($exc->getMessage());
         }
 
@@ -273,8 +273,7 @@ class BasePresenter extends RootPresenter
             return [];
         }
 
-        return array_map(fn($entity) => /* @var $entity BaseModel */
-            $entity->jsonSerialize(), $entities);
+        return array_map(fn($entity) => $entity->jsonSerialize(), $entities);
     }
 
     /**

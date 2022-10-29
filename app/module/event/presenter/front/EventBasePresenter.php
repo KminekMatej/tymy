@@ -73,7 +73,7 @@ class EventBasePresenter extends SecuredPresenter
         $feed = [];
 
         foreach ($events as $event) {
-            /* @var $event Event */
+            assert($event instanceof Event);
             $feed[] = [
                 "id" => $event->getId(),
                 "title" => $event->getCaption(),

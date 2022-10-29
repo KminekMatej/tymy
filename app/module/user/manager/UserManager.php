@@ -185,8 +185,8 @@ class UserManager extends BaseManager
     {
         parent::toBoolData($array, ["anonymousResults", "changeableVotes"]);
 
-        /* @var $userModel User */
         $userModel = $this->getById($id);
+        assert($userModel instanceof User);
 
         if ($userModel->getStatus() == User::STATUS_INIT && isset($array["status"]) && $array["status"] != User::STATUS_INIT) {
             if ($array["status"] == User::STATUS_DELETED) {
@@ -217,8 +217,8 @@ class UserManager extends BaseManager
      * @return User|null */
     public function map(?IRow $row, bool $force = false): ?BaseModel
     {
-        /* @var $user User */
         $user = parent::map($row, $force);
+        assert($user instanceof User);
 
         if ($row === null) {
             return null;
@@ -369,17 +369,17 @@ class UserManager extends BaseManager
 
         $createdRow = $this->createByArray($array);
 
-        /* @var $registeredUser User */
         $registeredUser = $this->map($createdRow);
+        assert($registeredUser instanceof User);
 
         $allAdmins = $this->getUsersWithPrivilege(Privilege::SYS("USR_UPDATE"));
 
         if ($invitation === null) { //send registration email only if this is blank registration from web, not from invitation
             foreach ($allAdmins as $admin) {
+                assert($admin instanceof User);
                 if (empty($admin->getEmail())) {  //skip admins without email
                     continue;
                 }
-                /* @var $admin User */
                 $this->mailService->mailUserRegistered($admin->getCallName(), $admin->getEmail(), $registeredUser->getLogin(), $registeredUser->getEmail(), $registeredUser->getFirstName(), $registeredUser->getLastName(), $array["note"] ?? null);
             }
         } else {    //mark invitation request as accepted. Cannot from invitationManager, since that would caus circullar reference
@@ -704,8 +704,8 @@ class UserManager extends BaseManager
             $this->respondNotFound(User::MODULE);
         }
 
-        /* @var $user User */
         $user = $this->getById($userId);
+        assert($user instanceof User);
 
         if (!$user->getCanLogin() || !in_array($user->getStatus(), [User::STATUS_PLAYER, User::STATUS_MEMBER, User::STATUS_SICK])) {
             $this->respondBadRequest($this->translator->translate("common.alerts.pwdResetFailed"));
@@ -800,7 +800,7 @@ class UserManager extends BaseManager
         ];
 
         foreach ($users as $user) {
-            /* @var $user User */
+            assert($user instanceof User);
             $this->userCounts["ALL"]++;
             $this->userCounts[$user->getStatus()]++;
             if ($user->getStatus() !== "DELETED") {
@@ -827,7 +827,7 @@ class UserManager extends BaseManager
     {
         $count = 0;
         foreach ($users as $user) {
-            /* @var $user User */
+            assert($user instanceof User);
             $count += $user->getWarnings();
         }
 
@@ -844,7 +844,7 @@ class UserManager extends BaseManager
         $byTypeAndId = [];
 
         foreach ($users as $user) {
-            /* @var $user User */
+            assert($user instanceof User);
             if (!array_key_exists($user->getStatus(), $byTypeAndId)) {
                 $byTypeAndId[$user->getStatus()] = [];
             }

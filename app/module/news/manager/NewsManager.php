@@ -63,7 +63,7 @@ class NewsManager extends BaseManager
      */
     public function getAllowedReaders(BaseModel $record): array
     {
-        /* @var $record Notice */
+        assert($record instanceof Notice);
         return $this->getAllUserIds();
     }
 
@@ -92,8 +92,8 @@ class NewsManager extends BaseManager
      */
     public function getListUserAllowed(): array
     {
-        /* @var $user User */
         $user = $this->userManager->getById($this->user->getId());
+        assert($user instanceof User);
         $limit = (new DateTime("2019-01-01"))->setTime(0, 0, 0);
 
         $news = $this->mapAll(

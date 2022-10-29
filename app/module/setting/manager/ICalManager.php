@@ -34,7 +34,7 @@ class ICalManager extends BaseManager
      */
     public function canEdit(BaseModel $entity, int $userId): bool
     {
-        /* @var $entity ICal */
+        assert($entity instanceof ICal);
         return $entity->getUserId() === $userId;
     }
 
@@ -49,8 +49,8 @@ class ICalManager extends BaseManager
             return null;
         }
 
-        /* @var $iCal ICal */
         $iCal = parent::map($row, $force);
+        assert($iCal instanceof ICal);
 
         $iCal->setStatusIds($row->related(ICalItem::TABLE)->fetchPairs(null, "status_id"));
 
@@ -77,8 +77,8 @@ class ICalManager extends BaseManager
 
     public function delete(int $resourceId, ?int $subResourceId = null): int
     {
-        /* @var $iCal ICal */
         $iCal = $this->getById($resourceId);
+        assert($iCal instanceof ICal);
 
         if ($iCal->getUserId() !== $this->user->getId()) {
             $this->respondForbidden();
@@ -92,14 +92,14 @@ class ICalManager extends BaseManager
      */
     public function getAllowedReaders(BaseModel $record): array
     {
-        /* @var $record ICal */
+        assert($record instanceof ICal);
         return [$record->getUserId()];
     }
 
     public function read(int $resourceId, ?int $subResourceId = null): BaseModel
     {
-        /* @var $iCal ICal */
         $iCal = $this->getById($resourceId);
+        assert($iCal instanceof ICal);
 
         if ($iCal->getUserId() !== $this->user->getId()) {
             $this->respondForbidden();
@@ -110,8 +110,8 @@ class ICalManager extends BaseManager
 
     public function update(array $data, int $resourceId, ?int $subResourceId = null): BaseModel
     {
-        /* @var $iCal ICal */
         $iCal = $this->getById($subResourceId);
+        assert($iCal instanceof ICal);
 
         if ($iCal->getUserId() !== $resourceId) {
             $this->respondForbidden();

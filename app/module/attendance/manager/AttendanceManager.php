@@ -72,13 +72,13 @@ class AttendanceManager extends BaseManager
      */
     public function map(?IRow $row, bool $force = false): ?BaseModel
     {
-        assert($row instanceof ActiveRow);
         if ($row === null) {
             return null;
         }
+        assert($row instanceof ActiveRow);
 
-        assert($attendance instanceof Attendance);
         $attendance = parent::map($row, $force);
+        assert($attendance instanceof Attendance);
 
         if ($attendance->getPreStatusId()) {
             $attendance->setPreStatus($row->ref(Status::TABLE, "pre_status_id")->code);

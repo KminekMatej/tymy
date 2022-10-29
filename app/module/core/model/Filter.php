@@ -40,7 +40,7 @@ class Filter
         }
 
         foreach ($filters as $filter) {
-            /* @var $filter Filter */
+            assert($filter instanceof Filter);
             if ($filter->getOperator() === "#=") {
                 $selector->where("UPPER(`{$filter->getColumn()}`) = UPPER(?)", $filter->getValue());
             } else {

@@ -33,8 +33,8 @@ class DebtManager extends BaseManager
 
     public function map(?IRow $row, $force = false): ?BaseModel
     {
-        /* @var $debt Debt */
         $debt = parent::map($row, $force);
+        assert($debt instanceof Debt);
 
         $isTeamDebtManager = $this->user->isAllowed($this->user->getId(), Privilege::SYS("DEBTS_TEAM"));
 
@@ -130,7 +130,7 @@ class DebtManager extends BaseManager
      */
     public function getAllowedReaders(BaseModel $record): array
     {
-        /* @var $record Debt */
+        assert($record instanceof Debt);
         return [];
     }
 
@@ -281,7 +281,7 @@ class DebtManager extends BaseManager
     {
         $count = 0;
         foreach ($debts as $debt) {
-            /* @var $debt Debt */
+            assert($debt instanceof Debt);
             if ($debt->getPaymentPending()) {
                 $count++;
             }

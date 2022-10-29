@@ -35,10 +35,10 @@ class TeamManager extends BaseManager
         if ($row === null) {
             return null;
         }
+        assert($row instanceof ActiveRow);
 
-        /* @var $team Team */
-        /* @var $row ActiveRow */
         $team = parent::map($row, $force);
+        assert($team instanceof Team);
 
         $team->setExtendedSysName(str_replace(".tymy.cz", "", $this->httpRequest->getUrl()->getHost()));
 

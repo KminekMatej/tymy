@@ -132,7 +132,7 @@ class PushNotificationManager extends BaseManager
     {
         try {
             foreach ($subscribers as $subscriber) {
-                /* @var $subscriber Subscriber */
+                assert($subscriber instanceof Subscriber);
                 $report = $this->webPush->sendOneNotification(
                     Subscription::create(\json_decode($subscriber->getSubscription(), true, 512, JSON_THROW_ON_ERROR)), // subscription
                     \json_encode($notification->jsonSerialize(), JSON_THROW_ON_ERROR) // payload
@@ -154,7 +154,7 @@ class PushNotificationManager extends BaseManager
 
         //delete expired subscribers after sent
         foreach ($this->applePush->getExpiredSubscribers() as $subscriber) {
-            /* @var $subscriber Subscriber */
+            assert($subscriber instanceof Subscriber);
             $this->delete($subscriber->getId());
         }
     }
@@ -186,7 +186,7 @@ class PushNotificationManager extends BaseManager
         $webSubscriptions = [];
 
         foreach ($this->getByUsers($userIds) as $subscriber) {
-            /* @var $subscriber Subscriber */
+            assert($subscriber instanceof Subscriber);
             switch ($subscriber->getType()) {
                 case Subscriber::TYPE_WEB:
                     $webSubscriptions[] = $subscriber;
@@ -229,7 +229,7 @@ class PushNotificationManager extends BaseManager
                 continue; //do not notify myself
             }
 
-            /* @var $subscriber Subscriber */
+            assert($subscriber instanceof Subscriber);
             switch ($subscriber->getType()) {
                 case Subscriber::TYPE_WEB:
                     $webSubscriptions[] = $subscriber;

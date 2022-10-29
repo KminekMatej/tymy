@@ -24,8 +24,8 @@ class DetailPresenter extends EventBasePresenter
         $this->template->cptNotDecidedYet = $this->translator->translate('event.notDecidedYet');
 
         $eventId = $this->parseIdFromWebname($resource);
-        /* @var $event Event */
         $event = $this->eventManager->getById($eventId);
+        assert($event instanceof Event);
 
         if (!$event instanceof Event) {
             $this->flashMessage($this->translator->translate("event.errors.eventNotExists", null, ['id' => $eventId]), "danger");
@@ -58,7 +58,7 @@ class DetailPresenter extends EventBasePresenter
         //return array, first key is attendance type (PRE, POST), then code (YES/NO/LAT), then gender (male/female/unknown), then user
         $usersWithAttendance = [];
         foreach ($event->getAttendance() as $attendance) {
-            /* @var $attendance Attendance */
+            assert($attendance instanceof Attendance);
             $statusId = $attendance->getPostStatusId() ?: $attendance->getPreStatusId();
             $gender = $attendance->getUser()->getGender();
 

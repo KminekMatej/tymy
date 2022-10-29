@@ -130,7 +130,7 @@ abstract class RequestCase extends TestCase
                 $codeStr = ", code: {$requestLog->getHttpResponseCode()}/{$requestLog->getExpectCode()}";
                 $success = false;
             }
-            /* @var $requestLog RequestLog */
+            assert($requestLog instanceof RequestLog);
             $data = $requestLog->getPostData();
             $clrStart = "";
             $clrEnd = "";
@@ -207,7 +207,7 @@ abstract class RequestCase extends TestCase
         $presenterMock = $this->loadPresenter($request->getPresenterName());
         $presenterMock->setRequestData($data);
         $this->responder->presenterMock = $presenterMock;
-        /* @var $response IResponse */
+        assert($response instanceof IResponse);
         $response = $presenterMock->run($request);
         $httpResponse = $presenterMock->getHttpResponse();
         if (!$responseClass) {
