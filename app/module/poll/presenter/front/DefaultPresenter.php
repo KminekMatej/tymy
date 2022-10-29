@@ -66,7 +66,7 @@ class DefaultPresenter extends SecuredPresenter
             $votes[] = [
                 "optionId" => $optId,
                 "userId" => $userId ?: $this->user->getId(),    //make alien voting possible
-                $opt["type"] => $opt["type"] == "numericValue" ? (int) $opt["value"] : $opt["value"]
+                $opt["type"] => $opt["type"] == "numericValue" ? (float) $opt["value"] : $opt["value"]
             ];
         }
         $this->redrawControl("poll-results");

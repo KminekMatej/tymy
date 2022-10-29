@@ -19,7 +19,7 @@ class Vote extends BaseModel
     private int $pollId;
     private int $userId;
     private int $optionId;
-    private ?int $numericValue = null;
+    private ?float $numericValue = null;
     private ?bool $booleanValue = null;
     private ?string $stringValue = null;
     private ?int $updatedById = null;
@@ -40,7 +40,7 @@ class Vote extends BaseModel
         return $this->optionId;
     }
 
-    public function getNumericValue(): ?int
+    public function getNumericValue(): ?float
     {
         return $this->numericValue;
     }
@@ -83,7 +83,7 @@ class Vote extends BaseModel
         return $this;
     }
 
-    public function setNumericValue(?int $numericValue): static
+    public function setNumericValue(?float $numericValue): static
     {
         $this->numericValue = $numericValue;
         return $this;
