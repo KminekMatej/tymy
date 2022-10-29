@@ -116,7 +116,7 @@ abstract class BaseManager
 
     /**
      * Maps one active row to object
-     * @param ActiveRow|false|null $row
+     * @param IRow|null $row
      * @return BaseModel
      */
     public function map(?IRow $row, bool $force = false): ?BaseModel

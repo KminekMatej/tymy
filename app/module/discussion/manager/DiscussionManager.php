@@ -65,7 +65,7 @@ class DiscussionManager extends BaseManager
 
     /**
      * Maps one active row to object
-     * @param ActiveRow|false|null $row
+     * @param IRow|null $row
      * @param bool $force True to skip cache
      * @return Discussion|null
      */

@@ -452,9 +452,9 @@ class MigrationManager
     /**
      * Migrate one migration file
      *
-     * @param type $direction
+     * @param bool $direction True for UP
      */
-    private function migrateOne(Migration $mig, $direction = self::MIGRATION_UP): void
+    private function migrateOne(Migration $mig, bool $direction = self::MIGRATION_UP): void
     {
         $this->logg("Running migration from file " . $mig->getFile());
         $mig->setMigratingFrom($this->getLatestMigration());

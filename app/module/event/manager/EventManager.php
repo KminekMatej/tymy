@@ -44,7 +44,7 @@ class EventManager extends BaseManager
 
     /**
      * Maps one active row to object
-     * @param ActiveRow|false|null $row
+     * @param IRow|null $row
      * @param bool $force True to skip cache
      * @return Event|null
      */
