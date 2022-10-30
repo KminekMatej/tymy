@@ -571,6 +571,11 @@ class UserManager extends BaseManager
             $this->respondNotFound();
         }
 
+        //only administrators can change user roles
+        if (isset($data["roles"]) && $data["roles"] !== $this->userModel->getRoles() && !$this->user->isAllowed($this->user->getId(), Privilege::SYS("IS_ADMIN"))) {
+            $this->responder->E403_FORBIDDEN($this->translator->translate("team.alerts.changingRolesForbidden"));
+        }
+        
         $canEditFull = $this->user->isAllowed($this->user->getId(), Privilege::SYS("USR_UPDATE"));
         $editingMyself = $this->userModel->getId() === $this->user->getId();
 
@@ -579,10 +584,7 @@ class UserManager extends BaseManager
         }
 
         if (!$canEditFull) {
-            //editing myself - cannot edit roles, canEditCallName, status, login and callName (when user cannot edit callName)
-            if (isset($data["roles"]) && $data["roles"] !== $this->userModel->getRoles()) {
-                $this->responder->E403_FORBIDDEN($this->translator->translate("team.alerts.changingRolesForbidden"));
-            }
+            //editing myself - canEditCallName, status, login and callName (when user cannot edit callName)
             if (isset($data["canEditCallName"]) && $data["canEditCallName"] !== $this->userModel->getCanEditCallName()) {
                 $this->responder->E403_FORBIDDEN($this->translator->translate("team.alerts.changingCanEditCallnameForbidden"));
             }
