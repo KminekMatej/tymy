@@ -20,6 +20,7 @@ use Tymy\Module\PushNotification\Manager\NotificationGenerator;
 use Tymy\Module\PushNotification\Manager\PushNotificationManager;
 use Tymy\Module\User\Manager\UserManager;
 use Tymy\Module\User\Model\User;
+
 use function mb_strlen;
 
 /**

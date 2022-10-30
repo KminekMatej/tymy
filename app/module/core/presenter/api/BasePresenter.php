@@ -223,7 +223,7 @@ class BasePresenter extends RootPresenter
     /**
      * If resourceId is supplied, load desired object using supplied manager.
      * Fills resourceRow property and returns BaseModel (resourceRow mapped using BaseManager)
-     * 
+     *
      * @param int $resourceId
      * @param BaseManager $manager
      * @return BaseModel|null Model mapped
@@ -246,7 +246,7 @@ class BasePresenter extends RootPresenter
     /**
      * If subResourceId is supplied, load desired object using supplied manager.
      * Fills subResourceRow property and returns BaseModel (subResourceRow mapped using BaseManager)
-     * 
+     *
      * @param int $subResourceId
      * @param BaseManager $manager
      * @return BaseModel|null Model mapped

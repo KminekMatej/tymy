@@ -38,7 +38,7 @@ class PushNotificationManager extends BaseManager
 
     /**
      * Get Subscribers by userIds
-     * 
+     *
      * @param int[] $userIds User ids
      * @return Subscriber[]
      */

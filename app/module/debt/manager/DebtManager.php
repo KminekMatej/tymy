@@ -103,7 +103,7 @@ class DebtManager extends BaseManager
 
     /**
      * Inner function to check whether user can edit debt with specified data - to be used before the debt is actually created
-     * 
+     *
      * @param int|null $payeeId (null for team payee)
      * @param string $payeeType
      * @return bool

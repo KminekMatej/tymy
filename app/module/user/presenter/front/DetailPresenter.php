@@ -16,6 +16,7 @@ use Tymy\Module\Core\Manager\Responder;
 use Tymy\Module\Core\Presenter\Front\BasePresenter;
 use Tymy\Module\Event\Manager\EventManager;
 use Tymy\Module\Settings\Manager\ICalManager;
+
 use function mb_str_split;
 
 /**

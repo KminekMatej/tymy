@@ -317,7 +317,7 @@ abstract class BaseManager
     /**
      * Delete table row based on given table and id.
      * IDColumn can be changed if primary key is different than classic `id`
-     * 
+     *
      * @param int $id
      * @param string|null $table
      * @param string $idColumn
@@ -514,7 +514,7 @@ abstract class BaseManager
      * This function is meant to be overloaded only. In overloaded functions, <b>DO NOT call parent::metaMap</b>
      *
      * @internal Every override of this function should make this function as fast as possible between one request - using simpleCache when neccessary
-     * 
+     *
      * @param BaseModel $model
      * @param int $userId
      * @return void

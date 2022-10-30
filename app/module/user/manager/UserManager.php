@@ -26,6 +26,7 @@ use Tymy\Module\User\Mapper\UserMapper;
 use Tymy\Module\User\Model\Invitation;
 use Tymy\Module\User\Model\SimpleUser;
 use Tymy\Module\User\Model\User;
+
 use const TEAM_DIR;
 
 /**
