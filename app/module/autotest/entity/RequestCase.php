@@ -25,11 +25,9 @@ use Tymy\Module\Autotest\Entity\Assert;
 use Tymy\Module\Core\Manager\Responder;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Presenter\Api\BasePresenter;
-
 use const TEAM_DIR;
 use const TEST_DIR;
 
-use function GuzzleHttp\json_encode;
 
 /**
  * Envelope class for all api testing classes
@@ -200,7 +198,7 @@ abstract class RequestCase extends TestCase
 
         $this->logs[] = $log = new RequestLog($method, $url, $data);
 
-        $httpRequest = $this->httpRequestFactory->from($url, $method, json_encode($data));
+        $httpRequest = $this->httpRequestFactory->from($url, $method, \json_encode($data));
         $request = $this->createInitialRequest($httpRequest);
 
         Assert::type(Request::class, $request, "No route found for url $url");
