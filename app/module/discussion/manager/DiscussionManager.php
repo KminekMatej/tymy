@@ -11,6 +11,7 @@ use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Discussion\Mapper\DiscussionMapper;
 use Tymy\Module\Discussion\Model\Discussion;
 use Tymy\Module\Discussion\Model\NewInfo;
+use Tymy\Module\Discussion\Model\Post;
 use Tymy\Module\Permission\Manager\PermissionManager;
 use Tymy\Module\Permission\Model\Permission;
 use Tymy\Module\Permission\Model\Privilege;
@@ -24,6 +25,7 @@ use Tymy\Module\User\Manager\UserManager;
 class DiscussionManager extends BaseManager
 {
     private ?Discussion $discussion = null;
+    private array $newsCache;
 
     public function __construct(ManagerFactory $managerFactory, private PermissionManager $permissionManager, private UserManager $userManager)
     {
@@ -78,8 +80,7 @@ class DiscussionManager extends BaseManager
         $discussion = parent::map($row, $force);
         assert($discussion instanceof Discussion);
 
-        $discussion->setNewInfo(new NewInfo($discussion->getId(), $row->newInfo, $row->lastVisit));
-        $discussion->setNumberOfPosts($row->numberOfPosts);
+        $discussion->setNumberOfPosts($row->related(Post::TABLE)->count("id"));
         $discussion->setWebName(Strings::webalize($discussion->getId() . "-" . $discussion->getCaption()));
 
         return $discussion;
@@ -92,26 +93,42 @@ class DiscussionManager extends BaseManager
         $model->setCanWrite(empty($model->getWriteRightName()) || $this->user->isAllowed($this->user->getId(), Privilege::USR($model->getWriteRightName())));
         $model->setCanDelete($this->userManager->isAdmin() || (!empty($model->getDeleteRightName()) && $this->user->isAllowed($this->user->getId(), Privilege::USR($model->getDeleteRightName()))));
         $model->setCanStick($this->userManager->isAdmin() || (!empty($model->getStickyRightName()) && $this->user->isAllowed($this->user->getId(), Privilege::USR($model->getStickyRightName()))));
+
+        $model->setNewInfo($this->getNewInfo($model->getId()));
     }
 
-    public function getById(int $id, bool $force = false): ?BaseModel
+    /**
+     * Load user-related informations regarding this discussion
+     * @param int $discussionId
+     * @return NewInfo
+     */
+    private function getNewInfo(int $discussionId): NewInfo
     {
-        return $this->map($this->database->query("
-            SELECT `discussion`.*, `discussion_read`.`last_date` AS `lastVisit`, 
+        if (!isset($this->newsCache)) {
+            $this->newsCache = $this->database->query("
+            SELECT 
+            `" . Discussion::TABLE . "`.`id`, 
+            `" . Post::TABLE_READ . "`.`last_date` AS `lastVisit`, 
+            
             (
-                SELECT COUNT(`discussion_post`.`id`) 
-                FROM `discussion_post` 
-                WHERE `discussion_post`.`insert_date` > `discussion_read`.`last_date` AND `discussion_post`.`discussion_id` = `discussion`.`id`
+                SELECT COUNT(`" . Post::TABLE . "`.`id`) 
+                FROM `" . Post::TABLE . "` 
+                WHERE `" . Post::TABLE . "`.`insert_date` > `" . Post::TABLE_READ . "`.`last_date` AND `" . Post::TABLE . "`.`discussion_id` = " . Discussion::TABLE . ".`id`
             ) AS `newInfo`, 
+            
             (
-                SELECT COUNT(`discussion_post`.`id`) 
-                FROM `discussion_post` 
-                WHERE `discussion_post`.`discussion_id` = `discussion`.`id`
+                SELECT COUNT(`" . Post::TABLE . "`.`id`) 
+                FROM `" . Post::TABLE . "` 
+                WHERE `" . Post::TABLE . "`.`discussion_id` = " . Discussion::TABLE . ".`id`
             ) AS `numberOfPosts` 
-            FROM `discussion` 
-            LEFT JOIN `discussion_read` ON `discussion`.`id` = `discussion_read`.`discussion_id` AND
-            (`discussion_read`.`discussion_id`=`discussion`.`id`) AND (`discussion_read`.`user_id` = ?) 
-            WHERE `discussion`.`id` = ? ORDER BY `discussion`.`order_flag` ASC", $this->user->getId(), $id)->fetch());
+            FROM " . Discussion::TABLE . " 
+            LEFT JOIN `" . Post::TABLE_READ . "` ON " . Discussion::TABLE . ".`id` = `" . Post::TABLE_READ . "`.`discussion_id` AND (`" . Post::TABLE_READ . "`.`user_id` = ?) 
+            WHERE " . Discussion::TABLE . ".`id` = ? ORDER BY " . Discussion::TABLE . ".`order_flag` ASC", $this->user->getId(), $discussionId)->fetchPairs("id");
+        }
+
+        $niData = $this->newsCache[$discussionId];
+
+        return new NewInfo($discussionId, $niData["newInfo"], $niData["lastVisit"]);
     }
 
     /**
@@ -137,26 +154,16 @@ class DiscussionManager extends BaseManager
      */
     public function getListUserAllowed(int $userId): array
     {
+        $selector = $this->database->table($this->getTable())->order("order_flag ASC");
+
         $readPerms = $this->permissionManager->getUserAllowedPermissionNames($this->userManager->getById($this->user->getId()), Permission::TYPE_USER);
-        $readPermsQ = empty($readPerms) ? "" : "`discussion`.`read_rights` IN (?) OR";
-        $query = "
-            SELECT `discussion`.*, `discussion_read`.`last_date` AS `lastVisit`, 
-            (
-                SELECT COUNT(`discussion_post`.`id`) 
-                FROM `discussion_post` 
-                WHERE `discussion_post`.`insert_date` > `discussion_read`.`last_date` AND `discussion_post`.`discussion_id` = `discussion`.`id`
-            ) AS `newInfo`, 
-            (
-                SELECT COUNT(`discussion_post`.`id`) 
-                FROM `discussion_post` 
-                WHERE `discussion_post`.`discussion_id` = `discussion`.`id`
-            ) AS `numberOfPosts` 
-            FROM `discussion` 
-            LEFT JOIN `discussion_read` ON `discussion`.`id` = `discussion_read`.`discussion_id` AND
-            (`discussion_read`.`discussion_id`=`discussion`.`id`) AND (`discussion_read`.`user_id` = ?) 
-            WHERE ($readPermsQ `discussion`.`read_rights` IS NULL OR
-            TRIM(`discussion`.`read_rights`) = '') ORDER BY `discussion`.`order_flag` ASC";
-        $selector = empty($readPerms) ? $this->database->query($query, $userId) : $this->database->query($query, $userId, $readPerms ?: "");
+
+        if (!empty($readPerms)) {
+            $selector->where("read_rights IS NULL OR read_rights IN (?)", $readPerms);
+        } else {
+            $selector->where("read_rights IS NULL");
+        }
+
         return $this->mapAll($selector->fetchAll());
     }
 
@@ -165,23 +172,7 @@ class DiscussionManager extends BaseManager
      */
     public function getList(?array $idList = null, string $idField = "id", ?int $limit = null, ?int $offset = null, ?string $order = null): array
     {
-        $query = "
-            SELECT `discussion`.*, `discussion_read`.`last_date` AS `lastVisit`, 
-            (
-                SELECT COUNT(`discussion_post`.`id`) 
-                FROM `discussion_post` 
-                WHERE `discussion_post`.`insert_date` > `discussion_read`.`last_date` AND `discussion_post`.`discussion_id` = `discussion`.`id`
-            ) AS `newInfo`, 
-            (
-                SELECT COUNT(`discussion_post`.`id`) 
-                FROM `discussion_post` 
-                WHERE `discussion_post`.`discussion_id` = `discussion`.`id`
-            ) AS `numberOfPosts` 
-            FROM `discussion` 
-            LEFT JOIN `discussion_read` ON `discussion`.`id` = `discussion_read`.`discussion_id` AND
-            (`discussion_read`.`discussion_id`=`discussion`.`id`) AND (`discussion_read`.`user_id` = ?) 
-            WHERE 1 ORDER BY `discussion`.`order_flag` ASC";
-        return $this->mapAll($this->database->query($query, $this->user->getId())->fetchAll());
+        return $this->mapAll($this->database->table($this->getTable())->order("order_flag ASC")->fetchAll());
     }
 
     /**
