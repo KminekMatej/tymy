@@ -25,9 +25,9 @@ use Tymy\Module\Autotest\Entity\Assert;
 use Tymy\Module\Core\Manager\Responder;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Presenter\Api\BasePresenter;
+
 use const TEAM_DIR;
 use const TEST_DIR;
-
 
 /**
  * Envelope class for all api testing classes
