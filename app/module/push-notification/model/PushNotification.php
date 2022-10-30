@@ -11,11 +11,19 @@ use JsonSerializable;
  */
 class PushNotification implements JsonSerializable
 {
+    private string $type;
     private array $params;
+    private int $userId;
+    private int $teamId; 
+    private string $title; 
+    private string $message; 
+    private ?string $imageUrl = null; 
+    private ?string $url = null;
+    private ?int $badge = null;
 
-    public function __construct(private string $type, private int $userId, private int $teamId, private string $title, private string $message, private ?string $imageUrl, private ?int $badge, array $params = [])
+    public function __construct(string $type)
     {
-        $this->params = $params + ["type" => $type];
+        $this->params = ["type" => $type];
     }
 
     public function getType(): string
@@ -43,6 +51,11 @@ class PushNotification implements JsonSerializable
         return $this->message;
     }
 
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
     public function getImageUrl(): ?string
     {
         return $this->imageUrl;
@@ -53,12 +66,57 @@ class PushNotification implements JsonSerializable
         return $this->badge;
     }
 
-    /**
-     * @return mixed[]
-     */
     public function getParams(): array
     {
         return $this->params;
+    }
+
+    public function setType(string $type)
+    {
+        $this->type = $type;
+        return $this;
+    }
+
+    public function setUserId(int $userId)
+    {
+        $this->userId = $userId;
+        return $this;
+    }
+
+    public function setTeamId(int $teamId)
+    {
+        $this->teamId = $teamId;
+        return $this;
+    }
+
+    public function setTitle(string $title)
+    {
+        $this->title = $title;
+        return $this;
+    }
+
+    public function setMessage(string $message)
+    {
+        $this->message = $message;
+        return $this;
+    }
+
+    public function setImageUrl(?string $imageUrl)
+    {
+        $this->imageUrl = $imageUrl;
+        return $this;
+    }
+
+    public function setUrl(?string $url)
+    {
+        $this->url = $url;
+        return $this;
+    }
+
+    public function setBadge(?int $badge)
+    {
+        $this->badge = $badge;
+        return $this;
     }
 
     public function addParam(string $name, $value): static
@@ -78,6 +136,10 @@ class PushNotification implements JsonSerializable
 
         if (isset($this->imageUrl)) {
             $array["image"] = $this->imageUrl;
+        }
+
+        if (isset($this->url)) {
+            $array["url"] = $this->url;
         }
 
         if (isset($this->badge)) {
