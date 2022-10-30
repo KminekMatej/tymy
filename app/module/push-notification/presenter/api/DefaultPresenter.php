@@ -34,6 +34,7 @@ class DefaultPresenter extends SecuredPresenter
         }
 
         $subscription = \json_encode($this->requestData, JSON_THROW_ON_ERROR);
+        assert($this->manager instanceof PushNotificationManager);
         $subscriber = $this->manager->getByUserAndSubscription($this->user->getId(), $subscription);
         assert($subscriber instanceof Subscriber);
 
@@ -47,7 +48,7 @@ class DefaultPresenter extends SecuredPresenter
         ]);
 
         if (!$createdSubscription) {
-            $this->responder->E4011_CREATE_FAILED(Subscriber::MODULE);
+            $this->responder->E4009_CREATE_FAILED(Subscriber::MODULE);
         }
 
         $this->respondOkCreated($createdSubscription->jsonSerialize());

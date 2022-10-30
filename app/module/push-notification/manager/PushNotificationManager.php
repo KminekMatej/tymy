@@ -38,8 +38,8 @@ class PushNotificationManager extends BaseManager
 
     /**
      * Get Subscribers by userIds
-     *
-     * @param int[] User ids
+     * 
+     * @param int[] $userIds User ids
      * @return Subscriber[]
      */
     private function getByUsers(array $userIds): array
@@ -117,7 +117,6 @@ class PushNotificationManager extends BaseManager
      *
      * @param PushNotification $notification Push notification object to be sent. Can be generated using NotificationGenerator
      * @param int $userId ID of user to send Push notification
-     * @param bool $flush Instant flush message
      */
     public function notifyUser(PushNotification $notification, int $userId): void
     {
@@ -216,7 +215,8 @@ class PushNotificationManager extends BaseManager
     /**
      * Notify every subscriber with PushNotification object.
      *
-     * @param int[] $userIds
+     * @param PushNotification $notification
+     * @return void
      */
     public function notifyEveryone(PushNotification $notification): void
     {
@@ -225,6 +225,7 @@ class PushNotificationManager extends BaseManager
         $webSubscriptions = [];
 
         foreach ($this->getList() as $subscriber) {
+            assert($subscriber instanceof Subscriber);
             if ($subscriber->getUserId() == $this->user->getId()) {
                 continue; //do not notify myself
             }

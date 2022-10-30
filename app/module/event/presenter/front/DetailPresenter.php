@@ -92,11 +92,11 @@ class DetailPresenter extends EventBasePresenter
     /**
      * @return array<string, mixed>
      */
-    private function getEventCaptions($event, $eventTypes): array
+    private function getEventCaptions(Event $event, array $eventTypes): array
     {
         return [
-            "myPreStatusCaption" => empty($event->myAttendance->preStatus) || $event->myAttendance->preStatus == "UNKNOWN" ? "not-set" : $eventTypes[$event->type]->preStatusSet[$event->myAttendance->preStatus]->code,
-            "myPostStatusCaption" => empty($event->myAttendance->postStatus) || $event->myAttendance->postStatus == "UNKNOWN" ? "not-set" : $eventTypes[$event->type]->postStatusSet[$event->myAttendance->postStatus]->code,
+            "myPreStatusCaption" => empty($event->getMyAttendance()->getPreStatus()) || $event->getMyAttendance()->getPreStatus() == "UNKNOWN" ? "not-set" : $eventTypes[$event->getType()]->preStatusSet[$event->getMyAttendance()->getPreStatus()]->code,
+            "myPostStatusCaption" => empty($event->getMyAttendance()->getPostStatus()) || $event->getMyAttendance()->getPostStatus() == "UNKNOWN" ? "not-set" : $eventTypes[$event->getType()]->postStatusSet[$event->getMyAttendance()->getPostStatus()]->code,
         ];
     }
 

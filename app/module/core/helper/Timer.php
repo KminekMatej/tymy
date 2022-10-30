@@ -39,7 +39,6 @@ class Timer
      * Optionally, checkpoint can contain name, which will be written in log
      *
      * @param string $name
-     * @param bool $sum If this is a summed checkpoint
      */
     public static function checkpoint($name = null): void
     {

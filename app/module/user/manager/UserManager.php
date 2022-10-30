@@ -217,12 +217,14 @@ class UserManager extends BaseManager
      * @return User|null */
     public function map(?IRow $row, bool $force = false): ?BaseModel
     {
-        $user = parent::map($row, $force);
-        assert($user instanceof User);
-
         if ($row === null) {
             return null;
         }
+
+        assert($row instanceof ActiveRow);
+
+        $user = parent::map($row, $force);
+        assert($user instanceof User);
 
         $user->setFullName($user->getFirstName() . " " . $user->getLastName());
         $user->setPictureUrl($this->getPictureUrl($row->id));
@@ -316,8 +318,7 @@ class UserManager extends BaseManager
 
     /**
      * Check if user limit has been reached
-     *
-     * @param string $login
+     * @return bool
      */
     public function limitUsersReached(): bool
     {
@@ -389,6 +390,20 @@ class UserManager extends BaseManager
         }
 
         return $registeredUser;
+    }
+
+    /**
+     * Get user by its ID or null if not found
+     * @param int $id
+     * @param bool $force
+     * @return User|null
+     */
+    public function getById(int $id, bool $force = false): ?User
+    {
+        $user = parent::getById($id, $force);
+        assert($user instanceof User);
+
+        return $user;
     }
 
     /**
@@ -694,8 +709,10 @@ class UserManager extends BaseManager
 
     /**
      * Checks prerequisities, generate reset code, store it into database and send informational mail to the resetting user
-     *
-     * @param int $userId
+     * @param string $email
+     * @param string $hostname
+     * @param string $callbackUri
+     * @return void
      */
     public function pwdLost(string $email, string $hostname, string $callbackUri): void
     {

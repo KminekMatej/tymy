@@ -26,6 +26,7 @@ class RegisterPresenter extends BasePresenter
         }
 
         try {
+            assert($this->manager instanceof UserManager);
             $registeredUser = $this->manager->register($this->requestData);
         } catch (InvalidArgumentException $exc) {
             $this->respondBadRequest($exc->getMessage());

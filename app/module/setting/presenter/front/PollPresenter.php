@@ -77,7 +77,7 @@ class PollPresenter extends SettingBasePresenter
         //RENDERING POLL DETAIL
         $pollId = $this->parseIdFromWebname($resource);
         $this->poll = $this->pollManager->getById($pollId);
-        if ($this->poll == null) {
+        if (!$this->poll instanceof Poll) {
             $this->flashMessage($this->translator->translate("poll.errors.pollNotExists", null, ['id' => $pollId]), "danger");
             $this->redirect(':Setting:Poll:');
         }

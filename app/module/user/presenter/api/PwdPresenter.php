@@ -33,6 +33,7 @@ class PwdPresenter extends BasePresenter
             }
         }
 
+        assert($this->manager instanceof UserManager);
         $this->manager->pwdLost($this->requestData["email"], $this->requestData["hostname"], $this->requestData["callbackUri"]);
 
         $this->respondOk();
@@ -52,6 +53,7 @@ class PwdPresenter extends BasePresenter
             $this->respondBadRequest($code);
         }
 
+        assert($this->manager instanceof UserManager);
         $newPwd = $this->manager->pwdReset($code);
 
         $this->respondOk($newPwd);

@@ -69,6 +69,7 @@ class PlayerPresenter extends SecuredPresenter
 
         if ($player) {  //new player based on another user
             $user = $this->userManager->getById($this->parseIdFromWebname($player));
+            assert($user instanceof User);
             $newPlayer = $user->setStatus("PLAYER")
                 ->setEmail("")
                 ->setPictureUrl("");

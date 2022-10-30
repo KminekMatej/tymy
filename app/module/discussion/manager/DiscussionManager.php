@@ -49,6 +49,7 @@ class DiscussionManager extends BaseManager
     {
         if ($recordId) {
             $this->discussion = $this->loadRecord($recordId);
+            assert($this->discussion instanceof Discussion);
 
             if (!$this->discussion->getCanRead()) {
                 $this->responder->E4001_VIEW_NOT_PERMITTED(Discussion::MODULE, $recordId);

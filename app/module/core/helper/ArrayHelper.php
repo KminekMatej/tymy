@@ -82,7 +82,7 @@ class ArrayHelper
      * @param mixed $expected
      * @param mixed $actual
      * @param int $level = 0 (internal usage to avoid recursion overflow)
-     * @param type $objects
+     * @param mixed $objects
      * @throws Exception
      */
     public static function isEqual(mixed $expected, mixed $actual, int $level = 0, $objects = null): bool

@@ -14,10 +14,8 @@ class Field
     public const TYPE_STRING = "string";
     public const TYPE_DATETIME = "datetime";
 
-    /** @var mixed|null */
     private ?string $column = null;
 
-    /** @var mixed|null */
     private ?string $property = null;
 
     private bool $mandatory = false;

@@ -43,6 +43,7 @@ class DefaultPresenter extends SecuredPresenter
 
     private function requestGenerateKey(string $team): void
     {
+        assert($this->manager instanceof MultiaccountManager);
         $tk = $this->manager->generateNewTk($team);
         assert($tk instanceof TransferKey);
 
@@ -66,6 +67,7 @@ class DefaultPresenter extends SecuredPresenter
     private function requestRemoveTeam(string $team)
     {
         try {
+            assert($this->manager instanceof MultiaccountManager);
             $this->manager->delete($team);
         } catch (Exception $exc) {
             $this->handleException($exc);
@@ -76,6 +78,7 @@ class DefaultPresenter extends SecuredPresenter
 
     private function requestGetList(): void
     {
+        assert($this->manager instanceof MultiaccountManager);
         $teams = $this->manager->getListUserAllowed();
 
         $this->respondOk($this->arrayToJson($teams));

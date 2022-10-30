@@ -108,8 +108,8 @@ class FormFactory
     public function createStatusSetForm(Closure $onSuccess): Multiplier
     {
         return new Multiplier(function (string $statusSetId) use ($onSuccess): \Nette\Application\UI\Form {
-                assert($statusSet instanceof StatusSet);
                 $statusSet = $this->statusSetManager->getById((int) $statusSetId);
+                assert($statusSet instanceof StatusSet);
                 $form = new Form();
                 $form->addHidden("id", $statusSetId);
                 $form->addText("name", $this->translator->translate("settings.team"))->setValue($statusSet->getName())->setRequired();
@@ -155,8 +155,8 @@ class FormFactory
         }
 
         return new Multiplier(function (string $eventTypeId) use ($onSuccess, $ssList): \Nette\Application\UI\Form {
-                assert($eventType instanceof EventType);
                 $eventType = $this->eventTypeManager->getById((int) $eventTypeId);
+                assert($eventType instanceof EventType);
                 $form = new Form();
                 $form->addHidden("id", $eventTypeId);
                 $form->addText("code", $this->translator->translate("status.code"))

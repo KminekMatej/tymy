@@ -4,7 +4,7 @@ namespace Tymy\Module\User\Presenter\Front;
 
 use DateTimeZone;
 use Nette\Application\Responses\CallbackResponse;
-use Nette\Application\UI\Template;
+use Nette\Bridges\ApplicationLatte\Template;
 use Nette\Http\IRequest;
 use Nette\Http\Response;
 use Nette\Utils\Arrays;

@@ -23,6 +23,7 @@ class LivePresenter extends SecuredPresenter
             $this->respondNotAllowed();
         }
 
+        assert($this->manager instanceof UserManager);
         $liveUsers = $this->manager->getLiveUsers();
 
         $this->respondOk($liveUsers);

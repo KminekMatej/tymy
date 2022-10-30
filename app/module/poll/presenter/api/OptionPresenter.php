@@ -2,8 +2,10 @@
 
 namespace Tymy\Module\Poll\Presenter\Api;
 
+use Exception;
 use Tymy\Module\Core\Presenter\Api\SecuredPresenter;
 use Tymy\Module\Poll\Manager\OptionManager;
+use Tymy\Module\Poll\Manager\PollManager;
 
 /**
  * Description of OptionPresenter
@@ -47,6 +49,7 @@ class OptionPresenter extends SecuredPresenter
 
     private function requestGetList(int $pollId): void
     {
+        assert($this->manager instanceof OptionManager);
         $options = $this->manager->getPollOptions($pollId);
 
         $this->respondOk($this->arrayToJson($options));
@@ -61,8 +64,9 @@ class OptionPresenter extends SecuredPresenter
 
         //if creating multiple options (standard use), call special function
         try {
+            assert($this->manager instanceof OptionManager);
             $created = $this->manager->createMultiple($this->requestData, $resourceId);
-        } catch (\Exception $exc) {
+        } catch (Exception $exc) {
             $this->handleException($exc);
         }
 

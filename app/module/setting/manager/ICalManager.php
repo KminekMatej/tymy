@@ -3,8 +3,10 @@
 namespace Tymy\Module\Settings\Manager;
 
 use Nette\Database\IRow;
+use Nette\Database\Table\ActiveRow;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Settings\Mapper\ICalMapper;
 use Tymy\Module\Settings\Model\ICal;
 use Tymy\Module\Settings\Model\ICalItem;
@@ -22,7 +24,7 @@ class ICalManager extends BaseManager
     }
 
     /**
-     * @return \Tymy\Module\Core\Model\Field[]
+     * @return Field[]
      */
     protected function getScheme(): array
     {
@@ -48,6 +50,7 @@ class ICalManager extends BaseManager
         if ($row === null) {
             return null;
         }
+        assert($row instanceof ActiveRow);
 
         $iCal = parent::map($row, $force);
         assert($iCal instanceof ICal);
@@ -138,8 +141,9 @@ class ICalManager extends BaseManager
 
     /**
      * Update statuses which events this ical shall display
-     * @param int $exportId
+     * @param ICal $iCal
      * @param int[] $statusIds
+     * @return void
      */
     public function updateItems(ICal $iCal, array $statusIds): void
     {

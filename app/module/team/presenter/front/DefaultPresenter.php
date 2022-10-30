@@ -78,6 +78,7 @@ class DefaultPresenter extends SecuredPresenter
         $allMails = [];
         if ($users !== []) {
             foreach ($users as $u) {
+                assert($u instanceof User);
                 if ($u->getEmail()) {
                     $allMails[] = $u->getEmail();
                 }

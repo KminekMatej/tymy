@@ -3,11 +3,13 @@
 namespace Tymy\Module\Core\Manager;
 
 use Nette\Database\Explorer;
+use Nette\Database\Table\ActiveRow;
 use Nette\Security\User;
 use Tracy\Debugger;
 use Tracy\ILogger;
 use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\User\Manager\UserManager;
+use Tymy\Module\User\Model\User as User2;
 
 /**
  * Description of StringsManager
@@ -42,7 +44,13 @@ class StringsManager
      */
     private function getLc(): string
     {
-        $code = $this->user->isLoggedIn() ? $this->userManager->getById($this->user->getId())->getLanguage() : $this->teamManager->getTeam()->getDefaultLanguageCode();
+        if ($this->user->isLoggedIn()) {
+            $tymyUser = $this->userManager->getById($this->user->getId());
+            assert($tymyUser instanceof User2);
+            $code = $tymyUser->getLanguage();
+        } else {
+            $code = $this->teamManager->getTeam()->getDefaultLanguageCode();
+        }
         return self::LC[$code];
     }
 
@@ -53,7 +61,7 @@ class StringsManager
     {
         $translation = $this->database->table(self::TABLE)->where("domain", $domain)->where("code", $code)->where("language", $this->getLc())->limit(1)->fetch();
 
-        if (!$translation instanceof \Nette\Database\Table\ActiveRow) {
+        if (!$translation instanceof ActiveRow) {
             Debugger::log("Missing translation: $domain.$code", ILogger::ERROR);
         }
 

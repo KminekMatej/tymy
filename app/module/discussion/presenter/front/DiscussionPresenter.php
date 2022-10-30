@@ -8,6 +8,7 @@ use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Discussion\Manager\DiscussionManager;
 use Tymy\Module\Discussion\Manager\PostManager;
+use Tymy\Module\Discussion\Model\Discussion;
 use Tymy\Module\Discussion\Model\Post;
 use Tymy\Module\User\Manager\UserManager;
 
@@ -49,7 +50,7 @@ class DiscussionPresenter extends SecuredPresenter
             return null;
         });
 
-        $this->template->addFilter('displayNames', fn(array $userIds): string => implode(", ", array_map(fn($userId) => $this->userList[$userId]->getCallName(), $userIds)));
+        $this->template->addFilter('displayNames', fn(array $userIds): string => implode(", ", array_map(fn($userId) => $this->userList[$userId]->getCallName(), $userIds))); /* @phpstan-ignore-line */
     }
 
     public function handleReact(int $postId, ?string $reaction = null, bool $remove = false): void
@@ -77,6 +78,7 @@ class DiscussionPresenter extends SecuredPresenter
         if (empty($d)) {
             $this->error($this->translator->translate("discussion.errors.noDiscussionExists"));
         }
+        assert($d instanceof Discussion);
 
         $this->template->search = $search;
         $this->template->suser = $suser;

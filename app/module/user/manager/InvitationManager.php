@@ -13,6 +13,7 @@ use Tymy\Module\Core\Service\MailService;
 use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Mapper\InvitationMapper;
 use Tymy\Module\User\Model\Invitation;
+use Tymy\Module\User\Model\User;
 
 /**
  * Description of InvitationManager
@@ -146,6 +147,7 @@ class InvitationManager extends BaseManager
         $name = $invitation->getFirstName() || $invitation->getLastName() ? implode(" ", [$invitation->getFirstName(), $invitation->getLastName()]) : null;
 
         $creator = $this->userManager->getById($this->user->getId());
+        assert($creator instanceof User);
 
         $this->mailService->mailInvitation($name, $invitation->getEmail(), $creator->getFullName() . "({$creator->getDisplayName()})", $this->linkGenerator->link("Sign:ByInvite:default", ["invite" => $invitation->getCode()]), $invitation->getValidUntil());
     }

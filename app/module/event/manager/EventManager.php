@@ -53,6 +53,7 @@ class EventManager extends BaseManager
         if ($row === null) {
             return null;
         }
+        assert($row instanceof ActiveRow);
 
         $event = parent::map($row, $force);
         assert($event instanceof Event);
@@ -347,6 +348,7 @@ class EventManager extends BaseManager
     protected function allowUpdate(?int $recordId = null, ?array &$data = null): void
     {
         $this->event = $this->getById($recordId);
+        assert($this->event instanceof Event);
 
         if (!$this->canEdit($this->event, $this->user->getId())) {
             $this->respondForbidden();
@@ -449,6 +451,7 @@ class EventManager extends BaseManager
         $oldStartTime = $this->event->getStartTime();
 
         $this->event = $this->getById($resourceId);
+        assert($this->event instanceof Event);
 
         if ($this->event->getStartTime()->format(BaseModel::DATETIME_ENG_FORMAT) !== $oldStartTime->format(BaseModel::DATETIME_ENG_FORMAT)) {
             $notification = $this->notificationGenerator->changeEventTime($this->event, $this->event->getStartTime());

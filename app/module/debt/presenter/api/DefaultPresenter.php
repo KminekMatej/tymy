@@ -40,7 +40,9 @@ class DefaultPresenter extends SecuredPresenter
 
     private function requestGetList(): void
     {
-        $debts = $this->manager->getListUserAllowed($this->user->getId());
+        assert($this->manager instanceof DebtManager);
+
+        $debts = $this->manager->getListUserAllowed();
 
         $this->respondOk($this->arrayToJson($debts));
     }

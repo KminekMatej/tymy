@@ -23,7 +23,8 @@ class DefaultPresenter extends SecuredPresenter
             $this->respondNotAllowed();
         }
 
-        $news = $this->manager->getListUserAllowed($this->user->getId());
+        assert($this->manager instanceof NewsManager);
+        $news = $this->manager->getListUserAllowed();
         $this->respondOk($this->arrayToJson($news));
     }
 }

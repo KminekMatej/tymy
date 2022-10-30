@@ -37,6 +37,7 @@ class FcmPresenter extends SecuredPresenter
 
         $deviceId = $this->requestData;
 
+        assert($this->manager instanceof PushNotificationManager);
         $subscriber = $this->manager->getByUserAndSubscription($this->user->getId(), $deviceId);
         assert($subscriber instanceof Subscriber);
 
@@ -51,7 +52,7 @@ class FcmPresenter extends SecuredPresenter
         ]);
 
         if (!$createdSubscription) {
-            $this->responder->E4011_CREATE_FAILED(Subscriber::MODULE);
+            $this->responder->E4009_CREATE_FAILED(Subscriber::MODULE);
         }
 
         $this->respondOkCreated($createdSubscription->jsonSerialize());

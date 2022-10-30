@@ -43,7 +43,7 @@ class DefaultPresenter extends SecuredPresenter
     {
         $this->allowAdmin();
 
-        $permission = $this->manager->getByName($name);
+        $permission = $this->permissionManager->getByName($name);
 
         if (!$permission) {
             $this->respondNotFound();
@@ -60,7 +60,7 @@ class DefaultPresenter extends SecuredPresenter
     {
         $this->allowAdmin();
 
-        $permissions = $this->manager->getByType($name);
+        $permissions = $this->permissionManager->getByType($name);
 
         if ($this->getRequest()->getMethod() == "GET") {
             $this->respondOk($this->arrayToJson($permissions));

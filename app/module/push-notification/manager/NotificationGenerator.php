@@ -11,6 +11,7 @@ use Tymy\Module\Event\Model\Event;
 use Tymy\Module\PushNotification\Model\PushNotification;
 use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\User\Manager\UserManager;
+use Tymy\Module\User\Model\User as User2;
 
 /**
  * Description of NotificationGenerator
@@ -28,7 +29,7 @@ class NotificationGenerator
     {
     }
 
-    public function createPost(Discussion $discussion, Post $post): \Tymy\Module\PushNotification\Model\PushNotification
+    public function createPost(Discussion $discussion, Post $post): PushNotification
     {
         return new PushNotification(
             self::CREATE_POST,
@@ -44,9 +45,10 @@ class NotificationGenerator
         );
     }
 
-    public function createEvent(Event $event): \Tymy\Module\PushNotification\Model\PushNotification
+    public function createEvent(Event $event): PushNotification
     {
         $user = $this->userManager->getById($this->user->getId());
+        assert($user instanceof User2);
 
         return new PushNotification(
             self::CREATE_EVENT,
@@ -61,9 +63,10 @@ class NotificationGenerator
         );
     }
 
-    public function deleteEvent(Event $event): \Tymy\Module\PushNotification\Model\PushNotification
+    public function deleteEvent(Event $event): PushNotification
     {
         $user = $this->userManager->getById($this->user->getId());
+        assert($user instanceof User2);
 
         return new PushNotification(
             self::DELETE_EVENT,
@@ -78,9 +81,10 @@ class NotificationGenerator
         );
     }
 
-    public function changeEventTime(Event $event, DateTime $previousStartTime): \Tymy\Module\PushNotification\Model\PushNotification
+    public function changeEventTime(Event $event, DateTime $previousStartTime): PushNotification
     {
         $user = $this->userManager->getById($this->user->getId());
+        assert($user instanceof User2);
 
         return new PushNotification(
             self::UPDATE_EVENT_TIME,

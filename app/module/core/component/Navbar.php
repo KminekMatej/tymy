@@ -6,6 +6,7 @@ use Contributte\Translation\Translator;
 use Nette\Application\UI\Control;
 use Nette\Application\UI\Form;
 use Nette\Http\FileUpload;
+use Nette\Http\Request;
 use Nette\Security\User;
 use Nette\Utils\DateTime;
 use Tymy\Module\Core\Helper\StringHelper;
@@ -31,7 +32,7 @@ class NavbarControl extends Control
 {
     private Translator $translator;
 
-    public function __construct(private SecuredPresenter $presenter, private PollManager $pollManager, private DiscussionManager $discussionManager, private EventManager $eventManager, private DebtManager $debtManager, private UserManager $userManager, private MultiaccountManager $multiaccountManager, private User $user, private TeamManager $teamManager, private EventTypeManager $eventTypeManager)
+    public function __construct(private SecuredPresenter $presenter, private PollManager $pollManager, private DiscussionManager $discussionManager, private EventManager $eventManager, private DebtManager $debtManager, private UserManager $userManager, private MultiaccountManager $multiaccountManager, private User $user, private TeamManager $teamManager, private EventTypeManager $eventTypeManager, private Request $httpRequest)
     {
         $this->translator = $this->presenter->translator;
     }
@@ -97,15 +98,15 @@ class NavbarControl extends Control
         $form = new Form();
         $form->addUpload("file", $this->translator->translate("file.file"));
         $form->addSubmit("save", "Nahrát");
-        $form->onSuccess[] = fn(\Nette\Application\UI\Form $form, $values) => $this->fileLoad($form, $values);
+        $form->onSuccess[] = fn(Form $form, $values) => $this->fileLoad($form, $values);
 
         return $form;
     }
 
     public function fileLoad(Form $form, $values): void
     {
-        assert($file instanceof FileUpload);
         $file = $values['file'];
+        assert($file instanceof FileUpload);
 
         if ($file->isOk()) {
             $file->move(FileManager::DOWNLOAD_DIR . '/' . $file->getUntrustedName());
@@ -141,10 +142,10 @@ class NavbarControl extends Control
 
     public function handleRefresh(): void
     {
-        if ($this->parent->isAjax()) {
+        if ($this->httpRequest->isAjax()) {
             $this->redrawControl('nav');
         } else {
-            $this->parent->redirect('this');
+            $this->presenter->redirect('this');
         }
     }
 }
