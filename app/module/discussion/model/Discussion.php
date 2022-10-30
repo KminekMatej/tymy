@@ -14,6 +14,7 @@ use Tymy\Module\Discussion\Mapper\DiscussionMapper;
 class Discussion extends BaseModel
 {
     public const TABLE = "discussion";
+    public const TABLE_OWNERS = "discussion_owner";
     public const MODULE = "discussion";
 
     private ?int $createdById = null;
@@ -33,6 +34,7 @@ class Discussion extends BaseModel
     private bool $canWrite = false;
     private bool $canDelete = false;
     private bool $canStick = false;
+    private ?array $owners = null;
     private int $numberOfPosts = 0;
     private NewInfo $newInfo;
     private string $webName;
@@ -120,6 +122,11 @@ class Discussion extends BaseModel
     public function getCanStick(): bool
     {
         return $this->canStick;
+    }
+
+    public function getOwners(): ?array
+    {
+        return $this->owners;
     }
 
     public function getNewPosts(): int
@@ -234,6 +241,12 @@ class Discussion extends BaseModel
         return $this;
     }
 
+    public function setOwners(?array $owners)
+    {
+        $this->owners = $owners;
+        return $this;
+    }
+
     public function setNewPosts(int $newPosts): static
     {
         return $this;
@@ -294,6 +307,7 @@ class Discussion extends BaseModel
                     "newPosts" => $this->getNewPosts(),
                     "numberOfPosts" => $this->numberOfPosts,
                     "newInfo" => $this->getNewInfo()->jsonSerialize(),
+                    "owners" => $this->getOwners(),
         ];
     }
 }

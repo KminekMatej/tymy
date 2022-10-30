@@ -81,6 +81,7 @@ class DiscussionManager extends BaseManager
         assert($discussion instanceof Discussion);
 
         $discussion->setNumberOfPosts($row->related(Post::TABLE)->count("id"));
+        $discussion->setOwners($row->related(Discussion::TABLE_OWNERS)->fetchPairs(null, "user_id"));
         $discussion->setWebName(Strings::webalize($discussion->getId() . "-" . $discussion->getCaption()));
 
         return $discussion;
