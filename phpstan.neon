@@ -2,7 +2,6 @@ parameters:
     level: 2
     paths:
         - app
-        - tests
     excludePaths:
         - app/components/phpqrcode.php
     tmpDir: temp/phpstan
