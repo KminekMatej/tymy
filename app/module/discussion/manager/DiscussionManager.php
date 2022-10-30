@@ -3,12 +3,11 @@
 namespace Tymy\Module\Discussion\Manager;
 
 use Nette\Database\IRow;
-use Nette\Database\Table\ActiveRow;
-use Nette\Database\Table\Selection;
 use Nette\Utils\Strings;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Discussion\Mapper\DiscussionMapper;
 use Tymy\Module\Discussion\Model\Discussion;
 use Tymy\Module\Discussion\Model\NewInfo;
@@ -162,7 +161,7 @@ class DiscussionManager extends BaseManager
     }
 
     /**
-     * @return \Tymy\Module\Core\Model\BaseModel[]
+     * @return BaseModel[]
      */
     public function getList(?array $idList = null, string $idField = "id", ?int $limit = null, ?int $offset = null, ?string $order = null): array
     {
@@ -201,7 +200,7 @@ class DiscussionManager extends BaseManager
     }
 
     /**
-     * @return \Tymy\Module\Core\Model\Field[]
+     * @return Field[]
      */
     protected function getScheme(): array
     {
