@@ -12,6 +12,7 @@ use Nette\DI\Container;
 use Nette\Http\Request as HttpRequest;
 use Nette\Http\Response as HttpResponse;
 use Nette\Utils\JsonException;
+use Throwable;
 use Tracy\Debugger;
 use Tracy\ILogger;
 use Tymy\Module\Core\Exception\DebugResponse;
@@ -148,7 +149,7 @@ class BasePresenter extends RootPresenter
     /**
      * Simple exception handler. If any exception gets throws, logs message into exception.log file and then either responds proper response, or continue throwing the response
      */
-    protected function handleException(\Throwable $exc): void
+    protected function handleException(Throwable $exc): void
     {
         if ($exc instanceof AbortException) {
             throw $exc; //when its aborted, simply continue with abortion
@@ -156,23 +157,23 @@ class BasePresenter extends RootPresenter
 
         Debugger::log($exc->getMessage(), ILogger::EXCEPTION);
 
-        if ($exc instanceof \Tymy\Module\Core\Exception\DeleteIntegrityException) {
-            /* @var $exc DeleteIntegrityException */
+        if ($exc instanceof DeleteIntegrityException) {
+            assert($exc instanceof DeleteIntegrityException);
             $this->responder->E4016_DELETE_BLOCKED_BY($exc->fkTable, $exc->blockingIds);
         }
 
-        if ($exc instanceof \Tymy\Module\Core\Exception\UpdateIntegrityException) {
-            /* @var $exc UpdateIntegrityException */
+        if ($exc instanceof UpdateIntegrityException) {
+            assert($exc instanceof UpdateIntegrityException);
             $this->responder->E4017_UPDATE_BLOCKED_BY($exc->fkTable, $exc->blockingIds);
         }
 
-        if ($exc instanceof \Tymy\Module\Core\Exception\IntegrityException) {
-            /* @var $exc IntegrityException */
+        if ($exc instanceof IntegrityException) {
+            assert($exc instanceof IntegrityException);
             $this->responder->E4007_RELATION_PROHIBITS($exc->failingField);
         }
 
-        if ($exc instanceof \Tymy\Module\Core\Exception\MissingInputException) {
-            /* @var $exc IntegrityException */
+        if ($exc instanceof MissingInputException) {
+            assert($exc instanceof IntegrityException);
             $this->responder->E4013_MISSING_INPUT($exc->getMessage());
         }
 
@@ -223,9 +224,11 @@ class BasePresenter extends RootPresenter
      * If resourceId is supplied, load desired object using supplied manager.
      * Fills resourceRow property and returns BaseModel (resourceRow mapped using BaseManager)
      *
-     * @return BaseModel|false|null Model mapped
+     * @param int $resourceId
+     * @param BaseManager $manager
+     * @return BaseModel|null Model mapped
      */
-    protected function loadResource(int $resourceId, BaseManager $manager): ?\Tymy\Module\Core\Model\BaseModel
+    protected function loadResource(int $resourceId, BaseManager $manager): ?BaseModel
     {
         if (empty($resourceId)) {
             return null;
@@ -233,7 +236,7 @@ class BasePresenter extends RootPresenter
 
         $this->resourceRow = $manager->getRow($resourceId);
 
-        if (!$this->resourceRow instanceof \Nette\Database\Table\ActiveRow) {
+        if (!$this->resourceRow instanceof ActiveRow) {
             $this->responder->E4005_OBJECT_NOT_FOUND($manager->getModule(), $resourceId);
         }
 
@@ -244,9 +247,11 @@ class BasePresenter extends RootPresenter
      * If subResourceId is supplied, load desired object using supplied manager.
      * Fills subResourceRow property and returns BaseModel (subResourceRow mapped using BaseManager)
      *
-     * @return BaseModel|false|null Model mapped
+     * @param int $subResourceId
+     * @param BaseManager $manager
+     * @return BaseModel|null Model mapped
      */
-    protected function loadSubResource(int $subResourceId, BaseManager $manager): ?\Tymy\Module\Core\Model\BaseModel
+    protected function loadSubResource(int $subResourceId, BaseManager $manager): ?BaseModel
     {
         if (empty($subResourceId)) {
             return null;
@@ -254,7 +259,7 @@ class BasePresenter extends RootPresenter
 
         $this->subResourceRow = $manager->getRow($subResourceId);
 
-        if (!$this->subResourceRow instanceof \Nette\Database\Table\ActiveRow) {
+        if (!$this->subResourceRow instanceof ActiveRow) {
             $this->responder->E4005_OBJECT_NOT_FOUND($manager->getModule(), $subResourceId);
         }
 
@@ -273,8 +278,7 @@ class BasePresenter extends RootPresenter
             return [];
         }
 
-        return array_map(fn($entity) => /* @var $entity BaseModel */
-            $entity->jsonSerialize(), $entities);
+        return array_map(fn($entity) => $entity->jsonSerialize(), $entities);
     }
 
     /**

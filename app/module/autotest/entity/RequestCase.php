@@ -3,8 +3,6 @@
 namespace Tymy\Module\Autotest;
 
 use Nette\Application\BadRequestException;
-use Nette\Application\IPresenter;
-use Nette\Application\IResponse;
 use Nette\Application\PresenterFactory;
 use Nette\Application\Request;
 use Nette\Application\Responses\JsonResponse;
@@ -13,7 +11,6 @@ use Nette\Application\UI\Presenter;
 use Nette\Database\Explorer;
 use Nette\DI\Container;
 use Nette\Http\IRequest;
-use Nette\Http\RequestFactory;
 use Nette\InvalidStateException;
 use Nette\Neon\Neon;
 use Nette\Routing\Router;
@@ -27,6 +24,7 @@ use Tymy\Module\Authentication\Manager\AuthenticationManager;
 use Tymy\Module\Autotest\Entity\Assert;
 use Tymy\Module\Core\Manager\Responder;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Presenter\Api\BasePresenter;
 
 use const TEAM_DIR;
 use const TEST_DIR;
@@ -51,7 +49,7 @@ abstract class RequestCase extends TestCase
     protected AuthenticationManager $authenticationManager;
     protected Responder $responder;
     private IRequest $httpRequest;
-    private RequestFactory $httpRequestFactory;
+    private MockRequestFactory $httpRequestFactory;
 
     /** @var RequestLog[] */
     private array $logs = [];
@@ -86,9 +84,9 @@ abstract class RequestCase extends TestCase
 
     abstract public function createRecord();
 
-    public function deleteRecord($recordId)
+    public function deleteRecord($recordId): void
     {
-        return $this->recordManager->deleteRecord($this->getBasePath(), $recordId);
+        $this->recordManager->deleteRecord($this->getBasePath(), $recordId);
     }
 
     abstract public function mockRecord();
@@ -130,7 +128,7 @@ abstract class RequestCase extends TestCase
                 $codeStr = ", code: {$requestLog->getHttpResponseCode()}/{$requestLog->getExpectCode()}";
                 $success = false;
             }
-            /* @var $requestLog RequestLog */
+            assert($requestLog instanceof RequestLog);
             $data = $requestLog->getPostData();
             $clrStart = "";
             $clrEnd = "";
@@ -200,21 +198,22 @@ abstract class RequestCase extends TestCase
 
         $this->logs[] = $log = new RequestLog($method, $url, $data);
 
-        $httpRequest = $this->httpRequestFactory->from($url, $method, json_encode($data));
+        $httpRequest = $this->httpRequestFactory->from($url, $method, \json_encode($data));
         $request = $this->createInitialRequest($httpRequest);
 
         Assert::type(Request::class, $request, "No route found for url $url");
         $presenterMock = $this->loadPresenter($request->getPresenterName());
         $presenterMock->setRequestData($data);
         $this->responder->presenterMock = $presenterMock;
-        /* @var $response IResponse */
         $response = $presenterMock->run($request);
         $httpResponse = $presenterMock->getHttpResponse();
         if (!$responseClass) {
             Assert::type(JsonResponse::class, $response);
+            assert($response instanceof JsonResponse);
             return new SimpleResponse($httpResponse->getCode(), ($response->getPayload()["status"] == "OK" ? ($response->getPayload()["data"] ?? null) : null), $request, $httpResponse, $response, $presenterMock, $log);
         } elseif ($responseClass == TextResponse::class) {
             Assert::type($responseClass, $response);
+            assert($response instanceof TextResponse);
             return new SimpleResponse($httpResponse->getCode(), $response->getSource(), $request, $httpResponse, $response, $presenterMock, $log);
         } else {
             Assert::type($responseClass, $response);
@@ -286,9 +285,10 @@ abstract class RequestCase extends TestCase
         }
     }
 
-    protected function loadPresenter(string $name): IPresenter
+    protected function loadPresenter(string $name): BasePresenter
     {
         $presenter = $this->presenterFactory->createPresenter($name);
+        assert($presenter instanceof BasePresenter);
         $presenter->autoCanonicalize = false;
         return $presenter;
     }
@@ -299,26 +299,6 @@ abstract class RequestCase extends TestCase
     public function getConfig(): array
     {
         return $this->config;
-    }
-
-    /**
-     * Inject mocks to http request based on method, request url, data and headers.
-     * Request url must always be relative, starting with /module (do not add /api here)
-     *
-     * @param string $method
-     * @param string $requestUrl
-     * @param array|null $data
-     * @param array|null $headers
-     * @return void
-     */
-    private function mockHttpRequest(string $method, string $requestUrl, ?array $data = null, ?array $headers = null): void
-    {
-        $this->httpRequest->setMockMethod($method);
-        $this->httpRequest->setMockUrl($requestUrl);
-        $this->httpRequest->setMockPost($data);
-        if ($headers) {
-            $this->httpRequest->setMockHeaders($headers);
-        }
     }
 
     public function toJsonDate(DateTime $date = null)

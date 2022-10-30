@@ -40,6 +40,7 @@ class DefaultPresenter extends SecuredPresenter
 
     private function requestGetList(): void
     {
+        assert($this->manager instanceof PollManager);
         $polls = $this->manager->getListUserAllowed();
 
         $this->respondOk($this->arrayToJson($polls));

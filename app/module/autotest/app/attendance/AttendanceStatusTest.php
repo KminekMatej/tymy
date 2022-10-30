@@ -171,9 +171,9 @@ class AttendanceStatusTest extends RequestCase
     }
     /**
      * Return id of random, already existing status set
-     * @return type
+     * @return int
      */
-    private function getStatusSetId()
+    private function getStatusSetId(): int
     {
         $allStatusSets = $this->request("attendanceStatus")->expect(200, "array")->getData();
         return $allStatusSets[random_int(0, (is_countable($allStatusSets) ? count($allStatusSets) : 0) - 1)]["id"];

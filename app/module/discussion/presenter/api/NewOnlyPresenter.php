@@ -28,6 +28,7 @@ class NewOnlyPresenter extends SecuredPresenter
 
     protected function requestGet($resourceId = null, $subResourceId = null): void
     {
+        assert($this->manager instanceof DiscussionManager);
         $discussions = $this->manager->getListUserAllowed($this->user->getId());
         $output = [];
 

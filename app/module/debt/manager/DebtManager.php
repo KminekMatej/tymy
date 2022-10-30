@@ -33,8 +33,8 @@ class DebtManager extends BaseManager
 
     public function map(?IRow $row, $force = false): ?BaseModel
     {
-        /* @var $debt Debt */
         $debt = parent::map($row, $force);
+        assert($debt instanceof Debt);
 
         $isTeamDebtManager = $this->user->isAllowed($this->user->getId(), Privilege::SYS("DEBTS_TEAM"));
 
@@ -104,8 +104,9 @@ class DebtManager extends BaseManager
     /**
      * Inner function to check whether user can edit debt with specified data - to be used before the debt is actually created
      *
-     * @param int $userId
-     * @param ?int $payeeId (null for team payee)
+     * @param int|null $payeeId (null for team payee)
+     * @param string $payeeType
+     * @return bool
      */
     private function canEditDebtData(?int $payeeId, string $payeeType): bool
     {
@@ -130,7 +131,7 @@ class DebtManager extends BaseManager
      */
     public function getAllowedReaders(BaseModel $record): array
     {
-        /* @var $record Debt */
+        assert($record instanceof Debt);
         return [];
     }
 
@@ -281,7 +282,7 @@ class DebtManager extends BaseManager
     {
         $count = 0;
         foreach ($debts as $debt) {
-            /* @var $debt Debt */
+            assert($debt instanceof Debt);
             if ($debt->getPaymentPending()) {
                 $count++;
             }

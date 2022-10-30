@@ -46,6 +46,7 @@ class DefaultPresenter extends SecuredPresenter
 
     private function requestGetList(?string $filter, ?string $order, ?string $limit, ?string $offset): void
     {
+        assert($this->manager instanceof EventManager);
         $events = $this->manager->getListUserAllowed($this->user->getId(), $filter, $order, (int) $limit, (int) $offset);
 
         $this->respondOk($this->arrayToJson($events));

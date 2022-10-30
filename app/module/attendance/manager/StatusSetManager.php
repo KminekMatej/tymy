@@ -3,6 +3,7 @@
 namespace Tymy\Module\Attendance\Manager;
 
 use Nette\Database\IRow;
+use Nette\Database\Table\ActiveRow;
 use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
 use Tymy\Module\Attendance\Mapper\StatusSetMapper;
@@ -12,6 +13,7 @@ use Tymy\Module\Attendance\Model\StatusSet;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Discussion\Model\Discussion;
 use Tymy\Module\User\Manager\UserManager;
 
@@ -31,8 +33,9 @@ class StatusSetManager extends BaseManager
 
     public function map(?IRow $row, $force = false): ?BaseModel
     {
-        /* @var $statusSet StatusSet */
+        assert($row instanceof ActiveRow);
         $statusSet = parent::map($row, $force);
+        assert($statusSet instanceof StatusSet);
 
         $statusSet->setWebname($statusSet->getId() . "-" . Strings::webalize($statusSet->getName()));
 
@@ -49,7 +52,7 @@ class StatusSetManager extends BaseManager
     }
 
     /**
-     * @return \Tymy\Module\Core\Model\Field[]
+     * @return Field[]
      */
     protected function getScheme(): array
     {

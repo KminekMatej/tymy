@@ -44,7 +44,7 @@ class EventManager extends BaseManager
 
     /**
      * Maps one active row to object
-     * @param ActiveRow|false|null $row
+     * @param IRow|null $row
      * @param bool $force True to skip cache
      * @return Event|null
      */
@@ -53,12 +53,13 @@ class EventManager extends BaseManager
         if ($row === null) {
             return null;
         }
+        assert($row instanceof ActiveRow);
 
-        /* @var $event Event */
         $event = parent::map($row, $force);
+        assert($event instanceof Event);
 
-        /* @var $eventType EventType */
         $eventType = $this->eventTypeManager->map($row->ref(EventType::TABLE, "event_type_id"));
+        assert($eventType instanceof EventType);
         $event->setEventType($eventType);
         $event->setType($eventType->getCode());
 
@@ -72,7 +73,7 @@ class EventManager extends BaseManager
 
     protected function metaMap(BaseModel &$model, $userId = null): void
     {
-        /* @var $model Event */
+        assert($model instanceof Event);
         $model->setCanView(empty($model->getViewRightName()) || $this->user->isAllowed($this->user->getId(), Privilege::USR($model->getViewRightName())));
         $model->setCanPlan(empty($model->getPlanRightName()) || $this->user->isAllowed($this->user->getId(), Privilege::USR($model->getPlanRightName())));
         $model->setCanPlanOthers($this->user->isAllowed($this->user->getId(), Privilege::SYS("ATT_UPDATE")));
@@ -246,7 +247,6 @@ class EventManager extends BaseManager
         }
         $allUserIds = array_keys($allSimpleUsers);
 
-        /* @var $event Event */
         $event->setAttendance($eventAttendances);
 
         //now add attendances to all users that doesnt have any attendance
@@ -348,6 +348,7 @@ class EventManager extends BaseManager
     protected function allowUpdate(?int $recordId = null, ?array &$data = null): void
     {
         $this->event = $this->getById($recordId);
+        assert($this->event instanceof Event);
 
         if (!$this->canEdit($this->event, $this->user->getId())) {
             $this->respondForbidden();
@@ -403,7 +404,7 @@ class EventManager extends BaseManager
      */
     public function getAllowedReaders(BaseModel $record): array
     {
-        /* @var $record Event */
+        assert($record instanceof Event);
         return $record->getViewRightName() ?
             $this->userManager->getUserIdsWithPrivilege(Privilege::USR($record->getViewRightName())) :
             $this->getAllUserIds();
@@ -450,6 +451,7 @@ class EventManager extends BaseManager
         $oldStartTime = $this->event->getStartTime();
 
         $this->event = $this->getById($resourceId);
+        assert($this->event instanceof Event);
 
         if ($this->event->getStartTime()->format(BaseModel::DATETIME_ENG_FORMAT) !== $oldStartTime->format(BaseModel::DATETIME_ENG_FORMAT)) {
             $notification = $this->notificationGenerator->changeEventTime($this->event, $this->event->getStartTime());
@@ -478,7 +480,7 @@ class EventManager extends BaseManager
     {
         $count = 0;
         foreach ($events as $event) {
-            /* @var $event Event */
+            assert($event instanceof Event);
             if ($event->getAttendancePending() && $event->getCanPlan()) {
                 $count++;
             }
@@ -497,7 +499,7 @@ class EventManager extends BaseManager
         $monthArray = [];
 
         foreach ($events as $event) {
-            /* @var $event Event */
+            assert($event instanceof Event);
             $month = $event->getStartTime()->format(BaseModel::YEAR_MONTH);
 
             if (!array_key_exists($month, $monthArray)) {

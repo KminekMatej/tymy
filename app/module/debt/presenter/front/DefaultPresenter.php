@@ -37,8 +37,8 @@ class DefaultPresenter extends DebtBasePresenter
     {
         $debtId = $this->parseIdFromWebname($resource);
 
-        /* @var $debt Debt */
         $debt = $this->debtManager->getById($debtId);
+        assert($debt instanceof Debt);
         $this->template->debt = $debt;
         $this->template->userListWithTeam = $this->userManager->getByIdWithTeam();
 
@@ -51,8 +51,8 @@ class DefaultPresenter extends DebtBasePresenter
     {
         $debtId = $this->parseIdFromWebname($resource);
 
-        /* @var $debt Debt */
         $debt = $this->debtManager->getById($debtId);
+        assert($debt instanceof Debt);
         $userList = $this->userManager->getByIdWithTeam();
 
         $payeeCallName = $debt->getPayeeId() == 0 ? "TEAM" : $userList[$debt->getPayeeId()]->getDisplayName();
@@ -149,8 +149,8 @@ class DefaultPresenter extends DebtBasePresenter
     {
         $bind = $this->getRequest()->getPost();
 
-        /* @var $createdDebt Debt */
         $createdDebt = $this->debtManager->create($bind["changes"]);
+        assert($createdDebt instanceof Debt);
 
         $this->flashMessage($this->translator->translate("common.alerts.debtAdded"), "success");
 

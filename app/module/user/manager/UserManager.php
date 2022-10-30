@@ -185,7 +185,6 @@ class UserManager extends BaseManager
     {
         parent::toBoolData($array, ["anonymousResults", "changeableVotes"]);
 
-        /* @var $userModel User */
         $userModel = $this->getById($id);
 
         if ($userModel->getStatus() == User::STATUS_INIT && isset($array["status"]) && $array["status"] != User::STATUS_INIT) {
@@ -217,12 +216,14 @@ class UserManager extends BaseManager
      * @return User|null */
     public function map(?IRow $row, bool $force = false): ?BaseModel
     {
-        /* @var $user User */
-        $user = parent::map($row, $force);
-
         if ($row === null) {
             return null;
         }
+
+        assert($row instanceof ActiveRow);
+
+        $user = parent::map($row, $force);
+        assert($user instanceof User);
 
         $user->setFullName($user->getFirstName() . " " . $user->getLastName());
         $user->setPictureUrl($this->getPictureUrl($row->id));
@@ -316,8 +317,7 @@ class UserManager extends BaseManager
 
     /**
      * Check if user limit has been reached
-     *
-     * @param string $login
+     * @return bool
      */
     public function limitUsersReached(): bool
     {
@@ -354,7 +354,7 @@ class UserManager extends BaseManager
     /**
      * Register user - create user record in INIT status
      */
-    public function register(array $array, ?Invitation $invitation = null): ?\Tymy\Module\User\Model\User
+    public function register(array $array, ?Invitation $invitation = null): ?User
     {
         $this->allowRegister($array);
 
@@ -369,17 +369,17 @@ class UserManager extends BaseManager
 
         $createdRow = $this->createByArray($array);
 
-        /* @var $registeredUser User */
         $registeredUser = $this->map($createdRow);
+        assert($registeredUser instanceof User);
 
         $allAdmins = $this->getUsersWithPrivilege(Privilege::SYS("USR_UPDATE"));
 
         if ($invitation === null) { //send registration email only if this is blank registration from web, not from invitation
             foreach ($allAdmins as $admin) {
+                assert($admin instanceof User);
                 if (empty($admin->getEmail())) {  //skip admins without email
                     continue;
                 }
-                /* @var $admin User */
                 $this->mailService->mailUserRegistered($admin->getCallName(), $admin->getEmail(), $registeredUser->getLogin(), $registeredUser->getEmail(), $registeredUser->getFirstName(), $registeredUser->getLastName(), $array["note"] ?? null);
             }
         } else {    //mark invitation request as accepted. Cannot from invitationManager, since that would caus circullar reference
@@ -389,6 +389,20 @@ class UserManager extends BaseManager
         }
 
         return $registeredUser;
+    }
+
+    /**
+     * Get user by its ID or null if not found
+     * @param int $id
+     * @param bool $force
+     * @return User|null
+     */
+    public function getById(int $id, bool $force = false): ?User
+    {
+        $user = parent::getById($id, $force);
+        assert($user instanceof User);
+
+        return $user;
     }
 
     /**
@@ -662,14 +676,14 @@ class UserManager extends BaseManager
         return parent::deleteRecord($resourceId);
     }
 
-    public function read(int $resourceId, ?int $subResourceId = null): BaseModel
+    public function read(int $resourceId, ?int $subResourceId = null): User
     {
         $this->allowRead($resourceId);
 
         return $this->getById($resourceId);
     }
 
-    public function update(array $data, int $resourceId, ?int $subResourceId = null): BaseModel
+    public function update(array $data, int $resourceId, ?int $subResourceId = null): User
     {
         parent::toBoolData($data, ["canEditCallName", "canLogin", "hideDiscDesc"]);
 
@@ -694,8 +708,10 @@ class UserManager extends BaseManager
 
     /**
      * Checks prerequisities, generate reset code, store it into database and send informational mail to the resetting user
-     *
-     * @param int $userId
+     * @param string $email
+     * @param string $hostname
+     * @param string $callbackUri
+     * @return void
      */
     public function pwdLost(string $email, string $hostname, string $callbackUri): void
     {
@@ -704,7 +720,6 @@ class UserManager extends BaseManager
             $this->respondNotFound(User::MODULE);
         }
 
-        /* @var $user User */
         $user = $this->getById($userId);
 
         if (!$user->getCanLogin() || !in_array($user->getStatus(), [User::STATUS_PLAYER, User::STATUS_MEMBER, User::STATUS_SICK])) {
@@ -800,7 +815,7 @@ class UserManager extends BaseManager
         ];
 
         foreach ($users as $user) {
-            /* @var $user User */
+            assert($user instanceof User);
             $this->userCounts["ALL"]++;
             $this->userCounts[$user->getStatus()]++;
             if ($user->getStatus() !== "DELETED") {
@@ -827,7 +842,7 @@ class UserManager extends BaseManager
     {
         $count = 0;
         foreach ($users as $user) {
-            /* @var $user User */
+            assert($user instanceof User);
             $count += $user->getWarnings();
         }
 
@@ -844,7 +859,7 @@ class UserManager extends BaseManager
         $byTypeAndId = [];
 
         foreach ($users as $user) {
-            /* @var $user User */
+            assert($user instanceof User);
             if (!array_key_exists($user->getStatus(), $byTypeAndId)) {
                 $byTypeAndId[$user->getStatus()] = [];
             }

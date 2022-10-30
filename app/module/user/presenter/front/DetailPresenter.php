@@ -4,7 +4,7 @@ namespace Tymy\Module\User\Presenter\Front;
 
 use DateTimeZone;
 use Nette\Application\Responses\CallbackResponse;
-use Nette\Application\UI\Template;
+use Nette\Bridges\ApplicationLatte\Template;
 use Nette\Http\IRequest;
 use Nette\Http\Response;
 use Nette\Utils\Arrays;
@@ -16,6 +16,8 @@ use Tymy\Module\Core\Manager\Responder;
 use Tymy\Module\Core\Presenter\Front\BasePresenter;
 use Tymy\Module\Event\Manager\EventManager;
 use Tymy\Module\Settings\Manager\ICalManager;
+
+use function mb_str_split;
 
 /**
  * Description of DetailPresenter
@@ -42,10 +44,11 @@ class DetailPresenter extends BasePresenter
     {
         parent::beforeRender();
 
+        assert($this->template instanceof Template);
         $this->template->addFilter("statusName", function (int $statusId) {
             if (!array_key_exists($statusId, $this->statusNameCache)) {
-                /* @var $status Status */
                 $status = $this->statusManager->getById($statusId);
+                assert($status instanceof Status);
                 $this->statusNameCache[$statusId] = $status !== null ? $status->getCaption() : "?";
             }
 

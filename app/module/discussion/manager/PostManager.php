@@ -10,6 +10,7 @@ use Nette\Utils\DateTime;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Core\Service\BbService;
 use Tymy\Module\Discussion\Mapper\PostMapper;
 use Tymy\Module\Discussion\Model\Discussion;
@@ -18,6 +19,7 @@ use Tymy\Module\Discussion\Model\Post;
 use Tymy\Module\PushNotification\Manager\NotificationGenerator;
 use Tymy\Module\PushNotification\Manager\PushNotificationManager;
 use Tymy\Module\User\Manager\UserManager;
+use Tymy\Module\User\Model\User;
 
 use function mb_strlen;
 
@@ -46,6 +48,7 @@ class PostManager extends BaseManager
     public function allowDiscussion($discussionId): void
     {
         $this->discussion = $this->loadRecord($discussionId, $this->discussionManager);
+        assert($this->discussion instanceof Discussion);
 
         if (!$this->discussion) {
             $this->respondNotFound(Discussion::MODULE, $discussionId);
@@ -88,6 +91,7 @@ class PostManager extends BaseManager
         }
 
         $this->post = $this->loadRecord($recordId);
+        assert($this->post instanceof Post);
         if ($this->post->getDiscussionId() !== $this->discussion->getId()) {
             $this->respondNotFound();
         }
@@ -107,6 +111,7 @@ class PostManager extends BaseManager
         if (!$this->post) {
             $this->respondNotFound();
         }
+        assert($this->post instanceof Post);
 
         if ($this->post->getDiscussionId() !== $this->discussion->getId()) {
             $this->respondNotFound();
@@ -126,10 +131,11 @@ class PostManager extends BaseManager
         if ($row === null) {
             return null;
         }
+        assert($row instanceof ActiveRow);
 
         $post = parent::map($row, $force);
 
-        /* @var $post Post */
+        assert($post instanceof Post);
         if (!$this->inBbCode) {
             $post->setPost(BbService::bb2Html($post->getPost()));
         }
@@ -146,7 +152,6 @@ class PostManager extends BaseManager
             $post->setUpdatedAtStr($post->getUpdatedAt()->format(BaseModel::DATETIME_CZECH_NO_SECS_FORMAT));
         }
 
-        /* @var $row ActiveRow */
         $post->setReactions($this->getReactions($post->getId()));
 
         return $post;
@@ -194,7 +199,9 @@ class PostManager extends BaseManager
     {
         $data["discussionId"] = $resourceId;
         $data["createdAt"] = new DateTime();
-        $data["userName"] = $this->userManager->getById($this->user->getId())->getDisplayName();
+        $tymyUser = $this->userManager->getById($this->user->getId());
+
+        $data["userName"] = $tymyUser->getDisplayName();
 
         $this->allowDiscussion($resourceId);
         $this->allowCreate($data);
@@ -278,7 +285,7 @@ class PostManager extends BaseManager
     }
 
     /**
-     * @return \Tymy\Module\Core\Model\Field[]
+     * @return Field[]
      */
     protected function getScheme(): array
     {
@@ -310,13 +317,13 @@ class PostManager extends BaseManager
      */
     public function getAllowedReaders(BaseModel $record): array
     {
-        /* @var $record Post */
+        assert($record instanceof Post);
         return $this->discussionManager->getAllowedReadersById($record->getDiscussionId());
     }
 
     /**
      * Get posts from discussion, selected by page, optionally filtered with search string and/or search user id
-     * @return \Tymy\Module\Core\Model\BaseModel[]
+     * @return BaseModel[]
      */
     private function getPostsFromDiscussion(int $discussionId, int $page = 1, bool $inBBCode = true, ?string $search = null, ?int $searchUserId = null): array
     {
@@ -348,7 +355,7 @@ class PostManager extends BaseManager
 
         $posts = $this->mapAll($this->database->query(implode(" ", $query), ...$params)->fetchAll());
 
-        if (!$this->user->getIdentity()->ghost) {
+        if (!$this->user->getIdentity()->ghost) { /* @phpstan-ignore-line */
             $this->markAllAsRead($this->user->getId(), $discussionId);
         }
 

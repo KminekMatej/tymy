@@ -2,6 +2,7 @@
 
 namespace Tymy\Module\Team\Presenter\Front;
 
+use Nette\Bridges\ApplicationLatte\Template;
 use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Permission\Model\Privilege;
@@ -16,6 +17,7 @@ class DefaultPresenter extends SecuredPresenter
         parent::beforeRender();
 
         $allFields = $this->userManager->getAllFields();
+        assert($this->template instanceof Template);
         $this->template->addFilter('errorsCount', function ($player, $tabName) use ($allFields): int {
             $errFields = [];
             switch ($tabName) {
@@ -76,6 +78,7 @@ class DefaultPresenter extends SecuredPresenter
         $allMails = [];
         if ($users !== []) {
             foreach ($users as $u) {
+                assert($u instanceof User);
                 if ($u->getEmail()) {
                     $allMails[] = $u->getEmail();
                 }
@@ -96,7 +99,7 @@ class DefaultPresenter extends SecuredPresenter
         $max = 0;
         $jerseyList = [];
         foreach ($allPlayers as $player) {
-            /* @var $player User */
+            assert($player instanceof User);
             if ($player->getJerseyNumber() != "") {
                 $jNumber = (int) $player->getJerseyNumber();
                 if ($jNumber < $min && $jNumber > -100) {

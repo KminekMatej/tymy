@@ -2,6 +2,8 @@
 
 namespace Tymy\Module\Autotest\Presenter\Front;
 
+use Exception;
+use Nette\Bridges\ApplicationLatte\Template;
 use Nette\Http\UrlScript;
 use Nette\Utils\DateTime;
 use SimpleXMLElement;
@@ -31,6 +33,7 @@ class DefaultPresenter extends BasePresenter
 
     protected function beforeRender(): void
     {
+        assert($this->template instanceof Template);
         $this->template->addFilter('colorize', fn($text): ?string => preg_replace([
             '/\[green\]/',
             '/\[red\]/',
@@ -113,7 +116,7 @@ class DefaultPresenter extends BasePresenter
 
         try {
             $this->testsManager->runTests($folder);
-        } catch (\Exception $exc) {
+        } catch (Exception $exc) {
             $this->handleException($exc);
         }
 

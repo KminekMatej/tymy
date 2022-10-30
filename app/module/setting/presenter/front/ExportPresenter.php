@@ -32,7 +32,7 @@ class ExportPresenter extends SettingBasePresenter
 
         $form = new Form();
 
-        $form->addCheckbox("enabled", $this->translator->translate("settings.enableExport"));
+        $enabled = $form->addCheckbox("enabled", $this->translator->translate("settings.enableExport"));
         $preStatuses = $this->statusManager->getAllPreStatuses();
 
         $statusArray = [];
@@ -40,11 +40,11 @@ class ExportPresenter extends SettingBasePresenter
             $statusArray[$preStatus->getId()] = $preStatus->getStatusSetName() . ": " . $preStatus->getCaption();
         }
 
-        $form->addMultiSelect("items", $this->translator->translate("settings.items"), $statusArray);
+        $items = $form->addMultiSelect("items", $this->translator->translate("settings.items"), $statusArray);
 
         if ($iCal !== null) {
-            $form['enabled']->setValue($iCal->getEnabled());
-            $form['items']->setValue($iCal->getStatusIds());
+            $enabled->setValue($iCal->getEnabled());
+            $items->setValue($iCal->getStatusIds());
         }
 
         $form->addSubmit("save");

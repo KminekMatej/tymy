@@ -44,6 +44,7 @@ class DefaultPresenter extends SecuredPresenter
 
     private function requestGetList(): void
     {
+        assert($this->manager instanceof DiscussionManager);
         $discussions = $this->manager->getListUserAllowed($this->user->getId());
 
         $this->respondOk($this->arrayToJson($discussions));

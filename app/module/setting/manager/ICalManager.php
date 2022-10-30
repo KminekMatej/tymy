@@ -3,8 +3,10 @@
 namespace Tymy\Module\Settings\Manager;
 
 use Nette\Database\IRow;
+use Nette\Database\Table\ActiveRow;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Settings\Mapper\ICalMapper;
 use Tymy\Module\Settings\Model\ICal;
 use Tymy\Module\Settings\Model\ICalItem;
@@ -22,7 +24,7 @@ class ICalManager extends BaseManager
     }
 
     /**
-     * @return \Tymy\Module\Core\Model\Field[]
+     * @return Field[]
      */
     protected function getScheme(): array
     {
@@ -34,7 +36,7 @@ class ICalManager extends BaseManager
      */
     public function canEdit(BaseModel $entity, int $userId): bool
     {
-        /* @var $entity ICal */
+        assert($entity instanceof ICal);
         return $entity->getUserId() === $userId;
     }
 
@@ -48,9 +50,10 @@ class ICalManager extends BaseManager
         if ($row === null) {
             return null;
         }
+        assert($row instanceof ActiveRow);
 
-        /* @var $iCal ICal */
         $iCal = parent::map($row, $force);
+        assert($iCal instanceof ICal);
 
         $iCal->setStatusIds($row->related(ICalItem::TABLE)->fetchPairs(null, "status_id"));
 
@@ -77,8 +80,8 @@ class ICalManager extends BaseManager
 
     public function delete(int $resourceId, ?int $subResourceId = null): int
     {
-        /* @var $iCal ICal */
         $iCal = $this->getById($resourceId);
+        assert($iCal instanceof ICal);
 
         if ($iCal->getUserId() !== $this->user->getId()) {
             $this->respondForbidden();
@@ -92,14 +95,14 @@ class ICalManager extends BaseManager
      */
     public function getAllowedReaders(BaseModel $record): array
     {
-        /* @var $record ICal */
+        assert($record instanceof ICal);
         return [$record->getUserId()];
     }
 
     public function read(int $resourceId, ?int $subResourceId = null): BaseModel
     {
-        /* @var $iCal ICal */
         $iCal = $this->getById($resourceId);
+        assert($iCal instanceof ICal);
 
         if ($iCal->getUserId() !== $this->user->getId()) {
             $this->respondForbidden();
@@ -110,8 +113,8 @@ class ICalManager extends BaseManager
 
     public function update(array $data, int $resourceId, ?int $subResourceId = null): BaseModel
     {
-        /* @var $iCal ICal */
         $iCal = $this->getById($subResourceId);
+        assert($iCal instanceof ICal);
 
         if ($iCal->getUserId() !== $resourceId) {
             $this->respondForbidden();
@@ -138,8 +141,9 @@ class ICalManager extends BaseManager
 
     /**
      * Update statuses which events this ical shall display
-     * @param int $exportId
+     * @param ICal $iCal
      * @param int[] $statusIds
+     * @return void
      */
     public function updateItems(ICal $iCal, array $statusIds): void
     {

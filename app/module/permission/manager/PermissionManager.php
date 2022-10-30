@@ -48,8 +48,8 @@ class PermissionManager extends BaseManager
             return null;
         }
 
-        /* @var $permission Permission */
         $permission = parent::map($row, $force);
+        assert($permission instanceof Permission);
 
         $permission->setWebname(Strings::webalize($permission->getId() . "-" . $permission->getName()));
 
@@ -58,6 +58,7 @@ class PermissionManager extends BaseManager
 
     protected function metaMap(BaseModel &$model, $userId = null): void
     {
+        assert($model instanceof Permission);
         $privilege = $model->getType() == Permission::TYPE_SYSTEM ? Privilege::SYS($model->getName()) : Privilege::USR($model->getName());
         $model->setMeAllowed($this->user->isLoggedIn() && $this->user->isAllowed($this->user->getId(), $privilege));
     }
@@ -81,7 +82,7 @@ class PermissionManager extends BaseManager
     /**
      * Find permissions by its name - returns the first one that matches
      */
-    public function getByTypeName(string $type, string $name): ?BaseModel
+    public function getByTypeName(string $type, string $name): ?Permission
     {
         return $this->map($this->database->table($this->getTable())->where("right_type", $type)->where("name", $name)->limit(1)->fetch());
     }
@@ -182,10 +183,11 @@ class PermissionManager extends BaseManager
 
         $this->permission = $this->getById($recordId);
 
-        if (!$this->permission instanceof BaseModel) {
+        if (!$this->permission instanceof Permission) {
             $this->respondNotFound();
         }
 
+        assert($this->permission instanceof Permission);
         if ($this->permission->getType() !== Permission::TYPE_USER) {
             $this->respondForbidden();
         }
@@ -204,7 +206,7 @@ class PermissionManager extends BaseManager
 
         $this->permission = $this->getById($recordId);
 
-        if (!$this->permission instanceof BaseModel) {
+        if (!$this->permission instanceof Permission) {
             $this->respondNotFound();
         }
 
@@ -337,7 +339,7 @@ class PermissionManager extends BaseManager
         $permissions = $this->getList();
 
         foreach ($permissions as $permission) {
-            /* @var $permission Permission */
+            assert($permission instanceof Permission);
             if ($permission->getWebname() == $webname) {
                 return $permission;
             }

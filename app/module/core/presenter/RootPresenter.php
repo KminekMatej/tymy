@@ -65,7 +65,7 @@ abstract class RootPresenter extends Presenter
     {
         $this->tymyUser = $this->userManager->getById($this->getUser()->getId());
 
-        if ($this->tymyUser && $this->tymyUser->getLanguage()) {
+        if ($this->tymyUser instanceof User && $this->tymyUser->getLanguage()) {
             $this->setLanguage($this->tymyUser->getLanguage());
         }
     }

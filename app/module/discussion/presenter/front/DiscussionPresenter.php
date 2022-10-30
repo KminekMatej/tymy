@@ -2,11 +2,13 @@
 
 namespace Tymy\Module\Discussion\Presenter\Front;
 
+use Nette\Bridges\ApplicationLatte\Template;
 use Tymy\Module\Core\Component\NewPostControl;
 use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Discussion\Manager\DiscussionManager;
 use Tymy\Module\Discussion\Manager\PostManager;
+use Tymy\Module\Discussion\Model\Discussion;
 use Tymy\Module\Discussion\Model\Post;
 use Tymy\Module\User\Manager\UserManager;
 
@@ -32,9 +34,12 @@ class DiscussionPresenter extends SecuredPresenter
         parent::beforeRender();
         $this->addBreadcrumb($this->translator->translate("discussion.discussion", 2), $this->link(":Discussion:Default:"));
 
+        assert($this->template instanceof Template);
+
         //set users
         $this->template->userList = $this->userList = $this->userManager->getIdList();
 
+        assert($this->template instanceof Template);
         $this->template->addFilter('myReaction', function (Post $post) {
             foreach ($post->getReactions() as $emoji => $userIds) {
                 if (in_array($this->user->getId(), $userIds)) {
@@ -45,7 +50,7 @@ class DiscussionPresenter extends SecuredPresenter
             return null;
         });
 
-        $this->template->addFilter('displayNames', fn(array $userIds): string => implode(", ", array_map(fn($userId) => $this->userList[$userId]->getCallName(), $userIds)));
+        $this->template->addFilter('displayNames', fn(array $userIds): string => implode(", ", array_map(fn($userId) => $this->userList[$userId]->getCallName(), $userIds))); /* @phpstan-ignore-line */
     }
 
     public function handleReact(int $postId, ?string $reaction = null, bool $remove = false): void
@@ -54,8 +59,8 @@ class DiscussionPresenter extends SecuredPresenter
             $this->sendPayload();   //terminate to avoid jumping into render function
         }
 
-        /* @var $post Post */
         $post = $this->postManager->getById($postId);
+        assert($post instanceof Post);
 
         $this->postManager->react($post->getDiscussionId(), $postId, $this->user->getId(), $reaction, $remove);
 
@@ -73,6 +78,7 @@ class DiscussionPresenter extends SecuredPresenter
         if (empty($d)) {
             $this->error($this->translator->translate("discussion.errors.noDiscussionExists"));
         }
+        assert($d instanceof Discussion);
 
         $this->template->search = $search;
         $this->template->suser = $suser;
@@ -153,7 +159,7 @@ class DiscussionPresenter extends SecuredPresenter
         }
     }
 
-    protected function createComponentNewPost(): \Tymy\Module\Core\Component\NewPostControl
+    protected function createComponentNewPost(): NewPostControl
     {
         $newpost = new NewPostControl($this->userManager);
         $newpost->redrawControl();

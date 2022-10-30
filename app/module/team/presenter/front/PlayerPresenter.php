@@ -3,6 +3,7 @@
 namespace Tymy\Module\Team\Presenter\Front;
 
 use Nette\Application\UI\Form;
+use Nette\Bridges\ApplicationLatte\Template;
 use Nette\Http\FileUpload;
 use Nette\Utils\Image;
 use Tymy\Module\Core\Exception\TymyResponse;
@@ -27,6 +28,7 @@ class PlayerPresenter extends SecuredPresenter
         $this->addBreadcrumb($this->translator->translate("team.team", 1), $this->link(":Team:Default:"));
 
         $allFields = $this->userManager->getAllFields();
+        assert($this->template instanceof Template);
         $this->template->addFilter('errorsCount', function ($player, $tabName) use ($allFields): int {
             $errFields = [];
             switch ($tabName) {
@@ -67,6 +69,7 @@ class PlayerPresenter extends SecuredPresenter
 
         if ($player) {  //new player based on another user
             $user = $this->userManager->getById($this->parseIdFromWebname($player));
+
             $newPlayer = $user->setStatus("PLAYER")
                 ->setEmail("")
                 ->setPictureUrl("");
@@ -89,7 +92,6 @@ class PlayerPresenter extends SecuredPresenter
 
     public function renderDefault($player): void
     {
-        /* @var $user User */
         $userId = $this->parseIdFromWebname($player);
         $user = $this->userManager->getById($userId);
 
@@ -111,7 +113,6 @@ class PlayerPresenter extends SecuredPresenter
 
     public function handleDelete($player): void
     {
-        /* @var $user User */
         $userId = $this->parseIdFromWebname($player);
 
         try {
@@ -132,6 +133,7 @@ class PlayerPresenter extends SecuredPresenter
         /* @var $file FileUpload */
         $file = $files["files"][0] ?? null;
         if ($file && $file->isImage() && $file->isOk()) {
+            assert($file instanceof FileUpload);
             $type = null;
             $image = Image::fromFile($file->getTemporaryFile(), $type);
             try {
@@ -165,9 +167,6 @@ class PlayerPresenter extends SecuredPresenter
     public function userConfigFormSuccess(Form $form, $values): void
     {
         $userId = (int) $values->id;
-
-        /* @var $oldUser User */
-        $this->userManager->getById($userId);
 
         try {
             if ($userId !== 0) {

@@ -55,15 +55,15 @@ class PollManager extends BaseManager
         if (empty($row)) {
             return null;
         }
+        assert($row instanceof ActiveRow);
 
-        /* @var $poll Poll */
         $poll = parent::map($row, $force);
+        assert($poll instanceof Poll);
 
         if ($poll->getDescription()) {
             $poll->setDescriptionHtml(BbService::bb2Html($poll->getDescription()));
         }
 
-        /* @var $row ActiveRow */
         $optionRows = $row->related(Option::TABLE, "quest_id")->fetchAll();
 
         if (!empty($optionRows)) {
@@ -78,7 +78,7 @@ class PollManager extends BaseManager
             $orderedVotes = [];
 
             foreach ($votes as $vote) {
-                /* @var $vote Vote */
+                assert($vote instanceof Vote);
                 if (!$poll->getAnonymousResults() && $vote->getUserId() == $this->user->getId()) {
                     $myVotes[$vote->getOptionId()] = $vote;
                 }
@@ -105,6 +105,7 @@ class PollManager extends BaseManager
 
     protected function metaMap(BaseModel &$model, $userId = null): void
     {
+        assert($model instanceof Poll);
         if (!$model->fullyMapped) {   //hack - metaMap is usually called by parent map function, but its not completely mapped and lacks important informations from local mapper. So metMap() is called from local mapper after everything is mapped properly. This condition just avoids double calling of metaMap
             return;
         }
@@ -112,11 +113,10 @@ class PollManager extends BaseManager
         if (empty($userId)) {
             $userId = $this->user->getId();
         }
-        /* @var $model Poll */
 
         //set voted
         foreach ($model->getVotes() as $vote) {
-            /* @var $vote Vote */
+            assert($vote instanceof Vote);
             if ($vote->getUserId() === $userId) {
                 $model->setVoted(true);
                 break;
@@ -298,7 +298,7 @@ class PollManager extends BaseManager
             } while (in_array($cloakId, $cloakIds));
             $cloakIds[] = $cloakId;
 
-            /* @var $vote Vote */
+            assert($vote instanceof Vote);
             $vote->setUserId($cloakId);
             $vote->setUpdatedAt(null);
             $vote->setUpdatedById(null);
@@ -324,7 +324,7 @@ class PollManager extends BaseManager
     {
         $count = 0;
         foreach ($polls as $poll) {
-            /* @var $poll Poll */
+            assert($poll instanceof Poll);
             if ($poll->getVotePending()) {
                 $count++;
             }

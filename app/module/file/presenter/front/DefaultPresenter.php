@@ -4,8 +4,8 @@ namespace Tymy\Module\File\Presenter\Front;
 
 use Exception;
 use Nette\Application\UI\Form;
+use Nette\Bridges\ApplicationLatte\Template;
 use Nette\Utils\DateTime;
-use Tracy\Debugger;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\File\Handler\FileManager;
 use Tymy\Module\Team\Manager\TeamManager;
@@ -34,6 +34,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->addBreadcrumb($this->translator->translate("file.file", 2), $this->link(":File:Default:"));
         $this->initFileStats();
 
+        assert($this->template instanceof Template);
         $this->template->addFilter('filesize', fn($sizeInBytes): string => $this->formatBytes($sizeInBytes));
 
         $this->template->addFilter('filetype', function ($filename) {
@@ -89,7 +90,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->template->contents = $this->getContents($folderSanitized);
     }
 
-    public function createComponentNewFolderForm(): \Nette\Application\UI\Form
+    public function createComponentNewFolderForm(): Form
     {
         $form = new Form();
 
@@ -111,7 +112,7 @@ class DefaultPresenter extends SecuredPresenter
         return $form;
     }
 
-    public function createComponentRenameForm(): \Nette\Application\UI\Form
+    public function createComponentRenameForm(): Form
     {
         $form = new Form();
 
@@ -136,7 +137,7 @@ class DefaultPresenter extends SecuredPresenter
         return $form;
     }
 
-    public function createComponentUploadFileForm(): \Nette\Application\UI\Form
+    public function createComponentUploadFileForm(): Form
     {
         $form = new Form();
 

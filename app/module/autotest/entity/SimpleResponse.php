@@ -4,6 +4,7 @@ namespace Tymy\Module\Autotest;
 
 use Nette\Application\IResponse;
 use Nette\Application\Request;
+use Nette\Application\Responses\JsonResponse;
 use Nette\Application\UI\Presenter;
 use Nette\Http\Response;
 use Tymy\Module\Autotest\Entity\Assert;
@@ -21,7 +22,7 @@ class SimpleResponse
         if ($data && is_array($data) && array_key_exists("code", $data)) {
             $this->log->setCustomResponseCode((int) $data["code"]);
         }
-        if (is_array($response->getPayload()) && array_key_exists("statusMessage", $response->getPayload())) {
+        if ($response instanceof JsonResponse && is_array($response->getPayload()) && array_key_exists("statusMessage", $response->getPayload())) {
             $this->message = $response->getPayload()["statusMessage"];
         }
     }

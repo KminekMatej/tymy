@@ -28,6 +28,7 @@ class MenuPresenter extends SecuredPresenter
 
     private function requestGetMenu(): void
     {
+        assert($this->manager instanceof PollManager);
         $polls = $this->manager->getListUserAllowed();
 
         $this->respondOk($this->arrayToJson($polls));

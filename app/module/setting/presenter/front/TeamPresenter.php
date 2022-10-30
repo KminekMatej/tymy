@@ -46,8 +46,8 @@ class TeamPresenter extends SettingBasePresenter
         $this->statusSetManager->updateByArray((int) $values->id, ["name" => $values->name]);
 
         //update statuses
-        /* @var $statusSet StatusSet */
         $statusSet = $this->statusSetManager->getById((int) $values->id);
+        assert($statusSet instanceof StatusSet);
 
         foreach ($statusSet->getStatuses() as $status) {
             $this->statusManager->updateByArray($status->getId(), [

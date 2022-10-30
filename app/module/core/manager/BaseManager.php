@@ -96,7 +96,7 @@ abstract class BaseManager
 
     /**
      * Get list of user ids, allowed to read given entity
-     * @param int|ActiveRow|BusinessCase $record
+     * @param BaseModel $record
      * @return int[]
      */
     abstract public function getAllowedReaders(BaseModel $record): array;
@@ -116,8 +116,8 @@ abstract class BaseManager
 
     /**
      * Maps one active row to object
-     * @param ActiveRow|false|null $row
-     * @return BaseModel
+     * @param IRow|null $row
+     * @return BaseModel|null
      */
     public function map(?IRow $row, bool $force = false): ?BaseModel
     {
@@ -277,21 +277,6 @@ abstract class BaseManager
     }
 
     /**
-     * Check if record, specified by list of IDs, exists - check whether supplied count of rows in database matches count of input idList
-     * @param int $id
-     * @return TRUE if counts matches, array of non-mathcing IDs if not
-     */
-    public function existsList(array $idList, string $table = null)
-    {
-        $table = $table ?: $this->getTable();
-        $ids = $this->database->table($table)->where("id", $idList)->fetchPairs(null, "id");
-        if (count($ids) === count($idList)) {
-            return true;
-        }
-        return array_diff($ids, $idList);
-    }
-
-    /**
      * Update table row based on given table, id and updates array. Function throws correct exception using class DBException
      * IDColumn can be changed if primary key is different than classic `id`
      *
@@ -333,11 +318,12 @@ abstract class BaseManager
      * Delete table row based on given table and id.
      * IDColumn can be changed if primary key is different than classic `id`
      *
-     * @param type $idColumn
-     * @return int number of affected rows
-     * @throws @static.mtd:DBException.from
+     * @param int $id
+     * @param string|null $table
+     * @param string $idColumn
+     * @return int
      */
-    protected function deleteRecord(int $id, ?string $table = null, $idColumn = "id")
+    protected function deleteRecord(int $id, ?string $table = null, string $idColumn = "id")
     {
         try {
             $deleted = $this->database->table($table ?: $this->getTable())->where($idColumn, $id)->delete();
@@ -395,7 +381,7 @@ abstract class BaseManager
         $inserts = [];
 
         foreach ($this->getScheme() as $field) {
-            /* @var $field Field */
+            assert($field instanceof Field);
             if ($field->getMandatory() && !array_key_exists($field->getProperty(), $array)) {
                 $this->responder->E4013_MISSING_INPUT($field->getProperty());
             }
@@ -442,7 +428,7 @@ abstract class BaseManager
         $sch = $scheme ?: $this->getScheme();
 
         foreach ($sch as $field) {
-            /* @var $field Field */
+            assert($field instanceof Field);
             if (!array_key_exists($field->getProperty(), $array)) { //this field is not mentioned in update data, fill it only if its update field
                 if ($field->getColumn() == "updated_user_id" && !empty($this->user)) {
                     $additionalUpdates[$field->getColumn()] = $this->user->getId();
@@ -529,7 +515,9 @@ abstract class BaseManager
      *
      * @internal Every override of this function should make this function as fast as possible between one request - using simpleCache when neccessary
      *
-     * @param BaseModel $entity
+     * @param BaseModel $model
+     * @param int $userId
+     * @return void
      */
     protected function metaMap(BaseModel &$model, int $userId = null): void
     {
@@ -576,7 +564,7 @@ abstract class BaseManager
         $this->responder->E403_FORBIDDEN($message ?? "Nedostatečná práva");
     }
 
-    protected function respondNotFound(?string $module = null, ?int $id = null)
+    protected function respondNotFound(?string $module = null, ?int $id = null): never
     {
         $this->responder->E404_NOT_FOUND($module, $id);
     }
@@ -688,7 +676,7 @@ abstract class BaseManager
         }
 
         foreach ($this->getScheme() as $dbField) {
-            /* @var $dbField Field */
+            assert($dbField instanceof Field);
             if ($dbField->getProperty() === $propertyName) {
                 return $dbField->getColumn();
             }

@@ -17,7 +17,6 @@ class Migration
 
     private string $migration;
 
-    /** @var mixed|null */
     private ?string $migratingFrom = null;
 
     private \Nette\Utils\DateTime $datetime;
@@ -28,7 +27,6 @@ class Migration
 
     private string $downContents;
 
-    /** @var mixed|null */
     private ?float $time = null;
 
     private bool $result = false;

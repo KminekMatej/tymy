@@ -2,10 +2,10 @@
 
 namespace Tymy\Module\Sign\Form;
 
+use Contributte\Translation\Translator;
 use Nette;
 use Nette\Application\UI\Form;
 use Nette\Security\SimpleIdentity;
-use Symfony\Component\Translation\Translator;
 use Tymy\Module\Core\Exception\MissingInputException;
 use Tymy\Module\User\Manager\InvitationManager;
 use Tymy\Module\User\Manager\UserManager;
@@ -43,12 +43,12 @@ class SignUpFormFactory
             ->addConditionOn($form['password'], Form::VALID)
             ->addRule($form::EQUAL, "Hesla se neshodují", $form['password']);
 
-        $form->addEmail('email', 'E-mail:')
+        $email = $form->addEmail('email', 'E-mail:')
             ->setRequired('E-mail je povinný')
             ->addRule($form::PATTERN, "E-mail je invalidní", self::EMAIL_PATTERN);
 
-        $form->addText('firstName', 'Křestní jméno:');
-        $form->addText('lastName', 'Příjmení:');
+        $firstname = $form->addText('firstName', 'Křestní jméno:');
+        $lastname = $form->addText('lastName', 'Příjmení:');
 
         $form->addTextArea('admin_note', 'Vzkaz pro admina:');
 
@@ -56,9 +56,9 @@ class SignUpFormFactory
 
         // fill details from invitation
         if ($invitation !== null) {
-            $form['firstName']->setValue($invitation->getFirstName());
-            $form['lastName']->setValue($invitation->getLastName());
-            $form['email']->setValue($invitation->getEmail());
+            $firstname->setValue($invitation->getFirstName());
+            $lastname->setValue($invitation->getLastName());
+            $email->setValue($invitation->getEmail());
         }
 
         $form->onSuccess[] = function (Form $form, $values) use ($onSuccess): void {
@@ -66,7 +66,7 @@ class SignUpFormFactory
                 $invitation = null;
                 if ($values->invitation && !empty($values->invitation)) {
                     $invitation = $this->invitationManager->getByCode($values->invitation);
-                    if (!$invitation instanceof Invitation) {
+                    if ($invitation instanceof Invitation) {
                         if ($invitation->getStatus() == Invitation::STATUS_EXPIRED) { //already expired
                             $form->addError($this->translator->translate("team.errors.invitationExpired", 1));
                             return;
@@ -89,10 +89,10 @@ class SignUpFormFactory
 
                 $identity = new SimpleIdentity($registeredUser->getId(), $registeredUser->getRoles());
             } catch (\Nette\InvalidArgumentException $exc) {
-                $form['username']->addError($exc->getMessage());
+                $form['username']->addError($exc->getMessage()); /* @phpstan-ignore-line */
                 return;
             } catch (MissingInputException $exc) {
-                $form[$exc->getMessage()]->addError("This field is required");
+                $form[$exc->getMessage()]->addError("This field is required"); /* @phpstan-ignore-line */
                 return;
             }
             $onSuccess($identity);

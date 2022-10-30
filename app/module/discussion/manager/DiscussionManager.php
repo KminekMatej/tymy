@@ -49,6 +49,7 @@ class DiscussionManager extends BaseManager
     {
         if ($recordId) {
             $this->discussion = $this->loadRecord($recordId);
+            assert($this->discussion instanceof Discussion);
 
             if (!$this->discussion->getCanRead()) {
                 $this->responder->E4001_VIEW_NOT_PERMITTED(Discussion::MODULE, $recordId);
@@ -65,7 +66,7 @@ class DiscussionManager extends BaseManager
 
     /**
      * Maps one active row to object
-     * @param ActiveRow|false|null $row
+     * @param IRow|null $row
      * @param bool $force True to skip cache
      * @return Discussion|null
      */
@@ -75,8 +76,8 @@ class DiscussionManager extends BaseManager
             return null;
         }
 
-        /* @var $discussion Discussion */
         $discussion = parent::map($row, $force);
+        assert($discussion instanceof Discussion);
 
         $discussion->setNewInfo(new NewInfo($discussion->getId(), $row->newInfo, $row->lastVisit));
         $discussion->setNumberOfPosts($row->numberOfPosts);
@@ -87,7 +88,7 @@ class DiscussionManager extends BaseManager
 
     protected function metaMap(BaseModel &$model, $userId = null): void
     {
-        /* @var $model Discussion */
+        assert($model instanceof Discussion);
         $model->setCanRead(empty($model->getReadRightName()) || $this->user->isAllowed($this->user->getId(), Privilege::USR($model->getReadRightName())));
         $model->setCanWrite(empty($model->getWriteRightName()) || $this->user->isAllowed($this->user->getId(), Privilege::USR($model->getWriteRightName())));
         $model->setCanDelete($this->userManager->isAdmin() || (!empty($model->getDeleteRightName()) && $this->user->isAllowed($this->user->getId(), Privilege::USR($model->getDeleteRightName()))));
@@ -122,7 +123,7 @@ class DiscussionManager extends BaseManager
         $discussionList = $userId ? $this->getListUserAllowed($userId) : $this->getList();
 
         foreach ($discussionList as $discussion) {
-            /* @var $discussion Discussion */
+            assert($discussion instanceof Discussion);
             if ($discussion->getWebName() == $webName) {
                 return $discussion;
             }
@@ -232,7 +233,7 @@ class DiscussionManager extends BaseManager
      */
     public function getAllowedReaders(BaseModel $record): array
     {
-        /* @var $record Discussion */
+        assert($record instanceof Discussion);
         if (empty($record->getReadRightName())) {
             return $this->getAllUserIds();
         }
@@ -283,7 +284,7 @@ class DiscussionManager extends BaseManager
     {
         $count = 0;
         foreach ($discussions as $discussion) {
-            /* @var $discussion Discussion */
+            assert($discussion instanceof Discussion);
             $count += $discussion->getNewInfo()->getNewsCount();
         }
 

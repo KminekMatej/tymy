@@ -44,7 +44,7 @@ class FormFactory
         if (!isset($this->userPermissions)) {
             $this->userPermissions = [];
             foreach ($this->permissionManager->getByType(Permission::TYPE_USER) as $userPermission) {
-                /* @var $userPermission Permission */
+                assert($userPermission instanceof Permission);
                 $this->userPermissions[$userPermission->getName()] = $userPermission->getCaption() ?: $userPermission->getName();
             }
         }
@@ -57,7 +57,7 @@ class FormFactory
         $eventTypes = [];
 
         foreach ($eventTypesList as $eventType) {
-            /* @var $eventType EventType */
+            assert($eventType instanceof EventType);
             $eventTypes[$eventType->getId()] = $eventType->getCaption();
         }
 
@@ -108,15 +108,15 @@ class FormFactory
     public function createStatusSetForm(Closure $onSuccess): Multiplier
     {
         return new Multiplier(function (string $statusSetId) use ($onSuccess): \Nette\Application\UI\Form {
-                /* @var $statusSet StatusSet */
                 $statusSet = $this->statusSetManager->getById((int) $statusSetId);
+                assert($statusSet instanceof StatusSet);
                 $form = new Form();
                 $form->addHidden("id", $statusSetId);
                 $form->addText("name", $this->translator->translate("settings.team"))->setValue($statusSet->getName())->setRequired();
                 $form->addSubmit("save")->setHtmlAttribute("title", $this->translator->translate("common.save"));
 
             foreach ($statusSet->getStatuses() as $status) {
-                /* @var $status Status */
+                assert($status instanceof Status);
                 $form->addText("status_{$status->getId()}_caption", $this->translator->translate("common.name"))
                     ->setValue($status->getCaption())
                     ->setHtmlAttribute("placeholder", $this->translator->translate("common.name"))
@@ -150,13 +150,13 @@ class FormFactory
         $ssList = [];
 
         foreach ($this->statusSetManager->getIdList() as $statusSet) {
-            /* @var $statusSet StatusSet */
+            assert($statusSet instanceof StatusSet);
             $ssList[$statusSet->getId()] = $statusSet->getName();
         }
 
         return new Multiplier(function (string $eventTypeId) use ($onSuccess, $ssList): \Nette\Application\UI\Form {
-                /* @var $eventType EventType */
                 $eventType = $this->eventTypeManager->getById((int) $eventTypeId);
+                assert($eventType instanceof EventType);
                 $form = new Form();
                 $form->addHidden("id", $eventTypeId);
                 $form->addText("code", $this->translator->translate("status.code"))
@@ -197,7 +197,7 @@ class FormFactory
         $form->addMultiSelect("requiredFields", $this->translator->translate("team.requiredFields"), $this->userManager->getAllFields()["ALL"])->setValue($team->getRequiredFields());
 
         foreach ($eventTypes as $etype) {
-            /* @var $etype EventType */
+            assert($etype instanceof EventType);
             $form->addText("eventColor_" . $etype->getCode(), $etype->getCaption())
                 ->setAttribute("type", "color")
                 ->setAttribute("data-color", $etype->getColor())
@@ -279,7 +279,7 @@ class FormFactory
 
             //add existing items
             foreach ($poll->getOptions() as $option) {
-                /* @var $option Option */
+                assert($option instanceof Option);
                 $form->addHidden("option_id_" . $option->getId(), $option->getId());
                 $form->addText("option_caption_" . $option->getId(), $this->translator->translate("poll.itemCaption"))->setValue($option->getCaption())->setHtmlAttribute("data-value", $option->getCaption());
                 $form->addSelect("option_type_" . $option->getId(), $this->translator->translate("settings.type"), $optionTypes)
@@ -410,7 +410,7 @@ class FormFactory
         }
 
         foreach ($form->getControls() as $control) {
-            /* @var $control BaseControl */
+            assert($control instanceof BaseControl);
             if (in_array($control->getName(), $this->teamManager->getTeam()->getRequiredFields())) {
                 $control->setRequired($this->translator->translate("common.errors.teamValueRequired"));
             }

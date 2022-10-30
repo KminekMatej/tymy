@@ -13,6 +13,7 @@ use Tymy\Module\Core\Service\MailService;
 use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Mapper\InvitationMapper;
 use Tymy\Module\User\Model\Invitation;
+use Tymy\Module\User\Model\User;
 
 /**
  * Description of InvitationManager
@@ -98,8 +99,8 @@ class InvitationManager extends BaseManager
 
         $createdRow = $this->createByArray($data);
 
-        /* @var $invitation Invitation */
         $invitation = $this->map($createdRow);
+        assert($invitation instanceof Invitation);
 
         if ($invitation->getEmail()) {
             $this->notifyByEmail($invitation);

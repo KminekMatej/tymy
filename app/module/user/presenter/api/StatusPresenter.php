@@ -27,6 +27,7 @@ class StatusPresenter extends SecuredPresenter
             $this->respondNotFound();
         }
 
+        assert($this->manager instanceof UserManager);
         $this->respondOk($this->arrayToJson($this->manager->getByStatus($status)));
     }
 }

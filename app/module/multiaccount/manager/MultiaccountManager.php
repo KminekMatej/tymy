@@ -173,12 +173,9 @@ class MultiaccountManager extends BaseManager
             ->delete();
 
         //if deleted record was the last one (which means the last record is just pointing to itself), delete all the accountId rows
-        if (!empty($accountId) && $accountId) {
-            $restRows = $this->mainDatabase->table($this->getTable())->where("account_id", $accountId)->count();
-
-            if ($restRows === 1) {
-                $this->mainDatabase->table($this->getTable())->where("account_id", $accountId)->delete();
-            }
+        $restRows = $this->mainDatabase->table($this->getTable())->where("account_id", $accountId)->count();
+        if ($restRows === 1) {
+            $this->mainDatabase->table($this->getTable())->where("account_id", $accountId)->delete();
         }
 
 

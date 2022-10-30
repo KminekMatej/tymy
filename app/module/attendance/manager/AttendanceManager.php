@@ -66,19 +66,19 @@ class AttendanceManager extends BaseManager
 
     /**
      * Maps one active row to object
-     * @param ActiveRow|false|null $row
+     * @param IRow|null $row
      * @param bool $force True to skip cache
      * @return Attendance|null
      */
     public function map(?IRow $row, bool $force = false): ?BaseModel
     {
-        /* @var $row ActiveRow */
         if ($row === null) {
             return null;
         }
+        assert($row instanceof ActiveRow);
 
-        /* @var $attendance Attendance */
         $attendance = parent::map($row, $force);
+        assert($attendance instanceof Attendance);
 
         if ($attendance->getPreStatusId()) {
             $attendance->setPreStatus($row->ref(Status::TABLE, "pre_status_id")->code);
@@ -130,7 +130,7 @@ class AttendanceManager extends BaseManager
      */
     public function getAllowedReaders(BaseModel $record): array
     {
-        /* @var $record Attendance */
+        assert($record instanceof Attendance);
         return $this->getAllUserIds();
     }
 

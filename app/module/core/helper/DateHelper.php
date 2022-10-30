@@ -39,7 +39,7 @@ class DateHelper
     /**
      * Sets local timzone to DateTime object
      * @param \DateTime $datetime
-     * @return void
+     * @return \DateTime
      */
     public static function toLocal(\DateTime $datetime): \DateTime
     {

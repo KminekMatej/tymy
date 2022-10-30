@@ -2,10 +2,10 @@
 
 namespace Tymy\Module\Event\Presenter\Front;
 
+use Nette\Bridges\ApplicationLatte\Template;
 use Tymy\Module\Attendance\Manager\AttendanceManager;
 use Tymy\Module\Attendance\Manager\StatusManager;
 use Tymy\Module\Attendance\Model\Attendance;
-use Tymy\Module\Attendance\Model\Status;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Event\Manager\EventTypeManager;
@@ -33,6 +33,7 @@ class EventBasePresenter extends SecuredPresenter
 
         $this->addBreadcrumb($this->translator->translate("event.attendance", 2), $this->link(":Event:Default:"));
 
+        assert($this->template instanceof Template);
         $this->template->addFilter('genderTranslate', function ($gender) {
             switch ($gender) {
                 case "MALE":
@@ -73,7 +74,7 @@ class EventBasePresenter extends SecuredPresenter
         $feed = [];
 
         foreach ($events as $event) {
-            /* @var $event Event */
+            assert($event instanceof Event);
             $feed[] = [
                 "id" => $event->getId(),
                 "title" => $event->getCaption(),

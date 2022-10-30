@@ -74,7 +74,7 @@ class ApplePush
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
         foreach ($subscribers as $subscriber) {
-            /* @var $subscriber Subscriber */
+            assert($subscriber instanceof Subscriber);
             if ($subscriber->getType() !== Subscriber::TYPE_APNS) {
                 continue;
             }

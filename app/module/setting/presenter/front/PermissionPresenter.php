@@ -83,8 +83,8 @@ class PermissionPresenter extends SettingBasePresenter
     {
         $bind = $this->getRequest()->getPost();
         try {
-            /* @var $createdPermission Permission */
             $createdPermission = $this->permissionManager->create($this->composePermissionData($bind["changes"]));
+            assert($createdPermission instanceof Permission);
             $this->flashMessage($this->translator->translate("common.alerts.created"), 'success');
             $this->redirect(":Setting:Permission:", $createdPermission->getWebname());
         } catch (TymyResponse $tResp) {
@@ -99,6 +99,7 @@ class PermissionPresenter extends SettingBasePresenter
         $data = $this->composePermissionData($bind["changes"]);
         try {
             $updatedPermission = $this->permissionManager->update($data, $bind["id"]);
+            assert($updatedPermission instanceof Permission);
             $this->flashMessage($this->translator->translate("common.alerts.updated"), 'success');
             if (array_key_exists("name", $data)) {   //if name has been changed, redirect to a new name is neccessary
                 $this->redirect(":Setting:Permission:", $updatedPermission->getName());
