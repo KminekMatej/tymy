@@ -48,7 +48,6 @@ class NotificationGenerator
     public function createEvent(Event $event): PushNotification
     {
         $user = $this->userManager->getById($this->user->getId());
-        assert($user instanceof User2);
 
         return new PushNotification(
             self::CREATE_EVENT,
@@ -66,7 +65,6 @@ class NotificationGenerator
     public function deleteEvent(Event $event): PushNotification
     {
         $user = $this->userManager->getById($this->user->getId());
-        assert($user instanceof User2);
 
         return new PushNotification(
             self::DELETE_EVENT,
@@ -84,7 +82,6 @@ class NotificationGenerator
     public function changeEventTime(Event $event, DateTime $previousStartTime): PushNotification
     {
         $user = $this->userManager->getById($this->user->getId());
-        assert($user instanceof User2);
 
         return new PushNotification(
             self::UPDATE_EVENT_TIME,

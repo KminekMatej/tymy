@@ -46,7 +46,7 @@ class StringsManager
     {
         if ($this->user->isLoggedIn()) {
             $tymyUser = $this->userManager->getById($this->user->getId());
-            assert($tymyUser instanceof User2);
+
             $code = $tymyUser->getLanguage();
         } else {
             $code = $this->teamManager->getTeam()->getDefaultLanguageCode();

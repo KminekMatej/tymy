@@ -199,7 +199,7 @@ class PostManager extends BaseManager
         $data["discussionId"] = $resourceId;
         $data["createdAt"] = new DateTime();
         $tymyUser = $this->userManager->getById($this->user->getId());
-        assert($tymyUser instanceof User);
+
         $data["userName"] = $tymyUser->getDisplayName();
 
         $this->allowDiscussion($resourceId);

@@ -59,7 +59,7 @@ class NavbarControl extends Control
     private function initPlayers(): void
     {
         $me = $this->userManager->getById($this->user->getId());
-        assert($me instanceof User2);
+
         $users = $this->userManager->getList();
         $this->template->counts = $this->userManager->getCounts($users);
         $this->template->playersWarnings = $me->getWarnings();

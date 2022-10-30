@@ -69,7 +69,7 @@ class PlayerPresenter extends SecuredPresenter
 
         if ($player) {  //new player based on another user
             $user = $this->userManager->getById($this->parseIdFromWebname($player));
-            assert($user instanceof User);
+
             $newPlayer = $user->setStatus("PLAYER")
                 ->setEmail("")
                 ->setPictureUrl("");
@@ -94,7 +94,6 @@ class PlayerPresenter extends SecuredPresenter
     {
         $userId = $this->parseIdFromWebname($player);
         $user = $this->userManager->getById($userId);
-        assert($user instanceof User);
 
         if (!$user instanceof BaseModel) {
             $this->flashMessage($this->translator->translate("common.alerts.userNotFound", null, ['id' => $userId]), "danger");

@@ -26,7 +26,6 @@ use Tymy\Module\User\Mapper\UserMapper;
 use Tymy\Module\User\Model\Invitation;
 use Tymy\Module\User\Model\SimpleUser;
 use Tymy\Module\User\Model\User;
-
 use const TEAM_DIR;
 
 /**
@@ -186,7 +185,6 @@ class UserManager extends BaseManager
         parent::toBoolData($array, ["anonymousResults", "changeableVotes"]);
 
         $userModel = $this->getById($id);
-        assert($userModel instanceof User);
 
         if ($userModel->getStatus() == User::STATUS_INIT && isset($array["status"]) && $array["status"] != User::STATUS_INIT) {
             if ($array["status"] == User::STATUS_DELETED) {
@@ -355,7 +353,7 @@ class UserManager extends BaseManager
     /**
      * Register user - create user record in INIT status
      */
-    public function register(array $array, ?Invitation $invitation = null): ?\Tymy\Module\User\Model\User
+    public function register(array $array, ?Invitation $invitation = null): ?User
     {
         $this->allowRegister($array);
 
@@ -677,14 +675,14 @@ class UserManager extends BaseManager
         return parent::deleteRecord($resourceId);
     }
 
-    public function read(int $resourceId, ?int $subResourceId = null): BaseModel
+    public function read(int $resourceId, ?int $subResourceId = null): User
     {
         $this->allowRead($resourceId);
 
         return $this->getById($resourceId);
     }
 
-    public function update(array $data, int $resourceId, ?int $subResourceId = null): BaseModel
+    public function update(array $data, int $resourceId, ?int $subResourceId = null): User
     {
         parent::toBoolData($data, ["canEditCallName", "canLogin", "hideDiscDesc"]);
 
@@ -722,7 +720,6 @@ class UserManager extends BaseManager
         }
 
         $user = $this->getById($userId);
-        assert($user instanceof User);
 
         if (!$user->getCanLogin() || !in_array($user->getStatus(), [User::STATUS_PLAYER, User::STATUS_MEMBER, User::STATUS_SICK])) {
             $this->respondBadRequest($this->translator->translate("common.alerts.pwdResetFailed"));

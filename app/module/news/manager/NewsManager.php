@@ -93,7 +93,7 @@ class NewsManager extends BaseManager
     public function getListUserAllowed(): array
     {
         $user = $this->userManager->getById($this->user->getId());
-        assert($user instanceof User);
+
         $limit = (new DateTime("2019-01-01"))->setTime(0, 0, 0);
 
         $news = $this->mapAll(
