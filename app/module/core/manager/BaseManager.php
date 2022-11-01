@@ -724,7 +724,7 @@ abstract class BaseManager
     {
         switch ($field->getType()) {
             case Field::TYPE_DATETIME:
-                $value = !empty($value) ? DateHelper::createLc($value) : $value; //format DateTime only if its not null or empty
+                $value = !empty($value) ? DateHelper::createLc($value) : null; //format DateTime only if its not null or empty
                 break;
             case Field::TYPE_FLOAT:
                 if (is_numeric($value)) {
