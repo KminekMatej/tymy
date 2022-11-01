@@ -54,7 +54,7 @@
                 <div class="input-group">
                     {input email, class => 'col-12 col-md-6 form-control', style => 'min-width: 200px'}
                     <div class="input-group-append">
-                        <span class="input-group-text text-danger" n:if="in_array(explode('@', $player->getEmail())[1], ['msn.com', 'outlook.com', 'hotmail.com', 'live.com'])" title="{_team.alerts.changeOutlookEmail}">
+                        <span class="input-group-text text-danger" n:if="in_array(explode('@', $player->getEmail() ?: '')[1], ['msn.com', 'outlook.com', 'hotmail.com', 'live.com'])" title="{_team.alerts.changeOutlookEmail}">
                             <i class="fa fa-triangle-exclamation fa-bounce" aria-hidden="true"></i>
                         </span>
                         <span class="input-group-text">
