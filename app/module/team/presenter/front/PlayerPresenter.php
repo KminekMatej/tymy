@@ -156,7 +156,9 @@ class PlayerPresenter extends SecuredPresenter
 
     public function createComponentUserConfigForm(): Form
     {
-        $userId = $this->parseIdFromWebname($this->getRequest()->getParameter("player"));
+        if ($this->getRequest()->getParameter("player")) {
+            $userId = $this->parseIdFromWebname($this->getRequest()->getParameter("player"));
+        }
 
         return $this->formFactory->createUserConfigForm(
             fn(Form $form, $values) => $this->userConfigFormSuccess($form, $values),
