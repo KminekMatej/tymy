@@ -575,7 +575,7 @@ class UserManager extends BaseManager
         if (isset($data["roles"]) && $data["roles"] !== $this->userModel->getRoles() && !$this->user->isAllowed($this->user->getId(), Privilege::SYS("IS_ADMIN"))) {
             $this->responder->E403_FORBIDDEN($this->translator->translate("team.alerts.changingRolesForbidden"));
         }
-        
+
         $canEditFull = $this->user->isAllowed($this->user->getId(), Privilege::SYS("USR_UPDATE"));
         $editingMyself = $this->userModel->getId() === $this->user->getId();
 

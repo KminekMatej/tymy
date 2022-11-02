@@ -14,10 +14,10 @@ class PushNotification implements JsonSerializable
     private string $type;
     private array $params;
     private int $userId;
-    private int $teamId; 
-    private string $title; 
-    private string $message; 
-    private ?string $imageUrl = null; 
+    private int $teamId;
+    private string $title;
+    private string $message;
+    private ?string $imageUrl = null;
     private ?string $url = null;
     private ?int $badge = null;
 
