@@ -205,7 +205,14 @@ class UserManager extends BaseManager
             $array["roles"] = implode(",", $array["roles"]);
         }
 
-        if (array_key_exists("password", $array)) {
+        if (isset($array["password"]) && empty($array["password"])) {
+            unset($array["password"]); //do not change password if input is empty
+        }
+
+        if (isset($array["password"])) { //changing password requested
+            if (strlen($array["password"]) < 3) {
+                $this->respondBadRequest($this->translator->translate("team.alerts.passwordTooShort"));
+            }
             $array["password"] = $this->hashPassword($array["password"]);
         }
 
