@@ -162,7 +162,7 @@ class PlayerPresenter extends SecuredPresenter
 
         return $this->formFactory->createUserConfigForm(
             fn(Form $form, $values) => $this->userConfigFormSuccess($form, $values),
-            $this->getAction() == "new" ? null : $this->userManager->getById($userId),
+            $this->getAction() == "new" || !isset($userId) ? null : $this->userManager->getById($userId),
         );
     }
 

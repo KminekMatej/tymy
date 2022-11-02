@@ -77,7 +77,7 @@ class SecuredPresenter extends BasePresenter
         if ($this->tymyUser && $this->tymyUser->getSkin() !== '' && $this->tymyUser->getSkin() !== '0') {//set user defined skin instead of team one after login
             $this->template->skin = $this->skin = $this->tymyUser->getSkin();
         }
-        if ($this->tymyUser && !$this->user->getIdentity()->ghost) {// mark user as live if this aint ghost access
+        if ($this->tymyUser && !$this->user->getIdentity()->ghost) { /* @phpstan-ignore-line : mark user as live if this aint ghost access */
             $this->userManager->setUserLive($this->tymyUser->getId());
         }
         $this->template->tymyUser = $this->tymyUser;
