@@ -4,19 +4,26 @@ on:
   push:
 
 jobs:
-  static-analysis:
-      name: Static analysis
+  setup: 
+      name: Setup
       runs-on: self-hosted
-      
       steps:
         - name: "Checkout"
           uses: actions/checkout@v2
           
         - name: "Compose"
           run: composer install --dev
-          
+  PhpCS:
+      needs: setup
+      name: PHP Code sniffer
+      runs-on: self-hosted
+      steps:          
         - name: "PHPCs"
           run: vendor/bin/phpcs
-          
+  PhpStan:
+      needs: setup
+      name: Static Analysis
+      runs-on: self-hosted
+      steps:          
         - name: "PHPStan"
           run: vendor/bin/phpstan
