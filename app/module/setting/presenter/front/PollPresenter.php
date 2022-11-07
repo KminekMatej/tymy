@@ -49,7 +49,7 @@ class PollPresenter extends SettingBasePresenter
         $this->template->rows = [];
         $polls = $this->pollManager->getList();
         foreach ($polls as $poll) {
-            /* @var $poll Poll */
+            assert($poll instanceof Poll);
             $this->template->rows[] = new Row([
                 Cell::detail($this->link(":Setting:Poll:", [$poll->getWebName()])),
                 $poll->getId(),
@@ -70,18 +70,19 @@ class PollPresenter extends SettingBasePresenter
         $this->addBreadcrumb($this->translator->translate("poll.new"));
     }
 
-    public function renderPoll(?string $resource = null): void
+    public function renderPoll(string $resource): void
     {
         $this->allowPermission('ASK.VOTE_UPDATE');
 
         //RENDERING POLL DETAIL
         $pollId = $this->parseIdFromWebname($resource);
-        /* @var $this->poll Poll */
         $this->poll = $this->pollManager->getById($pollId);
-        if ($this->poll == null) {
+
+        if (!$this->poll instanceof Poll) {
             $this->flashMessage($this->translator->translate("poll.errors.pollNotExists", null, ['id' => $pollId]), "danger");
             $this->redirect(':Setting:Poll:');
         }
+
         $this->addBreadcrumb($this->poll->getCaption(), $this->link(":Setting:Poll:", $this->poll->getWebName()));
         $this->template->poll = $this->poll;
     }
@@ -106,6 +107,8 @@ class PollPresenter extends SettingBasePresenter
         $poll = $values->id ?
             $this->pollManager->update((array) $values, $values->id) :
             $this->pollManager->create((array) $values);
+
+        assert($poll instanceof Poll);
 
         $existingOptionIds = ArrayHelper::entityIds($poll->getOptions());
         $optionsToDel = [];
