@@ -286,12 +286,12 @@ class FormFactory
                     ->setValue($option->getType())
                     ->setHtmlAttribute("data-value", $option->getType());
             }
-        }
 
-        //add template row
-        $form->addHidden("option_id_0", 0);
-        $form->addText("option_caption_0", $this->translator->translate("poll.itemCaption"))->setHtmlAttribute("data-value");
-        $form->addSelect("option_type_0", $this->translator->translate("settings.type"), $optionTypes)->setHtmlAttribute("data-value")->setDefaultValue(Option::TYPE_TEXT);
+            //add template row
+            $form->addHidden("option_id_0", 0);
+            $form->addText("option_caption_0", $this->translator->translate("poll.itemCaption"))->setHtmlAttribute("data-value");
+            $form->addSelect("option_type_0", $this->translator->translate("settings.type"), $optionTypes)->setHtmlAttribute("data-value", Option::TYPE_TEXT)->setDefaultValue(Option::TYPE_TEXT);
+        }
 
         $form->onSuccess[] = $onSuccess;
 
