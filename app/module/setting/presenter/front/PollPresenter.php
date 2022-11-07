@@ -49,7 +49,7 @@ class PollPresenter extends SettingBasePresenter
         $this->template->rows = [];
         $polls = $this->pollManager->getList();
         foreach ($polls as $poll) {
-            assert($poll instanceof Poll);
+            /* @var $poll Poll */
             $this->template->rows[] = new Row([
                 Cell::detail($this->link(":Setting:Poll:", [$poll->getWebName()])),
                 $poll->getId(),
@@ -76,8 +76,9 @@ class PollPresenter extends SettingBasePresenter
 
         //RENDERING POLL DETAIL
         $pollId = $this->parseIdFromWebname($resource);
+        /* @var $this->poll Poll */
         $this->poll = $this->pollManager->getById($pollId);
-        if (!$this->poll instanceof Poll) {
+        if ($this->poll == null) {
             $this->flashMessage($this->translator->translate("poll.errors.pollNotExists", null, ['id' => $pollId]), "danger");
             $this->redirect(':Setting:Poll:');
         }
@@ -94,16 +95,17 @@ class PollPresenter extends SettingBasePresenter
 
     public function createComponentPollForm(): Form
     {
-        $pollId = $this->parseIdFromWebname($this->getRequest()->getParameter("resource"));
+        $resource = $this->getRequest()->getParameter("resource");
+        $pollId = $resource ? $this->parseIdFromWebname($resource) : null;
         return $this->formFactory->createPollConfigForm(fn(Form $form, stdClass $values) => $this->pollFormSuccess($form, $values), ($pollId ? $this->pollManager->getById($pollId) : null));
     }
 
     public function pollFormSuccess(Form $form, stdClass $values): void
     {
+        /* @var $poll Poll */
         $poll = $values->id ?
             $this->pollManager->update((array) $values, $values->id) :
             $this->pollManager->create((array) $values);
-        assert($poll instanceof Poll);
 
         $existingOptionIds = ArrayHelper::entityIds($poll->getOptions());
         $optionsToDel = [];
@@ -112,7 +114,7 @@ class PollPresenter extends SettingBasePresenter
             if (preg_match('/option_id_(.+)/m', $name, $matches)) {
                 $id = $matches[1];
 
-                if ($id === '0') {   //skip template row
+                if ($id === '0' && !empty($existingOptionIds)) {   //add template row if there are no inputs yet (otherwise template row is hidden)
                     continue;
                 }
                 if ($value == 'null') {

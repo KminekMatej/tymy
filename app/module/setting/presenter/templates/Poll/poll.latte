@@ -79,7 +79,7 @@
                             <div class="col-12 col-md-8">
 
                                 {*display empty line - as a template for new rows*}
-                                <div class="row my-1 option-row-template d-none" data-row-id="0">
+                                <div class="row my-1 option-row-template {if !empty($poll->getOptions())}d-none{/if}" data-row-id="0">
                                     {input option_id_0}
                                     <div class="col-6 input-group">
                                         <div class="input-group-prepend"><span class="input-group-text">{_poll.itemCaption}:</span></div>
