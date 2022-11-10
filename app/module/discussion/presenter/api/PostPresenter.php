@@ -27,11 +27,17 @@ class PostPresenter extends SecuredPresenter
         switch ($this->getRequest()->getMethod()) {
             case 'GET':
                 $subResourceId ? $this->requestGet($resourceId, $subResourceId) : $this->requestGetList($resourceId, $this->getRequest()->getParameter("page") ?: 1);
-                // no break
+            // no break
             case 'POST':
+                if (empty($this->requestData)) {    //todo: move to some allow function or extend manager to allow sending null
+                    $this->respondBadRequest("Missing input data");
+                }
                 $this->requestPost($resourceId);
                 // no break
             case 'PUT':
+                if (empty($this->requestData)) {    //todo: move to some allow function or extend manager to allow sending null
+                    $this->respondBadRequest("Missing input data");
+                }
                 $this->requestPut($resourceId, $subResourceId);
                 // no break
             case 'DELETE':
