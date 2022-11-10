@@ -33,6 +33,10 @@ class DebtManager extends BaseManager
 
     public function map(?IRow $row, $force = false): ?BaseModel
     {
+        if ($row === null) {
+            return null;
+        }
+
         $debt = parent::map($row, $force);
         assert($debt instanceof Debt);
 

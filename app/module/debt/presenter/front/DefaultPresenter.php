@@ -38,6 +38,10 @@ class DefaultPresenter extends DebtBasePresenter
         $debtId = $this->parseIdFromWebname($resource);
 
         $debt = $this->debtManager->getById($debtId);
+        if(!$debt instanceof Debt){
+            $this->flashMessage($this->translator->translate("debt.debt", 1) . " $debtId " . $this->translator->translate("common.alerts.notFound", 1));
+            $this->redirect(":Core:Default:");
+        }
         assert($debt instanceof Debt);
         $this->template->debt = $debt;
         $this->template->userListWithTeam = $this->userManager->getByIdWithTeam();
