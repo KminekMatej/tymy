@@ -306,7 +306,7 @@ class Team extends BaseModel
 
     public function setRequiredFields(string $requiredFields): static
     {
-        $this->requiredFields = explode(",", $requiredFields);
+        $this->requiredFields = !empty($requiredFields) ? explode(",", $requiredFields) : [];
         return $this;
     }
 
