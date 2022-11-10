@@ -37,12 +37,8 @@ class DefaultPresenter extends DebtBasePresenter
     {
         $debtId = $this->parseIdFromWebname($resource);
 
-        $debt = $this->debtManager->getById($debtId);
-        if(!$debt instanceof Debt){
-            $this->flashMessage($this->translator->translate("debt.debt", 1) . " $debtId " . $this->translator->translate("common.alerts.notFound", 1));
-            $this->redirect(":Core:Default:");
-        }
-        assert($debt instanceof Debt);
+        $debt = $this->loadDebt($debtId);
+
         $this->template->debt = $debt;
         $this->template->userListWithTeam = $this->userManager->getByIdWithTeam();
 
@@ -55,8 +51,8 @@ class DefaultPresenter extends DebtBasePresenter
     {
         $debtId = $this->parseIdFromWebname($resource);
 
-        $debt = $this->debtManager->getById($debtId);
-        assert($debt instanceof Debt);
+        $debt = $this->loadDebt($debtId);
+
         $userList = $this->userManager->getByIdWithTeam();
 
         $payeeCallName = $debt->getPayeeId() == 0 ? "TEAM" : $userList[$debt->getPayeeId()]->getDisplayName();
@@ -68,6 +64,22 @@ class DefaultPresenter extends DebtBasePresenter
         }
         QRcode::png($paymentString, false, QR_ECLEVEL_H, 4, 4); /* @phpstan-ignore-line */
         $this->terminate();
+    }
+
+    /**
+     * Load debt of exact ID or redirect to homepage and display warning message
+     * @param int $debtId
+     * @return Debt
+     */
+    private function loadDebt(int $debtId): Debt
+    {
+        $debt = $this->debtManager->getById($debtId);
+        if (!$debt instanceof Debt) {
+            $this->flashMessage($this->translator->translate("debt.debt", 1) . " $debtId " . $this->translator->translate("common.alerts.notFound", 1));
+            $this->redirect(":Core:Default:");
+        }
+        assert($debt instanceof Debt);
+        return $debt;
     }
 
     public function renderNew(): void
