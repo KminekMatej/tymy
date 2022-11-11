@@ -4,6 +4,7 @@ namespace Tymy\Module\Setting\Presenter\Front;
 
 use Nette\Application\UI\Form;
 use stdClass;
+use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Core\Helper\ArrayHelper;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Model\Cell;
@@ -90,7 +91,12 @@ class PollPresenter extends SettingBasePresenter
     public function handlePollDelete(string $resource): void
     {
         $pollId = $this->parseIdFromWebname($resource);
-        $this->pollManager->delete($pollId);
+        try {
+            $this->pollManager->delete($pollId);
+        } catch (TymyResponse $tResp) {
+            $this->handleTymyResponse($tResp);
+        }
+
         $this->redirect(':Setting:Poll:');
     }
 
@@ -103,10 +109,14 @@ class PollPresenter extends SettingBasePresenter
 
     public function pollFormSuccess(Form $form, stdClass $values): void
     {
-        /* @var $poll Poll */
-        $poll = $values->id ?
-            $this->pollManager->update((array) $values, $values->id) :
-            $this->pollManager->create((array) $values);
+        try {
+            /* @var $poll Poll */
+            $poll = $values->id ?
+                $this->pollManager->update((array) $values, $values->id) :
+                $this->pollManager->create((array) $values);
+        } catch (TymyResponse $tResp) {
+            $this->handleTymyResponse($tResp);
+        }
 
         assert($poll instanceof Poll);
 
@@ -130,14 +140,22 @@ class PollPresenter extends SettingBasePresenter
                     "type" => $form->getHttpData()["option_type_$id"] ?? null,
                 ];
 
-                in_array($id, $existingOptionIds) ?
-                        $this->optionManager->update($optionData, $poll->getId(), $id) :
-                        $this->optionManager->create($optionData, $poll->getId());
+                try {
+                    in_array($id, $existingOptionIds) ?
+                            $this->optionManager->update($optionData, $poll->getId(), $id) :
+                            $this->optionManager->create($optionData, $poll->getId());
+                } catch (TymyResponse $tResp) {
+                    $this->handleTymyResponse($tResp);
+                }
             }
         }
 
         if (!empty($optionsToDel)) {
-            $this->optionManager->deleteOptions($poll->getId(), $optionsToDel);
+            try {
+                $this->optionManager->deleteOptions($poll->getId(), $optionsToDel);
+            } catch (TymyResponse $tResp) {
+                $this->handleTymyResponse($tResp);
+            }
         }
 
         $this->redirect(':Setting:Poll:', [$poll->getWebName()]);
