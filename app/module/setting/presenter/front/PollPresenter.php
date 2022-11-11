@@ -116,6 +116,7 @@ class PollPresenter extends SettingBasePresenter
                 $this->pollManager->create((array) $values);
         } catch (TymyResponse $tResp) {
             $this->handleTymyResponse($tResp);
+            $this->redirect(':Setting:Poll:');
         }
 
         assert($poll instanceof Poll);
