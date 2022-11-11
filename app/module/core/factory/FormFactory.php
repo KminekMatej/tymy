@@ -238,8 +238,8 @@ class FormFactory
         $caption = $form->addText("caption", $this->translator->translate("settings.title"))->setRequired();
         $description = $form->addTextArea("description", $this->translator->translate("settings.description"));
         $status = $form->addSelect("status", $this->translator->translate("settings.status"), $pollStatuses)->setDefaultValue(Poll::STATUS_DESIGN)->setPrompt($this->translator->translate("common.chooseState") . " ...")->setRequired();
-        $minItems = $form->addInteger("minItems", $this->translator->translate("poll.minItems"))->setHtmlAttribute("min", 0);
-        $maxItems = $form->addInteger("maxItems", $this->translator->translate("poll.maxItems"))->setHtmlAttribute("min", 0);
+        $minItems = $form->addInteger("minItems", $this->translator->translate("poll.minItems"))->setHtmlAttribute("min", 0)->setDefaultValue(0);
+        $maxItems = $form->addInteger("maxItems", $this->translator->translate("poll.maxItems"))->setHtmlAttribute("min", 1)->setDefaultValue(1);
 
         /*$minItems->addRule(Form::MAX, null, $form['maxItems']);
         $maxItems->addRule(Form::MIN, null, $form['minItems']);
