@@ -108,10 +108,10 @@ function stats(){
                     }
                     break;
                 case "BOOLEAN":
-                    if (value === "true") {
+                    if (value === "true" || parseInt(value) === 1) {
                         stats["id" + optionId].true += 1;
                         stats["id" + optionId].votes += 1;
-                    } else if (value === "false") {
+                    } else if (value === "false" || parseInt(value) === 0) {
                         stats["id" + optionId].false += 1;
                         stats["id" + optionId].votes += 1;
                     }
