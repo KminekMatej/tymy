@@ -1,14 +1,21 @@
-<div class="card sh-box mb-3">
+<div class="card sh-box mb-3 w-100">
     <div class="card-header">
-        <h5>Dlužníček</h5>
+        <h5>{_debt.debt, 2}</h5>
     </div>
     <div class="card-body">
-        <div class="row" n:foreach="$discussions as $item" title="{$item->getDescription()}">
-            <div class="col name" id="discussion-pane-{$item->getId()}">
-                <span n:class="badge,badge-pill,badge-danger,$item->getNewPosts() == 0 ? d-none">{$item->getNewPosts()}</span>
-                <a href="{plink :Discussion:Discussion: $item->getWebName()}">{$item->getCaption()}</a>
-                <span n:if="!$tymyUser->getHideDiscDesc()" class="col-sm-7 dis-description">{$item->getDescription()}</span>
-            </div>
+        {*{dump $debts}*}
+        <div class="row" n:if="empty($debts)">
+            <div class="col">- {_debt.noDebt} -</div>
         </div>
+        <a href="{plink :Debt:Default: $debt->getWebName()}" class="row debt {$debt->getClass()} {if !$iterator->isFirst()}pt-2{/if}" n:foreach="$debts as $debt">
+            {*{dump $debt}*}
+            <div class="col-8">
+                <div class="row debt-name"><div class="col">{$debt->getDisplayString()}</div></div>
+                <div class="row debt-caption"><div class="col">{$debt->getCaption()}</div></div>
+            </div>
+            <div class="col-4 debt-amount d-flex justify-content-end align-items-center">
+                {$debt->getAmount()},-
+            </div>
+        </a>
     </div>
 </div>

@@ -1,0 +1,28 @@
+/* 
+    Created on : 3. 12. 2022, 16:12:06
+    Author     : kminekmatej
+*/
+
+.debt {
+    border-bottom: 1px solid #d0d0d0;
+}
+
+.debt:hover {
+    text-decoration: none;
+    background-color: rgb(161 161 161 / 13%);
+}
+
+.debt-name{
+    font-size: 14pt;
+}
+
+.debt-caption{
+    font-size: 10pt;
+    color: #A1A1A1;
+}
+
+.debt-amount{
+    font-size: 1.7rem;
+    color: #707070;
+    text-align: right;
+}
