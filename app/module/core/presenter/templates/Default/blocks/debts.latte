@@ -7,11 +7,11 @@
         <div class="row" n:if="empty($debts)">
             <div class="col">- {_debt.noDebt} -</div>
         </div>
-        <a href="{plink :Debt:Default: $debt->getWebName()}" class="row debt {$debt->getClass()} {if !$iterator->isFirst()}pt-2{/if}" n:foreach="$debts as $debt">
+        <a href="{plink :Debt:Default: $debt->getWebName()}" class="row row-thick {if !$iterator->isFirst()}pt-2{/if}" n:foreach="$debts as $debt">
             {*{dump $debt}*}
             <div class="col-8">
-                <div class="row debt-name"><div class="col">{$debt->getDisplayString()}</div></div>
-                <div class="row debt-caption"><div class="col">{$debt->getCaption()}</div></div>
+                <div class="row heading {$debt->getClass()}"><div class="col">{$debt->getDisplayString()}</div></div>
+                <div class="row sub-heading one-liner"><div class="col">{$debt->getCaption()}</div></div>
             </div>
             <div class="col-4 debt-amount d-flex justify-content-end align-items-center">
                 {$debt->getAmount()},-

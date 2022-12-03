@@ -1,14 +1,18 @@
-<div class="card sh-box mb-3">
+<div class="card sh-box mb-3 w-100">
     <div class="card-header">
-        <h5>Ankety</h5>
+            <h5>{_poll.poll, 2}</h5>
     </div>
     <div class="card-body">
-        <div class="row" n:foreach="$discussions as $item" title="{$item->getDescription()}">
-            <div class="col name" id="discussion-pane-{$item->getId()}">
-                <span n:class="badge,badge-pill,badge-danger,$item->getNewPosts() == 0 ? d-none">{$item->getNewPosts()}</span>
-                <a href="{plink :Discussion:Discussion: $item->getWebName()}">{$item->getCaption()}</a>
-                <span n:if="!$tymyUser->getHideDiscDesc()" class="col-sm-7 dis-description">{$item->getDescription()}</span>
-            </div>
+        {dump $polls}
+        <div class="row" n:if="empty($polls)">
+            <div class="col">- {_poll.noPoll} -</div>
         </div>
+        <a href="{plink :Poll:Default: $poll->getWebName()}" class="row row-thick {if !$iterator->isFirst()}pt-2{/if}" n:foreach="$polls as $poll">
+            {dump $poll}
+            <div class="col">
+                <div class="row heading {if !$poll->getVoted() && $poll->getCanVote()}text-active{/if}"><div class="col">{$poll->getCaption()}</div></div>
+                <div class="row sub-heading one-liner"><div class="col">{$poll->getDescription()}</div></div>
+            </div>
+        </a>
     </div>
 </div>

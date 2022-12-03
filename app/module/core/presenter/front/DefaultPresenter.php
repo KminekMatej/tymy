@@ -10,6 +10,7 @@ use Tymy\Module\Event\Manager\EventTypeManager;
 use Tymy\Module\Multiaccount\Manager\MultiaccountManager;
 use Tymy\Module\Multiaccount\Model\TransferKey;
 use Tymy\Module\News\Manager\NewsManager;
+use Tymy\Module\Poll\Manager\PollManager;
 use Tymy\Module\User\Manager\UserManager;
 
 class DefaultPresenter extends SecuredPresenter
@@ -35,6 +36,9 @@ class DefaultPresenter extends SecuredPresenter
     /** @inject */
     public MultiaccountManager $multiaccountManager;
 
+    /** @inject */
+    public PollManager $pollManager;
+
     public function beforeRender(): void
     {
         parent::beforeRender();
@@ -56,6 +60,7 @@ class DefaultPresenter extends SecuredPresenter
 
         //$this->debtList->postProcessWithUsers($this->userList->getById(), $debts);    //@todo
         $this->template->debts = $this->debtManager->getListUserAllowed();
+        $this->template->polls = $this->pollManager->getListUserAllowed();
         $this->template->notices = $this->newsManager->getListUserAllowed();
 
         $this->template->today = date('m-d');

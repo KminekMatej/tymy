@@ -3,22 +3,36 @@
     Author     : kminekmatej
 */
 
-.debt {
+.row-thick {
+    min-height: 51px;
+    color: #A1A1A1;
+}
+
+.row-thick:not(:last-child) {
     border-bottom: 1px solid #d0d0d0;
 }
 
-.debt:hover {
+.row-thick:hover {
     text-decoration: none;
     background-color: rgb(161 161 161 / 13%);
 }
 
-.debt-name{
+.one-liner{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.text-active {
+    color: #41df46;
+}
+
+.row-thick .heading{
     font-size: 14pt;
 }
 
-.debt-caption{
+.row-thick .sub-heading{
     font-size: 10pt;
-    color: #A1A1A1;
 }
 
 .debt-amount{
