@@ -1,0 +1,36 @@
+<div class="card sh-box">
+    <div class="card-header">
+        <ul class="nav nav-tabs flex-column flex-sm-row card-header-tabs">
+            <li class="nav-item">
+                <a class="flex-sm-fill text-sm-center nav-link active" href="#live" data-toggle="tab" role="tab">{_team.currentlyOnline}</a>
+            </li>
+            <li class="nav-item">
+                <a class="flex-sm-fill text-sm-center nav-link" href="#lastLogin" data-toggle="tab" role="tab">{_team.lastLogin}</a>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body">
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="live" role="tabpanel">
+                <figure class="figure text-center" style="width: 100px" n:foreach="$liveUsers as $live">
+                    <a href="{plink :Team:Player: $live->getId()}" title="{$live->getCallName()}">
+                        <img src="{$live->getPictureUrl()}" class="figure-img img-fluid rounded avatar" alt="{$live->getCallName()}" />
+                        <figcaption class="figure-caption">{$live->getCallName()}</figcaption>
+                    </a>
+                </figure>
+                <h6 class="card-subtitle mb-2 text-muted" n:if="count($liveUsers) == 0">{_team.nobodyIsOnline}</h6>
+            </div>
+            <div class="tab-pane fade" id="lastLogin" role="tabpanel">
+                <figure class="figure text-center" style="width: 100px" n:foreach="$users as $usr">
+                    {var $lastLogin = $usr->getLastLogin() ? ($usr->getLastLogin()|date:'j.n.Y H:i:s') : $neverLogin}
+                    {var $caption = $usr->getLastLogin() ? ($usr->getLastLogin()|lastLogin) : $neverLogin}
+                    <a href="{plink :Team:Player: $usr->getWebName()}" title="{$lastLogin}">
+                        <img src="{$usr->getPictureUrl()}" class="figure-img img-fluid avatar" n:attr="alt => $usr->getFullName() ?: ''"/>
+                        <figcaption class="figure-caption">{$usr->getDisplayName()}</figcaption>
+                        <figcaption class="figure-caption" style="font-size: 70%; display: inline-block">{$caption}</figcaption>
+                    </a>
+                </figure>
+            </div>
+        </div>
+    </div>
+</div>

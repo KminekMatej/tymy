@@ -1,0 +1,5 @@
+<div class="col" n:inner-foreach="$currentEvents as $event">
+    <div class="alert alert-info alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        {_event.currently}: <a n:href=":Event:Detail: $event->getWebName()" class="alert-link">{$event->getCaption()}</a>
+    </div>
+</div>
