@@ -84,6 +84,40 @@ class SecuredPresenter extends BasePresenter
 
         $this->setAccessibleSettings();
         $this->addBreadcrumb($this->translator->translate("common.mainPage"), $this->link(":Core:Default:"));
+
+        assert($this->template instanceof Template);
+        $this->template->addFilter('timeAgo', function ($lastLogin): string {
+            $diff = date("U") - strtotime($lastLogin);
+            if ($diff == 1) {
+                return $this->translator->translate("common.lastLogin.secondAgo");
+            }
+            if ($diff < 60) {
+                return $this->translator->translate("common.lastLogin.secondsAgo", null, ['n' => $diff]);
+            }
+            if ($diff < 120) {
+                return $this->translator->translate("common.lastLogin.minuteAgo");
+            }
+            $diffMinutes = round($diff / 60);
+            if ($diff < 1800) {
+                return $this->translator->translate("common.lastLogin.minutesAgo", null, ['n' => $diffMinutes]);
+            }
+            if ($diff < 3600) {
+                return $this->translator->translate("common.lastLogin.halfHourAgo");
+            }
+            if ($diff < 7200) {
+                return $this->translator->translate("common.lastLogin.hourAgo");
+            }
+            $diffHours = round($diff / 3600);
+            if ($diff < 86400) {
+                return $this->translator->translate("common.lastLogin.hoursAgo", null, ['n' => $diffHours]);
+            }
+            $diffDays = round($diff / 86400);
+            if ($diff < 172800) {
+                return $this->translator->translate("common.lastLogin.dayAgo");
+            }
+            return $this->translator->translate("common.lastLogin.daysAgo", null, ['n' => $diffDays]);
+            ;
+        });
     }
 
     protected function startup(): void

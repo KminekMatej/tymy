@@ -23,7 +23,7 @@
             <div class="tab-pane fade" id="lastLogin" role="tabpanel">
                 <figure class="figure text-center" style="width: 100px" n:foreach="$users as $usr">
                     {var $lastLogin = $usr->getLastLogin() ? ($usr->getLastLogin()|date:'j.n.Y H:i:s') : $neverLogin}
-                    {var $caption = $usr->getLastLogin() ? ($usr->getLastLogin()|lastLogin) : $neverLogin}
+                    {var $caption = $usr->getLastLogin() ? ($usr->getLastLogin()|timeAgo) : $neverLogin}
                     <a href="{plink :Team:Player: $usr->getWebName()}" title="{$lastLogin}">
                         <img src="{$usr->getPictureUrl()}" class="figure-img img-fluid avatar" n:attr="alt => $usr->getFullName() ?: ''"/>
                         <figcaption class="figure-caption">{$usr->getDisplayName()}</figcaption>

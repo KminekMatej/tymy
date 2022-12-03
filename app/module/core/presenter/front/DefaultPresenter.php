@@ -38,40 +38,8 @@ class DefaultPresenter extends SecuredPresenter
     public function beforeRender(): void
     {
         parent::beforeRender();
-        assert($this->template instanceof Template);
-        $this->template->addFilter('lastLogin', function ($lastLogin): string {
-            $diff = date("U") - strtotime($lastLogin);
-            if ($diff == 1) {
-                return $this->translator->translate("common.lastLogin.secondAgo");
-            }
-            if ($diff < 60) {
-                return $this->translator->translate("common.lastLogin.secondsAgo", null, ['n' => $diff]);
-            }
-            if ($diff < 120) {
-                return $this->translator->translate("common.lastLogin.minuteAgo");
-            }
-            $diffMinutes = round($diff / 60);
-            if ($diff < 1800) {
-                return $this->translator->translate("common.lastLogin.minutesAgo", null, ['n' => $diffMinutes]);
-            }
-            if ($diff < 3600) {
-                return $this->translator->translate("common.lastLogin.halfHourAgo");
-            }
-            if ($diff < 7200) {
-                return $this->translator->translate("common.lastLogin.hourAgo");
-            }
-            $diffHours = round($diff / 3600);
-            if ($diff < 86400) {
-                return $this->translator->translate("common.lastLogin.hoursAgo", null, ['n' => $diffHours]);
-            }
-            $diffDays = round($diff / 86400);
-            if ($diff < 172800) {
-                return $this->translator->translate("common.lastLogin.dayAgo");
-            }
-            return $this->translator->translate("common.lastLogin.daysAgo", null, ['n' => $diffDays]);
-            ;
-        });
 
+        assert($this->template instanceof Template);
         $this->template->addFilter('namedayToday', fn($name, $webname): string => $this->translator->translate("team.hasNamedayToday", null, ["name" => '<strong><a href=' . $this->link(":Team:Player:", $webname) . '>' . $name . '</a></strong>']));
         $this->template->addFilter('namedayTommorow', fn($name, $webname): string => $this->translator->translate("team.hasNamedayTommorow", null, ["name" => '<strong><a href=' . $this->link(":Team:Player:", $webname) . '>' . $name . '</a></strong>']));
         $this->template->addFilter('birthdayToday', fn($name, $webname, $year): string => $this->translator->translate("team.hasBirthdayToday", null, ["name" => '<strong><a href=' . $this->link(":Team:Player:", $webname) . '>' . $name . '</a></strong>', "year" => '<strong>' . $year . '.</strong>']));
