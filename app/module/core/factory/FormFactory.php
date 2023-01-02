@@ -73,9 +73,9 @@ class FormFactory
         $close = $form->addText("closeTime")->setHtmlAttribute("data-name", "closeTime")->setHtmlType("datetime-local")->setValue((new DateTime("+ 23 hours"))->format(BaseModel::DATETIME_ISO_NO_SECS_FORMAT))->setRequired();
         $place = $form->addText("place")->setHtmlAttribute("data-name", "place");
         $link = $form->addText("link")->setHtmlAttribute("data-name", "link");
-        $canView = $form->addSelect("canView", null, $this->getUserPermissions())->setHtmlAttribute("data-name", "canView")->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
-        $canPlan = $form->addSelect("canPlan", null, $this->getUserPermissions())->setHtmlAttribute("data-name", "canPlan")->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
-        $canResult = $form->addSelect("canResult", null, $this->getUserPermissions())->setHtmlAttribute("data-name", "canResult")->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
+        $viewRightName = $form->addSelect("viewRightName", null, $this->getUserPermissions())->setHtmlAttribute("data-name", "viewRightName")->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
+        $planRightName = $form->addSelect("planRightName", null, $this->getUserPermissions())->setHtmlAttribute("data-name", "planRightName")->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
+        $resultRightName = $form->addSelect("resultRightName", null, $this->getUserPermissions())->setHtmlAttribute("data-name", "resultRightName")->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
 
         if ($event !== null) {
             $form->addHidden("id", $event->getId());
@@ -88,14 +88,14 @@ class FormFactory
             $place->setValue($event->getPlace());
             $link->setValue($event->getLink());
             if (!empty($event->getViewRightName())) {
-                $canView->setValue($event->getViewRightName());
+                $viewRightName->setValue($event->getViewRightName());
             }
             if (!empty($event->getPlanRightName())) {
-                $canPlan->setValue($event->getPlanRightName());
+                $planRightName->setValue($event->getPlanRightName());
             }
 
             if (!empty($event->getResultRightName())) {
-                $canResult->setValue($event->getResultRightName());
+                $resultRightName->setValue($event->getResultRightName());
             }
         }
 
