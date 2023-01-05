@@ -48,9 +48,13 @@
 {block content}
 
 <div class="container-fluid report">
+            
     <div class="row">
         <div class="col my-3">
             <div class="card sh-box">
+                <div class="card-header text-right">
+                    <a n:href=":Api:Event:Report:export, $year, $currentPage" class="btn btn-sm btn-outline-success" title="{_settings.export}" role="button" aria-pressed="true"><i class="fa fa-file-csv" aria-hidden="true"></i></a>
+                </div>
                 <div class="card-body">
                     <table class="table table-bordered table-striped">
                         <thead>
