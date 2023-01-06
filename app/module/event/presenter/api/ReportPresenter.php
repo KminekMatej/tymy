@@ -7,6 +7,9 @@ use Nette\Utils\DateTime;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Tymy\Module\Attendance\Manager\StatusManager;
@@ -27,6 +30,7 @@ class ReportPresenter extends SecuredPresenter
     private int $xlsRow = 1;
     private int $lastRow = 1;
     private int $lastCol = 1;
+    private array $headingStyle;
     private Worksheet $sheet;
     private DateTime $now;
 
@@ -42,6 +46,30 @@ class ReportPresenter extends SecuredPresenter
         $events = $this->eventManager->getYearEvents($this->user->getId(), $year, $page);
         $users = $this->userManager->getByStatus(User::STATUS_PLAYER);
         $this->now = new DateTime();
+
+        $lightGray = "FFEEEEEE";
+        $this->headingStyle = [
+            'font' => [
+                'bold' => true,
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+            ],
+            'borders' => [
+                'outline' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_DOTTED,
+                ],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => [
+                    'argb' => $lightGray,
+                ],
+                'endColor' => [
+                    'argb' => $lightGray,
+                ],
+            ],
+        ];
 
         $this->exportSpreadsheet("report-event-$year-$page.xlsx", $users, $events["events"]);
     }
@@ -67,14 +95,7 @@ class ReportPresenter extends SecuredPresenter
         $this->sheet->mergeCells("{$this->cell()->getCoordinate()}:{$this->cellBelow()->getCoordinate()}");
 
         $this->addHeadings($events);
-        $lastRowCell = $this->sheet->getCell(Coordinate::stringFromColumnIndex($this->xlsCol) . $this->xlsRow);
-        $this->sheet->setAutoFilter("A1:" . $lastRowCell->getCoordinate());
-        $this->sheet->getRowDimension($this->xlsRow)->setRowHeight(40);
-        for ($index = 1; $index < $this->lastCol; $index++) {
-            $this->sheet->getColumnDimensionByColumn($index)->setAutoSize(true);
-        }
-        $this->nextRow();
-        
+
         $this->addData($users, $events);
 
         $this->output($filename, $spreadsheet);
@@ -85,18 +106,31 @@ class ReportPresenter extends SecuredPresenter
         foreach ($events as $event) {
             $this->nextCol();
             assert($event instanceof Event);
-            $this->cell()->setValue($event->getCaption() . "\n" . $event->getStartTime()->format(BaseModel::DAY_CZECH_FORMAT));
+            $this->cell()->setValue($event->getCaption() . "\n" . $event->getStartTime()->format(BaseModel::DATE_CZECH_FORMAT));
             $this->cellBelow()->setValue("Plán");
 
-            $this->cell()->getStyle()->getAlignment()->setHorizontal('center');
-            $this->cell()->getStyle()->getFont()->setBold(true);
+            $this->cell()->getStyle()->applyFromArray($this->headingStyle);
+            $this->cellBelow()->getStyle()->applyFromArray($this->headingStyle);
+
             $cell1 = $this->cell()->getCoordinate();
             $this->nextCol();
-            $this->cell()->getStyle()->getAlignment()->setHorizontal('center');
-            $this->cell()->getStyle()->getFont()->setBold(true);
             $this->cellBelow()->setValue("Výsledek");
+            $this->cell()->getStyle()->applyFromArray($this->headingStyle);
+            $this->cellBelow()->getStyle()->applyFromArray($this->headingStyle);
             $cell2 = $this->cell()->getCoordinate();
+
             $this->sheet->mergeCells("$cell1:$cell2");
+        }
+
+        $this->sheet->getRowDimension($this->xlsRow)->setRowHeight(40);
+
+        $lastRowCell = $this->sheet->getCell(Coordinate::stringFromColumnIndex($this->xlsCol) . "2");
+
+        $this->nextRow();
+
+        $this->sheet->setAutoFilter("A2:" . $lastRowCell->getCoordinate());
+        for ($index = 1; $index < $this->lastCol; $index++) {
+            $this->sheet->getColumnDimensionByColumn($index)->setAutoSize(true);
         }
     }
 
@@ -127,6 +161,7 @@ class ReportPresenter extends SecuredPresenter
             /* @var $usr User */
             //first col is username
             $this->cell()->setValue($usr->getDisplayName());
+            $this->cell()->getStyle()->applyFromArray($this->headingStyle);
 
             foreach ($events as $event) {
                 $this->nextCol();
@@ -134,12 +169,20 @@ class ReportPresenter extends SecuredPresenter
                 $userAttendance = $event->getAttendance()[$usr->getId()] ?? null;
                 $preStatus = $postStatus = null;
                 if ($userAttendance){
+                    /* @var $preStatus \Tymy\Module\Attendance\Model\Status */
                     $preStatus = $statusList[$userAttendance->getPreStatusId()] ?? null;
+                    /* @var $postStatus \Tymy\Module\Attendance\Model\Status */
                     $postStatus = $statusList[$userAttendance->getPostStatusId()] ?? null;
                 }
                 $this->cell()->setValue($preStatus ? $preStatus->getCaption() : '');
+                if ($preStatus) {
+                    $this->cell()->getStyle()->getFont()->setColor(new Color($preStatus->getColor()));
+                }
                 $this->nextCol();
                 $this->cell()->setValue($postStatus ? $postStatus->getCaption() : '');
+                if ($postStatus) {
+                    $this->cell()->getStyle()->getFont()->setColor(new Color($postStatus->getColor()));
+                }
             }
         }
     }
