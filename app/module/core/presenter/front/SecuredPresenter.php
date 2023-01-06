@@ -54,7 +54,6 @@ class SecuredPresenter extends BasePresenter
     public $userRightsList;
     public $eventTypeList;
     public $noteList;
-    public $statusList;
     public array $accessibleSettings = [];
 
     public function getLevelCaptions()
