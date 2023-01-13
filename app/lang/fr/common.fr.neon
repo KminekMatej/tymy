@@ -27,6 +27,8 @@ chooseState: choisir état
 choose: Choisir
 ok: Ok
 yes: oui
+from: De
+until: Á
 no: Non
 user: utilisateur
 error: erreur

@@ -27,6 +27,8 @@ chooseState: Choose state
 choose: Choose
 ok: Ok
 yes: Yes
+from: From
+until: Until
 no: No
 user: User
 error: Error

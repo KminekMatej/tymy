@@ -1,0 +1,43 @@
+{import $componentsDir . '/secured.latte'}
+
+{block navbar}
+{control navbar}
+{/block}
+
+{block content}
+
+<div class="container-fluid container-md event">
+    <div class="row">
+        <div class="col">
+            <div class="card sh-box my-3">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col"><h4 class="card-title">Export docházky</h4></div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {form exportAttendanceForm, class => 'form-inline justify-content-center' }
+                        <div class="input-group mr-sm-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">{label from /}</div>
+                            </div>
+                            {input from, class => 'form-control'}
+                        </div>
+                        <div class="input-group mr-sm-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">{label until /}</div>
+                            </div>
+                                {input until, class => 'form-control'}
+                        </div>
+
+                        {input eventTypeId, class => 'form-control mr-sm-2'}
+
+                        <button type="submit" class="btn btn-success"><i class="fa fa-file-excel" aria-hidden="true"></i> {_'settings.export'}</button>
+
+                    {/form}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

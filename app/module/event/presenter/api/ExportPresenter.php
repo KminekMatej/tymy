@@ -118,10 +118,18 @@ class ExportPresenter extends SecuredPresenter
         $this->output($filename, $spreadsheet);
     }
 
-    public function actionAttendance(string $from, string $until, ?int $type = null)
+    public function actionAttendance(?string $from = null, ?string $until = null, ?int $type = null)
     {
         if ($this->getRequest()->getMethod() != 'GET') {
             $this->respondNotAllowed();
+        }
+
+        if (empty($from)) {
+            $this->respondBadRequest("Missing `from` in url");
+        }
+
+        if (empty($until)) {
+            $this->respondBadRequest("Missing `until` in url");
         }
 
         $events = $this->eventManager->getEventsInterval($this->user->getId(), new DateTime($from), new DateTime($until), $type);

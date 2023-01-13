@@ -27,6 +27,8 @@ chooseState: Vyberte stav
 choose: Vyberte
 ok: Ok
 yes: Ano
+from: Od
+until: Do
 no: Ne
 user: Uživatel
 error: Chyba
