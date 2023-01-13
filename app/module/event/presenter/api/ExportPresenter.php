@@ -135,7 +135,7 @@ class ExportPresenter extends SecuredPresenter
         $events = $this->eventManager->getEventsInterval($this->user->getId(), new DateTime($from), new DateTime($until), null, $type);
 
         $eventType = null;
-        if ($type) {
+        if (!empty($type)) {
             $eventType = $this->eventTypeManager->getById($type);
             if (!$eventType instanceof EventType) {
                 $this->respondBadRequest("Invalid event type id");
