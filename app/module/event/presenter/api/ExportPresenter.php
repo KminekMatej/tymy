@@ -7,12 +7,14 @@ use Nette\Utils\DateTime;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Tymy\Module\Attendance\Manager\StatusManager;
+use Tymy\Module\Attendance\Model\Status;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Core\Response\FileContentResponse;
@@ -26,115 +28,121 @@ use Tymy\Module\User\Model\User;
  */
 class ReportPresenter extends SecuredPresenter
 {
+    private const LIGHTGRAY = "FFEEEEEE";
+    private const HEADING_STYLE = [
+        'font' => [
+            'bold' => true,
+        ],
+        'alignment' => [
+            'horizontal' => Alignment::HORIZONTAL_CENTER,
+        ],
+        'borders' => [
+            'outline' => [
+                'borderStyle' => Border::BORDER_DOTTED,
+            ],
+        ],
+        'fill' => [
+            'fillType' => Fill::FILL_SOLID,
+            'startColor' => [
+                'argb' => self::LIGHTGRAY,
+            ],
+            'endColor' => [
+                'argb' => self::LIGHTGRAY,
+            ],
+        ],
+    ];
+
     private int $xlsCol = 1;
     private int $xlsRow = 1;
     private int $lastRow = 1;
     private int $lastCol = 1;
-    private array $headingStyle;
     private Worksheet $sheet;
     private DateTime $now;
 
     #[Inject]
     public StatusManager $statusManager;
 
-    public function renderExport(string $year, string $page)
+    protected function startup(): void
+    {
+        parent::startup();
+        $this->now = new DateTime();
+    }
+
+    public function actionReport(string $year, string $page)
     {
         if ($this->getRequest()->getMethod() != 'GET') {
             $this->respondNotAllowed();
         }
 
-        $events = $this->eventManager->getYearEvents($this->user->getId(), $year, $page);
+        $events = $this->eventManager->getYearEvents($this->user->getId(), $year, $page)["events"];
         $users = $this->userManager->getByStatus(User::STATUS_PLAYER);
-        $this->now = new DateTime();
 
-        $lightGray = "FFEEEEEE";
-        $this->headingStyle = [
-            'font' => [
-                'bold' => true,
-            ],
-            'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-            ],
-            'borders' => [
-                'outline' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_DOTTED,
-                ],
-            ],
-            'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                'startColor' => [
-                    'argb' => $lightGray,
-                ],
-                'endColor' => [
-                    'argb' => $lightGray,
-                ],
-            ],
-        ];
+        $filename = "report-event-$year-$page.xlsx";
 
-        $this->exportSpreadsheet("report-event-$year-$page.xlsx", $users, $events["events"]);
-    }
-
-    private function exportSpreadsheet(string $filename, array $users, array $events): void
-    {
         $spreadsheet = new Spreadsheet();
         $spreadsheet->removeSheetByIndex(0);
         $spreadsheet->getDefaultStyle()->getFont()->setName('Calibri');
         $spreadsheet->getDefaultStyle()->getFont()->setSize(7);
 
-        $this->sheet = new Worksheet(null, "Event report");
-        $spreadsheet->addSheet($this->sheet);
-        $this->sheet->getPageMargins()->setTop(1)->setRight(0)->setLeft(0)->setBottom(1);
+        $sheet = new Worksheet(null, $this->translator->translate("event.attendanceView"));
+        $spreadsheet->addSheet($sheet);
+        $sheet->getPageMargins()->setTop(1)->setRight(0)->setLeft(0)->setBottom(1);
 
         //add headers and footers
-        $this->addHeaderFooter();
+        $this->addReportTitle();
 
         //add table heading
-        $this->cell()->setValue("Hráči");
+        $this->cell()->setValue($this->translator->translate("team.player", 2));
         $this->cell()->getStyle()->getAlignment()->setHorizontal('center');
         $this->cell()->getStyle()->getFont()->setBold(true);
-        $this->sheet->mergeCells("{$this->cell()->getCoordinate()}:{$this->cellBelow()->getCoordinate()}");
+        $sheet->mergeCells("{$this->cell()->getCoordinate()}:{$this->cellBelow()->getCoordinate()}");
 
-        $this->addHeadings($events);
+        $this->addReportHeadings($sheet, $events);
 
-        $this->addData($users, $events);
+        $this->addReportData($users, $events);
 
         $this->output($filename, $spreadsheet);
     }
 
-    private function addHeadings(array $events)
+    /**
+     * Add heading into the report sheet
+     * @param array $events
+     * @return void
+     */
+    private function addReportHeadings(array $events): void
     {
         foreach ($events as $event) {
             $this->nextCol();
             assert($event instanceof Event);
             $this->cell()->setValue($event->getCaption() . "\n" . $event->getStartTime()->format(BaseModel::DATE_CZECH_FORMAT));
-            $this->cellBelow()->setValue("Plán");
+            $this->cellBelow()->setValue($this->translator->translate("event.plan"));
 
-            $this->cell()->getStyle()->applyFromArray($this->headingStyle);
-            $this->cellBelow()->getStyle()->applyFromArray($this->headingStyle);
+            $this->cell()->getStyle()->applyFromArray(self::HEADING_STYLE);
+            $this->cellBelow()->getStyle()->applyFromArray(self::HEADING_STYLE);
 
             $cell1 = $this->cell()->getCoordinate();
             $this->nextCol();
-            $this->cellBelow()->setValue("Výsledek");
-            $this->cell()->getStyle()->applyFromArray($this->headingStyle);
-            $this->cellBelow()->getStyle()->applyFromArray($this->headingStyle);
+            $this->cellBelow()->setValue($this->translator->translate("event.result"));
+            $this->cell()->getStyle()->applyFromArray(self::HEADING_STYLE);
+            $this->cellBelow()->getStyle()->applyFromArray(self::HEADING_STYLE);
             $cell2 = $this->cell()->getCoordinate();
 
-            $this->sheet->mergeCells("$cell1:$cell2");
+            $ths->sheet->mergeCells("$cell1:$cell2");
         }
 
-        $this->sheet->getRowDimension($this->xlsRow)->setRowHeight(40);
+        $ths->sheet->getRowDimension($this->xlsRow)->setRowHeight(40);
 
-        $lastRowCell = $this->sheet->getCell(Coordinate::stringFromColumnIndex($this->xlsCol) . "2");
+        $lastRowCell = $ths->sheet->getCell(Coordinate::stringFromColumnIndex($this->xlsCol) . "2");
 
         $this->nextRow();
 
-        $this->sheet->setAutoFilter("A2:" . $lastRowCell->getCoordinate());
+        $ths->sheet->setAutoFilter("A2:" . $lastRowCell->getCoordinate());
         for ($index = 1; $index < $this->lastCol; $index++) {
-            $this->sheet->getColumnDimensionByColumn($index)->setAutoSize(true);
+            $ths->sheet->getColumnDimensionByColumn($index)->setAutoSize(true);
         }
     }
 
-    private function addHeaderFooter(): void
+    private function addReportTitle(): void
     {
         $headerMiddle = "&B{$this->team->getName()}";
 
@@ -151,7 +159,12 @@ class ReportPresenter extends SecuredPresenter
         $this->sheet->getHeaderFooter()->setEvenFooter($footer);
     }
 
-    private function addData(array $users, array $events)
+    /**
+     * Add event attendances data into report export
+     * @param array $users
+     * @param array $events
+     */
+    private function addReportData(array $users, array $events)
     {
         $statusList = $this->statusManager->getIdList();
 
@@ -161,7 +174,7 @@ class ReportPresenter extends SecuredPresenter
             /* @var $usr User */
             //first col is username
             $this->cell()->setValue($usr->getDisplayName());
-            $this->cell()->getStyle()->applyFromArray($this->headingStyle);
+            $this->cell()->getStyle()->applyFromArray(self::HEADING_STYLE);
 
             foreach ($events as $event) {
                 $this->nextCol();
@@ -169,9 +182,9 @@ class ReportPresenter extends SecuredPresenter
                 $userAttendance = $event->getAttendance()[$usr->getId()] ?? null;
                 $preStatus = $postStatus = null;
                 if ($userAttendance){
-                    /* @var $preStatus \Tymy\Module\Attendance\Model\Status */
+                    /* @var $preStatus Status */
                     $preStatus = $statusList[$userAttendance->getPreStatusId()] ?? null;
-                    /* @var $postStatus \Tymy\Module\Attendance\Model\Status */
+                    /* @var $postStatus Status */
                     $postStatus = $statusList[$userAttendance->getPostStatusId()] ?? null;
                 }
                 $this->cell()->setValue($preStatus ? $preStatus->getCaption() : '');
@@ -187,6 +200,10 @@ class ReportPresenter extends SecuredPresenter
         }
     }
 
+    /**
+     * Increment current column coordinates
+     * @return void
+     */
     private function nextCol(): void
     {
         $this->xlsCol++;
@@ -195,6 +212,10 @@ class ReportPresenter extends SecuredPresenter
         }
     }
 
+    /**
+     * Increment current row and reset col to first one
+     * @return void
+     */
     private function nextRow(): void
     {
         $this->xlsRow++;
