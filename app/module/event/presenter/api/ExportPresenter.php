@@ -164,19 +164,26 @@ class ExportPresenter extends SecuredPresenter
      */
     private function addDefaultHeading(): void
     {
-        $this->cell()->setValue("ID");
+        $this->cell()->setValue("ID")->getStyle()->applyFromArray(self::HEADING_STYLE);
         $this->nextCol();
-        $this->cell()->setValue($this->translator->translate("event.eventType", 1));
+        $this->cell()->setValue($this->translator->translate("event.eventType", 1))->getStyle()->applyFromArray(self::HEADING_STYLE);
         $this->nextCol();
-        $this->cell()->setValue($this->translator->translate("event.event", 1));
+        $this->cell()->setValue($this->translator->translate("event.event", 1))->getStyle()->applyFromArray(self::HEADING_STYLE);
         $this->nextCol();
-        $this->cell()->setValue($this->translator->translate("event.start"));
+        $this->cell()->setValue($this->translator->translate("event.start"))->getStyle()->applyFromArray(self::HEADING_STYLE);
         $this->nextCol();
-        $this->cell()->setValue($this->translator->translate("team.PLAYER", 1));
+        $this->cell()->setValue($this->translator->translate("team.PLAYER", 1))->getStyle()->applyFromArray(self::HEADING_STYLE);
         $this->nextCol();
-        $this->cell()->setValue($this->translator->translate("event.plan"));
+        $this->cell()->setValue($this->translator->translate("event.plan"))->getStyle()->applyFromArray(self::HEADING_STYLE);
         $this->nextCol();
-        $this->cell()->setValue($this->translator->translate("event.result"));
+        $this->cell()->setValue($this->translator->translate("event.result"))->getStyle()->applyFromArray(self::HEADING_STYLE);
+
+        $lastRowCell = $this->sheet->getCell(Coordinate::stringFromColumnIndex($this->xlsCol) . "1");
+        $this->sheet->setAutoFilter("A1:" . $lastRowCell->getCoordinate());
+        for ($index = 1; $index < $this->lastCol; $index++) {
+            $this->sheet->getColumnDimensionByColumn($index)->setAutoSize(true);
+        }
+
         $this->nextRow();
     }
 
