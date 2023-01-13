@@ -14,10 +14,13 @@ class ExportPresenter extends EventBasePresenter
     /** @inject */
     public FormFactory $formFactory;
 
-    public function renderDefault(): void
+    public function beforeRender()
     {
+        parent::beforeRender();
+
+        $this->addBreadcrumb($this->translator->translate("report.report", 1), $this->link(":Event:Export:"));
     }
-    
+
     public function createComponentExportAttendanceForm()
     {
         return $this->formFactory->createExportAttendanceForm($this->link(":Api:Event:Export:attendance"));
