@@ -431,8 +431,8 @@ class FormFactory
         $form->setMethod("GET");
         $form->setAction($url);
         
-        $form->addText("from", $this->translator->translate("common.from"))->setHtmlType("date");
-        $form->addText("until", $this->translator->translate("common.until"))->setHtmlType("date");
+        $form->addText("from", $this->translator->translate("common.from"))->setHtmlType("date")->setRequired();
+        $form->addText("until", $this->translator->translate("common.until"))->setHtmlType("date")->setRequired();
         
         $eventTypes = ArrayHelper::pairsEntity($this->eventTypeManager->getList(), "id", "caption");
         $form->addSelect("eventTypeId", null, $eventTypes)->setPrompt($this->translator->translate("common.chooseType") . " ...");
