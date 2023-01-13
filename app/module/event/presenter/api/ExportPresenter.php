@@ -134,7 +134,7 @@ class ExportPresenter extends SecuredPresenter
             }
         }
 
-        $filename = ($eventType ? Strings::webalize($eventType->getCaption()) : "report") . "-$from-$until.xlsx";
+        $filename = ($eventType instanceof EventType ? Strings::webalize($eventType->getCaption()) : "report") . "-$from-$until.xlsx";
 
         $spreadsheet = new Spreadsheet();
         $spreadsheet->removeSheetByIndex(0);
