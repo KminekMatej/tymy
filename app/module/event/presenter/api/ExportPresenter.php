@@ -4,6 +4,7 @@ namespace Tymy\Module\Event\Presenter\Api;
 
 use Nette\DI\Attributes\Inject;
 use Nette\Utils\DateTime;
+use Nette\Utils\Strings;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -14,19 +15,23 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Tymy\Module\Attendance\Manager\StatusManager;
+use Tymy\Module\Attendance\Model\Attendance;
 use Tymy\Module\Attendance\Model\Status;
 use Tymy\Module\Core\Model\BaseModel;
-use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
+use Tymy\Module\Core\Presenter\Api\SecuredPresenter;
 use Tymy\Module\Core\Response\FileContentResponse;
+use Tymy\Module\Event\Manager\EventManager;
+use Tymy\Module\Event\Manager\EventTypeManager;
 use Tymy\Module\Event\Model\Event;
+use Tymy\Module\Event\Model\EventType;
 use Tymy\Module\User\Model\User;
 
 /**
- * Description of ReportPresenter
+ * Description of ExportPresenter
  *
  * @author kminekmatej, 5. 1. 2023, 21:27:25
  */
-class ReportPresenter extends SecuredPresenter
+class ExportPresenter extends SecuredPresenter
 {
     private const LIGHTGRAY = "FFEEEEEE";
     private const HEADING_STYLE = [
@@ -56,16 +61,25 @@ class ReportPresenter extends SecuredPresenter
     private int $xlsRow = 1;
     private int $lastRow = 1;
     private int $lastCol = 1;
+    /** @var Status[] */
+    private array $statusList;
     private Worksheet $sheet;
     private DateTime $now;
 
     #[Inject]
     public StatusManager $statusManager;
 
-    protected function startup(): void
+    #[Inject]
+    public EventManager $eventManager;
+
+    #[Inject]
+    public EventTypeManager $eventTypeManager;
+
+    public function startup(): void
     {
         parent::startup();
         $this->now = new DateTime();
+        $this->statusList = $this->statusManager->getIdList();
     }
 
     public function actionReport(string $year, string $page)
@@ -84,24 +98,129 @@ class ReportPresenter extends SecuredPresenter
         $spreadsheet->getDefaultStyle()->getFont()->setName('Calibri');
         $spreadsheet->getDefaultStyle()->getFont()->setSize(7);
 
-        $sheet = new Worksheet(null, $this->translator->translate("event.attendanceView"));
-        $spreadsheet->addSheet($sheet);
-        $sheet->getPageMargins()->setTop(1)->setRight(0)->setLeft(0)->setBottom(1);
+        $this->sheet = new Worksheet(null, $this->translator->translate("event.attendanceView"));
+        $spreadsheet->addSheet($this->sheet);
+        $this->sheet->getPageMargins()->setTop(1)->setRight(0)->setLeft(0)->setBottom(1);
 
-        //add headers and footers
-        $this->addReportTitle();
+        //add universal sheet title
+        $this->addTitle();
 
         //add table heading
-        $this->cell()->setValue($this->translator->translate("team.player", 2));
+        $this->cell()->setValue($this->translator->translate("team.PLAYER", 2));
         $this->cell()->getStyle()->getAlignment()->setHorizontal('center');
         $this->cell()->getStyle()->getFont()->setBold(true);
-        $sheet->mergeCells("{$this->cell()->getCoordinate()}:{$this->cellBelow()->getCoordinate()}");
+        $this->sheet->mergeCells("{$this->cell()->getCoordinate()}:{$this->cellBelow()->getCoordinate()}");
 
-        $this->addReportHeadings($sheet, $events);
+        $this->addReportHeadings($events);
 
         $this->addReportData($users, $events);
 
         $this->output($filename, $spreadsheet);
+    }
+
+    public function actionDefault(string $from, string $until, ?int $type = null)
+    {
+        if ($this->getRequest()->getMethod() != 'GET') {
+            $this->respondNotAllowed();
+        }
+
+        $events = $this->eventManager->getEventsInterval($this->user->getId(), new DateTime($from), new DateTime($until), $type);
+
+        $eventType = null;
+        if ($type) {
+            $eventType = $this->eventTypeManager->getById($type);
+            if (!$eventType instanceof EventType) {
+                $this->respondBadRequest("Invalid event type id");
+            }
+        }
+
+        $filename = ($eventType ? Strings::webalize($eventType->getCaption()) : "report") . "-$from-$until.xlsx";
+
+        $spreadsheet = new Spreadsheet();
+        $spreadsheet->removeSheetByIndex(0);
+        $spreadsheet->getDefaultStyle()->getFont()->setName('Calibri');
+        $spreadsheet->getDefaultStyle()->getFont()->setSize(9);
+
+        $this->sheet = new Worksheet(null, $this->translator->translate("event.attendanceView"));
+        $spreadsheet->addSheet($this->sheet);
+        $this->sheet->getPageMargins()->setTop(1)->setRight(0)->setLeft(0)->setBottom(1);
+
+        //add universal sheet title
+        $this->addTitle();
+        
+        //columns: idUd - typ - nazevUd - startDt - user - plan - result
+        //add column headings
+        $this->addDefaultHeading();
+        
+        //add event data
+        $this->addDefaultData($events);
+
+        $this->output($filename, $spreadsheet);
+    }
+
+    /**
+     * Add column headings
+     * @return void
+     */
+    private function addDefaultHeading(): void
+    {
+        $this->cell()->setValue("ID");
+        $this->nextCol();
+        $this->cell()->setValue($this->translator->translate("event.eventType", 1));
+        $this->nextCol();
+        $this->cell()->setValue($this->translator->translate("event.event", 1));
+        $this->nextCol();
+        $this->cell()->setValue($this->translator->translate("event.start"));
+        $this->nextCol();
+        $this->cell()->setValue($this->translator->translate("team.PLAYER", 1));
+        $this->nextCol();
+        $this->cell()->setValue($this->translator->translate("event.plan"));
+        $this->nextCol();
+        $this->cell()->setValue($this->translator->translate("event.result"));
+        $this->nextRow();
+    }
+
+    /**
+     * Print attendances of found events to each line
+     * @param array $events
+     * @return void
+     */
+    private function addDefaultData(array $events): void
+    {
+        foreach ($events as $event) {
+            foreach ($event->getAttendance() as $userId => $userAttendance) {
+                /* @var $preStatus Status */
+                $preStatus = $this->statusList[$userAttendance->getPreStatusId()] ?? null;
+                /* @var $postStatus Status */
+                $postStatus = $this->statusList[$userAttendance->getPostStatusId()] ?? null;
+
+                if (empty($preStatus) && empty($postStatus)) {  //fill only rows where either plan or result is specified
+                    continue;
+                }
+
+                /* @var $userAttendance Attendance */
+                $this->cell()->setValue($event->getId());  //event id
+                $this->nextCol();
+                $this->cell()->setValue($event->getEventType()->getCaption());  //event type
+                $this->nextCol();
+                $this->cell()->setValue($event->getCaption());  //event name
+                $this->nextCol();
+                $this->cell()->setValue($event->getStartTime()->format(BaseModel::DATETIME_CZECH_FORMAT));  //event start time
+                $this->nextCol();
+                $this->cell()->setValue($userAttendance->getUser()->getCallName());  //user call name
+                $this->nextCol();
+                if ($preStatus) {
+                    $this->cell()->setValue($preStatus->getCaption());  //plan
+                    $this->cell()->getStyle()->getFont()->setColor(new Color($preStatus->getColor()));
+                }
+                $this->nextCol();
+                if ($postStatus) {
+                    $this->cell()->setValue($postStatus->getCaption());  //result
+                    $this->cell()->getStyle()->getFont()->setColor(new Color($postStatus->getColor()));
+                }
+                $this->nextRow();
+            }
+        }
     }
 
     /**
@@ -127,22 +246,22 @@ class ReportPresenter extends SecuredPresenter
             $this->cellBelow()->getStyle()->applyFromArray(self::HEADING_STYLE);
             $cell2 = $this->cell()->getCoordinate();
 
-            $ths->sheet->mergeCells("$cell1:$cell2");
+            $this->sheet->mergeCells("$cell1:$cell2");
         }
 
-        $ths->sheet->getRowDimension($this->xlsRow)->setRowHeight(40);
+        $this->sheet->getRowDimension($this->xlsRow)->setRowHeight(40);
 
-        $lastRowCell = $ths->sheet->getCell(Coordinate::stringFromColumnIndex($this->xlsCol) . "2");
+        $lastRowCell = $this->sheet->getCell(Coordinate::stringFromColumnIndex($this->xlsCol) . "2");
 
         $this->nextRow();
 
-        $ths->sheet->setAutoFilter("A2:" . $lastRowCell->getCoordinate());
+        $this->sheet->setAutoFilter("A2:" . $lastRowCell->getCoordinate());
         for ($index = 1; $index < $this->lastCol; $index++) {
-            $ths->sheet->getColumnDimensionByColumn($index)->setAutoSize(true);
+            $this->sheet->getColumnDimensionByColumn($index)->setAutoSize(true);
         }
     }
 
-    private function addReportTitle(): void
+    private function addTitle(): void
     {
         $headerMiddle = "&B{$this->team->getName()}";
 
@@ -166,7 +285,6 @@ class ReportPresenter extends SecuredPresenter
      */
     private function addReportData(array $users, array $events)
     {
-        $statusList = $this->statusManager->getIdList();
 
         foreach ($users as $usr) {
             $this->nextRow();
@@ -183,9 +301,9 @@ class ReportPresenter extends SecuredPresenter
                 $preStatus = $postStatus = null;
                 if ($userAttendance){
                     /* @var $preStatus Status */
-                    $preStatus = $statusList[$userAttendance->getPreStatusId()] ?? null;
+                    $preStatus = $this->statusList[$userAttendance->getPreStatusId()] ?? null;
                     /* @var $postStatus Status */
-                    $postStatus = $statusList[$userAttendance->getPostStatusId()] ?? null;
+                    $postStatus = $this->statusList[$userAttendance->getPostStatusId()] ?? null;
                 }
                 $this->cell()->setValue($preStatus ? $preStatus->getCaption() : '');
                 if ($preStatus) {
