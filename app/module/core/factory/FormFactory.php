@@ -424,7 +424,7 @@ class FormFactory
 
         return $form;
     }
-    
+
     public function createExportAttendanceForm(string $url): Form
     {
         $form = new Form();
