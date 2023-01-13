@@ -430,12 +430,12 @@ class FormFactory
         $form = new Form();
         $form->setMethod("GET");
         $form->setAction($url);
-        
-        $form->addText("from", $this->translator->translate("common.from"))->setHtmlType("date")->setRequired();
-        $form->addText("until", $this->translator->translate("common.until"))->setHtmlType("date")->setRequired();
-        
+
+        $form->addText("from", $this->translator->translate("common.from"))->setHtmlType("date")->setRequired()->setValue((new DateTime("- 1 month"))->format(BaseModel::DATE_ENG_FORMAT));
+        $form->addText("until", $this->translator->translate("common.until"))->setHtmlType("date")->setRequired()->setValue((new DateTime())->format(BaseModel::DATE_ENG_FORMAT));
+
         $eventTypes = ArrayHelper::pairsEntity($this->eventTypeManager->getList(), "id", "caption");
-        $form->addSelect("eventTypeId", null, $eventTypes)->setPrompt($this->translator->translate("common.chooseType") . " ...");
+        $form->addSelect("type", null, $eventTypes)->setPrompt($this->translator->translate("common.chooseType") . " ...");
 
         $form->addSubmit("save", $this->translator->translate("settings.export"));
 
