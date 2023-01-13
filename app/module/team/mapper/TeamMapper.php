@@ -30,7 +30,6 @@ class TeamMapper extends BaseMapper
             Field::string()->withColumn("country_id")->setProperty("countryId"),
             Field::string()->withColumn("max_users")->setProperty("maxUsers"),
             Field::string()->withColumn("max_events_month")->setProperty("maxEventsMonth"),
-            Field::string()->withPropertyAndColumn("advertisement"),
             Field::string()->withColumn("insert_date")->setProperty("insertDate"),
             Field::string()->withColumn("time_zone")->setProperty("timeZone"),
             Field::string()->withColumn("dst_flag")->setProperty("dstFlag"),

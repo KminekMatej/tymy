@@ -38,7 +38,6 @@ class Team extends BaseModel
     private ?int $countryId = null;
     private int $maxUsers;
     private int $maxEventsMonth;
-    private bool $advertisement;
     private Datetime $insertDate;
     private int $timeZone;
     private string $dstFlag;
@@ -111,11 +110,6 @@ class Team extends BaseModel
     public function getMaxEventsMonth(): int
     {
         return $this->maxEventsMonth;
-    }
-
-    public function getAdvertisement(): bool
-    {
-        return $this->advertisement;
     }
 
     public function getInsertDate(): Datetime
@@ -241,12 +235,6 @@ class Team extends BaseModel
     public function setMaxEventsMonth(int $maxEventsMonth): static
     {
         $this->maxEventsMonth = $maxEventsMonth;
-        return $this;
-    }
-
-    public function setAdvertisement(bool $advertisement): static
-    {
-        $this->advertisement = $advertisement;
         return $this;
     }
 
