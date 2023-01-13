@@ -118,7 +118,7 @@ class ExportPresenter extends SecuredPresenter
         $this->output($filename, $spreadsheet);
     }
 
-    public function actionDefault(string $from, string $until, ?int $type = null)
+    public function actionAttendance(string $from, string $until, ?int $type = null)
     {
         if ($this->getRequest()->getMethod() != 'GET') {
             $this->respondNotAllowed();
@@ -150,10 +150,10 @@ class ExportPresenter extends SecuredPresenter
         
         //columns: idUd - typ - nazevUd - startDt - user - plan - result
         //add column headings
-        $this->addDefaultHeading();
+        $this->addAttendanceHeading();
         
         //add event data
-        $this->addDefaultData($events);
+        $this->addAttendanceData($events);
 
         $this->output($filename, $spreadsheet);
     }
@@ -162,7 +162,7 @@ class ExportPresenter extends SecuredPresenter
      * Add column headings
      * @return void
      */
-    private function addDefaultHeading(): void
+    private function addAttendanceHeading(): void
     {
         $this->cell()->setValue("ID")->getStyle()->applyFromArray(self::HEADING_STYLE);
         $this->nextCol();
@@ -192,7 +192,7 @@ class ExportPresenter extends SecuredPresenter
      * @param array $events
      * @return void
      */
-    private function addDefaultData(array $events): void
+    private function addAttendanceData(array $events): void
     {
         foreach ($events as $event) {
             foreach ($event->getAttendance() as $userId => $userAttendance) {
