@@ -49,11 +49,6 @@ class SecuredPresenter extends BasePresenter
 
     /** @inject */
     public MultiaccountManager $multiaccountManager;
-    public $discussionNews;
-    public $apiRights;
-    public $userRightsList;
-    public $eventTypeList;
-    public $noteList;
     public array $accessibleSettings = [];
 
     public function getLevelCaptions()
