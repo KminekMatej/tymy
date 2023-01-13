@@ -147,11 +147,11 @@ class ExportPresenter extends SecuredPresenter
 
         //add universal sheet title
         $this->addTitle();
-        
+
         //columns: idUd - typ - nazevUd - startDt - user - plan - result
         //add column headings
         $this->addAttendanceHeading();
-        
+
         //add event data
         $this->addAttendanceData($events);
 
@@ -306,7 +306,7 @@ class ExportPresenter extends SecuredPresenter
 
                 $userAttendance = $event->getAttendance()[$usr->getId()] ?? null;
                 $preStatus = $postStatus = null;
-                if ($userAttendance){
+                if ($userAttendance) {
                     /* @var $preStatus Status */
                     $preStatus = $this->statusList[$userAttendance->getPreStatusId()] ?? null;
                     /* @var $postStatus Status */
