@@ -131,7 +131,7 @@ class ExportPresenter extends SecuredPresenter
         if (empty($until)) {
             $this->respondBadRequest("Missing `until` in url");
         }
-        
+
         $type = !empty($type) ? intval($type) : null;
 
         $events = $this->eventManager->getEventsInterval($this->user->getId(), new DateTime($from), new DateTime($until), null, $type);
