@@ -109,15 +109,20 @@ class EventManager extends BaseManager
     }
 
     /**
-     * Returns filter array, based on provided $from and $until datetimes
+     * Returns filter array, based on provided $from and $until datetimes and optionally event type
      * @return string Filter syntax string
      */
-    private function getIntervalFilter(DateTime $from, DateTime $until): string
+    private function getIntervalTypeFilter(DateTime $from, DateTime $until, ?int $type = null): string
     {
-        return implode("~", [
+        $filter = [
             "startTime>" . $from->format(BaseModel::DATETIME_ISO_FORMAT),
             "startTime<" . $until->format(BaseModel::DATETIME_ISO_FORMAT),
-        ]);
+        ];
+
+        if ($type) {
+            $filter[] = "eventTypeId=$type";
+        }
+        return implode("~", $filter);
     }
 
     /**
@@ -462,13 +467,13 @@ class EventManager extends BaseManager
     }
 
     /**
-     * Return events specified by interval
+     * Return events specified by interval and optionally by event type id
      *
      * @return Event[]
      */
-    public function getEventsInterval(int $userId, DateTime $from, DateTime $until, ?string $order = null): array
+    public function getEventsInterval(int $userId, DateTime $from, DateTime $until, ?string $order = null, ?int $eventTypeId = null): array
     {
-        return $this->getListUserAllowed($userId, $this->getIntervalFilter($from, $until), $order);
+        return $this->getListUserAllowed($userId, $this->getIntervalTypeFilter($from, $until, $eventTypeId), $order);
     }
 
     /**

@@ -110,7 +110,7 @@ class EventPresenter extends SettingBasePresenter
     public function eventFormSuccess(Form $form, stdClass $values): void
     {
         \Tracy\Debugger::barDump($values);
-        
+
         try {
             $this->eventManager->update((array) $values, $values->id);
         } catch (TymyResponse $tResp) {

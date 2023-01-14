@@ -27,6 +27,8 @@ chooseState: Wybierz status
 choose: Wybierz
 ok: Ok
 yes: Tak
+from: Od
+until: Do
 no: Nie
 user: Użytkownik
 error: Błąd

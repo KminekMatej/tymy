@@ -12,6 +12,7 @@ use Nette\Utils\DateTime;
 use Tymy\Module\Attendance\Manager\StatusSetManager;
 use Tymy\Module\Attendance\Model\Status;
 use Tymy\Module\Attendance\Model\StatusSet;
+use Tymy\Module\Core\Helper\ArrayHelper;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Event\Manager\EventTypeManager;
 use Tymy\Module\Event\Model\Event;
@@ -420,6 +421,23 @@ class FormFactory
         $form->onSuccess[] = $onSuccess;
 
         $form->addSubmit("save");
+
+        return $form;
+    }
+
+    public function createExportAttendanceForm(string $url): Form
+    {
+        $form = new Form();
+        $form->setMethod("GET");
+        $form->setAction($url);
+
+        $form->addText("from", $this->translator->translate("common.from"))->setHtmlType("date")->setRequired()->setValue((new DateTime("- 1 month"))->format(BaseModel::DATE_ENG_FORMAT));
+        $form->addText("until", $this->translator->translate("common.until"))->setHtmlType("date")->setRequired()->setValue((new DateTime())->format(BaseModel::DATE_ENG_FORMAT));
+
+        $eventTypes = ArrayHelper::pairsEntity($this->eventTypeManager->getList(), "id", "caption");
+        $form->addSelect("type", null, $eventTypes)->setPrompt($this->translator->translate("common.chooseType") . " ...");
+
+        $form->addSubmit("save", $this->translator->translate("settings.export"));
 
         return $form;
     }
