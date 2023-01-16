@@ -66,7 +66,7 @@ class FileContentResponse implements Nette\Application\IResponse
 
         if ($this->resuming) {
             $httpResponse->setHeader('Accept-Ranges', 'bytes');
-            if (preg_match('#^bytes=(\d*)-(\d*)\z#', $httpRequest->getHeader('Range') ?: "", $matches)) {
+            if ($httpRequest->getHeader('Range') && preg_match('#^bytes=(\d*)-(\d*)\z#', $httpRequest->getHeader('Range') ?: "", $matches)) {
                 $start = isset($matches[1]) ? intval($matches[1]) : null;
                 $end = isset($matches[2]) ? intval($matches[2]) : null;
                 if (is_null($start)) {
