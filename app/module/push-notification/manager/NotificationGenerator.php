@@ -35,7 +35,7 @@ class NotificationGenerator
                 ->setUserId($this->user->getId())
                 ->setTeamId($this->teamManager->getTeam()->getId())
                 ->setTitle("{$post->getCreatedBy()->getCallName()} posted in {$discussion->getCaption()}")
-                ->setMessage(substr($post->getPost(), 0, 512) . (strlen($post->getPost()) > 512 ? " ..." : ""))
+                ->setMessage(substr($post->getPost(), 0, 512) . (strlen($post->getPost()) > 512 ? " ..." : "")) //must be shortened due to WebPush notification limit
                 ->setUrl($this->linkGenerator->link("Discussion:Discussion:", [$discussion->getWebName()]))
                 ->addParam("discussionId", $discussion->getId());
     }
