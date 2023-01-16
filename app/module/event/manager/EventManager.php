@@ -27,6 +27,7 @@ use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\PushNotification\Manager\NotificationGenerator;
 use Tymy\Module\PushNotification\Manager\PushNotificationManager;
 use Tymy\Module\User\Manager\UserManager;
+use Tymy\Module\User\Model\User;
 
 /**
  * Description of EventManager
@@ -480,12 +481,12 @@ class EventManager extends BaseManager
      *
      * @param Event[] $events
      */
-    public function getWarnings(array $events): int
+    public function getWarnings(array $events, User $tymyUser): int
     {
         $count = 0;
         foreach ($events as $event) {
             assert($event instanceof Event);
-            if ($event->getAttendancePending() && $event->getCanPlan()) {
+            if ($event->getAttendancePending() && $event->getCanPlan() && $tymyUser->getStatus() == User::STATUS_PLAYER) {
                 $count++;
             }
         }

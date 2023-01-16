@@ -21,7 +21,7 @@ use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\Poll\Manager\PollManager;
 use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\User\Manager\UserManager;
-use Tymy\Module\User\Model\User as User2;
+use Tymy\Module\User\Model\User as TymyUser;
 
 /**
  * Description of Navbar
@@ -32,7 +32,7 @@ class NavbarControl extends Control
 {
     private Translator $translator;
 
-    public function __construct(private SecuredPresenter $presenter, private PollManager $pollManager, private DiscussionManager $discussionManager, private EventManager $eventManager, private DebtManager $debtManager, private UserManager $userManager, private MultiaccountManager $multiaccountManager, private User $user, private TeamManager $teamManager, private EventTypeManager $eventTypeManager, private Request $httpRequest)
+    public function __construct(private SecuredPresenter $presenter, private PollManager $pollManager, private DiscussionManager $discussionManager, private EventManager $eventManager, private DebtManager $debtManager, private UserManager $userManager, private MultiaccountManager $multiaccountManager, private User $user, private TymyUser $tymyUser, private TeamManager $teamManager, private EventTypeManager $eventTypeManager, private Request $httpRequest)
     {
         $this->translator = $this->presenter->translator;
     }
@@ -58,13 +58,11 @@ class NavbarControl extends Control
 
     private function initPlayers(): void
     {
-        $me = $this->userManager->getById($this->user->getId());
-
         $users = $this->userManager->getList();
         $this->template->counts = $this->userManager->getCounts($users);
-        $this->template->playersWarnings = $me->getWarnings();
+        $this->template->playersWarnings = $this->tymyUser->getWarnings();
         $this->template->inits = $this->user->isAllowed($this->user->getId(), Privilege::SYS('SEE_INITS')) ? $this->template->counts["INIT"] : 0;
-        $this->template->me = $me;
+        $this->template->me = $this->tymyUser;
     }
 
     private function initPolls(): void
@@ -78,7 +76,7 @@ class NavbarControl extends Control
     {
         $events = $this->eventManager->getEventsInterval($this->user->getId(), new DateTime(), new DateTime("+ 1 year"), "startTime__asc");
         $this->template->events = $events;
-        $this->template->eventWarnings = $this->eventManager->getWarnings($events);
+        $this->template->eventWarnings = $this->eventManager->getWarnings($events, $this->tymyUser);
         $this->template->eventTypes = $this->eventTypeManager->getIndexedList();
     }
 

@@ -94,7 +94,7 @@ class SecuredPresenter extends BasePresenter
 
     protected function createComponentNavbar()
     {
-        $navbar = new NavbarControl($this, $this->pollManager, $this->discussionManager, $this->eventManager, $this->debtManager, $this->userManager, $this->multiaccountManager, $this->user, $this->teamManager, $this->eventTypeManager, $this->getHttpRequest());
+        $navbar = new NavbarControl($this, $this->pollManager, $this->discussionManager, $this->eventManager, $this->debtManager, $this->userManager, $this->multiaccountManager, $this->user, $this->tymyUser, $this->teamManager, $this->eventTypeManager, $this->getHttpRequest());
         $navbar->redrawControl();
         return $navbar;
     }
