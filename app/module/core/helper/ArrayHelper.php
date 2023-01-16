@@ -6,6 +6,7 @@ namespace Tymy\Module\Core\Helper;
 
 use Exception;
 use Nette\Database\Table\ActiveRow;
+use Nette\NotImplementedException;
 use SplObjectStorage;
 use Tymy\Module\Core\Model\BaseModel;
 
