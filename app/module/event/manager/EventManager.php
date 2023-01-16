@@ -435,7 +435,7 @@ class EventManager extends BaseManager
         $deleted = parent::deleteRecord($resourceId);
 
         $notification = $this->notificationGenerator->deleteEvent($this->event);
-        $this->pushNotificationManager->notifyUsers($notification, $this->getAllowedReaders($this->event));
+        $this->pushNotificationManager->notifyUsers($notification, $this->userManager->playersOnly($this->getAllowedReaders($this->event)));
 
         return $deleted !== 0 ? $resourceId : null;
     }
