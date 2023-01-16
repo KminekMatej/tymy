@@ -82,7 +82,11 @@ class EventPresenter extends SettingBasePresenter
 
     public function handleEventDelete(int $eventId): void
     {
-        $this->eventManager->delete($eventId);
+        try {
+            $this->eventManager->delete($eventId);
+        } catch (TymyResponse $tResp) {
+            $this->handleTymyResponse($tResp);
+        }
         $this->redirect(':Setting:Event:');
     }
 
