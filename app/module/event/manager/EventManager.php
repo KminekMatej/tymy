@@ -405,7 +405,7 @@ class EventManager extends BaseManager
     /**
      * Get user ids allowed to read given event
      * @param Event $record
-     * @return mixed[]|int[]
+     * @return int[] Id of users allowed to read this event
      */
     public function getAllowedReaders(BaseModel $record): array
     {
@@ -418,12 +418,12 @@ class EventManager extends BaseManager
     public function create(array $data, ?int $resourceId = null): BaseModel
     {
         $this->allowCreate($data);
-        Debugger::barDump($data);
+
         $createdRow = parent::createByArray($data);
         $createdEvent = $this->getById($createdRow->id);
 
         $notification = $this->notificationGenerator->createEvent($createdEvent);
-        $this->pushNotificationManager->notifyUsers($notification, $this->getAllowedReaders($createdEvent));
+        $this->pushNotificationManager->notifyUsers($notification, $this->userManager->playersOnly($this->getAllowedReaders($createdEvent)));
 
         return $createdEvent;
     }

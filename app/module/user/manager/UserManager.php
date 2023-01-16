@@ -13,6 +13,7 @@ use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
 use Tymy\Module\Core\Exception\MissingInputException;
 use Tymy\Module\Core\Factory\ManagerFactory;
+use Tymy\Module\Core\Helper\ArrayHelper;
 use Tymy\Module\Core\Helper\CURLHelper;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
@@ -26,7 +27,6 @@ use Tymy\Module\User\Mapper\UserMapper;
 use Tymy\Module\User\Model\Invitation;
 use Tymy\Module\User\Model\SimpleUser;
 use Tymy\Module\User\Model\User;
-
 use const TEAM_DIR;
 
 /**
@@ -61,6 +61,21 @@ class UserManager extends BaseManager
     public function __construct(ManagerFactory $managerFactory, private MailService $mailService, private PermissionManager $permissionManager, private Translator $translator, private TeamManager $teamManager)
     {
         parent::__construct($managerFactory);
+    }
+
+    /**
+     * Filter only players from input array.
+     * @param User[]|int[] $users Either array of User's or array of user ids
+     * @return User[]|int[] Only users having status = PLAYER
+     */
+    public function playersOnly(array $users): array
+    {
+        if (is_int($users[array_key_first($users)])) {    //this is an array of ids, not an array of Users
+            $playerIds = $this->database->table($this->getTable())->where("status", User::STATUS_PLAYER)->fetchPairs(null, "id");
+            return array_intersect($users, $playerIds);
+        } else {
+            return ArrayHelper::filter($users, "status", User::STATUS_PLAYER);
+        }
     }
 
     /**
