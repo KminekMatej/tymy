@@ -100,6 +100,10 @@ class AuthenticationManager implements IAuthenticator
         }
 
         $row = $this->teamDatabase->table(self::TABLE)->get($userId);
+
+        if (!$row) {
+            throw new AuthenticationException($this->translator->translate("team.alerts.authenticationFailed"), self::INVALID_CREDENTIAL);
+        }
         $this->teamDatabase->table(self::TABLE)->where('id', $userId)->update(["last_login" => new DateTime()]);
 
         return new SimpleIdentity($userId, explode(",", $row->roles ?: ""), ["ghost" => false]);
