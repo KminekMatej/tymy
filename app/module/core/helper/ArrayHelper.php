@@ -42,16 +42,31 @@ class ArrayHelper
     /**
      * Get sub-arrrays frorm multidimensional array, where property equals field or is in array of fields
      *
+     * @param array[]|BaseModel[] $inputArray
+     * @param string|int $where
      * @param string|string[]|int|int[]|bool $equals
-     * @return mixed[]
+     * @return array[]|BaseModel[] Filtered input
      */
-    public static function filter(array $inputArray, mixed $where, string|array|int|bool $equals): array
+    public static function filter(array $inputArray, string|int $where, string|array|int|bool $equals): array
     {
         return array_filter($inputArray, function ($elm) use ($where, $equals) {
+            if ($elm instanceof BaseModel) {
+                if (!is_string($where)) {
+                    throw new NotImplementedException("Filtering BaseModel entity must be made by string key (`where`)");
+                }
+                $getter = "get" . ucfirst($where);
+                if (!method_exists($elm, $getter)) {
+                    return false;
+                }
+                $val = $elm->$getter();
+            } else {
+                $val = $elm[$where];
+            }
+
             if (is_string($equals) || is_int($equals) || is_bool($equals)) {
-                return $elm[$where] === $equals;
+                return $val === $equals;
             } elseif (is_array($equals)) {
-                return in_array($elm[$where], $equals);
+                return in_array($val, $equals);
             }
         });
     }
