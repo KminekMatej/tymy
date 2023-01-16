@@ -2,17 +2,20 @@
 
 namespace Tymy\Module\Event\Manager;
 
+use Contributte\Translation\Translator;
 use Nette\Database\IRow;
 use Nette\Database\Table\ActiveRow;
 use Nette\Database\Table\Selection;
 use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
+use Tracy\Debugger;
 use Tymy\Module\Attendance\Manager\AttendanceManager;
 use Tymy\Module\Attendance\Model\Attendance;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Helper\ArrayHelper;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Core\Model\Filter;
 use Tymy\Module\Core\Model\Order;
 use Tymy\Module\Event\Mapper\EventMapper;
@@ -36,7 +39,7 @@ class EventManager extends BaseManager
     private DateTime $now;
     private ?Event $event = null;
 
-    public function __construct(ManagerFactory $managerFactory, private PermissionManager $permissionManager, private UserManager $userManager, private AttendanceManager $attendanceManager, private EventTypeManager $eventTypeManager, private NotificationGenerator $notificationGenerator, private PushNotificationManager $pushNotificationManager)
+    public function __construct(ManagerFactory $managerFactory, private PermissionManager $permissionManager, private UserManager $userManager, private AttendanceManager $attendanceManager, private EventTypeManager $eventTypeManager, private NotificationGenerator $notificationGenerator, private PushNotificationManager $pushNotificationManager, private Translator $translator)
     {
         parent::__construct($managerFactory);
         $this->now = new DateTime();
@@ -99,7 +102,7 @@ class EventManager extends BaseManager
     {
         $event = parent::getById($id);
 
-        if (!$event instanceof \Tymy\Module\Core\Model\BaseModel) {
+        if (!$event instanceof BaseModel) {
             return null;
         }
 
@@ -308,10 +311,10 @@ class EventManager extends BaseManager
         $endTimeDT = new DateTime($data["endTime"]);
 
         if ($closeTimeDT > $startTimeDT) {
-            $this->respondBadRequest("Close time after start time");
+            $this->respondBadRequest($this->translator->translate("event.errors.closeAfterStart"));
         }
         if ($endTimeDT < $startTimeDT) {
-            $this->respondBadRequest("Start time after end time");
+            $this->respondBadRequest($this->translator->translate("event.errors.startAfterEnd"));
         }
 
         //if there is no `eventTypeId` supplied, load it from `type` input
@@ -359,15 +362,11 @@ class EventManager extends BaseManager
             $this->respondForbidden();
         }
 
-        //if there is no `eventTypeId` supplied, load it from `type` input
-        if (isset($data["type"]) && $data["type"] !== $this->event->getType()) { //changing event type
-            $code = $this->eventTypeManager->getByCode($data["type"]);
-
-            if (empty($code)) {
-                $this->respondNotFound("Event type", $data["type"]);
-            }
-
-            $data["eventTypeId"] = $code->id;
+        if (
+            (isset($data["type"]) && $data["type"] !== $this->event->getType()) ||
+            (isset($data["eventTypeId"]) && $data["eventTypeId"] != $this->event->getEventTypeId())
+            ) { //changing event type
+            $this->respondForbidden("Changing event type is forbidden. Delete & create new event instead.");
         }
     }
 
@@ -377,7 +376,7 @@ class EventManager extends BaseManager
     }
 
     /**
-     * @return \Tymy\Module\Core\Model\Field[]
+     * @return Field[]
      */
     protected function getScheme(): array
     {
@@ -418,7 +417,7 @@ class EventManager extends BaseManager
     public function create(array $data, ?int $resourceId = null): BaseModel
     {
         $this->allowCreate($data);
-
+        Debugger::barDump($data);
         $createdRow = parent::createByArray($data);
         $createdEvent = $this->getById($createdRow->id);
 

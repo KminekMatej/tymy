@@ -39,3 +39,5 @@ eventType: Typ wydarzenia|Typy wydarzeń
 currently: Obecnie w toku
 errors:
     eventNotExists: Wydarzenie %id% nie istnieje
+    closeAfterStart: Termin nie może przypadać po rozpoczęciu
+    startAfterEnd: Rozpoczęcie nie może nastąpić po terminie

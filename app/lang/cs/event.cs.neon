@@ -39,3 +39,5 @@ eventType: Typ události|Typy událostí
 currently: Právě probíhá událost
 errors:
     eventNotExists: Událost %id% neexistuje
+    closeAfterStart: Uzávěrka nemůže být po začátku
+    startAfterEnd: Začátek nemůže být po konci

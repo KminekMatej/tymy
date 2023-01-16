@@ -39,3 +39,5 @@ eventType: Type d\'événement|Types d'événement
 currently: Actuellement en cours
 errors:
     eventNotExists: "L'événement %id% n'existe pas"
+    closeAfterStart: La date limite ne peut pas être après le début
+    startAfterEnd: Le début ne peut pas être après la date limite

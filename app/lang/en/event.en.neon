@@ -39,3 +39,5 @@ eventType: Event type|Event types
 currently: Currently in progress
 errors:
     eventNotExists: Event %id% does not exist
+    closeAfterStart: "Deadline can't be after start"
+    startAfterEnd: "Start can't be after deadline"
