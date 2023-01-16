@@ -366,7 +366,7 @@ class EventManager extends BaseManager
         if (
             (isset($data["type"]) && $data["type"] !== $this->event->getType()) ||
             (isset($data["eventTypeId"]) && $data["eventTypeId"] != $this->event->getEventTypeId())
-            ) { //changing event type
+        ) { //changing event type
             $this->respondForbidden("Changing event type is forbidden. Delete & create new event instead.");
         }
     }
