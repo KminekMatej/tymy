@@ -66,7 +66,12 @@ class FormFactory
 
         //     $id = $form->addHidden("id", $id);
 
-        $type = $form->addSelect("eventTypeId", null, $eventTypes)->setHtmlAttribute("data-name", "eventTypeId")->setRequired();
+        if ($event) {
+            $type = $form->addText("eventTypeId", null)->setDisabled()->setValue($eventTypes[$event->getEventTypeId()]);
+        } else {
+            $type = $form->addSelect("eventTypeId", null, $eventTypes)->setHtmlAttribute("data-name", "eventTypeId")->setRequired();
+        }
+
         $caption = $form->addText("caption")->setHtmlAttribute("data-name", "caption")->setRequired();
         $description = $form->addTextArea("description", null, null, 1)->setHtmlAttribute("data-name", "description");
         $start = $form->addText("startTime")->setHtmlAttribute("data-name", "startTime")->setHtmlType("datetime-local")->setValue((new DateTime("+ 24 hours"))->format(BaseModel::DATETIME_ISO_NO_SECS_FORMAT))->setRequired();
@@ -80,7 +85,6 @@ class FormFactory
 
         if ($event !== null) {
             $form->addHidden("id", $event->getId());
-            $type->setValue($event->getEventTypeId());
             $caption->setValue($event->getCaption());
             $description->setValue($event->getDescription());
             $start->setValue($event->getStartTime()->format(BaseModel::DATETIME_ISO_FORMAT));
