@@ -6,13 +6,14 @@ use Nette\Database\IRow;
 use Nette\Database\Table\ActiveRow;
 use Nette\NotImplementedException;
 use Tymy\Module\Attendance\Manager\StatusManager;
-use Tymy\Module\Attendance\Model\Status;
 use Tymy\Module\Attendance\Model\StatusSet;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Event\Mapper\EventTypeMapper;
 use Tymy\Module\Event\Model\EventType;
+use Tymy\Module\Permission\Model\Privilege;
 
 /**
  * Description of EventTypeManager
@@ -27,6 +28,20 @@ class EventTypeManager extends BaseManager
     public function __construct(ManagerFactory $managerFactory, private StatusManager $statusManager)
     {
         parent::__construct($managerFactory);
+    }
+
+    protected function allowCreate(?array &$data = null): void
+    {
+        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("IS_ADMIN"))) {
+            $this->respondForbidden();
+        }
+    }
+
+    protected function allowDelete(?int $recordId): void
+    {
+        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("IS_ADMIN"))) {
+            $this->respondForbidden();
+        }
     }
 
     /**
@@ -62,7 +77,7 @@ class EventTypeManager extends BaseManager
     }
 
     /**
-     * @return \Tymy\Module\Core\Model\Field[]
+     * @return Field[]
      */
     protected function getScheme(): array
     {
@@ -112,7 +127,7 @@ class EventTypeManager extends BaseManager
     }
 
     /**
-     * @return \Tymy\Module\Core\Model\BaseModel[]
+     * @return BaseModel[]
      */
     public function getListUserAllowed($userId): array
     {
@@ -122,12 +137,25 @@ class EventTypeManager extends BaseManager
 
     public function create(array $data, ?int $resourceId = null): BaseModel
     {
-        throw new NotImplementedException("Not implemented yet");
+        $this->allowCreate($data);
+
+        if (!isset($data["order"])) {
+            $latestOrder = $this->database->table($this->getTable())->select("MAX(order) AS maxOrder")->fetch()->maxOrder ?? 0;
+            $data["order"] = $latestOrder + 1;
+        }
+
+        $created = parent::createByArray($data);
+
+        return $this->map($created);
     }
 
     public function delete(int $resourceId, ?int $subResourceId = null): int
     {
-        throw new NotImplementedException("Not implemented yet");
+        $this->eventType = $this->getById($resourceId);
+
+        $this->allowDelete($resourceId);
+
+        return parent::deleteRecord($resourceId);
     }
 
     /**

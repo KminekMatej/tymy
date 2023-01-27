@@ -6,6 +6,7 @@ use Nette\Application\UI\Form;
 use Nette\Application\UI\Multiplier;
 use Tymy\Module\Attendance\Manager\StatusSetManager;
 use Tymy\Module\Attendance\Model\StatusSet;
+use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Core\Factory\FormFactory;
 
 class TeamPresenter extends SettingBasePresenter
@@ -19,6 +20,30 @@ class TeamPresenter extends SettingBasePresenter
     public function renderDefault(): void
     {
         $this->template->statusSets = $this->statusSetManager->getList();
+    }
+
+    public function actionNewType()
+    {
+        try {
+            $this->eventTypeManager->create(["code" => strtoupper(substr(md5(random_int(0, 1000)), 0, 3))]);
+        } catch (TymyResponse $tResp) {
+            $this->flashMessage($this->translator->translate("common.alerts.notPermitted"));
+            $this->handleTymyResponse($tResp);
+        }
+
+        $this->redirect(":Setting:Team:default");
+    }
+
+    public function actionDeleteType(int $id)
+    {
+        try {
+            $this->eventTypeManager->delete($id);
+        } catch (TymyResponse $tResp) {
+            $this->flashMessage($this->translator->translate("common.alerts.notPermitted"));
+            $this->handleTymyResponse($tResp);
+        }
+
+        $this->redirect(":Setting:Team:default");
     }
 
     public function createComponentStatusSetForm(): Multiplier
@@ -105,4 +130,6 @@ class TeamPresenter extends SettingBasePresenter
         $this->flashMessage($this->translator->translate("common.alerts.configSaved"));
         $this->redirect(":Setting:Team:");
     }
+    
+    
 }
