@@ -18,6 +18,8 @@ ALTER TABLE `status` ADD `order` INT NULL DEFAULT NULL AFTER `updated_user_id`;
 UPDATE `status` SET `order`=`id` WHERE 1;
 ALTER TABLE `status_set` ADD `order` INT NULL DEFAULT NULL AFTER `name`;
 UPDATE `status_set` SET `order`=`id` WHERE 1;
+ALTER TABLE `event_types` ADD `order` INT NULL DEFAULT NULL AFTER `updated_user_id`;
+UPDATE `event_types` SET `order`=`id` WHERE 1;
 
 
 -- DOWN:
