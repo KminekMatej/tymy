@@ -65,19 +65,19 @@ class TeamPresenter extends SettingBasePresenter
 
     public function eventTypeFormSuccess(Form $form, $values): void
     {
-        if (empty($values["id"])) {
-            return;
-        }
+        $allIds = array_keys($this->eventTypeManager->getIdList());
 
-        //update eventTypes
-        $this->eventTypeManager->updateByArray((int) $values->id, [
-            "code" => $values->code,
-            "caption" => $values->caption,
-            "order" => $values->order,
-            "color" => ltrim($values->color, " #"),
-            "preStatusSetId" => $values->preStatusSet,
-            "postStatusSetId" => $values->postStatusSet,
-        ]);
+        foreach ($allIds as $typeId) {
+            $this->eventTypeManager->updateByArray($typeId,
+                [
+                "code" => $values->{$typeId . "_code"},
+                "caption" => $values->{$typeId . "_caption"},
+                "order" => $values->{$typeId . "_order"},
+                "color" => ltrim($values->{$typeId . "_color"}, " #"),
+                "preStatusSetId" => $values->{$typeId . "_preStatusSet"},
+                "postStatusSetId" => $values->{$typeId . "_postStatusSet"},
+            ]);
+        }
 
         $this->flashMessage($this->translator->translate("common.alerts.configSaved"));
         $this->redirect(":Setting:Team:");
