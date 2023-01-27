@@ -118,7 +118,7 @@ class FormFactory
                 $form = new Form();
                 $form->addHidden("id", $statusSetId);
                 $form->addText("name", $this->translator->translate("settings.team"))->setValue($statusSet->getName())->setRequired();
-                $form->addInteger("order", $this->translator->translate("settings.order"))->setValue($statusSet->getOrder());
+                $form->addHidden("order", $this->translator->translate("settings.order"))->setValue($statusSet->getOrder());
                 $form->addSubmit("save")->setHtmlAttribute("title", $this->translator->translate("common.save"));
 
             foreach ($statusSet->getStatuses() as $status) {
@@ -185,7 +185,7 @@ class FormFactory
                     ->setValue($eventType->getPreStatusSetId());
                 $form->addSelect("postStatusSet", $this->translator->translate("status.postStatus"), $ssList)
                     ->setValue($eventType->getPostStatusSetId());
-                $form->addInteger("order", $this->translator->translate("settings.order"))
+                $form->addHidden("order", $this->translator->translate("settings.order"))
                     ->setValue($eventType->getOrder());
 
                 $form->addSubmit("save")->setHtmlAttribute("title", $this->translator->translate("common.save"));

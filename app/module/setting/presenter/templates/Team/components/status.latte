@@ -13,8 +13,12 @@
             <tr n:foreach="$statusSets as $s">
                 {var $ssid = $s->getId()}
                 {form "statusSetForm-$ssid"}
+                    <td style="width: 80px">
+                        <i class="fa fa-arrow-up" {if $iterator->isFirst()}style="display: none"{/if}></i>
+                        <i class="fa fa-arrow-down text-secondary" {if $iterator->isLast()}style="display: none"{/if}></i>
+                        {input order}
+                    </td>
                     <td style="width: 200px">{input name, class => 'form-control form-control-sm'}</td>
-                    <td style="width: 150px">{input order, class => 'form-control form-control-sm'}</td>
                     <td>
                         <div class="row">
                             <div class="col-2">
