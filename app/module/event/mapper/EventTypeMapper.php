@@ -27,6 +27,7 @@ class EventTypeMapper extends BaseMapper
             Field::string()->withPropertyAndColumn("mandatory"),
             Field::datetime()->withColumn("updated")->setProperty("updatedAt")->setChangeable(false),
             Field::int()->withColumn("updated_user_id")->setProperty("updatedById"),
+            Field::int()->withPropertyAndColumn("order"),
         ];
     }
 }

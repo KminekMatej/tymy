@@ -26,6 +26,7 @@ class StatusMapper extends BaseMapper
             Field::int()->withColumn("status_set_id", true)->setProperty("statusSetId"),
             Field::int()->withColumn("updated_user_id")->setProperty("updatedById"),
             Field::datetime()->withColumn("updated")->setProperty("updatedAt"),
+            Field::int()->withPropertyAndColumn("order"),
 
         ];
     }

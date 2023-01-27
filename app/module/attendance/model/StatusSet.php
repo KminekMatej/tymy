@@ -17,12 +17,18 @@ class StatusSet extends BaseModel
     public const POST = "post";
 
     private string $name;
+    private ?int $order = null;
     private string $webname;
     private array $statuses = [];
 
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getOrder(): ?int
+    {
+        return $this->order;
     }
 
     public function getWebname(): string
@@ -41,6 +47,12 @@ class StatusSet extends BaseModel
     public function setName(string $name): static
     {
         $this->name = $name;
+        return $this;
+    }
+
+    public function setOrder(?int $order)
+    {
+        $this->order = $order;
         return $this;
     }
 

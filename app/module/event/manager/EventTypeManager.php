@@ -106,6 +106,11 @@ class EventTypeManager extends BaseManager
         return $typesIndexed;
     }
 
+    public function getList(?array $idList = null, string $idField = "id", ?int $limit = null, ?int $offset = null, ?string $order = null): array
+    {
+        return parent::getList($idList, $idField, $limit, $offset, $order ?: "order");
+    }
+
     /**
      * @return \Tymy\Module\Core\Model\BaseModel[]
      */

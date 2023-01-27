@@ -166,7 +166,7 @@ class StatusSetManager extends BaseManager
      */
     public function getListUserAllowed(int $userId): array
     {
-        return $this->mapAll($this->database->table($this->getTable())->fetchAll());
+        return $this->mapAll($this->database->table($this->getTable())->order("order")->fetchAll());
     }
 
     public function update(array $data, int $resourceId, ?int $subResourceId = null): BaseModel

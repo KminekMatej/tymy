@@ -21,6 +21,7 @@ class Status extends BaseModel
     private ?string $caption = null;
     private ?string $icon = null;
     private int $statusSetId;
+    private ?int $order = null;
     private ?int $updatedById = null;
     private ?DateTime $updatedAt = null;
     private string $statusSetName;
@@ -48,6 +49,11 @@ class Status extends BaseModel
     public function getStatusSetId(): int
     {
         return $this->statusSetId;
+    }
+
+    public function getOrder(): ?int
+    {
+        return $this->order;
     }
 
     public function getUpdatedById(): ?int
@@ -92,6 +98,12 @@ class Status extends BaseModel
     public function setStatusSetId(int $statusSetId): static
     {
         $this->statusSetId = $statusSetId;
+        return $this;
+    }
+
+    public function setOrder(?int $order)
+    {
+        $this->order = $order;
         return $this;
     }
 

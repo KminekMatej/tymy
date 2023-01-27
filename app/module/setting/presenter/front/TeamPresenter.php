@@ -43,7 +43,7 @@ class TeamPresenter extends SettingBasePresenter
         }
 
         //update status name
-        $this->statusSetManager->updateByArray((int) $values->id, ["name" => $values->name]);
+        $this->statusSetManager->updateByArray((int) $values->id, ["name" => $values->name, "order" => $values->order]);
 
         //update statuses
         $statusSet = $this->statusSetManager->getById((int) $values->id);
@@ -55,6 +55,7 @@ class TeamPresenter extends SettingBasePresenter
                 "code" => $values->{"status_{$status->getId()}_code"},
                 "color" => ltrim($values->{"status_{$status->getId()}_color"}, " #"),
                 "icon" => $values->{"status_{$status->getId()}_icon"},
+                "order" => $values->{"status_{$status->getId()}_order"},
             ]);
         }
 
@@ -72,6 +73,7 @@ class TeamPresenter extends SettingBasePresenter
         $this->eventTypeManager->updateByArray((int) $values->id, [
             "code" => $values->code,
             "caption" => $values->caption,
+            "order" => $values->order,
             "color" => ltrim($values->color, " #"),
             "preStatusSetId" => $values->preStatusSet,
             "postStatusSetId" => $values->postStatusSet,

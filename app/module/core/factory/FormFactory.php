@@ -118,6 +118,7 @@ class FormFactory
                 $form = new Form();
                 $form->addHidden("id", $statusSetId);
                 $form->addText("name", $this->translator->translate("settings.team"))->setValue($statusSet->getName())->setRequired();
+                $form->addInteger("order", $this->translator->translate("settings.order"))->setValue($statusSet->getOrder());
                 $form->addSubmit("save")->setHtmlAttribute("title", $this->translator->translate("common.save"));
 
             foreach ($statusSet->getStatuses() as $status) {
@@ -144,6 +145,8 @@ class FormFactory
                     ->setHtmlAttribute("id", "iconpicker-{$status->getId()}")
                     ->setHtmlAttribute("data-toggle", "dropdown")
                     ->setHtmlAttribute("type", "hidden");
+                $form->addInteger("status_{$status->getId()}_order", $this->translator->translate("settings.order"))
+                    ->setValue($status->getOrder());
             }
                 $form->onSuccess[] = $onSuccess;
                 return $form;
@@ -182,6 +185,8 @@ class FormFactory
                     ->setValue($eventType->getPreStatusSetId());
                 $form->addSelect("postStatusSet", $this->translator->translate("status.postStatus"), $ssList)
                     ->setValue($eventType->getPostStatusSetId());
+                $form->addInteger("order", $this->translator->translate("settings.order"))
+                    ->setValue($eventType->getOrder());
 
                 $form->addSubmit("save")->setHtmlAttribute("title", $this->translator->translate("common.save"));
                 $form->onSuccess[] = $onSuccess;

@@ -8,8 +8,9 @@
                 <th>{_status.code}</th>
                 <th>{_common.name}</th>
                 <th>{_status.color}</th>
-                <th>{_status.planStatus}</th>
-                <th>{_status.resultStatus}</th>
+                <th title="{_status.preStatus}">{_event.plan}</th>
+                <th title="{_status.postStatus}">{_event.result}</th>
+                <th>{_settings.order}</th>
                 <th></th>
             </tr>
             <tr n:foreach="$eventTypes as $et">
@@ -29,6 +30,9 @@
                     </td>
                     <td>
                         {input postStatusSet, class => 'form-control form-control-sm'}
+                    </td>
+                    <td>
+                        {input order, class => 'form-control form-control-sm w-50'}
                     </td>
 
                     <td class="btn-group" role="group" n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('TEAM_UPDATE'))">
