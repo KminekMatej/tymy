@@ -31,7 +31,7 @@ class TeamPresenter extends SettingBasePresenter
         return $this->formFactory->createTeamConfigForm(fn(Form $form, $values) => $this->teamConfigFormSuccess($form, $values));
     }
 
-    public function createComponentEventTypeForm(): Multiplier
+    public function createComponentEventTypeForm(): Form
     {
         return $this->formFactory->createEventTypeForm(fn(Form $form, $values) => $this->eventTypeFormSuccess($form, $values));
     }

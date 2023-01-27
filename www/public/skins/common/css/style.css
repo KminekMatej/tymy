@@ -60,3 +60,15 @@ input[type='checkbox'].lfv-diff + .custom-control-label:before {
 BUTTON.btn:not(:disabled):not(.disabled), BUTTON.dropdown-item:not(:disabled):not(.disabled), A.btn:not(:disabled):not(.disabled), INPUT.btn:not(:disabled):not(.disabled){
     cursor: pointer;
 }
+
+I.order.fa-arrow-up:hover{
+    cursor: pointer;
+    font-weight: bold;
+    color: #03a9f4;
+}
+
+I.order.fa-arrow-down:hover{
+    cursor: pointer;
+    font-weight: bold;
+    color: #dc3545 !important;
+}

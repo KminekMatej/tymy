@@ -2,53 +2,60 @@
     <div class="card-header">
         <h4>{_event.eventType, 2}</h4>
     </div>
-    <div class="card-body">
-        <table class="table table-xs table-hover">
-            <tr>
-                <th>{_settings.order}</th>
-                <th>{_status.code}</th>
-                <th>{_common.name}</th>
-                <th>{_status.color}</th>
-                <th title="{_status.preStatus}">{_event.plan}</th>
-                <th title="{_status.postStatus}">{_event.result}</th>
-                <th></th>
-            </tr>
-            <tr n:foreach="$eventTypes as $et">
-                {var $etid = $et->getId()}
-                {form "eventTypeForm-$etid"}
-                    <td style="width: 80px">
-                        <i class="fa fa-arrow-up" {if $iterator->isFirst()}style="display: none"{/if}></i>
-                        <i class="fa fa-arrow-down text-secondary" {if $iterator->isLast()}style="display: none"{/if}></i>
-                        {input order}
-                    </td>
-                    <td style="width: 100px">
-                        {input code, class => 'form-control form-control-sm'}
-                    </td>
-                    <td>
-                        {input caption, class => 'form-control form-control-sm'}
-                    </td>
-                    <td style="width: 100px">
-                        {input color, class => 'form-control form-control-sm'}
-                    </td>
-                    <td>
-                        {input preStatusSet, class => 'form-control form-control-sm'}
-                    </td>
-                    <td>
-                        {input postStatusSet, class => 'form-control form-control-sm'}
-                    </td>
 
-                    <td class="btn-group" role="group" n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('TEAM_UPDATE'))">
-                        <button type="submit" n:name="save" title="{_common.save}" class="btn btn-sm btn-primary"><i class="fa fa-save" aria-hidden="true"></i></button>
-                        <button class="btn btn-sm btn-danger" href="#" title="{_common.delete}"><i class="far fa-trash-can" aria-hidden="true"></i></button>
-                    </td>
-                {/form}
-            </tr>
-        </table>
-    </div>
-    <div class="card-footer text-right" n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('TEAM_UPDATE'))">
-        {*<a class="btn btn-lg btn-success" href="{plink :Setting:Status:New}" onclick="btnRotate($(this), true)" title="{_common.new}">
-            <i class="fa fa-plus" aria-hidden="true"></i> // TODO ADD POSSIBILITY TO CREATE NEW STATUS
-        </a>*}
-    </div>
+    {form "eventTypeForm"}
+        <div class="card-body">
+            <table class="table table-xs table-hover">
+                <thead>
+                    <tr>
+                        <th>{_settings.order}</th>
+                        <th>{_status.code}</th>
+                        <th>{_common.name}</th>
+                        <th>{_status.color}</th>
+                        <th title="{_status.preStatus}">{_event.plan}</th>
+                        <th title="{_status.postStatus}">{_event.result}</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr n:foreach="$eventTypes as $et" data-id="{$et->getId()}">
+                        {var $etid = $et->getId()}
+                        <td style="width: 80px" class="py-1">
+                            <i class="fa order fa-arrow-up" {if $iterator->isFirst()}style="display: none"{/if} onclick="moveUp(this)"></i>
+                            <i class="fa order fa-arrow-down text-secondary" {if $iterator->isLast()}style="display: none"{/if} onclick="moveDown(this)"></i>
+                            {input "{$etid}_order", class => 'order'}
+                        </td>
+                        <td style="width: 100px" class="py-1">
+                            {input "{$etid}_code", class => 'form-control form-control-sm'}
+                        </td>
+                        <td class="py-1">
+                            {input "{$etid}_caption", class => 'form-control form-control-sm'}
+                        </td>
+                        <td style="width: 100px" class="py-1">
+                            {input "{$etid}_color", class => 'form-control form-control-sm'}
+                        </td>
+                        <td class="py-1">
+                            {input "{$etid}_preStatusSet", class => 'form-control form-control-sm'}
+                        </td>
+                        <td class="py-1">
+                            {input "{$etid}_postStatusSet", class => 'form-control form-control-sm'}
+                        </td>
+
+                        <td n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('TEAM_UPDATE'))" class="py-1">
+                            <button class="btn btn-sm btn-danger" href="#" title="{_common.delete}"><i class="far fa-trash-can" aria-hidden="true"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer text-right" n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('TEAM_UPDATE'))">
+
+            <button type="submit" n:name="save" title="{_common.save}" class="btn btn-lg btn-outline-primary"><i class="fa fa-save" aria-hidden="true"></i></button>
+
+            {*<a class="btn btn-lg btn-success" href="{plink :Setting:Status:New}" onclick="btnRotate($(this), true)" title="{_common.new}">
+                <i class="fa fa-plus" aria-hidden="true"></i> // TODO ADD POSSIBILITY TO CREATE NEW STATUS
+            </a>*}
+        </div>
+    {/form}
 
 </div>

@@ -153,7 +153,7 @@ class FormFactory
         });
     }
 
-    public function createEventTypeForm(Closure $onSuccess): Multiplier
+    public function createEventTypeForm(Closure $onSuccess): Form
     {
         $ssList = [];
 
@@ -162,36 +162,38 @@ class FormFactory
             $ssList[$statusSet->getId()] = $statusSet->getName();
         }
 
-        return new Multiplier(function (string $eventTypeId) use ($onSuccess, $ssList): \Nette\Application\UI\Form {
-                $eventType = $this->eventTypeManager->getById((int) $eventTypeId);
-                assert($eventType instanceof EventType);
-                $form = new Form();
-                $form->addHidden("id", $eventTypeId);
-                $form->addText("code", $this->translator->translate("status.code"))
-                    ->setValue($eventType->getCode())
-                    ->setHtmlAttribute("size", "5")
-                    ->setRequired()
-                    ->setMaxLength(3);
-                $form->addText("caption", $this->translator->translate("common.name"))
-                    ->setValue($eventType->getCaption())
-                    ->setRequired();
-                $form->addText("color", $this->translator->translate("status.color"))
-                    ->setValue("#" . $eventType->getColor())
-                    ->setMaxLength(6)
-                    ->setHtmlAttribute("type", "color")
-                    ->setRequired();
+        $form = new Form();
 
-                $form->addSelect("preStatusSet", $this->translator->translate("status.preStatus"), $ssList)
-                    ->setValue($eventType->getPreStatusSetId());
-                $form->addSelect("postStatusSet", $this->translator->translate("status.postStatus"), $ssList)
-                    ->setValue($eventType->getPostStatusSetId());
-                $form->addHidden("order", $this->translator->translate("settings.order"))
-                    ->setValue($eventType->getOrder());
+        $eventTypes = $this->eventTypeManager->getList();
 
-                $form->addSubmit("save")->setHtmlAttribute("title", $this->translator->translate("common.save"));
-                $form->onSuccess[] = $onSuccess;
-                return $form;
-        });
+        foreach ($eventTypes as $eventType) {
+            assert($eventType instanceof EventType);
+
+            $eventTypeId = $eventType->getId();
+            $form->addText("{$eventTypeId}_code", $this->translator->translate("status.code"))
+                ->setValue($eventType->getCode())
+                ->setHtmlAttribute("size", "5")
+                ->setRequired()
+                ->setMaxLength(3);
+            $form->addText("{$eventTypeId}_caption", $this->translator->translate("common.name"))
+                ->setValue($eventType->getCaption())
+                ->setRequired();
+            $form->addText("{$eventTypeId}_color", $this->translator->translate("status.color"))
+                ->setValue("#" . $eventType->getColor())
+                ->setMaxLength(6)
+                ->setHtmlAttribute("type", "color")
+                ->setRequired();
+            $form->addSelect("{$eventTypeId}_preStatusSet", $this->translator->translate("status.preStatus"), $ssList)
+                ->setValue($eventType->getPreStatusSetId());
+            $form->addSelect("{$eventTypeId}_postStatusSet", $this->translator->translate("status.postStatus"), $ssList)
+                ->setValue($eventType->getPostStatusSetId());
+            $form->addHidden("{$eventTypeId}_order", $this->translator->translate("settings.order"))
+                ->setValue($eventType->getOrder());
+        }
+
+        $form->addSubmit("save")->setHtmlAttribute("title", $this->translator->translate("common.save"));
+        $form->onSuccess[] = $onSuccess;
+        return $form;
     }
 
     public function createTeamConfigForm(Closure $onSuccess): Form

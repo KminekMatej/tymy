@@ -4,58 +4,62 @@
     </div>
     <div class="card-body">
         <table class="table table-xs table-hover">
-            <tr>
-                <th>{_common.name}</th>
-                <th>{_settings.order}</th>
-                <th>{_status.status, 2}</th>
-                <th></th>
-            </tr>
-            <tr n:foreach="$statusSets as $s">
-                {var $ssid = $s->getId()}
-                {form "statusSetForm-$ssid"}
-                    <td style="width: 80px">
-                        <i class="fa fa-arrow-up" {if $iterator->isFirst()}style="display: none"{/if}></i>
-                        <i class="fa fa-arrow-down text-secondary" {if $iterator->isLast()}style="display: none"{/if}></i>
-                        {input order}
-                    </td>
-                    <td style="width: 200px">{input name, class => 'form-control form-control-sm'}</td>
-                    <td>
-                        <div class="row">
-                            <div class="col-2">
-                                <a class="btn btn-sm btn-light-bordered" data-toggle="collapse" href="#set-{$ssid}-statuses" role="button" aria-expanded="false" aria-controls="set-{$ssid}-statuses">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                            </div>
-                            <div class="col-10">
-                                <div class="collapse" id="set-{$ssid}-statuses">
-                                    <div class="card card-body">
-                                        <div class="input-group" n:foreach="$s->getStatuses() as $status">
-                                            {var $statusId = $status->getId()}
-                                            {input status_{$statusId}_code, class => 'form-control form-control-sm status-code'}
-                                            {input status_{$statusId}_caption, class => 'form-control form-control-sm status-caption'}
-                                            {input status_{$statusId}_color, class => 'form-control form-control-sm status-color'}
-                                            {input status_{$statusId}_icon}
+            <thead>
+                <tr>
+                    <th>{_common.name}</th>
+                    <th>{_settings.order}</th>
+                    <th>{_status.status, 2}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr n:foreach="$statusSets as $s">
+                    {var $ssid = $s->getId()}
+                    {form "statusSetForm-$ssid"}
+                        <td style="width: 80px">
+                            <i class="fa fa-arrow-up" {if $iterator->isFirst()}style="display: none"{/if} onclick="moveUp(this)"></i>
+                            <i class="fa fa-arrow-down text-secondary" {if $iterator->isLast()}style="display: none"{/if} onclick="moveDown(this)"></i>
+                            {input order}
+                        </td>
+                        <td style="width: 200px">{input name, class => 'form-control form-control-sm'}</td>
+                        <td>
+                            <div class="row">
+                                <div class="col-2">
+                                    <a class="btn btn-sm btn-light-bordered" data-toggle="collapse" href="#set-{$ssid}-statuses" role="button" aria-expanded="false" aria-controls="set-{$ssid}-statuses">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </div>
+                                <div class="col-10">
+                                    <div class="collapse" id="set-{$ssid}-statuses">
+                                        <div class="card card-body">
+                                            <div class="input-group" n:foreach="$s->getStatuses() as $status">
+                                                {var $statusId = $status->getId()}
+                                                {input status_{$statusId}_code, class => 'form-control form-control-sm status-code'}
+                                                {input status_{$statusId}_caption, class => 'form-control form-control-sm status-caption'}
+                                                {input status_{$statusId}_color, class => 'form-control form-control-sm status-color'}
+                                                {input status_{$statusId}_icon}
 
-                                            <button type="button" class="btn btn-sm iconpicker" data-iconpicker-input="INPUT#iconpicker-{$statusId}" data-iconpicker-preview="i#iconpreview-{$statusId}">
-                                                <i id="iconpreview-{$statusId}" class="{$status->getIcon()}"></i>
-                                            </button>
-                                            
-                                            
+                                                <button type="button" class="btn btn-sm iconpicker" data-iconpicker-input="INPUT#iconpicker-{$statusId}" data-iconpicker-preview="i#iconpreview-{$statusId}">
+                                                    <i id="iconpreview-{$statusId}" class="{$status->getIcon()}"></i>
+                                                </button>
+
+
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </td>
+                        </td>
 
 
 
-                    <td class="btn-group" role="group" n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('TEAM_UPDATE'))">
-                        <button type="submit" n:name="save" title="{_common.save}" class="btn btn-sm btn-primary"><i class="fa fa-save" aria-hidden="true"></i></button>
-                        <button class="btn btn-sm btn-danger" href="#" title="{_common.delete}"><i class="far fa-trash-can" aria-hidden="true"></i></button>
-                    </td>
-                {/form}
-            </tr>
+                        <td class="btn-group" role="group" n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('TEAM_UPDATE'))">
+                            <button type="submit" n:name="save" title="{_common.save}" class="btn btn-sm btn-primary"><i class="fa fa-save" aria-hidden="true"></i></button>
+                            <button class="btn btn-sm btn-danger" href="#" title="{_common.delete}"><i class="far fa-trash-can" aria-hidden="true"></i></button>
+                        </td>
+                    {/form}
+                </tr>
+            </tbody>
         </table>
     </div>
     <div class="card-footer text-right" n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('TEAM_UPDATE'))">

@@ -46,3 +46,37 @@ function hexToRgb(hex) {
 function txtClr(rgb) {
     return ((rgb.r * 0.299 + rgb.g * 0.587 + rgb.b * 0.114) > 186) ? "#000000" : "#ffffff";
 }
+
+function moveUp(elm){
+    var thisRow = $(elm).closest("TR");
+    var prevRow = thisRow.prev();
+    thisRow.after(prevRow);
+    recountOrder(thisRow.parent());
+}
+
+function moveDown(elm){
+    var thisRow = $(elm).closest("TR");
+    var nextRow = thisRow.next();
+    thisRow.before(nextRow);
+    recountOrder(thisRow.parent());
+}
+
+function recountOrder(parent) {
+    var first = true;
+    var order = 0;
+    parent.children().each(function () {
+        if (first) {
+            $(this).find(".fa-arrow-up").hide();
+        } else {
+            $(this).find(".fa-arrow-up").show();
+        }
+        if($(this).next().length == 0){
+            $(this).find(".fa-arrow-down").hide();
+        } else {
+            $(this).find(".fa-arrow-down").show();
+        }
+        $(this).find("INPUT.order").val(order);
+        order++;
+        first = false;
+    });
+}
