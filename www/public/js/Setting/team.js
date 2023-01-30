@@ -47,33 +47,34 @@ function txtClr(rgb) {
     return ((rgb.r * 0.299 + rgb.g * 0.587 + rgb.b * 0.114) > 186) ? "#000000" : "#ffffff";
 }
 
-function moveUp(elm){
-    var thisRow = $(elm).closest("TR");
-    var prevRow = thisRow.prev();
+function moveUp(elm, selector = 'TR'){
+    var thisRow = $(elm).closest(selector);
+    var prevRow = thisRow.prevAll(selector + ":first");
     thisRow.after(prevRow);
-    recountOrder(thisRow.parent());
+    recountOrder(thisRow.parent(), selector);
+    
 }
 
-function moveDown(elm){
-    var thisRow = $(elm).closest("TR");
-    var nextRow = thisRow.next();
+function moveDown(elm, selector = 'TR'){
+    var thisRow = $(elm).closest(selector);
+    var nextRow = thisRow.nextAll(selector + ":first");
     thisRow.before(nextRow);
-    recountOrder(thisRow.parent());
+    recountOrder(thisRow.parent(), selector);
 }
 
-function recountOrder(parent) {
+function recountOrder(parent, selector = 'TR') {
     var first = true;
     var order = 0;
-    parent.children().each(function () {
+    parent.children(selector).each(function () {
         if (first) {
-            $(this).find(".fa-arrow-up").hide();
+            $(this).find(".fa-arrow-up:first").hide();
         } else {
-            $(this).find(".fa-arrow-up").show();
+            $(this).find(".fa-arrow-up:first").show();
         }
         if($(this).next().length == 0){
-            $(this).find(".fa-arrow-down").hide();
+            $(this).find(".fa-arrow-down:first").hide();
         } else {
-            $(this).find(".fa-arrow-down").show();
+            $(this).find(".fa-arrow-down:first").show();
         }
         $(this).find("INPUT.order").val(order);
         order++;

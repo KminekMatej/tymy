@@ -46,7 +46,7 @@ class TeamPresenter extends SettingBasePresenter
         $this->redirect(":Setting:Team:default");
     }
 
-    public function createComponentStatusSetForm(): Multiplier
+    public function createComponentStatusSetForm(): Form
     {
         return $this->formFactory->createStatusSetForm(fn(Form $form, $values) => $this->statusFormSuccess($form, $values));
     }

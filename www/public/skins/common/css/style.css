@@ -72,3 +72,16 @@ I.order.fa-arrow-down:hover{
     font-weight: bold;
     color: #dc3545 !important;
 }
+
+SPAN.sublevel{
+    font: 19pt bold;
+    margin: 0 0.7rem 0 0.5rem;
+}
+
+SPAN.sublevel:after{
+    content: "⸠";
+}
+
+TR:last-child SPAN.sublevel:after{
+    content: "⌊";
+}

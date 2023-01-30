@@ -110,16 +110,18 @@ class FormFactory
         return $form;
     }
 
-    public function createStatusSetForm(Closure $onSuccess): Multiplier
+    public function createStatusSetForm(Closure $onSuccess): Form
     {
-        return new Multiplier(function (string $statusSetId) use ($onSuccess): \Nette\Application\UI\Form {
-                $statusSet = $this->statusSetManager->getById((int) $statusSetId);
-                assert($statusSet instanceof StatusSet);
-                $form = new Form();
-                $form->addHidden("id", $statusSetId);
-                $form->addText("name", $this->translator->translate("settings.team"))->setValue($statusSet->getName())->setRequired();
-                $form->addHidden("order", $this->translator->translate("settings.order"))->setValue($statusSet->getOrder());
-                $form->addSubmit("save")->setHtmlAttribute("title", $this->translator->translate("common.save"));
+        $statusSets = $this->statusSetManager->getList();
+
+        $form = new Form();
+
+        foreach ($statusSets as $statusSet) {
+            assert($statusSet instanceof StatusSet);
+            $statusSetId = $statusSet->getId();
+
+            $form->addText("statusSet_{$statusSetId}_name", $this->translator->translate("settings.team"))->setValue($statusSet->getName())->setRequired();
+            $form->addHidden("statusSet_{$statusSetId}_order", $this->translator->translate("settings.order"))->setValue($statusSet->getOrder());
 
             foreach ($statusSet->getStatuses() as $status) {
                 assert($status instanceof Status);
@@ -145,12 +147,15 @@ class FormFactory
                     ->setHtmlAttribute("id", "iconpicker-{$status->getId()}")
                     ->setHtmlAttribute("data-toggle", "dropdown")
                     ->setHtmlAttribute("type", "hidden");
-                $form->addInteger("status_{$status->getId()}_order", $this->translator->translate("settings.order"))
+                $form->addHidden("status_{$status->getId()}_order", $this->translator->translate("settings.order"))
                     ->setValue($status->getOrder());
             }
-                $form->onSuccess[] = $onSuccess;
-                return $form;
-        });
+        }
+
+        $form->addSubmit("save")->setHtmlAttribute("title", $this->translator->translate("common.save"));
+
+        $form->onSuccess[] = $onSuccess;
+        return $form;
     }
 
     public function createEventTypeForm(Closure $onSuccess): Form
