@@ -40,6 +40,7 @@ class Event extends BaseModel
     private bool $inPast = false;
     private bool $inFuture = false;
     private ?Attendance $myAttendance = null;
+    /** @var Attendance[] */
     private array $attendance = [];
     private bool $attendancePending = false;
     private string $backgroundColor = 'blue';
@@ -158,7 +159,7 @@ class Event extends BaseModel
     }
 
     /**
-     * @return mixed[]
+     * @return Attendance[]
      */
     public function getAttendance(): array
     {

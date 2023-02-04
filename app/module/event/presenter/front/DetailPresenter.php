@@ -57,6 +57,13 @@ class DetailPresenter extends EventBasePresenter
         $attendances = [];
         //return array, first key is attendance type (PRE, POST), then code (YES/NO/LAT), then gender (male/female/unknown), then user
         $usersWithAttendance = [];
+
+        //prepare arrazs for each status to make the arraz properlz ordered
+        $statusIds = $this->statusManager->getStatusIdsOfEventType($event->getEventTypeId());
+        foreach ($statusIds as $statusId) {
+            $attendances[$statusId] = [];
+        }
+
         foreach ($event->getAttendance() as $attendance) {
             assert($attendance instanceof Attendance);
             $statusId = $attendance->getPostStatusId() ?: $attendance->getPreStatusId();
@@ -67,9 +74,6 @@ class DetailPresenter extends EventBasePresenter
                 continue;
             }
 
-            if (!array_key_exists($statusId, $attendances)) {//init code
-                $attendances[$statusId] = [];
-            }
             if (!array_key_exists($gender, $attendances[$statusId])) {//init gender
                 $attendances[$statusId][$gender] = [];
             }
@@ -78,7 +82,7 @@ class DetailPresenter extends EventBasePresenter
             $usersWithAttendance[] = $attendance->getUser()->getId();
         }
 
-        //add all other players ad not decided yet
+        //add all other players as not decided yet
         $users = $this->userManager->getByStatus(User::STATUS_PLAYER);
         foreach ($users as $user) {
             if (in_array($user->getId(), $usersWithAttendance)) {
@@ -86,7 +90,7 @@ class DetailPresenter extends EventBasePresenter
             }
             $attendances["unknown"][$user->getGender()][] = $user;
         }
-        return $attendances;
+        return array_filter($attendances);  //return only attendances having at least one item
     }
 
     /**
