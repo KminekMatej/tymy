@@ -95,8 +95,8 @@ class DetailPresenter extends EventBasePresenter
     private function getEventCaptions(Event $event, array $eventTypes): array
     {
         return [
-            "myPreStatusCaption" => empty($event->getMyAttendance()) || empty($event->getMyAttendance()->getPreStatus()) || $event->getMyAttendance()->getPreStatus() == "UNKNOWN" ? "not-set" : $eventTypes[$event->getType()]->preStatusSet[$event->getMyAttendance()->getPreStatus()]->code,
-            "myPostStatusCaption" => empty($event->getMyAttendance()) || empty($event->getMyAttendance()->getPostStatus()) || $event->getMyAttendance()->getPostStatus() == "UNKNOWN" ? "not-set" : $eventTypes[$event->getType()]->postStatusSet[$event->getMyAttendance()->getPostStatus()]->code,
+            "myPreStatusCaption" => empty($event->getMyAttendance()) || empty($event->getMyAttendance()->getPreStatus()) || $event->getMyAttendance()->getPreStatus() == "UNKNOWN" ? "not-set" : $eventTypes[$event->getType()]->getPreStatusSet()[$event->getMyAttendance()->getPreStatus()]->getCode(),
+            "myPostStatusCaption" => empty($event->getMyAttendance()) || empty($event->getMyAttendance()->getPostStatus()) || $event->getMyAttendance()->getPostStatus() == "UNKNOWN" ? "not-set" : $eventTypes[$event->getType()]->getPostStatusSet()[$event->getMyAttendance()->getPostStatus()]->getCode(),
         ];
     }
 
