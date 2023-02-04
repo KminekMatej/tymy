@@ -25,7 +25,40 @@ class TeamPresenter extends SettingBasePresenter
     public function actionNewType()
     {
         try {
-            $this->eventTypeManager->create(["code" => strtoupper(substr(md5(random_int(0, 1000)), 0, 3))]);
+            $this->eventTypeManager->create(["code" => $this->randomCode()]);
+            $this->flashMessage($this->translator->translate("common.alerts.created"), 'success');
+        } catch (TymyResponse $tResp) {
+            $this->flashMessage($this->translator->translate("common.alerts.notPermitted"));
+            $this->handleTymyResponse($tResp);
+        }
+
+        $this->redirect(":Setting:Team:default");
+    }
+
+    public function actionNewStatusSet()
+    {
+        try {
+            $this->statusSetManager->create([
+                "name" => ""
+            ]);
+            $this->flashMessage($this->translator->translate("common.alerts.created"), 'success');
+        } catch (TymyResponse $tResp) {
+            $this->flashMessage($this->translator->translate("common.alerts.notPermitted"));
+            $this->handleTymyResponse($tResp);
+        }
+
+        $this->redirect(":Setting:Team:default");
+    }
+
+    public function actionNewStatus(int $ssid)
+    {
+        try {
+            $this->statusManager->create([
+                "caption" => "",
+                "statusSetId" => $ssid,
+                "code" => $this->randomCode(),
+            ]);
+            $this->flashMessage($this->translator->translate("common.alerts.created"), 'success');
         } catch (TymyResponse $tResp) {
             $this->flashMessage($this->translator->translate("common.alerts.notPermitted"));
             $this->handleTymyResponse($tResp);
@@ -38,6 +71,33 @@ class TeamPresenter extends SettingBasePresenter
     {
         try {
             $this->eventTypeManager->delete($id);
+            $this->flashMessage($this->translator->translate("common.alerts.deleted"), 'success');
+        } catch (TymyResponse $tResp) {
+            $this->flashMessage($this->translator->translate("common.alerts.notPermitted"));
+            $this->handleTymyResponse($tResp);
+        }
+
+        $this->redirect(":Setting:Team:default");
+    }
+
+    public function actionDeleteStatusSet(int $ssid)
+    {
+        try {
+            $this->statusSetManager->delete($ssid);
+            $this->flashMessage($this->translator->translate("common.alerts.deleted"), 'success');
+        } catch (TymyResponse $tResp) {
+            $this->flashMessage($this->translator->translate("common.alerts.notPermitted"));
+            $this->handleTymyResponse($tResp);
+        }
+
+        $this->redirect(":Setting:Team:default");
+    }
+
+    public function actionDeleteStatus(int $sid)
+    {
+        try {
+            $this->statusManager->delete($sid);
+            $this->flashMessage($this->translator->translate("common.alerts.deleted"), 'success');
         } catch (TymyResponse $tResp) {
             $this->flashMessage($this->translator->translate("common.alerts.notPermitted"));
             $this->handleTymyResponse($tResp);
@@ -130,6 +190,13 @@ class TeamPresenter extends SettingBasePresenter
         $this->flashMessage($this->translator->translate("common.alerts.configSaved"));
         $this->redirect(":Setting:Team:");
     }
-    
-    
+
+    /**
+     * Generate and return random 3-char code
+     * @return string
+     */
+    private function randomCode(): string
+    {
+        return strtoupper(substr(md5(random_int(0, 1000)), 0, 3));
+    }
 }

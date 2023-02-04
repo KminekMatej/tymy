@@ -24,7 +24,7 @@
                         <td class="py-1">{input "statusSet_{$ssid}_name", class => 'form-control form-control-sm', style => 'max-width: 400px'}</td>
 
                         <td n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('TEAM_UPDATE'))" class="py-1 text-right">
-                            <button class="btn btn-sm btn-danger" href="#" title="{_common.delete}"><i class="far fa-trash-can" aria-hidden="true"></i></button>
+                            <a class="btn btn-sm btn-danger" href="{plink :Setting:Team:deleteStatusSet $ssid}" onclick="return confirm({_common.confirmDelete})" title="{_common.delete}"><i class="far fa-trash-can" aria-hidden="true"></i></a>
                         </td>
                     </tr>
                     <tr class="accordian-body collapse" id="statusSet{$ssid}">
@@ -59,16 +59,16 @@
                                                 </button>
                                             </td>
                                             <td class="p-0 px-md-1 pr-1 text-right">
-                                                <button class="btn btn-sm btn-danger" href="#" title="{_common.delete}" n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('TEAM_UPDATE'))">
+                                                <a class="btn btn-sm btn-danger" href="{plink :Setting:Team:deleteStatus $statusId}" title="{_common.delete}" n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('TEAM_UPDATE'))">
                                                     <i class="far fa-trash-can" aria-hidden="true"></i>
-                                                </button>
+                                                </a>
                                             </td>
                                         </tr>
                                     </tbody>
                                     <tfoot>
                                         <tr>
                                             <td class="py-1 text-center" colspan="6">
-                                                <button class="btn btn-outline-success btn-new" href="#" title="{_common.new}"><i class="far fa-plus" aria-hidden="true"></i></button>
+                                                <a class="btn btn-outline-success btn-new" href="{plink :Setting:Team:newStatus $ssid}" title="{_common.new}"><i class="far fa-plus" aria-hidden="true"></i></a>
                                             </td>
                                         </tr>
                                     </tfoot>

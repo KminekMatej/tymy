@@ -73,7 +73,7 @@ class StatusSetManager extends BaseManager
         $this->statusSet = $this->getById($recordId);
 
         if (empty($this->statusSet)) {
-            $this->respondNotFound();
+            $this->respondNotFound("Status Set", $recordId);
         }
 
         if ($this->isUsed($recordId)) {

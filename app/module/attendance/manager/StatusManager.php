@@ -7,13 +7,13 @@ use Nette\Database\Table\ActiveRow;
 use Nette\Utils\FileSystem;
 use Nette\Utils\Image;
 use Tymy\Module\Attendance\Mapper\StatusMapper;
+use Tymy\Module\Attendance\Model\Attendance;
 use Tymy\Module\Attendance\Model\Status;
 use Tymy\Module\Attendance\Model\StatusSet;
-use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Event\Model\EventType;
-use Tymy\Module\Team\Manager\TeamManager;
 
 use const TEAM_DIR;
 
@@ -36,7 +36,7 @@ class StatusManager extends BaseManager
     }
 
     /**
-     * @return \Tymy\Module\Core\Model\Field[]
+     * @return Field[]
      */
     protected function getScheme(): array
     {
@@ -181,6 +181,10 @@ class StatusManager extends BaseManager
         if (empty($this->status)) {
             $this->responder->E4005_OBJECT_NOT_FOUND("Status", $recordId);
         }
+
+        if ($this->isUsed($recordId)) {
+            $this->respondBadRequest("Status set is used, cannot be deleted");
+        }
     }
 
     protected function allowUpdate(?int $recordId = null, ?array &$data = null): void
@@ -216,7 +220,7 @@ class StatusManager extends BaseManager
     }
 
     /**
-     * @return \Tymy\Module\Core\Model\BaseModel[]
+     * @return BaseModel[]
      */
     public function getListUserAllowed($userId): array
     {
@@ -292,5 +296,16 @@ class StatusManager extends BaseManager
         $this->dropSimpleCache();
 
         return $this->getById($resourceId);
+    }
+
+    /**
+     * Check this status set is used, by checking if any of its statuses is used
+     */
+    public function isUsed(int $statusId): bool
+    {
+        return $this->database->table(Attendance::TABLE)->whereOr([
+                "pre_status_id" => $statusId,
+                "post_status_id" => $statusId,
+            ])->count() > 0;
     }
 }
