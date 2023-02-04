@@ -117,9 +117,8 @@ class StatusManager extends BaseManager
     {
         if (!array_key_exists($eventTypeId, $this->simpleCache)) {
             $this->simpleCache[$eventTypeId] = [
-
-                StatusSet::PRE => $this->mapAllWithCode($this->database->table(Status::TABLE)->where(".status_set:event_types(pre_status_set).id", $eventTypeId)->order("id")->fetchPairs("code")),
-                StatusSet::POST => $this->mapAllWithCode($this->database->table(Status::TABLE)->where(".status_set:event_types(post_status_set).id", $eventTypeId)->order("id")->fetchAll()),
+                StatusSet::PRE => $this->mapAllWithCode($this->database->table(Status::TABLE)->where(".status_set:event_types(pre_status_set).id", $eventTypeId)->order("order")->fetchPairs("code")),
+                StatusSet::POST => $this->mapAllWithCode($this->database->table(Status::TABLE)->where(".status_set:event_types(post_status_set).id", $eventTypeId)->order("order")->fetchAll()),
             ];
         }
         return $this->simpleCache[$eventTypeId];
@@ -146,7 +145,7 @@ class StatusManager extends BaseManager
     public function getByStatusCode(): array
     {
         $statuses = [];
-        foreach ($this->database->table(Status::TABLE)->fetchAll() as $row) {
+        foreach ($this->database->table(Status::TABLE)->order("order")->fetchAll() as $row) {
             $statuses[$row->code] = $this->map($row);
         }
         return $statuses;
@@ -160,7 +159,7 @@ class StatusManager extends BaseManager
     {
         $setIds = $this->database->table(EventType::TABLE)->select("DISTINCT(pre_status_set_id) AS setIds")->fetchPairs(null, "setIds");
 
-        $preStatuses = $this->database->table(Status::TABLE)->where("status_set.id", $setIds)->fetchAll();
+        $preStatuses = $this->database->table(Status::TABLE)->where("status_set.id", $setIds)->order("order")->fetchAll();
 
         return $this->mapAll($preStatuses);
     }
@@ -225,7 +224,7 @@ class StatusManager extends BaseManager
     public function getListUserAllowed($userId): array
     {
         //reading is not restricted
-        return $this->mapAll($this->database->table($this->getTable())->fetchAll());
+        return $this->mapAll($this->database->table($this->getTable())->order("order")->fetchAll());
     }
 
     public function create(array $data, ?int $resourceId = null): BaseModel
