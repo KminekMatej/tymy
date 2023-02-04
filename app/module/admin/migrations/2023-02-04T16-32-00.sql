@@ -17,6 +17,8 @@
 DELETE FROM `status` WHERE `status_set_id` NOT IN (SELECT `id` FROM `status_set` WHERE 1);
 ALTER TABLE `status` ADD FOREIGN KEY (`status_set_id`) REFERENCES `status_set`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
+ALTER TABLE `attendance` ADD FOREIGN KEY (`pre_usr_mod`) REFERENCES `user`(`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE `attendance` ADD FOREIGN KEY (`post_usr_mod`) REFERENCES `user`(`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 -- DOWN:
 -- commands that reverts updates from UP section shall be written here:
