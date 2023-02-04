@@ -3,8 +3,9 @@
 namespace Tymy\Module\Setting\Presenter\Front;
 
 use Nette\Application\UI\Form;
-use Nette\Application\UI\Multiplier;
+use Tracy\Debugger;
 use Tymy\Module\Attendance\Manager\StatusSetManager;
+use Tymy\Module\Attendance\Model\Status;
 use Tymy\Module\Attendance\Model\StatusSet;
 use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Core\Factory\FormFactory;
@@ -117,28 +118,51 @@ class TeamPresenter extends SettingBasePresenter
 
     public function statusFormSuccess(Form $form, $values): void
     {
-        if (empty($values["id"])) {
-            return;
+        $allStatusSets = $this->statusSetManager->getList();
+
+        try {
+            foreach ($allStatusSets as $statusSet) {
+                /* @var $statusSet StatusSet */
+                $id = $statusSet->getId();
+
+                $updates = [];
+                if ($values->{"statusSet_{$id}_name"} !== $statusSet->getName()) {
+                    $updates["name"] = $values->{"statusSet_{$id}_name"};
+                }
+                if (intval($values->{"statusSet_{$id}_order"}) !== $statusSet->getOrder()) {
+                    $updates["order"] = intval($values->{"statusSet_{$id}_order"});
+                }
+                if (!empty($updates)) {
+                    $this->statusSetManager->updateByArray($id, $updates);
+                }
+            }
+
+            //update statuses
+            $allStatuses = $this->statusManager->getList();
+            foreach ($allStatuses as $status) {
+                /* @var $status Status */
+                $id = $status->getId();
+                $updates = [];
+                foreach (["caption", "code", "color", "icon", "order"] as $field) {
+                    $val = $values->{"status_{$id}_{$field}"};
+                    if($field == "color"){
+                        $val = ltrim($val, " #");
+                    }
+                    $getter = "get" . ucfirst($field);
+                    if ($val != $status->$getter()) {
+                        $updates[$field] = $val;
+                    }
+                }
+                if (!empty($updates)) {
+                    $this->statusManager->updateByArray($id, $updates);
+                }
+            }
+
+            $this->flashMessage($this->translator->translate("common.alerts.configSaved"));
+        } catch (TymyResponse $tResp) {
+            $this->handleTymyResponse($tResp);
         }
 
-        //update status name
-        $this->statusSetManager->updateByArray((int) $values->id, ["name" => $values->name, "order" => $values->order]);
-
-        //update statuses
-        $statusSet = $this->statusSetManager->getById((int) $values->id);
-        assert($statusSet instanceof StatusSet);
-
-        foreach ($statusSet->getStatuses() as $status) {
-            $this->statusManager->updateByArray($status->getId(), [
-                "caption" => $values->{"status_{$status->getId()}_caption"},
-                "code" => $values->{"status_{$status->getId()}_code"},
-                "color" => ltrim($values->{"status_{$status->getId()}_color"}, " #"),
-                "icon" => $values->{"status_{$status->getId()}_icon"},
-                "order" => $values->{"status_{$status->getId()}_order"},
-            ]);
-        }
-
-        $this->flashMessage($this->translator->translate("common.alerts.configSaved"));
         $this->redirect(":Setting:Team:");
     }
 

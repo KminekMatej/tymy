@@ -19,7 +19,7 @@
                         <td style="width: 80px" class="py-1">
                             <i class="fa fa-arrow-up" {if $iterator->isFirst()}style="display: none"{/if} onclick="moveUp(this, 'TBODY')"></i>
                             <i class="fa fa-arrow-down text-secondary" {if $iterator->isLast()}style="display: none"{/if} onclick="moveDown(this, 'TBODY')"></i>
-                            {input "statusSet_{$ssid}_order"}
+                            {input "statusSet_{$ssid}_order", class => 'order'}
                         </td>
                         <td class="py-1">{input "statusSet_{$ssid}_name", class => 'form-control form-control-sm', style => 'max-width: 400px'}</td>
 
@@ -40,7 +40,7 @@
                                                 <span class="sublevel mx-0 mx-md-2"></span>
                                                 <i class="fa fa-arrow-up" {if $iterator->isFirst()}style="display: none"{/if} onclick="moveUp(this)"></i>
                                                 <i class="fa fa-arrow-down text-secondary" {if $iterator->isLast()}style="display: none"{/if} onclick="moveDown(this)"></i>
-                                                {input "status_{$statusId}_order"}
+                                                {input "status_{$statusId}_order", class => 'order'}
                                             </td>
                                             <td class="p-0 px-md-1">
                                                 {input status_{$statusId}_code, class => 'form-control form-control-sm status-code'}
