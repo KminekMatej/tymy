@@ -28,7 +28,6 @@ class TeamPresenter extends SettingBasePresenter
             $this->eventTypeManager->create(["code" => $this->randomCode()]);
             $this->flashMessage($this->translator->translate("common.alerts.created"), 'success');
         } catch (TymyResponse $tResp) {
-            $this->flashMessage($this->translator->translate("common.alerts.notPermitted"));
             $this->handleTymyResponse($tResp);
         }
 
@@ -43,7 +42,6 @@ class TeamPresenter extends SettingBasePresenter
             ]);
             $this->flashMessage($this->translator->translate("common.alerts.created"), 'success');
         } catch (TymyResponse $tResp) {
-            $this->flashMessage($this->translator->translate("common.alerts.notPermitted"));
             $this->handleTymyResponse($tResp);
         }
 
@@ -60,7 +58,6 @@ class TeamPresenter extends SettingBasePresenter
             ]);
             $this->flashMessage($this->translator->translate("common.alerts.created"), 'success');
         } catch (TymyResponse $tResp) {
-            $this->flashMessage($this->translator->translate("common.alerts.notPermitted"));
             $this->handleTymyResponse($tResp);
         }
 
@@ -73,7 +70,6 @@ class TeamPresenter extends SettingBasePresenter
             $this->eventTypeManager->delete($id);
             $this->flashMessage($this->translator->translate("common.alerts.deleted"), 'success');
         } catch (TymyResponse $tResp) {
-            $this->flashMessage($this->translator->translate("common.alerts.notPermitted"));
             $this->handleTymyResponse($tResp);
         }
 
@@ -86,7 +82,6 @@ class TeamPresenter extends SettingBasePresenter
             $this->statusSetManager->delete($ssid);
             $this->flashMessage($this->translator->translate("common.alerts.deleted"), 'success');
         } catch (TymyResponse $tResp) {
-            $this->flashMessage($this->translator->translate("common.alerts.notPermitted"));
             $this->handleTymyResponse($tResp);
         }
 
@@ -99,7 +94,6 @@ class TeamPresenter extends SettingBasePresenter
             $this->statusManager->delete($sid);
             $this->flashMessage($this->translator->translate("common.alerts.deleted"), 'success');
         } catch (TymyResponse $tResp) {
-            $this->flashMessage($this->translator->translate("common.alerts.notPermitted"));
             $this->handleTymyResponse($tResp);
         }
 
