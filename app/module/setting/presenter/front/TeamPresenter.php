@@ -145,7 +145,7 @@ class TeamPresenter extends SettingBasePresenter
                 $updates = [];
                 foreach (["caption", "code", "color", "icon", "order"] as $field) {
                     $val = $values->{"status_{$id}_{$field}"};
-                    if($field == "color"){
+                    if ($field == "color") {
                         $val = ltrim($val, " #");
                     }
                     $getter = "get" . ucfirst($field);
@@ -171,7 +171,8 @@ class TeamPresenter extends SettingBasePresenter
         $allIds = array_keys($this->eventTypeManager->getIdList());
 
         foreach ($allIds as $typeId) {
-            $this->eventTypeManager->updateByArray($typeId,
+            $this->eventTypeManager->updateByArray(
+                $typeId,
                 [
                 "code" => $values->{$typeId . "_code"},
                 "caption" => $values->{$typeId . "_caption"},
@@ -179,7 +180,8 @@ class TeamPresenter extends SettingBasePresenter
                 "color" => ltrim($values->{$typeId . "_color"}, " #"),
                 "preStatusSetId" => $values->{$typeId . "_preStatusSet"},
                 "postStatusSetId" => $values->{$typeId . "_postStatusSet"},
-            ]);
+                ]
+            );
         }
 
         $this->flashMessage($this->translator->translate("common.alerts.configSaved"));

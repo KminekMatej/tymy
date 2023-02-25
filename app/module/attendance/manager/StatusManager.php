@@ -172,10 +172,15 @@ class StatusManager extends BaseManager
     public function getStatusIdsOfEventType(int $eventTypeId): array
     {
         return array_merge(
-            $this->database->table(StatusSet::TABLE)->select(":status.id AS statusId")->where(":event_types(pre_status_set).id", $eventTypeId)->order(":status.order")->fetchPairs(null,
-                "statusId"),
-            $this->database->table(StatusSet::TABLE)->select(":status.id AS statusId")->where(":event_types(post_status_set).id", $eventTypeId)->order(":status.order")->fetchPairs(null,
-                "statusId"));
+            $this->database->table(StatusSet::TABLE)->select(":status.id AS statusId")->where(":event_types(pre_status_set).id", $eventTypeId)->order(":status.order")->fetchPairs(
+                null,
+                "statusId"
+            ),
+            $this->database->table(StatusSet::TABLE)->select(":status.id AS statusId")->where(":event_types(post_status_set).id", $eventTypeId)->order(":status.order")->fetchPairs(
+                null,
+                "statusId"
+            )
+        );
     }
 
     protected function allowRead(?int $recordId = null): void
