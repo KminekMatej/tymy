@@ -122,7 +122,7 @@ class TeamPresenter extends SettingBasePresenter
 
         try {
             foreach ($allStatusSets as $statusSet) {
-                /* @var $statusSet StatusSet */
+                assert($statusSet instanceof StatusSet);
                 $id = $statusSet->getId();
 
                 $updates = [];
