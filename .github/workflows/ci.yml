@@ -26,4 +26,4 @@ jobs:
       runs-on: self-hosted
       steps:          
         - name: "PHPStan"
-          run: vendor/bin/phpstan
+          run: vendor/bin/phpstan -v
