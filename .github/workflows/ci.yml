@@ -28,8 +28,7 @@ jobs:
         - name: "PHPStan"
           run: vendor/bin/phpstan -v
   Autotest:
-      needs: PhpCS
-      needs: PhpStan
+      needs: [PhpCS, PhpStan]
       name: Integration tests
       runs-on: self-hosted
       steps:          
