@@ -6,9 +6,9 @@ database:
         password: 'database-password'
         reflection: conventional
     team:
-        dsn: 'mysql:host=team-database-host;dbname=team-database-name'
-        user: 'team-database-user'
-        password: 'team-database-password'
+        dsn: 'mysql:host=database-team-host;dbname=database-team-name'
+        user: 'database-user'
+        password: 'database-password'
         reflection: conventional
 mail:
 	smtp: true
