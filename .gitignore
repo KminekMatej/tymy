@@ -20,5 +20,5 @@ user_pics
 attend_pics
 download
 www/user_pics
-/local/*.neon
-/config/debug.neon
+/local/config.neon
+/local/debug.neon
