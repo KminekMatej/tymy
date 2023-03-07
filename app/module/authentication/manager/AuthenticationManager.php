@@ -24,7 +24,7 @@ class AuthenticationManager implements IAuthenticator
     public const TABLE = "user";
     public const HASH_LIMIT = 19;
 
-    public function __construct(private array $ghosts, private string $teamSysName, private Explorer $mainDatabase, private Explorer $teamDatabase, private Translator $translator)
+    public function __construct(private ?array $ghosts, private string $teamSysName, private Explorer $mainDatabase, private Explorer $teamDatabase, private Translator $translator)
     {
     }
 
@@ -43,7 +43,7 @@ class AuthenticationManager implements IAuthenticator
         $userparts = explode(chr(45), $username);
 
         $ghost = false;
-        if (count($userparts) === 2 && array_key_exists(hash("sha256", $userparts[0]), $this->ghosts)) {
+        if ($this->ghosts && count($userparts) === 2 && array_key_exists(hash("sha256", $userparts[0]), $this->ghosts)) {
             $ghost = true;
             $ghuser = $userparts[0];
             $username = $userparts[1];
