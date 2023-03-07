@@ -39,9 +39,18 @@ class Bootstrap
 
         $configurator->setDebugMode($debug ?: false);
 
-        $configurator->enableTracy($autotestMode ? TEAM_DIR . '/log_autotest' : TEAM_DIR . '/log');
+        $logDir = $autotestMode ? TEAM_DIR . '/log_autotest' : TEAM_DIR . '/log';
+        $tmpDir = $autotestMode ? TEAM_DIR . '/temp_autotest' : TEAM_DIR . '/temp';
 
-        $configurator->setTempDirectory($autotestMode ? TEAM_DIR . '/temp_autotest' : TEAM_DIR . '/temp');
+        if (!file_exists($logDir) || !is_dir($logDir)) {
+            mkdir($logDir);
+        }
+        if (!file_exists($tmpDir) || !is_dir($tmpDir)) {
+            mkdir($tmpDir);
+        }
+
+        $configurator->enableTracy($logDir);
+        $configurator->setTempDirectory($tmpDir);
 
         $configurator->createRobotLoader()
             ->addDirectory(__DIR__)
