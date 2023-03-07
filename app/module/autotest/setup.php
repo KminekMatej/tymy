@@ -1,28 +1,20 @@
 <?php
 
-use Tester\Runner\Output\ConsolePrinter;
-use Tester\Runner\Output\JUnitPrinter;
-use Tymy\Module\Autotest\Manager\TestsManager;
+use Nette\Utils\FileSystem;
+use Tester\Runner\Runner;
 
 /*
  * Setup file for nette runner
  * You can use variable $runner here, which is created instance of Test Runner
  */
 
-if (isset($runner)) {
-    $runner->setEnvironmentVariable("ROOT_DIR", ROOT_DIR);
-    $runner->setEnvironmentVariable("TEAM_DIR", TEAM_DIR);
+if ($runner instanceof Runner) {
+    require_once __DIR__ . "/../../../vendor/autoload.php";
+
+    $rootDir = FileSystem::normalizePath(__DIR__ . "/../../..");
+    putenv("ROOT_DIR=$rootDir");
+    putenv("TEAM_DIR=$rootDir");
+    putenv("team=autotest");
+
     $runner->setEnvironmentVariable("AUTOTEST", true);
-
-    if (!file_exists(TEAM_DIR . "/log_autotest")) {
-        mkdir(TEAM_DIR . "/log_autotest");
-    }
-    if (!file_exists(TEAM_DIR . "/temp_autotest")) {
-        mkdir(TEAM_DIR . "/temp_autotest");
-    }
-
-    $runner->outputHandlers = [
-        new ConsolePrinter($runner, true, TestsManager::OUT_CONSOLE),
-        new JUnitPrinter(TestsManager::OUT_JUNIT),
-    ];
 }
