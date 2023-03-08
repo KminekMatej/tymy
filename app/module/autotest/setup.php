@@ -8,7 +8,7 @@ use Tester\Runner\Runner;
  * You can use variable $runner here, which is created instance of Test Runner
  */
 
-if ($runner instanceof Runner) {
+if (isset($runner) && $runner instanceof Runner) {
     require_once __DIR__ . "/../../../vendor/autoload.php";
 
     $rootDir = FileSystem::normalizePath(__DIR__ . "/../../..");
