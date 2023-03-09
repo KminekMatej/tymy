@@ -39,7 +39,7 @@ class Migration
     public function __construct(private $file)
     {
         $migFileInfo = pathinfo($file);
-        $this->migration = str_replace("base-", "", $migFileInfo["filename"]); //remove base prefix, if exists
+        $this->migration = str_replace("-base", "", $migFileInfo["filename"]); //remove base prefix, if exists
         $this->datetime = DateTime::createFromFormat("Y-m-d?H-i-s", $this->migration);
 
         $this->fileContents = @fread(@fopen($file, 'r'), @filesize($file));
@@ -102,12 +102,12 @@ class Migration
         return $this;
     }
 
-    public function getMigratingFrom(): string
+    public function getMigratingFrom(): ?string
     {
         return $this->migratingFrom;
     }
 
-    public function setMigratingFrom(string $migratingFrom): static
+    public function setMigratingFrom(?string $migratingFrom): static
     {
         $this->migratingFrom = $migratingFrom;
         return $this;
