@@ -72,9 +72,9 @@ INSERT INTO `rights` (`id`, `right_type`, `name`, `caption`, `a_roles`, `r_roles
 (16, 'SYS', 'FILE_CREATE', 'Upload files', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (17, 'SYS', 'FILE_UPDATE', 'Modify uploaded files', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (18, 'SYS', 'FILE_DELETE', 'Delete uploaded files', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(19, 'SYS', 'DEBTS_TEAM', 'Správa týmového dlužníčku', 'SUPER', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(19, 'SYS', 'DEBTS_TEAM', 'Správa týmového dlužníčku', 'SUPER', NULL, NULL, NULL, 3, NULL, NULL, NULL),
 (20, 'USR', 'ADMINONLY', 'SUPER roles only', 'SUPER', NULL, NULL, NULL, NULL, NULL, CURRENT_TIMESTAMP, NULL),
-(21, 'USR', 'MAINADMIN', 'Only user id 1 - superadmin', NULL, NULL, NULL, NULL, '1', NULL, CURRENT_TIMESTAMP, NULL);
+(21, 'USR', 'MEMBERONLY', 'Only user id 3 - member', NULL, NULL, NULL, NULL, 3, NULL, CURRENT_TIMESTAMP, NULL);
 
 INSERT INTO `event_types` (`id`, `code`, `caption`, `pre_status_set_id`, `post_status_set_id`, `mandatory`, `updated`, `updated_user_id`) VALUES
 (1, 'TRA', 'Trénink', 1, 3, 'FREE', NULL, NULL),

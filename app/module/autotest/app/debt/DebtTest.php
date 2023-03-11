@@ -46,10 +46,10 @@ class DebtTest extends RequestCase
         $origData = $this->request($this->getBasePath() . "/" . $recordId)->expect(200, "array");
 
         //test any other user doesnt see it
-        $this->authorizeAdmin($this->config["user_mainadmin_login"], $this->config["user_mainadmin_pwd"]);
+        $this->authorizeAdmin($this->config["user_member_login"], $this->config["user_member_pwd"]);
         $this->request($this->getBasePath() . "/" . $recordId)->expect(403);
 
-        //mainadmin cannot edit his debt, nor can set send date, nor delete
+        //member cannot edit his debt, nor can set send date, nor delete
         $this->request($this->getBasePath() . "/" . $recordId, "PUT", $this->mockChanges())->expect(403);
         $this->request($this->getBasePath() . "/" . $recordId, "PUT", ["paymentSent" => new DateTime()])->expect(403);
         $this->request($this->getBasePath() . "/" . $recordId, "DELETE")->expect(403);
@@ -78,7 +78,7 @@ class DebtTest extends RequestCase
         $origData = $this->request($this->getBasePath() . "/" . $recordId)->expect(200, "array");
 
         //another admin of team debts can see that debt
-        $this->authorizeAdmin($this->config["user_mainadmin_login"], $this->config["user_mainadmin_pwd"]);
+        $this->authorizeAdmin($this->config["user_member_login"], $this->config["user_member_pwd"]);
         $this->request($this->getBasePath() . "/" . $recordId)->expect(200, "array");
         $list = $this->request($this->getBasePath())->expect(200, "array")->getData();
 
@@ -118,7 +118,7 @@ class DebtTest extends RequestCase
         $this->request($this->getBasePath() . "/" . $recordId, "DELETE")->expect(403);
 
         //another admin can mark it as paymentReceived
-        $this->authorizeAdmin($this->config["user_mainadmin_login"], $this->config["user_mainadmin_pwd"]);
+        $this->authorizeAdmin($this->config["user_member_login"], $this->config["user_member_pwd"]);
         $this->request($this->getBasePath() . "/" . $recordId, "PUT", ["paymentReceived" => new DateTime()])->expect(200, "array");
 
         //admin can delete that debt
@@ -166,7 +166,7 @@ class DebtTest extends RequestCase
         ]);
 
         //admin can mark it as paymentSent
-        $this->authorizeAdmin($this->config["user_mainadmin_login"], $this->config["user_mainadmin_pwd"]);
+        $this->authorizeAdmin($this->config["user_member_login"], $this->config["user_member_pwd"]);
         $this->request($this->getBasePath() . "/" . $recordId, "PUT", ["paymentSent" => new DateTime()])->expect(200, "array");
         //admin cannot mark it as payment received
         $this->request($this->getBasePath() . "/" . $recordId, "PUT", ["paymentReceived" => new DateTime()])->expect(200, "array");
