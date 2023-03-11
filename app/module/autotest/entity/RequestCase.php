@@ -11,6 +11,7 @@ use Nette\Application\UI\Presenter;
 use Nette\Database\Explorer;
 use Nette\DI\Container;
 use Nette\Http\IRequest;
+use Nette\Http\RequestFactory;
 use Nette\InvalidStateException;
 use Nette\Neon\Neon;
 use Nette\Routing\Router;
@@ -26,6 +27,7 @@ use Tymy\Module\Core\Manager\Responder;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Presenter\Api\BasePresenter;
 
+use const PHP_EOL;
 use const TEAM_DIR;
 use const TEST_DIR;
 
@@ -49,7 +51,7 @@ abstract class RequestCase extends TestCase
     protected AuthenticationManager $authenticationManager;
     protected Responder $responder;
     private IRequest $httpRequest;
-    private MockRequestFactory $httpRequestFactory;
+    private RequestFactory $httpRequestFactory;
 
     /** @var RequestLog[] */
     private array $logs = [];
@@ -58,6 +60,7 @@ abstract class RequestCase extends TestCase
     {
         define('TEST_DIR', Bootstrap::normalizePath(Bootstrap::MODULES_DIR . "/autotest"));
         define('WWW_DIR', Bootstrap::normalizePath(TEAM_DIR . "/www"));
+        Environment::setup();
         $this->user = $this->container->getByType(User::class);
         $this->authenticationManager = $this->container->getByType(AuthenticationManager::class);
         $this->presenterFactory = $this->container->getService("application.presenterFactory");
@@ -69,7 +72,6 @@ abstract class RequestCase extends TestCase
         $this->recordManager = new RecordManager($this, $this->config);
         $this->httpRequest = $this->container->getService("http.request");
         $this->httpRequestFactory = $this->container->getService("http.requestFactory");
-        Environment::setup();
     }
 
     /**
