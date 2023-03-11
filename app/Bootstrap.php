@@ -22,9 +22,15 @@ class Bootstrap
     public static function boot(): Container
     {
         // absolute filesystem path to the application root
-        define("ROOT_DIR", getenv("ROOT_DIR") ? self::normalizePath(getenv("ROOT_DIR")) : self::normalizePath(__DIR__ . "/.."));
-        define("TEAM_DIR", getenv("TEAM_DIR") ?: str_replace("//", "/", dirname($_SERVER['SCRIPT_FILENAME'], 2)));
-        define('MODULES', array_diff(scandir(self::MODULES_DIR), ['..', '.']));
+        if (!defined("ROOT_DIR")) {
+            define("ROOT_DIR", getenv("ROOT_DIR") ? self::normalizePath(getenv("ROOT_DIR")) : self::normalizePath(__DIR__ . "/.."));
+        }
+        if (!defined("TEAM_DIR")) {
+            define("TEAM_DIR", getenv("TEAM_DIR") ?: str_replace("//", "/", dirname($_SERVER['SCRIPT_FILENAME'], 2)));
+        }
+        if (!defined("MODULES")) {
+            define('MODULES', array_diff(scandir(self::MODULES_DIR), ['..', '.']));
+        }
 
         $autotestMode = getenv("AUTOTEST") || isset($_GET["AUTOTEST"]);
 
@@ -57,7 +63,7 @@ class Bootstrap
             ->register();
 
         $configurator->addConfig(TEAM_DIR . '/app/config/config.neon');
-        $configurator->addConfig(TEAM_DIR . '/local/config.neon');
+        $configurator->addConfig(TEAM_DIR . '/local/' . ($autotestMode ? 'config.autotest.neon' : 'config.neon'));
 
         $configurator->addParameters(["team" => getenv("team") ?: substr($_SERVER["HTTP_HOST"], 0, strpos($_SERVER["HTTP_HOST"], "."))]);
 
