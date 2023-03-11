@@ -21,4 +21,6 @@ attend_pics
 download
 www/user_pics
 /local/config.neon
+/local/config.autotest.neon
 /local/debug.neon
+/bin/tests
