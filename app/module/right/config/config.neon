@@ -1,2 +1,0 @@
-services:
-    RightManager: Tymy\Module\Right\Manager\RightManager
