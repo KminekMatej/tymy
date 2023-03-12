@@ -31,14 +31,15 @@ jobs:
       needs: [PhpCS, PhpStan]
       name: Integration tests
       runs-on: self-hosted
-      steps:          
+      env:
+        DBMAINNAME: tymy_cz
+        DBNAME: autotest
+        DBUSER: drtikol
+        DBPWD: w,6TmB
+        TESTDIR: app/module/autotest
+      steps:
         - name: "Mock database environment"
           run: |
-            export DBMAINNAME=tymy_cz
-            export DBNAME=autotest
-            export DBUSER=drtikol
-            export DBPWD=w,6TmB
-            export TESTDIR=app/module/autotest
             mysql -u $DBUSER -p$DBPWD -e "CREATE DATABASE IF NOT EXISTS $DBNAME;"
             cp local/config.example.neon local/config.neon
             sed -i "s/database-host/localhost/g" local/config.neon
