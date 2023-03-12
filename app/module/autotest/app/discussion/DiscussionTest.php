@@ -43,10 +43,10 @@ class DiscussionTest extends RequestCase
     public function testCRUDNotPermittedDiscussion(): void
     {
         $dId = $this->recordManager->createDiscussion(null, [
-            "readRightName" => "ADMINONLY",
+            "readRightName" => "ADMINMEMBER",
             "writeRightName" => "ADMINONLY",
             "deleteRightName" => "ADMINONLY",
-            "stickyRightName" => "MEMBERONLY",
+            "stickyRightName" => "ADMINMEMBER",
         ]);
 
         $pid = $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "ADMIN first post " . random_int(0, 10000)])->expect(201)->getData()["id"];
@@ -100,7 +100,7 @@ class DiscussionTest extends RequestCase
         $dId = $this->recordManager->createDiscussion(null, [
             "writeRightName" => "ADMINONLY",
             "deleteRightName" => "ADMINONLY",
-            "stickyRightName" => "MEMBERONLY",
+            "stickyRightName" => "ADMINMEMBER",
         ]);
 
         $pid = $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "ADMIN first post " . random_int(0, 10000)])->expect(201)->getData()["id"];
@@ -202,7 +202,7 @@ class DiscussionTest extends RequestCase
         $this->authorizeAdmin();
         $dId = $this->recordManager->createDiscussion(null, [
             "deleteRightName" => "ADMINONLY",
-            "stickyRightName" => "MEMBERONLY",
+            "stickyRightName" => "ADMINMEMBER",
         ]);
 
         $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "ADMIN first post " . random_int(0, 10000)])->expect(201)->getData();
