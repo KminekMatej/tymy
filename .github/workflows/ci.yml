@@ -54,7 +54,7 @@ jobs:
             sed -i "s/smtp-password/bar/g" local/config.neon
             php bin/tester.php create-env
         - name: "Run tests"
-          run: php bin/tester.php $TESTDIR/app
+          run: php bin/tester.php ../$TESTDIR/app
         - name: "Clean created database"
           run: |
             mysql -u $DBUSER -p$DBPWD -e "DROP DATABASE $DBNAME;"
