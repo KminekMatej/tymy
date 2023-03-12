@@ -87,10 +87,10 @@ class Tester
                     $this->command = $arg;
                     break;
                 default:
-                    if (file_exists(__DIR__ . "/" . $arg)) {
-                        $this->path = __DIR__ . "/" . $arg;
-                    } else {
-                        die("\nUnrecognized path: [" . __DIR__ . "/" . $arg . "]\n");
+                    $this->path = str_starts_with($arg, "/") ? $arg : FileSystem::normalizePath(__DIR__ . "/" . $arg);
+
+                    if (!file_exists($this->path)) {
+                        die("\nUnrecognized path: [{$this->path}]\n");
                     }
             }
         }

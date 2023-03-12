@@ -82,7 +82,3 @@ INSERT INTO `event_types` (`id`, `code`, `caption`, `pre_status_set_id`, `post_s
 (3, 'MEE', 'Schůze', 1, 3, 'WARN', NULL, NULL),
 (4, 'TOU', 'Turnaj', 2, 4, 'WARN', NULL, NULL),
 (5, 'CMP', 'Soustředění', 2, 4, 'WARN', NULL, NULL);
-
-DELETE FROM `tymy_cz`.`teams` WHERE `sys_name` = 'autotest';
-INSERT INTO `tymy_cz`.`teams` (`name`, `sys_name`, `db_name`, `languages`, `default_lc`, `sport`, `account_number`, `web`, `country_id`, `attend_email`, `excuse_email`, `modules`, `max_users`, `max_events_month`, `advertisement`, `active`, `retranslate`, `insert_date`, `time_zone`, `dst_flag`, `app_version`, `use_namedays`, `att_check`, `att_check_days`, `create_step`, `activation_key`, `host`, `tariff`, `tariff_until`, `tariff_payment`, `skin`, `required_fields`) VALUES 
-('Autotest Team', 'autotest', NULL, 'CZ,EN', 'CZ', 'Autotest ultimate', NULL, NULL, '0', NULL, NULL, 'WEB,DS_WATCHER,DWNLD,ASK', '500', '100', 'YES', 'YES', 'NO', CURRENT_TIMESTAMP, '1', 'AUTO', '0.2', 'YES', 'FW', '7', '0', NULL, 'localhost', 'FULL', '2022-11-13', 'YEARLY', NULL, 'gender,firstName,lastName,phone,email,birthDate,callName,status,jerseyNumber,street,city,zipCode');

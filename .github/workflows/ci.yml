@@ -32,30 +32,31 @@ jobs:
       name: Integration tests
       runs-on: self-hosted
       steps:          
-        - name: "Create database"
+        - name: "Mock database environment"
           run: |
-            export DBMAINNAME=tymy_cz_$GITHUB_SHA
-            export DBNAME=autotest_$GITHUB_SHA
+            export DBMAINNAME=tymy_cz
+            export DBNAME=team
             export DBUSER=drtikol
             export DBPWD=w,6TmB
             export TESTDIR=app/module/autotest
             mysql -u $DBUSER -p$DBPWD -e "CREATE DATABASE IF NOT EXISTS $DBNAME;"
-            mysql -u $DBUSER -p$DBPWD -e "DROP DATABASE IF EXISTS `$DBMAINNAME`;"
-            mysql -u $DBUSER -p$DBPWD -e "CREATE DATABASE `$DBMAINNAME`;"
-            mysql -u $DBUSER -p$DBPWD $DBMAINNAME < $TESTDIR/main-database.sql
-            mysql -u $DBUSER -p$DBPWD -e 'INSERT INTO `$DBMAINNAME`.`teams` (`name`, `sys_name`, `db_name`, `languages`, `default_lc`, `sport`, `account_number`, `country_id`, `modules`, `max_users`, `max_events_month`, `advertisement`, `active`, `retranslate`, `insert_date`, `time_zone`, `dst_flag`, `app_version`, `use_namedays`, `att_check`, `att_check_days`, `create_step`, `activation_key`, `host`, `tariff`, `tariff_until`, `tariff_payment`, `skin`, `required_fields`) VALUES ("autotest", "autotest", "'$DBNAME'", "CZ,EN", "CZ", "Coding", NULL, "0", "WEB,DS_WATCHER,DWNLD,ASK", "500", "100", "YES", "YES", "NO", CURRENT_TIMESTAMP, "1", "AUTO", "0.2", "YES", "FW", "7", "0", NULL, "localhost", "FULL", "2035-11-13", "YEARLY", NULL, "gender,firstName,lastName,phone,email,birthDate,callName,status,jerseyNumber,street,city,zipCode");'
-            cp local/config.example.neon local/config.autotest.neon
-            sed -i "s/database-host/localhost/g" local/config.autotest.neon
-            sed -i "s/database-name/$DBMAINNAME/g" local/config.autotest.neon
-            sed -i "s/database-user/$DBUSER/g" local/config.autotest.neon
-            sed -i "s/database-password/$DBPWD/g" local/config.autotest.neon
-            sed -i "s/database-team-host/localhost/g" local/config.autotest.neon
-            sed -i "s/database-team-name/$DBNAME/g" local/config.autotest.neon
-            sed -i "s/mail-host/localhost/g" local/config.autotest.neon
-            sed -i "s/smtp-port/25/g" local/config.autotest.neon
-            sed -i "s/smtp-user/foo/g" local/config.autotest.neon
-            sed -i "s/smtp-password/bar/g" local/config.autotest.neon
-            php bin/tester.php migrate
-            php bin/tester.php reset
-            php bin/tester.php tests
+            cp local/config.example.neon local/config.neon
+            sed -i "s/database-host/localhost/g" local/config.neon
+            sed -i "s/database-name/$DBMAINNAME/g" local/config.neon
+            sed -i "s/database-user/$DBUSER/g" local/config.neon
+            sed -i "s/database-password/$DBPWD/g" local/config.neon
+            sed -i "s/database-team-host/localhost/g" local/config.neon
+            sed -i "s/database-team-name/$DBNAME/g" local/config.neon
+            sed -i "s/mail-host/localhost/g" local/config.neon
+            sed -i "s/smtp-port/25/g" local/config.neon
+            sed -i "s/smtp-user/foo/g" local/config.neon
+            sed -i "s/smtp-password/bar/g" local/config.neon
+            php bin/tester.php create-env
+            php bin/tester.php delete-env
+            mysql -u $DBUSER -p$DBPWD -e "CREATE DATABASE IF NOT EXISTS $DBNAME;"
+        - name: "Run tests"
+          run: php bin/tester.php $TESTDIR/app
+        - name: "Clean created database"
+          run: mysql -u $DBUSER -p$DBPWD -e "DROP DATABASE $DBNAME;"
+            
 
