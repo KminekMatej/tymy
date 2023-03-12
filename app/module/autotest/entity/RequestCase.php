@@ -11,7 +11,6 @@ use Nette\Application\UI\Presenter;
 use Nette\Database\Explorer;
 use Nette\DI\Container;
 use Nette\Http\IRequest;
-use Nette\Http\RequestFactory;
 use Nette\InvalidStateException;
 use Nette\Neon\Neon;
 use Nette\Routing\Router;
@@ -26,7 +25,6 @@ use Tymy\Module\Autotest\Entity\Assert;
 use Tymy\Module\Core\Manager\Responder;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Presenter\Api\BasePresenter;
-
 use const PHP_EOL;
 use const TEAM_DIR;
 use const TEST_DIR;
@@ -51,7 +49,7 @@ abstract class RequestCase extends TestCase
     protected AuthenticationManager $authenticationManager;
     protected Responder $responder;
     private IRequest $httpRequest;
-    private RequestFactory $httpRequestFactory;
+    private MockRequestFactory $httpRequestFactory;
 
     /** @var RequestLog[] */
     private array $logs = [];
