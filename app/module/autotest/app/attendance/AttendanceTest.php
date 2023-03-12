@@ -126,7 +126,7 @@ class AttendanceTest extends RequestCase
     public function testPermissivePost(): void
     {
         $this->authorizeAdmin();
-        $this->eventId = $this->recordManager->createEvent(null, ["viewRightName" => "ADMINONLY", "planRightName" => "ADMINONLY", "resultRightName" => "MEMBERONLY"]);
+        $this->eventId = $this->recordManager->createEvent(null, ["viewRightName" => "ADMINONLY", "planRightName" => "ADMINONLY", "resultRightName" => "ADMINMEMBER"]);
         $mocked = $this->mockRecord();
 
         $this->authorizeUser();
@@ -139,11 +139,11 @@ class AttendanceTest extends RequestCase
 
         $this->request($this->getBasePath(), "POST", $mocked)->expect(403); //user not permitted to attend
 
+        $mockedResult = $this->recordManager->mockAttendance($this->eventId, false, true);
+        $this->request($this->getBasePath(), "POST", $mockedResult)->expect(403); //user is forbidden to fill result
+
         $this->authorizeAdmin();
         $this->request($this->getBasePath(), "POST", $mocked)->expect(200); //admin permitted to attend
-
-        $mockedResult = $this->recordManager->mockAttendance($this->eventId, false, true);
-        $this->request($this->getBasePath(), "POST", $mockedResult)->expect(403); //admin is forbidden to fill result
 
         $this->authorizeAdmin($this->config["user_member_login"], $this->config["user_member_pwd"]);
         $this->request($this->getBasePath(), "POST", $mockedResult)->expect(200, "array"); //member is allowed to fill result
