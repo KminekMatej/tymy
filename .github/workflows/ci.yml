@@ -35,7 +35,7 @@ jobs:
         - name: "Mock database environment"
           run: |
             export DBMAINNAME=tymy_cz
-            export DBNAME=team
+            export DBNAME=autotest
             export DBUSER=drtikol
             export DBPWD=w,6TmB
             export TESTDIR=app/module/autotest
