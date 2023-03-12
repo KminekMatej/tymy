@@ -90,7 +90,8 @@ class Tester
                     $this->path = str_starts_with($arg, "/") ? $arg : FileSystem::normalizePath(__DIR__ . "/" . $arg);
 
                     if (!file_exists($this->path)) {
-                        die("\nUnrecognized path: [{$this->path}]\n");
+                        echo "\nUnrecognized path: [{$this->path}]\n";
+                        exit(1);
                     }
             }
         }
