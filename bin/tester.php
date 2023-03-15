@@ -339,6 +339,9 @@ class Tester
 
         $configuration["services"]["cacheStorage"] = ["factory" => new Entity(FileStorage::class, ["%tempDir%"])];
 
+        $configuration["parameters"]["web-push"]["VAPID"]["publicKey"] = "BIxsETXXdXYdeutK9cPKTxifri3tndIJkxP-A8tx2A_Iwb4042QiCib6NrtqijHJndjYcnUcXIysrbSwH9lfous"; //mock VAPID
+        $configuration["parameters"]["web-push"]["VAPID"]["privateKey"] = "b7tq-dJ5wiOjXAh_zgG45Ls1NBegSDOl_Xhlc-upYPU";
+
         file_put_contents($this->autotestConfigFile, Neon::encode($configuration, Neon::BLOCK));
 
         $this->successLogg("Autotest config file {$this->autotestConfigFile} succesfully created");
