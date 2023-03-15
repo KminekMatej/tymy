@@ -11,6 +11,9 @@ jobs:
         - name: "Checkout"
           uses: actions/checkout@v2
           
+        - name: "Drop vendor"
+          run: rm -fr vendor
+          
         - name: "Compose"
           run: composer install --no-interaction
   PhpCS:
