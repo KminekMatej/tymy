@@ -65,6 +65,11 @@ class AvatarManager
     {
         $this->allowUpload($userId);
 
-        $image->resize(self::WIDTH, self::HEIGHT)->save(TEAM_DIR . "/user_pics/$userId.png");
+        $picsDir = TEAM_DIR . "/user_pics";
+        if (!file_exists($picsDir) || !is_dir($picsDir)) {
+            mkdir($picsDir, 0755, true);
+        }
+
+        $image->resize(self::WIDTH, self::HEIGHT)->save("$picsDir/$userId.png");
     }
 }
