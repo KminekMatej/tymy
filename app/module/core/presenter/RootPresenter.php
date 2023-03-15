@@ -24,8 +24,8 @@ use const TEAM_DIR;
  */
 abstract class RootPresenter extends Presenter
 {
-    private const LOCALES = ["CZ" => "cs", "EN" => "en-gb", "FR" => "fr", "PL" => "pl"];
     public const TEAM_CACHE = "tymy-cache";
+    private const LOCALES = ["CZ" => "cs", "EN" => "en-gb", "FR" => "fr", "PL" => "pl"];
 
     protected Team $team;
 

@@ -43,6 +43,30 @@ abstract class BaseManager
     private array $lastIdList = [];
     protected ?string $idCol = "id"; //default id column name
 
+    /** @return Field[] */
+    abstract protected function getScheme(): array;
+
+    abstract public function create(array $data, ?int $resourceId = null): BaseModel;
+
+    abstract public function read(int $resourceId, ?int $subResourceId = null): BaseModel;
+
+    abstract public function update(array $data, int $resourceId, ?int $subResourceId = null): BaseModel;
+
+    abstract public function delete(int $resourceId, ?int $subResourceId = null): int;
+
+    abstract protected function getClassName(): string;
+
+    abstract public function canRead(BaseModel $entity, int $userId): bool;
+
+    abstract public function canEdit(BaseModel $entity, int $userId): bool;
+
+    /**
+     * Get list of user ids, allowed to read given entity
+     * @param BaseModel $record
+     * @return int[]
+     */
+    abstract public function getAllowedReaders(BaseModel $record): array;
+
     public function __construct(ManagerFactory $managerFactory)
     {
         $this->mainDatabase = $managerFactory->mainDatabase;
@@ -65,17 +89,6 @@ abstract class BaseManager
         }
     }
 
-    /** @return Field[] */
-    abstract protected function getScheme(): array;
-
-    abstract public function create(array $data, ?int $resourceId = null): BaseModel;
-
-    abstract public function read(int $resourceId, ?int $subResourceId = null): BaseModel;
-
-    abstract public function update(array $data, int $resourceId, ?int $subResourceId = null): BaseModel;
-
-    abstract public function delete(int $resourceId, ?int $subResourceId = null): int;
-
     protected function getTable(): string
     {
         $class = $this->getClassName();
@@ -87,19 +100,6 @@ abstract class BaseManager
         $class = $this->getClassName();
         return $class::MODULE;
     }
-
-    abstract protected function getClassName(): string;
-
-    abstract public function canRead(BaseModel $entity, int $userId): bool;
-
-    abstract public function canEdit(BaseModel $entity, int $userId): bool;
-
-    /**
-     * Get list of user ids, allowed to read given entity
-     * @param BaseModel $record
-     * @return int[]
-     */
-    abstract public function getAllowedReaders(BaseModel $record): array;
 
     /**
      * Function to quickly obtain all user ids - very neccessary when getAllowedReaders function should return all readers at all

@@ -3,6 +3,7 @@
 
     <!-- Check folders -->
     <file>./app</file>
+    <file>./bin</file>
     <file>./tests</file>
 
 
@@ -12,4 +13,30 @@
     </rule>
 
     <rule ref="PSR2.Methods.FunctionCallSignature"/> <!-- check parentheses when calling function - turned off by PSR12 -->
+
+    <rule ref="SlevomatCodingStandard.Classes.ClassStructure">
+        <properties>
+            <property name="groups" type="array">
+                <element value="uses"/>
+
+                <element value="enum cases"/>
+
+                <!-- Public constants are first but you don't care about the order of protected or private constants -->
+                <element value="public constants"/>
+                <element value="constants"/>
+
+                <element value="static properties"/>
+
+                <!-- You don't care about the order among the properties. The same can be done with "properties" shortcut -->
+                <element value="public properties, protected properties, private properties"/>
+
+                <element value="abstract methods"/>
+                
+                <!-- Constructor is first, then all static methods, then all other methods -->
+                <element value="constructor"/>
+                <element value="static methods"/>
+                <element value="methods"/>
+            </property>
+        </properties>
+    </rule>
 </ruleset>

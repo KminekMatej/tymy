@@ -16,16 +16,6 @@ class Order
         $this->order = strtoupper($order) == "ASC" ? "ASC" : "DESC";
     }
 
-    public function getColumn(): string
-    {
-        return $this->column;
-    }
-
-    public function getOrder(): string
-    {
-        return $this->order;
-    }
-
     public static function toString(array $orders): string
     {
         $outOrders = [];
@@ -36,5 +26,15 @@ class Order
         }
 
         return implode(", ", $outOrders);
+    }
+
+    public function getColumn(): string
+    {
+        return $this->column;
+    }
+
+    public function getOrder(): string
+    {
+        return $this->order;
     }
 }

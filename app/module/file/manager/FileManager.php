@@ -23,50 +23,6 @@ class FileManager
     {
     }
 
-    /**
-     * Uložení nahraného souboru.
-     *
-     * @return string Saved file path
-     */
-    public function save(FileUpload $file, string $folder): string
-    {
-        $mime = mime_content_type($file->getTemporaryFile());
-
-        if (!array_key_exists($mime, $this->getMimeTypes())) {
-            //mime not matched
-            unlink($file->getTemporaryFile());
-            $this->responder->E403_FORBIDDEN("Uploading type `$mime` is forbidden");
-        }
-
-        if (!$file->isOk()) {
-            unlink($file->getTemporaryFile());
-            $this->responder->E4009_CREATE_FAILED("File");
-        }
-
-        if (!is_dir(self::DOWNLOAD_DIR)) {
-            mkdir(self::DOWNLOAD_DIR, 0777, true);
-        }
-
-        $targetFile = self::DOWNLOAD_DIR . "/$folder/" . $file->getSanitizedName();
-
-        if (!$file->move($targetFile)) {
-            Debugger::log("File saving failed [$targetFile]", ILogger::ERROR);
-        }
-
-        return $targetFile;
-    }
-
-    /**
-     * @return mixed[]
-     */
-    private function getMimeTypes(): array
-    {
-        return self::getArchiveMimeTypes() +
-            self::getAudioMimeTypes() +
-            self::getDocumentMimeTypes() +
-            self::getImageMimeTypes();
-    }
-
     public static function getArchiveMimeTypes(): array
     {
         return [
@@ -112,5 +68,49 @@ class FileManager
             'image/jpeg' => 'jpg',
             'image/gif' => 'gif',
         ];
+    }
+
+    /**
+     * Uložení nahraného souboru.
+     *
+     * @return string Saved file path
+     */
+    public function save(FileUpload $file, string $folder): string
+    {
+        $mime = mime_content_type($file->getTemporaryFile());
+
+        if (!array_key_exists($mime, $this->getMimeTypes())) {
+            //mime not matched
+            unlink($file->getTemporaryFile());
+            $this->responder->E403_FORBIDDEN("Uploading type `$mime` is forbidden");
+        }
+
+        if (!$file->isOk()) {
+            unlink($file->getTemporaryFile());
+            $this->responder->E4009_CREATE_FAILED("File");
+        }
+
+        if (!is_dir(self::DOWNLOAD_DIR)) {
+            mkdir(self::DOWNLOAD_DIR, 0777, true);
+        }
+
+        $targetFile = self::DOWNLOAD_DIR . "/$folder/" . $file->getSanitizedName();
+
+        if (!$file->move($targetFile)) {
+            Debugger::log("File saving failed [$targetFile]", ILogger::ERROR);
+        }
+
+        return $targetFile;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    private function getMimeTypes(): array
+    {
+        return self::getArchiveMimeTypes() +
+            self::getAudioMimeTypes() +
+            self::getDocumentMimeTypes() +
+            self::getImageMimeTypes();
     }
 }

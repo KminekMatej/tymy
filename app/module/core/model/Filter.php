@@ -15,21 +15,6 @@ class Filter
     {
     }
 
-    public function getColumn(): string
-    {
-        return $this->column;
-    }
-
-    public function getOperator(): string
-    {
-        return $this->operator;
-    }
-
-    public function getValue()
-    {
-        return $this->value;
-    }
-
     /**
      * Add filters, one by one, to existing selector, using ->where functions
      */
@@ -47,5 +32,20 @@ class Filter
                 $selector->where("`{$filter->getColumn()}` {$filter->getOperator()} ?", $filter->getValue()); //`column` >= 'value', replaced by question marks
             }
         }
+    }
+
+    public function getColumn(): string
+    {
+        return $this->column;
+    }
+
+    public function getOperator(): string
+    {
+        return $this->operator;
+    }
+
+    public function getValue()
+    {
+        return $this->value;
     }
 }

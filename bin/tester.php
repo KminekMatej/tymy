@@ -17,9 +17,9 @@ use Tymy\Bootstrap;
 use Tymy\Module\Admin\Manager\MigrationManager;
 use Tymy\Module\Autotest\Manager\MockMailer;
 use Tymy\Module\Autotest\MockRequestFactory;
+
 use const ROOT_DIR;
 use const TEST_DIR;
-
 
 require(__DIR__ . "/Common.php");
 require(__DIR__ . "/../app/Bootstrap.php");
@@ -148,7 +148,7 @@ class Tester
 
         putenv("AUTOTEST=1");
         require_once ROOT_DIR . '/vendor/autoload.php';
-        
+
         $this->initContainer();
 
         $output = $this->migrationManager->migrateUp();
@@ -457,7 +457,7 @@ class Tester
             $this->rrmDir($autotestTempDir);
         }
     }
-    
+
     private function importMainDatabase()
     {
         $this->logg("Importing structure of main database");

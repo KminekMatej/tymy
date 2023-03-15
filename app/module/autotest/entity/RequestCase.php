@@ -55,6 +55,20 @@ abstract class RequestCase extends TestCase
     /** @var RequestLog[] */
     private array $logs = [];
 
+    /**
+     * Function should return string of module name, preferably from constant
+     */
+    abstract public function getModule(): string;
+
+    abstract public function createRecord();
+
+    abstract public function mockRecord();
+
+    /**
+     * @return mixed[]
+     */
+    abstract protected function mockChanges(): array;
+
     public function __construct(protected Container $container)
     {
         define('TEST_DIR', Bootstrap::normalizePath(Bootstrap::MODULES_DIR . "/autotest"));
@@ -73,29 +87,15 @@ abstract class RequestCase extends TestCase
         $this->httpRequestFactory = $this->container->getService("http.requestFactory");
     }
 
-    /**
-     * Function should return string of module name, preferably from constant
-     */
-    abstract public function getModule(): string;
-
     protected function getBasePath(): string
     {
         return $this->getModule();
     }
 
-    abstract public function createRecord();
-
     public function deleteRecord($recordId): void
     {
         $this->recordManager->deleteRecord($this->getBasePath(), $recordId);
     }
-
-    abstract public function mockRecord();
-
-    /**
-     * @return mixed[]
-     */
-    abstract protected function mockChanges(): array;
 
     public function getRecordManager(): RecordManager
     {
