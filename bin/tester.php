@@ -303,7 +303,7 @@ class Tester
     {
         $this->logg("Deleting test environment");
 
-        $this->configuration = $this->loadConfiguration($this->configFile);
+        $this->configuration = $this->loadConfiguration($this->autotestConfigFile);
 
         $this->deleteAutotestTempDirectory();
         $this->deleteAutotestLogDirectory();
@@ -317,14 +317,11 @@ class Tester
         $teamDb = $this->loadDatabaseCredentials($this->configuration, "team");
         $mainDb = $this->loadDatabaseCredentials($this->configuration, "main");
 
-        $teamAutotestDbName = $teamDb["name"] . "__autotest";
-        $mainAutotestDbName = $mainDb["name"] . "__autotest";
-
         //Drop created databases if exists
         $pdo = new PDO($teamDb["dsn"], $teamDb["user"], $teamDb["password"]);
 
-        $this->dropDatabase($pdo, $teamAutotestDbName, $teamDb["user"], $teamDb["host"]); //drop team DB if exists
-        $this->dropDatabase($pdo, $mainAutotestDbName, $teamDb["user"], $teamDb["host"]); //drop main DB if exists
+        $this->dropDatabase($pdo, $teamDb["name"], $teamDb["user"], $teamDb["host"]); //drop team DB if exists
+        $this->dropDatabase($pdo, $mainDb["name"], $mainDb["user"], $mainDb["host"]); //drop main DB if exists
 
         $this->rmTestsSymlink();
     }
