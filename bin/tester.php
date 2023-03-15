@@ -15,6 +15,7 @@ use PDO;
 use PDOException;
 use Tymy\Bootstrap;
 use Tymy\Module\Admin\Manager\MigrationManager;
+use Tymy\Module\Autotest\Manager\MockMailer;
 use Tymy\Module\Autotest\MockRequestFactory;
 use const ROOT_DIR;
 use const TEST_DIR;
