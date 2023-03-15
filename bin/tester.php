@@ -314,14 +314,17 @@ class Tester
             $this->successLogg("Autotest config file {$this->autotestConfigFile} deleted");
         }
 
-        $db = $this->loadDatabaseCredentials($this->configuration);
+        $teamDb = $this->loadDatabaseCredentials($this->configuration, "team");
+        $mainDb = $this->loadDatabaseCredentials($this->configuration, "main");
 
-        $autotestDbName = $db["name"] . "__autotest";
+        $teamAutotestDbName = $teamDb["name"] . "__autotest";
+        $mainAutotestDbName = $mainDb["name"] . "__autotest";
 
         //Drop created databases if exists
-        $pdo = new PDO($db["dsn"], $db["user"], $db["password"]);
+        $pdo = new PDO($teamDb["dsn"], $teamDb["user"], $teamDb["password"]);
 
-        $this->dropDatabase($pdo, $autotestDbName, $db["user"], $db["host"]);
+        $this->dropDatabase($pdo, $teamAutotestDbName, $teamDb["user"], $teamDb["host"]); //drop team DB if exists
+        $this->dropDatabase($pdo, $mainAutotestDbName, $teamDb["user"], $teamDb["host"]); //drop main DB if exists
 
         $this->rmTestsSymlink();
     }
