@@ -5,6 +5,7 @@
 namespace Tymy\Bin;
 
 use Nette\Caching\Storages\FileStorage;
+use Nette\Database\Explorer;
 use Nette\DI\Container;
 use Nette\Neon\Entity;
 use Nette\Neon\Neon;
@@ -16,6 +17,7 @@ use Tymy\Bootstrap;
 use Tymy\Module\Admin\Manager\MigrationManager;
 use Tymy\Module\Autotest\MockRequestFactory;
 use const ROOT_DIR;
+use const TEST_DIR;
 
 
 require(__DIR__ . "/Common.php");
@@ -40,6 +42,7 @@ class Tester
     private string $autotestConfigFile;
     private array $configuration;
     private ?Container $container = null;
+    private MigrationManager $migrationManager;
 
     public function __construct()
     {
@@ -123,6 +126,14 @@ class Tester
         }
     }
 
+    private function initContainer(): void
+    {
+        if (!$this->container) {
+            $this->container = Bootstrap::boot();
+            $this->migrationManager = $this->container->getByType(MigrationManager::class);
+        }
+    }
+
     /**
      * Migrate test database to latest possible version
      */
@@ -136,15 +147,10 @@ class Tester
 
         putenv("AUTOTEST=1");
         require_once ROOT_DIR . '/vendor/autoload.php';
+        
+        $this->initContainer();
 
-        if (!$this->container) {
-            $this->container = Bootstrap::boot();
-        }
-
-        $migrationManager = $this->container->getByType(MigrationManager::class);
-
-        /* @var $migrationManager MigrationManager */
-        $output = $migrationManager->migrateUp();
+        $output = $this->migrationManager->migrateUp();
 
         foreach ($output["log"] as $logLine) {
             $this->logg($logLine);
@@ -241,27 +247,31 @@ class Tester
 
         $this->configuration = $this->loadConfiguration($this->configFile);
 
-        $originalDsn = $this->getDefaultDbConfig($this->configuration)["dsn"];
-
         $this->createAutotestTempDirectory();
         $this->createAutotestLogDirectory();
 
-        $db = $this->loadDatabaseCredentials($this->configuration);
-        $autotestDbName = $db["name"] . "__autotest";
+        $teamDb = $this->loadDatabaseCredentials($this->configuration, "team");
+        $mainDb = $this->loadDatabaseCredentials($this->configuration, "main");
+
+        $teamAutotestDbName = $teamDb["name"] . "__autotest";
+        $mainAutotestDbName = $mainDb["name"] . "__autotest";
 
         //Create duplicate config file
-        $this->createAutotestConfigFile($db["host"], $autotestDbName);
+        $this->createAutotestConfigFile($this->configuration, $teamDb["host"], $teamAutotestDbName, $mainAutotestDbName);
 
-        //Create database
-        $pdo = new PDO($originalDsn, $db["user"], $db["password"]);
-
-        $this->dropDatabase($pdo, $autotestDbName, $db["user"], $db["host"]); //drop if exists
-        $this->createDatabase($pdo, $autotestDbName, $db["user"], $db["host"]); //create new one
-
+        $pdo = new PDO($teamDb["dsn"], $teamDb["user"], $teamDb["password"]);
+        //Prepare team database
+        $this->dropDatabase($pdo, $teamAutotestDbName, $teamDb["user"], $teamDb["host"]); //drop team DB if exists
+        $this->createDatabase($pdo, $teamAutotestDbName, $teamDb["user"], $teamDb["host"]); //create team DB new
         $this->migrate();
-
         $this->resetDatabase();
 
+        //Prepare main database
+        $this->dropDatabase($pdo, $mainAutotestDbName, $teamDb["user"], $teamDb["host"]); //drop main DB if exists
+        $this->createDatabase($pdo, $mainAutotestDbName, $teamDb["user"], $teamDb["host"]); //create main DB new
+        $this->importMainDatabase($mainAutotestDbName);
+
+        //Symlink test directory
         $this->rmTestsSymlink();
         $this->symlinkTestDir();
     }
@@ -272,18 +282,19 @@ class Tester
      * @param array $configuration
      * @return array [ "host" => (string), "name" => (string), "user" => (string), "password" => (string) ],
      */
-    private function loadDatabaseCredentials(array $configuration): array
+    private function loadDatabaseCredentials(array $configuration, ?string $mark = null): array
     {
         //get autotest database name
-        $originalDsn = $this->getDefaultDbConfig($configuration)["dsn"];
+        $dbConfig = $this->getDbConfig($configuration, $mark);
+        $originalDsn = $dbConfig["dsn"];
         preg_match('/mysql:host=(.*);dbname=(.*)/m', $originalDsn, $matches);
 
         return [
             "dsn" => $originalDsn,
             "host" => $matches[1],
             "name" => $matches[2],
-            "user" => $this->getDefaultDbConfig($configuration)["user"],
-            "password" => $this->getDefaultDbConfig($configuration)["password"],
+            "user" => $dbConfig["user"],
+            "password" => $dbConfig["password"],
         ];
     }
 
@@ -314,25 +325,21 @@ class Tester
         $this->rmTestsSymlink();
     }
 
-    private function createAutotestConfigFile(string $dbHost, string $dbName)
+    private function createAutotestConfigFile(array $configuration, string $dbHost, string $teamDbName, string $mainDbName)
     {
         $this->logg("Creating autotest config file");
 
-        $autotestConfig = $this->loadConfiguration($this->configFile);
-        if (array_key_exists("team", $autotestConfig["database"])) {
-            $autotestConfig["database"]["team"]["dsn"] = "mysql:host=$dbHost;dbname=$dbName";
-        } else {
-            $autotestConfig["database"]["dsn"] = "mysql:host=$dbHost;dbname=$dbName";
+        $configuration["database"]["team"]["dsn"] = "mysql:host=$dbHost;dbname=$teamDbName";
+        $configuration["database"]["main"]["dsn"] = "mysql:host=$dbHost;dbname=$mainDbName";
+
+        if (!array_key_exists("services", $configuration)) {
+            $configuration["services"] = [];
         }
+        $configuration["services"]["http.requestFactory"] = MockRequestFactory::class;
 
-        if (!array_key_exists("services", $autotestConfig)) {
-            $autotestConfig["services"] = [];
-        }
-        $autotestConfig["services"]["http.requestFactory"] = MockRequestFactory::class;
+        $configuration["services"]["cacheStorage"] = ["factory" => new Entity(FileStorage::class, ["%tempDir%"])];
 
-        $autotestConfig["services"]["cacheStorage"] = ["factory" => new Entity(FileStorage::class, ["%tempDir%"])];
-
-        file_put_contents($this->autotestConfigFile, Neon::encode($autotestConfig, Neon::BLOCK));
+        file_put_contents($this->autotestConfigFile, Neon::encode($configuration, Neon::BLOCK));
 
         $this->successLogg("Autotest config file {$this->autotestConfigFile} succesfully created");
     }
@@ -444,6 +451,42 @@ class Tester
             $this->rrmDir($autotestTempDir);
         }
     }
+    
+    private function importMainDatabase()
+    {
+        $this->logg("Importing structure of main database");
+        $mainDatabase = $this->container->getByName("database.main.explorer");
+        assert($mainDatabase instanceof Explorer);
+
+        //load custom data into database
+        $this->migrationManager->executeSqlContents(file_get_contents(TEST_DIR . "/main-database.sql"), $this->log, $mainDatabase);
+        $mainDatabase->table("teams")->insert([
+            "name" => 'Autotest Team',
+            "sys_name" => 'autotest',
+            "languages" => 'CZ,EN',
+            "default_lc" => 'CZ',
+            "sport" => 'Autotest ultimate',
+            "country_id" => 0,
+            "modules" => 'WEB,DS_WATCHER,DWNLD,ASK',
+            "max_users" => 500,
+            "max_events_month" => 100,
+            "advertisement" => 'YES',
+            "active" => 'YES',
+            "retranslate" => 'NO',
+            "insert_date" => new DateTime(),
+            "time_zone" => 1,
+            "dst_flag" => "AUTO",
+            "app_version" => "0.2",
+            "use_namedays" => 'YES',
+            "att_check" => 'FW',
+            "att_check_days" => 7,
+            "host" => "localhost",
+            "tariff" => 'FULL',
+            "tariff_until" => '2035-01-01',
+            "tariff_payment" => 'YEARLY',
+            "required_fields" => 'gender,firstName,lastName,phone,email,birthDate,callName,status,jerseyNumber,street,city,zipCode'
+        ]);
+    }
 
     /**
      * Load configuration from specified config neon file
@@ -474,13 +517,13 @@ class Tester
      * @param array $configuration
      * @return array
      */
-    private function getDefaultDbConfig(array $configuration): array
+    private function getDbConfig(array $configuration, ?string $mark = null): array
     {
         if (!isset($configuration["database"])) {
             $this->errLogg("DSN config not found in configuration, aborting!");
         }
 
-        return $this->configuration["database"]["team"] ?? $this->configuration["database"];
+        return $mark ? $this->configuration["database"][$mark] : $this->configuration["database"];
     }
 
     private function errLogg(string $msg, bool $die = false)
