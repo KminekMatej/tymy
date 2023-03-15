@@ -95,7 +95,7 @@ class StatusManager extends BaseManager
     {
         $dir = TEAM_DIR . "/attend_pics/$statusSetId";
         if (!file_exists($dir) || !is_dir($dir)) {
-            mkdir($dir);
+            mkdir($dir, 0755, true);
         }
         return $dir;
     }
