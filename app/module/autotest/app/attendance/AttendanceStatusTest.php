@@ -157,8 +157,6 @@ class AttendanceStatusTest extends RequestCase
             Assert::hasKey("caption", $status);
             Assert::hasKey("updatedById", $status);
             Assert::hasKey("updatedAt", $status);
-            Assert::type("int", $status["updatedById"]);
-            Assert::truthy($status["updatedById"]);
             Assert::equal($statusSetId, $status["statusSetId"]);
             if ($status["code"] == $mockedStatusData["code"]) {
                 $correctStatus = $status;

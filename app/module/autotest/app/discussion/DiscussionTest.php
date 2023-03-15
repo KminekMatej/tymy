@@ -43,10 +43,10 @@ class DiscussionTest extends RequestCase
     public function testCRUDNotPermittedDiscussion(): void
     {
         $dId = $this->recordManager->createDiscussion(null, [
-            "readRightName" => "ADMINONLY",
+            "readRightName" => "ADMINMEMBER",
             "writeRightName" => "ADMINONLY",
             "deleteRightName" => "ADMINONLY",
-            "stickyRightName" => "MAINADMIN",
+            "stickyRightName" => "ADMINMEMBER",
         ]);
 
         $pid = $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "ADMIN first post " . random_int(0, 10000)])->expect(201)->getData()["id"];
@@ -70,7 +70,7 @@ class DiscussionTest extends RequestCase
 
         //check that autotest_admin cannot stick but main admin can
         $this->request($this->getBasePath() . "/$dId/post/$pid", "PUT", ["sticky" => true])->expect(403);
-        $this->authorizeAdmin($this->config["user_mainadmin_login"], $this->config["user_mainadmin_pwd"]);
+        $this->authorizeAdmin($this->config["user_member_login"], $this->config["user_member_pwd"]);
         $this->request($this->getBasePath() . "/$dId/post/$pid", "PUT", ["sticky" => true])->expect(200, "array");
         $updatedResponse = $this->request($this->getBasePath() . "/$dId/post/$pid")->expect(200, "array");
         Assert::truthy($updatedResponse->getData()["updatedAtStr"]);
@@ -100,7 +100,7 @@ class DiscussionTest extends RequestCase
         $dId = $this->recordManager->createDiscussion(null, [
             "writeRightName" => "ADMINONLY",
             "deleteRightName" => "ADMINONLY",
-            "stickyRightName" => "MAINADMIN",
+            "stickyRightName" => "ADMINMEMBER",
         ]);
 
         $pid = $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "ADMIN first post " . random_int(0, 10000)])->expect(201)->getData()["id"];
@@ -202,7 +202,7 @@ class DiscussionTest extends RequestCase
         $this->authorizeAdmin();
         $dId = $this->recordManager->createDiscussion(null, [
             "deleteRightName" => "ADMINONLY",
-            "stickyRightName" => "MAINADMIN",
+            "stickyRightName" => "ADMINMEMBER",
         ]);
 
         $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "ADMIN first post " . random_int(0, 10000)])->expect(201)->getData();

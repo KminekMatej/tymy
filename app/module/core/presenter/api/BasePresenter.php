@@ -173,7 +173,7 @@ class BasePresenter extends RootPresenter
         }
 
         if ($exc instanceof MissingInputException) {
-            assert($exc instanceof IntegrityException);
+            assert($exc instanceof MissingInputException);
             $this->responder->E4013_MISSING_INPUT($exc->getMessage());
         }
 

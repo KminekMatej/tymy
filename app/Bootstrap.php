@@ -22,9 +22,15 @@ class Bootstrap
     public static function boot(): Container
     {
         // absolute filesystem path to the application root
-        define("ROOT_DIR", getenv("ROOT_DIR") ? self::normalizePath(getenv("ROOT_DIR")) : self::normalizePath(__DIR__ . "/.."));
-        define("TEAM_DIR", getenv("TEAM_DIR") ?: str_replace("//", "/", dirname($_SERVER['SCRIPT_FILENAME'], 2)));
-        define('MODULES', array_diff(scandir(self::MODULES_DIR), ['..', '.']));
+        if (!defined("ROOT_DIR")) {
+            define("ROOT_DIR", getenv("ROOT_DIR") ? self::normalizePath(getenv("ROOT_DIR")) : self::normalizePath(__DIR__ . "/.."));
+        }
+        if (!defined("TEAM_DIR")) {
+            define("TEAM_DIR", getenv("TEAM_DIR") ?: str_replace("//", "/", dirname($_SERVER['SCRIPT_FILENAME'], 2)));
+        }
+        if (!defined("MODULES")) {
+            define('MODULES', array_diff(scandir(self::MODULES_DIR), ['..', '.']));
+        }
 
         $autotestMode = getenv("AUTOTEST") || isset($_GET["AUTOTEST"]);
 
@@ -39,16 +45,25 @@ class Bootstrap
 
         $configurator->setDebugMode($debug ?: false);
 
-        $configurator->enableTracy($autotestMode ? TEAM_DIR . '/log_autotest' : TEAM_DIR . '/log');
+        $logDir = $autotestMode ? TEAM_DIR . '/log_autotest' : TEAM_DIR . '/log';
+        $tmpDir = $autotestMode ? TEAM_DIR . '/temp_autotest' : TEAM_DIR . '/temp';
 
-        $configurator->setTempDirectory($autotestMode ? TEAM_DIR . '/temp_autotest' : TEAM_DIR . '/temp');
+        if (!file_exists($logDir) || !is_dir($logDir)) {
+            mkdir($logDir);
+        }
+        if (!file_exists($tmpDir) || !is_dir($tmpDir)) {
+            mkdir($tmpDir);
+        }
+
+        $configurator->enableTracy($logDir);
+        $configurator->setTempDirectory($tmpDir);
 
         $configurator->createRobotLoader()
             ->addDirectory(__DIR__)
             ->register();
 
         $configurator->addConfig(TEAM_DIR . '/app/config/config.neon');
-        $configurator->addConfig(TEAM_DIR . '/local/config.neon');
+        $configurator->addConfig(TEAM_DIR . '/local/' . ($autotestMode ? 'config.autotest.neon' : 'config.neon'));
 
         $configurator->addParameters(["team" => getenv("team") ?: substr($_SERVER["HTTP_HOST"], 0, strpos($_SERVER["HTTP_HOST"], "."))]);
 

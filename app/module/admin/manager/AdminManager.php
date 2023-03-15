@@ -9,7 +9,7 @@ namespace Tymy\Module\Admin\Manager;
  */
 class AdminManager
 {
-    public function __construct(private array $ghosts)
+    public function __construct(private ?array $ghosts)
     {
     }
 
@@ -18,6 +18,6 @@ class AdminManager
      */
     public function allowToken(string $token): bool
     {
-        return in_array($token, $this->ghosts);
+        return $this->ghosts && in_array($token, $this->ghosts);
     }
 }

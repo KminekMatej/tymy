@@ -15,15 +15,49 @@ jobs:
           run: composer update --dev
   PhpCS:
       needs: setup
-      name: PHP Code sniffer
+      name: PHP Code Sniffer
       runs-on: self-hosted
       steps:          
         - name: "PHPCs"
           run: vendor/bin/phpcs
   PhpStan:
       needs: setup
-      name: Static Analysis
+      name: PHP Stan
       runs-on: self-hosted
       steps:          
         - name: "PHPStan"
           run: vendor/bin/phpstan -v
+  Autotest:
+      needs: [PhpCS, PhpStan]
+      name: Integration tests
+      runs-on: self-hosted
+      env:
+        DBMAINNAME: tymy_cz
+        DBNAME: autotest
+        DBUSER: drtikol
+        DBPWD: w,6TmB
+        TESTDIR: app/module/autotest
+      steps:
+        - name: "Mock database environment"
+          run: |
+            mysql -u $DBUSER -p$DBPWD -e "CREATE DATABASE IF NOT EXISTS $DBNAME;"
+            cp local/config.example.neon local/config.neon
+            sed -i "s/database-host/localhost/g" local/config.neon
+            sed -i "s/database-name/$DBMAINNAME/g" local/config.neon
+            sed -i "s/database-user/$DBUSER/g" local/config.neon
+            sed -i "s/database-password/$DBPWD/g" local/config.neon
+            sed -i "s/database-team-host/localhost/g" local/config.neon
+            sed -i "s/database-team-name/$DBNAME/g" local/config.neon
+            sed -i "s/mail-host/localhost/g" local/config.neon
+            sed -i "s/smtp-port/25/g" local/config.neon
+            sed -i "s/smtp-user/foo/g" local/config.neon
+            sed -i "s/smtp-password/bar/g" local/config.neon
+            php bin/tester.php create-env
+        - name: "Run tests"
+          run: php bin/tester.php ../$TESTDIR/app
+        - name: "Clean created database"
+          run: |
+            mysql -u $DBUSER -p$DBPWD -e "DROP DATABASE $DBNAME;"
+            php bin/tester.php delete-env
+            
+

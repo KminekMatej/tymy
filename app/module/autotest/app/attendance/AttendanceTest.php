@@ -115,7 +115,7 @@ class AttendanceTest extends RequestCase
 
         //test user not permitted to add plan as different user
         $mockedPlan = $this->recordManager->mockAttendance($eventId, true, false);
-        $mockedPlan["userId"] = $this->config["user_mainadmin_id"];
+        $mockedPlan["userId"] = $this->config["user_admin_id"];
         $this->request($this->getBasePath(), "POST", $mockedPlan)->expect(403);
 
         $this->authorizeAdmin();
@@ -126,7 +126,7 @@ class AttendanceTest extends RequestCase
     public function testPermissivePost(): void
     {
         $this->authorizeAdmin();
-        $this->eventId = $this->recordManager->createEvent(null, ["viewRightName" => "ADMINONLY", "planRightName" => "ADMINONLY", "resultRightName" => "MAINADMIN"]);
+        $this->eventId = $this->recordManager->createEvent(null, ["viewRightName" => "ADMINONLY", "planRightName" => "ADMINONLY", "resultRightName" => "ADMINMEMBER"]);
         $mocked = $this->mockRecord();
 
         $this->authorizeUser();
@@ -139,14 +139,14 @@ class AttendanceTest extends RequestCase
 
         $this->request($this->getBasePath(), "POST", $mocked)->expect(403); //user not permitted to attend
 
+        $mockedResult = $this->recordManager->mockAttendance($this->eventId, false, true);
+        $this->request($this->getBasePath(), "POST", $mockedResult)->expect(403); //user is forbidden to fill result
+
         $this->authorizeAdmin();
         $this->request($this->getBasePath(), "POST", $mocked)->expect(200); //admin permitted to attend
 
-        $mockedResult = $this->recordManager->mockAttendance($this->eventId, false, true);
-        $this->request($this->getBasePath(), "POST", $mockedResult)->expect(403); //admin is forbidden to fill result
-
-        $this->authorizeAdmin($this->config["user_mainadmin_login"], $this->config["user_mainadmin_pwd"]);
-        $this->request($this->getBasePath(), "POST", $mockedResult)->expect(200, "array"); //superadmin is allowed to fill result
+        $this->authorizeAdmin($this->config["user_member_login"], $this->config["user_member_pwd"]);
+        $this->request($this->getBasePath(), "POST", $mockedResult)->expect(200, "array"); //member is allowed to fill result
     }
 
     public function testUnknownEvent(): void

@@ -62,19 +62,19 @@ class MigrationManager
     /**
      * @return mixed[]
      */
-    public function executeSqlContents(string $contents, &$log = false): array
+    public function executeSqlContents(string $contents, &$log = null, ?Explorer $database = null): array
     {
         if ($log) {
             $this->log = &$log;
         }
         $commands = $this->getCommands($contents);
-        return $this->executeCommands($commands);
+        return $this->executeCommands($commands, $database);
     }
 
     /**
      * @return mixed[]
      */
-    public function executeCommands(array $sqlCommands): array
+    public function executeCommands(array $sqlCommands, ?Explorer $database = null): array
     {
         $this->logg("Executing supplied " . count($sqlCommands) . " queries");
         foreach ($sqlCommands as $cmd) {
@@ -83,7 +83,7 @@ class MigrationManager
                 $cmd .= ";";
             }
             $this->logg("Executing query " . $cmd);
-            $this->teamDatabase->query($cmd);
+            $database ? $database->query($cmd) : $this->teamDatabase->query($cmd);
         }
         return $this->log;
     }

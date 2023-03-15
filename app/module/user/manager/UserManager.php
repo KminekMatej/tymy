@@ -423,9 +423,7 @@ class UserManager extends BaseManager
     public function getById(int $id, bool $force = false): ?User
     {
         $user = parent::getById($id, $force);
-        assert($user instanceof User);
-
-        return $user;
+        return $user instanceof User ? $user : null;
     }
 
     /**

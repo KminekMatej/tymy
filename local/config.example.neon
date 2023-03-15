@@ -1,0 +1,39 @@
+# Copy this file to config.neon and fill out all neccessary configurations to run tymy.cz instance
+database:
+    main:
+        dsn: 'mysql:host=database-host;dbname=database-name'
+        user: 'database-user'
+        password: 'database-password'
+        reflection: conventional
+    team:
+        dsn: 'mysql:host=database-team-host;dbname=database-team-name'
+        user: 'database-user'
+        password: 'database-password'
+        reflection: conventional
+mail:
+	smtp: true
+	host: smtp-host
+	port: smtp-port
+	username: smtp-user
+	password: smtp-password
+	secure: tls
+
+parameters:
+    ghosts:
+    web-push:
+        VAPID:
+            subject: 'tymy.cz'
+            publicKey: 'vapid-public-key'
+            privateKey: 'vapid-private-key'
+    apns:
+        keyId: apns-keyId
+        teamId: apns-teamId
+        key: '../../common/authkey.p8'
+        topic: apns-topic
+        mode: apns-mode   #sandbox / production
+    fcm:
+        key: fcm-key
+
+services:
+    cacheStorage:
+        factory: Nette\Caching\Storages\FileStorage(%tempDir%)
