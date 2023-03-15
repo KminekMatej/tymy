@@ -2,9 +2,9 @@
 
 namespace Tymy\Module\Autotest\Manager;
 
-use BoostSpace\Test\Entity\Assert;
 use Nette\Mail\Mailer;
 use Nette\Mail\Message;
+use Tymy\Module\Autotest\Entity\Assert;
 
 /**
  * Description of MockMailer
