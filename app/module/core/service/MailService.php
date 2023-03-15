@@ -26,7 +26,7 @@ class MailService
     private Team $team;
     private string $teamDomain;
 
-    public function __construct(private TeamManager $teamManager, private Mailer $mailSender, private StringsManager $stringsManager, private Translator $translator)
+    public function __construct(private TeamManager $teamManager, private Mailer $mailer, private StringsManager $stringsManager, private Translator $translator)
     {
     }
 
@@ -114,7 +114,7 @@ class MailService
                 $mail->addReplyTo(trim($replyTo));
             }
 
-            $this->mailSender->send($mail);
+            $this->mailer->send($mail);
         } catch (SendException $exc) {
             Debugger::log("Failed to send email from team {$this->team->getSysName()} to $email. Error: {$exc->getMessage()}");
         }

@@ -335,6 +335,8 @@ class Tester
         if (!array_key_exists("services", $configuration)) {
             $configuration["services"] = [];
         }
+        unset($configuration["mail"]);
+        $configuration["services"]["mail.mailer"] = MockMailer::class;
         $configuration["services"]["http.requestFactory"] = MockRequestFactory::class;
 
         $configuration["services"]["cacheStorage"] = ["factory" => new Entity(FileStorage::class, ["%tempDir%"])];
