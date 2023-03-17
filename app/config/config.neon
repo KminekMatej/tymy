@@ -18,7 +18,7 @@ services:
         routerFactory: Tymy\RouterFactory
         router: @routerFactory::createRouter
         cacheStorage:
-            factory: Nette\Caching\Storages\NewMemcachedStorage()
+            factory: Nette\Caching\Storages\MemcachedStorage()
 
 tracy:
     email: matej.kminek@attendees.eu
