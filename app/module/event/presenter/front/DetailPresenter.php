@@ -69,8 +69,7 @@ class DetailPresenter extends EventBasePresenter
             $statusId = $attendance->getPostStatusId() ?: $attendance->getPreStatusId();
             $gender = $attendance->getUser()->getGender();
 
-            if ($statusId == null && $attendance->getUser()->getStatus() !== User::STATUS_PLAYER) {
-                //skip other non-players when status id is empty (not-decided)
+            if ($statusId == null) { //skip players when status id is empty (not-decided). Not-decided players will be added afterwards
                 continue;
             }
 
