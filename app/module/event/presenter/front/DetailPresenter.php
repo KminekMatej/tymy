@@ -63,13 +63,14 @@ class DetailPresenter extends EventBasePresenter
         foreach ($statusIds as $statusId) {
             $attendances[$statusId] = [];
         }
-
+        
         foreach ($event->getAttendance() as $attendance) {
             assert($attendance instanceof Attendance);
             $statusId = $attendance->getPostStatusId() ?: $attendance->getPreStatusId();
             $gender = $attendance->getUser()->getGender();
 
-            if ($statusId == null) { //skip players when status id is empty (not-decided). Not-decided players will be added afterwards
+            if ($statusId == null || !array_key_exists($statusId, $attendances)) {
+                //skip players when status id is empty (not-decided)
                 continue;
             }
 
