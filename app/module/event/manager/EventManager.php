@@ -8,7 +8,6 @@ use Nette\Database\Table\ActiveRow;
 use Nette\Database\Table\Selection;
 use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
-use Tracy\Debugger;
 use Tymy\Module\Attendance\Manager\AttendanceManager;
 use Tymy\Module\Attendance\Model\Attendance;
 use Tymy\Module\Core\Factory\ManagerFactory;
@@ -182,7 +181,7 @@ class EventManager extends BaseManager
 
         $selector->order(Order::toString($this->orderToArray($order ?: "startTime__desc")))
             ->limit($limit ?: 200, $offset ?: 0);
-        Debugger::log($selector->getSql());
+
         $events = $this->mapAll($selector->fetchAll());
 
         $this->addAttendances($events);
