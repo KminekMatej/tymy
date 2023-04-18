@@ -182,7 +182,7 @@ class EventManager extends BaseManager
 
         $selector->order(Order::toString($this->orderToArray($order ?: "startTime__desc")))
             ->limit($limit ?: 200, $offset ?: 0);
-
+        Debugger::log($selector->getSql());
         $events = $this->mapAll($selector->fetchAll());
 
         $this->addAttendances($events);
@@ -280,10 +280,10 @@ class EventManager extends BaseManager
         $readPermsQ = ["`view_rights` IS NULL", "`view_rights` = ''"];
         if (!empty($readPerms)) {
             $readPermsQ[] = "`view_rights` IN (?)";
+            return $this->database->table($this->getTable())->where(implode(" OR ", $readPermsQ), $readPerms);
+        } else {
+            return $this->database->table($this->getTable())->where(implode(" OR ", $readPermsQ));
         }
-
-        return $this->database->table($this->getTable())
-                ->where(implode(" OR ", $readPermsQ), empty($readPerms) ? null : $readPerms);
     }
 
     /**
