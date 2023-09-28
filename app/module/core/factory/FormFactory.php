@@ -265,10 +265,10 @@ class FormFactory
 
         $anonymousVotes = $form->addCheckbox("anonymousVotes", $this->translator->translate("poll.anonymousVotes"));
         $changeableVotes = $form->addCheckbox("changeableVotes", $this->translator->translate("poll.setChangeableVotes"))->setDefaultValue(true);
-        $displayResults = $form->addSelect("displayResults", $this->translator->translate("poll.displayResults"), $pollResults)->setPrompt($this->translator->translate("common.choose") . " ...")->setDefaultValue(Poll::RESULTS_NEVER);
+        $showResults = $form->addSelect("showResults", $this->translator->translate("poll.displayResults"), $pollResults)->setPrompt($this->translator->translate("common.choose") . " ...")->setDefaultValue(Poll::RESULTS_NEVER);
 
         $canVote = $form->addSelect("voteRightName", $this->translator->translate("poll.canVote"), $this->getUserPermissions())->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
-        $canDisplayResults = $form->addSelect("resultRightName", $this->translator->translate("poll.canDisplayResults"), $this->getUserPermissions())->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
+        $canShowResults = $form->addSelect("resultRightName", $this->translator->translate("poll.canDisplayResults"), $this->getUserPermissions())->setPrompt("-- " . $this->translator->translate("common.everyone") . " --");
         $canAlienVote = $form->addSelect("alienVoteRightName", $this->translator->translate("poll.canAlienVote"), $this->getUserPermissions())->setPrompt("-- " . $this->translator->translate("common.noone") . " --");
         $orderFlag = $form->addInteger("orderFlag", $this->translator->translate("settings.order"));
 
@@ -282,13 +282,13 @@ class FormFactory
             $maxItems->setValue($poll->getMaxItems())->setHtmlAttribute("data-value", $poll->getMaxItems());
             $anonymousVotes->setValue($poll->getAnonymousResults())->setHtmlAttribute("data-value", $poll->getAnonymousResults() ? 1 : 0);
             $changeableVotes->setValue($poll->getChangeableVotes())->setHtmlAttribute("data-value", $poll->getChangeableVotes() ? 1 : 0);
-            $displayResults->setValue($poll->getShowResults())->setHtmlAttribute("data-value", $poll->getShowResults() !== '' && $poll->getShowResults() !== '0' ? 1 : 0);
+            $showResults->setValue($poll->getShowResults())->setHtmlAttribute("data-value", $poll->getShowResults() !== '' && $poll->getShowResults() !== '0' ? 1 : 0);
             $orderFlag->setValue($poll->getOrderFlag())->setHtmlAttribute("data-value", $poll->getOrderFlag());
             if ($poll->getVoteRightName()) {
                 $canVote->setValue($poll->getVoteRightName())->setHtmlAttribute("data-value", $poll->getVoteRightName());
             }
             if ($poll->getResultRightName()) {
-                $canDisplayResults->setValue($poll->getResultRightName())->setHtmlAttribute("data-value", $poll->getResultRightName());
+                $canShowResults->setValue($poll->getResultRightName())->setHtmlAttribute("data-value", $poll->getResultRightName());
             }
             if ($poll->getAlienVoteRightName()) {
                 $canAlienVote->setValue($poll->getAlienVoteRightName())->setHtmlAttribute("data-value", $poll->getAlienVoteRightName());
