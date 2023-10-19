@@ -132,10 +132,14 @@ class PushNotificationManager extends BaseManager
         try {
             foreach ($subscribers as $subscriber) {
                 assert($subscriber instanceof Subscriber);
-                $report = $this->webPush->sendOneNotification(
-                    Subscription::create(\json_decode($subscriber->getSubscription(), true, 512, JSON_THROW_ON_ERROR)), // subscription
-                    \json_encode($notification->jsonSerialize(), JSON_THROW_ON_ERROR) // payload
+                $subscription = Subscription::create(\json_decode($subscriber->getSubscription(), true, 512, JSON_THROW_ON_ERROR));
+                $this->webPush->queueNotification(
+                    $subscription,
+                    \json_encode($notification->jsonSerialize(), JSON_THROW_ON_ERROR)
                 );
+            }
+
+            foreach ($this->webPush->flush() as $report) {
                 $this->processReport($subscriber, $report);
             }
         } catch (ErrorException $e) {
