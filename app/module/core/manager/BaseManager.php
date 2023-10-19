@@ -404,9 +404,7 @@ abstract class BaseManager
                 } else {
                     continue; // do not add not-needed null field to insert, so default values from MYSQL settings can be set
                 }
-            }
-
-            if (!empty($value)) {
+            } else {
                 $this->sanitizeValue($field, $value);
             }
 
