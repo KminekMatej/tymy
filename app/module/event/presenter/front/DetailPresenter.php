@@ -63,7 +63,7 @@ class DetailPresenter extends EventBasePresenter
         foreach ($statusIds as $statusId) {
             $attendances[$statusId] = [];
         }
-        
+
         foreach ($event->getAttendance() as $attendance) {
             assert($attendance instanceof Attendance);
             $statusId = $attendance->getPostStatusId() ?: $attendance->getPreStatusId();
