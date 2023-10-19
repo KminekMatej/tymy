@@ -6,12 +6,14 @@ use ErrorException;
 use Minishlink\WebPush\MessageSentReport;
 use Minishlink\WebPush\Subscription;
 use Minishlink\WebPush\WebPush;
+use Nette\Http\Url;
 use Nette\NotImplementedException;
 use Tracy\Debugger;
 use Tracy\ILogger;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Model\Field;
 use Tymy\Module\PushNotification\Mapper\SubscriberMapper;
 use Tymy\Module\PushNotification\Model\PushNotification;
 use Tymy\Module\PushNotification\Model\Subscriber;
@@ -29,11 +31,20 @@ class PushNotificationManager extends BaseManager
     /**
      * Get Push Notification subscription based on user ID and subscription
      */
-    public function getByUserAndSubscription(int $userId, string $subscription): ?\Tymy\Module\Core\Model\BaseModel
+    public function getByUserAndSubscription(int $userId, string $subscription): ?BaseModel
     {
         return $this->map($this->database->table(Subscriber::TABLE)
                     ->where("user_id", $userId)
                     ->where("subscription", $subscription)->fetch());
+    }
+
+    /**
+     * Get Push Notification subscription based on user ID and subscription
+     */
+    public function getIdByEndpoint(string $endpoint): ?int
+    {
+        return $this->database->table(Subscriber::TABLE)
+                ->where("subscription LIKE ?", "%$endpoint%")->fetch()?->id;
     }
 
     /**
@@ -64,7 +75,7 @@ class PushNotificationManager extends BaseManager
     }
 
     /**
-     * @return \Tymy\Module\Core\Model\Field[]
+     * @return Field[]
      */
     protected function getScheme(): array
     {
@@ -140,7 +151,7 @@ class PushNotificationManager extends BaseManager
             }
 
             foreach ($this->webPush->flush() as $report) {
-                $this->processReport($subscriber, $report);
+                $this->processReport($report);
             }
         } catch (ErrorException $e) {
             Debugger::log('WebPush ErrorException: ' . $e->getMessage(), ILogger::EXCEPTION);
@@ -265,10 +276,13 @@ class PushNotificationManager extends BaseManager
      * Deletes subscriber from database if its already expired.
      * May contain another post-processing tasks
      */
-    private function processReport(Subscriber $subscriber, MessageSentReport $report): void
+    private function processReport(MessageSentReport $report): void
     {
-        if (!$report->isSuccess() && $report->isSubscriptionExpired()) {
-            $this->delete($subscriber->getId());    //sending to void subscription - delete it from DB to avoid ghosts
+        $endpointUrl = new Url($report->getEndpoint());
+        $subscriberId = $this->getIdByEndpoint(str_replace("/fcm/send/", "", $endpointUrl->getPath()));
+
+        if ($subscriberId && !$report->isSuccess() && $report->isSubscriptionExpired()) {
+            $this->delete($subscriberId, $report->getId());    //sending to void subscription - delete it from DB to avoid ghosts
         }
     }
 }
