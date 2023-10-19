@@ -130,8 +130,8 @@ class PushNotification implements JsonSerializable
         $array = [
             "userId" => $this->userId,
             "teamId" => $this->teamId,
-            "title" => $this->title,
-            "message" => $this->message,
+            "title" => \Nette\Utils\Strings::normalize($this->title),
+            "message" => \Nette\Utils\Strings::normalize($this->message),
         ];
 
         if (isset($this->imageUrl)) {
