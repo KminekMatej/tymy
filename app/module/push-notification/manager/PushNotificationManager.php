@@ -282,7 +282,7 @@ class PushNotificationManager extends BaseManager
         $subscriberId = $this->getIdByEndpoint(str_replace("/fcm/send/", "", $endpointUrl->getPath()));
 
         if ($subscriberId && !$report->isSuccess() && $report->isSubscriptionExpired()) {
-            $this->delete($subscriberId, $report->getId());    //sending to void subscription - delete it from DB to avoid ghosts
+            $this->delete($subscriberId);    //sending to void subscription - delete it from DB to avoid ghosts
         }
     }
 }
