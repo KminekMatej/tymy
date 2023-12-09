@@ -38,7 +38,7 @@ jobs:
         - name: "StructureCheck"
           run: php bin/structure-check.php
   Autotest:
-      needs: [PhpCS, PhpStan]
+      needs: [PhpCS, PhpStan, StructureCheck]
       name: Integration tests
       runs-on: self-hosted
       env:
