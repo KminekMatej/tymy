@@ -40,7 +40,7 @@ class StructureChecker
         $this->loadArguments($args);
         Common::logg("Checking database structure against mapper configuration");
         $this->container = Bootstrap::boot();
-        $this->database = $this->container->getByType(Explorer::class);
+        $this->database = $this->container->getByName("database.team.explorer");
         define("WWW_DIR", ROOT_DIR . "/www");
 
         $this->mockServer();
