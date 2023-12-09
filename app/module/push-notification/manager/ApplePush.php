@@ -92,7 +92,7 @@ class ApplePush
                     //invalid device id, delete from database
                     $this->expiredSubscribers[] = $subscriber;
                 }
-                Debugger::log("APNS notifikace nemohla být odeslána, chyba: " . $response . ", infodata: " . json_encode($info, JSON_THROW_ON_ERROR), ILogger::ERROR);
+                Debugger::log("APNS notifikace nemohla být odeslána, chyba: " . $response . ", infodata: " . json_encode($info, JSON_THROW_ON_ERROR), ILogger::WARNING);
             }
         }
     }
