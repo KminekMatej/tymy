@@ -1,5 +1,4 @@
 <?php
-
 namespace Tymy\Module\Core\Model;
 
 /**
@@ -21,6 +20,7 @@ class Field
     private bool $nonempty = false;
     private bool $changeable = true;
     private ?int $maxLength = null;
+    private ?array $enum = null;
     private string $type = self::TYPE_STRING;
 
     /**
@@ -64,9 +64,9 @@ class Field
     public function withPropertyAndColumn(string $name, bool $mandatory = false, bool $changeable = true): static
     {
         return $this->setColumn($name)
-                        ->setProperty($name)
-                        ->setMandatory($mandatory)
-                        ->setChangeable($changeable);
+                ->setProperty($name)
+                ->setMandatory($mandatory)
+                ->setChangeable($changeable);
     }
 
     /**
@@ -78,8 +78,8 @@ class Field
     public function withColumn(string $name, bool $mandatory = false, bool $changeable = true): static
     {
         return $this->setColumn($name)
-                        ->setMandatory($mandatory)
-                        ->setChangeable($changeable);
+                ->setMandatory($mandatory)
+                ->setChangeable($changeable);
     }
 
     public function getColumn(): string
@@ -105,6 +105,11 @@ class Field
     public function getMaxLength(): ?int
     {
         return $this->maxLength;
+    }
+
+    public function getEnum(): ?array
+    {
+        return $this->enum;
     }
 
     public function setColumn(string $column): static
@@ -134,6 +139,12 @@ class Field
     public function setMaxLength(?int $maxLength)
     {
         $this->maxLength = $maxLength;
+        return $this;
+    }
+
+    public function setEnum(?array $enum)
+    {
+        $this->enum = $enum;
         return $this;
     }
 
