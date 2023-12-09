@@ -20,7 +20,7 @@ class SubscriberMapper extends BaseMapper
         return [
             Field::int()->withPropertyAndColumn("id", false, false),
             Field::datetime()->withColumn("created")->setProperty("created")->setChangeable(false),
-            Field::int()->withPropertyAndColumn("type"),
+            Field::string()->withPropertyAndColumn("type")->setEnum(['WEB', 'APNS', 'FCM']),
             Field::int()->withColumn("user_id", true)->setProperty("userId"),
             Field::string()->withPropertyAndColumn("subscription", true),
         ];

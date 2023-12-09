@@ -26,8 +26,8 @@ class InvitationMapper extends BaseMapper
             Field::string(50)->withPropertyAndColumn("email"),
             Field::string(32)->withPropertyAndColumn("code"),
             Field::string(2)->withPropertyAndColumn("lang"),
-            Field::string()->withColumn("user_id")->setProperty("userId"),
-            Field::string()->withColumn("valid_until")->setProperty("validUntil"),
+            Field::int()->withColumn("user_id")->setProperty("userId"),
+            Field::datetime()->withColumn("valid_until")->setProperty("validUntil"),
         ];
     }
 }

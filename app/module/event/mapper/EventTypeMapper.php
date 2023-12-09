@@ -24,7 +24,7 @@ class EventTypeMapper extends BaseMapper
             Field::string(6)->withPropertyAndColumn("color"),
             Field::int()->withColumn("pre_status_set_id")->setProperty("preStatusSetId"),
             Field::int()->withColumn("post_status_set_id")->setProperty("postStatusSetId"),
-            Field::string()->withPropertyAndColumn("mandatory"),
+            Field::string()->withPropertyAndColumn("mandatory")->setEnum(['FREE', 'WARN', 'MUST']),
             Field::datetime()->withColumn("updated")->setProperty("updatedAt")->setChangeable(false),
             Field::int()->withColumn("updated_user_id")->setProperty("updatedById"),
             Field::int()->withPropertyAndColumn("order"),

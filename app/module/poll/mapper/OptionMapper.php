@@ -21,7 +21,7 @@ class OptionMapper extends BaseMapper
             Field::int()->withPropertyAndColumn("id", false, false),
             Field::int()->withColumn("quest_id", true)->setProperty("pollId"),
             Field::string(255)->withPropertyAndColumn("caption"),
-            Field::string()->withColumn("item_type", true)->setProperty("type"),
+            Field::string()->withColumn("item_type", true)->setProperty("type")->setEnum(['NUMBER', 'TEXT', 'BOOLEAN']),
         ];
     }
 }

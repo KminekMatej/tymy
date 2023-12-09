@@ -19,7 +19,7 @@ class PermissionMapper extends BaseMapper
     {
         return [
             Field::int()->withPropertyAndColumn("id", false, false),
-            Field::string()->withColumn("right_type", true, false)->setProperty("type"),
+            Field::string()->withColumn("right_type", true, false)->setProperty("type")->setEnum(['SYS', 'PAGE', 'USR']),
             Field::string(20)->withPropertyAndColumn("name", true),
             Field::string(255)->withPropertyAndColumn("caption"),
             Field::string(100)->withColumn("a_roles")->setProperty("allowedRoles"),
