@@ -37,7 +37,7 @@ class PermissionManager extends BaseManager
     /**
      * @return Field[]
      */
-    protected function getScheme(): array
+    public function getScheme(): array
     {
         return PermissionMapper::scheme();
     }

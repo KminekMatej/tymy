@@ -203,7 +203,7 @@ class DiscussionManager extends BaseManager
     /**
      * @return \Tymy\Module\Core\Model\Field[]
      */
-    protected function getScheme(): array
+    public function getScheme(): array
     {
         return DiscussionMapper::scheme();
     }

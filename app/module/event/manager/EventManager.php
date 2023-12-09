@@ -378,7 +378,7 @@ class EventManager extends BaseManager
     /**
      * @return Field[]
      */
-    protected function getScheme(): array
+    public function getScheme(): array
     {
         return EventMapper::scheme();
     }

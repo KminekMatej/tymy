@@ -44,7 +44,7 @@ abstract class BaseManager
     protected ?string $idCol = "id"; //default id column name
 
     /** @return Field[] */
-    abstract protected function getScheme(): array;
+    abstract public function getScheme(): array;
 
     abstract public function create(array $data, ?int $resourceId = null): BaseModel;
 
@@ -89,7 +89,7 @@ abstract class BaseManager
         }
     }
 
-    protected function getTable(): string
+    public function getTable(): string
     {
         $class = $this->getClassName();
         return $class::TABLE;

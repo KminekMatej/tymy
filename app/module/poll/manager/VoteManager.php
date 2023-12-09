@@ -33,7 +33,7 @@ class VoteManager extends BaseManager
     /**
      * @return mixed[]
      */
-    protected function getScheme(): array
+    public function getScheme(): array
     {
         return VoteMapper::scheme();
     }

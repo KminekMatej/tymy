@@ -36,7 +36,7 @@ class MultiaccountManager extends BaseManager
     /**
      * @return mixed[]
      */
-    protected function getScheme(): array
+    public function getScheme(): array
     {
         return []; //no entity considered here
     }

@@ -498,7 +498,7 @@ class UserManager extends BaseManager
     /**
      * @return Field[]
      */
-    protected function getScheme(): array
+    public function getScheme(): array
     {
         return UserMapper::scheme();
     }

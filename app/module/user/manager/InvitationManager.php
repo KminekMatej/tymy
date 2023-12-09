@@ -35,7 +35,7 @@ class InvitationManager extends BaseManager
     /**
      * @return Field[]
      */
-    protected function getScheme(): array
+    public function getScheme(): array
     {
         return InvitationMapper::scheme();
     }
