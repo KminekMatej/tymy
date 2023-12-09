@@ -13,6 +13,9 @@ use Tymy\Module\Core\Helper\ArrayHelper;
 use Tymy\Module\Core\Helper\StringHelper;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\Field;
+use Tymy\Module\Multiaccount\Manager\MultiaccountManager;
+use Tymy\Module\News\Manager\NewsManager;
+use Tymy\Module\Team\Manager\TeamManager;
 
 use function count;
 
@@ -29,7 +32,8 @@ class StructureChecker
     private bool $fix = false;
     private int $errCount = 0;
     private Container $container;
-    private Explorer $database;
+    private Explorer $teamDatabase;
+    private Explorer $mainDatabase;
     private RobotLoader $robotLoader;
 
     public function run($args): void
@@ -40,7 +44,8 @@ class StructureChecker
         $this->loadArguments($args);
         Common::logg("Checking database structure against mapper configuration");
         $this->container = Bootstrap::boot();
-        $this->database = $this->container->getByName("database.team.explorer");
+        $this->teamDatabase = $this->container->getByName("database.team.explorer");
+        $this->mainDatabase = $this->container->getByName("database.main.explorer");
         define("WWW_DIR", ROOT_DIR . "/www");
 
         $this->mockServer();
@@ -86,7 +91,19 @@ class StructureChecker
         //compare columns from NDC against our mappers
         $table = $manager->getTable();
 
-        $columns = $this->database->getStructure()->getColumns($table);
+        if (in_array(get_class($manager), [
+                MultiaccountManager::class,
+                NewsManager::class,
+                TeamManager::class
+                ]
+            )) {
+            $columns = $this->mainDatabase->getStructure()->getColumns($table);
+        } else {
+            $columns = $this->teamDatabase->getStructure()->getColumns($table);
+        }
+        if(gettype($manager) === MultiaccountManager::class){
+            
+        }
         $fields = $manager->getScheme();
 
         foreach ($fields as $field) {
