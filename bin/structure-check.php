@@ -15,6 +15,7 @@ use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Multiaccount\Manager\MultiaccountManager;
 use Tymy\Module\News\Manager\NewsManager;
+use Tymy\Module\PushNotification\Manager\PushNotificationManager;
 use Tymy\Module\Team\Manager\TeamManager;
 
 use function count;
@@ -382,8 +383,11 @@ class StructureChecker
         }
 
         //get file path
-        $managerParts = explode("\\", $manager::class);
+        $managerParts = explode("\\", $managerClass);
         $mapperName = str_replace("Manager", "Mapper", array_pop($managerParts));
+        if($managerClass == PushNotificationManager::class){
+            $mapperName = "SubscriberMapper";
+        }
         $module = $manager->getModule();
         $path = MODULES_DIR . "/$module/mapper/$mapperName.php";
 
@@ -428,8 +432,11 @@ class StructureChecker
         $managerClass = $manager::class;
 
         //get file path
-        $managerParts = explode("\\", $manager::class);
+        $managerParts = explode("\\", $managerClass);
         $mapperName = str_replace("Manager", "Mapper", array_pop($managerParts));
+        if ($managerClass == PushNotificationManager::class) {
+            $mapperName = "SubscriberMapper";
+        }
         $module = $manager->getModule();
         $path = MODULES_DIR . "/$module/mapper/$mapperName.php";
 
