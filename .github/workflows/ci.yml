@@ -30,15 +30,8 @@ jobs:
       steps:          
         - name: "PHPStan"
           run: vendor/bin/phpstan analyse -c phpstan.neon
-  StructureCheck:
-      needs: setup
-      name: Mapper structure check
-      runs-on: self-hosted
-      steps:          
-        - name: "StructureCheck"
-          run: php bin/structure-check.php
   Autotest:
-      needs: [PhpCS, PhpStan, StructureCheck]
+      needs: [PhpCS, PhpStan]
       name: Integration tests
       runs-on: self-hosted
       env:
@@ -63,6 +56,8 @@ jobs:
             sed -i "s/smtp-user/foo/g" local/config.neon
             sed -i "s/smtp-password/bar/g" local/config.neon
             php bin/tester.php create-env
+        - name: "Check structure"
+          run: php bin/structure-check.php
         - name: "Run tests"
           run: php bin/tester.php ../$TESTDIR/app
         - name: "Clean created database"
