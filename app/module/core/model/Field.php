@@ -13,17 +13,14 @@ class Field
     public const TYPE_FLOAT = "float";
     public const TYPE_STRING = "string";
     public const TYPE_DATETIME = "datetime";
+    public const TYPE_DATE = "date";
 
     private ?string $column = null;
-
     private ?string $property = null;
-
     private bool $mandatory = false;
-
     private bool $nonempty = false;
-
     private bool $changeable = true;
-
+    private ?int $maxLength = null;
     private string $type = self::TYPE_STRING;
 
     /**
@@ -45,7 +42,7 @@ class Field
     /**
      * Return new field as string type
      */
-    public static function string(): \Tymy\Module\Core\Model\Field
+    public static function string(?int $maxLength = null): \Tymy\Module\Core\Model\Field
     {
         return (new Field())->setType(self::TYPE_STRING);
     }
@@ -105,6 +102,11 @@ class Field
         return $this->changeable;
     }
 
+    public function getMaxLength(): ?int
+    {
+        return $this->maxLength;
+    }
+
     public function setColumn(string $column): static
     {
         $this->column = $column;
@@ -126,6 +128,12 @@ class Field
     public function setChangeable(bool $changeable): static
     {
         $this->changeable = $changeable;
+        return $this;
+    }
+
+    public function setMaxLength(?int $maxLength)
+    {
+        $this->maxLength = $maxLength;
         return $this;
     }
 
