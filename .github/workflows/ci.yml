@@ -30,6 +30,13 @@ jobs:
       steps:          
         - name: "PHPStan"
           run: vendor/bin/phpstan analyse -c phpstan.neon
+  StructureCheck:
+      needs: setup
+      name: Mapper structure check
+      runs-on: self-hosted
+      steps:          
+        - name: "StructureCheck"
+          run: php bin/structure-check.php
   Autotest:
       needs: [PhpCS, PhpStan]
       name: Integration tests
