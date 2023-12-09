@@ -20,7 +20,7 @@ class OptionMapper extends BaseMapper
         return [
             Field::int()->withPropertyAndColumn("id", false, false),
             Field::int()->withColumn("quest_id", true)->setProperty("pollId"),
-            Field::string()->withPropertyAndColumn("caption"),
+            Field::string(255)->withPropertyAndColumn("caption"),
             Field::string()->withColumn("item_type", true)->setProperty("type"),
         ];
     }

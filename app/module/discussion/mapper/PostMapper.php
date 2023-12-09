@@ -26,7 +26,7 @@ class PostMapper extends BaseMapper
             Field::datetime()->withColumn("updated")->setProperty("updatedAt"),
             Field::int()->withColumn("updated_user_id")->setProperty("updatedById"),
             Field::int()->withPropertyAndColumn("sticky"),
-            Field::string()->withColumn("user_name")->setProperty("userName")->setChangeable(false),
+            Field::string(64)->withColumn("user_name")->setProperty("userName")->setChangeable(false),
         ];
     }
 }

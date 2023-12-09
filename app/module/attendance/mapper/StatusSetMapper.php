@@ -19,7 +19,7 @@ class StatusSetMapper extends BaseMapper
     {
         return [
             Field::int()->withPropertyAndColumn("id", false, false),
-            Field::string()->withPropertyAndColumn("name", true),
+            Field::string(50)->withPropertyAndColumn("name", true),
             Field::int()->withPropertyAndColumn("order"),
         ];
     }

@@ -20,10 +20,10 @@ class NewsMapper extends BaseMapper
         return [
             Field::int()->withPropertyAndColumn("id", false, false),
             Field::datetime()->withColumn("inserted")->setProperty("created"),
-            Field::string()->withPropertyAndColumn("caption"),
+            Field::string(100)->withPropertyAndColumn("caption"),
             Field::string()->withColumn("descr")->setProperty("description"),
-            Field::string()->withColumn("lc")->setProperty("languageCode"),
-            Field::string()->withPropertyAndColumn("team"),
+            Field::string(3)->withColumn("lc")->setProperty("languageCode"),
+            Field::string(50)->withPropertyAndColumn("team"),
         ];
     }
 }

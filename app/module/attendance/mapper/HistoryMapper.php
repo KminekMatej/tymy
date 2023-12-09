@@ -24,9 +24,9 @@ class HistoryMapper extends BaseMapper
             Field::int()->withColumn("updated_user_id")->setProperty("updatedById"),
             Field::int()->withColumn("status_id_from")->setProperty("statusIdFrom"),
             Field::int()->withColumn("status_id_to", true)->setProperty("statusIdTo"),
-            Field::string()->withColumn("pre_desc_to")->setProperty("preDescTo"),
-            Field::string()->withColumn("entry_type")->setProperty("entryType"),
-            Field::string()->withColumn("pre_desc_from")->setProperty("preDescFrom"),
+            Field::string(255)->withColumn("pre_desc_to")->setProperty("preDescTo"),
+            Field::string(3)->withColumn("entry_type")->setProperty("entryType"),
+            Field::string(255)->withColumn("pre_desc_from")->setProperty("preDescFrom"),
         ];
     }
 }

@@ -23,7 +23,7 @@ class PollMapper extends BaseMapper
             Field::datetime()->withColumn("created")->setProperty("createdAt")->setChangeable(false),
             Field::int()->withColumn("updated_user_id")->setProperty("updatedById")->setChangeable(false),
             Field::datetime()->withColumn("updated")->setProperty("updatedAt")->setChangeable(false),
-            Field::string()->withPropertyAndColumn("caption"),
+            Field::string(255)->withPropertyAndColumn("caption"),
             Field::string()->withColumn("descr")->setProperty("description"),
             Field::int()->withColumn("min_items")->setProperty("minItems"),
             Field::int()->withColumn("max_items")->setProperty("maxItems"),
@@ -31,9 +31,9 @@ class PollMapper extends BaseMapper
             Field::int()->withColumn("anonymous_results")->setProperty("anonymousResults"),
             Field::string()->withColumn("show_results")->setProperty("showResults"),
             Field::string()->withPropertyAndColumn("status"),
-            Field::string()->withColumn("result_rights")->setProperty("resultRightName"),
-            Field::string()->withColumn("vote_rights")->setProperty("voteRightName"),
-            Field::string()->withColumn("alien_vote_rights")->setProperty("alienVoteRightName"),
+            Field::string(20)->withColumn("result_rights")->setProperty("resultRightName"),
+            Field::string(20)->withColumn("vote_rights")->setProperty("voteRightName"),
+            Field::string(20)->withColumn("alien_vote_rights")->setProperty("alienVoteRightName"),
             Field::int()->withColumn("order_flag")->setProperty("orderFlag"),
         ];
     }

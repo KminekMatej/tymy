@@ -19,9 +19,9 @@ class EventTypeMapper extends BaseMapper
     {
         return [
             Field::int()->withPropertyAndColumn("id", false, false),
-            Field::string()->withPropertyAndColumn("code", true),
-            Field::string()->withPropertyAndColumn("caption"),
-            Field::string()->withPropertyAndColumn("color"),
+            Field::string(3)->withPropertyAndColumn("code", true),
+            Field::string(255)->withPropertyAndColumn("caption"),
+            Field::string(6)->withPropertyAndColumn("color"),
             Field::int()->withColumn("pre_status_set_id")->setProperty("preStatusSetId"),
             Field::int()->withColumn("post_status_set_id")->setProperty("postStatusSetId"),
             Field::string()->withPropertyAndColumn("mandatory"),
