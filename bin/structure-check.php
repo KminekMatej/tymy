@@ -93,18 +93,18 @@ class StructureChecker
         //compare columns from NDC against our mappers
         $table = $manager->getTable();
 
-        if (in_array(get_class($manager), [
+        if (
+            in_array(get_class($manager), [
                 MultiaccountManager::class,
                 NewsManager::class,
                 TeamManager::class
-                ]
-            )) {
+                ])
+        ) {
             $columns = $this->mainDatabase->getStructure()->getColumns($table);
         } else {
             $columns = $this->teamDatabase->getStructure()->getColumns($table);
         }
-        if(gettype($manager) === MultiaccountManager::class){
-            
+        if (gettype($manager) === MultiaccountManager::class) {
         }
         $fields = $manager->getScheme();
 
@@ -385,7 +385,7 @@ class StructureChecker
         //get file path
         $managerParts = explode("\\", $managerClass);
         $mapperName = str_replace("Manager", "Mapper", array_pop($managerParts));
-        if($managerClass == PushNotificationManager::class){
+        if ($managerClass == PushNotificationManager::class) {
             $mapperName = "SubscriberMapper";
         }
         $module = $manager->getModule();
