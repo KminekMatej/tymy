@@ -37,7 +37,7 @@ class PollManager extends BaseManager
         $this->optionManager->setPollManager($this);
     }
 
-    protected function getClassName(): string
+    public function getClassName(): string
     {
         return Poll::class;
     }

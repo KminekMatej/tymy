@@ -29,7 +29,7 @@ class PermissionManager extends BaseManager
         parent::__construct($managerFactory);
     }
 
-    protected function getClassName(): string
+    public function getClassName(): string
     {
         return Permission::class;
     }

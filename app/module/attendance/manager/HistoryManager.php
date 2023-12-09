@@ -58,7 +58,7 @@ class HistoryManager extends BaseManager
         return $history;
     }
 
-    protected function getClassName(): string
+    public function getClassName(): string
     {
         return History::class;
     }

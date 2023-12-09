@@ -278,7 +278,7 @@ class PostManager extends BaseManager
             DESC LIMIT " . self::POSTS_PER_PAGE, $this->user->getId(), $id)->fetch());
     }
 
-    protected function getClassName(): string
+    public function getClassName(): string
     {
         return Post::class;
     }

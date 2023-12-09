@@ -83,7 +83,7 @@ class DebtManager extends BaseManager
         return $debt;
     }
 
-    protected function getClassName(): string
+    public function getClassName(): string
     {
         return Debt::class;
     }

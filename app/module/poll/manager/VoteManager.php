@@ -25,7 +25,7 @@ class VoteManager extends BaseManager
         $this->idCol = null;
     }
 
-    protected function getClassName(): string
+    public function getClassName(): string
     {
         return Vote::class;
     }

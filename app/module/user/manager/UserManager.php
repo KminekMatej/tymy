@@ -490,7 +490,7 @@ class UserManager extends BaseManager
         return $this->mapAll($this->selectUsersByPrivilege($privilege)->fetchAll());
     }
 
-    protected function getClassName(): string
+    public function getClassName(): string
     {
         return User::class;
     }

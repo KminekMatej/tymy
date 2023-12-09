@@ -69,7 +69,7 @@ class PushNotificationManager extends BaseManager
         $this->webPush->flush();
     }
 
-    protected function getClassName(): string
+    public function getClassName(): string
     {
         return Subscriber::class;
     }

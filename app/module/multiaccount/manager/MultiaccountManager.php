@@ -28,7 +28,7 @@ class MultiaccountManager extends BaseManager
         $this->idCol = null;    //there is no simple primary key column in database - so avoid errors from BaseManager
     }
 
-    protected function getClassName(): string
+    public function getClassName(): string
     {
         return TransferKey::class;
     }

@@ -92,7 +92,7 @@ class TeamManager extends BaseManager
         return $this->mapSimple($this->database->table(Team::TABLE)->where("sys_name", $this->teamSysName)->fetch());
     }
 
-    protected function getClassName(): string
+    public function getClassName(): string
     {
         return Team::class;
     }

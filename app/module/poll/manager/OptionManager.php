@@ -22,7 +22,7 @@ class OptionManager extends BaseManager
         return $this;
     }
 
-    protected function getClassName(): string
+    public function getClassName(): string
     {
         return Option::class;
     }

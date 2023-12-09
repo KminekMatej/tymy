@@ -92,7 +92,7 @@ class AttendanceManager extends BaseManager
         return $attendance;
     }
 
-    protected function getClassName(): string
+    public function getClassName(): string
     {
         return Attendance::class;
     }

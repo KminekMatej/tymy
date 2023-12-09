@@ -18,7 +18,7 @@ use Tymy\Module\Settings\Model\ICalItem;
  */
 class ICalManager extends BaseManager
 {
-    protected function getClassName(): string
+    public function getClassName(): string
     {
         return ICal::class;
     }

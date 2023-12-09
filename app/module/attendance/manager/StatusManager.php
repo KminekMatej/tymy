@@ -30,7 +30,7 @@ class StatusManager extends BaseManager
     private ?Status $status = null;
     private array $simpleCache = [];
 
-    protected function getClassName(): string
+    public function getClassName(): string
     {
         return Status::class;
     }

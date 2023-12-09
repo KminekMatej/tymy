@@ -27,7 +27,7 @@ class InvitationManager extends BaseManager
         parent::__construct($managerFactory);
     }
 
-    protected function getClassName(): string
+    public function getClassName(): string
     {
         return Invitation::class;
     }

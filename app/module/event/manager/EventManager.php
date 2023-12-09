@@ -370,7 +370,7 @@ class EventManager extends BaseManager
         }
     }
 
-    protected function getClassName(): string
+    public function getClassName(): string
     {
         return Event::class;
     }

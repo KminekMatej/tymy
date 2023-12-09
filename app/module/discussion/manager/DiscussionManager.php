@@ -195,7 +195,7 @@ class DiscussionManager extends BaseManager
         return $this->database->table($this->getTable())->where("read_rights IS NULL OR read_rights = '' OR read_rights IN (?)", $readPerms)->fetchPairs(null, "id");
     }
 
-    protected function getClassName(): string
+    public function getClassName(): string
     {
         return Discussion::class;
     }

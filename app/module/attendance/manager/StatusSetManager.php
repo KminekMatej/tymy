@@ -46,7 +46,7 @@ class StatusSetManager extends BaseManager
         return $statusSet;
     }
 
-    protected function getClassName(): string
+    public function getClassName(): string
     {
         return StatusSet::class;
     }

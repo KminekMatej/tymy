@@ -36,7 +36,7 @@ class StructureChecker
     {
         define("ROOT_DIR", FileSystem::normalizePath(Common::getCwdUnresolved() . "/.."));
         define("TEAM_DIR", ROOT_DIR);
-        putenv("team=autotest");
+        putenv("team=mk");
         $this->loadArguments($args);
         Common::logg("Checking database structure against mapper configuration");
         $this->container = Bootstrap::boot();

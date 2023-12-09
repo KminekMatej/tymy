@@ -71,7 +71,7 @@ class EventTypeManager extends BaseManager
         return $eventType;
     }
 
-    protected function getClassName(): string
+    public function getClassName(): string
     {
         return EventType::class;
     }

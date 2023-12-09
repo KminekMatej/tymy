@@ -54,7 +54,7 @@ abstract class BaseManager
 
     abstract public function delete(int $resourceId, ?int $subResourceId = null): int;
 
-    abstract protected function getClassName(): string;
+    abstract public function getClassName(): string;
 
     abstract public function canRead(BaseModel $entity, int $userId): bool;
 
