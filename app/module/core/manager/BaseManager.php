@@ -724,6 +724,9 @@ abstract class BaseManager
             case Field::TYPE_DATETIME:
                 $value = !empty($value) ? DateHelper::createLc($value) : null; //format DateTime only if its not null or empty
                 break;
+            case Field::TYPE_DATE:
+                $value = $value ? DateHelper::createLc($value)->format(BaseModel::DATE_ENG_FORMAT) : $value; //format DateTime only if its not null or empty
+                break;
             case Field::TYPE_FLOAT:
                 if (is_numeric($value)) {
                     $value = round(floatval($value), 6);
@@ -731,6 +734,11 @@ abstract class BaseManager
                     $value = null;
                 } else {    //float value not supported, empty string or null - simply skip it then
                     return;
+                }
+                break;
+            case Field::TYPE_STRING:
+                if ($field->getMaxLength() && $value !== null && strlen($value) > $field->getMaxLength()) {
+                    $value = substr($value, 0, $field->getMaxLength());
                 }
                 break;
         }
