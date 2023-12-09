@@ -44,7 +44,7 @@ class Field
      */
     public static function string(?int $maxLength = null): \Tymy\Module\Core\Model\Field
     {
-        return (new Field())->setType(self::TYPE_STRING);
+        return (new Field())->setType(self::TYPE_STRING)->setMaxLength($maxLength);
     }
 
     /**
@@ -53,6 +53,16 @@ class Field
     public static function datetime(): \Tymy\Module\Core\Model\Field
     {
         return (new Field())->setType(self::TYPE_DATETIME);
+    }
+
+    /**
+     * Return new field as date type
+     *
+     * @return Field
+     */
+    public static function date()
+    {
+        return (new Field())->setType(self::TYPE_DATE);
     }
 
     /**
