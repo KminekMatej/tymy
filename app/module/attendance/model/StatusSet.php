@@ -13,6 +13,7 @@ use Tymy\Module\Core\Model\BaseModel;
 class StatusSet extends BaseModel
 {
     public const TABLE = "status_set";
+    public const MODULE = "attendance";
     public const PRE = "pre";
     public const POST = "post";
 
