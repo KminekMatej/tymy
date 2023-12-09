@@ -3,6 +3,7 @@
 namespace Tymy\Module\PushNotification\Model;
 
 use JsonSerializable;
+use Nette\Utils\Strings;
 
 /**
  * Description of PushNotification
@@ -130,8 +131,8 @@ class PushNotification implements JsonSerializable
         $array = [
             "userId" => $this->userId,
             "teamId" => $this->teamId,
-            "title" => \Nette\Utils\Strings::normalize($this->title),
-            "message" => \Nette\Utils\Strings::normalize($this->message),
+            "title" => Strings::normalize(Strings::fixEncoding($this->title)),
+            "message" => Strings::normalize(Strings::fixEncoding($this->message)),
         ];
 
         if (isset($this->imageUrl)) {
