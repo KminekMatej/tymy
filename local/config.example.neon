@@ -5,11 +5,15 @@ database:
         user: 'database-user'
         password: 'database-password'
         reflection: conventional
+        options:
+            lazy: true
     team:
         dsn: 'mysql:host=database-team-host;dbname=database-team-name'
         user: 'database-user'
         password: 'database-password'
         reflection: conventional
+        options:
+            lazy: true
 mail:
 	smtp: true
 	host: smtp-host
