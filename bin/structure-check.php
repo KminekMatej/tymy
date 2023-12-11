@@ -31,6 +31,7 @@ class StructureChecker
     private string $tmpDir;
     private array $modules;
     private bool $fix = false;
+    private bool $checkMainDb = true;
     private int $errCount = 0;
     private Container $container;
     private Explorer $teamDatabase;
@@ -100,6 +101,9 @@ class StructureChecker
                 TeamManager::class
                 ])
         ) {
+            if (!$this->checkMainDb) {
+                return;
+            }
             $columns = $this->mainDatabase->getStructure()->getColumns($table);
         } else {
             $columns = $this->teamDatabase->getStructure()->getColumns($table);
@@ -514,9 +518,12 @@ class StructureChecker
         . "2) If mapper type differs from database type.\n\n"
         . "Usage: php mapper-check.php [parameters]\n\n"
         . "Parameters: \n\n"
-        . "-h | --help ....... Prints this help and exits\n"
-        . "-f | --fix ........ Attempt to automatically fix found errors.\n"
-        . "-m | --module ..... Process only selected modules (modules can be separated using comma)\n";
+        . "-h | --help ...................... Prints this help and exits\n"
+        . "-f | --fix ....................... Attempt to automatically fix found errors.\n"
+        . "-v | --verbose ................... Be more verbose.\n"
+        . "-w | --without-main-database ..... Skip checking main database (tymy_cz).\n"
+        . "-f | --fix ....................... Attempt to automatically fix found errors.\n"
+        . "-m | --module .................... Process only selected modules (modules can be separated using comma)\n";
     }
 
     /**
@@ -542,6 +549,9 @@ class StructureChecker
                     break;
                 case in_array($arg, ["-f", "--fix"]):
                     $this->fix = true;
+                    break;
+                case in_array($arg, ["-w", "--without-main-database"]):
+                    $this->checkMainDb = false;
                     break;
                 case in_array($arg, ["-m", "--module"]):
                     $this->modules = explode(",", array_shift($args));
