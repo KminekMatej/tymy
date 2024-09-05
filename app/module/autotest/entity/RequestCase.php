@@ -239,8 +239,7 @@ abstract class RequestCase extends TestCase
             $httpRequest->getMethod(),
             $params,
             $httpRequest->getPost(),
-            $httpRequest->getFiles(),
-            [Request::SECURED => $httpRequest->isSecured()]
+            $httpRequest->getFiles()
         );
     }
 
