@@ -22,6 +22,7 @@
         "nette/mail": "^4",
         "nette/security": "^3",
         "nette/utils": "^4",
+        "tracy/tracy": "^2",
         "contributte/translation": "^2",
         "globalcitizen/php-iban": "^4.0",
         "minishlink/web-push": "^9",
@@ -34,7 +35,7 @@
         "lcobucci/jwt": "4.1.5",
         "vojir/nette-csv-response": "v1.2",
         "contributte/sentry": "^0.3.0",
-        "phpoffice/phpspreadsheet": "^1"
+        "phpoffice/phpspreadsheet": "^2"
     },
     "suggest": {
         "ext-memcached": "To use Memcached as CacheStorage (default for tymy.cz). If you dont want to use MemCached, override cache storage in your local/config.neon"
