@@ -25,6 +25,7 @@ tracy:
     fromEmail: robot@tymy.cz
 extensions:
     translation: Contributte\Translation\DI\TranslationExtension
+    sentry: Contributte\Sentry\DI\SentryExtension
 translation:
     locales:
         whitelist: [cs, en, fr, pl]
@@ -39,3 +40,10 @@ parameters:
             hell-boy: 'Hellboy'
             silver-surfer: 'Silver surfer'
             black-panther: 'Black panther'
+
+sentry:
+    enable: %productionMode% # enabled only on production
+    client:
+        dsn: https://1a0f09555e7a4ca79575231e42e56a38@glitch.boost.space/7
+        tags:
+            team: %team%

@@ -29,7 +29,7 @@ class AvatarPresenter extends SecuredPresenter
         try {
             $this->avatarManager->uploadAvatarBase64($this->requestData, $resourceId);
         } catch (Exception $exc) {
-            $this->handleException($exc);
+            $this->respondByException($exc);
         }
 
         $this->respondOk();

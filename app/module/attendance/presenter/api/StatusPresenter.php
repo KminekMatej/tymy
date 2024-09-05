@@ -61,7 +61,7 @@ class StatusPresenter extends SecuredPresenter
         try {
             $record = $this->statusSetManager->read($resourceId, $subResourceId);
         } catch (Exception $exc) {
-            $this->handleException($exc);
+            $this->respondByException($exc);
         }
 
         $this->respondOk($record->jsonSerialize());
@@ -73,7 +73,7 @@ class StatusPresenter extends SecuredPresenter
         try {
             $statuses = $this->statusSetManager->getListUserAllowed($this->user->getId());
         } catch (Exception $exc) {
-            $this->handleException($exc);
+            $this->respondByException($exc);
         }
 
         $this->respondOk($this->arrayToJson($statuses));
@@ -85,7 +85,7 @@ class StatusPresenter extends SecuredPresenter
         try {
             $created = $this->statusManager->create($this->requestData, $resourceId);
         } catch (Exception $exc) {
-            $this->handleException($exc);
+            $this->respondByException($exc);
         }
 
         $this->respondOkCreated($created->jsonSerialize());
@@ -97,7 +97,7 @@ class StatusPresenter extends SecuredPresenter
         try {
             $updated = $this->statusManager->update($this->requestData, $resourceId, $subResourceId);
         } catch (Exception $exc) {
-            $this->handleException($exc);
+            $this->respondByException($exc);
         }
 
         $this->respondOk($updated->jsonSerialize());
@@ -109,7 +109,7 @@ class StatusPresenter extends SecuredPresenter
         try {
             $deletedId = $this->statusManager->delete($resourceId, $subResourceId);
         } catch (Exception $exc) {
-            $this->handleException($exc);
+            $this->respondByException($exc);
         }
 
         $this->respondDeleted($deletedId);
@@ -121,7 +121,7 @@ class StatusPresenter extends SecuredPresenter
         try {
             $created = $this->statusSetManager->create($this->requestData, $resourceId);
         } catch (Exception $exc) {
-            $this->handleException($exc);
+            $this->respondByException($exc);
         }
 
         $this->respondOkCreated($created->jsonSerialize());
@@ -133,7 +133,7 @@ class StatusPresenter extends SecuredPresenter
         try {
             $updated = $this->statusSetManager->update($this->requestData, $resourceId, $subResourceId);
         } catch (Exception $exc) {
-            $this->handleException($exc);
+            $this->respondByException($exc);
         }
 
         $this->respondOk($updated->jsonSerialize());
@@ -145,7 +145,7 @@ class StatusPresenter extends SecuredPresenter
         try {
             $deletedId = $this->statusSetManager->delete($resourceId, $subResourceId);
         } catch (Exception $exc) {
-            $this->handleException($exc);
+            $this->respondByException($exc);
         }
 
         $this->respondDeleted($deletedId);

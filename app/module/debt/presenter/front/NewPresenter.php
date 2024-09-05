@@ -53,7 +53,7 @@ class NewPresenter extends DebtBasePresenter
             $this->flashMessage($this->translator->translate("common.alerts.debtAdded"), "success");
             $this->redirect(":Debt:Default:", $createdDebt->getWebName());
         } catch (TymyResponse $tResp) {
-            $this->handleTymyResponse($tResp);
+            $this->respondByTymyResponse($tResp);
         }
     }
 }

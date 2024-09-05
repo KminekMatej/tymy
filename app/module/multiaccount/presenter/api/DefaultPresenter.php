@@ -58,7 +58,7 @@ class DefaultPresenter extends SecuredPresenter
         try {
             $this->manager->create($this->requestData, $team);
         } catch (Exception $exc) {
-            $this->handleException($exc);
+            $this->respondByException($exc);
         }
 
         $this->respondOkCreated();
@@ -70,7 +70,7 @@ class DefaultPresenter extends SecuredPresenter
             assert($this->manager instanceof MultiaccountManager);
             $this->manager->delete($team);
         } catch (Exception $exc) {
-            $this->handleException($exc);
+            $this->respondByException($exc);
         }
 
         $this->respondOk();

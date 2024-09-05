@@ -31,7 +31,7 @@ class RegisterPresenter extends BasePresenter
         } catch (InvalidArgumentException $exc) {
             $this->respondBadRequest($exc->getMessage());
         } catch (\Exception $exc) {
-            $this->handleException($exc);
+            $this->respondByException($exc);
         }
 
         $this->respondOkCreated($registeredUser->jsonSerialize());

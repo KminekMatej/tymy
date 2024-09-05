@@ -88,7 +88,7 @@ class PermissionPresenter extends SettingBasePresenter
             $this->flashMessage($this->translator->translate("common.alerts.created"), 'success');
             $this->redirect(":Setting:Permission:", $createdPermission->getWebname());
         } catch (TymyResponse $tResp) {
-            $this->handleTymyResponse($tResp);
+            $this->respondByTymyResponse($tResp);
         }
     }
 
@@ -105,7 +105,7 @@ class PermissionPresenter extends SettingBasePresenter
                 $this->redirect(":Setting:Permission:", $updatedPermission->getName());
             }
         } catch (TymyResponse $tResp) {
-            $this->handleTymyResponse($tResp);
+            $this->respondByTymyResponse($tResp);
         }
     }
 
@@ -118,7 +118,7 @@ class PermissionPresenter extends SettingBasePresenter
             $this->flashMessage($this->translator->translate("common.alerts.deleted"), 'success');
             $this->redirect(":Setting:Permission:");
         } catch (TymyResponse $tResp) {
-            $this->handleTymyResponse($tResp);
+            $this->respondByTymyResponse($tResp);
         }
     }
 

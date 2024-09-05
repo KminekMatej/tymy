@@ -133,7 +133,7 @@ class DiscussionPresenter extends SecuredPresenter
         try {
             $this->postManager->update($updates, $discussionId, $postId);
         } catch (TymyResponse $tResp) {
-            $this->handleTymyResponse($tResp);
+            $this->respondByTymyResponse($tResp);
         }
 
         $this->setView('default');
@@ -145,7 +145,7 @@ class DiscussionPresenter extends SecuredPresenter
             $this->postManager->delete($discussionId, $postId);
             $this->redirect(":Discussion:Discussion:", ["discussion" => $discussionId, "page" => $currentPage]);
         } catch (TymyResponse $tResp) {
-            $this->handleTymyResponse($tResp);
+            $this->respondByTymyResponse($tResp);
         }
     }
 
@@ -155,7 +155,7 @@ class DiscussionPresenter extends SecuredPresenter
             $this->postManager->stickPost($postId, $discussionId, (bool) $sticky);
             $this->redirect(":Discussion:Discussion:", ["discussion" => $discussionId, "page" => 1]);
         } catch (TymyResponse $tResp) {
-            $this->handleTymyResponse($tResp);
+            $this->respondByTymyResponse($tResp);
         }
     }
 

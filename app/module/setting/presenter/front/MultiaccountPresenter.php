@@ -22,7 +22,7 @@ class MultiaccountPresenter extends SettingBasePresenter
             $this->multiaccountManager->delete($team);
             $this->flashMessage($this->translator->translate("common.alerts.multiaccountRemoved", null, ['team' => $team]), "success");
         } catch (TymyResponse $tResp) {
-            $this->handleTymyResponse($tResp);
+            $this->respondByTymyResponse($tResp);
         }
 
         $this->redirect(":Setting:Multiaccount:");
@@ -45,7 +45,7 @@ class MultiaccountPresenter extends SettingBasePresenter
 
                 $this->flashMessage($this->translator->translate("common.alerts.multiaccountAdded", null, ["team" => $values->sysName]));
             } catch (TymyResponse $tResp) {
-                $this->handleTymyResponse($tResp);
+                $this->respondByTymyResponse($tResp);
             }
             $this->redirect(":Setting:Multiaccount:");
         };

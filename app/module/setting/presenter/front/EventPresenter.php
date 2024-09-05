@@ -85,7 +85,7 @@ class EventPresenter extends SettingBasePresenter
         try {
             $this->eventManager->delete($eventId);
         } catch (TymyResponse $tResp) {
-            $this->handleTymyResponse($tResp);
+            $this->respondByTymyResponse($tResp);
         }
         $this->redirect(':Setting:Event:');
     }
@@ -116,7 +116,7 @@ class EventPresenter extends SettingBasePresenter
         try {
             $this->eventManager->update((array) $values, $values->id);
         } catch (TymyResponse $tResp) {
-            $this->handleTymyResponse($tResp);
+            $this->respondByTymyResponse($tResp);
         }
 
         if (!$this->isAjax()) {
@@ -156,7 +156,7 @@ class EventPresenter extends SettingBasePresenter
                 $createdEvents[] = $this->eventManager->create($item);
             }
         } catch (TymyResponse $tResp) {
-            $this->handleTymyResponse($tResp);
+            $this->respondByTymyResponse($tResp);
         }
 
         $this->redirect(':Setting:Event:');

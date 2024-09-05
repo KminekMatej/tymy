@@ -118,7 +118,7 @@ class PlayerPresenter extends SecuredPresenter
         try {
             $this->userManager->delete($userId);
         } catch (TymyResponse $tResp) {
-            $this->handleTymyResponse($tResp);
+            $this->respondByTymyResponse($tResp);
             $this->redirect('this');
         }
 
@@ -139,7 +139,7 @@ class PlayerPresenter extends SecuredPresenter
             try {
                 $this->avatarManager->uploadAvatarImage($image, $type, $this->user->getId());
             } catch (TymyResponse $tResp) {
-                $this->handleTymyResponse($tResp);
+                $this->respondByTymyResponse($tResp);
                 $this->redirect('this');
             }
 
@@ -181,7 +181,7 @@ class PlayerPresenter extends SecuredPresenter
                 $this->redirect(':Team:Default:');
             }
         } catch (TymyResponse $tResp) {
-            $this->handleTymyResponse($tResp);
+            $this->respondByTymyResponse($tResp);
         }
 
         $this->redirect('this');

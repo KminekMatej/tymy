@@ -37,8 +37,8 @@ class MockRequestFactory extends RequestFactory
 
             return new Request(
                 $urlScript,
-                null,
-                null,
+                [],
+                [],
                 $request->getCookies(),
                 $request->getHeaders(),
                 $method,

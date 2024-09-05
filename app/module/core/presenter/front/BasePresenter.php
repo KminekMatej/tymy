@@ -60,7 +60,7 @@ abstract class BasePresenter extends RootPresenter
         return [Bootstrap::MODULES_DIR . "/core/presenter/templates/@layout.latte"];
     }
 
-    protected function handleTymyResponse(TymyResponse $tResp)
+    protected function respondByTymyResponse(TymyResponse $tResp)
     {
         $this->flashMessage($tResp->getMessage(), $tResp->getSuccess() ? 'success' : 'warning');
         $this->redrawControl("flashes");

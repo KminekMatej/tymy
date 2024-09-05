@@ -67,7 +67,7 @@ class OptionPresenter extends SecuredPresenter
             assert($this->manager instanceof OptionManager);
             $created = $this->manager->createMultiple($this->requestData, $resourceId);
         } catch (Exception $exc) {
-            $this->handleException($exc);
+            $this->respondByException($exc);
         }
 
         $this->respondOkCreated($this->arrayToJson($created));

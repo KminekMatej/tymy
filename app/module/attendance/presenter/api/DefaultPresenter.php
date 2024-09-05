@@ -45,7 +45,7 @@ class DefaultPresenter extends SecuredPresenter
         try {
             $created = $this->manager->create($data);
         } catch (Exception $exc) {
-            $this->handleException($exc);
+            $this->respondByException($exc);
         }
 
         return $created;

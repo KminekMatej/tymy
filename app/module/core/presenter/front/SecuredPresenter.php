@@ -2,7 +2,7 @@
 
 namespace Tymy\Module\Core\Presenter\Front;
 
-use Nette\Security\IUserStorage;
+use Nette\Security\User as NetteUser;
 use Tracy\Debugger;
 use Tymy\Module\Core\Component\NavbarControl;
 use Tymy\Module\Core\Model\SettingMenu;
@@ -16,6 +16,8 @@ use Tymy\Module\Poll\Manager\PollManager;
 use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\User\Manager\UserManager;
 use Tymy\Module\User\Model\User;
+
+use function count;
 
 /**
  * Description of SecuredPresenter
@@ -85,7 +87,7 @@ class SecuredPresenter extends BasePresenter
         parent::startup();
         Debugger::$maxDepth = 7;
         if (!$this->getUser()->isLoggedIn()) {
-            if ($this->getUser()->getLogoutReason() === IUserStorage::INACTIVITY) {
+            if ($this->getUser()->getLogoutReason() === NetteUser::LogoutInactivity) {
                 $this->flashMessage($this->translator->translate("common.alerts.inactivityLogout"));
             }
             $this->redirect(':Sign:In:');
