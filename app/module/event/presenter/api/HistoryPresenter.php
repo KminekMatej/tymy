@@ -35,7 +35,7 @@ class HistoryPresenter extends SecuredPresenter
             assert($this->manager instanceof HistoryManager);
             $records = $this->manager->readForEvent($eventId);
         } catch (Exception $exc) {
-            $this->handleException($exc);
+            $this->respondByException($exc);
         }
 
         $this->respondOk($this->arrayToJson($records));

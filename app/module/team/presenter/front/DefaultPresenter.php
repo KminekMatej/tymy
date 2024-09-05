@@ -132,7 +132,7 @@ class DefaultPresenter extends SecuredPresenter
         try {
             $this->userManager->update(["status" => User::STATUS_PLAYER, "canLogin" => true], $userId);
         } catch (TymyResponse $tResp) {
-            $this->handleTymyResponse($tResp);
+            $this->respondByTymyResponse($tResp);
             $this->redirect('this');
         }
 
@@ -145,7 +145,7 @@ class DefaultPresenter extends SecuredPresenter
         try {
             $this->userManager->delete($userId);
         } catch (TymyResponse $tResp) {
-            $this->handleTymyResponse($tResp);
+            $this->respondByTymyResponse($tResp);
             $this->redirect('this');
         }
 

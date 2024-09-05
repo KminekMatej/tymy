@@ -61,7 +61,7 @@ class PostPresenter extends SecuredPresenter
             assert($this->manager instanceof PostManager);
             $this->manager->react($resourceId, $subResourceId, $this->user->getId(), $this->requestData, $remove);
         } catch (Exception $exc) {
-            $this->handleException($exc);
+            $this->respondByException($exc);
         }
 
         $this->respondOk();
@@ -90,7 +90,7 @@ class PostPresenter extends SecuredPresenter
             assert($this->manager instanceof PostManager);
             $posts = $this->manager->mode($resourceId, $page, "html", $this->getRequest()->getParameter("search"), $this->getRequest()->getParameter("suser"), $this->getRequest()->getParameter("jump2date"));
         } catch (Exception $exc) {
-            $this->handleException($exc);
+            $this->respondByException($exc);
         }
 
         $this->respondOk($posts->jsonSerialize());

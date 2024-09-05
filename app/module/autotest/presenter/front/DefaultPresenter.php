@@ -117,7 +117,7 @@ class DefaultPresenter extends BasePresenter
         try {
             $this->testsManager->runTests($folder);
         } catch (Exception $exc) {
-            $this->handleException($exc);
+            $this->respondByException($exc);
         }
 
         return ["console" => file_get_contents(TestsManager::OUT_CONSOLE), "junit" => file_get_contents(TestsManager::OUT_JUNIT)];

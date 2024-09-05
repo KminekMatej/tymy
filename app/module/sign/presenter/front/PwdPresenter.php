@@ -30,7 +30,7 @@ class PwdPresenter extends BasePresenter
                 $this->flashMessage($this->translator->translate("common.alerts.pwdResetSuccesfull"));
                 $this->redirect(':Sign:Pwd:new', ["pwd" => $newPassword]);
             } catch (TymyResponse $tResp) {
-                $this->handleTymyResponse($tResp);
+                $this->respondByTymyResponse($tResp);
             }
         }
     }
@@ -52,7 +52,7 @@ class PwdPresenter extends BasePresenter
                 $this->flashMessage($this->translator->translate("common.alerts.resetCodeSent"));
                 $this->redirect(':Sign:Pwd:reset');
             } catch (TymyResponse $tResp) {
-                $this->handleTymyResponse($tResp);
+                $this->respondByTymyResponse($tResp);
             }
         };
         return $form;
@@ -70,7 +70,7 @@ class PwdPresenter extends BasePresenter
                 $this->flashMessage($this->translator->translate("common.alerts.pwdResetSuccesfull"));
                 $this->redirect(':Sign:Pwd:new', ["pwd" => $newPassword]);
             } catch (TymyResponse $tResp) {
-                $this->handleTymyResponse($tResp);
+                $this->respondByTymyResponse($tResp);
             }
         };
         return $form;

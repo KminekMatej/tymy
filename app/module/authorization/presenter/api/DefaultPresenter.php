@@ -39,7 +39,7 @@ class DefaultPresenter extends BasePresenter
         try {
             $rights = $this->AuthorizationManager->getListUserAllowed($this->userManager->getById($userId));
         } catch (\Exception $exc) {
-            $this->handleException($exc);
+            $this->respondByException($exc);
         }
 
         $this->respondOk($rights);

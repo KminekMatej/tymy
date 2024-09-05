@@ -94,7 +94,7 @@ class PollPresenter extends SettingBasePresenter
         try {
             $this->pollManager->delete($pollId);
         } catch (TymyResponse $tResp) {
-            $this->handleTymyResponse($tResp);
+            $this->respondByTymyResponse($tResp);
         }
 
         $this->redirect(':Setting:Poll:');
@@ -115,7 +115,7 @@ class PollPresenter extends SettingBasePresenter
                 $this->pollManager->update((array) $values, $values->id) :
                 $this->pollManager->create((array) $values);
         } catch (TymyResponse $tResp) {
-            $this->handleTymyResponse($tResp);
+            $this->respondByTymyResponse($tResp);
             $this->redirect(':Setting:Poll:');
         }
 
@@ -146,7 +146,7 @@ class PollPresenter extends SettingBasePresenter
                             $this->optionManager->update($optionData, $poll->getId(), $id) :
                             $this->optionManager->create($optionData, $poll->getId());
                 } catch (TymyResponse $tResp) {
-                    $this->handleTymyResponse($tResp);
+                    $this->respondByTymyResponse($tResp);
                 }
             }
         }
@@ -155,7 +155,7 @@ class PollPresenter extends SettingBasePresenter
             try {
                 $this->optionManager->deleteOptions($poll->getId(), $optionsToDel);
             } catch (TymyResponse $tResp) {
-                $this->handleTymyResponse($tResp);
+                $this->respondByTymyResponse($tResp);
             }
         }
 

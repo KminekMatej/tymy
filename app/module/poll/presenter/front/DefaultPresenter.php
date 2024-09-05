@@ -75,7 +75,7 @@ class DefaultPresenter extends SecuredPresenter
         try {
             $this->voteManager->setPoll($poll)->create($votes, $pollId);
         } catch (TymyResponse $tResp) {
-            $this->handleTymyResponse($tResp);
+            $this->respondByTymyResponse($tResp);
         }
     }
 }

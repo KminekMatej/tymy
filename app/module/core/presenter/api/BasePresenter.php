@@ -104,7 +104,7 @@ class BasePresenter extends RootPresenter
         try {
             $record = $this->manager->read($resourceId, $subResourceId);
         } catch (\Exception $exc) {
-            $this->handleException($exc);
+            $this->respondByException($exc);
         }
 
         $this->respondOk($record->jsonSerialize());
@@ -116,7 +116,7 @@ class BasePresenter extends RootPresenter
         try {
             $created = $this->manager->create($this->requestData, $resourceId);
         } catch (\Exception $exc) {
-            $this->handleException($exc);
+            $this->respondByException($exc);
         }
 
         $this->respondOkCreated($created->jsonSerialize());
@@ -128,7 +128,7 @@ class BasePresenter extends RootPresenter
         try {
             $updated = $this->manager->update($this->requestData, $resourceId, $subResourceId);
         } catch (\Exception $exc) {
-            $this->handleException($exc);
+            $this->respondByException($exc);
         }
 
         $this->respondOk($updated->jsonSerialize());
@@ -140,7 +140,7 @@ class BasePresenter extends RootPresenter
         try {
             $deletedId = $this->manager->delete($resourceId, $subResourceId);
         } catch (\Exception $exc) {
-            $this->handleException($exc);
+            $this->respondByException($exc);
         }
 
         $this->respondDeleted($deletedId);
@@ -149,7 +149,7 @@ class BasePresenter extends RootPresenter
     /**
      * Simple exception handler. If any exception gets throws, logs message into exception.log file and then either responds proper response, or continue throwing the response
      */
-    protected function handleException(Throwable $exc): void
+    protected function respondByException(Throwable $exc): void
     {
         if ($exc instanceof AbortException) {
             throw $exc; //when its aborted, simply continue with abortion
