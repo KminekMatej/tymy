@@ -11,11 +11,20 @@
         }
     ],
     "require": {
-        "php": ">=8.1",
-        "nette/nette": "^3.1",
+        "php": ">=8.3",
+        "nette/application": "^3",
+        "nette/bootstrap": "^3",
+        "nette/caching": "^3",
+        "nette/database": "^3",
+        "nette/di": "^3",
+        "nette/forms": "^3",
+        "nette/http": "^3",
+        "nette/mail": "^4",
+        "nette/security": "^3",
+        "nette/utils": "^4",
         "contributte/translation": "^2",
         "globalcitizen/php-iban": "^4.0",
-        "minishlink/web-push": "^7",
+        "minishlink/web-push": "^9",
         "ext-curl": "*",
         "ext-zip": "*",
         "ext-gd": "*",
@@ -41,6 +50,9 @@
     },
     "minimum-stability": "stable",
     "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        },
         "discard-changes": true,
         "secure-http": false
     }
