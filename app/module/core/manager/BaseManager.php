@@ -748,7 +748,7 @@ abstract class BaseManager
                 $value = !empty($value) ? DateHelper::createLc($value) : null; //format DateTime only if its not null or empty
                 break;
             case Field::TYPE_DATE:
-                $value = $value ? DateHelper::createLc($value)->format(BaseModel::DATE_ENG_FORMAT) : $value; //format DateTime only if its not null or empty
+                $value = $value ? DateHelper::createLc($value)->format(BaseModel::DATE_ENG_FORMAT) : null; //format DateTime only if its not null or empty
                 break;
             case Field::TYPE_FLOAT:
                 if (is_numeric($value)) {
