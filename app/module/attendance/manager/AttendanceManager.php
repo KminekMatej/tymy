@@ -301,9 +301,9 @@ class AttendanceManager extends BaseManager
             $this->responder->E4005_OBJECT_NOT_FOUND(Event::MODULE, $data["eventId"]);
         }
 
-        $existingAttendance = $this->getByEventUserId($data["eventId"], $data["userId"]);
-
         $this->allowCreate($data); //allowCreate checks right for both creating and updating already created attendance
+
+        $existingAttendance = $this->getByEventUserId($data["eventId"], $data["userId"]);
         if (!$existingAttendance instanceof Attendance) {
             $created = $this->createByArray($data);
             if ($created && isset($data["preStatusId"])) {
