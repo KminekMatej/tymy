@@ -3,6 +3,8 @@
 namespace Tymy\Module\Multiaccount\Manager;
 
 use Contributte\Translation\Translator;
+use Nette\Database\Table\ActiveRow;
+use Nette\Database\UniqueConstraintViolationException;
 use Nette\NotImplementedException;
 use Nette\Utils\DateTime;
 use Tymy\Module\Core\Factory\ManagerFactory;
@@ -74,7 +76,7 @@ class MultiaccountManager extends BaseManager
         $sourceTeam = $this->teamManager->getTeam();
         $sourceUserId = $this->user->getId();
 
-        if (!$targetTeam instanceof \Tymy\Module\Team\Model\Team) {
+        if (!$targetTeam instanceof Team) {
             $this->respondNotFound();
         }
 
@@ -136,11 +138,16 @@ class MultiaccountManager extends BaseManager
             $accountId = $this->mainDatabase->table($this->getTable())->select("MAX(account_id) + 1 AS nextId")->fetch()->nextId;
         }
 
-        $this->mainDatabase->table($this->getTable())->insert([
-            "account_id" => $accountId,
-            "user_id" => $userId,
-            "team_id" => $teamId,
-        ]);
+        try {
+            $this->mainDatabase->table($this->getTable())->insert([
+                "account_id" => $accountId,
+                "user_id" => $userId,
+                "team_id" => $teamId,
+            ]);
+        } catch (UniqueConstraintViolationException $exc) {
+            //this multiaccount already exists - simply return the created id
+            return $accountId;
+        }
 
         return $accountId;
     }
@@ -161,7 +168,7 @@ class MultiaccountManager extends BaseManager
         //delete multi account
         $targetTeam = $this->teamManager->getBySysname($resourceId);
 
-        if (!$targetTeam instanceof \Tymy\Module\Team\Model\Team) {
+        if (!$targetTeam instanceof Team) {
             $this->responder->E4005_OBJECT_NOT_FOUND(Team::MODULE, $resourceId);
         }
 
@@ -222,7 +229,7 @@ class MultiaccountManager extends BaseManager
     {
         $targetTeam = $this->teamManager->getBySysname($targetTeamSysName);
 
-        if (!$targetTeam instanceof \Tymy\Module\Team\Model\Team) {
+        if (!$targetTeam instanceof Team) {
             $this->respondNotFound();
         }
 
@@ -256,7 +263,7 @@ class MultiaccountManager extends BaseManager
             ->where("team_id", $teamId)
             ->fetch();
 
-        if (!$row instanceof \Nette\Database\Table\ActiveRow) {
+        if (!$row instanceof ActiveRow) {
             $this->responder->E4005_OBJECT_NOT_FOUND(Team::MODULE, $teamId);
         }
 
