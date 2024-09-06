@@ -16,6 +16,16 @@ jobs:
           
         - name: "Compose"
           run: composer install --no-interaction
+  lint:
+      needs: setup
+      name: Linter
+      runs-on: self-hosted
+      steps:          
+        - name: "Latte-Lint"
+          run: vendor/bin/latte-lint app
+      steps:          
+        - name: "Neon-Lint"
+          run: vendor/bin/neon-lint app
   PhpCS:
       needs: setup
       name: PHP Code Sniffer
