@@ -57,7 +57,7 @@ class PollPresenter extends SettingBasePresenter
                 $poll->getCaption(),
                 $poll->getDescription(),
                 $this->translator->translate("poll." . strtolower($poll->getStatus())),
-                $poll->getCreatedAt()->format(BaseModel::DATE_CZECH_FORMAT) . ", " . $this->userManager->getById($poll->getCreatedById())->getDisplayName(),
+                $poll->getCreatedAt()->format(BaseModel::DATE_CZECH_FORMAT) . ($poll->getCreatedById() ? ", " . $this->userManager->getById($poll->getCreatedById())?->getDisplayName() : ""),
             ]);
         }
 
