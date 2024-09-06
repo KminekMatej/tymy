@@ -22,10 +22,6 @@ class ErrorPresenter implements IPresenter
     {
     }
 
-
-    /**
-     * @return IResponse
-     */
     public function run(Request $request): Response
     {
         $e = $request->getParameter('exception');

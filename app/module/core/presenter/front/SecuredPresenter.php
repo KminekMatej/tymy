@@ -106,7 +106,7 @@ class SecuredPresenter extends BasePresenter
     protected function parseIdFromWebname(string $webName): ?int
     {
         if (strpos($webName, "-")) {
-            return substr($webName, 0, strpos($webName, "-"));
+            return intval(substr($webName, 0, strpos($webName, "-")));
         }
         if ((int) $webName !== 0) {
             return (int) $webName;
