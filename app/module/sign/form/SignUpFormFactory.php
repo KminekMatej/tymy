@@ -5,8 +5,10 @@ namespace Tymy\Module\Sign\Form;
 use Contributte\Translation\Translator;
 use Nette;
 use Nette\Application\UI\Form;
+use Nette\Database\UniqueConstraintViolationException;
 use Nette\Security\SimpleIdentity;
 use Tymy\Module\Core\Exception\MissingInputException;
+use Tymy\Module\Core\Helper\StringHelper;
 use Tymy\Module\User\Manager\InvitationManager;
 use Tymy\Module\User\Manager\UserManager;
 use Tymy\Module\User\Model\Invitation;
@@ -93,6 +95,13 @@ class SignUpFormFactory
                 return;
             } catch (MissingInputException $exc) {
                 $form[$exc->getMessage()]->addError("This field is required"); /* @phpstan-ignore-line */
+                return;
+            } catch (UniqueConstraintViolationException $exc) {
+                if (preg_match("/SQLSTATE\[23000\]: Integrity constraint violation: 1062 Duplicate entry \'(.*?)\' for key \'(.*?)\'/m", $exc->getMessage(), $matches)) {
+                    $form[$exc->getMessage()]->addError("Cannot create user. Field '" . StringHelper::toCamelCase($matches[2]) . " is already used'");
+                } else {
+                    $form[$exc->getMessage()]->addError("Cannot create user. Already exists'");
+                }
                 return;
             }
             $onSuccess($identity);
