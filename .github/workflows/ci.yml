@@ -23,7 +23,6 @@ jobs:
       steps:          
         - name: "Latte-Lint"
           run: vendor/bin/latte-lint app
-      steps:          
         - name: "Neon-Lint"
           run: vendor/bin/neon-lint app
   PhpCS:
