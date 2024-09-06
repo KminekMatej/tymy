@@ -11,15 +11,14 @@ use Tymy\Module\Attendance\Model\Status;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Event\Model\Event;
 use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Manager\UserManager;
 use Tymy\Module\User\Model\User;
 
 /**
- * Description of HistoryManager
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 9. 10. 2020
+ * @extends BaseManager<History>
  */
 class HistoryManager extends BaseManager
 {
@@ -34,7 +33,7 @@ class HistoryManager extends BaseManager
      * @param ActiveRow|null $row
      * @return History|null
      */
-    public function map(?IRow $row, bool $force = false): ?BaseModel
+    public function map(?IRow $row, bool $force = false): ?History
     {
         if ($row === null) {
             return null;
@@ -64,7 +63,7 @@ class HistoryManager extends BaseManager
     }
 
     /**
-     * @return \Tymy\Module\Core\Model\Field[]
+     * @return Field[]
      */
     public function getScheme(): array
     {
@@ -91,7 +90,7 @@ class HistoryManager extends BaseManager
     protected function allowRead(?int $recordId = null): void
     {
         $eventRow = $this->database->table(Event::TABLE)->where("id", $recordId)->fetch();
-        if (!$eventRow instanceof \Nette\Database\Table\ActiveRow) {
+        if (!$eventRow instanceof ActiveRow) {
             $this->responder->E4005_OBJECT_NOT_FOUND(Event::MODULE, $recordId);
         }
 
@@ -135,7 +134,7 @@ class HistoryManager extends BaseManager
     }
 
     /**
-     * @return \Tymy\Module\Attendance\Model\History[]
+     * @return History[]
      */
     public function readForEvent(int $eventId): array
     {

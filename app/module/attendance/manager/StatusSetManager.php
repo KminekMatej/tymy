@@ -18,9 +18,7 @@ use Tymy\Module\Discussion\Model\Discussion;
 use Tymy\Module\User\Manager\UserManager;
 
 /**
- * Description of StatusSetManager
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 4. 11. 2020
+ * @extends BaseManager<StatusSet>
  */
 class StatusSetManager extends BaseManager
 {
@@ -162,7 +160,7 @@ class StatusSetManager extends BaseManager
 
     /**
      * Get array of StatusSet objects which user is allowed to read
-     * @return Discussion[]
+     * @return StatusSet[]
      */
     public function getListUserAllowed(int $userId): array
     {

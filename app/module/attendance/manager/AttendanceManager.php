@@ -22,9 +22,7 @@ use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Manager\UserManager;
 
 /**
- * Description of AttendanceManager
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 21. 9. 2020
+ * @extends BaseManager<Attendance>
  */
 class AttendanceManager extends BaseManager
 {
@@ -47,7 +45,7 @@ class AttendanceManager extends BaseManager
 
     /**
      * Get array of attendanced related to events
-     * @return array<int|string, array<\Tymy\Module\Attendance\Model\Attendance|null>>
+     * @return array<int|string, array<Attendance|null>>
      */
     public function getByEvents(array $eventIds): array
     {
@@ -281,7 +279,12 @@ class AttendanceManager extends BaseManager
         ]);
     }
 
-    public function create(array $data, ?int $resourceId = null): BaseModel
+    /**
+     * @param array $data
+     * @param int|null $resourceId
+     * @return Attendance
+     */
+    public function create(array $data, ?int $resourceId = null): Attendance
     {
         if (empty($data)) {
             $this->respondBadRequest("No attendance entry provided");
@@ -302,7 +305,7 @@ class AttendanceManager extends BaseManager
         $existingAttendance = $this->getByEventUserId($data["eventId"], $data["userId"]);
 
         $this->allowCreate($data); //allowCreate checks right for both creating and updating already created attendance
-        if (!$existingAttendance instanceof \Tymy\Module\Attendance\Model\Attendance) {
+        if (!$existingAttendance instanceof Attendance) {
             $created = $this->createByArray($data);
             if ($created && isset($data["preStatusId"])) {
                 $this->createHistory($data["userId"], $data["eventId"], $data["preStatusId"], $data["preDescription"] ?? null);

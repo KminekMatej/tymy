@@ -21,10 +21,10 @@ use Tymy\Module\Core\Model\Order;
 use Tymy\Module\Team\Model\Team;
 use Tymy\Module\User\Model\User as UserEntity;
 
+use function count;
+
 /**
- * Description of BaseManager
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 5. 6. 2020
+ * @template T of BaseModel
  */
 abstract class BaseManager
 {
@@ -146,7 +146,7 @@ abstract class BaseManager
 
     /**
      * Maps active rows to array of objects
-     * @return BaseModel[]
+     * @return T[]
      */
     public function mapAll(array $rows): array
     {
@@ -208,6 +208,13 @@ abstract class BaseManager
         return $this->database->table($this->getTable())->where("id", $id)->fetch();
     }
 
+    /**
+     * Get record using its id
+     *
+     * @param int $id
+     * @param bool $force
+     * @return T|null
+     */
     public function getById(int $id, bool $force = false): ?BaseModel
     {
         if (!is_numeric($id)) {
