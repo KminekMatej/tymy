@@ -6,14 +6,14 @@
     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
         <a class="dropdown-item" href="{plink :Team:Player: $me->getWebName()}">{$me->getDisplayName()} <span class="badge badge-danger" n:if="$me->getWarnings()">{$me->getWarnings()}</span></a>
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item text-primary" href="{plink :Team:Default:inits}" n:if="$counts['INIT'] > 0 && $user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('SEE_INITS'))">{_team.INIT,2} <span class="badge badge-primary" n:if="$counts['INIT'] > 0">{$counts['INIT']}</span></a>
+        <a class="dropdown-item text-primary" href="{plink :Team:Default:inits}" n:if="$counts['INIT'] > 0 && $user->isAllowed($user->getId(), 'SYS:SEE_INITS')">{_team.INIT,2} <span class="badge badge-primary" n:if="$counts['INIT'] > 0">{$counts['INIT']}</span></a>
         <a class="dropdown-item" href="{plink :Team:Default:players}">{_team.PLAYER,2} ({$counts['PLAYER']}) <span class="badge badge-success" n:if="$counts['NEW:PLAYER'] > 0">{_common.new}</span></a>
         <a class="dropdown-item" href="{plink :Team:Default:members}">{_team.MEMBER,2} ({$counts['MEMBER']})</a>
         <a class="dropdown-item" href="{plink :Team:Default:sicks}">{_team.SICK,2} ({$counts['SICK']})</a>
         <a class="dropdown-item" href="{plink :Team:Default:}">{_common.everyone} ({$counts['ALL']})</a>
-        <a class="dropdown-item" href="{plink :Team:Player:new}" n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('USR_CREATE'))"><i class="fa fa-plus-circle text-success" aria-hidden="true"></i> {_common.new}</a>
+        <a class="dropdown-item" href="{plink :Team:Player:new}" n:if="$user->isAllowed($user->getId(), 'SYS:USR_CREATE')"><i class="fa fa-plus-circle text-success" aria-hidden="true"></i> {_common.new}</a>
         <div class="dropdown-divider"></div>
         <a class="dropdown-item" href="{plink :Team:Default:jerseys}"><i class="fas fa-tshirt" aria-hidden="true"></i> {_team.jerseyList}</a>
-        <a n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('USR_CREATE'))" class="dropdown-item" href="{plink :Team:Default:invitation}"><i class="fa-solid fa-envelope-open-text"></i> {_team.invitation, 2}</a>
+        <a n:if="$user->isAllowed($user->getId(), 'SYS:USR_CREATE')" class="dropdown-item" href="{plink :Team:Default:invitation}"><i class="fa-solid fa-envelope-open-text"></i> {_team.invitation, 2}</a>
     </div>
 </li>
