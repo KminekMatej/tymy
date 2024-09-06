@@ -108,7 +108,7 @@ class AuthorizationManager implements IAuthorizator
     {
         if (!$privilege) {
             //\Tracy\Debugger::barDump("No privilege");
-            return self::DENY;
+            return self::Deny;
         }
 
         //\Tracy\Debugger::barDump("Checking role $role for user id $resource and privilege {$privilege->getType()}:{$privilege->getName()}");
@@ -118,28 +118,28 @@ class AuthorizationManager implements IAuthorizator
                 return $this->isAdmin($role);
             }
             if ($privilege->getName() == "SEE_INITS") {
-                return in_array($role, ["SUPER", "USR"]) ? self::ALLOW : self::DENY;
+                return in_array($role, ["SUPER", "USR"]) ? self::Allow : self::Deny;
             }
 
             if ($this->isAdmin($role)) {
-                return self::ALLOW;
+                return self::Allow;
             }
         }
 
         $permission = $this->getPermission($privilege->getType(), $privilege->getName());
         if (!$permission instanceof \Tymy\Module\Permission\Model\Permission) {
             //\Tracy\Debugger::log("No permission");
-            return self::DENY;
+            return self::Deny;
         }
         //\Tracy\Debugger::log("Allowed by role: " . ($this->isAllowedByRole($role, $permission) ? "true" : "false"));
         //\Tracy\Debugger::log("Allowed by status: " . ($this->isAllowedByStatus($this->getUserStatus($resource), $permission) ? "true" : "false"));
         //\Tracy\Debugger::log("Allowed by id: " . ($this->isAllowedById($resource, $permission) ? "true" : "false"));
-        return $this->isAllowedByRole($role, $permission) || $this->isAllowedByStatus($this->getUserStatus($resource), $permission) || $this->isAllowedById($resource, $permission) ? self::ALLOW : self::DENY;
+        return $this->isAllowedByRole($role, $permission) || $this->isAllowedByStatus($this->getUserStatus($resource), $permission) || $this->isAllowedById($resource, $permission) ? self::Allow : self::Deny;
     }
 
     private function isAdmin(string $role): bool
     {
-        return $role == "SUPER" ? self::ALLOW : self::DENY;
+        return $role == "SUPER" ? self::Allow : self::Deny;
     }
 
     private function isAllowedByRole(string $role, Permission $permission): bool
