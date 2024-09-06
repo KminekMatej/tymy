@@ -35,7 +35,7 @@ class AvatarManager
             $this->responder->E4005_OBJECT_NOT_FOUND(User2::MODULE, $userId);
         }
 
-        $canEditFull = $this->user->isAllowed($this->user->getId(), "SYS:USR_UPDATE");
+        $canEditFull = $this->user->isAllowed((string) $this->user->getId(), "SYS:USR_UPDATE");
         $editingMyself = $this->userModel->getId() === $this->user->getId();
 
         if (!$canEditFull && !$editingMyself) {

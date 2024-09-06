@@ -43,7 +43,7 @@ class InvitationManager extends BaseManager
 
     protected function allowCreate(?array &$data = null): void
     {
-        if (!$this->user->isAllowed($this->user->getId(), "SYS:USR_CREATE")) {
+        if (!$this->user->isAllowed((string) $this->user->getId(), "SYS:USR_CREATE")) {
             $this->responder->E4003_CREATE_NOT_PERMITTED("Invitiation");
         }
 
@@ -62,21 +62,21 @@ class InvitationManager extends BaseManager
 
     protected function allowDelete(?int $recordId): void
     {
-        if (!$this->user->isAllowed($this->user->getId(), "SYS:USR_CREATE")) {
+        if (!$this->user->isAllowed((string) $this->user->getId(), "SYS:USR_CREATE")) {
             $this->responder->E4004_DELETE_NOT_PERMITTED("Invitiation", $recordId);
         }
     }
 
     protected function allowRead(?int $recordId = null): void
     {
-        if (!$this->user->isAllowed($this->user->getId(), "SYS:USR_CREATE")) {
+        if (!$this->user->isAllowed((string) $this->user->getId(), "SYS:USR_CREATE")) {
             $this->responder->E4001_VIEW_NOT_PERMITTED("Invitiation", $recordId);
         }
     }
 
     protected function allowUpdate(?int $recordId = null, ?array &$data = null): void
     {
-        if (!$this->user->isAllowed($this->user->getId(), "SYS:USR_CREATE")) {
+        if (!$this->user->isAllowed((string) $this->user->getId(), "SYS:USR_CREATE")) {
             $this->responder->E4002_EDIT_NOT_PERMITTED("Invitiation", $recordId);
         }
     }

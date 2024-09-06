@@ -183,10 +183,10 @@ class AttendanceManager extends BaseManager
     {
         $resultRightName = $this->eventRow->result_rights;
         if ($resultRightName) {
-            if (!$this->user->isAllowed($this->user->getId(), "USR:$resultRightName")) {
+            if (!$this->user->isAllowed((string) $this->user->getId(), "USR:$resultRightName")) {
                 $this->respondForbidden();
             }
-        } elseif (!$this->user->isAllowed($this->user->getId(), "SYS:EVE_ATT_UPDATE")) {
+        } elseif (!$this->user->isAllowed((string) $this->user->getId(), "SYS:EVE_ATT_UPDATE")) {
             $this->respondForbidden();
         }
     }
@@ -196,12 +196,12 @@ class AttendanceManager extends BaseManager
      */
     private function allowAttend(array $data): void
     {
-        if ($this->user->getId() !== $data["userId"] && !$this->user->isAllowed($this->user->getId(), "SYS:ATT_UPDATE")) {
+        if ($this->user->getId() !== $data["userId"] && !$this->user->isAllowed((string) $this->user->getId(), "SYS:ATT_UPDATE")) {
             $this->respondForbidden();
         }
 
         $planRightName = $this->eventRow->plan_rights;
-        if ($planRightName && !$this->user->isAllowed($this->user->getId(), "USR:$planRightName")) {
+        if ($planRightName && !$this->user->isAllowed((string) $this->user->getId(), "USR:$planRightName")) {
             $this->respondForbidden();
         }
     }

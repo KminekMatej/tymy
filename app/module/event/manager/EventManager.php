@@ -74,12 +74,12 @@ class EventManager extends BaseManager
     protected function metaMap(BaseModel &$model, $userId = null): void
     {
         assert($model instanceof Event);
-        $model->setCanView(empty($model->getViewRightName()) || $this->user->isAllowed($this->user->getId(), "USR:{$model->getViewRightName()}"));
-        $model->setCanPlan(empty($model->getPlanRightName()) || $this->user->isAllowed($this->user->getId(), "USR:{$model->getPlanRightName()}"));
-        $model->setCanPlanOthers($this->user->isAllowed($this->user->getId(), "SYS:ATT_UPDATE"));
+        $model->setCanView(empty($model->getViewRightName()) || $this->user->isAllowed((string) $this->user->getId(), "USR:{$model->getViewRightName()}"));
+        $model->setCanPlan(empty($model->getPlanRightName()) || $this->user->isAllowed((string) $this->user->getId(), "USR:{$model->getPlanRightName()}"));
+        $model->setCanPlanOthers($this->user->isAllowed((string) $this->user->getId(), "SYS:ATT_UPDATE"));
         $model->setCanResult(empty($model->getResultRightName()) ?
-            $this->user->isAllowed($this->user->getId(), "SYS:EVE_ATT_UPDATE") :
-            $this->user->isAllowed($this->user->getId(), "USR:{$model->getResultRightName()}"));
+            $this->user->isAllowed((string) $this->user->getId(), "SYS:EVE_ATT_UPDATE") :
+            $this->user->isAllowed((string) $this->user->getId(), "USR:{$model->getResultRightName()}"));
 
         $eventColor = '#' . $this->eventTypeManager->getEventTypeColor($model->getEventTypeId());
 
@@ -295,7 +295,7 @@ class EventManager extends BaseManager
 
     protected function allowCreate(?array &$data = null): void
     {
-        if (!$this->user->isAllowed($this->user->getId(), "SYS:EVE_CREATE")) {
+        if (!$this->user->isAllowed((string) $this->user->getId(), "SYS:EVE_CREATE")) {
             $this->respondForbidden();
         }
 
@@ -336,7 +336,7 @@ class EventManager extends BaseManager
     {
         $this->event = $this->getById($recordId);
 
-        if (!$this->user->isAllowed($this->user->getId(), "SYS:EVE_DELETE")) {
+        if (!$this->user->isAllowed((string) $this->user->getId(), "SYS:EVE_DELETE")) {
             $this->respondForbidden();
         }
     }

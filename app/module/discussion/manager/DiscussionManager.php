@@ -30,14 +30,14 @@ class DiscussionManager extends BaseManager
 
     protected function allowCreate(?array &$data = null): void
     {
-        if (!$this->user->isAllowed($this->user->getId(), "SYS:DSSETUP")) {
+        if (!$this->user->isAllowed((string) $this->user->getId(), "SYS:DSSETUP")) {
             $this->respondForbidden();
         }
     }
 
     protected function allowDelete(?int $recordId): void
     {
-        if (!$this->user->isAllowed($this->user->getId(), "SYS:DSSETUP")) {
+        if (!$this->user->isAllowed((string) $this->user->getId(), "SYS:DSSETUP")) {
             $this->respondForbidden();
         }
     }
@@ -56,7 +56,7 @@ class DiscussionManager extends BaseManager
 
     protected function allowUpdate(?int $recordId = null, ?array &$data = null): void
     {
-        if (!$this->user->isAllowed($this->user->getId(), "SYS:DSSETUP")) {
+        if (!$this->user->isAllowed((string) $this->user->getId(), "SYS:DSSETUP")) {
             $this->respondForbidden();
         }
     }
@@ -86,10 +86,10 @@ class DiscussionManager extends BaseManager
     protected function metaMap(BaseModel &$model, $userId = null): void
     {
         assert($model instanceof Discussion);
-        $model->setCanRead(empty($model->getReadRightName()) || $this->user->isAllowed($this->user->getId(), "USR:{$model->getReadRightName()}"));
-        $model->setCanWrite(empty($model->getWriteRightName()) || $this->user->isAllowed($this->user->getId(), "USR:{$model->getWriteRightName()}"));
-        $model->setCanDelete($this->userManager->isAdmin() || (!empty($model->getDeleteRightName()) && $this->user->isAllowed($this->user->getId(), "USR:{$model->getDeleteRightName()}")));
-        $model->setCanStick($this->userManager->isAdmin() || (!empty($model->getStickyRightName()) && $this->user->isAllowed($this->user->getId(), "USR:{$model->getStickyRightName()}")));
+        $model->setCanRead(empty($model->getReadRightName()) || $this->user->isAllowed((string) $this->user->getId(), "USR:{$model->getReadRightName()}"));
+        $model->setCanWrite(empty($model->getWriteRightName()) || $this->user->isAllowed((string) $this->user->getId(), "USR:{$model->getWriteRightName()}"));
+        $model->setCanDelete($this->userManager->isAdmin() || (!empty($model->getDeleteRightName()) && $this->user->isAllowed((string) $this->user->getId(), "USR:{$model->getDeleteRightName()}")));
+        $model->setCanStick($this->userManager->isAdmin() || (!empty($model->getStickyRightName()) && $this->user->isAllowed((string) $this->user->getId(), "USR:{$model->getStickyRightName()}")));
     }
 
     public function getById(int $id, bool $force = false): ?BaseModel

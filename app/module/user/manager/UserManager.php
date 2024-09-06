@@ -539,7 +539,7 @@ class UserManager extends BaseManager
 
     protected function allowCreate(?array &$data = null): void
     {
-        if (!$this->user->isAllowed($this->user->getId(), "SYS:USR_CREATE")) {
+        if (!$this->user->isAllowed((string) $this->user->getId(), "SYS:USR_CREATE")) {
             $this->responder->E4003_CREATE_NOT_PERMITTED(User::MODULE);
         }
 
@@ -578,7 +578,7 @@ class UserManager extends BaseManager
             $this->respondNotFound();
         }
 
-        if (!$this->user->isAllowed($this->user->getId(), "SYS:USR_UPDATE")) {
+        if (!$this->user->isAllowed((string) $this->user->getId(), "SYS:USR_UPDATE")) {
             $this->responder->E4004_DELETE_NOT_PERMITTED(User::MODULE, $recordId);
         }
     }
@@ -597,11 +597,11 @@ class UserManager extends BaseManager
         }
 
         //only administrators can change user roles
-        if (isset($data["roles"]) && $data["roles"] !== $this->userModel->getRoles() && !$this->user->isAllowed($this->user->getId(), "SYS:IS_ADMIN")) {
+        if (isset($data["roles"]) && $data["roles"] !== $this->userModel->getRoles() && !$this->user->isAllowed((string) $this->user->getId(), "SYS:IS_ADMIN")) {
             $this->responder->E403_FORBIDDEN($this->translator->translate("team.alerts.changingRolesForbidden"));
         }
 
-        $canEditFull = $this->user->isAllowed($this->user->getId(), "SYS:USR_UPDATE");
+        $canEditFull = $this->user->isAllowed((string) $this->user->getId(), "SYS:USR_UPDATE");
         $editingMyself = $this->userModel->getId() === $this->user->getId();
 
         if (!$canEditFull && !$editingMyself) {

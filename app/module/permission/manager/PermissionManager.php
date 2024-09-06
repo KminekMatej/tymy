@@ -57,7 +57,7 @@ class PermissionManager extends BaseManager
     {
         assert($model instanceof Permission);
         $privilege = "{$model->getType()}:{$model->getName()}";
-        $model->setMeAllowed($this->user->isLoggedIn() && $this->user->isAllowed($this->user->getId(), $privilege));
+        $model->setMeAllowed($this->user->isLoggedIn() && $this->user->isAllowed((string) $this->user->getId(), $privilege));
     }
 
     public function canEdit($entity, $userId): bool

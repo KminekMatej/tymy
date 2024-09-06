@@ -152,7 +152,7 @@ class PollManager extends BaseManager
 
     protected function allowCreate(?array &$data = null): void
     {
-        if (!$this->user->isAllowed($this->user->getId(), "SYS:ASK.VOTE_CREATE")) {
+        if (!$this->user->isAllowed((string) $this->user->getId(), "SYS:ASK.VOTE_CREATE")) {
             $this->respondForbidden();
         }
 
@@ -186,7 +186,7 @@ class PollManager extends BaseManager
 
         $this->allowRead($recordId);
 
-        if (!$this->user->isAllowed($this->user->getId(), "SYS:ASK.VOTE_DELETE")) {
+        if (!$this->user->isAllowed((string) $this->user->getId(), "SYS:ASK.VOTE_DELETE")) {
             $this->respondForbidden();
         }
     }
@@ -202,7 +202,7 @@ class PollManager extends BaseManager
     {
         $this->allowRead($recordId);
 
-        if (!$this->user->isAllowed($this->user->getId(), "SYS:ASK.VOTE_UPDATE")) {
+        if (!$this->user->isAllowed((string) $this->user->getId(), "SYS:ASK.VOTE_UPDATE")) {
             $this->respondForbidden();
         }
 
