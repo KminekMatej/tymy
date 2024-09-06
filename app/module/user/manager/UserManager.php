@@ -74,7 +74,7 @@ class UserManager extends BaseManager
             $playerIds = $this->database->table($this->getTable())->where("status", User::STATUS_PLAYER)->fetchPairs(null, "id");
             return array_intersect($users, $playerIds);
         } else {
-            return ArrayHelper::filter($users, "status", User::STATUS_PLAYER);
+            return ArrayHelper::filter($users, "status", User::STATUS_PLAYER); /* @phpstan-ignore-line Dont know how to properly specify returning same type as on input */
         }
     }
 
@@ -361,7 +361,7 @@ class UserManager extends BaseManager
                     "password" => $password,
         ]));    //this request is accessible from localhost only
 
-        return $userId && $userId !== "null" ? $userId : null;
+        return $userId && $userId !== "null" ? intval($userId) : null;
     }
 
     /**
@@ -427,7 +427,7 @@ class UserManager extends BaseManager
 
     /**
      * Function selects all users allowed on given permission
-     * @var string $privilege String representation of privilege
+     * @param string $privilege String representation of privilege
      * @return Selection Selection to operate with
      */
     private function selectUsersByPrivilege(string $privilege): Selection

@@ -73,7 +73,7 @@ class PermissionManager extends BaseManager
 
     public function getAllowedReaders(BaseModel $record): array
     {
-        return false; //todo
+        return $this->getAllUserIds();
     }
 
     /**

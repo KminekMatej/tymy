@@ -13,7 +13,7 @@ use Tymy\Module\News\Model\Notice;
 use Tymy\Module\User\Manager\UserManager;
 
 /**
- * @extends BaseManager<News>
+ * @extends BaseManager<Notice>
  */
 class NewsManager extends BaseManager
 {

@@ -124,7 +124,7 @@ abstract class BaseManager
     public function getAllAdminIds(): array
     {
         if (empty($this->allAdminIdList)) {
-            $this->allAdminIdList = $this->database->table(UserEntity::TABLE)->where("roles LIKE ?", "%" . User::ROLE_SUPER . "%")->select("id")->fetchPairs(null, "id");
+            $this->allAdminIdList = $this->database->table(UserEntity::TABLE)->where("roles LIKE ?", "%" . UserEntity::ROLE_SUPER . "%")->select("id")->fetchPairs(null, "id");
         }
 
         return $this->allAdminIdList;
