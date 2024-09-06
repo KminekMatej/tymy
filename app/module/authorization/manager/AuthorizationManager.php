@@ -5,7 +5,7 @@ namespace Tymy\Module\Authorization\Manager;
 use Nette\Database\Explorer;
 use Nette\Database\Table\ActiveRow;
 use Nette\Security\IAuthorizator;
-use Tymy\Module\Core\Model\BaseModel;
+use stdClass;
 use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Permission\Mapper\PermissionMapper;
 use Tymy\Module\Permission\Model\Permission;
@@ -44,7 +44,7 @@ class AuthorizationManager implements IAuthorizator
     /**
      * Maps one active row to object
      */
-    public function map(string $class, array $scheme, \Nette\Database\Table\ActiveRow|false $row, $force = false): ?object
+    public function map(string $class, array $scheme, ActiveRow|false $row, $force = false): ?object
     {
         if (!$row) {
             return null;
@@ -113,11 +113,15 @@ class AuthorizationManager implements IAuthorizator
 
         //\Tracy\Debugger::barDump("Checking role $role for user id $resource and privilege {$privilege->getType()}:{$privilege->getName()}");
 
-        if ($privilege->getType() == "SYS") {
-            if ($privilege->getName() == "IS_ADMIN") {
+        $privParts = explode(":", $privilege);
+        $type = array_shift($privParts);
+        $name = join(":", $privParts); //join by colon back in case some user permission would contain it
+
+        if ($type == "SYS") {
+            if ($name == "IS_ADMIN") {
                 return $this->isAdmin($role);
             }
-            if ($privilege->getName() == "SEE_INITS") {
+            if ($name == "SEE_INITS") {
                 return in_array($role, ["SUPER", "USR"]) ? self::Allow : self::Deny;
             }
 
@@ -127,7 +131,7 @@ class AuthorizationManager implements IAuthorizator
         }
 
         $permission = $this->getPermission($privilege->getType(), $privilege->getName());
-        if (!$permission instanceof \Tymy\Module\Permission\Model\Permission) {
+        if (!$permission instanceof Permission) {
             //\Tracy\Debugger::log("No permission");
             return self::Deny;
         }
@@ -157,7 +161,7 @@ class AuthorizationManager implements IAuthorizator
         return is_array($permission->getAllowedUsers()) && in_array($id, $permission->getAllowedUsers()) && (empty($permission->getRevokedUsers()) || !in_array($id, $permission->getRevokedUsers()));
     }
 
-    public function getListUserAllowed(User $user): \stdClass
+    public function getListUserAllowed(User $user): stdClass
     {
         return (object)[
             "notesRights" => $this->getNotesRights($user),
@@ -171,21 +175,21 @@ class AuthorizationManager implements IAuthorizator
         ];
     }
 
-    private function getNotesRights(User $user): \stdClass
+    private function getNotesRights(User $user): stdClass
     {
         return (object) [
                     "manageSharedNotes" => $this->isUserAllowed($user, "SYS:NOTES")
         ];
     }
 
-    private function getDiscussionRights(User $user): \stdClass
+    private function getDiscussionRights(User $user): stdClass
     {
         return (object) [
                     "setup" => $this->isUserAllowed($user, "SYS:DSSETUP")
         ];
     }
 
-    private function getEventRights(User $user): \stdClass
+    private function getEventRights(User $user): stdClass
     {
         return (object) [
                     "canCreate" => $this->isUserAllowed($user, "SYS:EVE_CREATE"),
@@ -196,7 +200,7 @@ class AuthorizationManager implements IAuthorizator
         ];
     }
 
-    private function getPollRights(User $user): \stdClass
+    private function getPollRights(User $user): stdClass
     {
         return (object) [
                     "canCreatePoll" => $this->isUserAllowed($user, "SYS:ASK.VOTE_CREATE"),
@@ -206,21 +210,21 @@ class AuthorizationManager implements IAuthorizator
         ];
     }
 
-    private function getReportsRights(User $user): \stdClass
+    private function getReportsRights(User $user): stdClass
     {
         return (object) [
                     "canSetup" => $this->isUserAllowed($user, "SYS:REP_SETUP")
         ];
     }
 
-    private function getTeamRights(User $user): \stdClass
+    private function getTeamRights(User $user): stdClass
     {
         return (object) [
                     "canSetup" => $this->isUserAllowed($user, "SYS:TEAM_UPDATE")
         ];
     }
 
-    private function getUserRights(User $user): \stdClass
+    private function getUserRights(User $user): stdClass
     {
         return (object) [
                     "canCreate" => $this->isUserAllowed($user, "SYS:USR_CREATE"),
@@ -229,7 +233,7 @@ class AuthorizationManager implements IAuthorizator
         ];
     }
 
-    private function getDebtRights(User $user): \stdClass
+    private function getDebtRights(User $user): stdClass
     {
         return (object) [
                     "canManageTeamDebts" => $this->isUserAllowed($user, "SYS:DEBTS_TEAM")
