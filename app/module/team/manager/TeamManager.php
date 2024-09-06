@@ -15,9 +15,7 @@ use Tymy\Module\Team\Model\SimpleTeam;
 use Tymy\Module\Team\Model\Team;
 
 /**
- * Description of TeamManager
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 5. 6. 2020
+ * @extends BaseManager<Team>
  */
 class TeamManager extends BaseManager
 {

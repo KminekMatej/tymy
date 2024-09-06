@@ -15,9 +15,7 @@ use Tymy\Module\Event\Mapper\EventTypeMapper;
 use Tymy\Module\Event\Model\EventType;
 
 /**
- * Description of EventTypeManager
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 8. 10. 2020
+ * @extends BaseManager<EventType>
  */
 class EventTypeManager extends BaseManager
 {

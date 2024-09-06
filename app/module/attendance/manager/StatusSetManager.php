@@ -14,7 +14,6 @@ use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Model\Field;
-use Tymy\Module\Discussion\Model\Discussion;
 use Tymy\Module\User\Manager\UserManager;
 
 /**

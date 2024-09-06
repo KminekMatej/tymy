@@ -582,9 +582,9 @@ abstract class BaseManager
     /**
      * Load record using id. Responds with 404 if not found
      *
-     * @return BaseModel
+     * @return T|null
      */
-    protected function loadRecord(int $recordId, ?BaseManager $manager = null)
+    protected function loadRecord(int $recordId, ?BaseManager $manager = null): ?BaseModel
     {
         $record = $manager !== null ? $manager->getById($recordId) : $this->getById($recordId);
 

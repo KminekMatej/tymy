@@ -15,9 +15,7 @@ use Tymy\Module\Team\Model\Team;
 use Tymy\Module\User\Manager\UserManager;
 
 /**
- * Description of MultiaccountManager
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 06. 02. 2021
+ * @extends BaseManager<TransferKey>
  */
 class MultiaccountManager extends BaseManager
 {

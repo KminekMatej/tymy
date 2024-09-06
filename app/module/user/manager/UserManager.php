@@ -32,9 +32,7 @@ use const TEAM_DIR;
 use function count;
 
 /**
- * Description of UserManager
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 4. 8. 2020
+ * @extends BaseManager<User>
  */
 class UserManager extends BaseManager
 {

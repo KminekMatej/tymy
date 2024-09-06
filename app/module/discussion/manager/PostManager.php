@@ -23,9 +23,7 @@ use Tymy\Module\User\Manager\UserManager;
 use function mb_strlen;
 
 /**
- * Description of PostManager
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 17. 9. 2020
+ * @extends BaseManager<Post>
  */
 class PostManager extends BaseManager
 {
@@ -35,7 +33,9 @@ class PostManager extends BaseManager
     public const MINIMUM_NUMBER_OF_POSTS_DISPLAYED_WITH_NEW_POSTS = 5;
     public const MAXIMUM_FIRST_PAGE_SIZE = 200;
     private bool $inBbCode = true;
+    /** @var Discussion|null */
     private ?Discussion $discussion = null;
+    /** @var Post|null */
     private ?Post $post = null;
     private array $reactionsCache;
 
@@ -46,10 +46,9 @@ class PostManager extends BaseManager
 
     public function allowDiscussion($discussionId): void
     {
-        $this->discussion = $this->loadRecord($discussionId, $this->discussionManager);
-        assert($this->discussion instanceof Discussion);
+        $this->discussion = $this->discussionManager->getById($discussionId);
 
-        if (!$this->discussion) {
+        if (!$this->discussion instanceof Discussion) {
             $this->respondNotFound(Discussion::MODULE, $discussionId);
         }
 
@@ -125,7 +124,7 @@ class PostManager extends BaseManager
         }
     }
 
-    public function map(?IRow $row, bool $force = false): ?BaseModel
+    public function map(?IRow $row, bool $force = false): ?Post
     {
         if ($row === null) {
             return null;
@@ -267,7 +266,7 @@ class PostManager extends BaseManager
         return new DiscussionPosts($this->discussion, $page, $this->getNumberOfPages($this->discussion->getId()), $posts);
     }
 
-    public function getById(int $id, bool $force = false): ?BaseModel
+    public function getById(int $id, bool $force = false): ?Post
     {
         return $this->map($this->database->query("
             SELECT `discussion_post`.*, IF(`discussion_read`.`last_date`<`discussion_post`.`insert_date`,1,0) AS 'newPost' 

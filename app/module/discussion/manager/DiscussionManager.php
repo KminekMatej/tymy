@@ -16,12 +16,11 @@ use Tymy\Module\Permission\Model\Permission;
 use Tymy\Module\User\Manager\UserManager;
 
 /**
- * Description of DiscussionManager
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 5. 6. 2020
+ * @extends BaseManager<Discussion>
  */
 class DiscussionManager extends BaseManager
 {
+    /** @var Discussion|null */
     private ?Discussion $discussion = null;
 
     public function __construct(ManagerFactory $managerFactory, private PermissionManager $permissionManager, private UserManager $userManager)

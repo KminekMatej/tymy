@@ -28,9 +28,7 @@ use Tymy\Module\User\Manager\UserManager;
 use Tymy\Module\User\Model\User;
 
 /**
- * Description of EventManager
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 19. 9. 2020
+ * @extends BaseManager<Event>
  */
 class EventManager extends BaseManager
 {
@@ -79,8 +77,8 @@ class EventManager extends BaseManager
         $model->setCanView(empty($model->getViewRightName()) || $this->user->isAllowed($this->user->getId(), "USR:{$model->getViewRightName()}"));
         $model->setCanPlan(empty($model->getPlanRightName()) || $this->user->isAllowed($this->user->getId(), "USR:{$model->getPlanRightName()}"));
         $model->setCanPlanOthers($this->user->isAllowed($this->user->getId(), "SYS:ATT_UPDATE"));
-        $model->setCanResult(empty($model->getResultRightName()) ? 
-            $this->user->isAllowed($this->user->getId(), "SYS:EVE_ATT_UPDATE") : 
+        $model->setCanResult(empty($model->getResultRightName()) ?
+            $this->user->isAllowed($this->user->getId(), "SYS:EVE_ATT_UPDATE") :
             $this->user->isAllowed($this->user->getId(), "USR:{$model->getResultRightName()}"));
 
         $eventColor = '#' . $this->eventTypeManager->getEventTypeColor($model->getEventTypeId());

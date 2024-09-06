@@ -7,15 +7,13 @@ use Nette\Utils\DateTime;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Model\Field;
 use Tymy\Module\News\Mapper\NewsMapper;
 use Tymy\Module\News\Model\Notice;
 use Tymy\Module\User\Manager\UserManager;
-use Tymy\Module\User\Model\User;
 
 /**
- * Description of NewsManager
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 21. 02. 2021
+ * @extends BaseManager<News>
  */
 class NewsManager extends BaseManager
 {
@@ -30,7 +28,7 @@ class NewsManager extends BaseManager
     }
 
     /**
-     * @return \Tymy\Module\Core\Model\Field[]
+     * @return Field[]
      */
     public function getScheme(): array
     {
@@ -88,7 +86,7 @@ class NewsManager extends BaseManager
     }
 
     /**
-     * @return \Tymy\Module\Core\Model\BaseModel[]
+     * @return BaseModel[]
      */
     public function getListUserAllowed(): array
     {

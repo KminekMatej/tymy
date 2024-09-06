@@ -19,7 +19,7 @@ use Tymy\Module\PushNotification\Model\PushNotification;
 use Tymy\Module\PushNotification\Model\Subscriber;
 
 /**
- * PushNotificationManager is a class for handling read operations upon Push Notification subscription table.
+ * @extends BaseManager<Subscriber>
  */
 class PushNotificationManager extends BaseManager
 {

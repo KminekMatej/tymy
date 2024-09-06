@@ -14,9 +14,7 @@ use Tymy\Module\User\Mapper\InvitationMapper;
 use Tymy\Module\User\Model\Invitation;
 
 /**
- * Description of InvitationManager
- *
- * @author kminekmatej, 25. 9. 2022, 21:25:38
+ * @extends BaseManager<Invitation>
  */
 class InvitationManager extends BaseManager
 {

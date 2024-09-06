@@ -11,9 +11,7 @@ use Tymy\Module\Poll\Model\Option;
 use Tymy\Module\Poll\Model\Poll;
 
 /**
- * Description of OptionManager
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 21. 12. 2020
+ * @extends BaseManager<Option>
  */
 class OptionManager extends BaseManager
 {

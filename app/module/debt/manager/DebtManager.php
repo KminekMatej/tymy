@@ -13,9 +13,7 @@ use Tymy\Module\Debt\Model\Debt;
 use Tymy\Module\User\Manager\UserManager;
 
 /**
- * Description of DebtManager
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 29. 11. 2020
+ * @extends BaseManager<Debt>
  */
 class DebtManager extends BaseManager
 {

@@ -11,9 +11,7 @@ use Tymy\Module\Poll\Model\Poll;
 use Tymy\Module\Poll\Model\Vote;
 
 /**
- * Description of VoteManager
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 21. 12. 2020
+ * @extends BaseManager<Vote>
  */
 class VoteManager extends BaseManager
 {

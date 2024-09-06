@@ -23,9 +23,7 @@ use Tymy\Module\User\Manager\UserManager;
  * Description of PollManager
  *
  * @RequestMapping(value = "/polls/{id}/votes", method = RequestMethod.POST)
- *
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 21. 12. 2020
+ * @extends BaseManager<Poll>
  */
 class PollManager extends BaseManager
 {

@@ -15,9 +15,7 @@ use Tymy\Module\Permission\Model\Permission;
 use Tymy\Module\User\Model\User;
 
 /**
- * Description of PermissionManager
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 2. 9. 2020
+ * @extends BaseManager<Permission>
  */
 class PermissionManager extends BaseManager
 {
