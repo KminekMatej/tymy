@@ -10,9 +10,10 @@ use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Core\Factory\FormFactory;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
-use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Manager\AvatarManager;
 use Tymy\Module\User\Model\User;
+
+use function count;
 
 class PlayerPresenter extends SecuredPresenter
 {

@@ -20,7 +20,6 @@ use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Core\Service\MailService;
 use Tymy\Module\Permission\Manager\PermissionManager;
-use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\Team\Model\Team;
 use Tymy\Module\User\Mapper\UserMapper;
@@ -29,6 +28,8 @@ use Tymy\Module\User\Model\SimpleUser;
 use Tymy\Module\User\Model\User;
 
 use const TEAM_DIR;
+
+use function count;
 
 /**
  * Description of UserManager
@@ -433,7 +434,11 @@ class UserManager extends BaseManager
      */
     private function selectUsersByPrivilege(string $privilege): Selection
     {
-        $permission = $this->permissionManager->getByTypeName(...explode(":", $privilege));
+        $privParts = explode(":", $privilege);
+        $type = array_shift($privParts);
+        $name = join(":", $privParts); //join by colon back in case some user permission would contain it
+
+        $permission = $this->permissionManager->getByTypeName($type, $name);
 
         $usersSelector = $this->database->table($this->getTable());
         $conditions = [];
@@ -486,7 +491,7 @@ class UserManager extends BaseManager
      * Load list of user object, allowed to operate with given privilege
      * @return BaseModel[]
      */
-    public function getUsersWithPrivilege(Privilege $privilege): array
+    public function getUsersWithPrivilege(string $privilege): array
     {
         return $this->mapAll($this->selectUsersByPrivilege($privilege)->fetchAll());
     }

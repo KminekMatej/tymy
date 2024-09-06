@@ -22,7 +22,6 @@ use Tymy\Module\Event\Model\Event;
 use Tymy\Module\Event\Model\EventType;
 use Tymy\Module\Permission\Manager\PermissionManager;
 use Tymy\Module\Permission\Model\Permission;
-use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\PushNotification\Manager\NotificationGenerator;
 use Tymy\Module\PushNotification\Manager\PushNotificationManager;
 use Tymy\Module\User\Manager\UserManager;

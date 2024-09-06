@@ -9,10 +9,10 @@ use Nette\Utils\Strings;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Core\Service\BbService;
 use Tymy\Module\Permission\Manager\PermissionManager;
 use Tymy\Module\Permission\Model\Permission;
-use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\Poll\Mapper\PollMapper;
 use Tymy\Module\Poll\Model\Option;
 use Tymy\Module\Poll\Model\Poll;
@@ -43,7 +43,7 @@ class PollManager extends BaseManager
     }
 
     /**
-     * @return \Tymy\Module\Core\Model\Field[]
+     * @return Field[]
      */
     public function getScheme(): array
     {

@@ -18,7 +18,6 @@ use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Event\Model\Event;
-use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Manager\UserManager;
 
 /**

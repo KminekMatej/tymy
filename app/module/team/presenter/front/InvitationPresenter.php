@@ -6,7 +6,6 @@ use Nette\Application\UI\Form;
 use Nette\Bridges\ApplicationLatte\Template;
 use stdClass;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
-use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Manager\InvitationManager;
 use Tymy\Module\User\Model\User;
 

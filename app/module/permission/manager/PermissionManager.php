@@ -12,7 +12,6 @@ use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Permission\Mapper\PermissionMapper;
 use Tymy\Module\Permission\Model\Permission;
-use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Model\User;
 
 /**

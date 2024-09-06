@@ -5,8 +5,9 @@ namespace Tymy\Module\Team\Presenter\Front;
 use Nette\Bridges\ApplicationLatte\Template;
 use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
-use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Model\User;
+
+use function count;
 
 class DefaultPresenter extends SecuredPresenter
 {

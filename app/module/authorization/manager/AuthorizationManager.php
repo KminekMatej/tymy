@@ -9,7 +9,6 @@ use stdClass;
 use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Permission\Mapper\PermissionMapper;
 use Tymy\Module\Permission\Model\Permission;
-use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Model\User;
 
 /**
@@ -87,7 +86,7 @@ class AuthorizationManager implements IAuthorizator
     /**
      * Check user is allowed for privilege. Does the same thing as Nette user->isAllowed() but with any user object
      */
-    public function isUserAllowed(User $user, Privilege $privilege): bool
+    public function isUserAllowed(User $user, ?string $privilege): bool
     {
         foreach ($user->getRoles() as $role) {
             if ($this->isAllowed($role, $user->getId(), $privilege)) {
@@ -102,7 +101,7 @@ class AuthorizationManager implements IAuthorizator
      * Main permissions checker
      * @param string $role Role - SUPER / USR / WEB / ATT
      * @param string|null $resource User id
-     * @param Privilege $privilege Privilege, consisting of type and name of permissions
+     * @param string|null $privilege Privilege, consisting of type and name of permissions
      */
     public function isAllowed(?string $role, ?string $resource, ?string $privilege): bool
     {
@@ -130,7 +129,7 @@ class AuthorizationManager implements IAuthorizator
             }
         }
 
-        $permission = $this->getPermission($privilege->getType(), $privilege->getName());
+        $permission = $this->getPermission($type, $name);
         if (!$permission instanceof Permission) {
             //\Tracy\Debugger::log("No permission");
             return self::Deny;

@@ -5,7 +5,7 @@ namespace Tymy\Module\Poll\Manager;
 use Nette\NotImplementedException;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
-use Tymy\Module\Permission\Model\Privilege;
+use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Poll\Mapper\OptionMapper;
 use Tymy\Module\Poll\Model\Option;
 use Tymy\Module\Poll\Model\Poll;
@@ -28,7 +28,7 @@ class OptionManager extends BaseManager
     }
 
     /**
-     * @return \Tymy\Module\Core\Model\Field[]
+     * @return Field[]
      */
     public function getScheme(): array
     {
@@ -72,7 +72,7 @@ class OptionManager extends BaseManager
 
 
     /**
-     * @return \Tymy\Module\Core\Model\BaseModel[]|null[]
+     * @return BaseModel[]|null[]
      */
     public function createMultiple(array $options, ?int $resourceId = null): array
     {

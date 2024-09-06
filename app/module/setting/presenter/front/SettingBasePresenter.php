@@ -8,7 +8,6 @@ use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Event\Manager\EventTypeManager;
 use Tymy\Module\Permission\Manager\PermissionManager;
 use Tymy\Module\Permission\Model\Permission;
-use Tymy\Module\Permission\Model\Privilege;
 
 /**
  * Description of SettingDefaultPresenter

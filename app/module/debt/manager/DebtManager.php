@@ -10,7 +10,6 @@ use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Debt\Mapper\DebtMapper;
 use Tymy\Module\Debt\Model\Debt;
-use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Manager\UserManager;
 
 /**

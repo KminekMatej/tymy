@@ -13,7 +13,6 @@ use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Event\Mapper\EventTypeMapper;
 use Tymy\Module\Event\Model\EventType;
-use Tymy\Module\Permission\Model\Privilege;
 
 /**
  * Description of EventTypeManager
