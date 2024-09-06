@@ -144,7 +144,7 @@ class PollManager extends BaseManager
 
     public function canEdit($entity, $userId): bool
     {
-        return $this->user->isAllowed($userId, Privilege::SYS("ASK.VOTE_UPDATE"));
+        return $this->user->isAllowed($userId, "SYS:ASK.VOTE_UPDATE");
     }
 
     public function canRead($entity, $userId): bool
@@ -154,7 +154,7 @@ class PollManager extends BaseManager
 
     protected function allowCreate(?array &$data = null): void
     {
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("ASK.VOTE_CREATE"))) {
+        if (!$this->user->isAllowed($this->user->getId(), "SYS:ASK.VOTE_CREATE")) {
             $this->respondForbidden();
         }
 
@@ -188,7 +188,7 @@ class PollManager extends BaseManager
 
         $this->allowRead($recordId);
 
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("ASK.VOTE_DELETE"))) {
+        if (!$this->user->isAllowed($this->user->getId(), "SYS:ASK.VOTE_DELETE")) {
             $this->respondForbidden();
         }
     }
@@ -204,7 +204,7 @@ class PollManager extends BaseManager
     {
         $this->allowRead($recordId);
 
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("ASK.VOTE_UPDATE"))) {
+        if (!$this->user->isAllowed($this->user->getId(), "SYS:ASK.VOTE_UPDATE")) {
             $this->respondForbidden();
         }
 

@@ -40,7 +40,7 @@ class DebtManager extends BaseManager
         $debt = parent::map($row, $force);
         assert($debt instanceof Debt);
 
-        $isTeamDebtManager = $this->user->isAllowed($this->user->getId(), Privilege::SYS("DEBTS_TEAM"));
+        $isTeamDebtManager = $this->user->isAllowed($this->user->getId(), "SYS:DEBTS_TEAM");
 
         $isDebtor = //this user is debtor if its his own debt, or if its team debt and he can administrate team debts
                 ($debt->getDebtorType() == self::TYPE_USER && $debt->getDebtorId() == $this->user->getId()) ||
@@ -115,7 +115,7 @@ class DebtManager extends BaseManager
     private function canEditDebtData(?int $payeeId, string $payeeType): bool
     {
         $isTeamDebt = $payeeType == self::TYPE_TEAM;
-        return $isTeamDebt ? $this->user->isAllowed($this->user->getId(), Privilege::SYS("DEBTS_TEAM")) : $payeeId == $this->user->getId();
+        return $isTeamDebt ? $this->user->isAllowed($this->user->getId(), "SYS:DEBTS_TEAM") : $payeeId == $this->user->getId();
     }
 
     /**
@@ -261,7 +261,7 @@ class DebtManager extends BaseManager
 
     public function getListUserAllowed()
     {
-        $includeTeamDebts = $this->user->isAllowed($this->user->getId(), Privilege::SYS("DEBTS_TEAM"));
+        $includeTeamDebts = $this->user->isAllowed($this->user->getId(), "SYS:DEBTS_TEAM");
 
         if ($includeTeamDebts) {// debts for me or by me or team
             return $this->mapAll($this->database->table($this->getTable())->whereOr([

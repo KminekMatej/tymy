@@ -187,7 +187,7 @@ class AttendanceManager extends BaseManager
             if (!$this->user->isAllowed($this->user->getId(), "USR:$resultRightName")) {
                 $this->respondForbidden();
             }
-        } elseif (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("EVE_ATT_UPDATE"))) {
+        } elseif (!$this->user->isAllowed($this->user->getId(), "SYS:EVE_ATT_UPDATE")) {
             $this->respondForbidden();
         }
     }
@@ -197,7 +197,7 @@ class AttendanceManager extends BaseManager
      */
     private function allowAttend(array $data): void
     {
-        if ($this->user->getId() !== $data["userId"] && !$this->user->isAllowed($this->user->getId(), Privilege::SYS("ATT_UPDATE"))) {
+        if ($this->user->getId() !== $data["userId"] && !$this->user->isAllowed($this->user->getId(), "SYS:ATT_UPDATE")) {
             $this->respondForbidden();
         }
 

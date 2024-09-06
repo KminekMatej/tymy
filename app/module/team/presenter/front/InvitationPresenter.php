@@ -33,7 +33,7 @@ class InvitationPresenter extends SecuredPresenter
 
     public function renderDefault(): void
     {
-        if (!$this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('USR_CREATE'))) {
+        if (!$this->getUser()->isAllowed($this->user->getId(), "SYS:USR_CREATE")) {
             $this->flashMessage($this->translator->translate("common.alerts.notPermitted"), "warning");
             $this->redirect(':Core:Default:');
         }
@@ -44,7 +44,7 @@ class InvitationPresenter extends SecuredPresenter
 
     public function handleDelete(int $id): void
     {
-        if (!$this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('USR_CREATE'))) {
+        if (!$this->getUser()->isAllowed($this->user->getId(), "SYS:USR_CREATE")) {
             $this->flashMessage($this->translator->translate("common.alerts.notPermitted"), "warning");
             $this->redirect(':Core:Default:');
         }

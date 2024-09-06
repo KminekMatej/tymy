@@ -61,7 +61,7 @@ class NavbarControl extends Control
         $users = $this->userManager->getList();
         $this->template->counts = $this->userManager->getCounts($users);
         $this->template->playersWarnings = $this->tymyUser->getWarnings();
-        $this->template->inits = $this->user->isAllowed($this->user->getId(), Privilege::SYS('SEE_INITS')) ? $this->template->counts["INIT"] : 0;
+        $this->template->inits = $this->user->isAllowed($this->user->getId(), "SYS:SEE_INITS") ? $this->template->counts["INIT"] : 0;
         $this->template->me = $this->tymyUser;
     }
 

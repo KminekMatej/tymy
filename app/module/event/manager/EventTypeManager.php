@@ -32,14 +32,14 @@ class EventTypeManager extends BaseManager
 
     protected function allowCreate(?array &$data = null): void
     {
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("IS_ADMIN"))) {
+        if (!$this->user->isAllowed($this->user->getId(), "SYS:IS_ADMIN")) {
             $this->respondForbidden();
         }
     }
 
     protected function allowDelete(?int $recordId): void
     {
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("IS_ADMIN"))) {
+        if (!$this->user->isAllowed($this->user->getId(), "SYS:IS_ADMIN")) {
             $this->respondForbidden();
         }
     }

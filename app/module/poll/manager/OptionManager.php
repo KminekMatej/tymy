@@ -47,7 +47,7 @@ class OptionManager extends BaseManager
 
     protected function allowCreate(?array &$data = null): void
     {
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("ASK.VOTE_UPDATE"))) {
+        if (!$this->user->isAllowed($this->user->getId(), "SYS:ASK.VOTE_UPDATE")) {
             $this->respondForbidden();
         }
 
@@ -56,7 +56,7 @@ class OptionManager extends BaseManager
 
     protected function allowUpdate(?int $recordId = null, ?array &$data = null): void
     {
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("ASK.VOTE_UPDATE"))) {
+        if (!$this->user->isAllowed($this->user->getId(), "SYS:ASK.VOTE_UPDATE")) {
             $this->respondForbidden();
         }
 
@@ -76,7 +76,7 @@ class OptionManager extends BaseManager
      */
     public function createMultiple(array $options, ?int $resourceId = null): array
     {
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("ASK.VOTE_UPDATE"))) {
+        if (!$this->user->isAllowed($this->user->getId(), "SYS:ASK.VOTE_UPDATE")) {
             $this->respondForbidden();
         }
 

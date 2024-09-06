@@ -33,14 +33,14 @@ class DiscussionManager extends BaseManager
 
     protected function allowCreate(?array &$data = null): void
     {
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("DSSETUP"))) {
+        if (!$this->user->isAllowed($this->user->getId(), "SYS:DSSETUP")) {
             $this->respondForbidden();
         }
     }
 
     protected function allowDelete(?int $recordId): void
     {
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("DSSETUP"))) {
+        if (!$this->user->isAllowed($this->user->getId(), "SYS:DSSETUP")) {
             $this->respondForbidden();
         }
     }
@@ -59,7 +59,7 @@ class DiscussionManager extends BaseManager
 
     protected function allowUpdate(?int $recordId = null, ?array &$data = null): void
     {
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("DSSETUP"))) {
+        if (!$this->user->isAllowed($this->user->getId(), "SYS:DSSETUP")) {
             $this->respondForbidden();
         }
     }
@@ -214,7 +214,7 @@ class DiscussionManager extends BaseManager
      */
     public function canEdit($entity, int $userId): bool
     {
-        return in_array($userId, $this->userManager->getUserIdsWithPrivilege(Privilege::SYS("DSSETUP")));
+        return in_array($userId, $this->userManager->getUserIdsWithPrivilege("SYS:DSSETUP"));
     }
 
     /**

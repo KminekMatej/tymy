@@ -298,7 +298,7 @@ class EventManager extends BaseManager
 
     protected function allowCreate(?array &$data = null): void
     {
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("EVE_CREATE"))) {
+        if (!$this->user->isAllowed($this->user->getId(), "SYS:EVE_CREATE")) {
             $this->respondForbidden();
         }
 
@@ -339,7 +339,7 @@ class EventManager extends BaseManager
     {
         $this->event = $this->getById($recordId);
 
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("EVE_DELETE"))) {
+        if (!$this->user->isAllowed($this->user->getId(), "SYS:EVE_DELETE")) {
             $this->respondForbidden();
         }
     }
@@ -391,7 +391,7 @@ class EventManager extends BaseManager
      */
     public function canEdit($entity, int $userId): bool
     {
-        return in_array($userId, $this->userManager->getUserIdsWithPrivilege(Privilege::SYS("EVE_UPDATE")));
+        return in_array($userId, $this->userManager->getUserIdsWithPrivilege("SYS:EVE_UPDATE"));
     }
 
     /**

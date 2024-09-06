@@ -124,7 +124,7 @@ class DefaultPresenter extends SecuredPresenter
 
     public function handleApprove(int $userId): void
     {
-        if (!$this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("USR_UPDATE"))) {
+        if (!$this->getUser()->isAllowed($this->user->getId(), "SYS:USR_UPDATE")) {
             $this->flashMessage($this->translator->translate("common.alerts.notPermitted"));
             $this->redirect('this');
         }

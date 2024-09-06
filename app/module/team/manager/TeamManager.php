@@ -144,7 +144,7 @@ class TeamManager extends BaseManager
             $this->respondForbidden();
         }
 
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("TEAM_UPDATE"))) {
+        if (!$this->user->isAllowed($this->user->getId(), "SYS:TEAM_UPDATE")) {
             $this->respondForbidden();
         }
     }
