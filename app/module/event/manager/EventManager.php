@@ -302,12 +302,24 @@ class EventManager extends BaseManager
         if (!isset($data["endTime"])) {
             $data["endTime"] = $data["startTime"];
         }
-        if (!isset($data["closeTime"])) {
+
+        try {
+            $closeTimeDT = new DateTime($data["closeTime"]);
+        } catch (Exception $exc) {
+            $this->respondBadRequest($this->translator->translate("event.close") . ": " . $this->translator->translate("common.errors.valueInvalid"));
         }
 
-        $closeTimeDT = new DateTime($data["closeTime"]);
-        $startTimeDT = new DateTime($data["startTime"]);
-        $endTimeDT = new DateTime($data["endTime"]);
+        try {
+            $startTimeDT = new DateTime($data["startTime"]);
+        } catch (Exception $exc) {
+            $this->respondBadRequest($this->translator->translate("event.start") . ": " . $this->translator->translate("common.errors.valueInvalid"));
+        }
+
+        try {
+            $endTimeDT = new DateTime($data["endTime"]);
+        } catch (Exception $exc) {
+            $this->respondBadRequest($this->translator->translate("event.end") . ": " . $this->translator->translate("common.errors.valueInvalid"));
+        }
 
         if ($closeTimeDT > $startTimeDT) {
             $this->respondBadRequest($this->translator->translate("event.errors.closeAfterStart"));
@@ -345,6 +357,10 @@ class EventManager extends BaseManager
     {
         if ($recordId) {
             $this->event = $this->getById($recordId);
+
+            if (!$this->event) {
+                $this->respondNotFound(Event::MODULE, $recordId);
+            }
 
             if (!$this->canRead($this->event, $this->user->getId())) {
                 $this->responder->E4001_VIEW_NOT_PERMITTED(Event::MODULE, $recordId);
