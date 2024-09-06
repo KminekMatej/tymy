@@ -39,6 +39,9 @@ abstract class BaseManager
 
     /** @var int[] */
     private array $allIdList = [];
+
+    /** @var int[] */
+    private array $allAdminIdList = [];
     /** @var int[] */
     private array $lastIdList = [];
     protected ?string $idCol = "id"; //default id column name
@@ -115,9 +118,22 @@ abstract class BaseManager
     }
 
     /**
+     * Function to quickly obtain all admin ids - very neccessary when getAllowedReaders function should return all admins
+     * @return int[]
+     */
+    public function getAllAdminIds(): array
+    {
+        if (empty($this->allAdminIdList)) {
+            $this->allAdminIdList = $this->database->table(UserEntity::TABLE)->where("roles LIKE ?", "%" . User::ROLE_SUPER . "%")->select("id")->fetchPairs(null, "id");
+        }
+
+        return $this->allAdminIdList;
+    }
+
+    /**
      * Maps one active row to object
      * @param IRow|null $row
-     * @return BaseModel|null
+     * @return T|null
      */
     public function map(?IRow $row, bool $force = false): ?BaseModel
     {
@@ -163,7 +179,7 @@ abstract class BaseManager
 
     /**
      * Maps active rows to array of objects, where keys are id fields
-     * @return BaseModel[]
+     * @return T[]
      */
     public function mapAllWithId(array $rows): array
     {
@@ -249,7 +265,7 @@ abstract class BaseManager
     /**
      * Get array of objects, where keys are id fields
      *
-     * @return BaseModel[]
+     * @return T[]
      */
     public function getIdList(?array $idList = null, string $idField = "id"): array
     {
