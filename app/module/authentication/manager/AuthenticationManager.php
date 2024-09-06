@@ -30,6 +30,10 @@ class AuthenticationManager implements IAuthenticator
 
     public function authenticate(array $credentials): SimpleIdentity
     {
+        if (empty($credentials)) {
+            throw new AuthenticationException($this->translator->translate("team.alerts.authenticationFailed"), self::INVALID_CREDENTIAL);
+        }
+
         if (count($credentials) == 1) {   //if there is only username sent, it can possibly be login using transfer key
             $parts = explode("|", $credentials[0]);
             if (count($parts) == 2 && $parts[0] == "tk") {
