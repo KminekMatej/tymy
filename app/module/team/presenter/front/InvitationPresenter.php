@@ -6,7 +6,6 @@ use Nette\Application\UI\Form;
 use Nette\Bridges\ApplicationLatte\Template;
 use stdClass;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
-use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Manager\InvitationManager;
 use Tymy\Module\User\Model\User;
 
@@ -33,7 +32,7 @@ class InvitationPresenter extends SecuredPresenter
 
     public function renderDefault(): void
     {
-        if (!$this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('USR_CREATE'))) {
+        if (!$this->getUser()->isAllowed($this->user->getId(), "SYS:USR_CREATE")) {
             $this->flashMessage($this->translator->translate("common.alerts.notPermitted"), "warning");
             $this->redirect(':Core:Default:');
         }
@@ -44,7 +43,7 @@ class InvitationPresenter extends SecuredPresenter
 
     public function handleDelete(int $id): void
     {
-        if (!$this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('USR_CREATE'))) {
+        if (!$this->getUser()->isAllowed($this->user->getId(), "SYS:USR_CREATE")) {
             $this->flashMessage($this->translator->translate("common.alerts.notPermitted"), "warning");
             $this->redirect(':Core:Default:');
         }

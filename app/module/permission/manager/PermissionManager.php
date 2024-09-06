@@ -12,13 +12,10 @@ use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Permission\Mapper\PermissionMapper;
 use Tymy\Module\Permission\Model\Permission;
-use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Model\User;
 
 /**
- * Description of PermissionManager
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 2. 9. 2020
+ * @extends BaseManager<Permission>
  */
 class PermissionManager extends BaseManager
 {
@@ -59,8 +56,8 @@ class PermissionManager extends BaseManager
     protected function metaMap(BaseModel &$model, $userId = null): void
     {
         assert($model instanceof Permission);
-        $privilege = $model->getType() == Permission::TYPE_SYSTEM ? Privilege::SYS($model->getName()) : Privilege::USR($model->getName());
-        $model->setMeAllowed($this->user->isLoggedIn() && $this->user->isAllowed($this->user->getId(), $privilege));
+        $privilege = "{$model->getType()}:{$model->getName()}";
+        $model->setMeAllowed($this->user->isLoggedIn() && $this->user->isAllowed((string) $this->user->getId(), $privilege));
     }
 
     public function canEdit($entity, $userId): bool
@@ -76,7 +73,7 @@ class PermissionManager extends BaseManager
 
     public function getAllowedReaders(BaseModel $record): array
     {
-        return false; //todo
+        return $this->getAllUserIds();
     }
 
     /**

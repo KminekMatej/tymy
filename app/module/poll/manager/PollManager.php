@@ -9,10 +9,10 @@ use Nette\Utils\Strings;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Core\Service\BbService;
 use Tymy\Module\Permission\Manager\PermissionManager;
 use Tymy\Module\Permission\Model\Permission;
-use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\Poll\Mapper\PollMapper;
 use Tymy\Module\Poll\Model\Option;
 use Tymy\Module\Poll\Model\Poll;
@@ -23,9 +23,7 @@ use Tymy\Module\User\Manager\UserManager;
  * Description of PollManager
  *
  * @RequestMapping(value = "/polls/{id}/votes", method = RequestMethod.POST)
- *
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 21. 12. 2020
+ * @extends BaseManager<Poll>
  */
 class PollManager extends BaseManager
 {
@@ -43,7 +41,7 @@ class PollManager extends BaseManager
     }
 
     /**
-     * @return \Tymy\Module\Core\Model\Field[]
+     * @return Field[]
      */
     public function getScheme(): array
     {
@@ -123,9 +121,9 @@ class PollManager extends BaseManager
             }
         }
 
-        $hasVoteRights = empty($model->getVoteRightName()) || $this->user->isAllowed($userId, Privilege::USR($model->getVoteRightName()));
-        $hasAlienVoteRights = !empty($model->getAlienVoteRightName()) && $this->user->isAllowed($userId, Privilege::USR($model->getAlienVoteRightName()));
-        $hasResultRights = empty($model->getResultRightName()) || $this->user->isAllowed($userId, Privilege::USR($model->getResultRightName()));
+        $hasVoteRights = empty($model->getVoteRightName()) || $this->user->isAllowed((string) $userId, "USR:{$model->getVoteRightName()}");
+        $hasAlienVoteRights = !empty($model->getAlienVoteRightName()) && $this->user->isAllowed((string) $userId, "USR:{$model->getAlienVoteRightName()}");
+        $hasResultRights = empty($model->getResultRightName()) || $this->user->isAllowed((string) $userId, "USR:{$model->getResultRightName()}");
         $resultsCanBeShown = $model->getShowResults() == Poll::RESULTS_ALWAYS ||
                 ($model->getShowResults() == Poll::RESULTS_AFTER_VOTE && $model->getVoted()) ||
                 ($model->getShowResults() == Poll::RESULTS_NEVER && $model->getCreatedById() === $userId) ||
@@ -144,7 +142,7 @@ class PollManager extends BaseManager
 
     public function canEdit($entity, $userId): bool
     {
-        return $this->user->isAllowed($userId, Privilege::SYS("ASK.VOTE_UPDATE"));
+        return $this->user->isAllowed((string) $userId, "SYS:ASK.VOTE_UPDATE");
     }
 
     public function canRead($entity, $userId): bool
@@ -154,7 +152,7 @@ class PollManager extends BaseManager
 
     protected function allowCreate(?array &$data = null): void
     {
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("ASK.VOTE_CREATE"))) {
+        if (!$this->user->isAllowed((string) $this->user->getId(), "SYS:ASK.VOTE_CREATE")) {
             $this->respondForbidden();
         }
 
@@ -188,7 +186,7 @@ class PollManager extends BaseManager
 
         $this->allowRead($recordId);
 
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("ASK.VOTE_DELETE"))) {
+        if (!$this->user->isAllowed((string) $this->user->getId(), "SYS:ASK.VOTE_DELETE")) {
             $this->respondForbidden();
         }
     }
@@ -204,7 +202,7 @@ class PollManager extends BaseManager
     {
         $this->allowRead($recordId);
 
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("ASK.VOTE_UPDATE"))) {
+        if (!$this->user->isAllowed((string) $this->user->getId(), "SYS:ASK.VOTE_UPDATE")) {
             $this->respondForbidden();
         }
 

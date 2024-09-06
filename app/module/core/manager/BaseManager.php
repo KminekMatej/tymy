@@ -21,10 +21,10 @@ use Tymy\Module\Core\Model\Order;
 use Tymy\Module\Team\Model\Team;
 use Tymy\Module\User\Model\User as UserEntity;
 
+use function count;
+
 /**
- * Description of BaseManager
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 5. 6. 2020
+ * @template T of BaseModel
  */
 abstract class BaseManager
 {
@@ -39,6 +39,9 @@ abstract class BaseManager
 
     /** @var int[] */
     private array $allIdList = [];
+
+    /** @var int[] */
+    private array $allAdminIdList = [];
     /** @var int[] */
     private array $lastIdList = [];
     protected ?string $idCol = "id"; //default id column name
@@ -115,9 +118,22 @@ abstract class BaseManager
     }
 
     /**
+     * Function to quickly obtain all admin ids - very neccessary when getAllowedReaders function should return all admins
+     * @return int[]
+     */
+    public function getAllAdminIds(): array
+    {
+        if (empty($this->allAdminIdList)) {
+            $this->allAdminIdList = $this->database->table(UserEntity::TABLE)->where("roles LIKE ?", "%" . UserEntity::ROLE_SUPER . "%")->select("id")->fetchPairs(null, "id");
+        }
+
+        return $this->allAdminIdList;
+    }
+
+    /**
      * Maps one active row to object
      * @param IRow|null $row
-     * @return BaseModel|null
+     * @return T|null
      */
     public function map(?IRow $row, bool $force = false): ?BaseModel
     {
@@ -146,7 +162,7 @@ abstract class BaseManager
 
     /**
      * Maps active rows to array of objects
-     * @return BaseModel[]
+     * @return T[]
      */
     public function mapAll(array $rows): array
     {
@@ -163,7 +179,7 @@ abstract class BaseManager
 
     /**
      * Maps active rows to array of objects, where keys are id fields
-     * @return BaseModel[]
+     * @return T[]
      */
     public function mapAllWithId(array $rows): array
     {
@@ -208,6 +224,13 @@ abstract class BaseManager
         return $this->database->table($this->getTable())->where("id", $id)->fetch();
     }
 
+    /**
+     * Get record using its id
+     *
+     * @param int $id
+     * @param bool $force
+     * @return T|null
+     */
     public function getById(int $id, bool $force = false): ?BaseModel
     {
         if (!is_numeric($id)) {
@@ -242,7 +265,7 @@ abstract class BaseManager
     /**
      * Get array of objects, where keys are id fields
      *
-     * @return BaseModel[]
+     * @return T[]
      */
     public function getIdList(?array $idList = null, string $idField = "id"): array
     {
@@ -575,9 +598,9 @@ abstract class BaseManager
     /**
      * Load record using id. Responds with 404 if not found
      *
-     * @return BaseModel
+     * @return T|null
      */
-    protected function loadRecord(int $recordId, ?BaseManager $manager = null)
+    protected function loadRecord(int $recordId, ?BaseManager $manager = null): ?BaseModel
     {
         $record = $manager !== null ? $manager->getById($recordId) : $this->getById($recordId);
 

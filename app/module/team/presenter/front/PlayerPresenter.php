@@ -10,9 +10,10 @@ use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Core\Factory\FormFactory;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
-use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Manager\AvatarManager;
 use Tymy\Module\User\Model\User;
+
+use function count;
 
 class PlayerPresenter extends SecuredPresenter
 {
@@ -55,7 +56,7 @@ class PlayerPresenter extends SecuredPresenter
 
     public function renderNew($player = null): void
     {
-        if (!$this->getUser()->isAllowed($this->user->getId(), Privilege::SYS('USR_CREATE'))) {
+        if (!$this->getUser()->isAllowed($this->user->getId(), "SYS:USR_CREATE")) {
             $this->flashMessage($this->translator->translate("common.alerts.notPermitted"), "warning");
             $this->redirect('this');
         }
@@ -104,7 +105,7 @@ class PlayerPresenter extends SecuredPresenter
 
         $this->template->player = $user;
         $this->template->isMe = $user->getId() == $this->getUser()->getId();
-        $this->template->canUpdate = $this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("USR_UPDATE")) || $this->template->isMe;
+        $this->template->canUpdate = $this->getUser()->isAllowed($this->user->getId(), "SYS:USR_UPDATE") || $this->template->isMe;
 
         $this->template->allRoles = $this->getAllRoles();
         $this->template->allSkins = $this->teamManager->allSkins;

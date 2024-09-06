@@ -12,9 +12,7 @@ use Tymy\Module\Settings\Model\ICal;
 use Tymy\Module\Settings\Model\ICalItem;
 
 /**
- * Description of ICalManager
- *
- * @author kminekmatej, 11. 9. 2022, 15:49:12
+ * @extends BaseManager<ICal>
  */
 class ICalManager extends BaseManager
 {

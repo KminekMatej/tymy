@@ -17,7 +17,6 @@ use Tymy\Module\Event\Manager\EventManager;
 use Tymy\Module\Event\Manager\EventTypeManager;
 use Tymy\Module\File\Handler\FileManager;
 use Tymy\Module\Multiaccount\Manager\MultiaccountManager;
-use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\Poll\Manager\PollManager;
 use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\User\Manager\UserManager;
@@ -61,7 +60,7 @@ class NavbarControl extends Control
         $users = $this->userManager->getList();
         $this->template->counts = $this->userManager->getCounts($users);
         $this->template->playersWarnings = $this->tymyUser->getWarnings();
-        $this->template->inits = $this->user->isAllowed($this->user->getId(), Privilege::SYS('SEE_INITS')) ? $this->template->counts["INIT"] : 0;
+        $this->template->inits = $this->user->isAllowed((string) $this->user->getId(), "SYS:SEE_INITS") ? $this->template->counts["INIT"] : 0;
         $this->template->me = $this->tymyUser;
     }
 

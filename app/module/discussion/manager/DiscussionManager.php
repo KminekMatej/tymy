@@ -3,27 +3,24 @@
 namespace Tymy\Module\Discussion\Manager;
 
 use Nette\Database\IRow;
-use Nette\Database\Table\ActiveRow;
-use Nette\Database\Table\Selection;
 use Nette\Utils\Strings;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
+use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Discussion\Mapper\DiscussionMapper;
 use Tymy\Module\Discussion\Model\Discussion;
 use Tymy\Module\Discussion\Model\NewInfo;
 use Tymy\Module\Permission\Manager\PermissionManager;
 use Tymy\Module\Permission\Model\Permission;
-use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Manager\UserManager;
 
 /**
- * Description of DiscussionManager
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 5. 6. 2020
+ * @extends BaseManager<Discussion>
  */
 class DiscussionManager extends BaseManager
 {
+    /** @var Discussion|null */
     private ?Discussion $discussion = null;
 
     public function __construct(ManagerFactory $managerFactory, private PermissionManager $permissionManager, private UserManager $userManager)
@@ -33,14 +30,14 @@ class DiscussionManager extends BaseManager
 
     protected function allowCreate(?array &$data = null): void
     {
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("DSSETUP"))) {
+        if (!$this->user->isAllowed((string) $this->user->getId(), "SYS:DSSETUP")) {
             $this->respondForbidden();
         }
     }
 
     protected function allowDelete(?int $recordId): void
     {
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("DSSETUP"))) {
+        if (!$this->user->isAllowed((string) $this->user->getId(), "SYS:DSSETUP")) {
             $this->respondForbidden();
         }
     }
@@ -59,7 +56,7 @@ class DiscussionManager extends BaseManager
 
     protected function allowUpdate(?int $recordId = null, ?array &$data = null): void
     {
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("DSSETUP"))) {
+        if (!$this->user->isAllowed((string) $this->user->getId(), "SYS:DSSETUP")) {
             $this->respondForbidden();
         }
     }
@@ -89,10 +86,10 @@ class DiscussionManager extends BaseManager
     protected function metaMap(BaseModel &$model, $userId = null): void
     {
         assert($model instanceof Discussion);
-        $model->setCanRead(empty($model->getReadRightName()) || $this->user->isAllowed($this->user->getId(), Privilege::USR($model->getReadRightName())));
-        $model->setCanWrite(empty($model->getWriteRightName()) || $this->user->isAllowed($this->user->getId(), Privilege::USR($model->getWriteRightName())));
-        $model->setCanDelete($this->userManager->isAdmin() || (!empty($model->getDeleteRightName()) && $this->user->isAllowed($this->user->getId(), Privilege::USR($model->getDeleteRightName()))));
-        $model->setCanStick($this->userManager->isAdmin() || (!empty($model->getStickyRightName()) && $this->user->isAllowed($this->user->getId(), Privilege::USR($model->getStickyRightName()))));
+        $model->setCanRead(empty($model->getReadRightName()) || $this->user->isAllowed((string) $this->user->getId(), "USR:{$model->getReadRightName()}"));
+        $model->setCanWrite(empty($model->getWriteRightName()) || $this->user->isAllowed((string) $this->user->getId(), "USR:{$model->getWriteRightName()}"));
+        $model->setCanDelete($this->userManager->isAdmin() || (!empty($model->getDeleteRightName()) && $this->user->isAllowed((string) $this->user->getId(), "USR:{$model->getDeleteRightName()}")));
+        $model->setCanStick($this->userManager->isAdmin() || (!empty($model->getStickyRightName()) && $this->user->isAllowed((string) $this->user->getId(), "USR:{$model->getStickyRightName()}")));
     }
 
     public function getById(int $id, bool $force = false): ?BaseModel
@@ -162,7 +159,7 @@ class DiscussionManager extends BaseManager
     }
 
     /**
-     * @return \Tymy\Module\Core\Model\BaseModel[]
+     * @return BaseModel[]
      */
     public function getList(?array $idList = null, string $idField = "id", ?int $limit = null, ?int $offset = null, ?string $order = null): array
     {
@@ -201,7 +198,7 @@ class DiscussionManager extends BaseManager
     }
 
     /**
-     * @return \Tymy\Module\Core\Model\Field[]
+     * @return Field[]
      */
     public function getScheme(): array
     {
@@ -214,7 +211,7 @@ class DiscussionManager extends BaseManager
      */
     public function canEdit($entity, int $userId): bool
     {
-        return in_array($userId, $this->userManager->getUserIdsWithPrivilege(Privilege::SYS("DSSETUP")));
+        return in_array($userId, $this->userManager->getUserIdsWithPrivilege("SYS:DSSETUP"));
     }
 
     /**
@@ -238,7 +235,7 @@ class DiscussionManager extends BaseManager
             return $this->getAllUserIds();
         }
 
-        return $this->userManager->getUserIdsWithPrivilege(Privilege::USR($record->getReadRightName()));
+        return $this->userManager->getUserIdsWithPrivilege("USR:{$record->getReadRightName()}");
     }
 
     public function create(array $data, ?int $resourceId = null): BaseModel

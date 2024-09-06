@@ -20,7 +20,6 @@ use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Core\Service\MailService;
 use Tymy\Module\Permission\Manager\PermissionManager;
-use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\Team\Model\Team;
 use Tymy\Module\User\Mapper\UserMapper;
@@ -28,12 +27,12 @@ use Tymy\Module\User\Model\Invitation;
 use Tymy\Module\User\Model\SimpleUser;
 use Tymy\Module\User\Model\User;
 
+use function count;
+
 use const TEAM_DIR;
 
 /**
- * Description of UserManager
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 4. 8. 2020
+ * @extends BaseManager<User>
  */
 class UserManager extends BaseManager
 {
@@ -75,7 +74,7 @@ class UserManager extends BaseManager
             $playerIds = $this->database->table($this->getTable())->where("status", User::STATUS_PLAYER)->fetchPairs(null, "id");
             return array_intersect($users, $playerIds);
         } else {
-            return ArrayHelper::filter($users, "status", User::STATUS_PLAYER);
+            return ArrayHelper::filter($users, "status", User::STATUS_PLAYER); /* @phpstan-ignore-line Dont know how to properly specify returning same type as on input */
         }
     }
 
@@ -362,7 +361,7 @@ class UserManager extends BaseManager
                     "password" => $password,
         ]));    //this request is accessible from localhost only
 
-        return $userId && $userId !== "null" ? $userId : null;
+        return $userId && $userId !== "null" ? intval($userId) : null;
     }
 
     /**
@@ -395,7 +394,7 @@ class UserManager extends BaseManager
         $registeredUser = $this->map($createdRow);
         assert($registeredUser instanceof User);
 
-        $allAdmins = $this->getUsersWithPrivilege(Privilege::SYS("USR_UPDATE"));
+        $allAdmins = $this->getUsersWithPrivilege("SYS:USR_UPDATE");
 
         if ($invitation === null) { //send registration email only if this is blank registration from web, not from invitation
             foreach ($allAdmins as $admin) {
@@ -428,11 +427,16 @@ class UserManager extends BaseManager
 
     /**
      * Function selects all users allowed on given permission
+     * @param string $privilege String representation of privilege
      * @return Selection Selection to operate with
      */
-    private function selectUsersByPrivilege(Privilege $privilege): Selection
+    private function selectUsersByPrivilege(string $privilege): Selection
     {
-        $permission = $this->permissionManager->getByTypeName($privilege->getType(), $privilege->getName());
+        $privParts = explode(":", $privilege);
+        $type = array_shift($privParts);
+        $name = join(":", $privParts); //join by colon back in case some user permission would contain it
+
+        $permission = $this->permissionManager->getByTypeName($type, $name);
 
         $usersSelector = $this->database->table($this->getTable());
         $conditions = [];
@@ -476,7 +480,7 @@ class UserManager extends BaseManager
      * Load list of user ids, allowed to operate with given privilege
      * @return mixed[]
      */
-    public function getUserIdsWithPrivilege(Privilege $privilege): array
+    public function getUserIdsWithPrivilege(string $privilege): array
     {
         return $this->selectUsersByPrivilege($privilege)->fetchPairs("id", "id");
     }
@@ -485,7 +489,7 @@ class UserManager extends BaseManager
      * Load list of user object, allowed to operate with given privilege
      * @return BaseModel[]
      */
-    public function getUsersWithPrivilege(Privilege $privilege): array
+    public function getUsersWithPrivilege(string $privilege): array
     {
         return $this->mapAll($this->selectUsersByPrivilege($privilege)->fetchAll());
     }
@@ -535,7 +539,7 @@ class UserManager extends BaseManager
 
     protected function allowCreate(?array &$data = null): void
     {
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("USR_CREATE"))) {
+        if (!$this->user->isAllowed((string) $this->user->getId(), "SYS:USR_CREATE")) {
             $this->responder->E4003_CREATE_NOT_PERMITTED(User::MODULE);
         }
 
@@ -574,7 +578,7 @@ class UserManager extends BaseManager
             $this->respondNotFound();
         }
 
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("USR_UPDATE"))) {
+        if (!$this->user->isAllowed((string) $this->user->getId(), "SYS:USR_UPDATE")) {
             $this->responder->E4004_DELETE_NOT_PERMITTED(User::MODULE, $recordId);
         }
     }
@@ -593,11 +597,11 @@ class UserManager extends BaseManager
         }
 
         //only administrators can change user roles
-        if (isset($data["roles"]) && $data["roles"] !== $this->userModel->getRoles() && !$this->user->isAllowed($this->user->getId(), Privilege::SYS("IS_ADMIN"))) {
+        if (isset($data["roles"]) && $data["roles"] !== $this->userModel->getRoles() && !$this->user->isAllowed((string) $this->user->getId(), "SYS:IS_ADMIN")) {
             $this->responder->E403_FORBIDDEN($this->translator->translate("team.alerts.changingRolesForbidden"));
         }
 
-        $canEditFull = $this->user->isAllowed($this->user->getId(), Privilege::SYS("USR_UPDATE"));
+        $canEditFull = $this->user->isAllowed((string) $this->user->getId(), "SYS:USR_UPDATE");
         $editingMyself = $this->userModel->getId() === $this->user->getId();
 
         if (!$canEditFull && !$editingMyself) {

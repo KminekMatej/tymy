@@ -2,9 +2,9 @@
 
 namespace Tymy\Module\Debt\Presenter\Front;
 
+use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Debt\Manager\DebtManager;
-use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Manager\UserManager;
 
 /**
@@ -28,12 +28,12 @@ class DebtBasePresenter extends SecuredPresenter
 
     /**
      * Get list of possible payees - always Me, but if user is permitted to manage team debts, also TEAM mocked user
-     * @return \Tymy\Module\Core\Model\BaseModel[]|null[]|mixed[]
+     * @return BaseModel[]|null[]|mixed[]
      */
     protected function getPayeeList(): array
     {
         $payeeList = [$this->userManager->getById($this->user->getId())];
-        if ($this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("DEBTS_TEAM"))) {
+        if ($this->getUser()->isAllowed($this->user->getId(), "SYS:DEBTS_TEAM")) {
             $payeeList[] = $this->userManager->mockTeamUser();
         }
         return $payeeList;

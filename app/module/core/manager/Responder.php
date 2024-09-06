@@ -4,11 +4,11 @@
 
 namespace Tymy\Module\Core\Manager;
 
-use Exception;
 use Contributte\Translation\Translator;
+use Exception;
 use Nette\Application\AbortException;
 use Nette\Application\Application;
-use Nette\Http\Request;
+use Nette\Application\IPresenter;
 use Nette\Http\Response;
 use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Core\Presenter\RootPresenter;
@@ -21,7 +21,7 @@ use Tymy\Module\User\Model\User;
  */
 class Responder
 {
-    public ?RootPresenter $presenter = null;
+    public ?IPresenter $presenter = null;
     public ?RootPresenter $presenterMock = null;
     private int $httpCode = Response::S403_FORBIDDEN;
 
@@ -66,6 +66,7 @@ class Responder
 
     private function throw(string $message): never
     {
+        assert($this->presenter instanceof RootPresenter);
         $this->presenter->getHttpResponse()->setCode($this->httpCode);
 
         throw new Exception($message);

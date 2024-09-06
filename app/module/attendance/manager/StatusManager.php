@@ -18,15 +18,14 @@ use Tymy\Module\Event\Model\EventType;
 use const TEAM_DIR;
 
 /**
- * Description of StatusManager
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 8. 10. 2020
+ * @extends BaseManager<Status>
  */
 class StatusManager extends BaseManager
 {
     public const ICON_WIDTH = 250;
     public const ICON_HEIGHT = 250;
 
+    /** @var Status|null */
     private ?Status $status = null;
     private array $simpleCache = [];
 
@@ -59,7 +58,12 @@ class StatusManager extends BaseManager
         $this->simpleCache = [];
     }
 
-    public function map(?IRow $row, $force = false): ?BaseModel
+    /**
+     * @param IRow|null $row
+     * @param bool $force
+     * @return Status|null
+     */
+    public function map(?IRow $row, bool $force = false): ?Status
     {
         if ($row === null) {
             return null;

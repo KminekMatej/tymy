@@ -10,13 +10,10 @@ use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Debt\Mapper\DebtMapper;
 use Tymy\Module\Debt\Model\Debt;
-use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Manager\UserManager;
 
 /**
- * Description of DebtManager
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 29. 11. 2020
+ * @extends BaseManager<Debt>
  */
 class DebtManager extends BaseManager
 {
@@ -40,7 +37,7 @@ class DebtManager extends BaseManager
         $debt = parent::map($row, $force);
         assert($debt instanceof Debt);
 
-        $isTeamDebtManager = $this->user->isAllowed($this->user->getId(), Privilege::SYS("DEBTS_TEAM"));
+        $isTeamDebtManager = $this->user->isAllowed((string) $this->user->getId(), "SYS:DEBTS_TEAM");
 
         $isDebtor = //this user is debtor if its his own debt, or if its team debt and he can administrate team debts
                 ($debt->getDebtorType() == self::TYPE_USER && $debt->getDebtorId() == $this->user->getId()) ||
@@ -115,7 +112,7 @@ class DebtManager extends BaseManager
     private function canEditDebtData(?int $payeeId, string $payeeType): bool
     {
         $isTeamDebt = $payeeType == self::TYPE_TEAM;
-        return $isTeamDebt ? $this->user->isAllowed($this->user->getId(), Privilege::SYS("DEBTS_TEAM")) : $payeeId == $this->user->getId();
+        return $isTeamDebt ? $this->user->isAllowed((string) $this->user->getId(), "SYS:DEBTS_TEAM") : $payeeId == $this->user->getId();
     }
 
     /**
@@ -261,7 +258,7 @@ class DebtManager extends BaseManager
 
     public function getListUserAllowed()
     {
-        $includeTeamDebts = $this->user->isAllowed($this->user->getId(), Privilege::SYS("DEBTS_TEAM"));
+        $includeTeamDebts = $this->user->isAllowed((string) $this->user->getId(), "SYS:DEBTS_TEAM");
 
         if ($includeTeamDebts) {// debts for me or by me or team
             return $this->mapAll($this->database->table($this->getTable())->whereOr([

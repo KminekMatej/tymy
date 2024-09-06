@@ -22,16 +22,13 @@ use Tymy\Module\Event\Model\Event;
 use Tymy\Module\Event\Model\EventType;
 use Tymy\Module\Permission\Manager\PermissionManager;
 use Tymy\Module\Permission\Model\Permission;
-use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\PushNotification\Manager\NotificationGenerator;
 use Tymy\Module\PushNotification\Manager\PushNotificationManager;
 use Tymy\Module\User\Manager\UserManager;
 use Tymy\Module\User\Model\User;
 
 /**
- * Description of EventManager
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 19. 9. 2020
+ * @extends BaseManager<Event>
  */
 class EventManager extends BaseManager
 {
@@ -77,10 +74,12 @@ class EventManager extends BaseManager
     protected function metaMap(BaseModel &$model, $userId = null): void
     {
         assert($model instanceof Event);
-        $model->setCanView(empty($model->getViewRightName()) || $this->user->isAllowed($this->user->getId(), Privilege::USR($model->getViewRightName())));
-        $model->setCanPlan(empty($model->getPlanRightName()) || $this->user->isAllowed($this->user->getId(), Privilege::USR($model->getPlanRightName())));
-        $model->setCanPlanOthers($this->user->isAllowed($this->user->getId(), Privilege::SYS("ATT_UPDATE")));
-        $model->setCanResult(empty($model->getResultRightName()) ? $this->user->isAllowed($this->user->getId(), Privilege::SYS("EVE_ATT_UPDATE")) : $this->user->isAllowed($this->user->getId(), Privilege::USR($model->getResultRightName())));
+        $model->setCanView(empty($model->getViewRightName()) || $this->user->isAllowed((string) $this->user->getId(), "USR:{$model->getViewRightName()}"));
+        $model->setCanPlan(empty($model->getPlanRightName()) || $this->user->isAllowed((string) $this->user->getId(), "USR:{$model->getPlanRightName()}"));
+        $model->setCanPlanOthers($this->user->isAllowed((string) $this->user->getId(), "SYS:ATT_UPDATE"));
+        $model->setCanResult(empty($model->getResultRightName()) ?
+            $this->user->isAllowed((string) $this->user->getId(), "SYS:EVE_ATT_UPDATE") :
+            $this->user->isAllowed((string) $this->user->getId(), "USR:{$model->getResultRightName()}"));
 
         $eventColor = '#' . $this->eventTypeManager->getEventTypeColor($model->getEventTypeId());
 
@@ -296,7 +295,7 @@ class EventManager extends BaseManager
 
     protected function allowCreate(?array &$data = null): void
     {
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("EVE_CREATE"))) {
+        if (!$this->user->isAllowed((string) $this->user->getId(), "SYS:EVE_CREATE")) {
             $this->respondForbidden();
         }
 
@@ -337,7 +336,7 @@ class EventManager extends BaseManager
     {
         $this->event = $this->getById($recordId);
 
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("EVE_DELETE"))) {
+        if (!$this->user->isAllowed((string) $this->user->getId(), "SYS:EVE_DELETE")) {
             $this->respondForbidden();
         }
     }
@@ -389,7 +388,7 @@ class EventManager extends BaseManager
      */
     public function canEdit($entity, int $userId): bool
     {
-        return in_array($userId, $this->userManager->getUserIdsWithPrivilege(Privilege::SYS("EVE_UPDATE")));
+        return in_array($userId, $this->userManager->getUserIdsWithPrivilege("SYS:EVE_UPDATE"));
     }
 
     /**
@@ -410,7 +409,7 @@ class EventManager extends BaseManager
     {
         assert($record instanceof Event);
         return $record->getViewRightName() ?
-            $this->userManager->getUserIdsWithPrivilege(Privilege::USR($record->getViewRightName())) :
+            $this->userManager->getUserIdsWithPrivilege("USR:{$record->getViewRightName()}") :
             $this->getAllUserIds();
     }
 

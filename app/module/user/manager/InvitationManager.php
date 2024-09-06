@@ -10,15 +10,11 @@ use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Core\Service\MailService;
-use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Mapper\InvitationMapper;
 use Tymy\Module\User\Model\Invitation;
-use Tymy\Module\User\Model\User;
 
 /**
- * Description of InvitationManager
- *
- * @author kminekmatej, 25. 9. 2022, 21:25:38
+ * @extends BaseManager<Invitation>
  */
 class InvitationManager extends BaseManager
 {
@@ -42,12 +38,12 @@ class InvitationManager extends BaseManager
 
     public function canEdit(BaseModel $entity, int $userId): bool
     {
-        return in_array($userId, $this->userManager->getUserIdsWithPrivilege(Privilege::SYS("USR_CREATE")));
+        return in_array($userId, $this->userManager->getUserIdsWithPrivilege("SYS:USR_CREATE"));
     }
 
     protected function allowCreate(?array &$data = null): void
     {
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("USR_CREATE"))) {
+        if (!$this->user->isAllowed((string) $this->user->getId(), "SYS:USR_CREATE")) {
             $this->responder->E4003_CREATE_NOT_PERMITTED("Invitiation");
         }
 
@@ -66,28 +62,28 @@ class InvitationManager extends BaseManager
 
     protected function allowDelete(?int $recordId): void
     {
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("USR_CREATE"))) {
+        if (!$this->user->isAllowed((string) $this->user->getId(), "SYS:USR_CREATE")) {
             $this->responder->E4004_DELETE_NOT_PERMITTED("Invitiation", $recordId);
         }
     }
 
     protected function allowRead(?int $recordId = null): void
     {
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("USR_CREATE"))) {
+        if (!$this->user->isAllowed((string) $this->user->getId(), "SYS:USR_CREATE")) {
             $this->responder->E4001_VIEW_NOT_PERMITTED("Invitiation", $recordId);
         }
     }
 
     protected function allowUpdate(?int $recordId = null, ?array &$data = null): void
     {
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("USR_CREATE"))) {
+        if (!$this->user->isAllowed((string) $this->user->getId(), "SYS:USR_CREATE")) {
             $this->responder->E4002_EDIT_NOT_PERMITTED("Invitiation", $recordId);
         }
     }
 
     public function canRead(BaseModel $entity, int $userId): bool
     {
-        return in_array($userId, $this->userManager->getUserIdsWithPrivilege(Privilege::SYS("USR_CREATE")));
+        return in_array($userId, $this->userManager->getUserIdsWithPrivilege("SYS:USR_CREATE"));
     }
 
     public function create(array $data, ?int $resourceId = null): BaseModel
@@ -121,7 +117,7 @@ class InvitationManager extends BaseManager
      */
     public function getAllowedReaders(BaseModel $record): array
     {
-        return $this->userManager->getUserIdsWithPrivilege(Privilege::SYS("USR_CREATE"));
+        return $this->userManager->getUserIdsWithPrivilege("SYS:USR_CREATE");
     }
 
     public function read(int $resourceId, ?int $subResourceId = null): BaseModel

@@ -5,11 +5,10 @@ namespace Tymy\Module\Authorization\Manager;
 use Nette\Database\Explorer;
 use Nette\Database\Table\ActiveRow;
 use Nette\Security\IAuthorizator;
-use Tymy\Module\Core\Model\BaseModel;
+use stdClass;
 use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Permission\Mapper\PermissionMapper;
 use Tymy\Module\Permission\Model\Permission;
-use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Model\User;
 
 /**
@@ -44,7 +43,7 @@ class AuthorizationManager implements IAuthorizator
     /**
      * Maps one active row to object
      */
-    public function map(string $class, array $scheme, \Nette\Database\Table\ActiveRow|false $row, $force = false): ?object
+    public function map(string $class, array $scheme, ActiveRow|false $row, $force = false): ?object
     {
         if (!$row) {
             return null;
@@ -87,7 +86,7 @@ class AuthorizationManager implements IAuthorizator
     /**
      * Check user is allowed for privilege. Does the same thing as Nette user->isAllowed() but with any user object
      */
-    public function isUserAllowed(User $user, Privilege $privilege): bool
+    public function isUserAllowed(User $user, ?string $privilege): bool
     {
         foreach ($user->getRoles() as $role) {
             if ($this->isAllowed($role, $user->getId(), $privilege)) {
@@ -101,45 +100,49 @@ class AuthorizationManager implements IAuthorizator
     /**
      * Main permissions checker
      * @param string $role Role - SUPER / USR / WEB / ATT
-     * @param int $resource User id
-     * @param Privilege $privilege Privilege, consisting of type and name of permissions
+     * @param string|null $resource User id
+     * @param string|null $privilege Privilege, consisting of type and name of permissions
      */
-    public function isAllowed($role, $resource, $privilege): bool
+    public function isAllowed(?string $role, ?string $resource, ?string $privilege): bool
     {
         if (!$privilege) {
             //\Tracy\Debugger::barDump("No privilege");
-            return self::DENY;
+            return self::Deny;
         }
 
         //\Tracy\Debugger::barDump("Checking role $role for user id $resource and privilege {$privilege->getType()}:{$privilege->getName()}");
 
-        if ($privilege->getType() == "SYS") {
-            if ($privilege->getName() == "IS_ADMIN") {
+        $privParts = explode(":", $privilege);
+        $type = array_shift($privParts);
+        $name = join(":", $privParts); //join by colon back in case some user permission would contain it
+
+        if ($type == "SYS") {
+            if ($name == "IS_ADMIN") {
                 return $this->isAdmin($role);
             }
-            if ($privilege->getName() == "SEE_INITS") {
-                return in_array($role, ["SUPER", "USR"]) ? self::ALLOW : self::DENY;
+            if ($name == "SEE_INITS") {
+                return in_array($role, ["SUPER", "USR"]) ? self::Allow : self::Deny;
             }
 
             if ($this->isAdmin($role)) {
-                return self::ALLOW;
+                return self::Allow;
             }
         }
 
-        $permission = $this->getPermission($privilege->getType(), $privilege->getName());
-        if (!$permission instanceof \Tymy\Module\Permission\Model\Permission) {
+        $permission = $this->getPermission($type, $name);
+        if (!$permission instanceof Permission) {
             //\Tracy\Debugger::log("No permission");
-            return self::DENY;
+            return self::Deny;
         }
         //\Tracy\Debugger::log("Allowed by role: " . ($this->isAllowedByRole($role, $permission) ? "true" : "false"));
         //\Tracy\Debugger::log("Allowed by status: " . ($this->isAllowedByStatus($this->getUserStatus($resource), $permission) ? "true" : "false"));
         //\Tracy\Debugger::log("Allowed by id: " . ($this->isAllowedById($resource, $permission) ? "true" : "false"));
-        return $this->isAllowedByRole($role, $permission) || $this->isAllowedByStatus($this->getUserStatus($resource), $permission) || $this->isAllowedById($resource, $permission) ? self::ALLOW : self::DENY;
+        return $this->isAllowedByRole($role, $permission) || $this->isAllowedByStatus($this->getUserStatus($resource), $permission) || $this->isAllowedById($resource, $permission) ? self::Allow : self::Deny;
     }
 
     private function isAdmin(string $role): bool
     {
-        return $role == "SUPER" ? self::ALLOW : self::DENY;
+        return $role == "SUPER" ? self::Allow : self::Deny;
     }
 
     private function isAllowedByRole(string $role, Permission $permission): bool
@@ -157,7 +160,7 @@ class AuthorizationManager implements IAuthorizator
         return is_array($permission->getAllowedUsers()) && in_array($id, $permission->getAllowedUsers()) && (empty($permission->getRevokedUsers()) || !in_array($id, $permission->getRevokedUsers()));
     }
 
-    public function getListUserAllowed(User $user): \stdClass
+    public function getListUserAllowed(User $user): stdClass
     {
         return (object)[
             "notesRights" => $this->getNotesRights($user),
@@ -171,68 +174,68 @@ class AuthorizationManager implements IAuthorizator
         ];
     }
 
-    private function getNotesRights(User $user): \stdClass
+    private function getNotesRights(User $user): stdClass
     {
         return (object) [
-                    "manageSharedNotes" => $this->isUserAllowed($user, Privilege::SYS("NOTES"))
+                    "manageSharedNotes" => $this->isUserAllowed($user, "SYS:NOTES")
         ];
     }
 
-    private function getDiscussionRights(User $user): \stdClass
+    private function getDiscussionRights(User $user): stdClass
     {
         return (object) [
-                    "setup" => $this->isUserAllowed($user, Privilege::SYS("DSSETUP"))
+                    "setup" => $this->isUserAllowed($user, "SYS:DSSETUP")
         ];
     }
 
-    private function getEventRights(User $user): \stdClass
+    private function getEventRights(User $user): stdClass
     {
         return (object) [
-                    "canCreate" => $this->isUserAllowed($user, Privilege::SYS("EVE_CREATE")),
-                    "canDelete" => $this->isUserAllowed($user, Privilege::SYS("EVE_DELETE")),
-                    "canUpdate" => $this->isUserAllowed($user, Privilege::SYS("EVE_UPDATE")),
-                    "canResult" => $this->isUserAllowed($user, Privilege::SYS("EVE_ATT_UPDATE")),
-                    "canPlanOthers" => $this->isUserAllowed($user, Privilege::SYS("ATT_UPDATE")),
+                    "canCreate" => $this->isUserAllowed($user, "SYS:EVE_CREATE"),
+                    "canDelete" => $this->isUserAllowed($user, "SYS:EVE_DELETE"),
+                    "canUpdate" => $this->isUserAllowed($user, "SYS:EVE_UPDATE"),
+                    "canResult" => $this->isUserAllowed($user, "SYS:EVE_ATT_UPDATE"),
+                    "canPlanOthers" => $this->isUserAllowed($user, "SYS:ATT_UPDATE"),
         ];
     }
 
-    private function getPollRights(User $user): \stdClass
+    private function getPollRights(User $user): stdClass
     {
         return (object) [
-                    "canCreatePoll" => $this->isUserAllowed($user, Privilege::SYS("ASK.VOTE_CREATE")),
-                    "canUpdatePoll" => $this->isUserAllowed($user, Privilege::SYS("ASK.VOTE_UPDATE")),
-                    "canDeletePoll" => $this->isUserAllowed($user, Privilege::SYS("ASK.VOTE_DELETE")),
-                    "canResetVotes" => $this->isUserAllowed($user, Privilege::SYS("ASK.VOTE_RESET")),
+                    "canCreatePoll" => $this->isUserAllowed($user, "SYS:ASK.VOTE_CREATE"),
+                    "canUpdatePoll" => $this->isUserAllowed($user, "SYS:ASK.VOTE_UPDATE"),
+                    "canDeletePoll" => $this->isUserAllowed($user, "SYS:ASK.VOTE_DELETE"),
+                    "canResetVotes" => $this->isUserAllowed($user, "SYS:ASK.VOTE_RESET"),
         ];
     }
 
-    private function getReportsRights(User $user): \stdClass
+    private function getReportsRights(User $user): stdClass
     {
         return (object) [
-                    "canSetup" => $this->isUserAllowed($user, Privilege::SYS("REP_SETUP"))
+                    "canSetup" => $this->isUserAllowed($user, "SYS:REP_SETUP")
         ];
     }
 
-    private function getTeamRights(User $user): \stdClass
+    private function getTeamRights(User $user): stdClass
     {
         return (object) [
-                    "canSetup" => $this->isUserAllowed($user, Privilege::SYS("TEAM_UPDATE"))
+                    "canSetup" => $this->isUserAllowed($user, "SYS:TEAM_UPDATE")
         ];
     }
 
-    private function getUserRights(User $user): \stdClass
+    private function getUserRights(User $user): stdClass
     {
         return (object) [
-                    "canCreate" => $this->isUserAllowed($user, Privilege::SYS("USR_CREATE")),
-                    "canUpdate" => $this->isUserAllowed($user, Privilege::SYS("USR_UPDATE")),
-                    "canDelete" => $this->isUserAllowed($user, Privilege::SYS("USR_HDEL")),
+                    "canCreate" => $this->isUserAllowed($user, "SYS:USR_CREATE"),
+                    "canUpdate" => $this->isUserAllowed($user, "SYS:USR_UPDATE"),
+                    "canDelete" => $this->isUserAllowed($user, "SYS:USR_HDEL"),
         ];
     }
 
-    private function getDebtRights(User $user): \stdClass
+    private function getDebtRights(User $user): stdClass
     {
         return (object) [
-                    "canManageTeamDebts" => $this->isUserAllowed($user, Privilege::SYS("DEBTS_TEAM"))
+                    "canManageTeamDebts" => $this->isUserAllowed($user, "SYS:DEBTS_TEAM")
         ];
     }
 }

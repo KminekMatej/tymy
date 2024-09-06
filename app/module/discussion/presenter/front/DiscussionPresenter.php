@@ -50,7 +50,7 @@ class DiscussionPresenter extends SecuredPresenter
             return null;
         });
 
-        $this->template->addFilter('displayNames', fn(array $userIds): string => implode(", ", array_map(fn($userId) => $this->userList[$userId]->getCallName(), $userIds))); /* @phpstan-ignore-line */
+        $this->template->addFilter('displayNames', fn(array $userIds): string => implode(", ", array_map(fn($userId) => $this->userList[$userId]->getCallName(), $userIds)));
     }
 
     public function handleReact(int $postId, ?string $reaction = null, bool $remove = false): void

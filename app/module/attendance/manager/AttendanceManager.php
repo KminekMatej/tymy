@@ -18,13 +18,10 @@ use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Event\Model\Event;
-use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Manager\UserManager;
 
 /**
- * Description of AttendanceManager
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 21. 9. 2020
+ * @extends BaseManager<Attendance>
  */
 class AttendanceManager extends BaseManager
 {
@@ -47,7 +44,7 @@ class AttendanceManager extends BaseManager
 
     /**
      * Get array of attendanced related to events
-     * @return array<int|string, array<\Tymy\Module\Attendance\Model\Attendance|null>>
+     * @return array<int|string, array<Attendance|null>>
      */
     public function getByEvents(array $eventIds): array
     {
@@ -186,10 +183,10 @@ class AttendanceManager extends BaseManager
     {
         $resultRightName = $this->eventRow->result_rights;
         if ($resultRightName) {
-            if (!$this->user->isAllowed($this->user->getId(), Privilege::USR($resultRightName))) {
+            if (!$this->user->isAllowed((string) $this->user->getId(), "USR:$resultRightName")) {
                 $this->respondForbidden();
             }
-        } elseif (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("EVE_ATT_UPDATE"))) {
+        } elseif (!$this->user->isAllowed((string) $this->user->getId(), "SYS:EVE_ATT_UPDATE")) {
             $this->respondForbidden();
         }
     }
@@ -199,12 +196,12 @@ class AttendanceManager extends BaseManager
      */
     private function allowAttend(array $data): void
     {
-        if ($this->user->getId() !== $data["userId"] && !$this->user->isAllowed($this->user->getId(), Privilege::SYS("ATT_UPDATE"))) {
+        if ($this->user->getId() !== $data["userId"] && !$this->user->isAllowed((string) $this->user->getId(), "SYS:ATT_UPDATE")) {
             $this->respondForbidden();
         }
 
         $planRightName = $this->eventRow->plan_rights;
-        if ($planRightName && !$this->user->isAllowed($this->user->getId(), Privilege::USR($planRightName))) {
+        if ($planRightName && !$this->user->isAllowed((string) $this->user->getId(), "USR:$planRightName")) {
             $this->respondForbidden();
         }
     }
@@ -281,7 +278,12 @@ class AttendanceManager extends BaseManager
         ]);
     }
 
-    public function create(array $data, ?int $resourceId = null): BaseModel
+    /**
+     * @param array $data
+     * @param int|null $resourceId
+     * @return Attendance
+     */
+    public function create(array $data, ?int $resourceId = null): Attendance
     {
         if (empty($data)) {
             $this->respondBadRequest("No attendance entry provided");
@@ -302,7 +304,7 @@ class AttendanceManager extends BaseManager
         $existingAttendance = $this->getByEventUserId($data["eventId"], $data["userId"]);
 
         $this->allowCreate($data); //allowCreate checks right for both creating and updating already created attendance
-        if (!$existingAttendance instanceof \Tymy\Module\Attendance\Model\Attendance) {
+        if (!$existingAttendance instanceof Attendance) {
             $created = $this->createByArray($data);
             if ($created && isset($data["preStatusId"])) {
                 $this->createHistory($data["userId"], $data["eventId"], $data["preStatusId"], $data["preDescription"] ?? null);

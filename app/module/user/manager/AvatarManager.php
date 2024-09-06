@@ -6,8 +6,9 @@ use Nette\Security\User;
 use Nette\Utils\Image;
 use Tymy\Module\Core\Manager\Responder;
 use Tymy\Module\Core\Model\BaseModel;
-use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Model\User as User2;
+
+use function count;
 
 use const TEAM_DIR;
 
@@ -34,7 +35,7 @@ class AvatarManager
             $this->responder->E4005_OBJECT_NOT_FOUND(User2::MODULE, $userId);
         }
 
-        $canEditFull = $this->user->isAllowed($this->user->getId(), Privilege::SYS("USR_UPDATE"));
+        $canEditFull = $this->user->isAllowed((string) $this->user->getId(), "SYS:USR_UPDATE");
         $editingMyself = $this->userModel->getId() === $this->user->getId();
 
         if (!$canEditFull && !$editingMyself) {

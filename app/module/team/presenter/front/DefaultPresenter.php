@@ -5,8 +5,9 @@ namespace Tymy\Module\Team\Presenter\Front;
 use Nette\Bridges\ApplicationLatte\Template;
 use Tymy\Module\Core\Exception\TymyResponse;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
-use Tymy\Module\Permission\Model\Privilege;
 use Tymy\Module\User\Model\User;
+
+use function count;
 
 class DefaultPresenter extends SecuredPresenter
 {
@@ -124,7 +125,7 @@ class DefaultPresenter extends SecuredPresenter
 
     public function handleApprove(int $userId): void
     {
-        if (!$this->getUser()->isAllowed($this->user->getId(), Privilege::SYS("USR_UPDATE"))) {
+        if (!$this->getUser()->isAllowed($this->user->getId(), "SYS:USR_UPDATE")) {
             $this->flashMessage($this->translator->translate("common.alerts.notPermitted"));
             $this->redirect('this');
         }

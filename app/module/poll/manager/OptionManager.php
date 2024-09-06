@@ -5,15 +5,13 @@ namespace Tymy\Module\Poll\Manager;
 use Nette\NotImplementedException;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
-use Tymy\Module\Permission\Model\Privilege;
+use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Poll\Mapper\OptionMapper;
 use Tymy\Module\Poll\Model\Option;
 use Tymy\Module\Poll\Model\Poll;
 
 /**
- * Description of OptionManager
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 21. 12. 2020
+ * @extends BaseManager<Option>
  */
 class OptionManager extends BaseManager
 {
@@ -28,7 +26,7 @@ class OptionManager extends BaseManager
     }
 
     /**
-     * @return \Tymy\Module\Core\Model\Field[]
+     * @return Field[]
      */
     public function getScheme(): array
     {
@@ -47,7 +45,7 @@ class OptionManager extends BaseManager
 
     protected function allowCreate(?array &$data = null): void
     {
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("ASK.VOTE_UPDATE"))) {
+        if (!$this->user->isAllowed((string) $this->user->getId(), "SYS:ASK.VOTE_UPDATE")) {
             $this->respondForbidden();
         }
 
@@ -56,7 +54,7 @@ class OptionManager extends BaseManager
 
     protected function allowUpdate(?int $recordId = null, ?array &$data = null): void
     {
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("ASK.VOTE_UPDATE"))) {
+        if (!$this->user->isAllowed((string) $this->user->getId(), "SYS:ASK.VOTE_UPDATE")) {
             $this->respondForbidden();
         }
 
@@ -72,11 +70,11 @@ class OptionManager extends BaseManager
 
 
     /**
-     * @return \Tymy\Module\Core\Model\BaseModel[]|null[]
+     * @return BaseModel[]|null[]
      */
     public function createMultiple(array $options, ?int $resourceId = null): array
     {
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("ASK.VOTE_UPDATE"))) {
+        if (!$this->user->isAllowed((string) $this->user->getId(), "SYS:ASK.VOTE_UPDATE")) {
             $this->respondForbidden();
         }
 

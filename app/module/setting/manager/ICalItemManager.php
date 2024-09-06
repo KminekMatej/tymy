@@ -8,9 +8,7 @@ use Tymy\Module\Settings\Mapper\ICalItemMapper;
 use Tymy\Module\Settings\Model\ICalItem;
 
 /**
- * Description of ICalItemManager
- *
- * @author kminekmatej, 11. 9. 2022, 21:07:29
+ * @extends BaseManager<ICalItem>
  */
 class ICalItemManager extends BaseManager
 {

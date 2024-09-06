@@ -9,15 +9,13 @@ use Nette\NotImplementedException;
 use Tymy\Module\Core\Factory\ManagerFactory;
 use Tymy\Module\Core\Manager\BaseManager;
 use Tymy\Module\Core\Model\BaseModel;
-use Tymy\Module\Permission\Model\Privilege;
+use Tymy\Module\Core\Model\Field;
 use Tymy\Module\Team\Mapper\TeamMapper;
 use Tymy\Module\Team\Model\SimpleTeam;
 use Tymy\Module\Team\Model\Team;
 
 /**
- * Description of TeamManager
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 5. 6. 2020
+ * @extends BaseManager<Team>
  */
 class TeamManager extends BaseManager
 {
@@ -79,7 +77,7 @@ class TeamManager extends BaseManager
         return $this->map($this->database->table(Team::TABLE)->where("sys_name", $sysname)->fetch());
     }
 
-    public function getTeam(): ?\Tymy\Module\Team\Model\Team
+    public function getTeam(): ?Team
     {
         if (!isset($this->team)) {
             $this->team = $this->getBySysname($this->teamSysName);
@@ -98,7 +96,7 @@ class TeamManager extends BaseManager
     }
 
     /**
-     * @return \Tymy\Module\Core\Model\Field[]
+     * @return Field[]
      */
     public function getScheme(): array
     {
@@ -144,7 +142,7 @@ class TeamManager extends BaseManager
             $this->respondForbidden();
         }
 
-        if (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("TEAM_UPDATE"))) {
+        if (!$this->user->isAllowed((string) $this->user->getId(), "SYS:TEAM_UPDATE")) {
             $this->respondForbidden();
         }
     }

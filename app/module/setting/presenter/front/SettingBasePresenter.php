@@ -8,7 +8,6 @@ use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Event\Manager\EventTypeManager;
 use Tymy\Module\Permission\Manager\PermissionManager;
 use Tymy\Module\Permission\Model\Permission;
-use Tymy\Module\Permission\Model\Privilege;
 
 /**
  * Description of SettingDefaultPresenter
@@ -58,7 +57,7 @@ class SettingBasePresenter extends SecuredPresenter
      */
     protected function allowPermission(string $permissionName, string $type = "SYS"): void
     {
-        if (!$this->getUser()->isAllowed($this->user->getId(), $type == "SYS" ? Privilege::SYS($permissionName) : Privilege::USR($permissionName))) {
+        if (!$this->getUser()->isAllowed($this->user->getId(), "$type:$permissionName")) {
             $this->flashMessage($this->translator->translate("common.alerts.notPermitted"));
             $this->redirect(":Setting:Default:");
         }
