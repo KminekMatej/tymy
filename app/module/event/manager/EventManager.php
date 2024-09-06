@@ -77,10 +77,12 @@ class EventManager extends BaseManager
     protected function metaMap(BaseModel &$model, $userId = null): void
     {
         assert($model instanceof Event);
-        $model->setCanView(empty($model->getViewRightName()) || $this->user->isAllowed($this->user->getId(), Privilege::USR($model->getViewRightName())));
-        $model->setCanPlan(empty($model->getPlanRightName()) || $this->user->isAllowed($this->user->getId(), Privilege::USR($model->getPlanRightName())));
-        $model->setCanPlanOthers($this->user->isAllowed($this->user->getId(), Privilege::SYS("ATT_UPDATE")));
-        $model->setCanResult(empty($model->getResultRightName()) ? $this->user->isAllowed($this->user->getId(), Privilege::SYS("EVE_ATT_UPDATE")) : $this->user->isAllowed($this->user->getId(), Privilege::USR($model->getResultRightName())));
+        $model->setCanView(empty($model->getViewRightName()) || $this->user->isAllowed($this->user->getId(), "USR:{$model->getViewRightName()}"));
+        $model->setCanPlan(empty($model->getPlanRightName()) || $this->user->isAllowed($this->user->getId(), "USR:{$model->getPlanRightName()}"));
+        $model->setCanPlanOthers($this->user->isAllowed($this->user->getId(), "SYS:ATT_UPDATE"));
+        $model->setCanResult(empty($model->getResultRightName()) ? 
+            $this->user->isAllowed($this->user->getId(), "SYS:EVE_ATT_UPDATE") : 
+            $this->user->isAllowed($this->user->getId(), "USR:{$model->getResultRightName()}"));
 
         $eventColor = '#' . $this->eventTypeManager->getEventTypeColor($model->getEventTypeId());
 
@@ -410,7 +412,7 @@ class EventManager extends BaseManager
     {
         assert($record instanceof Event);
         return $record->getViewRightName() ?
-            $this->userManager->getUserIdsWithPrivilege(Privilege::USR($record->getViewRightName())) :
+            $this->userManager->getUserIdsWithPrivilege("USR:{$record->getViewRightName()}") :
             $this->getAllUserIds();
     }
 

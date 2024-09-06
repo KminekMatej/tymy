@@ -428,11 +428,12 @@ class UserManager extends BaseManager
 
     /**
      * Function selects all users allowed on given permission
+     * @var string $privilege String representation of privilege
      * @return Selection Selection to operate with
      */
-    private function selectUsersByPrivilege(Privilege $privilege): Selection
+    private function selectUsersByPrivilege(string $privilege): Selection
     {
-        $permission = $this->permissionManager->getByTypeName($privilege->getType(), $privilege->getName());
+        $permission = $this->permissionManager->getByTypeName(...explode(":", $privilege));
 
         $usersSelector = $this->database->table($this->getTable());
         $conditions = [];
@@ -476,7 +477,7 @@ class UserManager extends BaseManager
      * Load list of user ids, allowed to operate with given privilege
      * @return mixed[]
      */
-    public function getUserIdsWithPrivilege(Privilege $privilege): array
+    public function getUserIdsWithPrivilege(string $privilege): array
     {
         return $this->selectUsersByPrivilege($privilege)->fetchPairs("id", "id");
     }

@@ -92,7 +92,7 @@
                     </table>
                 </div>
                 <div class="card-footer text-right">
-                    <a n:if="$user->isAllowed($user->getId(), \Tymy\Module\Permission\Model\Privilege::SYS('EVE_CREATE'))" class="btn btn-lg btn-success" href="{plink :Setting:Event:New}" onclick="btnRotate($(this), true)" title="{_common.save}" style="margin-right: 10px">
+                    <a n:if="$user->isAllowed($user->getId(), 'SYS:EVE_CREATE')" class="btn btn-lg btn-success" href="{plink :Setting:Event:New}" onclick="btnRotate:$(this), true"" title="{_common.save}" style="margin-right: 10px">
                         <i class="fa fa-plus" aria-hidden="true"></i>
                     </a>
                 </div>

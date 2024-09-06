@@ -84,7 +84,7 @@ class HistoryManager extends BaseManager
     public function canRead($entity, int $userId): bool
     {
         assert($entity instanceof Event);
-        return $entity->getViewRightName() ? $this->user->isAllowed($this->user->getId(), Privilege::USR($entity->getViewRightName())) : true;
+        return $entity->getViewRightName() ? $this->user->isAllowed($this->user->getId(), "USR:{$entity->getViewRightName()}") : true;
     }
 
     protected function allowRead(?int $recordId = null): void
@@ -95,7 +95,7 @@ class HistoryManager extends BaseManager
         }
 
         $eventReadRightName = $eventRow->view_rights;
-        if ($eventReadRightName && !$this->user->isAllowed($this->user->getId(), Privilege::USR($eventReadRightName))) {
+        if ($eventReadRightName && !$this->user->isAllowed($this->user->getId(), "USR:$eventReadRightName")) {
             $this->responder->E4001_VIEW_NOT_PERMITTED(Event::MODULE, $recordId);
         }
     }

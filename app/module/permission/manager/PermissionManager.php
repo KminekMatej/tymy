@@ -59,7 +59,7 @@ class PermissionManager extends BaseManager
     protected function metaMap(BaseModel &$model, $userId = null): void
     {
         assert($model instanceof Permission);
-        $privilege = $model->getType() == Permission::TYPE_SYSTEM ? Privilege::SYS($model->getName()) : Privilege::USR($model->getName());
+        $privilege = "{$model->getType()}:{$model->getName()}";
         $model->setMeAllowed($this->user->isLoggedIn() && $this->user->isAllowed($this->user->getId(), $privilege));
     }
 

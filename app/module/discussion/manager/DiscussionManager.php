@@ -89,10 +89,10 @@ class DiscussionManager extends BaseManager
     protected function metaMap(BaseModel &$model, $userId = null): void
     {
         assert($model instanceof Discussion);
-        $model->setCanRead(empty($model->getReadRightName()) || $this->user->isAllowed($this->user->getId(), Privilege::USR($model->getReadRightName())));
-        $model->setCanWrite(empty($model->getWriteRightName()) || $this->user->isAllowed($this->user->getId(), Privilege::USR($model->getWriteRightName())));
-        $model->setCanDelete($this->userManager->isAdmin() || (!empty($model->getDeleteRightName()) && $this->user->isAllowed($this->user->getId(), Privilege::USR($model->getDeleteRightName()))));
-        $model->setCanStick($this->userManager->isAdmin() || (!empty($model->getStickyRightName()) && $this->user->isAllowed($this->user->getId(), Privilege::USR($model->getStickyRightName()))));
+        $model->setCanRead(empty($model->getReadRightName()) || $this->user->isAllowed($this->user->getId(), "USR:{$model->getReadRightName()}"));
+        $model->setCanWrite(empty($model->getWriteRightName()) || $this->user->isAllowed($this->user->getId(), "USR:{$model->getWriteRightName()}"));
+        $model->setCanDelete($this->userManager->isAdmin() || (!empty($model->getDeleteRightName()) && $this->user->isAllowed($this->user->getId(), "USR:{$model->getDeleteRightName()}")));
+        $model->setCanStick($this->userManager->isAdmin() || (!empty($model->getStickyRightName()) && $this->user->isAllowed($this->user->getId(), "USR:{$model->getStickyRightName()}")));
     }
 
     public function getById(int $id, bool $force = false): ?BaseModel
@@ -238,7 +238,7 @@ class DiscussionManager extends BaseManager
             return $this->getAllUserIds();
         }
 
-        return $this->userManager->getUserIdsWithPrivilege(Privilege::USR($record->getReadRightName()));
+        return $this->userManager->getUserIdsWithPrivilege("USR:{$record->getReadRightName()}");
     }
 
     public function create(array $data, ?int $resourceId = null): BaseModel

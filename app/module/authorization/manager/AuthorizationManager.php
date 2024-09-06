@@ -101,10 +101,10 @@ class AuthorizationManager implements IAuthorizator
     /**
      * Main permissions checker
      * @param string $role Role - SUPER / USR / WEB / ATT
-     * @param int $resource User id
+     * @param string|null $resource User id
      * @param Privilege $privilege Privilege, consisting of type and name of permissions
      */
-    public function isAllowed($role, $resource, $privilege): bool
+    public function isAllowed(?string $role, ?string $resource, ?string $privilege): bool
     {
         if (!$privilege) {
             //\Tracy\Debugger::barDump("No privilege");
@@ -174,65 +174,65 @@ class AuthorizationManager implements IAuthorizator
     private function getNotesRights(User $user): \stdClass
     {
         return (object) [
-                    "manageSharedNotes" => $this->isUserAllowed($user, Privilege::SYS("NOTES"))
+                    "manageSharedNotes" => $this->isUserAllowed($user, "SYS:NOTES")
         ];
     }
 
     private function getDiscussionRights(User $user): \stdClass
     {
         return (object) [
-                    "setup" => $this->isUserAllowed($user, Privilege::SYS("DSSETUP"))
+                    "setup" => $this->isUserAllowed($user, "SYS:DSSETUP")
         ];
     }
 
     private function getEventRights(User $user): \stdClass
     {
         return (object) [
-                    "canCreate" => $this->isUserAllowed($user, Privilege::SYS("EVE_CREATE")),
-                    "canDelete" => $this->isUserAllowed($user, Privilege::SYS("EVE_DELETE")),
-                    "canUpdate" => $this->isUserAllowed($user, Privilege::SYS("EVE_UPDATE")),
-                    "canResult" => $this->isUserAllowed($user, Privilege::SYS("EVE_ATT_UPDATE")),
-                    "canPlanOthers" => $this->isUserAllowed($user, Privilege::SYS("ATT_UPDATE")),
+                    "canCreate" => $this->isUserAllowed($user, "SYS:EVE_CREATE"),
+                    "canDelete" => $this->isUserAllowed($user, "SYS:EVE_DELETE"),
+                    "canUpdate" => $this->isUserAllowed($user, "SYS:EVE_UPDATE"),
+                    "canResult" => $this->isUserAllowed($user, "SYS:EVE_ATT_UPDATE"),
+                    "canPlanOthers" => $this->isUserAllowed($user, "SYS:ATT_UPDATE"),
         ];
     }
 
     private function getPollRights(User $user): \stdClass
     {
         return (object) [
-                    "canCreatePoll" => $this->isUserAllowed($user, Privilege::SYS("ASK.VOTE_CREATE")),
-                    "canUpdatePoll" => $this->isUserAllowed($user, Privilege::SYS("ASK.VOTE_UPDATE")),
-                    "canDeletePoll" => $this->isUserAllowed($user, Privilege::SYS("ASK.VOTE_DELETE")),
-                    "canResetVotes" => $this->isUserAllowed($user, Privilege::SYS("ASK.VOTE_RESET")),
+                    "canCreatePoll" => $this->isUserAllowed($user, "SYS:ASK.VOTE_CREATE"),
+                    "canUpdatePoll" => $this->isUserAllowed($user, "SYS:ASK.VOTE_UPDATE"),
+                    "canDeletePoll" => $this->isUserAllowed($user, "SYS:ASK.VOTE_DELETE"),
+                    "canResetVotes" => $this->isUserAllowed($user, "SYS:ASK.VOTE_RESET"),
         ];
     }
 
     private function getReportsRights(User $user): \stdClass
     {
         return (object) [
-                    "canSetup" => $this->isUserAllowed($user, Privilege::SYS("REP_SETUP"))
+                    "canSetup" => $this->isUserAllowed($user, "SYS:REP_SETUP")
         ];
     }
 
     private function getTeamRights(User $user): \stdClass
     {
         return (object) [
-                    "canSetup" => $this->isUserAllowed($user, Privilege::SYS("TEAM_UPDATE"))
+                    "canSetup" => $this->isUserAllowed($user, "SYS:TEAM_UPDATE")
         ];
     }
 
     private function getUserRights(User $user): \stdClass
     {
         return (object) [
-                    "canCreate" => $this->isUserAllowed($user, Privilege::SYS("USR_CREATE")),
-                    "canUpdate" => $this->isUserAllowed($user, Privilege::SYS("USR_UPDATE")),
-                    "canDelete" => $this->isUserAllowed($user, Privilege::SYS("USR_HDEL")),
+                    "canCreate" => $this->isUserAllowed($user, "SYS:USR_CREATE"),
+                    "canUpdate" => $this->isUserAllowed($user, "SYS:USR_UPDATE"),
+                    "canDelete" => $this->isUserAllowed($user, "SYS:USR_HDEL"),
         ];
     }
 
     private function getDebtRights(User $user): \stdClass
     {
         return (object) [
-                    "canManageTeamDebts" => $this->isUserAllowed($user, Privilege::SYS("DEBTS_TEAM"))
+                    "canManageTeamDebts" => $this->isUserAllowed($user, "SYS:DEBTS_TEAM")
         ];
     }
 }

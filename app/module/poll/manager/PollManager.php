@@ -123,9 +123,9 @@ class PollManager extends BaseManager
             }
         }
 
-        $hasVoteRights = empty($model->getVoteRightName()) || $this->user->isAllowed($userId, Privilege::USR($model->getVoteRightName()));
-        $hasAlienVoteRights = !empty($model->getAlienVoteRightName()) && $this->user->isAllowed($userId, Privilege::USR($model->getAlienVoteRightName()));
-        $hasResultRights = empty($model->getResultRightName()) || $this->user->isAllowed($userId, Privilege::USR($model->getResultRightName()));
+        $hasVoteRights = empty($model->getVoteRightName()) || $this->user->isAllowed($userId, "USR:{$model->getVoteRightName()}");
+        $hasAlienVoteRights = !empty($model->getAlienVoteRightName()) && $this->user->isAllowed($userId, "USR:{$model->getAlienVoteRightName()}");
+        $hasResultRights = empty($model->getResultRightName()) || $this->user->isAllowed($userId, "USR:{$model->getResultRightName()}");
         $resultsCanBeShown = $model->getShowResults() == Poll::RESULTS_ALWAYS ||
                 ($model->getShowResults() == Poll::RESULTS_AFTER_VOTE && $model->getVoted()) ||
                 ($model->getShowResults() == Poll::RESULTS_NEVER && $model->getCreatedById() === $userId) ||

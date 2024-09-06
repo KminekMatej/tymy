@@ -184,7 +184,7 @@ class AttendanceManager extends BaseManager
     {
         $resultRightName = $this->eventRow->result_rights;
         if ($resultRightName) {
-            if (!$this->user->isAllowed($this->user->getId(), Privilege::USR($resultRightName))) {
+            if (!$this->user->isAllowed($this->user->getId(), "USR:$resultRightName")) {
                 $this->respondForbidden();
             }
         } elseif (!$this->user->isAllowed($this->user->getId(), Privilege::SYS("EVE_ATT_UPDATE"))) {
@@ -202,7 +202,7 @@ class AttendanceManager extends BaseManager
         }
 
         $planRightName = $this->eventRow->plan_rights;
-        if ($planRightName && !$this->user->isAllowed($this->user->getId(), Privilege::USR($planRightName))) {
+        if ($planRightName && !$this->user->isAllowed($this->user->getId(), "USR:$planRightName")) {
             $this->respondForbidden();
         }
     }
