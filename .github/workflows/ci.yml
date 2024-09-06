@@ -58,6 +58,8 @@ jobs:
             sed -i "s/smtp-password/bar/g" local/config.neon
             sed -i "s/vapid-public-key/BLDYT7Wc1T4zilBuW_JAXt4NMRuXF9V95Ql02f7hRQ7hynVo0IOcdFt2cc9HqHuqOnXICmPaLK5JzrbtyobBg9k/g" local/config.neon
             sed -i "s/vapid-private-key/SV-O2lJqCqFUv-R9kYWb5K5AuwgRWqI9ZjYu3tkxcD8/g" local/config.neon
+            echo "sentry:" local/config.neon
+            echo "    enable: false" local/config.neon
             php bin/tester.php create-env
         - name: "Check structure"
           run: php bin/structure-check.php
