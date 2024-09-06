@@ -27,9 +27,9 @@ use Tymy\Module\User\Model\Invitation;
 use Tymy\Module\User\Model\SimpleUser;
 use Tymy\Module\User\Model\User;
 
-use const TEAM_DIR;
-
 use function count;
+
+use const TEAM_DIR;
 
 /**
  * @extends BaseManager<User>

@@ -8,9 +8,9 @@ use Tymy\Module\Core\Manager\Responder;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\User\Model\User as User2;
 
-use const TEAM_DIR;
-
 use function count;
+
+use const TEAM_DIR;
 
 /**
  * Description of AvatarManager
