@@ -44,8 +44,10 @@
         "nette/tester": "^2.0",
         "squizlabs/php_codesniffer": "^3",
         "phpstan/phpstan": "^1",
-        "rector/rector": "^0",
+        "phpstan/phpstan-deprecation-rules": "^1.1",
         "phpstan/phpstan-nette": "^1",
+        "phpstan/phpstan-strict-rules": "^1.5",
+        "rector/rector": "^0",
         "roave/security-advisories": "dev-latest",
         "slevomat/coding-standard": "^8"
     },

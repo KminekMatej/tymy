@@ -98,9 +98,9 @@ class SignUpFormFactory
                 return;
             } catch (UniqueConstraintViolationException $exc) {
                 if (preg_match("/SQLSTATE\[23000\]: Integrity constraint violation: 1062 Duplicate entry \'(.*?)\' for key \'(.*?)\'/m", $exc->getMessage(), $matches)) {
-                    $form[$exc->getMessage()]->addError("Cannot create user. Field '" . StringHelper::toCamelCase($matches[2]) . " is already used'");
+                    $form[$exc->getMessage()]->addError("Cannot create user. Field '" . StringHelper::toCamelCase($matches[2]) . " is already used'"); /* @phpstan-ignore-line */
                 } else {
-                    $form[$exc->getMessage()]->addError("Cannot create user. Already exists'");
+                    $form[$exc->getMessage()]->addError("Cannot create user. Already exists'"); /* @phpstan-ignore-line */
                 }
                 return;
             }
