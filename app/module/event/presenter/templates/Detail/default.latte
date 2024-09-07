@@ -25,7 +25,7 @@
                         <div class="col"><h4 class="card-title">{$event->getCaption()}</h4></div>
                         <div class="col col-md-auto text-right">
                             <a class="btn btn-sm btn-outline-dark ajax" n:href="loadHistory! $event->getWebName()" n:snippet="historyBtn" onclick="btnRotate($(this), true)" title="{_event.displayHistory}"><i class="fas fa-history"></i></a>
-                            <a n:if="$user->isAllowed($user->getId(), 'SYS:EVE_UPDATE')" class="btn btn-sm btn-light btn-light-bordered" title="{_common.edit}" href="{plink :Setting:Event: $event->getWebName()}"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                            <a n:if="$user->isAllowed((string) $user->getId(), 'SYS:EVE_UPDATE')" class="btn btn-sm btn-light btn-light-bordered" title="{_common.edit}" href="{plink :Setting:Event: $event->getWebName()}"><i class="fa fa-edit" aria-hidden="true"></i></a>
                         </div>
                     </div>
                 </div>

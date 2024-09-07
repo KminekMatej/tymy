@@ -81,8 +81,8 @@
                                                 {input resultRightName, class=> 'form-control form-control-sm'}
                                             </td>
                                             <td class="btn-group" role="group">
-                                                <button n:name="save" n:if="$user->isAllowed($user->getId(), 'SYS:EVE_UPDATE')" class="btn btn-sm btn-primary" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
-                                                <a n:if="$user->isAllowed($user->getId(), 'SYS:EVE_DELETE')" href="{link eventDelete! $event->getId()}" class="btn btn-sm btn-danger ajax" title="{_common.delete}"><i class="far fa-trash-can" aria-hidden="true"></i></a>
+                                                <button n:name="save" n:if="$user->isAllowed((string) $user->getId(), 'SYS:EVE_UPDATE')" class="btn btn-sm btn-primary" title="{_common.save}"><i class="fa fa-save" aria-hidden="true"></i></button>
+                                                <a n:if="$user->isAllowed((string) $user->getId(), 'SYS:EVE_DELETE')" href="{link eventDelete! $event->getId()}" class="btn btn-sm btn-danger ajax" title="{_common.delete}"><i class="far fa-trash-can" aria-hidden="true"></i></a>
                                             </td>
                                         </tr>
                                     {/form}
@@ -92,7 +92,7 @@
                     </table>
                 </div>
                 <div class="card-footer text-right">
-                    <a n:if="$user->isAllowed($user->getId(), 'SYS:EVE_CREATE')" class="btn btn-lg btn-success" href="{plink :Setting:Event:New}" onclick="btnRotate($(this), true)" title="{_common.save}" style="margin-right: 10px">
+                    <a n:if="$user->isAllowed((string) $user->getId(), 'SYS:EVE_CREATE')" class="btn btn-lg btn-success" href="{plink :Setting:Event:New}" onclick="btnRotate($(this), true)" title="{_common.save}" style="margin-right: 10px">
                         <i class="fa fa-plus" aria-hidden="true"></i>
                     </a>
                 </div>

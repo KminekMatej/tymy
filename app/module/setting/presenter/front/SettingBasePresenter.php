@@ -57,7 +57,7 @@ class SettingBasePresenter extends SecuredPresenter
      */
     protected function allowPermission(string $permissionName, string $type = "SYS"): void
     {
-        if (!$this->getUser()->isAllowed($this->user->getId(), "$type:$permissionName")) {
+        if (!$this->getUser()->isAllowed((string) $this->user->getId(), "$type:$permissionName")) {
             $this->flashMessage($this->translator->translate("common.alerts.notPermitted"));
             $this->redirect(":Setting:Default:");
         }

@@ -146,35 +146,35 @@ class SecuredPresenter extends BasePresenter
     private function setAccessibleSettings()
     {
         $separate = false;
-        if ($this->getUser()->isAllowed($this->user->getId(), "SYS:DSSETUP")) {
+        if ($this->getUser()->isAllowed((string) $this->user->getId(), "SYS:DSSETUP")) {
             $this->accessibleSettings[] = new SettingMenu("discussions", $this->translator->translate("discussion.discussion", 2), $this->link(":Setting:Discussion:"), "fa-comments", true);
             $separate = true;
         }
         if (
-            $this->getUser()->isAllowed($this->user->getId(), "SYS:EVE_UPDATE") ||
-                $this->getUser()->isAllowed($this->user->getId(), "SYS:EVE_CREATE") ||
-                $this->getUser()->isAllowed($this->user->getId(), "SYS:EVE_DELETE")
+            $this->getUser()->isAllowed((string) $this->user->getId(), "SYS:EVE_UPDATE") ||
+                $this->getUser()->isAllowed((string) $this->user->getId(), "SYS:EVE_CREATE") ||
+                $this->getUser()->isAllowed((string) $this->user->getId(), "SYS:EVE_DELETE")
         ) {
             $this->accessibleSettings[] = new SettingMenu("events", $this->translator->translate("event.event", 2), $this->link(":Setting:Event:"), "fa-calendar", true);
             $separate = true;
         }
 
-        if ($this->getUser()->isAllowed($this->user->getId(), "SYS:TEAM_UPDATE")) {
+        if ($this->getUser()->isAllowed((string) $this->user->getId(), "SYS:TEAM_UPDATE")) {
             $this->accessibleSettings[] = new SettingMenu("team", $this->translator->translate("team.team", 1), $this->link(":Setting:Team:"), "fa-users", true);
             $separate = true;
         }
 
-        if ($this->getUser()->isAllowed($this->user->getId(), "SYS:ASK.VOTE_UPDATE")) {
+        if ($this->getUser()->isAllowed((string) $this->user->getId(), "SYS:ASK.VOTE_UPDATE")) {
             $this->accessibleSettings[] = new SettingMenu("polls", $this->translator->translate("poll.poll", 2), $this->link(":Setting:Poll:"), "fa-chart-pie", true);
             $separate = true;
         }
 
-        /*if ($this->getUser()->isAllowed($this->user->getId(), "SYS:REP_SETUP")) {
+        /*if ($this->getUser()->isAllowed((string) $this->user->getId(), "SYS:REP_SETUP")) {
             $this->accessibleSettings[] = new SettingMenu("reports", $this->translator->translate("report.report", 2), $this->link(":Setting:Report:"), "fa-chart-area", false);
             $separate = true;
         }*/
 
-        if ($this->getUser()->isAllowed($this->user->getId(), "SYS:IS_ADMIN")) {
+        if ($this->getUser()->isAllowed((string) $this->user->getId(), "SYS:IS_ADMIN")) {
             $this->accessibleSettings[] = new SettingMenu("permissions", $this->translator->translate("permission.permission", 2), $this->link(":Setting:Permission:"), "fa-gavel", true);
             $separate = true;
         }

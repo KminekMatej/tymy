@@ -74,7 +74,7 @@
                                     {input resultRightName, class=> 'form-control form-control-sm'}
                                 </td>
                                 <td class="btn-group" role="group">
-                                    <button n:if="$user->isAllowed($user->getId(), 'SYS:EVE_CREATE')" class="btn btn-sm btn-outline-danger" title="{_common.delete}" onclick="removeRow(this)"><i class="far fa-trash-can" aria-hidden="true"></i></button>
+                                    <button n:if="$user->isAllowed((string) $user->getId(), 'SYS:EVE_CREATE')" class="btn btn-sm btn-outline-danger" title="{_common.delete}" onclick="removeRow(this)"><i class="far fa-trash-can" aria-hidden="true"></i></button>
                                 </td>
                             </tr>
                         </table>
@@ -111,7 +111,7 @@
                         </div>
                     </div>
                     <div class="card-footer text-right">
-                        <button n:if="$user->isAllowed($user->getId(), 'SYS:EVE_CREATE')" n:name="save" class="btn btn-lg btn-primary">
+                        <button n:if="$user->isAllowed((string) $user->getId(), 'SYS:EVE_CREATE')" n:name="save" class="btn btn-lg btn-primary">
                             <i class="fa fa-save" aria-hidden="true"></i>
                         </button>
                     </div>

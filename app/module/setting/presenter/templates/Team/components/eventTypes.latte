@@ -41,14 +41,14 @@
                             {input "{$etid}_postStatusSet", class => 'form-control form-control-sm'}
                         </td>
 
-                        <td n:if="$user->isAllowed($user->getId(), 'SYS:TEAM_UPDATE')" class="py-1">
+                        <td n:if="$user->isAllowed((string) $user->getId(), 'SYS:TEAM_UPDATE')" class="py-1">
                             <a class="btn btn-sm btn-danger" href="{plink :Setting:Team:deleteType $etid}" title="{_common.delete}"><i class="far fa-trash-can" aria-hidden="true"></i></a>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <div class="card-footer text-right" n:if="$user->isAllowed($user->getId(), 'SYS:TEAM_UPDATE')">
+        <div class="card-footer text-right" n:if="$user->isAllowed((string) $user->getId(), 'SYS:TEAM_UPDATE')">
             <a class="btn btn-lg mr-4 btn-outline-success" href="{plink :Setting:Team:newType}" onclick="btnRotate($(this), true)" title="{_common.new}" type="">
                 <i class="fa fa-plus" aria-hidden="true"></i>
             </a>

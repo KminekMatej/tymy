@@ -33,7 +33,7 @@ class DebtBasePresenter extends SecuredPresenter
     protected function getPayeeList(): array
     {
         $payeeList = [$this->userManager->getById($this->user->getId())];
-        if ($this->getUser()->isAllowed($this->user->getId(), "SYS:DEBTS_TEAM")) {
+        if ($this->getUser()->isAllowed((string) $this->user->getId(), "SYS:DEBTS_TEAM")) {
             $payeeList[] = $this->userManager->mockTeamUser();
         }
         return $payeeList;
