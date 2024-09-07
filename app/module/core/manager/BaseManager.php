@@ -555,32 +555,32 @@ abstract class BaseManager
         return $this->getAllowedReaders($this->getById($modelId));
     }
 
-    protected function respondOk($payload = null)
+    protected function respondOk($payload = null): never
     {
         $this->responder->A200_OK($payload);
     }
 
-    protected function respondOkCreated($payload = null)
+    protected function respondOkCreated($payload = null): never
     {
         $this->responder->A201_CREATED($payload);
     }
 
-    protected function respondDeleted($id)
+    protected function respondDeleted($id): never
     {
         $this->respondOk(["id" => (int) $id]);
     }
 
-    protected function respondBadRequest($message = null)
+    protected function respondBadRequest($message = null): never
     {
         $this->responder->E400_BAD_REQUEST($message);
     }
 
-    protected function respondUnauthorized(?string $message = null)
+    protected function respondUnauthorized(?string $message = null): never
     {
         $this->responder->E401_UNAUTHORIZED($message);
     }
 
-    protected function respondForbidden(?string $message = null)
+    protected function respondForbidden(?string $message = null): never
     {
         $this->responder->E403_FORBIDDEN($message ?? "Nedostatečná práva");
     }
@@ -590,7 +590,7 @@ abstract class BaseManager
         $this->responder->E404_NOT_FOUND($module, $id);
     }
 
-    protected function respondNotAllowed()
+    protected function respondNotAllowed(): never
     {
         $this->responder->E405_METHOD_NOT_ALLOWED();
     }
