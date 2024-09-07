@@ -4,6 +4,7 @@ namespace Tymy\Module\Core\Service;
 
 use Contributte\Translation\Translator;
 use Latte\Engine;
+use Latte\Essential\TranslatorExtension;
 use Nette\Mail\Mailer;
 use Nette\Mail\Message;
 use Nette\Mail\SendException;
@@ -85,7 +86,10 @@ class MailService
 
         $latte = new Engine();
 
-        $latte->addFilter('translate', fn($message, $parameters): string => $this->translator->translate($message, $parameters));
+        $translatorExtension = new TranslatorExtension(
+            $this->translator->translate(...),
+        );
+        $latte->addExtension($translatorExtension);
 
         $subject = $this->translator->translate("mail.invitation.subject");
 
