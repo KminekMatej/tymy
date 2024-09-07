@@ -23,9 +23,9 @@ class StringsManager
     public const LC = ["CZ" => "cs", "EN" => "en", "FR" => "fr", "PL" => "pl"];
 
     public function __construct(
-        private Explorer $database, 
-        private User $user, 
-        private TeamManager $teamManager, 
+        private Explorer $database,
+        private User $user,
+        private TeamManager $teamManager,
         private UserManager $userManager
     ) {
     }
