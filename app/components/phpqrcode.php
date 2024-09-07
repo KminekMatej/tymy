@@ -3045,14 +3045,14 @@ class QRrawcode
     {
         if ($this->count < $this->dataLength) {
             $row = $this->count % $this->blocks;
-            $col = $this->count / $this->blocks;
+            $col = intval($this->count / $this->blocks); //intval: avoid deprecation warning
             if ($col >= $this->rsblocks[0]->dataLength) {
                 $row += $this->b1;
             }
             $ret = $this->rsblocks[$row]->data[$col];
         } elseif ($this->count < $this->dataLength + $this->eccLength) {
             $row = ($this->count - $this->dataLength) % $this->blocks;
-            $col = ($this->count - $this->dataLength) / $this->blocks;
+            $col = intval(($this->count - $this->dataLength) / $this->blocks); //intval: avoid deprecation warning
             $ret = $this->rsblocks[$row]->ecc[$col];
         } else {
             return 0;
