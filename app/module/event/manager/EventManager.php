@@ -3,6 +3,7 @@
 namespace Tymy\Module\Event\Manager;
 
 use Contributte\Translation\Translator;
+use Exception;
 use Nette\Database\IRow;
 use Nette\Database\Table\ActiveRow;
 use Nette\Database\Table\Selection;
