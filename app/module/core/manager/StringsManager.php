@@ -9,6 +9,7 @@ use Tracy\Debugger;
 use Tracy\ILogger;
 use Tymy\Module\Team\Manager\TeamManager;
 use Tymy\Module\User\Manager\UserManager;
+use Tymy\Module\User\Model\User as TymyUser;
 
 use function count;
 
@@ -22,11 +23,12 @@ class StringsManager
     public const TABLE = "strings";
     public const LC = ["CZ" => "cs", "EN" => "en", "FR" => "fr", "PL" => "pl"];
 
+    private UserManager $userManager;
+
     public function __construct(
         private Explorer $database,
         private User $user,
-        private TeamManager $teamManager,
-        private UserManager $userManager
+        private TeamManager $teamManager
     ) {
     }
 
@@ -49,9 +51,7 @@ class StringsManager
     private function getLc(): string
     {
         if ($this->user->isLoggedIn()) {
-            $tymyUser = $this->userManager->getById($this->user->getId());
-
-            $code = $tymyUser->getLanguage();
+            $code = $this->database->table(TymyUser::TABLE)->where("id", $this->user->getId())->fetch()->language;
         } else {
             $code = $this->teamManager->getTeam()->getDefaultLanguageCode();
         }
