@@ -14,6 +14,9 @@
 -- UP:
 -- commands that updates database shall be written here:
 
+UPDATE `attendance` SET `pre_usr_mod`=NULL WHERE `pre_usr_mod` NOT IN (SELECT `id` FROM `user`);
+UPDATE `attendance` SET `post_usr_mod`=NULL WHERE `post_usr_mod` NOT IN (SELECT `id` FROM `user`);
+
 ALTER TABLE `attendance` DROP FOREIGN KEY `attendance_ibfk_5`; 
 ALTER TABLE `attendance` ADD CONSTRAINT `attendance_ibfk_5` FOREIGN KEY (`pre_usr_mod`) REFERENCES `user`(`id`) ON DELETE SET NULL ON UPDATE CASCADE; 
 ALTER TABLE `attendance` DROP FOREIGN KEY `attendance_ibfk_6`; 
