@@ -17,10 +17,10 @@
 <script src="{$publicPath}/resources/fullcalendar/locale/{$locale}.js?ver={$appver}"></script>
 <script>
     $(document).ready(function () {
-        var defaultView = (localStorage.getItem("fcDefaultView") != null ? localStorage.getItem("fcDefaultView") : "month"); 
+        var defaultView = (localStorage.getItem("fcDefaultView") != null ? localStorage.getItem("fcDefaultView") : "month");
         var defaultStartDate = (localStorage.getItem("fcDefaultStartDate") != null ? moment(localStorage.getItem("fcDefaultStartDate")) : moment());
         $('#calendar').fullCalendar({
-            defaultView: defaultView, 
+            defaultView: defaultView,
             locale: locale,
             contentHeight: 350,
             fixedWeekCount: false,
@@ -51,7 +51,7 @@
                 }
             }
         });
-        $('#calendar').fullCalendar('gotoDate', defaultStartDate); 
+        $('#calendar').fullCalendar('gotoDate', defaultStartDate);
         $('#calendar DIV.fc-header-toolbar').addClass("card-header");
         $('#calendar DIV.fc-button-group').addClass("btn-group");
         $('#calendar DIV.fc-header-toolbar BUTTON').each(function () {
@@ -66,104 +66,29 @@
 
 <div class="container-fluid container-md homepage">
     <div class="row mt-2" n:if="!empty($notices)">
-        <div class="col">
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <strong class="text-secondary ml-4">{_common.alerts.newsOnTymy}</strong>
-                <div n:foreach="$notices as $notice"><div class="mt-2"><small>{$notice->getCreated()|date:'j.n.Y'} - </small><strong>{$notice->getCaption()|noescape}</strong></div>{$notice->getDescription()|noescape}</div>
-                <small class="text-secondary ml-4">{_common.alerts.newsOnTymyFooter} <a href="https://www.tymy.cz/news" target="blank">www.tymy.cz</a></small>
-            </div>
-        </div>
+        {include './parts/notices.latte'}
     </div>
 
     <div class="row">
         <div class="col-md-5 my-3">
-            <div class="card sh-box" id='calendar'></div>
-            <a class="btn btn-sm btn-light btn-light-bordered my-1 d-block" href="{plink :Event:Default:}">{_event.goToEvents} ...</a>
+            {include './parts/mini-calendar.latte'}
         </div>
         <div class="col-md-7 my-3">
-            <div class="card sh-box discussion-box">
-                <div class="card-header">
-                    <div class="row">
-                        <div class="col"><h4 class="card-title">{_discussion.discussion, 2}</h4></div>
-                        <div class="col col-md-auto text-right">
-                            <button class="btn btn-sm btn-light btn-light-bordered refresh" title="{_common.refresh}" onclick="refresh()" data-href="{link navbar:refresh!}"><i class="fa fa-sync" aria-hidden="true"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="row my-2" n:foreach="$discussions as $item" title="{$item->getDescription()}">
-                        <div class="col name" id="discussion-pane-{$item->getId()}">
-                            <span n:class="badge,badge-pill,badge-danger,$item->getNewPosts() == 0 ? d-none">{$item->getNewPosts()}</span>
-                            <a href="{plink :Discussion:Discussion: $item->getWebName()}">{$item->getCaption()}</a>
-                            <span n:if="!$tymyUser->getHideDiscDesc()" class="col-sm-7 dis-description">{$item->getDescription()}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {include './parts/discussions.latte'}
         </div>
     </div>
 
     {* Display bar with current events *}
     <div class="row">
-        <div class="col" n:inner-foreach="$currentEvents as $event">
-            <div class="alert alert-info alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                {_event.currently}: <a n:href=":Event:Detail: $event->getWebName()" class="alert-link">{$event->getCaption()}</a>
-            </div>
-        </div>
+        {include './parts/current-events.latte'}
     </div>
 
     {* Display bar with celebrations *}
     <div class="row">
-        <div class="col" n:inner-foreach="$users as $usr">
-            {var $nameDay = $usr->getNameDayMonth() && $usr->getNameDayDay() ? date('m-d', strtotime(date('Y').'-'.$usr->getNameDayMonth().'-'.$usr->getNameDayDay())) : null}
-            {var $bDay = $usr->getBirthDate() ? date('m-d', strtotime($usr->getBirthDate())) : '0-0'}
-            {var $years = $usr->getBirthDate() ? date('Y') - date('Y', strtotime($usr->getBirthDate())) : '0'}
-            <div n:if="$usr->getNameDayMonth() > 0 && $usr->getNameDayDay() > 0 && $today==$nameDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{$usr->getDisplayName()|namedayToday:$usr->getWebName()|noescape}</div>
-            <div n:if="$usr->getBirthDate() && $today==$bDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{$usr->getDisplayName()|birthdayToday:$usr->getWebName(),$years|noescape}</div>
-            <div n:if="$usr->getNameDayMonth() > 0 && $usr->getNameDayDay() > 0 && $tommorow==$nameDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{$usr->getDisplayName()|namedayTommorow:$usr->getWebName()|noescape}</div>
-            <div n:if="$usr->getBirthDate() && $tommorow==$bDay" class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{$usr->getDisplayName()|birthdayTommorow:$usr->getWebName(),$years|noescape}</div>
-        </div>
+        {include './parts/celebrationBar.latte'}
     </div>
 
     <div class="row">
-        <div class="col my-1">
-            <div class="card sh-box">
-                <div class="card-header">
-                    <ul class="nav nav-tabs flex-column flex-sm-row card-header-tabs">
-                        <li class="nav-item">
-                            <a class="flex-sm-fill text-sm-center nav-link active" href="#live" data-toggle="tab" role="tab">{_team.currentlyOnline}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="flex-sm-fill text-sm-center nav-link" href="#lastLogin" data-toggle="tab" role="tab">{_team.lastLogin}</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="card-body">
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="live" role="tabpanel">
-                            <figure class="figure text-center" style="width: 100px" n:foreach="$liveUsers as $live">
-                                <a href="{plink :Team:Player: $live->getId()}" title="{$live->getCallName()}">
-                                    <img src="{$live->getPictureUrl()}" class="figure-img img-fluid rounded avatar" alt="{$live->getCallName()}" />
-                                    <figcaption class="figure-caption">{$live->getCallName()}</figcaption>
-                                </a>
-                            </figure>
-                            <h6 class="card-subtitle mb-2 text-muted" n:if="count($liveUsers) == 0">{_team.nobodyIsOnline}</h6>
-                        </div>
-                        <div class="tab-pane fade" id="lastLogin" role="tabpanel">
-                            <figure class="figure text-center" style="width: 100px" n:foreach="$users as $usr">
-                                {var $lastLogin = $usr->getLastLogin() ? ($usr->getLastLogin()|date:'j.n.Y H:i:s') : $neverLogin}
-                                {var $caption = $usr->getLastLogin() ? ($usr->getLastLogin()|lastLogin) : $neverLogin}
-                                <a href="{plink :Team:Player: $usr->getWebName()}" title="{$lastLogin}">
-                                    <img src="{$usr->getPictureUrl()}" class="figure-img img-fluid avatar" n:attr="alt => $usr->getFullName() ?: ''"/>
-                                    <figcaption class="figure-caption">{$usr->getDisplayName()}</figcaption>
-                                    <figcaption class="figure-caption" style="font-size: 70%; display: inline-block">{$caption}</figcaption>
-                                </a>
-                            </figure>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        {include './parts/footer-tabs.latte'}
     </div>
 </div>
