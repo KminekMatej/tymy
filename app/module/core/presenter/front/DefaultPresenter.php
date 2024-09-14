@@ -3,6 +3,7 @@
 namespace Tymy\Module\Core\Presenter\Front;
 
 use Nette\Bridges\ApplicationLatte\Template;
+use Nette\DI\Attributes\Inject;
 use Tymy\Module\Debt\Manager\DebtManager;
 use Tymy\Module\Discussion\Manager\DiscussionManager;
 use Tymy\Module\Event\Manager\EventManager;
@@ -14,25 +15,25 @@ use Tymy\Module\User\Manager\UserManager;
 
 class DefaultPresenter extends SecuredPresenter
 {
-    /** @inject */
+    #[Inject]
     public EventManager $eventManager;
 
-    /** @inject */
+    #[Inject]
     public UserManager $userManager;
 
-    /** @inject */
+    #[Inject]
     public DebtManager $debtManager;
 
-    /** @inject */
+    #[Inject]
     public NewsManager $newsManager;
 
-    /** @inject */
+    #[Inject]
     public DiscussionManager $discussionManager;
 
-    /** @inject */
+    #[Inject]
     public EventTypeManager $eventTypeManager;
 
-    /** @inject */
+    #[Inject]
     public MultiaccountManager $multiaccountManager;
 
     public function beforeRender(): void

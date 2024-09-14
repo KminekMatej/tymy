@@ -16,16 +16,16 @@ use Tymy\Module\Permission\Model\Permission;
  */
 class SettingBasePresenter extends SecuredPresenter
 {
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public PermissionManager $permissionManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public EventTypeManager $eventTypeManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public StatusManager $statusManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public FormFactory $formFactory;
 
     protected array $eventTypes;

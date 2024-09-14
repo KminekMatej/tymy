@@ -9,7 +9,7 @@ use Tymy\Module\Sign\Form\SignUpFormFactory;
 
 class UpPresenter extends BasePresenter
 {
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public SignUpFormFactory $signUpFactory;
 
     /**

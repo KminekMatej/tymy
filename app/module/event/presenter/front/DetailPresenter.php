@@ -16,7 +16,7 @@ use Tymy\Module\User\Model\User;
  */
 class DetailPresenter extends EventBasePresenter
 {
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public HistoryManager $historyManager;
 
     public function renderDefault(string $resource): void

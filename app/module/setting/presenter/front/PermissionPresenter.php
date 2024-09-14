@@ -9,7 +9,7 @@ use Tymy\Module\Setting\Presenter\Front\SettingBasePresenter;
 
 class PermissionPresenter extends SettingBasePresenter
 {
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public PermissionManager $permissionManager;
 
     public function beforeRender(): void

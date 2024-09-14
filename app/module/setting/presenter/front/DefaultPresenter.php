@@ -11,22 +11,22 @@ use Tymy\Module\Poll\Manager\PollManager;
 
 class DefaultPresenter extends SettingBasePresenter
 {
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public EventManager $eventManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public PollManager $pollManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public OptionManager $optionManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public PermissionManager $permissionManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public EventTypeManager $eventTypeManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public StatusManager $statusManager;
 
 

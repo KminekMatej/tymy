@@ -19,13 +19,13 @@ use Tymy\Module\User\Manager\UserManager;
  */
 class DiscussionPresenter extends SecuredPresenter
 {
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public DiscussionManager $discussionManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public PostManager $postManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public UserManager $userManager;
     private array $userList;
 

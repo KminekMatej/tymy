@@ -16,10 +16,10 @@ use Tymy\Module\Setting\Presenter\Front\SettingBasePresenter;
 
 class PollPresenter extends SettingBasePresenter
 {
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public PollManager $pollManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public OptionManager $optionManager;
     private ?Poll $poll = null;
 

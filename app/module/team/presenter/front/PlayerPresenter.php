@@ -17,10 +17,10 @@ use function count;
 
 class PlayerPresenter extends SecuredPresenter
 {
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public AvatarManager $avatarManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public FormFactory $formFactory;
 
     public function beforeRender(): void

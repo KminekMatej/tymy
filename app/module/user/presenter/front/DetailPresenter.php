@@ -26,16 +26,16 @@ use function mb_str_split;
  */
 class DetailPresenter extends BasePresenter
 {
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public ICalManager $iCalManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public EventManager $eventManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public StatusManager $statusManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public Responder $responder;
 
     private array $statusNameCache = [];

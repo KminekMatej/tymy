@@ -14,10 +14,10 @@ use Tymy\Module\User\Manager\UserManager;
  */
 class DebtBasePresenter extends SecuredPresenter
 {
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public DebtManager $debtManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public UserManager $userManager;
 
     public function beforeRender(): void

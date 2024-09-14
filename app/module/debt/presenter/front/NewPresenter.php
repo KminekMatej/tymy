@@ -14,7 +14,7 @@ use Tymy\Module\Debt\Model\Debt;
  */
 class NewPresenter extends DebtBasePresenter
 {
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public DebtManager $debtManager;
 
     public function renderDefault(): void

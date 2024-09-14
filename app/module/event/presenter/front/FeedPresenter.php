@@ -8,7 +8,7 @@ use Tymy\Module\Event\Manager\EventManager;
 
 class FeedPresenter extends EventBasePresenter
 {
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public EventManager $eventManager;
 
     public function actionDefault(string $start, string $end): void

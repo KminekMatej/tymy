@@ -29,16 +29,16 @@ abstract class RootPresenter extends Presenter
 
     protected Team $team;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public Translator $translator;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public TeamManager $teamManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public UserManager $userManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public Storage $cacheStorage;
     protected Cache $teamCache;
     protected ?User $tymyUser;

@@ -13,10 +13,10 @@ use Tymy\Module\Sign\Form\SignInFormFactory;
 
 class InPresenter extends BasePresenter
 {
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public SignInFormFactory $signInFactory;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public AuthenticationManager $authenticationManager;
 
     /**

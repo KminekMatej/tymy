@@ -21,10 +21,10 @@ class DefaultPresenter extends SecuredPresenter
 {
     private const DIR_NAME_REGEX = '([a-zA-Z_\/\-0-9áčďéěíňóřšťůúýžÁČĎÉĚÍŇÓŘŠŤŮÚÝŽ ]+\.?)*[a-zA-Z_\/\-0-9áčďéěíňóřšťůúýžÁČĎÉĚÍŇÓŘŠŤŮÚÝŽ ]+';
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public TeamManager $teamManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public FileManager $fileManager;
     private array $fileStats;
 
