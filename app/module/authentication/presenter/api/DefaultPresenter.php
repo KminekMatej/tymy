@@ -15,10 +15,10 @@ use Tymy\Module\User\Manager\UserManager;
  */
 class DefaultPresenter extends BasePresenter
 {
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public UserManager $userManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public MultiaccountManager $maManager;
 
     public function actionIn($username, $password): void

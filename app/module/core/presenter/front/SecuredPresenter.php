@@ -27,28 +27,28 @@ class SecuredPresenter extends BasePresenter
 {
     protected $levelCaptions;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public PollManager $pollManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public DiscussionManager $discussionManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public EventManager $eventManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public EventTypeManager $eventTypeManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public DebtManager $debtManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public UserManager $userManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public TeamManager $teamManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public MultiaccountManager $multiaccountManager;
     public array $accessibleSettings = [];
 

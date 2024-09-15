@@ -9,6 +9,7 @@ use Nette\Http\FileUpload;
 use Nette\Http\Request;
 use Nette\Security\User;
 use Nette\Utils\DateTime;
+use Tymy\Module\Core\Helper\ArrayHelper;
 use Tymy\Module\Core\Helper\StringHelper;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\Debt\Manager\DebtManager;
@@ -58,6 +59,10 @@ class NavbarControl extends Control
     private function initPlayers(): void
     {
         $users = $this->userManager->getList();
+        $this->template->birthdayToday = ArrayHelper::filter($users, "hasBirthdayToday", true);
+        $this->template->birthdayTommorow = ArrayHelper::filter($users, "hasBirthdayTommorow", true);
+        $this->template->namedayToday = ArrayHelper::filter($users, "hasNamedayToday", true);
+        $this->template->namedayTommorow = ArrayHelper::filter($users, "hasNamedayTommorow", true);
         $this->template->counts = $this->userManager->getCounts($users);
         $this->template->playersWarnings = $this->tymyUser->getWarnings();
         $this->template->inits = $this->user->isAllowed((string) $this->user->getId(), "SYS:SEE_INITS") ? $this->template->counts["INIT"] : 0;

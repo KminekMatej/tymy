@@ -14,10 +14,10 @@ use Tymy\Module\Core\Presenter\Api\SecuredPresenter;
  */
 class StatusPresenter extends SecuredPresenter
 {
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public StatusManager $statusManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public StatusSetManager $statusSetManager;
 
     public function actionStatus(?int $resourceId, ?int $subResourceId): void

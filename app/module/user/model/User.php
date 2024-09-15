@@ -75,6 +75,11 @@ class User extends BaseModel
     private ?string $webName = null;
     private ?string $skin = null;
     private bool $hideDiscDesc = false;
+    private bool $hasBirthdayToday = false;
+    private int $yearsOld;
+    private bool $hasBirthdayTommorow = false;
+    private bool $hasNamedayToday = false;
+    private bool $hasNamedayTommorow = false;
 
     public function getLogin(): string
     {
@@ -256,6 +261,31 @@ class User extends BaseModel
         return $this->hideDiscDesc;
     }
 
+    public function getHasBirthdayToday(): bool
+    {
+        return $this->hasBirthdayToday;
+    }
+
+    public function getHasBirthdayTommorow(): bool
+    {
+        return $this->hasBirthdayTommorow;
+    }
+
+    public function getHasNamedayToday(): bool
+    {
+        return $this->hasNamedayToday;
+    }
+
+    public function getHasNamedayTommorow(): bool
+    {
+        return $this->hasNamedayTommorow;
+    }
+
+    public function getYearsOld(): int
+    {
+        return $this->yearsOld;
+    }
+
     public function setLogin(string $login): static
     {
         $this->login = $login;
@@ -378,18 +408,43 @@ class User extends BaseModel
     public function setBirthDate(?DateTime $birthDate): static
     {
         $this->birthDate = $birthDate;
+        $now = new DateTime();
+
+        if ($birthDate) {
+            $this->hasBirthdayToday = $birthDate->format("m-d") == $now->format("m-d");
+            $this->hasBirthdayTommorow = $birthDate->modifyClone("- 1 day")->format("m-d") == $now->format("m-d");
+        }
+
+        $this->yearsOld = intval($now->format("Y")) - intval($birthDate->format("Y"));
+
         return $this;
     }
 
     public function setNameDayMonth(int $nameDayMonth): static
     {
         $this->nameDayMonth = $nameDayMonth;
+        $this->setHasNameday();
         return $this;
     }
 
     public function setNameDayDay(int $nameDayDay): static
     {
         $this->nameDayDay = $nameDayDay;
+        $this->setHasNameday();
+        return $this;
+    }
+
+    public function setHasNameday()
+    {
+        if (!isset($this->nameDayDay, $this->nameDayMonth)) {
+            return;
+        }
+
+        $now = new DateTime();
+        $nameDay = new DateTime(date('Y') . "-{$this->nameDayMonth}-{$this->nameDayDay}");
+        $this->hasNamedayToday = $nameDay->format("m-d") == $now->format("m-d");
+        $this->hasNamedayTommorow = $nameDay->modifyClone("- 1 day")->format("m-d") == $now->format("m-d");
+
         return $this;
     }
 
@@ -551,6 +606,10 @@ class User extends BaseModel
             "rolesAsString" => implode(",", $this->getRoles()),
             "pictureUrl" => $this->getPictureUrl(),
             "displayName" => $this->getDisplayName(),
+            "hasBirthdayToday" => $this->hasBirthdayToday,
+            "hasBirthdayTommorow" => $this->hasBirthdayTommorow,
+            "hasNamedayToday" => $this->hasNamedayToday,
+            "hasNamedayTommorow" => $this->hasNamedayTommorow,
         ];
     }
 

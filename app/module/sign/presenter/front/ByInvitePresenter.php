@@ -10,10 +10,10 @@ use Tymy\Module\User\Model\Invitation;
 
 class ByInvitePresenter extends BasePresenter
 {
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public SignUpFormFactory $signUpFactory;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public InvitationManager $invitationManager;
 
     public function renderDefault(string $invite): void

@@ -10,10 +10,10 @@ use Tymy\Module\Poll\Model\Poll;
 
 class DefaultPresenter extends SecuredPresenter
 {
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public PollManager $pollManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public VoteManager $voteManager;
 
     public function actionDefault(?string $resource = null): void

@@ -8,10 +8,10 @@ use Tymy\Module\User\Model\User;
 
 class ReportPresenter extends EventBasePresenter
 {
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public EventManager $eventManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public UserManager $userManager;
 
     public function renderDefault(?int $year = null, ?int $page = null): void

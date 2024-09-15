@@ -4,6 +4,7 @@ namespace Tymy\Module\Team\Presenter\Front;
 
 use Nette\Application\UI\Form;
 use Nette\Bridges\ApplicationLatte\Template;
+use Nette\DI\Attributes\Inject;
 use Nette\Http\FileUpload;
 use Nette\Utils\Image;
 use Tymy\Module\Core\Exception\TymyResponse;
@@ -17,10 +18,10 @@ use function count;
 
 class PlayerPresenter extends SecuredPresenter
 {
-    /** @inject */
+    #[Inject]
     public AvatarManager $avatarManager;
 
-    /** @inject */
+    #[Inject]
     public FormFactory $formFactory;
 
     public function beforeRender(): void
@@ -96,9 +97,22 @@ class PlayerPresenter extends SecuredPresenter
         $userId = $this->parseIdFromWebname($player);
         $user = $this->userManager->getById($userId);
 
-        if (!$user instanceof BaseModel) {
+        if (!$user instanceof User) {
             $this->flashMessage($this->translator->translate("common.alerts.userNotFound", null, ['id' => $userId]), "danger");
             $this->redirect(':Team:Default:');
+        }
+
+        if ($user->getHasBirthdayToday()) {
+            $this->flashMessage($this->translator->translate("team.hasBirthdayToday", ["name" => $user->getDisplayName(), "year" => $user->getYearsOld()]), "warning");
+        }
+        if ($user->getHasBirthdayTommorow()) {
+            $this->flashMessage($this->translator->translate("team.hasBirthdayTommorow", ["name" => $user->getDisplayName(), "year" => $user->getYearsOld()]), "success");
+        }
+        if ($user->getHasNamedayToday()) {
+            $this->flashMessage($this->translator->translate("team.hasNamedayToday", ["name" => $user->getDisplayName()]), "warning");
+        }
+        if ($user->getHasNamedayTommorow()) {
+            $this->flashMessage($this->translator->translate("team.hasNamedayTommorow", ["name" => $user->getDisplayName()]), "success");
         }
 
         $this->addBreadcrumb($user->getDisplayName(), $this->link(":Team:Player:", $user->getWebName()));

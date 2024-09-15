@@ -14,10 +14,10 @@ use Tymy\Module\Setting\Presenter\Front\SettingBasePresenter;
 
 class EventPresenter extends SettingBasePresenter
 {
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public EventManager $eventManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public FormFactory $formFactory;
 
     public function beforeRender(): void

@@ -12,7 +12,7 @@ use Tymy\Module\Team\Manager\TeamManager;
  */
 class IsPresenter extends BasePresenter
 {
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public TeamManager $teamManager;
 
     public function actionDefault(): void

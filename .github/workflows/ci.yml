@@ -9,7 +9,7 @@ jobs:
       runs-on: self-hosted
       steps:
         - name: "Checkout"
-          uses: actions/checkout@v2
+          uses: actions/checkout@v4
           
         - name: "Drop vendor"
           run: rm -fr vendor

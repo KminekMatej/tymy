@@ -33,15 +33,15 @@ use Tymy\Module\Core\Presenter\RootPresenter;
  */
 class BasePresenter extends RootPresenter
 {
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public Responder $responder;
     private Explorer $mainDatabase;
     protected ?ActiveRow $resourceRow = null;
     protected ?ActiveRow $subResourceRow = null;
     protected BaseManager $manager;
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public HttpRequest $httpRequest;
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public HttpResponse $httpResponse;
 
     /** @var mixed */

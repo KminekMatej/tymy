@@ -12,13 +12,13 @@ use Tymy\Module\User\Manager\UserManager;
 
 class PwdPresenter extends BasePresenter
 {
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public PwdLostFormFactory $pwdLostFactory;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public PwdResetFormFactory $pwdResetFactory;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public UserManager $userManager;
 
     public function renderReset(): void

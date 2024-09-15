@@ -18,7 +18,7 @@ class DefaultPresenter extends BasePresenter
 {
     public const PHP_CMD_PARAM = "php_cmd";
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public TestsManager $testsManager;
 
     public function startup(): void

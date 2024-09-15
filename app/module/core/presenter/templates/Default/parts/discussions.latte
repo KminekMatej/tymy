@@ -1,0 +1,20 @@
+
+<div class="card sh-box discussion-box">
+    <div class="card-header">
+        <div class="row">
+            <div class="col"><h4 class="card-title">{_discussion.discussion, 2}</h4></div>
+            <div class="col col-md-auto text-right">
+                <button class="btn btn-sm btn-light btn-light-bordered refresh" title="{_common.refresh}" onclick="refresh()" data-href="{link navbar:refresh!}"><i class="fa fa-sync" aria-hidden="true"></i></button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row my-2" n:foreach="$discussions as $item" title="{$item->getDescription()}">
+            <div class="col name" id="discussion-pane-{$item->getId()}">
+                <span n:class="badge,badge-pill,badge-danger,$item->getNewPosts() == 0 ? d-none">{$item->getNewPosts()}</span>
+                <a href="{plink :Discussion:Discussion: $item->getWebName()}">{$item->getCaption()}</a>
+                <span n:if="!$tymyUser->getHideDiscDesc()" class="col-sm-7 dis-description">{$item->getDescription()}</span>
+            </div>
+        </div>
+    </div>
+</div>

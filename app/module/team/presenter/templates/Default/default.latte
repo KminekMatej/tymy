@@ -24,7 +24,14 @@
             <div n:foreach="$users as $u" class="col-md-3 my-2">
                 <div class="card sh-box set-box">
                     <a href="{plink :Team:Player: $u->getWebName()}">
-                        <div class="card-header py-1 {$u->getGender()}">
+                        <div 
+                            class="card-header py-1 {$u->getGender()} {if $u->getHasBirthdayToday() || $u->getHasNamedayToday()}bg-warning text-white{elseif $u->getHasBirthdayTommorow() || $u->getHasNamedayTommorow()}bg-info text-white{/if}"
+                            {if $u->getHasBirthdayToday()}title="{_team.hasBirthdayToday, [name: $u->getDisplayName(), year: $u->getYearsOld()]}"
+                            {elseif $u->getHasBirthdayTommorow()}title="{_team.hasBirthdayTommorow, [name: $u->getDisplayName(), year: $u->getYearsOld()]}"
+                            {elseif $u->getHasNamedayToday()}title="{_team.hasNamedayToday, [name: $u->getDisplayName()]}"
+                            {elseif $u->getHasNamedayTommorow()}title="{_team.hasNamedayTommorow, [name: $u->getDisplayName()]}"
+                            {/if}
+                        >
                             <span class="name">{$u->getDisplayName()}{if $u->getJerseyNumber() != ""} (#{$u->getJerseyNumber()}){/if}</span>
                             <span n:if="$u->getIsNew() && $userType != 'INIT'" class="badge badge-success float-right">{_common.new}</span>
                         </div>

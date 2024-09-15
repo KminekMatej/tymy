@@ -11,7 +11,7 @@ use Tymy\Module\Admin\Manager\MigrationManager;
  */
 class MigratePresenter extends AdminSecuredPresenter
 {
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public MigrationManager $migrationManager;
 
     public function actionDefault(): void

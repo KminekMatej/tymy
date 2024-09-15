@@ -14,10 +14,10 @@ use Tymy\Module\User\Manager\UserManager;
  */
 class DefaultPresenter extends BasePresenter
 {
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public AuthorizationManager $AuthorizationManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public UserManager $userManager;
 
     public function actionDefault($resourceId): void

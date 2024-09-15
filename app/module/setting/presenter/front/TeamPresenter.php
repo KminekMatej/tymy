@@ -12,10 +12,10 @@ use Tymy\Module\Core\Factory\FormFactory;
 
 class TeamPresenter extends SettingBasePresenter
 {
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public StatusSetManager $statusSetManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public FormFactory $formFactory;
 
     public function renderDefault(): void

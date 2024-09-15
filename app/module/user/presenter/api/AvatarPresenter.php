@@ -13,7 +13,7 @@ use Tymy\Module\User\Manager\AvatarManager;
  */
 class AvatarPresenter extends SecuredPresenter
 {
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public AvatarManager $avatarManager;
 
     public function actionDefault(int $resourceId): void

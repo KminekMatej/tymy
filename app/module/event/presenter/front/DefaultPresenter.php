@@ -9,7 +9,7 @@ use Tymy\Module\Core\Model\BaseModel;
 
 class DefaultPresenter extends EventBasePresenter
 {
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public HistoryManager $historyManager;
 
 

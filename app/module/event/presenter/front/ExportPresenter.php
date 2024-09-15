@@ -8,10 +8,10 @@ use Tymy\Module\Core\Factory\FormFactory;
 
 class ExportPresenter extends EventBasePresenter
 {
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public HistoryManager $historyManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public FormFactory $formFactory;
 
     public function beforeRender()

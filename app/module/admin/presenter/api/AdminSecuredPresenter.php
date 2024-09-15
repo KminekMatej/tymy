@@ -12,7 +12,7 @@ use Tymy\Module\Core\Presenter\Api\BasePresenter;
  */
 class AdminSecuredPresenter extends BasePresenter
 {
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public AdminManager $adminManager;
 
     protected function startup(): void

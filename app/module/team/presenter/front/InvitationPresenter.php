@@ -16,7 +16,7 @@ use Tymy\Module\User\Model\User;
  */
 class InvitationPresenter extends SecuredPresenter
 {
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public InvitationManager $invitationManager;
 
     public function beforeRender(): void

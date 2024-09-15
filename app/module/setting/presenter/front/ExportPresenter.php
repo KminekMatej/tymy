@@ -9,10 +9,10 @@ use Tymy\Module\Settings\Manager\ICalManager;
 
 class ExportPresenter extends SettingBasePresenter
 {
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public ICalManager $iCalManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public StatusManager $statusManager;
 
     public function beforeRender(): void

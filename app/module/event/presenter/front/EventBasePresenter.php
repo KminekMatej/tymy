@@ -18,13 +18,13 @@ use Tymy\Module\Event\Model\Event;
  */
 class EventBasePresenter extends SecuredPresenter
 {
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public EventTypeManager $eventTypeManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public StatusManager $statusManager;
 
-    /** @inject */
+    #[\Nette\DI\Attributes\Inject]
     public AttendanceManager $attendanceManager;
 
     public function beforeRender()
