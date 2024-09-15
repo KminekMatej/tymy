@@ -3,8 +3,10 @@
 namespace Tymy\Module\Sign\Presenter\Front;
 
 use Nette;
+use Nette\Application\Attributes\Persistent;
 use Nette\Application\UI\Form;
-use Nette\NotImplementedException;
+use Nette\DI\Attributes\Inject;
+use Nette\Security\AuthenticationException;
 use Tracy\Debugger;
 use Tymy\Module\Authentication\Manager\AuthenticationManager;
 use Tymy\Module\Core\Manager\BaseManager;
@@ -13,10 +15,13 @@ use Tymy\Module\Sign\Form\SignInFormFactory;
 
 class InPresenter extends BasePresenter
 {
-    #[\Nette\DI\Attributes\Inject]
+    #[Persistent]
+    public string $backlink = '';
+
+    #[Inject]
     public SignInFormFactory $signInFactory;
 
-    #[\Nette\DI\Attributes\Inject]
+    #[Inject]
     public AuthenticationManager $authenticationManager;
 
     /**
@@ -29,7 +34,7 @@ class InPresenter extends BasePresenter
                 $this->user->setExpiration('20 minutes');
                 $this->user->login($values->name, $values->password);
                 BaseManager::logg($this->team, "{$values->name} application login");
-            } catch (Nette\Security\AuthenticationException $exc) {
+            } catch (AuthenticationException $exc) {
                 match ($exc->getMessage()) {
                     "Login not approved" => $this->flashMessage($this->translator->translate("common.alerts.loginNotApproved"), "danger"),
                     default => $this->flashMessage($this->translator->translate("common.alerts.loginNotSuccesfull") . ' (' . $exc->getMessage() . ")", "danger"),
@@ -39,6 +44,7 @@ class InPresenter extends BasePresenter
                 $this->initUser();
                 Debugger::log($this->tymyUser->getCallName() . "@" . $this->team->getSysName() . " logged in");
             }
+            $this->restoreRequest($this->backlink);
             $this->redirect(':Core:Default:');
         });
     }
