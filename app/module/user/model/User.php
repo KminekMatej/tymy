@@ -436,7 +436,7 @@ class User extends BaseModel
 
     public function setHasNameday()
     {
-        if(!isset($this->nameDayDay, $this->nameDayMonth)) {
+        if (!isset($this->nameDayDay, $this->nameDayMonth)) {
             return;
         }
 
