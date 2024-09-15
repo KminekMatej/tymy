@@ -84,7 +84,7 @@ class UserManager extends BaseManager
     public function getSimpleUser(int $userId): ?SimpleUser
     {
         if (empty($this->simpleUserCache) || !array_key_exists($userId, $this->simpleUserCache)) {
-            $allRows = $this->database->table(User::VIEW)->fetchAll();
+            $allRows = $this->database->table(User::TABLE)->fetchAll();
             foreach ($allRows as $userRow) {
                 $this->simpleUserCache[$userRow->id] = new SimpleUser($userRow->id, $userRow->user_name, $userRow->call_name, $this->getPictureUrl($userRow->id), (strtoupper($userRow->sex) == "FEMALE" ? "FEMALE" : "MALE"), $userRow->status, $userRow->email);
             }
@@ -101,7 +101,7 @@ class UserManager extends BaseManager
      */
     public function getSimpleUsers(?array $userIds = null): array
     {
-        $selector = $this->database->table(User::VIEW);
+        $selector = $this->database->table(User::TABLE);
         if ($userIds) {
             $selector->where("id", $userIds);
         }
@@ -157,35 +157,7 @@ class UserManager extends BaseManager
             $array["roles"] = implode(",", $array["roles"]);
         }
 
-        $createdRow = parent::createByArray($array);
-
-        $this->saveEmail($createdRow->id, $array["email"]);
-
-        return $createdRow;
-    }
-
-    /**
-     * Function to save email for given user.
-     * @param string $type Default DEF
-     * @throws AbortException
-     */
-    private function saveEmail(int $userId, string $email, string $type = "DEF"): void
-    {
-        $updated = $this->database->table(User::TABLE_MAILS)->where("user_id", $userId)->where("type", $type)->update(["email" => $email]);
-
-        if ($updated === 0) {
-            $created = $this->database->table(User::TABLE_MAILS)->insert(
-                [
-                        "user_id" => $userId,
-                        "type" => $type,
-                        "email" => $email,
-                    ]
-            );
-
-            if (!$created) {
-                $this->responder->E4009_CREATE_FAILED(User::MODULE);
-            }
-        }
+        return parent::createByArray($array);
     }
 
     /**
@@ -210,10 +182,6 @@ class UserManager extends BaseManager
                 $array["canLogin"] = 1;
                 $this->mailService->mailLoginApproved($userModel->getFullName(), $userModel->getEmail());
             }
-        }
-
-        if (array_key_exists("email", $array) && !empty($array["email"]) && $array["email"] !== $userModel->getEmail()) {
-            $this->saveEmail($id, $array["email"]);
         }
 
         if (array_key_exists("roles", $array) && is_array($array["roles"])) {
@@ -250,10 +218,6 @@ class UserManager extends BaseManager
         $user->setFullName($user->getFirstName() . " " . $user->getLastName());
         $user->setPictureUrl($this->getPictureUrl($row->id));
         $user->setIsNew($user->getCreatedAt() > new DateTime("- 14 days"));
-
-        $emailRow = $row->related(User::TABLE_MAILS, "user_id")->where("type", "DEF")->fetch();
-
-        $user->setEmail($emailRow ? $emailRow["email"] : null);
 
         $user->setWebName($user->getId() . "-" . Strings::webalize($user->getDisplayName()));
 
@@ -334,7 +298,7 @@ class UserManager extends BaseManager
      */
     public function getExistingEmails(): array
     {
-        return $this->database->table(User::VIEW)->fetchPairs(null, "email");
+        return $this->database->table(User::TABLE)->fetchPairs(null, "email");
     }
 
     /**
@@ -369,8 +333,8 @@ class UserManager extends BaseManager
      */
     public function getIdByEmail(string $email): ?int
     {
-        $row = $this->database->table(User::TABLE_MAILS)->where("email", $email)->fetch();
-        return $row !== null ? $row->user_id : null;
+        $row = $this->database->table(User::TABLE)->where("email", $email)->fetch();
+        return $row !== null ? $row->id : null;
     }
 
     /**

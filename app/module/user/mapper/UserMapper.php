@@ -20,6 +20,7 @@ class UserMapper extends BaseMapper
         return [
             Field::int()->withPropertyAndColumn("id", false, false),
             Field::string(20)->withColumn("user_name", true)->setProperty("login"),
+            Field::string(1023)->withPropertyAndColumn("email"),
             Field::int()->withColumn("can_login")->setProperty("canLogin"),
             Field::int()->withColumn("editable_call_name")->setProperty("canEditCallName"),
             Field::datetime()->withColumn("created_at", false, true)->setProperty("createdAt"),
