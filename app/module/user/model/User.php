@@ -27,7 +27,6 @@ class User extends BaseModel
     public const ROLE_USER_CLASS = "info";
     public const ROLE_ATTENDANCE_CLASS = "warning";
     public const STATUS_MEMBER = "MEMBER";
-    public const STATUS_DELETED = "DELETED";
     public const STATUS_PLAYER = "PLAYER";
     public const STATUS_SICK = "SICK";
     public const STATUS_INIT = "INIT";

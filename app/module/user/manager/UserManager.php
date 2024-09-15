@@ -175,13 +175,9 @@ class UserManager extends BaseManager
         $userModel = $this->getById($id);
 
         if ($userModel->getStatus() == User::STATUS_INIT && isset($array["status"]) && $array["status"] != User::STATUS_INIT) {
-            if ($array["status"] == User::STATUS_DELETED) {
-                $this->mailService->mailLoginDenied($userModel->getFullName(), $userModel->getEmail());
-            } else {
-                //user status has been changed from INIT - need to notify him about the upgrade
-                $array["canLogin"] = 1;
-                $this->mailService->mailLoginApproved($userModel->getFullName(), $userModel->getEmail());
-            }
+            //user status has been changed from INIT - need to notify him about the upgrade
+            $array["canLogin"] = 1;
+            $this->mailService->mailLoginApproved($userModel->getFullName(), $userModel->getEmail());
         }
 
         if (array_key_exists("roles", $array) && is_array($array["roles"])) {
@@ -664,6 +660,10 @@ class UserManager extends BaseManager
     {
         $this->allowDelete($resourceId);
 
+        if ($this->userModel == User::STATUS_INIT) {
+            $this->mailService->mailLoginDenied($this->userModel->getFullName(), $this->userModel->getEmail());
+        }
+
         return parent::deleteRecord($resourceId);
     }
 
@@ -906,23 +906,6 @@ class UserManager extends BaseManager
             }
         }
         return $this->userFields;
-    }
-
-    /**
-     * @return BaseModel[]
-     */
-    public function getList(?array $idList = null, string $idField = "id", ?int $limit = null, ?int $offset = null, ?string $order = null): array
-    {
-        $rows = $this->database->table($this->getTable())->where("status != ?", User::STATUS_DELETED);
-        if ($idList !== null) {
-            $rows->where($idField, $idList);
-        }
-
-        if (is_int($limit) && is_int($offset)) {
-            $rows->limit($limit, $offset);
-        }
-
-        return $this->mapAll($rows->fetchAll());
     }
 
     /**
