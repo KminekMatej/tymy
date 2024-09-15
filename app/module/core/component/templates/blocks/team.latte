@@ -2,7 +2,14 @@
     {if ($playersWarnings + $inits) > 0}
         <span class="badge badge-pill {if $playersWarnings > 0}badge-danger{else}badge-primary{/if} badge-new">{$playersWarnings + $inits}</span>
     {/if}
-    <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-users" aria-hidden="true"></i> {_team.team,1}</a>    
+    <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" {if $birthdayToday || $birthdayTommorow || $namedayToday || $namedayTommorow}title="Někdo slaví"{/if}>
+        {if $birthdayToday || $birthdayTommorow || $namedayToday || $namedayTommorow}
+            <i class="fas fa-birthday-cake {if $birthdayToday || $namedayToday}text-warning{else}text-info{/if}"></i>
+        {else}
+            <i class="fa fa-users" aria-hidden="true"></i>
+        {/if}
+        {_team.team,1}
+    </a>    
     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
         <a class="dropdown-item" href="{plink :Team:Player: $me->getWebName()}">{$me->getDisplayName()} <span class="badge badge-danger" n:if="$me->getWarnings()">{$me->getWarnings()}</span></a>
         <div class="dropdown-divider"></div>
@@ -15,5 +22,12 @@
         <div class="dropdown-divider"></div>
         <a class="dropdown-item" href="{plink :Team:Default:jerseys}"><i class="fas fa-tshirt" aria-hidden="true"></i> {_team.jerseyList}</a>
         <a n:if="$user->isAllowed((string) $user->getId(), 'SYS:USR_CREATE')" class="dropdown-item" href="{plink :Team:Default:invitation}"><i class="fa-solid fa-envelope-open-text"></i> {_team.invitation, 2}</a>
+        {if $birthdayToday || $birthdayTommorow || $namedayToday || $namedayTommorow}
+            <div class="dropdown-divider"></div>
+            <a n:foreach="$birthdayToday as $birthdayTodayUser" class="dropdown-item" href="{plink :Team:Player: $birthdayTodayUser->getWebName()}" title="{_team.hasBirthdayToday, [name: $birthdayTodayUser->getDisplayName(), year: $birthdayTodayUser->getYearsOld()]}"><i class="fas fa-birthday-cake text-warning"></i> {$birthdayTodayUser->getDisplayName()}</a>
+            <a n:foreach="$birthdayTommorow as $birthdayTommorowUser" class="dropdown-item" href="{plink :Team:Player: $birthdayTommorowUser->getWebName()}" title="{_team.hasBirthdayTommorow, [name: $birthdayTommorowUser->getDisplayName(), year: $birthdayTommorowUser->getYearsOld()]}"><i class="fas fa-birthday-cake text-info"></i> {$birthdayTommorowUser->getDisplayName()}</a>
+            <a n:foreach="$namedayToday as $namedayTodayUser" class="dropdown-item" href="{plink :Team:Player: $namedayTodayUser->getWebName()}" title="{_team.hasNamedayToday, [name: $namedayTodayUser->getDisplayName()]}"><i class="fas fa-birthday-cake text-warning"></i> {$namedayTodayUser->getDisplayName()}</a>
+            <a n:foreach="$namedayTommorow as $namedayTommorowUser" class="dropdown-item" href="{plink :Team:Player: $namedayTommorowUser->getWebName()}" title="{_team.hasNamedayTommorow, [name: $namedayTommorowUser->getDisplayName()]}"><i class="fas fa-birthday-cake text-info"></i> {$namedayTommorowUser->getDisplayName()}</a>
+        {/if}
     </div>
 </li>
