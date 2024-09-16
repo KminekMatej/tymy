@@ -8,25 +8,19 @@ use Nette\Security\User;
 use Tracy\Debugger;
 use Tracy\ILogger;
 use Tymy\Module\Team\Manager\TeamManager;
-use Tymy\Module\User\Manager\UserManager;
 use Tymy\Module\User\Model\User as TymyUser;
 
 use function count;
 
-/**
- * Description of StringsManager
- */
 class StringsManager
 {
     public const TABLE = "strings";
     public const LC = ["CZ" => "cs", "EN" => "en", "FR" => "fr", "PL" => "pl"];
 
-    private UserManager $userManager;
-
     public function __construct(
-        private Explorer $database,
-        private User $user,
-        private TeamManager $teamManager
+        private readonly Explorer $database,
+        private readonly User $user,
+        private readonly TeamManager $teamManager
     ) {
     }
 

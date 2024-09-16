@@ -3,6 +3,7 @@
 namespace Tymy\Module\Core\Response;
 
 use Nette;
+use Override;
 
 class FileContentResponse implements Nette\Application\IResponse
 {
@@ -16,8 +17,13 @@ class FileContentResponse implements Nette\Application\IResponse
      * @param string|null $contentType MIME content type
      * @param bool $forceDownload True to download instead of display
      */
-    public function __construct(private string $fileContent, private ?string $name = null, private ?string $contentType = 'application/octet-stream', private bool $forceDownload = true)
-    {
+    public function __construct(
+        private string $fileContent,
+        private ?string $name = null,
+        private ?string $contentType = 'application/octet-stream',
+        private bool $forceDownload = true
+    ) {
+        $this->name = $name;
     }
 
     /**
@@ -25,7 +31,7 @@ class FileContentResponse implements Nette\Application\IResponse
      *
      * @return string
      */
-    public function getFileContent()
+    public function getFileContent(): string
     {
         return $this->fileContent;
     }
@@ -45,7 +51,7 @@ class FileContentResponse implements Nette\Application\IResponse
      *
      * @return string
      */
-    public function getContentType()
+    public function getContentType(): string
     {
         return $this->contentType;
     }
@@ -56,6 +62,7 @@ class FileContentResponse implements Nette\Application\IResponse
      *
      * @return void
      */
+    #[Override]
     public function send(Nette\Http\IRequest $httpRequest, Nette\Http\IResponse $httpResponse): void
     {
         $httpResponse->setContentType($this->contentType);
@@ -70,9 +77,9 @@ class FileContentResponse implements Nette\Application\IResponse
 
         if ($this->resuming) {
             $httpResponse->setHeader('Accept-Ranges', 'bytes');
-            if ($httpRequest->getHeader('Range') && preg_match('#^bytes=(\d*)-(\d*)\z#', $httpRequest->getHeader('Range') ?: "", $matches)) {
-                $start = isset($matches[1]) ? intval($matches[1]) : null;
-                $end = isset($matches[2]) ? intval($matches[2]) : null;
+            if ($httpRequest->getHeader('Range') && preg_match('#^bytes=(\d*)-(\d*)\z#', $httpRequest->getHeader('Range'), $matches)) {
+                $start = !empty($matches[1]) ? intval($matches[1]) : null;
+                $end = !empty($matches[2]) ? intval($matches[2]) : null;
                 if (is_null($start)) {
                     $start = max(0, $filesize - $end);
                     $end = $filesize - 1;

@@ -361,15 +361,6 @@ class UserTest extends RequestCase
         $this->request($this->getBasePath() . "/$recordId", "PUT", ["status" => "DELETED"])->expect(200, "array");
     }
 
-    /**
-     * Load data list
-     */
-    private function getList(): SimpleResponse
-    {
-        $this->authorizeAdmin();
-        return $this->request($this->getBasePath())->expect(200, "array");
-    }
-
     protected function mockChanges(): array
     {
         return [

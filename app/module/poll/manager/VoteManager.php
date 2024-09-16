@@ -55,7 +55,6 @@ class VoteManager extends BaseManager
 
             if (!empty($vote["userId"]) && !empty($voteUserId) && $vote["userId"] !== $voteUserId) {
                 $this->respondBadRequest("All votes must be for the same user");
-                $voteUserId = $vote["userId"];
             }
 
 
@@ -97,7 +96,7 @@ class VoteManager extends BaseManager
         $answers = 0;
         foreach ($votes as $vote) {
             if (
-                (isset($vote["booleanValue"]) && !is_null($vote["booleanValue"]))
+                isset($vote["booleanValue"])
                 || !empty($vote["stringValue"])
                 || !empty($vote["numericValue"])
             ) {

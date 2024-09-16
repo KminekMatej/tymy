@@ -398,13 +398,7 @@ abstract class BaseManager
      */
     public function createByArray(array $array)
     {
-        $created = $this->createRecord($this->getTable(), $this->composeInsertArray($array));
-
-        if (!$created) {
-            $this->responder->E4009_CREATE_FAILED($this->getModule());
-        }
-
-        return $created;
+        return $this->createRecord($this->getTable(), $this->composeInsertArray($array));
     }
 
     /**
@@ -711,7 +705,7 @@ abstract class BaseManager
      */
     private function getColumnName(string $propertyName): ?string
     {
-        if (empty($this->getScheme()) || !is_array($this->getScheme()) || empty($propertyName)) {
+        if (empty($this->getScheme()) || empty($propertyName)) {
             return null;
         }
 

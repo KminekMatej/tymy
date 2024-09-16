@@ -122,7 +122,7 @@ class Discussion extends BaseModel
 
     public function getNewPosts(): int
     {
-        return $this->newInfo ? $this->newInfo->getNewsCount() : 0;
+        return isset($this->newInfo) ? $this->newInfo->getNewsCount() : 0;
     }
 
     public function getWebName(): string

@@ -156,7 +156,7 @@ class DiscussionManager extends BaseManager
             (`discussion_read`.`discussion_id`=`discussion`.`id`) AND (`discussion_read`.`user_id` = ?) 
             WHERE ($readPermsQ `discussion`.`read_rights` IS NULL OR
             TRIM(`discussion`.`read_rights`) = '') ORDER BY `discussion`.`order_flag` ASC";
-        $selector = empty($readPerms) ? $this->database->query($query, $userId) : $this->database->query($query, $userId, $readPerms ?: "");
+        $selector = empty($readPerms) ? $this->database->query($query, $userId) : $this->database->query($query, $userId, $readPerms);
         return $this->mapAll($selector->fetchAll());
     }
 

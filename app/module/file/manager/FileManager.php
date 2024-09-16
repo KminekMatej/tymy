@@ -94,9 +94,7 @@ class FileManager
 
         $targetFile = self::DOWNLOAD_DIR . "/$folder/" . $file->getSanitizedName();
 
-        if (!$file->move($targetFile)) {
-            Debugger::log("File saving failed [$targetFile]", ILogger::ERROR);
-        }
+        $file->move($targetFile);
 
         return $targetFile;
     }

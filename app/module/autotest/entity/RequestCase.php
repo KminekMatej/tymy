@@ -47,7 +47,6 @@ abstract class RequestCase extends TestCase
     private PresenterFactory $presenterFactory;
     protected AuthenticationManager $authenticationManager;
     protected Responder $responder;
-    private IRequest $httpRequest;
     private MockRequestFactory $httpRequestFactory;
 
     /** @var RequestLog[] */
@@ -81,7 +80,6 @@ abstract class RequestCase extends TestCase
         $this->config = Neon::decode(file_get_contents(TEST_DIR . '/autotest.records.map.neon'));
         $this->moduleConfig = $this->config[$this->getModule()] ?? [];
         $this->recordManager = new RecordManager($this, $this->config);
-        $this->httpRequest = $this->container->getService("http.request");
         $this->httpRequestFactory = $this->container->getService("http.requestFactory");
     }
 

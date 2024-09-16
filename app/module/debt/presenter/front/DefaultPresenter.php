@@ -60,7 +60,7 @@ class DefaultPresenter extends DebtBasePresenter
         if (!$paymentString) {
             $this->sendResponse(new TextResponse("Insufficient data to create QR code"));
         }
-        QRcode::png($paymentString, false, QR_ECLEVEL_H, 4, 4); /* @phpstan-ignore-line */
+        QRcode::png($paymentString, false, QR_ECLEVEL_H, 4, 4);
         $this->terminate();
     }
 

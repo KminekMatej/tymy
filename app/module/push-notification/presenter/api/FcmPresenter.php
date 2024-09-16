@@ -6,9 +6,6 @@ use Tymy\Module\Core\Presenter\Api\SecuredPresenter;
 use Tymy\Module\PushNotification\Manager\PushNotificationManager;
 use Tymy\Module\PushNotification\Model\Subscriber;
 
-/**
- * Description of DefaultPresenter
- */
 class FcmPresenter extends SecuredPresenter
 {
     public function injectManager(PushNotificationManager $manager): void
@@ -39,9 +36,8 @@ class FcmPresenter extends SecuredPresenter
 
         assert($this->manager instanceof PushNotificationManager);
         $subscriber = $this->manager->getByUserAndSubscription($this->user->getId(), $deviceId);
-        assert($subscriber instanceof Subscriber);
 
-        if ($subscriber) {
+        if ($subscriber instanceof Subscriber) {
             $this->respondOk($subscriber->jsonSerialize());
         }
 
@@ -50,10 +46,6 @@ class FcmPresenter extends SecuredPresenter
             "type" => Subscriber::TYPE_FCM,
             "subscription" => $deviceId,
         ]);
-
-        if (!$createdSubscription) {
-            $this->responder->E4009_CREATE_FAILED(Subscriber::MODULE);
-        }
 
         $this->respondOkCreated($createdSubscription->jsonSerialize());
     }

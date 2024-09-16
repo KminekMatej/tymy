@@ -38,9 +38,8 @@ class ApplePresenter extends SecuredPresenter
         $deviceId = $this->requestData;
         assert($this->manager instanceof PushNotificationManager);
         $subscriber = $this->manager->getByUserAndSubscription($this->user->getId(), $deviceId);
-        assert($subscriber instanceof Subscriber);
 
-        if ($subscriber) {
+        if ($subscriber instanceof Subscriber) {
             $this->respondOk($subscriber->jsonSerialize());
         }
 
@@ -49,10 +48,6 @@ class ApplePresenter extends SecuredPresenter
             "type" => Subscriber::TYPE_APNS,
             "subscription" => $deviceId,
         ]);
-
-        if (!$createdSubscription) {
-            $this->responder->E4009_CREATE_FAILED(Subscriber::MODULE);
-        }
 
         $this->respondOkCreated($createdSubscription->jsonSerialize());
     }
