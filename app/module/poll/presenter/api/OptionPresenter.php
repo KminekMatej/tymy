@@ -47,7 +47,7 @@ class OptionPresenter extends SecuredPresenter
         $this->respondNotAllowed();
     }
 
-    private function requestGetList(int $pollId): void
+    private function requestGetList(int $pollId): never
     {
         assert($this->manager instanceof OptionManager);
         $options = $this->manager->getPollOptions($pollId);
@@ -55,7 +55,7 @@ class OptionPresenter extends SecuredPresenter
         $this->respondOk($this->arrayToJson($options));
     }
 
-    protected function requestPost($resourceId): void
+    protected function requestPost($resourceId): never
     {
         $created = null;
         if (!$this->isMultipleObjects($this->requestData)) {
