@@ -282,7 +282,7 @@ class MigrationManager
     /**
      * Log string using defined logger or to internal log array
      *
-     * @param type $text
+     * @param string $text
      * @return void
      */
     private function logg(string $text): void
