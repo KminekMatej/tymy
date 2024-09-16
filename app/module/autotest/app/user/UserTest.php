@@ -118,8 +118,6 @@ class UserTest extends RequestCase
 
         $this->change($recordId);
 
-        $this->request($this->getBasePath() . "/$recordId", "DELETE")->expect(405);
-
         $this->deleteRecord($recordId);
     }
 
@@ -355,15 +353,6 @@ class UserTest extends RequestCase
     public function mockRecord(): array
     {
         return $this->recordManager->mockUser();
-    }
-
-    /**
-     * Override deleting function - user is not being deleted normally, he gets marked as deleted in status
-     * @param int $recordId
-     */
-    public function deleteRecord($recordId): void
-    {
-        $this->request($this->getBasePath() . "/$recordId", "PUT", ["status" => "DELETED"])->expect(200, "array");
     }
 
     /**

@@ -38,7 +38,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->respondNotAllowed();
     }
 
-    private function requestGetList(): void
+    private function requestGetList(): never
     {
         assert($this->manager instanceof PollManager);
         $polls = $this->manager->getListUserAllowed();

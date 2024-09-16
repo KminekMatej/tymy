@@ -16,7 +16,7 @@ class ApplePresenter extends SecuredPresenter
         $this->manager = $manager;
     }
 
-    public function actionDefault($resourceId): void
+    public function actionDefault($resourceId): never
     {
         if ($this->getRequest()->getMethod() === 'POST') {
             $this->requestPost($resourceId);
@@ -25,7 +25,7 @@ class ApplePresenter extends SecuredPresenter
         $this->respondNotAllowed();
     }
 
-    protected function requestPost($resourceId): void
+    protected function requestPost($resourceId): never
     {
         if (empty($this->requestData)) {
             $this->respondBadRequest("Missing request data");
