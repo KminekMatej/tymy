@@ -17,7 +17,7 @@
 ALTER TABLE `user` ADD `email` VARCHAR(1023) NULL DEFAULT NULL AFTER `password`; 
 UPDATE `user` SET `email` = (SELECT `email` FROM `usr_mails` WHERE `user_id` = `user`.`id` LIMIT 1);
 DROP TABLE `usr_mails`;
-DROP VIEW IF EXISTS `v_users`;
+DROP VIEW IF EXISTS `v_user`;
 
 
 -- DOWN:
