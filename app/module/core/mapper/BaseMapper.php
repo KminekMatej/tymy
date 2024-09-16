@@ -6,8 +6,6 @@ use Tymy\Module\Core\Model\Field;
 
 /**
  * BaseMapper - parent function for all mappers
- *
- * @author kminekmatej, 25.4.2019
  */
 abstract class BaseMapper
 {

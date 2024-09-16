@@ -9,8 +9,6 @@ use Tymy\Module\Team\Mapper\TeamMapper;
 
 /**
  * Description of Team
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 5. 6. 2020
  */
 class Team extends BaseModel
 {

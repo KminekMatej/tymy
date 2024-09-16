@@ -7,8 +7,6 @@ use Tymy\Module\Poll\Mapper\OptionMapper;
 
 /**
  * Description of Option
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 20. 12. 2020
  */
 class Option extends BaseModel
 {

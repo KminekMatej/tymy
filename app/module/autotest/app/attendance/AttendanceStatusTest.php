@@ -15,13 +15,9 @@ $container = Bootstrap::boot();
 /**
  * Description of AttendanceStatusTest
  *
- * @author kminekmatej, 07.11.2020 21:47:07
- *
-    @RequestMapping(value = "/attendanceStatusSet", method = RequestMethod.POST)
-    @RequestMapping(value = "/attendanceStatusSet/{id}", method = RequestMethod.PUT)
-    @RequestMapping(value = "/attendanceStatusSet/{id}", method = RequestMethod.DELETE)
- *
- *
+ * @RequestMapping(value = "/attendanceStatusSet", method = RequestMethod.POST)
+ * @RequestMapping(value = "/attendanceStatusSet/{id}", method = RequestMethod.PUT)
+ * @RequestMapping(value = "/attendanceStatusSet/{id}", method = RequestMethod.DELETE)
  */
 class AttendanceStatusTest extends RequestCase
 {
@@ -169,6 +165,7 @@ class AttendanceStatusTest extends RequestCase
     }
     /**
      * Return id of random, already existing status set
+     *
      * @return int
      */
     private function getStatusSetId(): int

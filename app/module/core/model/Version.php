@@ -6,8 +6,6 @@ use Nette\Utils\DateTime;
 
 /**
  * Simple object to store Version data
- *
- * @author kminekmatej, 21. 2. 2022, 12:14:02
  */
 class Version
 {

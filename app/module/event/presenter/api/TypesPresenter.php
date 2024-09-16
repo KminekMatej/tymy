@@ -7,8 +7,6 @@ use Tymy\Module\Event\Manager\EventTypeManager;
 
 /**
  * Description of TypesPresenter
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 08.10. 2020
  */
 class TypesPresenter extends SecuredPresenter
 {

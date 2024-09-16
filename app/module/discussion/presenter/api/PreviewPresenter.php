@@ -9,8 +9,6 @@ use Tymy\Module\Discussion\Model\Discussion;
 
 /**
  * Description of PreviewPresenter
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 14. 9. 2020
  */
 class PreviewPresenter extends SecuredPresenter
 {

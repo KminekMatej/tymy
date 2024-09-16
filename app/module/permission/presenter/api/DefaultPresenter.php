@@ -7,8 +7,6 @@ use Tymy\Module\Permission\Manager\PermissionManager;
 
 /**
  * Description of DefaultPresenter
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 28. 8. 2020
  */
 class DefaultPresenter extends SecuredPresenter
 {

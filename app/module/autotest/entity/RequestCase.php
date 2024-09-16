@@ -32,8 +32,6 @@ use const TEST_DIR;
 
 /**
  * Envelope class for all api testing classes
- *
- * @author kminekmatej, 10.3.2019
  */
 abstract class RequestCase extends TestCase
 {

@@ -12,9 +12,6 @@ $container = Bootstrap::boot();
 
 /**
  * Description of IsTest
- *
- * @author kminekmatej, 01.10.2020 22:00:34
- *
  */
 class IsTest extends RequestCase
 {

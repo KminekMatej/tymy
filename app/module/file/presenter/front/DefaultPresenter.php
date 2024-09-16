@@ -14,8 +14,6 @@ use const TEAM_DIR;
 
 /**
  * Description of DebtPresenter
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 10. 2. 2020
  */
 class DefaultPresenter extends SecuredPresenter
 {
@@ -169,6 +167,7 @@ class DefaultPresenter extends SecuredPresenter
 
     /**
      * Get download folder contents
+     *
      * @return array<string, mixed[]>
      */
     private function getContents(string $folder): array

@@ -7,8 +7,6 @@ use Tymy\Module\Team\Manager\TeamManager;
 
 /**
  * Description of IsPresenter
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 6. 8. 2020
  */
 class IsPresenter extends BasePresenter
 {

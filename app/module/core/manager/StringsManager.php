@@ -15,8 +15,6 @@ use function count;
 
 /**
  * Description of StringsManager
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 9. 9. 2020
  */
 class StringsManager
 {

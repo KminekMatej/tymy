@@ -7,8 +7,6 @@ use Tymy\Module\Core\Model\Field;
 
 /**
  * Description of DebtMapper
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 29. 11. 2020
  */
 class DebtMapper extends BaseMapper
 {

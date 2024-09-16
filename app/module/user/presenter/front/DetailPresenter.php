@@ -21,8 +21,6 @@ use function mb_str_split;
 
 /**
  * Description of DetailPresenter
- *
- * @author kminekmatej, 11. 9. 2022, 21:35:32
  */
 class DetailPresenter extends BasePresenter
 {
@@ -85,6 +83,7 @@ class DetailPresenter extends BasePresenter
 
     /**
      * Send response in iCal formatting, with respect to some ical specific formatting
+     *
      * @return never
      */
     private function sendAsIcal(Template $template): void

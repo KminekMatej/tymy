@@ -7,8 +7,6 @@ use Tymy\Module\Core\Model\Field;
 
 /**
  * Description of HistoryMapper
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 19. 9. 2020
  */
 class HistoryMapper extends BaseMapper
 {

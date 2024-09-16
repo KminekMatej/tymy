@@ -12,8 +12,6 @@ use Tymy\Module\Core\Model\BaseModel;
 
 /**
  * Description of ArrayHelper
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 14. 1. 2021
  */
 class ArrayHelper
 {
@@ -89,7 +87,6 @@ class ArrayHelper
     }
 
     /**
-     *
      * Compares two structures and checks expectations. The identity of objects, the order of keys
      * in the arrays and marginally different floats are ignored.
      *
@@ -99,6 +96,7 @@ class ArrayHelper
      * @param mixed $actual
      * @param int $level = 0 (internal usage to avoid recursion overflow)
      * @param mixed $objects
+     *
      * @throws Exception
      */
     public static function isEqual(mixed $expected, mixed $actual, int $level = 0, $objects = null): bool
@@ -158,6 +156,7 @@ class ArrayHelper
 
     /**
      * Transform array of entities to array of its json representation
+     *
      * @param BaseModel[]|null $entities
      * @return mixed[]
      */
@@ -225,6 +224,7 @@ class ArrayHelper
 
     /**
      * Function to process absolute array diff - will return array of items which are not in BOTH arrays
+     *
      * @return mixed[]
      */
     public static function diffAbs(array $array1, array $array2): array
@@ -237,6 +237,7 @@ class ArrayHelper
 
     /**
      * Cast all entities in array to int
+     *
      * @return int[]
      */
     public static function ints(array $array): array
@@ -246,6 +247,7 @@ class ArrayHelper
 
     /**
      * Explode string by separator and cast all explded values to int
+     *
      * @return mixed[]
      */
     public static function explodeInts(string $separator, string $string): array
@@ -257,6 +259,7 @@ class ArrayHelper
 
     /**
      * Merge one or more arrays and return their unique values
+     *
      * @param array $arrays Input arrays
      * @return array|null on failure
      */
@@ -275,6 +278,7 @@ class ArrayHelper
      * Rows of type ActiveRow are transformed into array and outputed.
      * Any other types of rows are skipped and not outputed.
      * Array keys and order are maintained.
+     *
      * @return mixed[][]
      */
     public static function rowsToArrays(array $rows): array
@@ -321,6 +325,7 @@ class ArrayHelper
     /**
      * Transform two-dimensional array to key->value pair array, getting key from object getter, formed from property name
      * If no value is specified, returns complete model
+     *
      * @param BaseModel[] $inputArray
      * @return array|BaseModel[]
      */

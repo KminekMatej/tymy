@@ -14,9 +14,6 @@ $container = Bootstrap::boot();
 
 /**
  * Description of PollTest
- *
- * @author kminekmatej, 28.12.2020 22:41:07
- *
  */
 class PollTest extends RequestCase
 {

@@ -8,8 +8,6 @@ use Tymy\Module\File\Handler\FileManager;
 
 /**
  * Description of DownloadPresenter
- *
- * @author kminekmatej, 2. 5. 2022, 22:48:27
  */
 class DownloadPresenter extends SecuredPresenter
 {

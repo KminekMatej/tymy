@@ -16,9 +16,6 @@ $container = Bootstrap::boot();
 
 /**
  * Description of DebtTest
- *
- * @author kminekmatej, 07.10.2020 21:47:07
- *
  */
 class DebtTest extends RequestCase
 {

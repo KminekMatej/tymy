@@ -7,8 +7,6 @@ use Tymy\Module\Discussion\Manager\DiscussionManager;
 
 /**
  * Description of DefaultPresenter
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 13. 9. 2020
  */
 class DefaultPresenter extends SecuredPresenter
 {

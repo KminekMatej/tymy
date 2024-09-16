@@ -44,6 +44,7 @@ class AttendanceManager extends BaseManager
 
     /**
      * Get array of attendanced related to events
+     *
      * @return array<int|string, array<Attendance|null>>
      */
     public function getByEvents(array $eventIds): array
@@ -63,6 +64,7 @@ class AttendanceManager extends BaseManager
 
     /**
      * Maps one active row to object
+     *
      * @param IRow|null $row
      * @param bool $force True to skip cache
      * @return Attendance|null
@@ -104,6 +106,7 @@ class AttendanceManager extends BaseManager
 
     /**
      * Check edit permission
+     *
      * @param Attendance $entity
      */
     public function canEdit($entity, int $userId): bool
@@ -113,6 +116,7 @@ class AttendanceManager extends BaseManager
 
     /**
      * Check read permission
+     *
      * @param Attendance $entity
      */
     public function canRead($entity, int $userId): bool
@@ -122,6 +126,7 @@ class AttendanceManager extends BaseManager
 
     /**
      * Get user ids allowed to read given attendance
+     *
      * @param Attendance $record
      * @return int[]
      */
@@ -330,6 +335,7 @@ class AttendanceManager extends BaseManager
      * @param array $updates Array of updates
      * @param string $idColumn Caption of primary key column
      * @return int number of affected rows
+     *
      * @throws Exception
      */
     protected function updateRecord(string $table, int $id, array $updates, string $idColumn = "id"): int

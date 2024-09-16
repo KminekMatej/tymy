@@ -6,8 +6,6 @@ use JsonSerializable;
 
 /**
  * Description of SimpleUser
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 4. 8. 2020
  */
 class SimpleUser implements JsonSerializable
 {

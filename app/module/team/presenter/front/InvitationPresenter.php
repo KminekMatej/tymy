@@ -11,8 +11,6 @@ use Tymy\Module\User\Model\User;
 
 /**
  * Description of InvitationPresenter
- *
- * @author kminekmatej, 25. 9. 2022, 21:07:50
  */
 class InvitationPresenter extends SecuredPresenter
 {

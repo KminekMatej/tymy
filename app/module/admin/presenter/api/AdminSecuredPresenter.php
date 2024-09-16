@@ -7,8 +7,6 @@ use Tymy\Module\Core\Presenter\Api\BasePresenter;
 
 /**
  * Description of AdminSecuredPresenter
- *
- * @author kminekmatej, 25. 10. 2021
  */
 class AdminSecuredPresenter extends BasePresenter
 {
@@ -42,7 +40,7 @@ class AdminSecuredPresenter extends BasePresenter
         }
 
         if ($this->user->isLoggedIn()) {
-            $this->user->logout(true); //
+            $this->user->logout(true);
         }
 
         return is_string($headerContent) ? $headerContent : null;
@@ -64,7 +62,7 @@ class AdminSecuredPresenter extends BasePresenter
         }
 
         if ($this->user->isLoggedIn()) {
-            $this->user->logout(true); //
+            $this->user->logout(true);
         }
 
         return is_string($paramContent) ? $paramContent : null;

@@ -17,9 +17,6 @@ $container = Bootstrap::boot();
 
 /**
  * Description of DiscussionTest
- *
- * @author kminekmatej, 01.10.2020 22:00:34
- *
  */
 class DiscussionTest extends RequestCase
 {

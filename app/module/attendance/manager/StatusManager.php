@@ -106,6 +106,7 @@ class StatusManager extends BaseManager
 
     /**
      * Get all status unique status codes
+     *
      * @return mixed[]
      */
     public function getAllStatusCodes(): array
@@ -115,6 +116,7 @@ class StatusManager extends BaseManager
 
     /**
      * Get all pre and post statuses by corresponding event type id
+     *
      * @return array In the form of ["pre" => [..array of Status objects..], "post" => [..array of Status objects..]]
      */
     public function getByEventTypeId(int $eventTypeId): array
@@ -130,6 +132,7 @@ class StatusManager extends BaseManager
 
     /**
      * Map all rows to array of statuses where key is status code
+     *
      * @param ActiveRow[] $rows
      * @return Status[]
      */
@@ -144,6 +147,7 @@ class StatusManager extends BaseManager
 
     /**
      * Get all status unique status codes
+     *
      * @return Status[] where key is code
      */
     public function getByStatusCode(): array
@@ -157,6 +161,7 @@ class StatusManager extends BaseManager
 
     /**
      * Get all statuses, which are used in any event_type for pre-status purposes
+     *
      * @return Status[] where key is code
      */
     public function getAllPreStatuses(): array
@@ -170,6 +175,7 @@ class StatusManager extends BaseManager
 
     /**
      * Load status ids related to specific event types - first PRE then POST statuses
+     *
      * @param int $eventTypeId
      * @return int[]
      */

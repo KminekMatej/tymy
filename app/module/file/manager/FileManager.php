@@ -12,8 +12,6 @@ use const TEAM_DIR;
 
 /**
  * Description of FileManager
- *
- * @author kminekmatej, 7.11.2018
  */
 class FileManager
 {

@@ -94,6 +94,7 @@ class PermissionManager extends BaseManager
 
     /**
      * Find permissions by its type
+     *
      * @return Permission[]
      */
     public function getByType(string $type): array
@@ -103,6 +104,7 @@ class PermissionManager extends BaseManager
 
     /**
      * Get all permission names which are allowed for user
+     *
      * @return array of names
      */
     public function getUserAllowedPermissionNames(User $user, ?string $type = null): array
@@ -112,6 +114,7 @@ class PermissionManager extends BaseManager
 
     /**
      * Get all permission objects which are allowed for user
+     *
      * @return Permission[]
      */
     public function getUserAllowedPermissionObjects(User $user, ?string $type = null): array

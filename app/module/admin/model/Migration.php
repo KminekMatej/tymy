@@ -6,8 +6,6 @@ use Nette\Utils\DateTime;
 
 /**
  * Description of Migration
- *
- * @author Matěj Kmínek
  */
 class Migration
 {

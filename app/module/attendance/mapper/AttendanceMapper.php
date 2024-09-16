@@ -7,8 +7,6 @@ use Tymy\Module\Core\Model\Field;
 
 /**
  * Description of AttendanceMapper
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 21. 9. 2020
  */
 class AttendanceMapper extends BaseMapper
 {

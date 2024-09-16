@@ -19,8 +19,6 @@ use const TEAM_DIR;
 
 /**
  * Description of RootPresenter
- *
- * @author kminekmatej, 9. 1. 2022, 21:57:52
  */
 abstract class RootPresenter extends Presenter
 {

@@ -14,8 +14,6 @@ use Tymy\Module\User\Manager\UserManager;
 
 /**
  * Description of DiscussionPresenter
- *
- * @author matej
  */
 class DiscussionPresenter extends SecuredPresenter
 {

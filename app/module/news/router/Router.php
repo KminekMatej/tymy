@@ -7,8 +7,6 @@ use Tymy\Module\Core\Interfaces\RouterInterface;
 
 /**
  * Description of Router
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 21. 02. 2021
  */
 class Router implements RouterInterface
 {

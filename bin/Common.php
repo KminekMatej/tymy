@@ -6,8 +6,6 @@ use Nette\Utils\DateTime;
 
 /**
  * Description of Common
- *
- * @author kminekmatej, 29. 3. 2022, 15:03:24
  */
 class Common
 {
@@ -23,6 +21,7 @@ class Common
 
     /**
      * Echoes ASCII Boot.space logo to standard output
+     *
      * @return void
      */
     public static function DUMPLOGO(): void

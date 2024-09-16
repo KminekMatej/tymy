@@ -136,6 +136,7 @@ class PushNotificationManager extends BaseManager
 
     /**
      * Notify all subscribers registered through Web push messaging
+     *
      * @param Subscriber[] $subscribers
      */
     private function webPushBulk(PushNotification $notification, array $subscribers): void
@@ -159,7 +160,6 @@ class PushNotificationManager extends BaseManager
     }
 
     /**
-     *
      * @param Subscriber[] $subscribers
      */
     private function applePushBulk(PushNotification $notification, array $subscribers): void
@@ -174,8 +174,8 @@ class PushNotificationManager extends BaseManager
     }
 
     /**
-     *
      * @param Subscriber[] $subscribers
+     *
      * @todo
      */
     private function firebasePushBulk(PushNotification $notification, array $subscribers): void

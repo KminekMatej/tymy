@@ -20,8 +20,6 @@ use function count;
 
 /**
  * Description of SecuredPresenter
- *
- * @author matej
  */
 class SecuredPresenter extends BasePresenter
 {
@@ -117,11 +115,13 @@ class SecuredPresenter extends BasePresenter
 
     /**
      * Smart pagination script
-     * @link https://stackoverflow.com/questions/163809/smart-pagination-algorithm
+     *
      * @param int $totalCount Total count of items
      * @param int $perPage Number of items per page
      * @param int $currentPage Number of current page
      * @param int $shownCount Number of shown links
+     *
+     * @link https://stackoverflow.com/questions/163809/smart-pagination-algorithm
      */
     protected function pagination(int $totalCount, int $perPage, int $currentPage, int $shownCount): array
     {

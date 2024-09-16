@@ -10,8 +10,6 @@ use Tymy\Module\User\Model\SimpleUser;
 
 /**
  * Description of Attendance
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 21. 9. 2020
  */
 class Attendance extends BaseModel implements JsonSerializable
 {

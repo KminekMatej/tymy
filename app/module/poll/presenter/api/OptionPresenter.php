@@ -10,12 +10,9 @@ use Tymy\Module\Poll\Manager\PollManager;
 /**
  * Description of OptionPresenter
  *
- *
  * @RequestMapping(value = "/polls/{id}/options", method = RequestMethod.POST)
  * @RequestMapping(value = "/polls/{id}/options", method = RequestMethod.PUT)
  * @RequestMapping(value = "/polls/{id}/options", method = RequestMethod.DELETE)
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 27. 12. 2020
  */
 class OptionPresenter extends SecuredPresenter
 {

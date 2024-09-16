@@ -7,8 +7,6 @@ use Tymy\Module\Core\Model\Field;
 
 /**
  * Description of NewsMapper
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 21. 02. 2021
  */
 class NewsMapper extends BaseMapper
 {

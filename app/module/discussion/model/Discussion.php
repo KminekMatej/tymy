@@ -8,8 +8,6 @@ use Tymy\Module\Discussion\Mapper\DiscussionMapper;
 
 /**
  * Description of Discussion
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 5. 6. 2020
  */
 class Discussion extends BaseModel
 {

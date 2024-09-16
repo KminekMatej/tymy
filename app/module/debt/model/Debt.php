@@ -10,8 +10,6 @@ use Tymy\Module\User\Model\User;
 
 /**
  * Description of Debt
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 29. 11. 2020
  */
 class Debt extends BaseModel implements JsonSerializable
 {

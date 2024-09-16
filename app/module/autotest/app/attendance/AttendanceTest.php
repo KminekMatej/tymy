@@ -14,9 +14,6 @@ $container = Bootstrap::boot();
 
 /**
  * Description of AttendanceTest
- *
- * @author kminekmatej, 04.11.2020 21:47:07
- *
  */
 class AttendanceTest extends RequestCase
 {

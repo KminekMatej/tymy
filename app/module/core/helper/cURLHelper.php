@@ -8,6 +8,7 @@ class CURLHelper
 {
     /**
      * Get content from url
+     *
      * @return string|array If its json data
      */
     public static function get(string $url, bool $isJson = false): string|array

@@ -7,8 +7,6 @@ use Tymy\Module\Core\Model\Field;
 
 /**
  * Description of PostMapper
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 5. 6. 2020
  */
 class PostMapper extends BaseMapper
 {

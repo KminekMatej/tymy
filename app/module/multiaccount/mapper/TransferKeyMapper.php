@@ -7,8 +7,6 @@ use Tymy\Module\Core\Model\Field;
 
 /**
  * Description of TransferKeyMapper
- *
- * @author kminekmatej, 18. 11. 2021, 23:33:50
  */
 class TransferKeyMapper extends BaseMapper
 {

@@ -8,8 +8,6 @@ use Tymy\Module\User\Mapper\InvitationMapper;
 
 /**
  * Description of Invitation
- *
- * @author kminekmatej, 25. 9. 2022, 21:18:30
  */
 class Invitation extends BaseModel
 {

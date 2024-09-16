@@ -14,9 +14,6 @@ $container = Bootstrap::boot();
 
 /**
  * Description of EventTest
- *
- * @author kminekmatej, 07.10.2020 21:47:07
- *
  */
 class EventTest extends RequestCase
 {

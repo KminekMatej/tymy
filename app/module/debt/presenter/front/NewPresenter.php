@@ -9,8 +9,6 @@ use Tymy\Module\Debt\Model\Debt;
 
 /**
  * Description of NewPresenter
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 10. 2. 2020
  */
 class NewPresenter extends DebtBasePresenter
 {

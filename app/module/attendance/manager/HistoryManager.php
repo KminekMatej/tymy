@@ -28,7 +28,6 @@ class HistoryManager extends BaseManager
     }
 
     /**
-     *
      * @param ActiveRow|null $row
      * @return History|null
      */

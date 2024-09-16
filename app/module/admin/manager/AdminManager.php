@@ -4,8 +4,6 @@ namespace Tymy\Module\Admin\Manager;
 
 /**
  * Description of AdminManager
- *
- * @author kminekmatej, 25. 10. 2021
  */
 class AdminManager
 {

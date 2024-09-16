@@ -73,7 +73,6 @@ class DefaultPresenter extends SecuredPresenter
                 return $this->translator->translate("common.lastLogin.dayAgo");
             }
             return $this->translator->translate("common.lastLogin.daysAgo", null, ['n' => $diffDays]);
-            ;
         });
 
         $this->template->addFilter('namedayToday', fn($name, $webname): string => $this->translator->translate("team.hasNamedayToday", null, ["name" => '<strong><a href=' . $this->link(":Team:Player:", $webname) . '>' . $name . '</a></strong>']));

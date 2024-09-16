@@ -11,8 +11,6 @@ use Tymy\Module\User\Model\User;
 
 /**
  * Description of DetailPresenter
- *
- * @author kminekmatej
  */
 class DetailPresenter extends EventBasePresenter
 {
@@ -50,6 +48,7 @@ class DetailPresenter extends EventBasePresenter
 
     /**
      * Compose attendance array to be easily used on template
+     *
      * @return array<int|string, array<int|string, mixed[]>>
      */
     private function loadEventAttendance(Event $event): array

@@ -8,8 +8,6 @@ use Tymy\Module\Multiaccount\Mapper\TransferKeyMapper;
 
 /**
  * Description of TransferKey
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 7. 2. 2021
  */
 class TransferKey extends BaseModel implements JsonSerializable
 {

@@ -4,8 +4,6 @@ namespace Tymy\Module\Core\Model;
 
 /**
  * Object setting accessible configuration area
- *
- * @author kminekmatej
  */
 class SettingMenu
 {

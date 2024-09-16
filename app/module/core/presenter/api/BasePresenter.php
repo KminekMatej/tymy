@@ -28,8 +28,6 @@ use Tymy\Module\Core\Presenter\RootPresenter;
 
 /**
  * Description of BasePresenter
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 2. 8. 2020
  */
 class BasePresenter extends RootPresenter
 {
@@ -83,6 +81,7 @@ class BasePresenter extends RootPresenter
 
     /**
      * Decode input request data passed as json-encoded string
+     *
      * @throws JsonException
      */
     private function decodeJsonData(): void
@@ -335,7 +334,7 @@ class BasePresenter extends RootPresenter
      */
     protected function allowOnlyInDebuggerMode(): void
     {
-        if (Debugger::$productionMode) {  //
+        if (Debugger::$productionMode) {
             $this->redirect("Core:Default:Default");
         }
     }

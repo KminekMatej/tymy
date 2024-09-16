@@ -124,6 +124,7 @@ class PermissionPresenter extends SettingBasePresenter
 
     /**
      * Create input array for permission, containing name, caption, allowedRoles (or revokedRoles), allowedStatuses (or revokedStatuses) and , allowedUsers (or revokedUsers)
+     *
      * @return array<string, mixed>
      */
     private function composePermissionData(array $changes): array

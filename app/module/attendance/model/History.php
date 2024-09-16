@@ -9,8 +9,6 @@ use Tymy\Module\User\Model\SimpleUser;
 
 /**
  * Description of History
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 9. 10. 2020
  */
 class History extends BaseModel
 {

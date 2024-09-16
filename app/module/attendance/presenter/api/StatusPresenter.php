@@ -9,8 +9,6 @@ use Tymy\Module\Core\Presenter\Api\SecuredPresenter;
 
 /**
  * Description of StatusPresenter
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 3. 11. 2020
  */
 class StatusPresenter extends SecuredPresenter
 {

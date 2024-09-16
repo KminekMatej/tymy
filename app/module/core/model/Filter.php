@@ -6,8 +6,6 @@ use Nette\Database\Table\Selection;
 
 /**
  * Description of Filter
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 15. 2. 2021
  */
 class Filter
 {

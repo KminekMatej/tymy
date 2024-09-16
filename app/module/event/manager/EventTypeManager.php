@@ -42,7 +42,6 @@ class EventTypeManager extends BaseManager
     }
 
     /**
-     *
      * @param ActiveRow|null $row
      * @return EventType|null
      */
@@ -103,6 +102,7 @@ class EventTypeManager extends BaseManager
 
     /**
      * Get list of all event types, with their code as array keys
+     *
      * @return EventType[]
      */
     public function getIndexedList(): array

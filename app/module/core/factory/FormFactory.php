@@ -38,6 +38,7 @@ class FormFactory
 
     /**
      * Get array of user permissions (cached on first call)
+     *
      * @return array in the format of name = caption
      */
     private function getUserPermissions(): array

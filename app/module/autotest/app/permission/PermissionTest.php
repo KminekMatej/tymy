@@ -14,9 +14,6 @@ $container = Bootstrap::boot();
 
 /**
  * Description of PermissionTest
- *
- * @author kminekmatej, 19.10.2020 21:47:07
- *
  */
 class PermissionTest extends RequestCase
 {

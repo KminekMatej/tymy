@@ -9,8 +9,6 @@ use Tymy\Module\User\Model\SimpleUser;
 
 /**
  * Description of Post
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 14. 9. 2020
  */
 class Post extends BaseModel
 {

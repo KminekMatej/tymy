@@ -17,9 +17,6 @@ $container = Bootstrap::boot();
 
 /**
  * Description of UserTest
- *
- * @author kminekmatej, 24.10.2020 14:00:05
- *
  */
 class UserTest extends RequestCase
 {
@@ -39,8 +36,7 @@ class UserTest extends RequestCase
     }
 
     /**
-     *
-      @RequestMapping(value = "/users/{id}", method = RequestMethod.PUT)
+     * @RequestMapping(value = "/users/{id}", method = RequestMethod.PUT)
       @RequestMapping(value = "/users/{id}/avatar", method = RequestMethod.POST)
       @RequestMapping(value = "/users", method = RequestMethod.POST)
       @RequestMapping(value = "/users/status/{status}", method = RequestMethod.GET)
@@ -50,7 +46,6 @@ class UserTest extends RequestCase
       @RequestMapping(value = "/loginPhp", method = RequestMethod.GET)
       @RequestMapping(value = "/login", method = RequestMethod.POST)
       @RequestMapping(value = "/logout")
-     *
      */
     public function testGetSingular(): void
     {
@@ -359,6 +354,7 @@ class UserTest extends RequestCase
 
     /**
      * Override deleting function - user is not being deleted normally, he gets marked as deleted in status
+     *
      * @param int $recordId
      */
     public function deleteRecord($recordId): void

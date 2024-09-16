@@ -14,8 +14,6 @@ use const TEAM_DIR;
 
 /**
  * Description of AvatarManager
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 10. 9. 2020
  */
 class AvatarManager
 {

@@ -7,8 +7,6 @@ use Tymy\Module\Poll\Manager\PollManager;
 
 /**
  * Description of DefaultPresenter
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 21. 12. 2020
  */
 class DefaultPresenter extends SecuredPresenter
 {

@@ -45,6 +45,7 @@ class EventManager extends BaseManager
 
     /**
      * Maps one active row to object
+     *
      * @param IRow|null $row
      * @param bool $force True to skip cache
      * @return Event|null
@@ -113,6 +114,7 @@ class EventManager extends BaseManager
 
     /**
      * Returns filter array, based on provided $from and $until datetimes and optionally event type
+     *
      * @return string Filter syntax string
      */
     private function getIntervalTypeFilter(DateTime $from, DateTime $until, ?int $type = null): string
@@ -169,6 +171,7 @@ class EventManager extends BaseManager
 
     /**
      * Get array of event objects which user is allowed to view
+     *
      * @return Event[]
      */
     public function getListUserAllowed(int $userId, ?string $filter = null, ?string $order = null, ?int $limit = null, ?int $offset = null): array
@@ -191,6 +194,7 @@ class EventManager extends BaseManager
 
     /**
      * Load events of user in specified interval and where users attendance is one of selected
+     *
      * @return ActiveRow[]
      */
     public function getEventsOfPrestatus(int $userId, array $prestatusIds, DateTime $since): array
@@ -208,6 +212,7 @@ class EventManager extends BaseManager
 
     /**
      * Get currently active events
+     *
      * @return Event[]
      */
     public function getCurrentEvents(int $userId): array
@@ -241,6 +246,7 @@ class EventManager extends BaseManager
 
     /**
      * Add attendance to one event
+     *
      * @param array|null $eventAttendances Cached attendances - null loads them from database for just this one event
      * @param array|null $allSimpleUsers Cached all simple users, null loads them from database
      */
@@ -287,6 +293,7 @@ class EventManager extends BaseManager
 
     /**
      * Get array of event ids which user is allowed to view
+     *
      * @return int[]
      */
     public function getIdsUserAllowed(int $userId): array
@@ -401,6 +408,7 @@ class EventManager extends BaseManager
 
     /**
      * Check edit permission
+     *
      * @param Event $entity
      */
     public function canEdit($entity, int $userId): bool
@@ -410,6 +418,7 @@ class EventManager extends BaseManager
 
     /**
      * Check read permission
+     *
      * @param Event $entity
      */
     public function canRead($entity, int $userId): bool
@@ -419,6 +428,7 @@ class EventManager extends BaseManager
 
     /**
      * Get user ids allowed to read given event
+     *
      * @param Event $record
      * @return int[] Id of users allowed to read this event
      */

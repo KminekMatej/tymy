@@ -13,8 +13,6 @@ use Tymy\Module\Event\Model\Event;
 
 /**
  * Description of EventBasePresenter
- *
- * @author kminekmatej
  */
 class EventBasePresenter extends SecuredPresenter
 {

@@ -28,8 +28,6 @@ use Tymy\Module\User\Model\User;
 
 /**
  * Description of ExportPresenter
- *
- * @author kminekmatej, 5. 1. 2023, 21:27:25
  */
 class ExportPresenter extends SecuredPresenter
 {
@@ -170,6 +168,7 @@ class ExportPresenter extends SecuredPresenter
 
     /**
      * Add column headings
+     *
      * @return void
      */
     private function addAttendanceHeading(): void
@@ -199,6 +198,7 @@ class ExportPresenter extends SecuredPresenter
 
     /**
      * Print attendances of found events to each line
+     *
      * @param array $events
      * @return void
      */
@@ -242,6 +242,7 @@ class ExportPresenter extends SecuredPresenter
 
     /**
      * Add heading into the report sheet
+     *
      * @param array $events
      * @return void
      */
@@ -297,6 +298,7 @@ class ExportPresenter extends SecuredPresenter
 
     /**
      * Add event attendances data into report export
+     *
      * @param array $users
      * @param array $events
      */
@@ -337,6 +339,7 @@ class ExportPresenter extends SecuredPresenter
 
     /**
      * Increment current column coordinates
+     *
      * @return void
      */
     private function nextCol(): void
@@ -349,6 +352,7 @@ class ExportPresenter extends SecuredPresenter
 
     /**
      * Increment current row and reset col to first one
+     *
      * @return void
      */
     private function nextRow(): void

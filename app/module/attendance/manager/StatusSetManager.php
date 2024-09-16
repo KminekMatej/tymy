@@ -159,6 +159,7 @@ class StatusSetManager extends BaseManager
 
     /**
      * Get array of StatusSet objects which user is allowed to read
+     *
      * @return StatusSet[]
      */
     public function getListUserAllowed(int $userId): array

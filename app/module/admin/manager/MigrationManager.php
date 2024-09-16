@@ -12,8 +12,6 @@ use Tymy\Module\Core\Model\BaseModel;
 
 /**
  * Description of MigrationManager
- *
- * @author Matěj Kmínek
  */
 class MigrationManager
 {
@@ -122,8 +120,9 @@ class MigrationManager
     /**
      * Drop all comments from file and get just array of sql queries
      *
-     * @throws Exception When there are no commands
      * @return string[]
+     *
+     * @throws Exception When there are no commands
      */
     public function getCommands(string $contents): array
     {
@@ -188,6 +187,7 @@ class MigrationManager
     /**
      * Split an uploaded sql file into single sql statements.
      * Note: expects trim() to have already been run on $sql.
+     *
      * @return string[]
      */
     private function splitSqlFile(string $sql, string $delimiter): array
@@ -316,6 +316,7 @@ class MigrationManager
 
     /**
      * Migrate database to latest version
+     *
      * @return array<string, mixed[]>
      */
     public function migrateUp(): array

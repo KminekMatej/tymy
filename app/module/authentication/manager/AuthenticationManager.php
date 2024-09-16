@@ -16,8 +16,6 @@ use Tymy\Module\User\Model\User;
 
 /**
  * Description of AuthenticationManager
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 5. 6. 2020
  */
 class AuthenticationManager implements IAuthenticator
 {
@@ -115,6 +113,7 @@ class AuthenticationManager implements IAuthenticator
 
     /**
      * Check that password matches
+     *
      * @param string|null $expectedPwd  (can be null for new non-approved users)
      */
     public function passwordMatch(string $suppliedPassword, ?string $expectedPwd = null): bool

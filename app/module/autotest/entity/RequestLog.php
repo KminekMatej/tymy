@@ -6,8 +6,6 @@ use Nette\Utils\DateTime;
 
 /**
  * Description of RequestLog
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 7. 10. 2020
  */
 class RequestLog
 {

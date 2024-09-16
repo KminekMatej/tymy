@@ -22,6 +22,7 @@ class FileContentResponse implements Nette\Application\IResponse
 
     /**
      * Returns the content of a downloaded file.
+     *
      * @return string
      */
     public function getFileContent()
@@ -31,6 +32,7 @@ class FileContentResponse implements Nette\Application\IResponse
 
     /**
      * Returns the file name.
+     *
      * @return string
      */
     public function getName()
@@ -40,6 +42,7 @@ class FileContentResponse implements Nette\Application\IResponse
 
     /**
      * Returns the MIME content type of a downloaded file.
+     *
      * @return string
      */
     public function getContentType()
@@ -50,6 +53,7 @@ class FileContentResponse implements Nette\Application\IResponse
 
     /**
      * Sends response to output.
+     *
      * @return void
      */
     public function send(Nette\Http\IRequest $httpRequest, Nette\Http\IResponse $httpResponse): void

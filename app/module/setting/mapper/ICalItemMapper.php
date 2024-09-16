@@ -7,8 +7,6 @@ use Tymy\Module\Core\Model\Field;
 
 /**
  * Description of ICalItemMapper
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 11. 9. 2022, 15:49:12
  */
 class ICalItemMapper extends BaseMapper
 {

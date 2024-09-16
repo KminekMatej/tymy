@@ -17,8 +17,6 @@ use Tymy\Module\Team\Model\Team;
 
 /**
  * Description of MailService
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 6. 9. 2020
  */
 class MailService
 {

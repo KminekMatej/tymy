@@ -8,8 +8,6 @@ use Tymy\Module\User\Manager\UserManager;
 
 /**
  * Description of Navbar
- *
- * @author matej
  */
 class NewPostControl extends Control
 {

@@ -26,8 +26,6 @@ require(__DIR__ . "/../app/Bootstrap.php");
 
 /**
  * CLI script to run autotests automatically
- *
- * @author kminekmatej, 8. 3. 2023
  */
 class Tester
 {
@@ -412,6 +410,7 @@ class Tester
 
     /**
      * Create autotest temp directory. If it already exists, will be cleaned
+     *
      * @return void
      */
     private function createAutotestTempDirectory(): void
@@ -423,6 +422,7 @@ class Tester
 
     /**
      * Delete autotest temp directory.
+     *
      * @return void
      */
     private function deleteAutotestTempDirectory(): void
@@ -436,6 +436,7 @@ class Tester
 
     /**
      * Create autotest log directory. If it already exists, will be cleaned
+     *
      * @return void
      */
     private function createAutotestLogDirectory(): void
@@ -447,6 +448,7 @@ class Tester
 
     /**
      * Delete autotest log directory.
+     *
      * @return void
      */
     private function deleteAutotestLogDirectory(): void
@@ -496,6 +498,7 @@ class Tester
 
     /**
      * Load configuration from specified config neon file
+     *
      * @param string $configFile
      * @return array
      */

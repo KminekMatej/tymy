@@ -8,8 +8,6 @@ use Vojir\Responses\CsvResponse\ComposedCsvResponse;
 
 /**
  * Description of ExportPresenter
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 18.10.2022
  */
 class ExportPresenter extends SecuredPresenter
 {

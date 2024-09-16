@@ -8,8 +8,6 @@ use Tymy\Module\User\Manager\UserManager;
 
 /**
  * Description of RegisterPresenter
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 1. 9. 2020
  */
 class RegisterPresenter extends BasePresenter
 {

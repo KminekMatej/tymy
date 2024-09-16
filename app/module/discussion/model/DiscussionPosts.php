@@ -4,8 +4,6 @@ namespace Tymy\Module\Discussion\Model;
 
 /**
  * Description of DiscussionPosts
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 17. 9. 2020
  */
 class DiscussionPosts implements \JsonSerializable
 {
