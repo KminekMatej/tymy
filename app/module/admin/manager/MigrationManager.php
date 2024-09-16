@@ -2,6 +2,7 @@
 
 namespace Tymy\Module\Admin\Manager;
 
+use Closure;
 use Exception;
 use Nette\Database\Explorer;
 use Nette\Utils\DateTime;
@@ -9,6 +10,8 @@ use PDOException;
 use Tracy\Debugger;
 use Tymy\Module\Admin\Entity\Migration;
 use Tymy\Module\Core\Model\BaseModel;
+
+use function count;
 
 /**
  * Description of MigrationManager
@@ -23,6 +26,7 @@ class MigrationManager
     private array $log = [];
     private bool $tableExists;
     private array $migrationsCache = [];
+    public Closure $logger;
 
     public function __construct(private Explorer $teamDatabase)
     {
@@ -275,9 +279,19 @@ class MigrationManager
         return $output;
     }
 
-    private function logg($text): void
+    /**
+     * Log string using defined logger or to internal log array
+     *
+     * @param type $text
+     * @return void
+     */
+    private function logg(string $text): void
     {
-        $this->log[] = (new DateTime())->format(BaseModel::DATETIME_CZECH_FORMAT) . " " . $text;
+        if (isset($this->logger)) {
+            ($this->logger)($text);
+        } else {
+            $this->log[] = (new DateTime())->format(BaseModel::DATETIME_CZECH_FORMAT) . " " . $text;
+        }
     }
 
     /** @return Migration[] Migrations to perform. First migration might be base migration */
@@ -408,7 +422,6 @@ class MigrationManager
 
     private function migrateBatch(array $migrations): bool
     {
-        $this->teamDatabase->beginTransaction();
         Debugger::timer("migration");
         $ok = true;
         $mig = null;
@@ -421,13 +434,6 @@ class MigrationManager
             $msg = "An ERROR happened occured migration: [" . $exc->getMessage() . "], performing rollback.";
             Debugger::log($msg);
             $this->logg($msg);
-            try {
-                $this->teamDatabase->rollBack();
-            } catch (PDOException $exc) {
-                if ($exc->getMessage() !== "There is no active transaction") {//avoid throwing errors on autocommit mode or when someone already commits the transaction
-                    throw $exc;
-                }
-            }
             $ok = false;
             $this->saveMigrationRecord($mig);
         }
@@ -436,13 +442,7 @@ class MigrationManager
             return false;
         }
 
-        try {
-            $this->teamDatabase->commit();
-        } catch (PDOException $exc) {
-            if ($exc->getMessage() !== "There is no active transaction") {//avoid throwing errors on autocommit mode or when someone already commits the transaction
-                throw $exc;
-            }
-        }
+        $this->teamDatabase->getStructure()->rebuild();
 
         $this->saveMigrationsCache();
         $this->logg("Database migrated in " . Debugger::timer("migration") * 1000 . " ms");
