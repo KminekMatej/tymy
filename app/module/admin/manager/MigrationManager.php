@@ -163,9 +163,7 @@ class MigrationManager
         $lines = explode("\n", $sql);
 
         $output = [];
-        $i = 0;
         foreach ($lines as $line) {
-            $i++;
             $lineT = trim($line);
             $lineT = str_replace('&nbsp;', ' ', $lineT);
             if ($lineT === '') {
@@ -203,7 +201,6 @@ class MigrationManager
         }
 
         // try to save mem.
-        $sql = "";
         $output = [];
 
         // we don't actually care about the matches preg gives us.
@@ -362,11 +359,9 @@ class MigrationManager
             return; //no tables exists - this is a new system, simply perform the base migration to fill it
         }
 
-        $migrationTableExists = in_array("migration", $tables);
-        if ($migrationTableExists) {
+        if (in_array("migration", $tables)) {
             if ($this->teamDatabase->table("migration")->where("result", "OK")->count("id") == 0) {   //migration table exists, but not containing any migration, so its some bloat, remove the table and continue
                 $this->teamDatabase->query("DROP TABLE IF EXISTS `migration`;")->fetch();
-                $migrationTableExists = false;
             } else {
                 return; //there is already migration table structure, no neeed to continue
             }

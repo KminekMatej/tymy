@@ -22,8 +22,7 @@ class DiscussionTest extends RequestCase
 {
     public function testGet(): void
     {
-        $data = null;
-        $listResponse = $this->getList();
+        Assert::type("array", $this->getList());
     }
 
     public function testNewOnly(): void

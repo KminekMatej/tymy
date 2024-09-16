@@ -24,9 +24,8 @@ class EventTest extends RequestCase
 
     public function testGet(): void
     {
-        $data = null;
         $this->authorizeAdmin();
-        $listResponse = $this->request($this->getBasePath())->expect(200, "array");
+        $this->request($this->getBasePath())->expect(200, "array");
     }
 
     public function testCreateMultiple(): void

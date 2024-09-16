@@ -49,14 +49,13 @@ class UserTest extends RequestCase
      */
     public function testGetSingular(): void
     {
-        $data = null;
-        $listResponse = $this->getList();
+        $this->authorizeAdmin();
+        $this->request($this->getBasePath())->expect(200, "array");
     }
 
     public function testGetPlural(): void
     {
-        $data = null;
-        $listResponse = $this->request($this->getBasePath() . "s")->expect(200, "array");
+        $this->request($this->getBasePath() . "s")->expect(200, "array");
     }
 
     public function testLogin(): void

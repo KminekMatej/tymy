@@ -22,7 +22,7 @@ class TestAuthenticator implements Nette\Security\IAuthenticator
      */
     public function authenticate(array $credentials)
     {
-        list($username, $password) = $credentials;
+        list($username, ) = $credentials;
         $this->setId(38);
         $this->setStatus(["TESTROLE", "TESTROLE2"]);
         $this->setArr([

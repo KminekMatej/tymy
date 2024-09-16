@@ -26,9 +26,6 @@ use Tymy\Module\Event\Model\Event;
 use Tymy\Module\Event\Model\EventType;
 use Tymy\Module\User\Model\User;
 
-/**
- * Description of ExportPresenter
- */
 class ExportPresenter extends SecuredPresenter
 {
     private const LIGHTGRAY = "FFEEEEEE";
@@ -205,7 +202,7 @@ class ExportPresenter extends SecuredPresenter
     private function addAttendanceData(array $events): void
     {
         foreach ($events as $event) {
-            foreach ($event->getAttendance() as $userId => $userAttendance) {
+            foreach ($event->getAttendance() as $userAttendance) {
                 /* @var $preStatus Status */
                 $preStatus = $this->statusList[$userAttendance->getPreStatusId()] ?? null;
                 /* @var $postStatus Status */

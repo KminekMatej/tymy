@@ -24,16 +24,14 @@ class PollTest extends RequestCase
 
     public function testGetSingular(): void
     {
-        $data = null;
         $this->authorizeAdmin();
-        $listResponse = $this->request($this->getBasePath())->expect(200, "array");
+        $this->request($this->getBasePath())->expect(200, "array");
     }
 
     public function testGetPlural(): void
     {
-        $data = null;
         $this->authorizeAdmin();
-        $listResponse = $this->request($this->getBasePath() . "s")->expect(200, "array");
+        $this->request($this->getBasePath() . "s")->expect(200, "array");
     }
 
     public function testCRUDSingular(): void

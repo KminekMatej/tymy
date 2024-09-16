@@ -68,9 +68,9 @@ class FormFactory
         //     $id = $form->addHidden("id", $id);
 
         if ($event) {
-            $type = $form->addText("eventTypeId", null)->setDisabled()->setValue($eventTypes[$event->getEventTypeId()]);
+            $form->addText("eventTypeId", null)->setDisabled()->setValue($eventTypes[$event->getEventTypeId()]);
         } else {
-            $type = $form->addSelect("eventTypeId", null, $eventTypes)->setHtmlAttribute("data-name", "eventTypeId")->setRequired();
+            $form->addSelect("eventTypeId", null, $eventTypes)->setHtmlAttribute("data-name", "eventTypeId")->setRequired();
         }
 
         $caption = $form->addText("caption")->setHtmlAttribute("data-name", "caption")->setRequired();
