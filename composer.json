@@ -51,6 +51,12 @@
         "roave/security-advisories": "dev-latest",
         "slevomat/coding-standard": "^8"
     },
+    "autoload": {
+        "classmap": ["app/"]
+    },
+    "autoload-dev": {
+        "classmap": ["app/"]
+    },
     "minimum-stability": "stable",
     "config": {
         "allow-plugins": {
