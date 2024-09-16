@@ -207,7 +207,7 @@ class MigrationManager
         $matches = [];
 
         // this is faster than calling count($oktens) every time thru the loop.
-        $token_count = is_countable($tokens) ? count($tokens) : 0;
+        $token_count = count($tokens);
         for ($i = 0; $i < $token_count; $i++) {
             // Don't wanna add an empty string as the last thing in the array.
             if (($i !== $token_count - 1) || (strlen($tokens[$i] > 0))) {

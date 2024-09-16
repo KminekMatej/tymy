@@ -130,9 +130,7 @@ class StatusSetManager extends BaseManager
 
         $created = parent::createByArray($data);
 
-        if ($created) {
-            $this->createStatusSetDir($created->id);
-        }
+        $this->createStatusSetDir($created->id);
 
         return $this->map($created);
     }

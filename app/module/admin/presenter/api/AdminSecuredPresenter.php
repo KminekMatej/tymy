@@ -2,6 +2,7 @@
 
 namespace Tymy\Module\Admin\Presenter\Api;
 
+use Nette\DI\Attributes\Inject;
 use Tymy\Module\Admin\Manager\AdminManager;
 use Tymy\Module\Core\Presenter\Api\BasePresenter;
 
@@ -10,7 +11,7 @@ use Tymy\Module\Core\Presenter\Api\BasePresenter;
  */
 class AdminSecuredPresenter extends BasePresenter
 {
-    #[\Nette\DI\Attributes\Inject]
+    #[Inject]
     public AdminManager $adminManager;
 
     protected function startup(): void
@@ -43,7 +44,7 @@ class AdminSecuredPresenter extends BasePresenter
             $this->user->logout(true);
         }
 
-        return is_string($headerContent) ? $headerContent : null;
+        return $headerContent;
     }
 
     /**

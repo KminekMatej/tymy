@@ -9,9 +9,6 @@ use Tymy\Module\Core\Model\BaseModel;
 
 class DefaultPresenter extends EventBasePresenter
 {
-    #[\Nette\DI\Attributes\Inject]
-    public HistoryManager $historyManager;
-
 
     public function renderDefault($date = null, $direction = null): void
     {
