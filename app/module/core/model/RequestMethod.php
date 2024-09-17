@@ -4,8 +4,6 @@ namespace Tymy\Module\Core\Model;
 
 /**
  * Http RequestMethod
- *
- * @author kminekmatej
  */
 abstract class RequestMethod
 {

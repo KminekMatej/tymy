@@ -7,8 +7,6 @@ use Tymy\Module\Core\Model\Field;
 
 /**
  * Description of PermissionMapper
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 4.8. 2020
  */
 class PermissionMapper extends BaseMapper
 {

@@ -7,8 +7,6 @@ use Tymy\Module\Core\Model\Field;
 
 /**
  * Description of OptionMapper
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 20. 12. 2020
  */
 class OptionMapper extends BaseMapper
 {

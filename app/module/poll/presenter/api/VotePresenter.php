@@ -7,8 +7,6 @@ use Tymy\Module\Poll\Manager\VoteManager;
 
 /**
  * Description of VotePresenter
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 27. 12. 2020
  */
 class VotePresenter extends SecuredPresenter
 {

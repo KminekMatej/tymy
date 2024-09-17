@@ -260,6 +260,7 @@ class PollManager extends BaseManager
 
     /**
      * Get list of polls, which currently logged user is allowed to see
+     *
      * @return Poll[]
      */
     public function getListUserAllowed(): array

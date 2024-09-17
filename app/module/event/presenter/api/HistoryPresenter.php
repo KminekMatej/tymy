@@ -8,8 +8,6 @@ use Tymy\Module\Core\Presenter\Api\SecuredPresenter;
 
 /**
  * Description of HistoryPresenter
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 08.10. 2020
  */
 class HistoryPresenter extends SecuredPresenter
 {

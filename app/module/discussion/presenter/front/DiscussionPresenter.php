@@ -14,8 +14,6 @@ use Tymy\Module\User\Manager\UserManager;
 
 /**
  * Description of DiscussionPresenter
- *
- * @author matej
  */
 class DiscussionPresenter extends SecuredPresenter
 {
@@ -73,7 +71,7 @@ class DiscussionPresenter extends SecuredPresenter
 
     public function renderDefault(string $discussion, int $page = 1, ?string $search = null, string $suser = "all", ?string $jump2date = null): void
     {
-        $d = (is_int($discussion) || is_numeric($discussion)) ? $this->discussionManager->getById((int) $discussion) : $this->discussionManager->getByWebName($discussion, $this->user->getId());
+        $d = is_numeric($discussion) ? $this->discussionManager->getById((int) $discussion) : $this->discussionManager->getByWebName($discussion, $this->user->getId());
 
         if (empty($d)) {
             $this->error($this->translator->translate("discussion.errors.noDiscussionExists"));
@@ -91,9 +89,9 @@ class DiscussionPresenter extends SecuredPresenter
         $this->template->userId = $this->getUser()->getId();
         $this->template->discussionPosts = $discussionPosts;
         $this->template->nazevDiskuze = $discussionPosts->getDiscussion()->getWebName();
-        $currentPage = is_numeric($discussionPosts->getCurrentPage()) ? $discussionPosts->getCurrentPage() : 1;
+        $currentPage = $discussionPosts->getCurrentPage() ?: 1;
         $this->template->currentPage = $currentPage;
-        $lastPage = is_numeric($discussionPosts->getNumberOfPages()) ? $discussionPosts->getNumberOfPages() : 1;
+        $lastPage = $discussionPosts->getNumberOfPages() ?: 1;
         $this->template->lastPage = $lastPage;
         $this->template->pagination = $this->pagination($lastPage, 1, $currentPage, 5);
         if ($this->isAjax()) {

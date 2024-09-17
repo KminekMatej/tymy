@@ -14,9 +14,6 @@ $container = Bootstrap::boot();
 
 /**
  * Description of PermissionTest
- *
- * @author kminekmatej, 19.10.2020 21:47:07
- *
  */
 class PermissionTest extends RequestCase
 {
@@ -27,16 +24,14 @@ class PermissionTest extends RequestCase
 
     public function testGetSingular(): void
     {
-        $data = null;
         $this->authorizeAdmin();
-        $listResponse = $this->request($this->getBasePath())->expect(200, "array");
+        $this->request($this->getBasePath())->expect(200, "array");
     }
 
     public function testGetPlural(): void
     {
-        $data = null;
         $this->authorizeAdmin();
-        $listResponse = $this->request($this->getBasePath() . "s")->expect(200, "array");
+        $this->request($this->getBasePath() . "s")->expect(200, "array");
     }
 
     public function testCRUDSingular(): void

@@ -15,7 +15,6 @@ $container = Bootstrap::boot();
 /**
  * Description of MultiaccountTest
  *
- * @author kminekmatej, 07.10.2020 21:47:07
  * @skip Skip this autotest, since its ot performable from cli - we would need two tymy instances to test this
  */
 class MultiaccountTest extends RequestCase

@@ -17,16 +17,13 @@ $container = Bootstrap::boot();
 
 /**
  * Description of DiscussionTest
- *
- * @author kminekmatej, 01.10.2020 22:00:34
- *
  */
 class DiscussionTest extends RequestCase
 {
     public function testGet(): void
     {
-        $data = null;
-        $listResponse = $this->getList();
+        $this->authorizeAdmin();
+        $this->request($this->getBasePath())->expect(200, "array");
     }
 
     public function testNewOnly(): void
@@ -213,15 +210,6 @@ class DiscussionTest extends RequestCase
 
         //check that user can update, but cannot stick
         $this->request($this->getBasePath() . "/$dId/post/$pid2", "PUT", ["sticky" => true])->expect(403);
-    }
-
-    /**
-     * Load data list
-     */
-    private function getList(): \Tymy\Module\Autotest\SimpleResponse
-    {
-        $this->authorizeAdmin();
-        return $this->request($this->getBasePath())->expect(200, "array");
     }
 
     public function testCRUD(): void

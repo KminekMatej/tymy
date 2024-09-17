@@ -15,8 +15,6 @@ use function count;
 
 /**
  * Description of MigrationManager
- *
- * @author Matěj Kmínek
  */
 class MigrationManager
 {
@@ -126,8 +124,9 @@ class MigrationManager
     /**
      * Drop all comments from file and get just array of sql queries
      *
-     * @throws Exception When there are no commands
      * @return string[]
+     *
+     * @throws Exception When there are no commands
      */
     public function getCommands(string $contents): array
     {
@@ -168,9 +167,7 @@ class MigrationManager
         $lines = explode("\n", $sql);
 
         $output = [];
-        $i = 0;
         foreach ($lines as $line) {
-            $i++;
             $lineT = trim($line);
             $lineT = str_replace('&nbsp;', ' ', $lineT);
             if ($lineT === '') {
@@ -192,6 +189,7 @@ class MigrationManager
     /**
      * Split an uploaded sql file into single sql statements.
      * Note: expects trim() to have already been run on $sql.
+     *
      * @return string[]
      */
     private function splitSqlFile(string $sql, string $delimiter): array
@@ -207,14 +205,13 @@ class MigrationManager
         }
 
         // try to save mem.
-        $sql = "";
         $output = [];
 
         // we don't actually care about the matches preg gives us.
         $matches = [];
 
         // this is faster than calling count($oktens) every time thru the loop.
-        $token_count = is_countable($tokens) ? count($tokens) : 0;
+        $token_count = count($tokens);
         for ($i = 0; $i < $token_count; $i++) {
             // Don't wanna add an empty string as the last thing in the array.
             if (($i !== $token_count - 1) || (strlen($tokens[$i] > 0))) {
@@ -330,6 +327,7 @@ class MigrationManager
 
     /**
      * Migrate database to latest version
+     *
      * @return array<string, mixed[]>
      */
     public function migrateUp(): array
@@ -375,11 +373,9 @@ class MigrationManager
             return; //no tables exists - this is a new system, simply perform the base migration to fill it
         }
 
-        $migrationTableExists = in_array("migration", $tables);
-        if ($migrationTableExists) {
+        if (in_array("migration", $tables)) {
             if ($this->teamDatabase->table("migration")->where("result", "OK")->count("id") == 0) {   //migration table exists, but not containing any migration, so its some bloat, remove the table and continue
                 $this->teamDatabase->query("DROP TABLE IF EXISTS `migration`;")->fetch();
-                $migrationTableExists = false;
             } else {
                 return; //there is already migration table structure, no neeed to continue
             }

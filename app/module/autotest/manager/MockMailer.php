@@ -8,8 +8,6 @@ use Tymy\Module\Autotest\Entity\Assert;
 
 /**
  * Description of MockMailer
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 15.03.2023
  */
 class MockMailer implements Mailer
 {

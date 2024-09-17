@@ -140,6 +140,7 @@ class RouterFactory
 
     /**
      * Create RouteList, already containing routes from modules
+     *
      * @return Routelist
      */
     private function moduleRouteList(): Routelist

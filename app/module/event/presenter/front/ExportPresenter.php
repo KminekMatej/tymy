@@ -2,16 +2,12 @@
 
 namespace Tymy\Module\Event\Presenter\Front;
 
-use Nette\Application\UI\Form;
-use Tymy\Module\Attendance\Manager\HistoryManager;
+use Nette\DI\Attributes\Inject;
 use Tymy\Module\Core\Factory\FormFactory;
 
 class ExportPresenter extends EventBasePresenter
 {
-    #[\Nette\DI\Attributes\Inject]
-    public HistoryManager $historyManager;
-
-    #[\Nette\DI\Attributes\Inject]
+    #[Inject]
     public FormFactory $formFactory;
 
     public function beforeRender()

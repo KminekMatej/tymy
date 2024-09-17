@@ -9,8 +9,6 @@ use const TEST_DIR;
 
 /**
  * Description of TestsManager
- *
- * @author Matěj Kmínek
  */
 class TestsManager
 {

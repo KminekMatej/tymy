@@ -157,6 +157,7 @@ class InvitationManager extends BaseManager
 
     /**
      * Load e-mails that already exists - for form validation
+     *
      * @return string[]
      */
     public function getExistingEmails(): array

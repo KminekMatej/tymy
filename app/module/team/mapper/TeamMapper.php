@@ -7,8 +7,6 @@ use Tymy\Module\Core\Model\Field;
 
 /**
  * Description of TeamMapper
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 5. 6. 2020
  */
 class TeamMapper extends BaseMapper
 {

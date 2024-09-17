@@ -28,7 +28,6 @@ class HistoryManager extends BaseManager
     }
 
     /**
-     *
      * @param ActiveRow|null $row
      * @return History|null
      */
@@ -82,8 +81,9 @@ class HistoryManager extends BaseManager
      */
     public function canRead($entity, int $userId): bool
     {
-        assert($entity instanceof Event);
-        return $entity->getViewRightName() ? $this->user->isAllowed((string) $this->user->getId(), "USR:{$entity->getViewRightName()}") : true;
+        assert($entity instanceof History);
+        $eventRow = $this->database->table(Event::TABLE)->where("id", $entity->getEventId())->fetch();
+        return $eventRow->view_rights ? $this->user->isAllowed((string) $userId, "USR:{$eventRow->view_rights}") : true;
     }
 
     protected function allowRead(?int $recordId = null): void

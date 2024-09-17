@@ -11,8 +11,6 @@ use Tymy\Module\User\Mapper\UserMapper;
 
 /**
  * Description of User
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 4. 8. 2020
  */
 class User extends BaseModel
 {
@@ -187,7 +185,6 @@ class User extends BaseModel
         }
 
         return $this->getLogin();
-        ;
     }
 
     public function getBirthDate(): ?DateTime
@@ -612,6 +609,7 @@ class User extends BaseModel
 
     /**
      * Serialize to one-dimensional array
+     *
      * @return array
      */
     public function csvSerialize(): array

@@ -7,8 +7,6 @@ use Tymy\Module\Core\Model\Field;
 
 /**
  * Description of EventTypeMapper
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 8. 10. 2020
  */
 class EventTypeMapper extends BaseMapper
 {

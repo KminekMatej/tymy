@@ -8,8 +8,6 @@ use Tymy\Module\Discussion\Mapper\DiscussionMapper;
 
 /**
  * Description of Discussion
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 5. 6. 2020
  */
 class Discussion extends BaseModel
 {
@@ -124,7 +122,7 @@ class Discussion extends BaseModel
 
     public function getNewPosts(): int
     {
-        return $this->newInfo ? $this->newInfo->getNewsCount() : 0;
+        return isset($this->newInfo) ? $this->newInfo->getNewsCount() : 0;
     }
 
     public function getWebName(): string

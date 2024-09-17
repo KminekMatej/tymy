@@ -21,8 +21,6 @@ use function mb_str_split;
 
 /**
  * Description of DetailPresenter
- *
- * @author kminekmatej, 11. 9. 2022, 21:35:32
  */
 class DetailPresenter extends BasePresenter
 {
@@ -48,8 +46,7 @@ class DetailPresenter extends BasePresenter
         $this->template->addFilter("statusName", function (int $statusId) {
             if (!array_key_exists($statusId, $this->statusNameCache)) {
                 $status = $this->statusManager->getById($statusId);
-                assert($status instanceof Status);
-                $this->statusNameCache[$statusId] = $status !== null ? $status->getCaption() : "?";
+                $this->statusNameCache[$statusId] = $status instanceof Status ? $status->getCaption() : "?";
             }
 
             return $this->statusNameCache[$statusId];
@@ -85,6 +82,7 @@ class DetailPresenter extends BasePresenter
 
     /**
      * Send response in iCal formatting, with respect to some ical specific formatting
+     *
      * @return never
      */
     private function sendAsIcal(Template $template): void

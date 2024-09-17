@@ -8,8 +8,6 @@ use Tymy\Module\Core\Manager\Responder;
 
 /**
  * Description of ManagerFactory
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 5. 6. 2020
  */
 class ManagerFactory
 {

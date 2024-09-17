@@ -4,6 +4,7 @@ namespace Tymy\Module\Autotest;
 
 use Nette\Application\IResponse;
 use Nette\Application\Request;
+use Nette\Application\Response as Response2;
 use Nette\Application\Responses\JsonResponse;
 use Nette\Application\UI\Presenter;
 use Nette\Http\Response;
@@ -16,7 +17,7 @@ class SimpleResponse
 {
     private ?string $message = null;
 
-    public function __construct(private $code, private string|array|null $data, private Request $httpRequest, private Response $httpResponse, private IResponse $response, private Presenter $presenter, private RequestLog &$log)
+    public function __construct(private $code, private string|array|null $data, private Request $httpRequest, private Response $httpResponse, private Response2 $response, private Presenter $presenter, private RequestLog &$log)
     {
         $this->log->setHttpResponseCode($httpResponse->getCode());
         if ($data && is_array($data) && array_key_exists("code", $data)) {
@@ -47,7 +48,7 @@ class SimpleResponse
         return $this->httpResponse;
     }
 
-    public function getResponse(): IResponse
+    public function getResponse(): Response2
     {
         return $this->response;
     }

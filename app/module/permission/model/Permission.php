@@ -8,8 +8,6 @@ use Tymy\Module\Permission\Mapper\PermissionMapper;
 
 /**
  * Description of Permission
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 4. 8. 2020
  */
 class Permission extends BaseModel
 {

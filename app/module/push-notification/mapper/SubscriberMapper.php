@@ -7,8 +7,6 @@ use Tymy\Module\Core\Model\Field;
 
 /**
  * Description of SubscriberMapper
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 14. 11. 2021
  */
 class SubscriberMapper extends BaseMapper
 {

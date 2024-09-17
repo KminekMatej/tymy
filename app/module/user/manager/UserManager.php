@@ -65,6 +65,7 @@ class UserManager extends BaseManager
 
     /**
      * Filter only players from input array.
+     *
      * @param User[]|int[] $users Either array of User's or array of user ids
      * @return User[]|int[] Only users having status = PLAYER
      */
@@ -131,8 +132,10 @@ class UserManager extends BaseManager
 
     /**
      * Creates new User record and returns it on success
+     *
      * @param array $array Values to create
      * @return ActiveRow Created row
+     *
      * @throws Exception
      */
     public function createByArray(array $array): ActiveRow
@@ -277,6 +280,7 @@ class UserManager extends BaseManager
 
     /**
      * Load logins that already exists - for form validation
+     *
      * @return string[]
      */
     public function getExistingLoginsExcept(?string $exceptLogin = null): array
@@ -290,6 +294,7 @@ class UserManager extends BaseManager
 
     /**
      * Load e-mails that already exists - for form validation
+     *
      * @return string[]
      */
     public function getExistingEmails(): array
@@ -299,6 +304,7 @@ class UserManager extends BaseManager
 
     /**
      * Check if user limit has been reached
+     *
      * @return bool
      */
     public function limitUsersReached(): bool
@@ -375,6 +381,7 @@ class UserManager extends BaseManager
 
     /**
      * Get user by its ID or null if not found
+     *
      * @param int $id
      * @param bool $force
      * @return User|null
@@ -387,6 +394,7 @@ class UserManager extends BaseManager
 
     /**
      * Function selects all users allowed on given permission
+     *
      * @param string $privilege String representation of privilege
      * @return Selection Selection to operate with
      */
@@ -438,6 +446,7 @@ class UserManager extends BaseManager
 
     /**
      * Load list of user ids, allowed to operate with given privilege
+     *
      * @return mixed[]
      */
     public function getUserIdsWithPrivilege(string $privilege): array
@@ -447,6 +456,7 @@ class UserManager extends BaseManager
 
     /**
      * Load list of user object, allowed to operate with given privilege
+     *
      * @return BaseModel[]
      */
     public function getUsersWithPrivilege(string $privilege): array
@@ -699,6 +709,7 @@ class UserManager extends BaseManager
 
     /**
      * Checks prerequisities, generate reset code, store it into database and send informational mail to the resetting user
+     *
      * @param string $email
      * @param string $hostname
      * @param string $callbackUri
@@ -842,6 +853,7 @@ class UserManager extends BaseManager
 
     /**
      * Return array of all users, categorized by status and id
+     *
      * @return array in the form of [$status][$id] = $user
      */
     public function getByStatusAndId(): array
@@ -862,6 +874,7 @@ class UserManager extends BaseManager
 
     /**
      * Return array of all users, categorized by status and id
+     *
      * @return array in the form of [$status][$id] = $user
      */
     public function getByIdWithTeam(): array
@@ -882,6 +895,7 @@ class UserManager extends BaseManager
 
     /**
      * Get array of user fields
+     *
      * @return mixed[]|array<string, array<string, string>>
      */
     public function getAllFields(): array
@@ -911,6 +925,7 @@ class UserManager extends BaseManager
     /**
      * Adds user to live table or update time if user is already there.
      * Also deletes old records
+     *
      * @param int $userId
      * @return void
      */

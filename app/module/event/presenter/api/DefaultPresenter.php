@@ -9,8 +9,6 @@ use Tymy\Module\Event\Model\Event;
 
 /**
  * Description of DefaultPresenter
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 19. 9. 2020
  */
 class DefaultPresenter extends SecuredPresenter
 {

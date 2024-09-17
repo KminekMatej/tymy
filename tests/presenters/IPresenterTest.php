@@ -6,10 +6,6 @@ use Nette\Application\Request;
 use Tester\Assert;
 use Tapi\TapiService;
 
-/**
- *
- * @author kminekmatej
- */
 abstract class IPresenterTest extends \Tester\TestCase
 {
     /** @var TapiService */

@@ -7,8 +7,6 @@ use Tymy\Module\Discussion\Manager\DiscussionManager;
 
 /**
  * Description of NewOnlyPresenter
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 16. 9. 2020
  */
 class NewOnlyPresenter extends SecuredPresenter
 {

@@ -63,6 +63,7 @@ class DiscussionManager extends BaseManager
 
     /**
      * Maps one active row to object
+     *
      * @param IRow|null $row
      * @param bool $force True to skip cache
      * @return Discussion|null
@@ -131,6 +132,7 @@ class DiscussionManager extends BaseManager
 
     /**
      * Get array of discussion objects which user is allowed to read
+     *
      * @return Discussion[]
      */
     public function getListUserAllowed(int $userId): array
@@ -154,7 +156,7 @@ class DiscussionManager extends BaseManager
             (`discussion_read`.`discussion_id`=`discussion`.`id`) AND (`discussion_read`.`user_id` = ?) 
             WHERE ($readPermsQ `discussion`.`read_rights` IS NULL OR
             TRIM(`discussion`.`read_rights`) = '') ORDER BY `discussion`.`order_flag` ASC";
-        $selector = empty($readPerms) ? $this->database->query($query, $userId) : $this->database->query($query, $userId, $readPerms ?: "");
+        $selector = empty($readPerms) ? $this->database->query($query, $userId) : $this->database->query($query, $userId, $readPerms);
         return $this->mapAll($selector->fetchAll());
     }
 
@@ -184,6 +186,7 @@ class DiscussionManager extends BaseManager
 
     /**
      * Get array of discussion ids which user is allowed to read
+     *
      * @return int[]
      */
     public function getIdsUserAllowed(int $userId): array
@@ -207,6 +210,7 @@ class DiscussionManager extends BaseManager
 
     /**
      * Check edit permission
+     *
      * @param Discussion $entity
      */
     public function canEdit($entity, int $userId): bool
@@ -216,6 +220,7 @@ class DiscussionManager extends BaseManager
 
     /**
      * Check read permission
+     *
      * @param Discussion $entity
      */
     public function canRead($entity, int $userId): bool
@@ -225,6 +230,7 @@ class DiscussionManager extends BaseManager
 
     /**
      * Get user ids allowed to read given discussion
+     *
      * @param Discussion $record
      * @return int[]|mixed[]
      */

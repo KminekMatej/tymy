@@ -157,6 +157,7 @@ class PostManager extends BaseManager
 
     /**
      * Load aray of reactions to a certain posts.
+     *
      * @return array in the form of ["utf8mb4smiley" => [1,2,4]] .. where 1,2,4 are user ids, reacting with this smile
      */
     private function getReactions(int $postId): array
@@ -292,6 +293,7 @@ class PostManager extends BaseManager
 
     /**
      * Check edit permissions
+     *
      * @param Post $entity
      */
     public function canEdit($entity, int $userId): bool
@@ -301,6 +303,7 @@ class PostManager extends BaseManager
 
     /**
      * Check read permissions
+     *
      * @param Post $entity
      */
     public function canRead($entity, int $userId): bool
@@ -309,7 +312,6 @@ class PostManager extends BaseManager
     }
 
     /**
-     *
      * @param Post $record
      * @return int[]
      */
@@ -321,6 +323,7 @@ class PostManager extends BaseManager
 
     /**
      * Get posts from discussion, selected by page, optionally filtered with search string and/or search user id
+     *
      * @return BaseModel[]
      */
     private function getPostsFromDiscussion(int $discussionId, int $page = 1, bool $inBBCode = true, ?string $search = null, ?int $searchUserId = null): array

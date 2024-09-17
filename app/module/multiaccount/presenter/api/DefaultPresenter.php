@@ -9,12 +9,11 @@ use Tymy\Module\Multiaccount\Model\TransferKey;
 
 /**
  * Description of DefaultPresenter
+ *
  * @RequestMapping(value = "/multiaccount", method = RequestMethod.GET)
  * @RequestMapping(value = "/multiaccount/{team}", method = RequestMethod.GET)
  * @RequestMapping(value = "/multiaccount/{team}", method = RequestMethod.POST)
  * @RequestMapping(value = "/multiaccount/{team}", method = RequestMethod.DELETE)
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 06. 02. 2021
  */
 class DefaultPresenter extends SecuredPresenter
 {

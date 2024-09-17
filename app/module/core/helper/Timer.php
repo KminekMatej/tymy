@@ -7,20 +7,14 @@ use Tracy\Debugger;
 
 /**
  * Description of Timer
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 26. 2. 2020
  */
 class Timer
 {
     private static ?int $number = null;
     private static ?int $sumNumber = null;
-    /**
-     * @var array<mixed, array<string, mixed>>|null
-     */
+    /** @var array<mixed, array<string, mixed>>|null */
     private static ?array $points = null;
-    /**
-     * @var array<mixed, array<string, mixed>>|null
-     */
+    /** @var array<mixed, array<string, mixed>>|null */
     private static ?array $sumpoints = null;
     private static array $serverTimingHeader = [];
     private static bool $started = false;
@@ -159,7 +153,7 @@ class Timer
 
         if (count(self::$serverTimingHeader) > 99) {
             $decades = 3;
-        };
+        }
         $headerStrings = [];
         foreach (self::$serverTimingHeader as $index => $val) {
             $headerStrings[] = ($decades > 1 ? sprintf("%0{$decades}d", $index) : $index) . "-$val";

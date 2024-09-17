@@ -5,26 +5,24 @@ namespace Tymy\Module\File\Presenter\Front;
 use Exception;
 use Nette\Application\UI\Form;
 use Nette\Bridges\ApplicationLatte\Template;
+use Nette\DI\Attributes\Inject;
 use Nette\Utils\DateTime;
 use Tymy\Module\Core\Presenter\Front\SecuredPresenter;
 use Tymy\Module\File\Handler\FileManager;
 use Tymy\Module\Team\Manager\TeamManager;
 
+use function count;
+
 use const TEAM_DIR;
 
-/**
- * Description of DebtPresenter
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 10. 2. 2020
- */
 class DefaultPresenter extends SecuredPresenter
 {
     private const DIR_NAME_REGEX = '([a-zA-Z_\/\-0-9áčďéěíňóřšťůúýžÁČĎÉĚÍŇÓŘŠŤŮÚÝŽ ]+\.?)*[a-zA-Z_\/\-0-9áčďéěíňóřšťůúýžÁČĎÉĚÍŇÓŘŠŤŮÚÝŽ ]+';
 
-    #[\Nette\DI\Attributes\Inject]
+    #[Inject]
     public TeamManager $teamManager;
 
-    #[\Nette\DI\Attributes\Inject]
+    #[Inject]
     public FileManager $fileManager;
     private array $fileStats;
 
@@ -52,16 +50,12 @@ class DefaultPresenter extends SecuredPresenter
     public function renderDefault(string $folder = "/"): void
     {
         $folderSanitized = "/" . trim($folder, "/");
-        $i = 3;
         $folderLink = "";
-        $parentFolder = "";
         $folderParts = explode("/", $folder);
         foreach ($folderParts as $folderPart) {
-            $parentFolder = $folderLink;
             $folderLink .= "$folderPart";
             $this->addBreadcrumb($folderPart, $this->link(":File:Default:", $folderLink));
             $folderLink .= "/";
-            $i++;
         }
 
         $usedSpace = $this->fileStats["usedSpace"];
@@ -169,6 +163,7 @@ class DefaultPresenter extends SecuredPresenter
 
     /**
      * Get download folder contents
+     *
      * @return array<string, mixed[]>
      */
     private function getContents(string $folder): array

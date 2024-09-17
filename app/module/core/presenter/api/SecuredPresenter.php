@@ -9,8 +9,6 @@ use Tymy\Module\User\Model\User;
 
 /**
  * Description of SecuredPresenter
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 2. 8. 2020
  */
 class SecuredPresenter extends BasePresenter
 {

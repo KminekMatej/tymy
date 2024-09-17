@@ -13,8 +13,6 @@ use Tymy\Module\Event\Model\Event;
 
 /**
  * Description of EventBasePresenter
- *
- * @author kminekmatej
  */
 class EventBasePresenter extends SecuredPresenter
 {
@@ -57,7 +55,7 @@ class EventBasePresenter extends SecuredPresenter
             } elseif (is_null($myPostStatusId)) { // akce uz byla, post status nevyplnen
                 return $statusId == $myPreStatusId && !is_null($myPreStatusId) ? "statusBtn$statusId disabled active" : "btn-outline-secondary disabled";
             } else {
-                return $statusId == $myPostStatusId && !is_null($myPostStatusId) ? "statusBtn$statusId disabled active" : "btn-outline-secondary disabled";
+                return $statusId == $myPostStatusId ? "statusBtn$statusId disabled active" : "btn-outline-secondary disabled";
             }
         });
 

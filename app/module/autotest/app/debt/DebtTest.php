@@ -16,9 +16,6 @@ $container = Bootstrap::boot();
 
 /**
  * Description of DebtTest
- *
- * @author kminekmatej, 07.10.2020 21:47:07
- *
  */
 class DebtTest extends RequestCase
 {
@@ -29,9 +26,8 @@ class DebtTest extends RequestCase
 
     public function testGet(): void
     {
-        $data = null;
         $this->authorizeAdmin();
-        $listResponse = $this->request($this->getBasePath())->expect(200, "array");
+        $this->request($this->getBasePath())->expect(200, "array");
     }
 
     public function testCRUDSingular(): void

@@ -14,11 +14,6 @@ use function iban_set_checksum;
 
 use const QR_ECLEVEL_H;
 
-/**
- * Description of DebtPresenter
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 10. 2. 2020
- */
 class DefaultPresenter extends DebtBasePresenter
 {
     public function actionDefault(?string $resource = null): void
@@ -68,6 +63,7 @@ class DefaultPresenter extends DebtBasePresenter
 
     /**
      * Load debt of exact ID or redirect to homepage and display warning message
+     *
      * @param int $debtId
      * @return Debt
      */

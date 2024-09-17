@@ -10,6 +10,7 @@ class DateHelper
 {
     /**
      * Create DateTime object from various formats
+     *
      * @param mixed $datetime
      * @param DateTimeZone|null $timezone
      * @return \DateTime
@@ -27,6 +28,7 @@ class DateHelper
 
     /**
      * Create DateTime object from various formats and setis it to current datetimezone
+     *
      * @param mixed $datetime
      * @param DateTimeZone|null $timezone
      * @return \DateTime
@@ -38,6 +40,7 @@ class DateHelper
 
     /**
      * Sets local timzone to DateTime object
+     *
      * @param \DateTime $datetime
      * @return \DateTime
      */

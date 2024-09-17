@@ -7,8 +7,6 @@ use Nette\Utils\DateTime;
 
 /**
  * Description of NewInfo
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 16. 9. 2020
  */
 class NewInfo implements JsonSerializable
 {

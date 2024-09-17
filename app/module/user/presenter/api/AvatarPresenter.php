@@ -8,8 +8,6 @@ use Tymy\Module\User\Manager\AvatarManager;
 
 /**
  * Description of AvatarPresenter
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 25. 10. 2020
  */
 class AvatarPresenter extends SecuredPresenter
 {

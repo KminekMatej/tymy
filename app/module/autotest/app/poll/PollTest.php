@@ -14,9 +14,6 @@ $container = Bootstrap::boot();
 
 /**
  * Description of PollTest
- *
- * @author kminekmatej, 28.12.2020 22:41:07
- *
  */
 class PollTest extends RequestCase
 {
@@ -27,16 +24,14 @@ class PollTest extends RequestCase
 
     public function testGetSingular(): void
     {
-        $data = null;
         $this->authorizeAdmin();
-        $listResponse = $this->request($this->getBasePath())->expect(200, "array");
+        $this->request($this->getBasePath())->expect(200, "array");
     }
 
     public function testGetPlural(): void
     {
-        $data = null;
         $this->authorizeAdmin();
-        $listResponse = $this->request($this->getBasePath() . "s")->expect(200, "array");
+        $this->request($this->getBasePath() . "s")->expect(200, "array");
     }
 
     public function testCRUDSingular(): void

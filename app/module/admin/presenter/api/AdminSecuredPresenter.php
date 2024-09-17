@@ -2,17 +2,16 @@
 
 namespace Tymy\Module\Admin\Presenter\Api;
 
+use Nette\DI\Attributes\Inject;
 use Tymy\Module\Admin\Manager\AdminManager;
 use Tymy\Module\Core\Presenter\Api\BasePresenter;
 
 /**
  * Description of AdminSecuredPresenter
- *
- * @author kminekmatej, 25. 10. 2021
  */
 class AdminSecuredPresenter extends BasePresenter
 {
-    #[\Nette\DI\Attributes\Inject]
+    #[Inject]
     public AdminManager $adminManager;
 
     protected function startup(): void
@@ -42,10 +41,10 @@ class AdminSecuredPresenter extends BasePresenter
         }
 
         if ($this->user->isLoggedIn()) {
-            $this->user->logout(true); //
+            $this->user->logout(true);
         }
 
-        return is_string($headerContent) ? $headerContent : null;
+        return $headerContent;
     }
 
     /**
@@ -64,7 +63,7 @@ class AdminSecuredPresenter extends BasePresenter
         }
 
         if ($this->user->isLoggedIn()) {
-            $this->user->logout(true); //
+            $this->user->logout(true);
         }
 
         return is_string($paramContent) ? $paramContent : null;

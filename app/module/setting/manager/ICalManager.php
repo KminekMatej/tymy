@@ -139,6 +139,7 @@ class ICalManager extends BaseManager
 
     /**
      * Update statuses which events this ical shall display
+     *
      * @param ICal $iCal
      * @param int[] $statusIds
      * @return void

@@ -10,8 +10,6 @@ use Tymy\Module\User\Manager\UserManager;
 
 /**
  * Description of DefaultPresenter
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 2. 8. 2020
  */
 class DefaultPresenter extends BasePresenter
 {

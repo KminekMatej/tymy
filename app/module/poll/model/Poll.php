@@ -8,8 +8,6 @@ use Tymy\Module\Poll\Mapper\PollMapper;
 
 /**
  * Description of Poll
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 20. 12. 2020
  */
 class Poll extends BaseModel
 {

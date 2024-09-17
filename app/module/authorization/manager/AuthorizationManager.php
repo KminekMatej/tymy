@@ -13,8 +13,6 @@ use Tymy\Module\User\Model\User;
 
 /**
  * Description of AuthorizationManager
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 2. 9. 2020
  */
 class AuthorizationManager implements IAuthorizator
 {
@@ -74,7 +72,7 @@ class AuthorizationManager implements IAuthorizator
             $this->permissionCache[$type] = [];
             $typePermissions = $this->teamDatabase->table(Permission::TABLE)->where("right_type", $type)->fetchAll();
             foreach ($typePermissions as $typePermissionRow) {
-                $permission = $typePermissionRow ? $this->map(Permission::class, PermissionMapper::scheme(), $typePermissionRow) : null;
+                $permission = $this->map(Permission::class, PermissionMapper::scheme(), $typePermissionRow);
                 assert($permission instanceof Permission);
                 $this->permissionCache[$type][$permission->getName()] = $permission;
             }
@@ -99,6 +97,7 @@ class AuthorizationManager implements IAuthorizator
 
     /**
      * Main permissions checker
+     *
      * @param string $role Role - SUPER / USR / WEB / ATT
      * @param string|null $resource User id
      * @param string|null $privilege Privilege, consisting of type and name of permissions

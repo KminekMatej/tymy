@@ -6,8 +6,6 @@ use Iterator;
 
 /**
  * Description of Row
- *
- * @author kminekmatej, 30. 9. 2022, 23:57:39
  */
 class Row implements Iterator
 {

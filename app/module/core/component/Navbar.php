@@ -25,8 +25,6 @@ use Tymy\Module\User\Model\User as TymyUser;
 
 /**
  * Description of Navbar
- *
- * @author matej
  */
 class NavbarControl extends Control
 {

@@ -7,8 +7,6 @@ use Tymy\Module\User\Manager\UserManager;
 
 /**
  * Description of PwdPresenter
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 21. 2. 2021
  */
 class PwdPresenter extends BasePresenter
 {
@@ -40,8 +38,7 @@ class PwdPresenter extends BasePresenter
     }
 
     /**
-    *
-        @RequestMapping(value = "/pwdreset/{resetCode}", method = RequestMethod.GET)
+     * @RequestMapping(value = "/pwdreset/{resetCode}", method = RequestMethod.GET)
     */
     public function actionReset(?string $code): void
     {

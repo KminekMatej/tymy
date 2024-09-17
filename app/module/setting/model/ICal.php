@@ -8,8 +8,6 @@ use Tymy\Module\Settings\Mapper\ICalMapper;
 
 /**
  * Description of ICal
- *
- * @author kminekmatej, 11. 9. 2022, 17:02:32
  */
 class ICal extends BaseModel
 {

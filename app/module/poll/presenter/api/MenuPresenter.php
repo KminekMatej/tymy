@@ -7,8 +7,6 @@ use Tymy\Module\Poll\Manager\PollManager;
 
 /**
  * Description of MenuPresenter
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 27. 12. 2020
  */
 class MenuPresenter extends SecuredPresenter
 {

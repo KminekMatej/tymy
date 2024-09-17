@@ -8,8 +8,6 @@ use Tymy\Module\Core\Model\BaseModel;
 
 /**
  * Description of Status
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 4. 11. 2020
  */
 class Status extends BaseModel
 {

@@ -11,8 +11,6 @@ use Tracy\ILogger;
 
 /**
  * Description of DBException
- *
- * @author kminekmatej, 01.09.2020
  */
 class DBException
 {

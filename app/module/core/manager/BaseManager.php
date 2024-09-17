@@ -65,6 +65,7 @@ abstract class BaseManager
 
     /**
      * Get list of user ids, allowed to read given entity
+     *
      * @param BaseModel $record
      * @return int[]
      */
@@ -106,6 +107,7 @@ abstract class BaseManager
 
     /**
      * Function to quickly obtain all user ids - very neccessary when getAllowedReaders function should return all readers at all
+     *
      * @return int[]
      */
     public function getAllUserIds(): array
@@ -119,6 +121,7 @@ abstract class BaseManager
 
     /**
      * Function to quickly obtain all admin ids - very neccessary when getAllowedReaders function should return all admins
+     *
      * @return int[]
      */
     public function getAllAdminIds(): array
@@ -132,6 +135,7 @@ abstract class BaseManager
 
     /**
      * Maps one active row to object
+     *
      * @param IRow|null $row
      * @return T|null
      */
@@ -162,6 +166,7 @@ abstract class BaseManager
 
     /**
      * Maps active rows to array of objects
+     *
      * @return T[]
      */
     public function mapAll(array $rows): array
@@ -179,6 +184,7 @@ abstract class BaseManager
 
     /**
      * Maps active rows to array of objects, where keys are id fields
+     *
      * @return T[]
      */
     public function mapAllWithId(array $rows): array
@@ -194,6 +200,7 @@ abstract class BaseManager
      * Check whether $array cotains all the mandatory fields, specified in mapper
      *
      * @param array $array - Input array to check
+     *
      * @throws AbortException
      */
     public function checkInputs(array $array): void
@@ -308,6 +315,7 @@ abstract class BaseManager
      * @param array $updates Array of updates
      * @param string $idColumn Caption of primary key column
      * @return int number of affected rows
+     *
      * @throws Exception
      */
     protected function updateRecord(string $table, int $id, array $updates, string $idColumn = "id")
@@ -325,6 +333,7 @@ abstract class BaseManager
      * IDColumn can be changed if primary key is different than classic `id`
      *
      * @return ActiveRow
+     *
      * @throws Exception
      */
     protected function createRecord(string $table, array $inserts, string $idColumn = "id")
@@ -365,9 +374,11 @@ abstract class BaseManager
 
     /**
      * Updates record from table using array of fields to update.
+     *
      * @param int $id Id of record to update
      * @param array $array Array of fields to update
      * @return int Number of affected rows
+     *
      * @throws Exception
      */
     public function updateByArray(int $id, array $array)
@@ -379,23 +390,20 @@ abstract class BaseManager
 
     /**
      * Creates new entity record and returns it on success
+     *
      * @param array $array Values to create
      * @return ActiveRow Created row
+     *
      * @throws Exception
      */
     public function createByArray(array $array)
     {
-        $created = $this->createRecord($this->getTable(), $this->composeInsertArray($array));
-
-        if (!$created) {
-            $this->responder->E4009_CREATE_FAILED($this->getModule());
-        }
-
-        return $created;
+        return $this->createRecord($this->getTable(), $this->composeInsertArray($array));
     }
 
     /**
      * Use mapper data to compose array of database fields to insert from specified input array
+     *
      * @param array $array Input data (usually $this->requestData)
      * @return array Insert output
      */
@@ -439,6 +447,7 @@ abstract class BaseManager
 
     /**
      * Use mapper data to compose array of database fields to update from specified input array
+     *
      * @param array $array Input data (usually $this->requestData)
      * @param array $scheme Scheme upon which wo work (optional)
      * @return array Update output
@@ -483,6 +492,7 @@ abstract class BaseManager
 
     /**
      * Basic allow function to be overriden - otherwise throw 405:Not allowed
+     *
      * @param ?array $data Input data (optional)
      */
     protected function allowCreate(?array &$data = null): void
@@ -492,6 +502,7 @@ abstract class BaseManager
 
     /**
      * Basic allow function to be overriden - otherwise throw 405:Not allowed
+     *
      * @param ?int $recordId Id of record to read (optional)
      */
     protected function allowRead(?int $recordId = null): void
@@ -501,6 +512,7 @@ abstract class BaseManager
 
     /**
      * Basic allow function to be overriden - otherwise throw 405:Not allowed
+     *
      * @param ?int $recordId Id of record to read (optional)
      * @param ?array $data Input data (optional)
      */
@@ -511,6 +523,7 @@ abstract class BaseManager
 
     /**
      * Basic allow function to be overriden - otherwise throw 405:Not allowed
+     *
      * @param int $recordId Id of record to read (optional)
      */
     protected function allowDelete(int $recordId): void
@@ -534,11 +547,11 @@ abstract class BaseManager
      *
      * This function is meant to be overloaded only. In overloaded functions, <b>DO NOT call parent::metaMap</b>
      *
-     * @internal Every override of this function should make this function as fast as possible between one request - using simpleCache when neccessary
-     *
      * @param BaseModel $model
      * @param int $userId
      * @return void
+     *
+     * @internal Every override of this function should make this function as fast as possible between one request - using simpleCache when neccessary
      */
     protected function metaMap(BaseModel &$model, int $userId = null): void
     {
@@ -692,7 +705,7 @@ abstract class BaseManager
      */
     private function getColumnName(string $propertyName): ?string
     {
-        if (empty($this->getScheme()) || !is_array($this->getScheme()) || empty($propertyName)) {
+        if (empty($this->getScheme()) || empty($propertyName)) {
             return null;
         }
 
@@ -737,6 +750,7 @@ abstract class BaseManager
 
     /**
      * Sanitize value from Field specification
+     *
      * @param Field $field
      * @param mixed $value
      * @return void

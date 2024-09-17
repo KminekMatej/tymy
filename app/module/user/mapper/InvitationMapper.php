@@ -7,8 +7,6 @@ use Tymy\Module\Core\Model\Field;
 
 /**
  * Description of InvitationMapper
- *
- * @author kminekmatej, 25. 9. 2022, 21:21:18
  */
 class InvitationMapper extends BaseMapper
 {

@@ -16,8 +16,6 @@ use Tymy\Module\User\Model\User;
 
 /**
  * Description of Responder
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 02.08.2020
  */
 class Responder
 {
@@ -50,6 +48,7 @@ class Responder
      * @param int $code Specific tymy app response code
      * @param string $message Additional response message
      * @param string|null $sessionKey SessionKey - used only for auth responses
+     *
      * @throws TymyResponse
      */
     private function respond(int $code, string $message, string $sessionKey = null): never
@@ -264,6 +263,7 @@ class Responder
     /**
      * @param string $blockingModule
      * @param int[] $blockingIds
+     *
      * @throws AbortException
      */
     public function E4016_DELETE_BLOCKED_BY(string $blockingModule, array $blockingIds): never
@@ -275,6 +275,7 @@ class Responder
     /**
      * @param string $blockingModule
      * @param int[] $blockingIds
+     *
      * @throws AbortException
      */
     public function E4017_UPDATE_BLOCKED_BY(string $blockingModule, array $blockingIds): never

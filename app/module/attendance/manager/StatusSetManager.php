@@ -130,9 +130,7 @@ class StatusSetManager extends BaseManager
 
         $created = parent::createByArray($data);
 
-        if ($created) {
-            $this->createStatusSetDir($created->id);
-        }
+        $this->createStatusSetDir($created->id);
 
         return $this->map($created);
     }
@@ -159,6 +157,7 @@ class StatusSetManager extends BaseManager
 
     /**
      * Get array of StatusSet objects which user is allowed to read
+     *
      * @return StatusSet[]
      */
     public function getListUserAllowed(int $userId): array

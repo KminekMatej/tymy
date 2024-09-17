@@ -2,6 +2,7 @@
 
 namespace Tymy\Module\Event\Presenter\Front;
 
+use Nette\DI\Attributes\Inject;
 use Tymy\Module\Attendance\Manager\HistoryManager;
 use Tymy\Module\Attendance\Model\Attendance;
 use Tymy\Module\Attendance\Model\Status;
@@ -9,14 +10,9 @@ use Tymy\Module\Core\Helper\ArrayHelper;
 use Tymy\Module\Event\Model\Event;
 use Tymy\Module\User\Model\User;
 
-/**
- * Description of DetailPresenter
- *
- * @author kminekmatej
- */
 class DetailPresenter extends EventBasePresenter
 {
-    #[\Nette\DI\Attributes\Inject]
+    #[Inject]
     public HistoryManager $historyManager;
 
     public function renderDefault(string $resource): void
@@ -50,6 +46,7 @@ class DetailPresenter extends EventBasePresenter
 
     /**
      * Compose attendance array to be easily used on template
+     *
      * @return array<int|string, array<int|string, mixed[]>>
      */
     private function loadEventAttendance(Event $event): array

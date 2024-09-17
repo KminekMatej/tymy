@@ -213,6 +213,7 @@ class TeamPresenter extends SettingBasePresenter
 
     /**
      * Generate and return random 3-char code
+     *
      * @return string
      */
     private function randomCode(): string

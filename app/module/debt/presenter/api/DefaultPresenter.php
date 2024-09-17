@@ -7,8 +7,6 @@ use Tymy\Module\Debt\Manager\DebtManager;
 
 /**
  * Description of DefaultPresenter
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 30. 11. 2020
  */
 class DefaultPresenter extends SecuredPresenter
 {

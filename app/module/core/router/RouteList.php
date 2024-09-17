@@ -6,8 +6,6 @@ use Nette\Application\Routers\RouteList as NetteRouteList;
 
 /**
  * Description of RouteList
- *
- * @author kminekmatej, 11. 9. 2021
  */
 class RouteList extends NetteRouteList
 {

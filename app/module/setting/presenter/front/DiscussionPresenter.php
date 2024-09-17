@@ -72,8 +72,8 @@ class DiscussionPresenter extends SettingBasePresenter
     public function handleDiscussionCreate(): void
     {
         $discussionData = (object) $this->getRequest()->getPost()["changes"]; // new discussion is always as ID 1
-        $discussionData->publicRead = $discussionData->publicRead == "true" ?? false;
-        $discussionData->editablePosts = $discussionData->editablePosts == "true" ?? false;
+        $discussionData->publicRead = $discussionData->publicRead == "true";
+        $discussionData->editablePosts = $discussionData->editablePosts == "true";
         $this->discussionManager->create((array) $discussionData);
         $this->redirect(':Setting:Discussion:');
     }

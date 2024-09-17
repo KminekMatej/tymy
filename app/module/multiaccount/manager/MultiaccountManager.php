@@ -189,6 +189,7 @@ class MultiaccountManager extends BaseManager
 
     /**
      * Get list of users multiaccounts
+     *
      * @return SimpleTeam[]
      */
     public function getListUserAllowed(): array

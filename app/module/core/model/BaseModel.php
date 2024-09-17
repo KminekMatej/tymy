@@ -7,8 +7,6 @@ use Nette\Utils\DateTime;
 
 /**
  * Description of BaseModel
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 5. 6. 2020
  */
 abstract class BaseModel implements JsonSerializable
 {

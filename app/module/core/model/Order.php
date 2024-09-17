@@ -4,8 +4,6 @@ namespace Tymy\Module\Core\Model;
 
 /**
  * Description of Order
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 15. 2. 2021
  */
 class Order
 {

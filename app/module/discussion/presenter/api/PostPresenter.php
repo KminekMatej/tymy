@@ -8,8 +8,6 @@ use Tymy\Module\Discussion\Manager\PostManager;
 
 /**
  * Description of PostPresenter
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 16. 9. 2020
  */
 class PostPresenter extends SecuredPresenter
 {

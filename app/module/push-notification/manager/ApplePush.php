@@ -15,8 +15,6 @@ use Tymy\Module\Team\Manager\TeamManager;
 
 /**
  * Description of ApplePush
- *
- * @author kminekmatej, 22. 11. 2021, 12:28:27
  */
 class ApplePush
 {

@@ -9,8 +9,6 @@ use Tymy\Module\User\Manager\UserManager;
 
 /**
  * Description of DefaultPresenter
- *
- * @author matej
  */
 class DefaultPresenter extends SecuredPresenter
 {

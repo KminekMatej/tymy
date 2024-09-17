@@ -6,8 +6,6 @@ use Tymy\Module\Autotest\SimpleResponse;
 
 /**
  * Description of Assert
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 16. 1. 2020
  */
 class Assert extends \Tester\Assert
 {

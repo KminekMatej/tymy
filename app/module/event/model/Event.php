@@ -9,8 +9,6 @@ use Tymy\Module\Event\Mapper\EventMapper;
 
 /**
  * Description of Event
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 19. 9. 2020
  */
 class Event extends BaseModel
 {

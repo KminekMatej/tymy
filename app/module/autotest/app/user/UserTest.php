@@ -17,9 +17,6 @@ $container = Bootstrap::boot();
 
 /**
  * Description of UserTest
- *
- * @author kminekmatej, 24.10.2020 14:00:05
- *
  */
 class UserTest extends RequestCase
 {
@@ -39,8 +36,7 @@ class UserTest extends RequestCase
     }
 
     /**
-     *
-      @RequestMapping(value = "/users/{id}", method = RequestMethod.PUT)
+     * @RequestMapping(value = "/users/{id}", method = RequestMethod.PUT)
       @RequestMapping(value = "/users/{id}/avatar", method = RequestMethod.POST)
       @RequestMapping(value = "/users", method = RequestMethod.POST)
       @RequestMapping(value = "/users/status/{status}", method = RequestMethod.GET)
@@ -50,18 +46,16 @@ class UserTest extends RequestCase
       @RequestMapping(value = "/loginPhp", method = RequestMethod.GET)
       @RequestMapping(value = "/login", method = RequestMethod.POST)
       @RequestMapping(value = "/logout")
-     *
      */
     public function testGetSingular(): void
     {
-        $data = null;
-        $listResponse = $this->getList();
+        $this->authorizeAdmin();
+        $this->request($this->getBasePath())->expect(200, "array");
     }
 
     public function testGetPlural(): void
     {
-        $data = null;
-        $listResponse = $this->request($this->getBasePath() . "s")->expect(200, "array");
+        $this->request($this->getBasePath() . "s")->expect(200, "array");
     }
 
     public function testLogin(): void
@@ -353,15 +347,6 @@ class UserTest extends RequestCase
     public function mockRecord(): array
     {
         return $this->recordManager->mockUser();
-    }
-
-    /**
-     * Load data list
-     */
-    private function getList(): SimpleResponse
-    {
-        $this->authorizeAdmin();
-        return $this->request($this->getBasePath())->expect(200, "array");
     }
 
     protected function mockChanges(): array

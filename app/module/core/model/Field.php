@@ -4,8 +4,6 @@ namespace Tymy\Module\Core\Model;
 
 /**
  * Description of Field
- *
- * @author kminekmatej, 25.4.2019
  */
 class Field
 {
@@ -68,6 +66,7 @@ class Field
 
     /**
      * Return field, fill database column name and equal property name.
+     *
      * @param string $name Database column name and property name
      * @param bool $mandatory If field is mandatory, then value cannot be null
      * @param bool $changeable If field is not changeable, any future changes are prohibited
@@ -82,6 +81,7 @@ class Field
 
     /**
      * Return field, fill only database column name. Use setter to set property name.
+     *
      * @param string $name Database column name
      * @param bool $mandatory If field is mandatory, then value cannot be null
      * @param bool $changeable If field is not changeable, any future changes are prohibited

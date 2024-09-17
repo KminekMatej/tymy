@@ -37,6 +37,7 @@ class NewsManager extends BaseManager
 
     /**
      * Check edit permission
+     *
      * @param Notice $entity
      */
     public function canEdit($entity, int $userId): bool
@@ -46,6 +47,7 @@ class NewsManager extends BaseManager
 
     /**
      * Check read permission
+     *
      * @param Notice $entity
      */
     public function canRead($entity, int $userId): bool
@@ -55,9 +57,11 @@ class NewsManager extends BaseManager
 
     /**
      * Get user ids allowed to read given debt
+     *
      * @param Notice $record
-     * @todo when its neccessary
      * @return int[]
+     *
+     * @todo when its neccessary
      */
     public function getAllowedReaders(BaseModel $record): array
     {

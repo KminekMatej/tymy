@@ -4,8 +4,6 @@ namespace Tymy\Module\Core\Service;
 
 /**
  * Description of BbService
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 18. 9. 2020
  */
 class BbService
 {
@@ -70,6 +68,7 @@ class BbService
      *
      * @param string $text written in BB code
      * @return string|null Text with html tags
+     *
      * @todo Finish all neccessary tags
      */
     public static function bb2Html(string $text): ?string

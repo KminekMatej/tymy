@@ -4,8 +4,6 @@ namespace Tymy\Module\Core\Helper;
 
 /**
  * Description of StringHelper
- *
- * @author kminekmatej, 4. 5. 2022, 21:59:59
  */
 class StringHelper
 {

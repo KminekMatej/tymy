@@ -15,8 +15,6 @@ use Tymy\Module\User\Manager\UserManager;
 
 /**
  * Description of NotificationGenerator
- *
- * @author kminekmatej, 15. 11. 2021, 13:10:33
  */
 class NotificationGenerator
 {

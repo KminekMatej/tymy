@@ -6,8 +6,6 @@ use Tymy\Module\Admin\Manager\MigrationManager;
 
 /**
  * Description of MigratePresenter
- *
- * @author kminekmatej, 25. 10. 2021
  */
 class MigratePresenter extends AdminSecuredPresenter
 {

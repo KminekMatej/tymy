@@ -4,8 +4,6 @@ namespace Tymy\Module\Core\Model;
 
 /**
  * Description of Cell
- *
- * @author kminekmatej, 12. 7. 2022, 22:58:19
  */
 class Cell
 {

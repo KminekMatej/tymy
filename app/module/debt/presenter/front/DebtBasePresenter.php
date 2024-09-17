@@ -9,8 +9,6 @@ use Tymy\Module\User\Manager\UserManager;
 
 /**
  * Description of DebtBasePresenter
- *
- * @author kminekmatej
  */
 class DebtBasePresenter extends SecuredPresenter
 {
@@ -28,6 +26,7 @@ class DebtBasePresenter extends SecuredPresenter
 
     /**
      * Get list of possible payees - always Me, but if user is permitted to manage team debts, also TEAM mocked user
+     *
      * @return BaseModel[]|null[]|mixed[]
      */
     protected function getPayeeList(): array

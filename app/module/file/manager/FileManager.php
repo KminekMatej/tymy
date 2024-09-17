@@ -12,8 +12,6 @@ use const TEAM_DIR;
 
 /**
  * Description of FileManager
- *
- * @author kminekmatej, 7.11.2018
  */
 class FileManager
 {
@@ -96,9 +94,7 @@ class FileManager
 
         $targetFile = self::DOWNLOAD_DIR . "/$folder/" . $file->getSanitizedName();
 
-        if (!$file->move($targetFile)) {
-            Debugger::log("File saving failed [$targetFile]", ILogger::ERROR);
-        }
+        $file->move($targetFile);
 
         return $targetFile;
     }

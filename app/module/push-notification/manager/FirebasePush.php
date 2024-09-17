@@ -9,8 +9,6 @@ use Tymy\Module\Team\Manager\TeamManager;
 
 /**
  * Description of AndroidPush
- *
- * @author kminekmatej, 22. 11. 2021, 12:28:27
  */
 class FirebasePush
 {

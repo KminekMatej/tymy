@@ -14,8 +14,6 @@ use Tymy\Module\User\Model\User;
 
 /**
  * Description of RecordManager
- *
- * @author kminekmatej, 1.5.2019
  */
 class RecordManager
 {

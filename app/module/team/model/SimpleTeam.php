@@ -6,8 +6,6 @@ use JsonSerializable;
 
 /**
  * Description of SimpleTeam
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 6. 8. 2020
  */
 class SimpleTeam implements JsonSerializable
 {

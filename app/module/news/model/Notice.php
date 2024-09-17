@@ -9,8 +9,6 @@ use Tymy\Module\News\Mapper\NewsMapper;
 
 /**
  * Description of Notice
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 29. 11. 2020
  */
 class Notice extends BaseModel implements JsonSerializable
 {

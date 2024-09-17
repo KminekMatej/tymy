@@ -7,8 +7,6 @@ use Tymy\Module\User\Manager\UserManager;
 
 /**
  * Description of LivePresenter
- *
- * @author Matej Kminek <matej.kminek@attendees.eu>, 14. 2. 2021
  */
 class LivePresenter extends SecuredPresenter
 {

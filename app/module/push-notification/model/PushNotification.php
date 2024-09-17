@@ -7,8 +7,6 @@ use Nette\Utils\Strings;
 
 /**
  * Description of PushNotification
- *
- * @author kminekmatej, 14. 11. 2021, 21:29:25
  */
 class PushNotification implements JsonSerializable
 {
