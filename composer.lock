@@ -4601,12 +4601,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "b3d9a3d80bf68f14f44ffa521454b162d8ff5561"
+                "reference": "0d120db075c79583ff3746a534fc743202af380a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/b3d9a3d80bf68f14f44ffa521454b162d8ff5561",
-                "reference": "b3d9a3d80bf68f14f44ffa521454b162d8ff5561",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/0d120db075c79583ff3746a534fc743202af380a",
+                "reference": "0d120db075c79583ff3746a534fc743202af380a",
                 "shasum": ""
             },
             "conflict": {
@@ -5415,7 +5415,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-09-16T22:05:02+00:00"
+            "time": "2024-09-16T19:04:26+00:00"
         },
         {
             "name": "slevomat/coding-standard",

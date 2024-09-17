@@ -24,7 +24,7 @@ class MenuPresenter extends SecuredPresenter
         $this->respondNotAllowed();
     }
 
-    private function requestGetMenu(): void
+    private function requestGetMenu(): never
     {
         assert($this->manager instanceof PollManager);
         $polls = $this->manager->getListUserAllowed();

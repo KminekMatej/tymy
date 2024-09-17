@@ -21,7 +21,7 @@ class PreviewPresenter extends SecuredPresenter
         $this->requestPost($resourceId);
     }
 
-    protected function requestPost($resourceId): void
+    protected function requestPost($resourceId): never
     {
         if (!array_key_exists("post", $this->requestData)) {
             $this->responder->E4013_MISSING_INPUT("post");

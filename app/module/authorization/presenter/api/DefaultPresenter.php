@@ -31,7 +31,7 @@ class DefaultPresenter extends BasePresenter
         $this->requestGetList($resourceId);
     }
 
-    private function requestGetList(int $userId): void
+    private function requestGetList(int $userId): never
     {
         $rights = null;
         try {

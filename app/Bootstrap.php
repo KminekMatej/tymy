@@ -58,10 +58,6 @@ class Bootstrap
         $configurator->enableTracy($logDir);
         $configurator->setTempDirectory($tmpDir);
 
-        $configurator->createRobotLoader()
-            ->addDirectory(__DIR__)
-            ->register();
-
         $configurator->addConfig(TEAM_DIR . '/app/config/config.neon');
         $configurator->addConfig(TEAM_DIR . '/local/' . ($autotestMode ? 'config.autotest.neon' : 'config.neon'));
 

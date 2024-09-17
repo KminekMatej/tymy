@@ -42,7 +42,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->respondNotAllowed();
     }
 
-    private function requestGetList(?string $filter, ?string $order, ?string $limit, ?string $offset): void
+    private function requestGetList(?string $filter, ?string $order, ?string $limit, ?string $offset): never
     {
         assert($this->manager instanceof EventManager);
         $events = $this->manager->getListUserAllowed($this->user->getId(), $filter, $order, (int) $limit, (int) $offset);
@@ -50,7 +50,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->respondOk($this->arrayToJson($events));
     }
 
-    protected function requestPost($resourceId): void
+    protected function requestPost($resourceId): never
     {
         if ($this->isMultipleObjects($this->requestData)) {
             $events = [];

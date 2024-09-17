@@ -27,12 +27,17 @@ class DefaultPresenter extends SecuredPresenter
             case 'PUT':
                 $this->needs($resourceId);
                 $this->requestPut($resourceId, $subResourceId);
+                // no break
+            case 'DELETE':
+                $this->needs($resourceId);
+                $this->requestDelete($resourceId, $subResourceId);
+                // no break
         }
 
         $this->respondNotAllowed();
     }
 
-    private function requestGetList(): void
+    private function requestGetList(): never
     {
         $users = $this->manager->getList();
 

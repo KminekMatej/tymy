@@ -32,26 +32,18 @@ TRUNCATE `notes_history`;
 TRUNCATE `push_notification`;
 TRUNCATE `pwd_reset`;
 TRUNCATE `rights`;
-TRUNCATE `usr_mails`;
 TRUNCATE `user`;
 
 SET FOREIGN_KEY_CHECKS=1;
 
 /** IMPORT SECTION */
 
-INSERT INTO `user` (`user_name`, `password`, `can_login`, `status`, `roles`, `first_name`, `last_name`, `call_name`, `editable_call_name`, `email_name`,`language`, `sex`, `gdpr_accepted_at`, `last_read_news`) VALUES
-('autotest_admin',  'f4ad5b4e691802fca51711dede771a36', 1, 'PLAYER', 'SUPER,USR,ATT', 'Autotest', 'admin', 'autotest-admin', 0, 'autotest-admin', 'CZ', 'MALE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('autotest_user',   '58d26e9a3381ace5e682dc26bf780dd4', 1, 'PLAYER', '', 'Autotest', 'user', 'autotest-user', 0, 'autotest-user', 'CZ', 'MALE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('autotest_member',  '58d26e9a3381ace5e682dc26bf780dd4', 1, 'MEMBER', '', 'Autotest', 'member', 'autotest-member', 0, 'autotest-member', 'CZ', 'MALE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('autotest_init',  '58d26e9a3381ace5e682dc26bf780dd4', 1, 'INIT', '', 'Autotest', 'init', 'autotest-init', 0, 'autotest-init', 'CZ', 'MALE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('autotest_sick',  '58d26e9a3381ace5e682dc26bf780dd4', 1, 'SICK', '', 'Autotest', 'sick', 'autotest-sick', 0, 'autotest-sick', 'CZ', 'MALE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
-INSERT INTO `usr_mails`(`user_id`, `email`, `type`) VALUES 
-(1,'admin@autotest.tymy.cz','DEF'),
-(2,'user@autotest.tymy.cz','DEF'),
-(3,'member@autotest.tymy.cz','DEF'),
-(4,'init@autotest.tymy.cz','DEF'),
-(5,'sick@autotest.tymy.cz','DEF');
+INSERT INTO `user` (`user_name`, `password`, `email`, `can_login`, `status`, `roles`, `first_name`, `last_name`, `call_name`, `editable_call_name`, `email_name`,`language`, `sex`, `gdpr_accepted_at`, `last_read_news`) VALUES
+('autotest_admin',  'f4ad5b4e691802fca51711dede771a36', 'admin@autotest.tymy.cz', 1, 'PLAYER', 'SUPER,USR,ATT', 'Autotest', 'admin', 'autotest-admin', 0, 'autotest-admin', 'CZ', 'MALE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('autotest_user',   '58d26e9a3381ace5e682dc26bf780dd4', 'user@autotest.tymy.cz', 1, 'PLAYER', '', 'Autotest', 'user', 'autotest-user', 0, 'autotest-user', 'CZ', 'MALE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('autotest_member',  '58d26e9a3381ace5e682dc26bf780dd4' ,'member@autotest.tymy.cz', 1, 'MEMBER', '', 'Autotest', 'member', 'autotest-member', 0, 'autotest-member', 'CZ', 'MALE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('autotest_init',  '58d26e9a3381ace5e682dc26bf780dd4', 'init@autotest.tymy.cz', 1, 'INIT', '', 'Autotest', 'init', 'autotest-init', 0, 'autotest-init', 'CZ', 'MALE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('autotest_sick',  '58d26e9a3381ace5e682dc26bf780dd4','sick@autotest.tymy.cz', 1, 'SICK', '', 'Autotest', 'sick', 'autotest-sick', 0, 'autotest-sick', 'CZ', 'MALE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 INSERT INTO `rights` (`id`, `right_type`, `name`, `caption`, `a_roles`, `r_roles`, `a_statuses`, `r_statuses`, `a_users`, `r_users`, `updated`, `updated_user_id`) VALUES
 (1, 'SYS', 'EVE_CREATE', 'Create event', 'ATT', NULL, NULL, NULL, NULL, NULL, NULL, NULL),

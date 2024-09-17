@@ -97,7 +97,7 @@ class BasePresenter extends RootPresenter
         }
     }
 
-    protected function requestGet(int $resourceId, ?int $subResourceId): void
+    protected function requestGet(int $resourceId, ?int $subResourceId): never
     {
         $record = null;
         try {
@@ -109,7 +109,7 @@ class BasePresenter extends RootPresenter
         $this->respondOk($record->jsonSerialize());
     }
 
-    protected function requestPost(?int $resourceId): void
+    protected function requestPost(?int $resourceId): never
     {
         $created = null;
         try {
@@ -121,7 +121,7 @@ class BasePresenter extends RootPresenter
         $this->respondOkCreated($created->jsonSerialize());
     }
 
-    protected function requestPut(int $resourceId, ?int $subResourceId): void
+    protected function requestPut(int $resourceId, ?int $subResourceId): never
     {
         $updated = null;
         try {
@@ -133,7 +133,7 @@ class BasePresenter extends RootPresenter
         $this->respondOk($updated->jsonSerialize());
     }
 
-    protected function requestDelete(int $resourceId, ?int $subResourceId): void
+    protected function requestDelete(int $resourceId, ?int $subResourceId): never
     {
         $deletedId = null;
         try {
@@ -179,42 +179,42 @@ class BasePresenter extends RootPresenter
         throw $exc;
     }
 
-    protected function respondOk($payload = null): void
+    protected function respondOk($payload = null): never
     {
         $this->responder->A200_OK($payload);
     }
 
-    protected function respondOkCreated($payload = null): void
+    protected function respondOkCreated($payload = null): never
     {
         $this->responder->A201_CREATED($payload);
     }
 
-    protected function respondDeleted($id): void
+    protected function respondDeleted($id): never
     {
         $this->respondOk(["id" => (int) $id]);
     }
 
-    protected function respondBadRequest($message = null): void
+    protected function respondBadRequest($message = null): never
     {
         $this->responder->E400_BAD_REQUEST($message);
     }
 
-    protected function respondUnauthorized(): void
+    protected function respondUnauthorized(): never
     {
         $this->responder->E401_UNAUTHORIZED();
     }
 
-    protected function respondForbidden(): void
+    protected function respondForbidden(): never
     {
         $this->responder->E403_FORBIDDEN("Nedostatečná práva");
     }
 
-    protected function respondNotFound(): void
+    protected function respondNotFound(): never
     {
         $this->responder->E404_NOT_FOUND();
     }
 
-    protected function respondNotAllowed(): void
+    protected function respondNotAllowed(): never
     {
         $this->responder->E405_METHOD_NOT_ALLOWED();
     }

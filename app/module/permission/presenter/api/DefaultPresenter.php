@@ -67,7 +67,7 @@ class DefaultPresenter extends SecuredPresenter
         }
     }
 
-    private function requestGetList(): void
+    private function requestGetList(): never
     {
         $this->allowAdmin();
 

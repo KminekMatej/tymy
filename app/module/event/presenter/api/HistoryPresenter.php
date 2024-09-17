@@ -26,7 +26,7 @@ class HistoryPresenter extends SecuredPresenter
         $this->requestGetList($resourceId);
     }
 
-    protected function requestGetList($eventId): void
+    protected function requestGetList($eventId): never
     {
         $records = null;
         try {

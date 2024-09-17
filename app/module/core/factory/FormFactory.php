@@ -334,7 +334,6 @@ class FormFactory
             User::STATUS_PLAYER => $this->translator->translate("team.PLAYER", 1),
             User::STATUS_MEMBER => $this->translator->translate("team.MEMBER", 1),
             User::STATUS_SICK => $this->translator->translate("team.SICK", 1),
-            User::STATUS_DELETED => $this->translator->translate("team.DELETED", 1),
         ];
 
         $rolesList = [

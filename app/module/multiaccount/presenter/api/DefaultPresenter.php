@@ -40,7 +40,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->respondNotAllowed();
     }
 
-    private function requestGenerateKey(string $team): void
+    private function requestGenerateKey(string $team): never
     {
         assert($this->manager instanceof MultiaccountManager);
         $tk = $this->manager->generateNewTk($team);
@@ -52,7 +52,7 @@ class DefaultPresenter extends SecuredPresenter
         ]);
     }
 
-    private function requestAddTeam(string $team)
+    private function requestAddTeam(string $team): never
     {
         try {
             $this->manager->create($this->requestData, $team);
@@ -63,7 +63,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->respondOkCreated();
     }
 
-    private function requestRemoveTeam(string $team)
+    private function requestRemoveTeam(string $team): never
     {
         try {
             assert($this->manager instanceof MultiaccountManager);
@@ -75,7 +75,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->respondOk();
     }
 
-    private function requestGetList(): void
+    private function requestGetList(): never
     {
         assert($this->manager instanceof MultiaccountManager);
         $teams = $this->manager->getListUserAllowed();

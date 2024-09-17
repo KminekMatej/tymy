@@ -81,7 +81,7 @@ class PostPresenter extends SecuredPresenter
         $this->respondOk($posts->jsonSerialize());
     }
 
-    private function requestGetList($resourceId, $page = 1): void
+    private function requestGetList($resourceId, $page = 1): never
     {
         $posts = null;
         try {

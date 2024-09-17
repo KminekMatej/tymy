@@ -40,7 +40,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->respondNotAllowed();
     }
 
-    private function requestGetList(): void
+    private function requestGetList(): never
     {
         assert($this->manager instanceof DiscussionManager);
         $discussions = $this->manager->getListUserAllowed($this->user->getId());

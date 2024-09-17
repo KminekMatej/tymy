@@ -18,11 +18,12 @@ class UserMapper extends BaseMapper
         return [
             Field::int()->withPropertyAndColumn("id", false, false),
             Field::string(20)->withColumn("user_name", true)->setProperty("login"),
+            Field::string(1023)->withPropertyAndColumn("email"),
             Field::int()->withColumn("can_login")->setProperty("canLogin"),
             Field::int()->withColumn("editable_call_name")->setProperty("canEditCallName"),
             Field::datetime()->withColumn("created_at", false, true)->setProperty("createdAt"),
             Field::datetime()->withColumn("last_login", false, true)->setProperty("lastLogin"),
-            Field::string(15)->withPropertyAndColumn("status"),
+            Field::string()->withPropertyAndColumn("status")->setEnum(['INIT', 'PLAYER', 'MEMBER', 'SICK']),
             Field::string(40)->withPropertyAndColumn("roles"),
             Field::string(20)->withColumn("first_name")->setProperty("firstName"),
             Field::string(20)->withColumn("last_name")->setProperty("lastName"),

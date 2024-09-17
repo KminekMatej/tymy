@@ -53,7 +53,7 @@ class StatusPresenter extends SecuredPresenter
         $this->respondNotAllowed();
     }
 
-    private function requestStatusGet(int $resourceId, ?int $subResourceId): void
+    private function requestStatusGet(int $resourceId, ?int $subResourceId): never
     {
         $record = null;
         try {
@@ -65,7 +65,7 @@ class StatusPresenter extends SecuredPresenter
         $this->respondOk($record->jsonSerialize());
     }
 
-    private function requestStatusGetList(): void
+    private function requestStatusGetList(): never
     {
         $statuses = null;
         try {
@@ -77,7 +77,7 @@ class StatusPresenter extends SecuredPresenter
         $this->respondOk($this->arrayToJson($statuses));
     }
 
-    private function requestStatusPost(?int $resourceId): void
+    private function requestStatusPost(?int $resourceId): never
     {
         $created = null;
         try {
@@ -89,7 +89,7 @@ class StatusPresenter extends SecuredPresenter
         $this->respondOkCreated($created->jsonSerialize());
     }
 
-    private function requestStatusPut(int $resourceId, ?int $subResourceId): void
+    private function requestStatusPut(int $resourceId, ?int $subResourceId): never
     {
         $updated = null;
         try {
@@ -101,7 +101,7 @@ class StatusPresenter extends SecuredPresenter
         $this->respondOk($updated->jsonSerialize());
     }
 
-    private function requestStatusDelete(int $resourceId, ?int $subResourceId): void
+    private function requestStatusDelete(int $resourceId, ?int $subResourceId): never
     {
         $deletedId = null;
         try {
@@ -113,7 +113,7 @@ class StatusPresenter extends SecuredPresenter
         $this->respondDeleted($deletedId);
     }
 
-    private function requestStatusSetPost(?int $resourceId): void
+    private function requestStatusSetPost(?int $resourceId): never
     {
         $created = null;
         try {
@@ -125,7 +125,7 @@ class StatusPresenter extends SecuredPresenter
         $this->respondOkCreated($created->jsonSerialize());
     }
 
-    private function requestStatusSetPut(int $resourceId, ?int $subResourceId): void
+    private function requestStatusSetPut(int $resourceId, ?int $subResourceId): never
     {
         $updated = null;
         try {
@@ -137,7 +137,7 @@ class StatusPresenter extends SecuredPresenter
         $this->respondOk($updated->jsonSerialize());
     }
 
-    private function requestStatusSetDelete(int $resourceId, ?int $subResourceId): void
+    private function requestStatusSetDelete(int $resourceId, ?int $subResourceId): never
     {
         $deletedId = null;
         try {

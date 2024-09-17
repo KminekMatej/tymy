@@ -149,7 +149,9 @@ class Tester
 
         $this->initContainer();
 
+        $this->migrationManager->logger = $this->logg(...);
         $output = $this->migrationManager->migrateUp();
+        $this->logg("Finished");
 
         foreach ($output["log"] as $logLine) {
             $this->logg($logLine);

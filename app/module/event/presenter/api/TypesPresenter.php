@@ -24,7 +24,7 @@ class TypesPresenter extends SecuredPresenter
         $this->requestGetList();
     }
 
-    private function requestGetList(): void
+    private function requestGetList(): never
     {
         assert($this->manager instanceof EventTypeManager);
         $events = $this->manager->getListUserAllowed($this->user->getId());

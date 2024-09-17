@@ -22,7 +22,7 @@ class FcmPresenter extends SecuredPresenter
         $this->respondNotAllowed();
     }
 
-    protected function requestPost($resourceId): void
+    protected function requestPost($resourceId): never
     {
         if (empty($this->requestData)) {
             $this->respondBadRequest("Missing request data");

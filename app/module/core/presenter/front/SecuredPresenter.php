@@ -87,7 +87,7 @@ class SecuredPresenter extends BasePresenter
             if ($this->getUser()->getLogoutReason() === NetteUser::LogoutInactivity) {
                 $this->flashMessage($this->translator->translate("common.alerts.inactivityLogout"));
             }
-            $this->redirect(':Sign:In:');
+            $this->redirect(':Sign:In:', ['backlink' => $this->storeRequest()]);
         }
     }
 
