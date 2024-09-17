@@ -14,9 +14,6 @@ use function iban_set_checksum;
 
 use const QR_ECLEVEL_H;
 
-/**
- * Description of DebtPresenter
- */
 class DefaultPresenter extends DebtBasePresenter
 {
     public function actionDefault(?string $resource = null): void
