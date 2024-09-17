@@ -310,7 +310,7 @@ class AttendanceManager extends BaseManager
 
         $existingAttendance = $this->getByEventUserId($data["eventId"], $data["userId"]);
         if (!$existingAttendance instanceof Attendance) {
-            $created = $this->createByArray($data);
+            $this->createByArray($data);
             if (isset($data["preStatusId"])) {
                 $this->createHistory($data["userId"], $data["eventId"], $data["preStatusId"], $data["preDescription"] ?? null);
             }
