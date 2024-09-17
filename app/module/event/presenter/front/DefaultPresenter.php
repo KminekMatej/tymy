@@ -3,13 +3,10 @@
 namespace Tymy\Module\Event\Presenter\Front;
 
 use Nette\Utils\DateTime;
-use Tymy\Module\Attendance\Manager\AttendanceManager;
-use Tymy\Module\Attendance\Manager\HistoryManager;
 use Tymy\Module\Core\Model\BaseModel;
 
 class DefaultPresenter extends EventBasePresenter
 {
-
     public function renderDefault($date = null, $direction = null): void
     {
         $dateTimeBase = new DateTime();
