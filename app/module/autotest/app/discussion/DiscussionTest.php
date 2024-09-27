@@ -4,13 +4,12 @@
 
 namespace Tymy\Module\Autotest\Discussion;
 
-use Tymy\Bootstrap;
 use Nette\Utils\DateTime;
+use Tymy\Bootstrap;
+use Tymy\Module\Autotest\ApiTest;
+use Tymy\Module\Autotest\Entity\Assert;
 use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Discussion\Model\Discussion;
-use Tymy\Module\Autotest\Entity\Assert;
-use Tymy\Module\Autotest\RequestCase;
-use Tymy\Module\Autotest\SimpleResponse;
 
 require getenv("ROOT_DIR") . '/app/Bootstrap.php';
 $container = Bootstrap::boot();
@@ -18,7 +17,7 @@ $container = Bootstrap::boot();
 /**
  * Description of DiscussionTest
  */
-class DiscussionTest extends RequestCase
+class DiscussionTest extends ApiTest
 {
     public function testGet(): void
     {
@@ -44,7 +43,7 @@ class DiscussionTest extends RequestCase
             "writeRightName" => "ADMINONLY",
             "deleteRightName" => "ADMINONLY",
             "stickyRightName" => "ADMINMEMBER",
-        ]);
+        ])["id"];
 
         $pid = $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "ADMIN first post " . random_int(0, 10000)])->expect(201)->getData()["id"];
 
@@ -98,7 +97,7 @@ class DiscussionTest extends RequestCase
             "writeRightName" => "ADMINONLY",
             "deleteRightName" => "ADMINONLY",
             "stickyRightName" => "ADMINMEMBER",
-        ]);
+        ])["id"];
 
         $pid = $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "ADMIN first post " . random_int(0, 10000)])->expect(201)->getData()["id"];
 
@@ -200,7 +199,7 @@ class DiscussionTest extends RequestCase
         $dId = $this->recordManager->createDiscussion(null, [
             "deleteRightName" => "ADMINONLY",
             "stickyRightName" => "ADMINMEMBER",
-        ]);
+        ])["id"];
 
         $this->request($this->getBasePath() . "/$dId/post", "POST", ["post" => "ADMIN first post " . random_int(0, 10000)])->expect(201)->getData();
 
@@ -215,7 +214,7 @@ class DiscussionTest extends RequestCase
     public function testCRUD(): void
     {
         $this->authorizeAdmin();
-        $recordId = $this->createRecord();
+        $recordId = $this->createRecord()["id"];
 
         $this->request($this->getBasePath() . "/" . $recordId)->expect(200, "array");
 
@@ -224,7 +223,7 @@ class DiscussionTest extends RequestCase
         $this->deleteRecord($recordId);
     }
 
-    public function createRecord(): int
+    public function createRecord(): array
     {
         return $this->recordManager->createDiscussion();
     }

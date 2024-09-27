@@ -6,8 +6,10 @@ namespace Tymy\Module\Autotest\Event;
 
 use Tymy\Bootstrap;
 use Tymy\Module\Attendance\Model\Attendance;
+use Tymy\Module\Autotest\ApiTest;
 use Tymy\Module\Autotest\Entity\Assert;
-use Tymy\Module\Autotest\RequestCase;
+
+use function count;
 
 require getenv("ROOT_DIR") . '/app/Bootstrap.php';
 $container = Bootstrap::boot();
@@ -19,7 +21,7 @@ $container = Bootstrap::boot();
  * @RequestMapping(value = "/attendanceStatusSet/{id}", method = RequestMethod.PUT)
  * @RequestMapping(value = "/attendanceStatusSet/{id}", method = RequestMethod.DELETE)
  */
-class AttendanceStatusTest extends RequestCase
+class AttendanceStatusTest extends ApiTest
 {
     protected function getBasePath(): string
     {
@@ -174,7 +176,7 @@ class AttendanceStatusTest extends RequestCase
         return $allStatusSets[random_int(0, (is_countable($allStatusSets) ? count($allStatusSets) : 0) - 1)]["id"];
     }
 
-    public function createRecord(): void
+    public function createRecord(): array
     {
         //use creator from recorManager - can create status or statusSet
     }

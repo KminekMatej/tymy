@@ -5,8 +5,8 @@
 namespace Tymy\Module\Autotest\Multiaccount;
 
 use Tymy\Bootstrap;
+use Tymy\Module\Autotest\ApiTest;
 use Tymy\Module\Autotest\Entity\Assert;
-use Tymy\Module\Autotest\RequestCase;
 use Tymy\Module\Multiaccount\Model\TransferKey;
 
 require getenv("ROOT_DIR") . '/app/Bootstrap.php';
@@ -17,7 +17,7 @@ $container = Bootstrap::boot();
  *
  * @skip Skip this autotest, since its ot performable from cli - we would need two tymy instances to test this
  */
-class MultiaccountTest extends RequestCase
+class MultiaccountTest extends ApiTest
 {
     public function getModule(): string
     {

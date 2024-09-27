@@ -44,7 +44,7 @@ abstract class RequestCase extends TestCase
     protected array $moduleConfig;
     protected RecordManager $recordManager;
     private Router $router;
-    private PresenterFactory $presenterFactory;
+    protected PresenterFactory $presenterFactory;
     protected AuthenticationManager $authenticationManager;
     protected Responder $responder;
     private MockRequestFactory $httpRequestFactory;
@@ -56,15 +56,6 @@ abstract class RequestCase extends TestCase
      * Function should return string of module name, preferably from constant
      */
     abstract public function getModule(): string;
-
-    abstract public function createRecord();
-
-    abstract public function mockRecord();
-
-    /**
-     * @return mixed[]
-     */
-    abstract protected function mockChanges(): array;
 
     public function __construct(protected Container $container)
     {
@@ -81,16 +72,6 @@ abstract class RequestCase extends TestCase
         $this->moduleConfig = $this->config[$this->getModule()] ?? [];
         $this->recordManager = new RecordManager($this, $this->config);
         $this->httpRequestFactory = $this->container->getService("http.requestFactory");
-    }
-
-    protected function getBasePath(): string
-    {
-        return $this->getModule();
-    }
-
-    public function deleteRecord($recordId): void
-    {
-        $this->recordManager->deleteRecord($this->getBasePath(), $recordId);
     }
 
     public function getRecordManager(): RecordManager
@@ -164,29 +145,6 @@ abstract class RequestCase extends TestCase
 
         $this->assertObjectEquality($changes, $changedData);
     }
-
-    //*************** COMMON TESTS, SAME FOR ALL MODULES
-
-    public function testUnauthorized()
-    {
-        $this->user->logout(true);
-
-        $this->request($this->getBasePath())->expect(401);
-        $this->request($this->getBasePath(), 'POST', $this->mockRecord())->expect(401);
-        $this->request($this->getBasePath() . "/1", 'PUT', $this->mockRecord())->expect(401);
-        $this->request($this->getBasePath() . "/1", 'DELETE')->expect(401);
-    }
-
-    public function testMethodNotAllowed()
-    {
-        $this->authorizeAdmin();
-
-        $this->request($this->getBasePath(), 'HEAD')->expect(405);
-
-        $this->user->logout(true);
-    }
-
-    //*************** END:COMMON TESTS
 
     /** @return SimpleResponse */
     public function request($url, $method = "GET", $data = [], $responseClass = null)

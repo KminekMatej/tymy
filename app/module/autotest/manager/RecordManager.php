@@ -21,7 +21,16 @@ class RecordManager
     {
     }
 
-    private function createRecord(string $url, array $data = null, $changes = null, string $identifier = "ID", ?array $checkSkips = null): int
+    /**
+     * Create record using modules url and important request parameters and return json serialized created record
+     *
+     * @param string $url
+     * @param array|null $data
+     * @param array|null $changes
+     * @param array|null $checkSkips
+     * @return array
+     */
+    private function createRecord(string $url, ?array $data = null, ?array $changes = null, ?array $checkSkips = null): array
     {
         $this->applyChanges($data, $changes);
 
@@ -29,11 +38,11 @@ class RecordManager
 
         $this->requestCase->assertObjectEquality($data, $response->getData(), $checkSkips);
 
-        return $response->getData()[$identifier];
+        return $response->getData();
     }
 
-    /** @return int $recordId */
-    public function createUser($data = null, $changes = null): int
+    /** @return array Created user */
+    public function createUser($data = null, $changes = null): array
     {
         $postData = $data ?: $this->mockUser();
         $this->applyChanges($postData, $changes);
@@ -45,25 +54,25 @@ class RecordManager
         Assert::equal(false, array_key_exists("password", $response->getData())); //check password is not returned
         Assert::equal(strtoupper($postData["login"]), $response->getData()["login"]); //check login has been saved in uppercase
 
-        return $response->getData()["id"];
+        return $response->getData();
     }
 
-    /** @return int $recordId */
-    public function createDebt(?array $data = null, ?array $changes = null): int
+    /** @return array Created record */
+    public function createDebt(?array $data = null, ?array $changes = null): array
     {
-        return $this->createRecord(Debt::MODULE, $data ?: $this->mockDebt(), $changes, "id");
+        return $this->createRecord(Debt::MODULE, $data ?: $this->mockDebt(), $changes);
     }
 
-    /** @return int $recordId */
-    public function createDiscussion(?array $data = null, ?array $changes = null): int
+    /** @return array Created record */
+    public function createDiscussion(?array $data = null, ?array $changes = null): array
     {
-        return $this->createRecord(Discussion::MODULE, $data ?: $this->mockDiscussion(), $changes, "id");
+        return $this->createRecord(Discussion::MODULE, $data ?: $this->mockDiscussion(), $changes);
     }
 
-    /** @return int $recordId */
-    public function createEvent(?array $data = null, ?array $changes = null): int
+    /** @return array Created record */
+    public function createEvent(?array $data = null, ?array $changes = null): array
     {
-        return $this->createRecord(Event::MODULE, $data ?: $this->mockEvent(), $changes, "id");
+        return $this->createRecord(Event::MODULE, $data ?: $this->mockEvent(), $changes);
     }
 
     public function createOptions(int $pollId, int $numberOfOptions, ?array $data = null, ?array $changes = null): void
@@ -81,28 +90,28 @@ class RecordManager
         //here is record created directly, without checking the result, since we are creating array of objects and we cannot check that against returned array of objects (output contains ID, but input does not)
     }
 
-    /** @return int $recordId */
-    public function createPermission(?array $data = null, ?array $changes = null): int
+    /** @return array Created record */
+    public function createPermission(?array $data = null, ?array $changes = null): array
     {
-        return $this->createRecord(Permission::MODULE, $data ?: $this->mockPermission(), $changes, "id", ["allowedRoles", "allowedStatuses", "allowedUsers"]);//we are sending revocations, so there will not be any allowances
+        return $this->createRecord(Permission::MODULE, $data ?: $this->mockPermission(), $changes, ["allowedRoles", "allowedStatuses", "allowedUsers"]);//we are sending revocations, so there will not be any allowances
     }
 
-    /** @return int $recordId */
-    public function createPoll(?array $data = null, ?array $changes = null): int
+    /** @return array Created record */
+    public function createPoll(?array $data = null, ?array $changes = null): array
     {
-        return $this->createRecord(Poll::MODULE, $data ?: $this->mockPoll(), $changes, "id");
+        return $this->createRecord(Poll::MODULE, $data ?: $this->mockPoll(), $changes);
     }
 
-    /** @return int $recordId */
-    public function createStatus(int $statusSetId, ?array $data = null, ?array $changes = null): int
+    /** @return array Created record */
+    public function createStatus(int $statusSetId, ?array $data = null, ?array $changes = null): array
     {
-        return $this->createRecord("attendanceStatus", $data ?: $this->mockStatus($statusSetId), $changes, "id", ["image"]);
+        return $this->createRecord("attendanceStatus", $data ?: $this->mockStatus($statusSetId), $changes, ["image"]);
     }
 
-    /** @return int $recordId */
-    public function createStatusSet(?array $data = null, ?array $changes = null): int
+    /** @return array Created record */
+    public function createStatusSet(?array $data = null, ?array $changes = null): array
     {
-        return $this->createRecord("attendanceStatusSet", $data ?: $this->mockStatusSet(), $changes, "id");
+        return $this->createRecord("attendanceStatusSet", $data ?: $this->mockStatusSet(), $changes);
     }
 
     public function mockAttendance(int $eventId, $pre = true, $post = false): array

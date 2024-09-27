@@ -6,9 +6,8 @@ namespace Tymy\Module\Autotest\Debt;
 
 use Nette\Utils\DateTime;
 use Tymy\Bootstrap;
+use Tymy\Module\Autotest\ApiTest;
 use Tymy\Module\Autotest\Entity\Assert;
-use Tymy\Module\Autotest\RequestCase;
-use Tymy\Module\Core\Model\BaseModel;
 use Tymy\Module\Debt\Model\Debt;
 
 require getenv("ROOT_DIR") . '/app/Bootstrap.php';
@@ -17,7 +16,7 @@ $container = Bootstrap::boot();
 /**
  * Description of DebtTest
  */
-class DebtTest extends RequestCase
+class DebtTest extends ApiTest
 {
     public function getModule(): string
     {
@@ -70,8 +69,8 @@ class DebtTest extends RequestCase
     {
         //admin can create team debt
         $this->authorizeAdmin();
-        $recordId = $this->recordManager->createDebt(null, ["payeeId" => null, "caption" => "Poplatky 2020", "note" => null]);   //create debt for team
-        $origData = $this->request($this->getBasePath() . "/" . $recordId)->expect(200, "array");
+        $origData = $this->recordManager->createDebt(null, ["payeeId" => null, "caption" => "Poplatky 2020", "note" => null]);   //create debt for team
+        $recordId = $origData["id"];
 
         //another admin of team debts can see that debt
         $this->authorizeAdmin($this->config["user_member_login"], $this->config["user_member_pwd"]);
@@ -105,7 +104,7 @@ class DebtTest extends RequestCase
         Assert::true($found, "Debt id $recordId not found in users list");
 
         $chResponse = $this->request($this->getBasePath() . "/" . $recordId, "PUT", $this->mockChanges())->expect(200, "array");//debtor can edit, but the only field that gets edited is paymentSent
-        Assert::equal($origData->getData()["amount"], $chResponse->getData()["amount"]);//amount didnt change
+        Assert::equal($origData["amount"], $chResponse->getData()["amount"]);//amount didnt change
         $now = new DateTime();
         $this->request($this->getBasePath() . "/" . $recordId, "PUT", ["paymentSent" => $this->toJsonDate($now)])->expect(200, "array");
         sleep(1);//sleep for one second, to make sure that current datetime is now different than $now variable. So we can check that the paymentSent would be actually changed if something changes it
@@ -159,7 +158,7 @@ class DebtTest extends RequestCase
             "payeeId" => $this->config["user_test_id"],
             "debtorId" => 0,
             "caption" => "Tým mi dluží přeplatek za finále MČR, id: " . $this->user->getId()
-        ]);
+        ])["id"];
 
         //admin can mark it as paymentSent
         $this->authorizeAdmin($this->config["user_member_login"], $this->config["user_member_pwd"]);
@@ -183,7 +182,7 @@ class DebtTest extends RequestCase
         $this->deleteRecord($recordId);
     }
 
-    public function createRecord(): int
+    public function createRecord(): array
     {
         return $this->recordManager->createDebt();
     }

@@ -6,9 +6,8 @@ namespace Tymy\Module\Autotest\User;
 
 use Nette\Security\AuthenticationException;
 use Tymy\Bootstrap;
+use Tymy\Module\Autotest\ApiTest;
 use Tymy\Module\Autotest\Entity\Assert;
-use Tymy\Module\Autotest\RequestCase;
-use Tymy\Module\Autotest\SimpleResponse;
 use Tymy\Module\User\Model\User;
 use Vojir\Responses\CsvResponse\ComposedCsvResponse;
 
@@ -18,7 +17,7 @@ $container = Bootstrap::boot();
 /**
  * Description of UserTest
  */
-class UserTest extends RequestCase
+class UserTest extends ApiTest
 {
     private bool $inited = false;
 
@@ -336,7 +335,7 @@ class UserTest extends RequestCase
         $this->request("live", "POST")->expect(405);
     }
 
-    public function createRecord(): int
+    public function createRecord(): array
     {
         return $this->recordManager->createUser();
     }

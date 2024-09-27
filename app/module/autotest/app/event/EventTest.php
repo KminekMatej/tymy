@@ -5,8 +5,8 @@
 namespace Tymy\Module\Autotest\Event;
 
 use Tymy\Bootstrap;
+use Tymy\Module\Autotest\ApiTest;
 use Tymy\Module\Autotest\Entity\Assert;
-use Tymy\Module\Autotest\RequestCase;
 use Tymy\Module\Event\Model\Event;
 
 require getenv("ROOT_DIR") . '/app/Bootstrap.php';
@@ -15,7 +15,7 @@ $container = Bootstrap::boot();
 /**
  * Description of EventTest
  */
-class EventTest extends RequestCase
+class EventTest extends ApiTest
 {
     public function getModule(): string
     {
@@ -80,7 +80,7 @@ class EventTest extends RequestCase
         $this->request("eventTypes")->expect(200, "array");
     }
 
-    public function createRecord(): int
+    public function createRecord(): array
     {
         return $this->recordManager->createEvent();
     }

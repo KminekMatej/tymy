@@ -5,9 +5,9 @@
 namespace Tymy\Module\Autotest\Permission;
 
 use Tymy\Bootstrap;
-use Tymy\Module\Poll\Model\Poll;
+use Tymy\Module\Autotest\ApiTest;
 use Tymy\Module\Autotest\Entity\Assert;
-use Tymy\Module\Autotest\RequestCase;
+use Tymy\Module\Poll\Model\Poll;
 
 require getenv("ROOT_DIR") . '/app/Bootstrap.php';
 $container = Bootstrap::boot();
@@ -15,7 +15,7 @@ $container = Bootstrap::boot();
 /**
  * Description of PollTest
  */
-class PollTest extends RequestCase
+class PollTest extends ApiTest
 {
     public function getModule(): string
     {
@@ -138,7 +138,7 @@ class PollTest extends RequestCase
         //create poll and add some votes into it, the get the poll again and check the votes exists
     }
 
-    public function createRecord(): int
+    public function createRecord(): array
     {
         return $this->recordManager->createPoll();
     }

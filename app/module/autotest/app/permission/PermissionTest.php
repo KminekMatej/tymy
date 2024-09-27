@@ -5,9 +5,9 @@
 namespace Tymy\Module\Autotest\Permission;
 
 use Tymy\Bootstrap;
-use Tymy\Module\Permission\Model\Permission;
+use Tymy\Module\Autotest\ApiTest;
 use Tymy\Module\Autotest\Entity\Assert;
-use Tymy\Module\Autotest\RequestCase;
+use Tymy\Module\Permission\Model\Permission;
 
 require getenv("ROOT_DIR") . '/app/Bootstrap.php';
 $container = Bootstrap::boot();
@@ -15,7 +15,7 @@ $container = Bootstrap::boot();
 /**
  * Description of PermissionTest
  */
-class PermissionTest extends RequestCase
+class PermissionTest extends ApiTest
 {
     public function getModule(): string
     {
@@ -71,7 +71,7 @@ class PermissionTest extends RequestCase
         $this->request("permissionName/ADMINONLY")->expect(200, "array");
     }
 
-    public function createRecord(): int
+    public function createRecord(): array
     {
         return $this->recordManager->createPermission();
     }

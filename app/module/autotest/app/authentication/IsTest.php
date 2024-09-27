@@ -5,7 +5,7 @@
 namespace Tymy\Module\Autotest\Authentication;
 
 use Tymy\Bootstrap;
-use Tymy\Module\Autotest\RequestCase;
+use Tymy\Module\Autotest\ApiTest;
 
 require getenv("ROOT_DIR") . '/app/Bootstrap.php';
 $container = Bootstrap::boot();
@@ -13,7 +13,7 @@ $container = Bootstrap::boot();
 /**
  * Description of IsTest
  */
-class IsTest extends RequestCase
+class IsTest extends ApiTest
 {
     public function testUnauthorized(): void
     {
@@ -33,7 +33,7 @@ class IsTest extends RequestCase
         return [];
     }
 
-    public function createRecord(): void
+    public function createRecord(): array
     {
         //not used in this test
     }

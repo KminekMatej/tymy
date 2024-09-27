@@ -6,8 +6,8 @@ namespace Tymy\Module\Autotest\Event;
 
 use Tymy\Bootstrap;
 use Tymy\Module\Attendance\Model\Attendance;
+use Tymy\Module\Autotest\ApiTest;
 use Tymy\Module\Autotest\Entity\Assert;
-use Tymy\Module\Autotest\RequestCase;
 
 require getenv("ROOT_DIR") . '/app/Bootstrap.php';
 $container = Bootstrap::boot();
@@ -15,7 +15,7 @@ $container = Bootstrap::boot();
 /**
  * Description of AttendanceTest
  */
-class AttendanceTest extends RequestCase
+class AttendanceTest extends ApiTest
 {
     private ?int $eventId = null;
 
@@ -28,7 +28,7 @@ class AttendanceTest extends RequestCase
     {
         $this->authorizeAdmin();
         //pre
-        $this->eventId = $this->recordManager->createEvent();
+        $this->eventId = $this->recordManager->createEvent()["id"];
         $mocked = $this->mockRecord();
 
         $this->authorizeUser();
@@ -102,7 +102,7 @@ class AttendanceTest extends RequestCase
     public function testViewPlanForbidden(): void
     {
         $this->authorizeAdmin();
-        $eventId = $this->recordManager->createEvent(null, ["resultRightName" => null]);
+        $eventId = $this->recordManager->createEvent(null, ["resultRightName" => null])["id"];
 
         $this->authorizeUser();
 
@@ -123,7 +123,7 @@ class AttendanceTest extends RequestCase
     public function testPermissivePost(): void
     {
         $this->authorizeAdmin();
-        $this->eventId = $this->recordManager->createEvent(null, ["viewRightName" => "ADMINONLY", "planRightName" => "ADMINONLY", "resultRightName" => "ADMINMEMBER"]);
+        $this->eventId = $this->recordManager->createEvent(null, ["viewRightName" => "ADMINONLY", "planRightName" => "ADMINONLY", "resultRightName" => "ADMINMEMBER"])["id"];
         $mocked = $this->mockRecord();
 
         $this->authorizeUser();
@@ -153,7 +153,7 @@ class AttendanceTest extends RequestCase
         $this->request($this->getBasePath(), "POST", $mocked)->expect(404); //event doesnt exist
     }
 
-    public function createRecord(): void
+    public function createRecord(): array
     {
         //attendance are never created solely, always just posted to some event
     }
