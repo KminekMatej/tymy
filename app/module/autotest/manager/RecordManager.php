@@ -63,7 +63,12 @@ class RecordManager
         return $this->createRecord(Debt::MODULE, $data ?: $this->mockDebt(), $changes);
     }
 
-    /** @return array Created record */
+    /**
+     * Create discussion 
+     * Default config: everyone can read/write, only admin can delete
+     *
+     * @return array Created discussion 
+     */
     public function createDiscussion(?array $data = null, ?array $changes = null): array
     {
         return $this->createRecord(Discussion::MODULE, $data ?: $this->mockDiscussion(), $changes);
