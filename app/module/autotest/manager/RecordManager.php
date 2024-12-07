@@ -294,6 +294,16 @@ class RecordManager
         $this->deleteRecord(User::MODULE, $id);
     }
 
+    public function deleteDiscussion($id): void
+    {
+        $this->deleteRecord(Discussion::MODULE, $id);
+    }
+
+    public function deleteEvent($id): void
+    {
+        $this->deleteRecord(Event::MODULE, $id);
+    }
+
     public function deleteRecord($basePath, $id): void
     {
         $url = "$basePath/$id";
