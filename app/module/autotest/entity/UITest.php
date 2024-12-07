@@ -82,11 +82,11 @@ abstract class UITest extends RequestCase
         $breadcrumb = self::assertDomHas($dom, 'ol.breadcrumb li.breadcrumb-item', $index);
 
         if ($isLink) {
-            Assert::true(isset($breadcrumb->a), "Breadcrumb #$index:$caption is not hyperlink!");
             Assert::equal($caption, $breadcrumb->a->__toString(), "Breadcrumb #$index caption is invalid");
+            Assert::true(isset($breadcrumb->a), "Breadcrumb #$index:$caption is not hyperlink!");
         } else {
-            Assert::false(isset($breadcrumb->a), "Breadcrumb #$index:$caption shouldn't be hyperlink!");
             Assert::equal($caption, $breadcrumb->__toString(), "Breadcrumb #$index caption is invalid");
+            Assert::false(isset($breadcrumb->a), "Breadcrumb #$index:$caption shouldn't be hyperlink!");
         }
     }
 }
