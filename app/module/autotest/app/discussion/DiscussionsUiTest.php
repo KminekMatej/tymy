@@ -11,7 +11,7 @@ use function count;
 require getenv("ROOT_DIR") . '/app/Bootstrap.php';
 $container = Bootstrap::boot();
 
-class DefaultPresenterTest extends UITest
+class DiscussionsUiTest extends UITest
 {
 
     public function testActionDefault()
@@ -43,4 +43,4 @@ class DefaultPresenterTest extends UITest
     }
 }
 
-(new DefaultPresenterTest($container))->run();
+(new DiscussionsUiTest($container))->run();
