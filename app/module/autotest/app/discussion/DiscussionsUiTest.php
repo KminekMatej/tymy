@@ -27,9 +27,8 @@ class DiscussionsUiTest extends UITest
 
         //has breadcrumbs
         $containerDom = parent::assertDomHas($dom, 'div.container');
-        parent::assertDomHas($containerDom, 'ol.breadcrumb');
-        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 1);
-        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 2); //last item aint link
+        $this->assertBreadcrumb($dom, 0, "Hlavní stránka", true);
+        $this->assertBreadcrumb($dom, 1, "Diskuze", false);
 
         $discussionsDom = parent::assertDomHas($dom, 'div.container-fluid.discussions');
         $discussionsListDom = parent::assertDomHas($discussionsDom, 'div.card.sh-box.discussion-box');

@@ -27,11 +27,9 @@ class PollDetailUiTest extends UITest
         
         //has navbar
         parent::assertDomHas($dom, 'div#snippet-navbar-nav');
-
-        //has breadcrumbs
-        parent::assertDomHas($dom, 'div.container div.row div.col ol.breadcrumb');
-        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 2);
-        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 3); //last item aint link
+        $this->assertBreadcrumb($dom, 0, "Hlavní stránka", true);
+        $this->assertBreadcrumb($dom, 1, "Ankety", true);
+        $this->assertBreadcrumb($dom, 2, $poll["caption"], false);
 
         $objectDom = parent::assertDomHas($dom, 'div.container-fluid.poll');
         parent::assertDomHas($objectDom, 'div.card.sh-box', expectedCount: 2);

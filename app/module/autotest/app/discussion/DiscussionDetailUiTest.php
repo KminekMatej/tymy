@@ -53,9 +53,9 @@ class DiscussionDetailUiTest extends UITest
         parent::assertDomHas($dom, 'div#snippet-navbar-nav');
 
         //has breadcrumbs
-        parent::assertDomHas($dom, 'div.container div.row div.col ol.breadcrumb');
-        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 2);
-        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 3); //last item aint link
+        $this->assertBreadcrumb($dom, 0, "Hlavní stránka", true);
+        $this->assertBreadcrumb($dom, 1, "Diskuze", true);
+        $this->assertBreadcrumb($dom, 2, $discussion["caption"], false);
 
         $discussionDom = parent::assertDomHas($dom, 'div.container-fluid.my-2');
         Assert::equal(count($discussionDom->find('div.row.justify-content-md-center')), 2); //search container and wysiwyg container
