@@ -4,8 +4,7 @@ namespace Tymy\Module\Autotest;
 
 abstract class ApiTest extends RequestCase
 {
-
-    abstract public function createRecord() : array;
+    abstract public function createRecord(): array;
 
     abstract public function mockRecord();
 

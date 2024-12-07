@@ -12,7 +12,7 @@ abstract class UITest extends RequestCase
     protected IPresenter $presenter;
     protected string $presenterName;
 
-    protected abstract function getPresenter(): string;
+    abstract protected function getPresenter(): string;
 
     protected function setUp()
     {
@@ -23,7 +23,7 @@ abstract class UITest extends RequestCase
 
         parent::setUp();
     }
-    
+
     /**
      * Asserts that given selector exists in Dom and return $returnIndex's found instance as DomQuery object
      *

@@ -64,10 +64,10 @@ class RecordManager
     }
 
     /**
-     * Create discussion 
+     * Create discussion
      * Default config: everyone can read/write, only admin can delete
      *
-     * @return array Created discussion 
+     * @return array Created discussion
      */
     public function createDiscussion(?array $data = null, ?array $changes = null): array
     {
