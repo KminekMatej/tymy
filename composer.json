@@ -35,7 +35,7 @@
         "lcobucci/jwt": "4.1.5",
         "vojir/nette-csv-response": "v1.2",
         "contributte/sentry": "^0.3.0",
-        "phpoffice/phpspreadsheet": "^2"
+        "phpoffice/phpspreadsheet": "^3"
     },
     "suggest": {
         "ext-memcached": "To use Memcached as CacheStorage (default for tymy.cz). If you dont want to use MemCached, override cache storage in your local/config.neon"
@@ -55,7 +55,7 @@
         "classmap": ["app/"]
     },
     "autoload-dev": {
-        "classmap": ["app/"]
+        "classmap": ["app/", "tests/"]
     },
     "minimum-stability": "stable",
     "config": {

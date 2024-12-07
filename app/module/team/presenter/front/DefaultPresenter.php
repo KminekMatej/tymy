@@ -11,8 +11,6 @@ use function count;
 
 class DefaultPresenter extends SecuredPresenter
 {
-    private string $userType;
-
     public function beforeRender(): void
     {
         parent::beforeRender();
@@ -41,41 +39,42 @@ class DefaultPresenter extends SecuredPresenter
 
             return count($errFields);
         });
-
-        $this->addBreadcrumb($this->translator->translate("team.team", 1), $this->link(":Team:Default:"));
-    }
-
-    public function actionPlayers(): void
-    {
-        $this->addBreadcrumb($this->translator->translate("team.PLAYER", 2), $this->link(":Team:Default:players"));
-        $this->userType = "PLAYER";
-        $this->setView('default');
-    }
-
-    public function actionMembers(): void
-    {
-        $this->addBreadcrumb($this->translator->translate("team.MEMBER", 2), $this->link(":Team:Default:members"));
-        $this->userType = "MEMBER";
-        $this->setView('default');
-    }
-
-    public function actionSicks(): void
-    {
-        $this->addBreadcrumb($this->translator->translate("team.SICK", 2), $this->link(":Team:Default:sicks"));
-        $this->userType = "SICK";
-        $this->setView('default');
-    }
-
-    public function actionInits(): void
-    {
-        $this->addBreadcrumb($this->translator->translate("team.INIT", 2), $this->link(":Team:Default:inits"));
-        $this->userType = "INIT";
-        $this->setView('default');
     }
 
     public function renderDefault(): void
     {
-        $users = isset($this->userType) ? $this->userManager->getByStatus($this->userType) : $this->userManager->getList();
+        $this->addBreadcrumb($this->translator->translate("common.everyone"), $this->link(":Team:Default:"));
+        $this->statusRender();
+    }
+
+    public function renderPlayers(): void
+    {
+        $this->addBreadcrumb($this->translator->translate("team.PLAYER", 2), $this->link(":Team:Default:players"));
+        $this->statusRender("PLAYER");
+    }
+
+    public function renderMembers(): void
+    {
+        $this->addBreadcrumb($this->translator->translate("team.MEMBER", 2), $this->link(":Team:Default:members"));
+        $this->statusRender("MEMBER");
+    }
+
+    public function renderSicks(): void
+    {
+        $this->addBreadcrumb($this->translator->translate("team.SICK", 2), $this->link(":Team:Default:sicks"));
+        $this->statusRender("SICK");
+    }
+
+    public function renderInits(): void
+    {
+        $this->addBreadcrumb($this->translator->translate("team.INIT", 2), $this->link(":Team:Default:inits"));
+        $this->statusRender("INIT");
+    }
+
+    private function statusRender(?string $userStatus = null): void
+    {
+        $this->setView('default');
+        $users = $userStatus ? $this->userManager->getByStatus($userStatus) : $this->userManager->getList();
         $allMails = [];
         if ($users !== []) {
             foreach ($users as $u) {
@@ -88,7 +87,7 @@ class DefaultPresenter extends SecuredPresenter
             $this->flashMessage($this->translator->translate("common.alerts.nobodyFound") . "!");
         }
 
-        $this->template->userType = $this->userType ?? null;
+        $this->template->userType = $userStatus;
         $this->template->users = $users;
         $this->template->allMails = implode(",", $allMails);
     }
