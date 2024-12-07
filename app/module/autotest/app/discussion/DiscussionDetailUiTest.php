@@ -66,6 +66,8 @@ class DiscussionDetailUiTest extends UITest
 
         $discussionPostsDom = parent::assertDomHas($discussionDom, 'div.container-fluid.discussion#snippet--discussion');
         Assert::count(0, $discussionPostsDom->find('div.row'));
+        
+        $this->recordManager->deleteDiscussion($discussion["id"]);
     }
 
     public function testActionDiscussionReadableOnly()
@@ -110,6 +112,8 @@ class DiscussionDetailUiTest extends UITest
 
         $discussionPostsDom = parent::assertDomHas($discussionDom, 'div.container-fluid.discussion#snippet--discussion');
         Assert::count(0, $discussionPostsDom->find('div.row'));
+
+        $this->recordManager->deleteDiscussion($discussion["id"]);
     }
 
     protected function getPresenter(): string
