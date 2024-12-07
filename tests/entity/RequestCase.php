@@ -59,7 +59,7 @@ abstract class RequestCase extends TestCase
 
     public function __construct(protected Container $container)
     {
-        define('TEST_DIR', Bootstrap::normalizePath(Bootstrap::MODULES_DIR . "/autotest"));
+        define('TEST_DIR', Bootstrap::normalizePath(__DIR__ . "/.."));
         define('WWW_DIR', Bootstrap::normalizePath(TEAM_DIR . "/www"));
         Environment::setup();
         $this->user = $this->container->getByType(User::class);
