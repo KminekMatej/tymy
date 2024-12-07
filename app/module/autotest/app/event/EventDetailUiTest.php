@@ -21,9 +21,9 @@ class EventDetailUiTest extends UITest
 
         $this->authorizeUser();
         $dom = parent::getDomForAction('default', ["resource" => $event["id"]]);
-        
-        
-        
+
+
+
         //has navbar
         parent::assertDomHas($dom, 'div#snippet-navbar-nav');
 
@@ -53,7 +53,7 @@ class EventDetailUiTest extends UITest
 
         //attendanceBox
         parent::assertDomHas($attendanceBoxDom, 'div.card-header ul.nav li.nav-item', expectedCount: 1);
-        $attendancePane = parent::assertDomHas($attendanceBoxDom, 'div.card-body.tab-content div.tab-pane', expectedCount: 1);
+        parent::assertDomHas($attendanceBoxDom, 'div.card-body.tab-content div.tab-pane', expectedCount: 1);
 
         $this->authorizeAdmin();
         $this->recordManager->deleteEvent($event["id"]);

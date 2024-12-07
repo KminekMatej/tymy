@@ -24,9 +24,7 @@ class DiscussionsUiTest extends UITest
 
         //has navbar
         parent::assertDomHas($dom, 'div#snippet-navbar-nav');
-
-        //has breadcrumbs
-        $containerDom = parent::assertDomHas($dom, 'div.container');
+        parent::assertDomHas($dom, 'div.container');
         $this->assertBreadcrumb($dom, 0, "Hlavní stránka", true);
         $this->assertBreadcrumb($dom, 1, "Diskuze", false);
 

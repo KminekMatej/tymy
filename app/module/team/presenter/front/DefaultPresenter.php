@@ -70,7 +70,7 @@ class DefaultPresenter extends SecuredPresenter
         $this->addBreadcrumb($this->translator->translate("team.INIT", 2), $this->link(":Team:Default:inits"));
         $this->statusRender("INIT");
     }
-    
+
     private function statusRender(?string $userStatus = null): void
     {
         $this->setView('default');

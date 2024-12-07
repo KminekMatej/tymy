@@ -22,9 +22,9 @@ class PollDetailUiTest extends UITest
 
         $this->authorizeUser();
         $dom = parent::getDomForAction('default', ["resource" => $poll["id"]]);
-        
-        
-        
+
+
+
         //has navbar
         parent::assertDomHas($dom, 'div#snippet-navbar-nav');
         $this->assertBreadcrumb($dom, 0, "Hlavní stránka", true);
