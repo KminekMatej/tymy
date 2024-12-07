@@ -88,6 +88,9 @@ class DiscussionTest extends ApiTest
         $this->request($this->getBasePath() . "/$dId/bb?jump2date=" . $nextYear->format(BaseModel::DATE_ENG_FORMAT))->expect(200, "array");
 
         $this->request($this->getBasePath() . "/$dId/bb?search=Autotest&suser=2")->expect(200, "array");
+
+        $this->authorizeAdmin();
+        $this->recordManager->deleteDiscussion($dId);
     }
 
     public function testPostDiscussion(): void
@@ -132,6 +135,9 @@ class DiscussionTest extends ApiTest
 
         $this->authorizeAdmin();
         $this->request($this->getBasePath() . "/$dId/post/$pid", "DELETE")->expect(200);
+
+        $this->authorizeAdmin();
+        $this->recordManager->deleteDiscussion($dId);
     }
 
     public function testBbCodes(): void
@@ -209,6 +215,9 @@ class DiscussionTest extends ApiTest
 
         //check that user can update, but cannot stick
         $this->request($this->getBasePath() . "/$dId/post/$pid2", "PUT", ["sticky" => true])->expect(403);
+
+        $this->authorizeAdmin();
+        $this->deleteRecord($dId);
     }
 
     public function testCRUD(): void

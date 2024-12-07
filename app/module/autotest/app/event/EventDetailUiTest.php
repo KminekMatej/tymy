@@ -25,7 +25,7 @@ class EventDetailUiTest extends UITest
 
 
         //has navbar
-        parent::assertDomHas($dom, 'div#snippet-navbar-nav');
+        parent::assertNavbar($dom);
 
         //has breadcrumbs
         $this->assertBreadcrumb($dom, 0, "Hlavní stránka", true);

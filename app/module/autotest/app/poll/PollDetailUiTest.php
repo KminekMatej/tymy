@@ -4,11 +4,8 @@
 
 namespace Tymy\Module\Autotest\Event;
 
-use Tester\Assert;
 use Tymy\Bootstrap;
 use Tymy\Module\Autotest\UITest;
-
-use function count;
 
 require getenv("ROOT_DIR") . '/app/Bootstrap.php';
 $container = Bootstrap::boot();
@@ -26,7 +23,7 @@ class PollDetailUiTest extends UITest
 
 
         //has navbar
-        parent::assertDomHas($dom, 'div#snippet-navbar-nav');
+        parent::assertNavbar($dom);
         $this->assertBreadcrumb($dom, 0, "Hlavní stránka", true);
         $this->assertBreadcrumb($dom, 1, "Ankety", true);
         $this->assertBreadcrumb($dom, 2, $poll["caption"], false);

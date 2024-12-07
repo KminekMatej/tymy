@@ -18,12 +18,12 @@ class DiscussionsUiTest extends UITest
     public function testActionDefault()
     {
         $this->authorizeAdmin();
-        $this->recordManager->createDiscussion();
+        $dId = $this->recordManager->createDiscussion()["id"];
 
         $dom = parent::getDomForAction();
 
         //has navbar
-        parent::assertDomHas($dom, 'div#snippet-navbar-nav');
+        parent::assertNavbar($dom);
         parent::assertDomHas($dom, 'div.container');
         $this->assertBreadcrumb($dom, 0, "Hlavní stránka", true);
         $this->assertBreadcrumb($dom, 1, "Diskuze", false);
@@ -31,6 +31,9 @@ class DiscussionsUiTest extends UITest
         $discussionsDom = parent::assertDomHas($dom, 'div.container-fluid.discussions');
         $discussionsListDom = parent::assertDomHas($discussionsDom, 'div.card.sh-box.discussion-box');
         Assert::true(count($discussionsListDom->find('div.card-body div.row')) >= 1);
+
+        $this->authorizeAdmin();
+        $this->recordManager->deleteDiscussion($dId);
     }
 
     protected function getPresenter(): string

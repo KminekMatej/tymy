@@ -89,4 +89,32 @@ abstract class UITest extends RequestCase
             Assert::false(isset($breadcrumb->a), "Breadcrumb #$index:$caption shouldn't be hyperlink!");
         }
     }
+
+    public function assertNavbar(DomQuery $dom)
+    {
+        $navbarDom = $this->assertDomHas($dom, 'div#snippet-navbar-nav nav.navbar.navbar-expand-lg.fixed-top');
+        $this->assertDomHas($navbarDom, 'a.navbar-brand');
+        $this->assertDomHas($navbarDom, 'div#navbarContent');
+        $leftNavDom = $this->assertDomHas($navbarDom, 'div#navbarContent ul.navbar-nav.mr-auto');
+        $rightNavDom = $this->assertDomHas($navbarDom, 'div#navbarContent ul.navbar-nav', 1, 2);
+
+        $this->assertDomHas($rightNavDom, "li.nav-item.dropdown");
+
+        $discussionMenuDom = $this->assertDomHas($leftNavDom, "li.nav-item.dropdown", 0, 8);
+        $this->assertDomHas($leftNavDom, "li.nav-item.dropdown[name=discussions] div.dropdown-menu .dropdown-item");
+        $eventMenuDom = $this->assertDomHas($leftNavDom, "li.nav-item.dropdown", 1, 8);
+        $this->assertDomHas($leftNavDom, "li.nav-item.dropdown[name=events] div.dropdown-menu .dropdown-item");
+        $teamMenuDom = $this->assertDomHas($leftNavDom, "li.nav-item.dropdown", 2, 8);
+        $this->assertDomHas($leftNavDom, "li.nav-item.dropdown[name=team] div.dropdown-menu .dropdown-item", 0, 6);
+        $pollMenuDom = $this->assertDomHas($leftNavDom, "li.nav-item.dropdown", 3, 8);
+        $this->assertDomHas($leftNavDom, "li.nav-item.dropdown[name=polls] div.dropdown-menu .dropdown-item");
+        $debtMenuDom = $this->assertDomHas($leftNavDom, "li.nav-item.dropdown", 4, 8);
+        $this->assertDomHas($leftNavDom, "li.nav-item.dropdown[name=debts] div.dropdown-menu a.dropdown-item");
+        $filesMenuDom = $this->assertDomHas($leftNavDom, "li.nav-item.dropdown", 5, 8);
+        $this->assertDomHas($leftNavDom, "li.nav-item.dropdown[name=files] div.dropdown-menu a.dropdown-item");
+        $reportsMenuDom = $this->assertDomHas($leftNavDom, "li.nav-item.dropdown", 6, 8);
+        $this->assertDomHas($leftNavDom, "li.nav-item.dropdown[name=reports] div.dropdown-menu a.dropdown-item", 0, 1);
+        $settingsMenuDom = $this->assertDomHas($leftNavDom, "li.nav-item.dropdown", 7, 8);
+        $this->assertDomHas($leftNavDom, "li.nav-item.dropdown[name=settings] div.dropdown-menu a.dropdown-item", 0, 3);
+    }
 }

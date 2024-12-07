@@ -4,7 +4,6 @@
 
 namespace Tymy\Module\Autotest\Discussion;
 
-use Nette;
 use Nette\Application\Request;
 use Nette\Application\Responses\TextResponse;
 use Nette\Utils\Strings;
@@ -50,7 +49,7 @@ class DiscussionDetailUiTest extends UITest
         $dom = $this->getDomForAction('default', ['discussion' => $discussionWebName]);
 
         //has navbar
-        parent::assertDomHas($dom, 'div#snippet-navbar-nav');
+        parent::assertNavbar($dom);
 
         //has breadcrumbs
         $this->assertBreadcrumb($dom, 0, "Hlavní stránka", true);
@@ -90,7 +89,7 @@ class DiscussionDetailUiTest extends UITest
         $dom = $this->getDomForAction('default', ['discussion' => $discussionWebName]);
 
         //has navbar
-        parent::assertDomHas($dom, 'div#snippet-navbar-nav');
+        parent::assertNavbar($dom);
 
         //has breadcrumbs
 
