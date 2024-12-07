@@ -20,11 +20,18 @@ $container = Bootstrap::boot();
 
 class DiscussionDetailUiTest extends UITest
 {
-    protected function getDomForAction(Nette\Application\UI\Presenter $presenter, string $action = "default", array $params = [])
+    /**
+     * Load DOM response on presenter/action query
+     *
+     * @param string $action
+     * @param array $params Additional request parameters
+     * @return DomQuery
+     */
+    protected function getDomForAction(string $action = "default", array $params = [])
     {
         $this->authorizeUser();
-        $request = new Request($presenter, 'GET', ['action' => $action] + $params);
-        $response = $presenter->run($request);
+        $request = new Request("{$this->getModule()}:{$this->getPresenter()}", 'GET', ['action' => $action] + $params);
+        $response = $this->presenter->run($request);
 
         Assert::type(TextResponse::class, $response);
         assert($response instanceof TextResponse);
@@ -40,7 +47,7 @@ class DiscussionDetailUiTest extends UITest
         $this->authorizeAdmin();
         $discussion = $this->recordManager->createDiscussion();
         $discussionWebName = Strings::webalize($discussion["id"] . "-" . $discussion["caption"]);
-        $dom = $this->getDomForAction($this->presenter, 'default', ['discussion' => $discussionWebName]);
+        $dom = $this->getDomForAction('default', ['discussion' => $discussionWebName]);
 
         //has navbar
         parent::assertDomHas($dom, 'div#snippet-navbar-nav');
@@ -79,7 +86,7 @@ class DiscussionDetailUiTest extends UITest
         $discussionWebName = Strings::webalize($discussion["id"] . "-" . $discussion["caption"]);
 
         $this->authorizeUser(); //this user can read only in this discussion
-        $dom = $this->getDomForAction($this->presenter, 'default', ['discussion' => $discussionWebName]);
+        $dom = $this->getDomForAction('default', ['discussion' => $discussionWebName]);
 
         //has navbar
         parent::assertDomHas($dom, 'div#snippet-navbar-nav');

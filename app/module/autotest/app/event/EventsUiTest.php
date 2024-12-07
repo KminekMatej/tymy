@@ -14,11 +14,12 @@ use function count;
 
 require getenv("ROOT_DIR") . '/app/Bootstrap.php';
 $container = Bootstrap::boot();
+
 class EventsUiTest extends UITest
 {
     public function testActionDefault()
     {
-        $dom = parent::getDomForAction($this->presenter);
+        $dom = parent::getDomForAction();
 //has navbar
         Assert::true($dom->has('div#snippet-navbar-nav'));
 //has breadcrumbs
@@ -36,7 +37,7 @@ class EventsUiTest extends UITest
 
     protected function getPresenter(): string
     {
-        return "Event";
+        return "Default";
     }
 
     public function getModule(): string

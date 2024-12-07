@@ -17,7 +17,10 @@ class DiscussionsUiTest extends UITest
 {
     public function testActionDefault()
     {
-        $dom = parent::getDomForAction($this->presenter);
+        $this->authorizeAdmin();
+        $this->recordManager->createDiscussion();
+
+        $dom = parent::getDomForAction();
 
         //has navbar
         parent::assertDomHas($dom, 'div#snippet-navbar-nav');

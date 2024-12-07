@@ -29,16 +29,15 @@ abstract class UITest extends RequestCase
     /**
      * Load DOM response on presenter/action query
      *
-     * @param Presenter $presenter
      * @param string $action
      * @param array $params Additional request parameters
      * @return DomQuery
      */
-    protected function getDomForAction(Presenter $presenter, string $action = "default", array $params = [])
+    protected function getDomForAction(string $action = "default", array $params = [])
     {
         $this->authorizeUser();
-        $request = new Request($presenter, 'GET', ['action' => $action] + $params);
-        $response = $presenter->run($request);
+        $request = new Request("{$this->getModule()}:{$this->getPresenter()}", 'GET', ['action' => $action] + $params);
+        $response = $this->presenter->run($request);
 
         Assert::type(TextResponse::class, $response);
         assert($response instanceof TextResponse);
