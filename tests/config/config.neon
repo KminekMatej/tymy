@@ -1,0 +1,9 @@
+#
+# WARNING: it is CRITICAL that this file & directory are NOT accessible directly via a web browser!
+# https://nette.org/security-warning
+#
+
+services:  
+  TestsManager: Tymy\Test\Manager\TestsManager
+  TestsRouter: Tymy\Test\Router\Router
+  
