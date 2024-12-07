@@ -4,6 +4,7 @@
 
 namespace Tymy\Module\Autotest\Event;
 
+use Nette\NotImplementedException;
 use Tymy\Bootstrap;
 use Tymy\Module\Attendance\Model\Attendance;
 use Tymy\Module\Autotest\ApiTest;
@@ -155,7 +156,7 @@ class AttendanceTest extends ApiTest
 
     public function createRecord(): array
     {
-        throw new \Nette\NotImplementedException();
+        throw new NotImplementedException();
     }
 
     public function mockRecord(): array

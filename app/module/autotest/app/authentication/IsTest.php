@@ -4,6 +4,7 @@
 
 namespace Tymy\Module\Autotest\Authentication;
 
+use Nette\NotImplementedException;
 use Tymy\Bootstrap;
 use Tymy\Module\Autotest\ApiTest;
 
@@ -35,7 +36,7 @@ class IsTest extends ApiTest
 
     public function createRecord(): array
     {
-        throw new \Nette\NotImplementedException();
+        throw new NotImplementedException();
     }
 
     protected function getBasePath(): string
