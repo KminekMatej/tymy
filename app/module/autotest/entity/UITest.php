@@ -66,4 +66,27 @@ abstract class UITest extends RequestCase
 
         return $items[$returnIndex];
     }
+
+    /**
+     * Assert breadcrumb number, caption and hyperlink
+     *
+     * @param DomQuery $dom
+     * @param int $index
+     * @param string $caption
+     * @param bool $isLink
+     * @return void
+     */
+    protected function assertBreadcrumb(DomQuery $dom, int $index, string $caption, bool $isLink = false): void
+    {
+        Assert::true($dom->has('div.container div.row div.col ol.breadcrumb'));
+        $breadcrumb = self::assertDomHas($dom, 'ol.breadcrumb li.breadcrumb-item', $index);
+
+        if ($isLink) {
+            Assert::true(isset($breadcrumb->a), "Breadcrumb #$index:$caption is not hyperlink!");
+            Assert::equal($caption, $breadcrumb->a->__toString(), "Breadcrumb #$index caption is invalid");
+        } else {
+            Assert::false(isset($breadcrumb->a), "Breadcrumb #$index:$caption shouldn't be hyperlink!");
+            Assert::equal($caption, $breadcrumb->__toString(), "Breadcrumb #$index caption is invalid");
+        }
+    }
 }
