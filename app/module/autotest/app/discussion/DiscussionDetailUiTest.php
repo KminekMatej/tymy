@@ -3,6 +3,7 @@
 namespace Tymy\Module\Autotest\Discussion;
 
 use Nette;
+use Nette\Application\Responses\TextResponse;
 use Nette\Utils\Strings;
 use Tester\Assert;
 use Tester\DomQuery;
@@ -27,12 +28,13 @@ class DiscussionDetailUiTest extends UITest
         $request = new Nette\Application\Request($this->presenterName, 'GET', ['action' => 'default', 'discussion' => $discussionWebName]);
         $response = $this->presenter->run($request);
 
-        Assert::type('Nette\Application\Responses\TextResponse', $response);
-        
+        assert($response instanceof TextResponse);
+        Assert::type(TextResponse::class, $response);
+
         $re = '/&(?!(?:apos|quot|[gl]t|amp);|#)/';
 
         $dom = NULL;
-        $html = (string)$response->getSource();
+        $html = (string) $response->getSource();
         //replace unescaped ampersands in html to prevent tests from failing
         $html = preg_replace($re, "&amp;", $html);
         

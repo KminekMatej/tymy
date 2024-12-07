@@ -41,6 +41,7 @@ abstract class UITest extends RequestCase
         $response = $presenter->run($request);
 
         Assert::type(TextResponse::class, $response);
+        assert($response instanceof TextResponse);
 
         $html = (string) $response->getSource();
         return DomQuery::fromHtml($html);
