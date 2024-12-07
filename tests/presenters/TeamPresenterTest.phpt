@@ -29,14 +29,14 @@ class TeamPresenterTest extends IPresenterTest {
 
     protected function setUp() {
         $parentResult = parent::setUp();
-        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->authorizeUser();
         $this->userList->getData();
         $this->counts = $this->userList->getCounts();
         return $parentResult;
     }
 
     function testActionDefault() {
-        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->authorizeUser();
         $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', array('action' => 'default'));
         $response = $this->presenter->run($request);
 
@@ -63,7 +63,7 @@ class TeamPresenterTest extends IPresenterTest {
     
     /** @dataProvider getActions */
     function testAction($actionName, $itemsCount) {
-        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->authorizeUser();
         $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', array('action' => $actionName));
         $response = $this->presenter->run($request);
 
@@ -102,7 +102,7 @@ class TeamPresenterTest extends IPresenterTest {
      * @dataProvider allWebNames
      */
     function testPlayer($player) {
-        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->authorizeUser();
         $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', array('action' => 'player', "player" => $player->webName));
         $response = $this->presenter->run($request);
 

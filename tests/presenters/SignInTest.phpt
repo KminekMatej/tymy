@@ -50,7 +50,7 @@ class SignInTest extends IPresenterTest {
     }
     
     function testSignInSuccess(){
-        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->authorizeUser();
         $identity = $this->user->getIdentity();
         Assert::type("Nette\Security\Identity", $identity);
         Assert::true(isset($identity->id));

@@ -22,7 +22,7 @@ class NotesPresenterTest extends IPresenterTest {
     }
         
     function testActionDefault(){
-        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->authorizeUser();
         $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', array('action' => 'default'));
         $response = $this->presenter->run($request);
 
@@ -45,7 +45,7 @@ class NotesPresenterTest extends IPresenterTest {
     
     function testActionNote(){
         $noteId = $GLOBALS["testedTeam"]["testNoteId"];
-        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->authorizeUser();
         $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', array('action' => 'note', 'poznamka' => $noteId));
         $response = $this->presenter->run($request);
 

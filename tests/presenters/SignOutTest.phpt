@@ -22,7 +22,7 @@ class SignOutTest extends IPresenterTest {
     }
 
     function testSignOutComponents(){
-        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->authorizeUser();
         $request = new Request('Sign', 'GET', array('action' => 'out'));
         $response = $this->presenter->run($request);
 

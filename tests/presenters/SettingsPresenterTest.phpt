@@ -22,7 +22,7 @@ class SettingsPresenterTest extends IPresenterTest {
     }
 
     function testActionDefault(){
-        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->authorizeUser();
         $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', array('action' => 'default'));
         $response = $this->presenter->run($request);
 
@@ -53,7 +53,7 @@ class SettingsPresenterTest extends IPresenterTest {
     
     /** @dataProvider getListActions */
     function testActionList($action) {
-        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->authorizeUser();
         $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', array('action' => $action));
         $response = $this->presenter->run($request);
 
@@ -85,7 +85,7 @@ class SettingsPresenterTest extends IPresenterTest {
     
     /** @dataProvider getFormActions */
     function testActionForm($requestParams) {
-        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->authorizeUser();
         $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', $requestParams);
         $response = $this->presenter->run($request);
 
@@ -121,7 +121,7 @@ class SettingsPresenterTest extends IPresenterTest {
     }
 
     function testActionApp() {
-        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->authorizeUser();
         $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', array('action' => "app"));
         $response = $this->presenter->run($request);
 
@@ -149,7 +149,7 @@ class SettingsPresenterTest extends IPresenterTest {
     }
 
     function testActionDiscussionNew() {
-        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->authorizeUser();
         $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', ["action" => "discussion_new"]);
         $response = $this->presenter->run($request);
 
@@ -181,7 +181,7 @@ class SettingsPresenterTest extends IPresenterTest {
     }
 
     function testActionEventNew() {
-        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->authorizeUser();
         $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', ["action" => "event_new"]);
         $response = $this->presenter->run($request);
 
@@ -215,7 +215,7 @@ class SettingsPresenterTest extends IPresenterTest {
     }
 
     function testActionPollNew() {
-        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->authorizeUser();
         $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', ["action" => "poll_new"]);
         $response = $this->presenter->run($request);
 

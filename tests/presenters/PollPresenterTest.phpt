@@ -27,7 +27,7 @@ class PollPresenterTest extends IPresenterTest {
     }
     
     function testActionDefault(){
-        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->authorizeUser();
         $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', array('action' => 'default'));
         $response = $this->presenter->run($request);
 
@@ -59,7 +59,7 @@ class PollPresenterTest extends IPresenterTest {
      * @dataProvider allWebNames
      */
     function testPoll($obj){
-        $this->userTapiAuthenticate($GLOBALS["testedTeam"]["user"], $GLOBALS["testedTeam"]["pass"]);
+        $this->authorizeUser();
         $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', array('action' => 'poll', "anketa" => $obj->webName));
         $response = $this->presenter->run($request);
 
