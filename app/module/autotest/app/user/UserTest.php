@@ -5,11 +5,14 @@
 namespace Tymy\Module\Autotest\User;
 
 use Nette\Security\AuthenticationException;
+use Tester\Environment;
 use Tymy\Bootstrap;
 use Tymy\Module\Autotest\ApiTest;
 use Tymy\Module\Autotest\Entity\Assert;
 use Tymy\Module\User\Model\User;
 use Vojir\Responses\CsvResponse\ComposedCsvResponse;
+
+use const ROOT_DIR;
 
 require getenv("ROOT_DIR") . '/app/Bootstrap.php';
 $container = Bootstrap::boot();
@@ -105,6 +108,7 @@ class UserTest extends ApiTest
 
     public function testCRUD(): void
     {
+        Environment::lock('users', ROOT_DIR . "/temp");
         $recordId = $this->createRecord()["id"];
 
         $this->request($this->getBasePath() . "/" . $recordId)->expect(200, "array");
@@ -262,6 +266,7 @@ class UserTest extends ApiTest
 
     public function testUpdateFailures(): void
     {
+        Environment::lock('users', ROOT_DIR . "/temp");
         $this->authorizeAdmin();
         $adminData = $this->request($this->getBasePath() . "/1", "PUT", ["roles" => ["USR"]])->expect(200)->getData();
         Assert::contains("SUPER", $adminData["roles"]);
@@ -286,6 +291,7 @@ class UserTest extends ApiTest
 
     public function testAvatar(): void
     {
+        Environment::lock('users', ROOT_DIR . "/temp");
         $this->authorizeUser();
         $myId = $this->config["user_test_id"];
         $this->request(
