@@ -3,6 +3,8 @@
 namespace Tymy\Module\Autotest;
 
 use Nette\Application\IPresenter;
+use Nette\Application\Request;
+use Nette\Application\Responses\TextResponse;
 use Nette\Application\UI\Presenter;
 use Tester\DomQuery;
 use Tymy\Module\Autotest\Entity\Assert;
@@ -22,6 +24,25 @@ abstract class UITest extends RequestCase
         $this->presenter->autoCanonicalize = false;
 
         parent::setUp();
+    }
+    
+    /**
+     * Load DOM response on presenter/action query
+     *
+     * @param Presenter $presenter
+     * @param string $action
+     * @return DomQuery
+     */
+    protected function getDomForAction(Presenter $presenter, string $action = "default")
+    {
+        $this->authorizeUser();
+        $request = new Request($presenter, 'GET', ['action' => $action]);
+        $response = $presenter->run($request);
+
+        Assert::type(TextResponse::class, $response);
+
+        $html = (string) $response->getSource();
+        return DomQuery::fromHtml($html);
     }
 
     /**
