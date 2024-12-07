@@ -48,7 +48,7 @@ jobs:
         DBNAME: autotest
         DBUSER: drtikol
         DBPWD: w,6TmB
-        TESTDIR: app/module/autotest
+        TESTDIR: tests
         AUTOTEST: 1
       steps:
         - name: "Mock database environment"
