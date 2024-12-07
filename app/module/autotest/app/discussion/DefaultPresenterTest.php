@@ -2,10 +2,7 @@
 
 namespace Tymy\Module\Autotest\Discussion;
 
-use Nette\Application\Request;
-use Nette\Application\Responses\TextResponse;
 use Tester\Assert;
-use Tester\DomQuery;
 use Tymy\Bootstrap;
 use Tymy\Module\Autotest\UITest;
 
@@ -19,18 +16,11 @@ class DefaultPresenterTest extends UITest
 
     public function testActionDefault()
     {
-        $this->authorizeUser();
-        $request = new Request($this->presenterName, 'GET', array('action' => 'default'));
-        $response = $this->presenter->run($request);
+        $dom = parent::getDomForAction($this->presenter);
 
-        Assert::type(TextResponse::class, $response);
-        
-        $html = (string) $response->getSource();
-        $dom = DomQuery::fromHtml($html);
-        
         //has navbar
         parent::assertDomHas($dom, 'div#snippet-navbar-nav');
-        
+
         //has breadcrumbs
         $containerDom = parent::assertDomHas($dom, 'div.container');
         parent::assertDomHas($containerDom, 'ol.breadcrumb');
