@@ -76,6 +76,7 @@ class DiscussionDetailUiTest extends UITest
         $discussionPostsDom = parent::assertDomHas($discussionDom, 'div.container-fluid.discussion#snippet--discussion');
         Assert::count(0, $discussionPostsDom->find('div.row'));
 
+        $this->authorizeAdmin();
         $this->recordManager->deleteDiscussion($discussion["id"]);
     }
 
@@ -111,6 +112,7 @@ class DiscussionDetailUiTest extends UITest
         $discussionPostsDom = parent::assertDomHas($discussionDom, 'div.container-fluid.discussion#snippet--discussion');
         Assert::count(0, $discussionPostsDom->find('div.row'));
 
+        $this->authorizeAdmin();
         $this->recordManager->deleteDiscussion($discussion["id"]);
     }
 

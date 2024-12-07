@@ -304,6 +304,11 @@ class RecordManager
         $this->deleteRecord(Event::MODULE, $id);
     }
 
+    public function deletePoll($id): void
+    {
+        $this->deleteRecord(Poll::MODULE, $id);
+    }
+
     public function deleteRecord($basePath, $id): void
     {
         $url = "$basePath/$id";

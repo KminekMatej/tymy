@@ -1,0 +1,55 @@
+<?php
+
+// phpcs:disable PSR1.Files.SideEffects
+
+namespace Tymy\Module\Autotest\Event;
+
+use Tester\Assert;
+use Tymy\Bootstrap;
+use Tymy\Module\Autotest\UITest;
+
+use function count;
+
+require getenv("ROOT_DIR") . '/app/Bootstrap.php';
+$container = Bootstrap::boot();
+
+class PollDetailUiTest extends UITest
+{
+    public function testEvent()
+    {
+        $this->authorizeAdmin();
+        $poll = $this->recordManager->createPoll();
+
+        $this->authorizeUser();
+        $dom = parent::getDomForAction('default', ["resource" => $poll["id"]]);
+        
+        
+        
+        //has navbar
+        parent::assertDomHas($dom, 'div#snippet-navbar-nav');
+
+        //has breadcrumbs
+        parent::assertDomHas($dom, 'div.container div.row div.col ol.breadcrumb');
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 2);
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 3); //last item aint link
+
+        $objectDom = parent::assertDomHas($dom, 'div.container-fluid.poll');
+        parent::assertDomHas($objectDom, 'div.card.sh-box', expectedCount: 2);
+
+        $this->authorizeAdmin();
+        $this->recordManager->deletePoll($poll["id"]);
+    }
+
+    protected function getPresenter(): string
+    {
+        return "Default";
+    }
+
+    public function getModule(): string
+    {
+        return "Poll";
+    }
+}
+
+$test = new PollDetailUiTest($container);
+$test->run();

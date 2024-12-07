@@ -51,12 +51,18 @@ abstract class UITest extends RequestCase
      *
      * @param DomQuery $dom
      * @param string $selector
+     * @param int|null $returnIndex Index which found element to return
+     * @param int|null $expectedCount If set, asserts how many items are expected to return
      * @return DomQuery
      */
-    protected function assertDomHas(DomQuery $dom, string $selector, ?int $returnIndex = 0): DomQuery
+    protected function assertDomHas(DomQuery $dom, string $selector, ?int $returnIndex = 0, ?int $expectedCount = null): DomQuery
     {
         Assert::true($dom->has($selector), "Selector `$selector` not found in HTML output");
         $items = $dom->find($selector);
+
+        if ($expectedCount) {
+            Assert::count($expectedCount, $items, "Selector `$selector` count not as expected");
+        }
 
         return $items[$returnIndex];
     }

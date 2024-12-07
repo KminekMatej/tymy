@@ -15,12 +15,12 @@ use function count;
 require getenv("ROOT_DIR") . '/app/Bootstrap.php';
 $container = Bootstrap::boot();
 
-class EventsUiTest extends UITest
+class PollsUiTest extends UITest
 {
     public function testActionDefault()
     {
         $this->authorizeAdmin();
-        $eventId = $this->recordManager->createEvent()["id"];
+        $eventId = $this->recordManager->createPoll()["id"];
 
         $dom = parent::getDomForAction();
 //has navbar
@@ -29,16 +29,12 @@ class EventsUiTest extends UITest
         Assert::true($dom->has('div.container div.row div.col ol.breadcrumb'));
         Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 1);
         Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 2);
-//last item aint link
 
-        Assert::true($dom->has('div.container-fluid.events'));
-        Assert::true(count($dom->find('div.container-fluid.events div.row')) >= 1);
-        Assert::true($dom->has('div.container-fluid.events div.row div.col-md-7.my-3 div.card.sh-box#calendar'));
-        Assert::true($dom->has('div.container-fluid.events div.row div.col-md-5.my-3.agenda-wrapper#snippet--events-agenda'));
-        Assert::equal(count($dom->find('div.container-fluid.events div.row div.col-md-5.my-3.agenda-wrapper#snippet--events-agenda div.card.sh-box.agenda[data-month]')), 13);
+        Assert::true($dom->has('div.container-fluid.polls'));
+        Assert::true(count($dom->find('div.container-fluid.polls div.row')) >= 1);
 
         $this->authorizeAdmin();
-        $this->recordManager->deleteEvent($eventId);
+        $this->recordManager->deletePoll($eventId);
     }
 
     protected function getPresenter(): string
@@ -48,9 +44,9 @@ class EventsUiTest extends UITest
 
     public function getModule(): string
     {
-        return "Event";
+        return "Poll";
     }
 }
 
-$test = new EventsUiTest($container);
+$test = new PollsUiTest($container);
 $test->run();

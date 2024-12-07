@@ -20,36 +20,48 @@ class EventDetailUiTest extends UITest
         $event = $this->recordManager->createEvent();
 
         $this->authorizeUser();
-        $dom = parent::getDomForAction('default', ["event" => $event["id"]]);
-//has navbar
-        Assert::true($dom->has('div#snippet-navbar-nav'));
-//has breadcrumbs
-        Assert::true($dom->has('div.container div.row div.col ol.breadcrumb'));
+        $dom = parent::getDomForAction('default', ["resource" => $event["id"]]);
+        
+        
+        
+        //has navbar
+        parent::assertDomHas($dom, 'div#snippet-navbar-nav');
+
+        //has breadcrumbs
+        parent::assertDomHas($dom, 'div.container div.row div.col ol.breadcrumb');
         Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 2);
-        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 3);
-//last item aint link
-        //test body
-        Assert::true($dom->has('div.container.event div.row div.col div.card.sh-box.my-3 div.card-header div.row div.col h4.card-title'));
-        Assert::true($dom->has('div.container.event div.row div.col div.card.sh-box.my-3 div.card-body h6.card-subtitle.mb-2.text-muted span a'));
-        Assert::true($dom->has('div.container.event div.row div.col div.card.sh-box.my-3 div.card-body p.card-text'));
-        Assert::equal(count($dom->find('div.container.event div.row div.col div.card.sh-box.my-3 div.card-body div.row div.col-lg-4 table.table.mb-0 tr th')), 3);
-        Assert::equal(count($dom->find('div.container.event div.row div.col div.card.sh-box.my-3 div.card-body div.row div.col-lg-4 table.table.mb-0 tr td')), 3);
-        Assert::true($dom->has('div.container.event div.row div.col div.card.sh-box.my-3 div.card-body div.row div.col-lg-8.d-flex.flex-column-reverse.align-items-center input.form-control.form-control-sm.custom-btn-sm'));
-        Assert::count(3, $dom->find('div.container.event div.row div.col div.card.sh-box.my-3 div.card-body div.row div.col-lg-8.d-flex.flex-column-reverse.align-items-center button.btn.custom-btn-sm'));
-        Assert::true($dom->has('div.container.event div.row div.col div.card.sh-box.my-3 div.card-body div.row div.col-lg-8.d-flex.flex-column-reverse.align-items-center div#snippet--attendanceWarning'));
-        Assert::true($dom->has('div.container.event div.row div.col div.card.sh-box.my-3#snippet--attendanceTabs div.card-header ul.nav.nav-tabs.flex-column.flex-sm-row.card-header-tabs li.nav-item'));
-        Assert::true($dom->has('div.container.event div.row div.col div.card.sh-box.my-3#snippet--attendanceTabs div.card-body div.tab-content div.tab-pane.fade.player-list div.row.my-2'));
-//admin sees also pencil button
+        Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 3); //last item aint link
+
+        $eventDom = parent::assertDomHas($dom, 'div.container-fluid.event');
+        $eventBoxDom = parent::assertDomHas($eventDom, 'div.card.sh-box', expectedCount: 2);
+        $attendanceBoxDom = parent::assertDomHas($eventDom, 'div.card.sh-box#snippet--attendanceTabs');
+
+        //eventBox: header
+        $eventBoxHeader = parent::assertDomHas($eventBoxDom, 'div.card-header');
+        parent::assertDomHas($eventBoxHeader, 'h4.card-title');
+        parent::assertDomHas($eventBoxHeader, 'a.btn.btn-outline-dark.ajax#snippet--historyBtn');
+
+        //eventBox: body
+        $eventBoxBody = parent::assertDomHas($eventBoxDom, 'div.card-body');
+        parent::assertDomHas($eventBoxBody, 'h6.card-subtitle.text-muted');
+        parent::assertDomHas($eventBoxBody, 'div.row div.col-lg-4 table.table.mb-0 tr th', expectedCount: 3);
+        parent::assertDomHas($eventBoxBody, 'div.row div.col-lg-4 table.table.mb-0 tr td', expectedCount: 3);
+        parent::assertDomHas($eventBoxBody, 'div.row div.col-lg-8.d-flex.flex-column.align-items-center div#snippet--attendanceWarning');
+        parent::assertDomHas($eventBoxBody, 'div.row div.col-lg-8.d-flex.flex-column.align-items-center input[name=preStatusDesc]');
+        parent::assertDomHas($eventBoxBody, 'div.row div.col-lg-8.d-flex.flex-column.align-items-center div.custom-container.btn-group.input-group.pt-2'); //attendance button group
+        parent::assertDomHas($eventBoxBody, 'div.row div.col-lg-8.d-flex.flex-column.align-items-center div.custom-container.btn-group.input-group.pt-2 button.custom-btn-sm', expectedCount: 3);
+
+        //attendanceBox
+        parent::assertDomHas($attendanceBoxDom, 'div.card-header ul.nav li.nav-item', expectedCount: 1);
+        $attendancePane = parent::assertDomHas($attendanceBoxDom, 'div.card-body.tab-content div.tab-pane', expectedCount: 1);
+
         $this->authorizeAdmin();
-        $dom = parent::getDomForAction('event', ["udalost" => $event["id"]]);
-        $pencilBtn = 'div.container.event div.row div.col div.card.sh-box.my-3 div.card-header div.row div.col.col-md-auto a.btn.btn-sm.btn-light.btn-light-bordered i.fa.fa-edit';
-        Assert::true($dom->has($pencilBtn));
         $this->recordManager->deleteEvent($event["id"]);
     }
 
     protected function getPresenter(): string
     {
-        return "Event";
+        return "Detail";
     }
 
     public function getModule(): string
