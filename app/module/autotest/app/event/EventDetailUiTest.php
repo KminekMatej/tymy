@@ -1,9 +1,7 @@
 <?php
 namespace Tymy\Module\Autotest\Event;
 
-use Nette;
 use Tester\Assert;
-use Tester\DomQuery;
 use Tymy\Bootstrap;
 use Tymy\Module\Autotest\UITest;
 
@@ -14,40 +12,13 @@ $container = Bootstrap::boot();
 
 class EventDetailUiTest extends UITest
 {
-
-    private function eventDetailInputs()
+    public function testEvent()
     {
-        return [
-            [
-                [
-                    "adminMode" => TRUE,
-                    "username" => $GLOBALS["testedTeam"]["user_admin"],
-                    "password" => $GLOBALS["testedTeam"]["pass_admin"],
-                    "eventId" => $GLOBALS["testedTeam"]["testEventId"]
-                ]
-            ],
-            [
-                [
-                    "adminMode" => FALSE,
-                    "username" => $GLOBALS["testedTeam"]["user"],
-                    "password" => $GLOBALS["testedTeam"]["pass"],
-                    "eventId" => $GLOBALS["testedTeam"]["testEventId"]
-                ]
-            ],
-        ];
-    }
-
-    /** @dataProvider eventDetailInputs */
-    public function testActionEventAdmin($inputs)
-    {
-        $this->userTapiAuthenticate($inputs["username"], $inputs["password"]);
-        $request = new Nette\Application\Request(self::PRESENTERNAME, 'GET', array('action' => 'event', "udalost" => $inputs["eventId"]));
-        $response = $this->presenter->run($request);
-
-        Assert::type('Nette\Application\Responses\TextResponse', $response);
-
-        $html = (string) $response->getSource();
-        $dom = DomQuery::fromHtml($html);
+        $this->authorizeAdmin();
+        $event = $this->recordManager->createEvent();
+        
+        $this->authorizeUser();
+        $dom = parent::getDomForAction($this->presenter, 'event', ["udalost" => $event["id"]]);
 
         //has navbar
         Assert::true($dom->has('div#snippet-navbar-nav'));
@@ -57,13 +28,8 @@ class EventDetailUiTest extends UITest
         Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 3); //last item aint link
         //test body
         Assert::true($dom->has('div.container.event div.row div.col div.card.sh-box.my-3 div.card-header div.row div.col h4.card-title'));
-        $pencilBtn = 'div.container.event div.row div.col div.card.sh-box.my-3 div.card-header div.row div.col.col-md-auto a.btn.btn-sm.btn-light.btn-light-bordered i.fa.fa-edit';
-        if ($inputs["adminMode"]) {
-            Assert::true($dom->has($pencilBtn));
-        } else {
-            Assert::false($dom->has($pencilBtn));
-        }
-
+        
+        
         Assert::true($dom->has('div.container.event div.row div.col div.card.sh-box.my-3 div.card-body h6.card-subtitle.mb-2.text-muted span a'));
         Assert::true($dom->has('div.container.event div.row div.col div.card.sh-box.my-3 div.card-body p.card-text'));
         Assert::equal(count($dom->find('div.container.event div.row div.col div.card.sh-box.my-3 div.card-body div.row div.col-lg-4 table.table.mb-0 tr th')), 3);
@@ -75,6 +41,15 @@ class EventDetailUiTest extends UITest
 
         Assert::true($dom->has('div.container.event div.row div.col div.card.sh-box.my-3#snippet--attendanceTabs div.card-header ul.nav.nav-tabs.flex-column.flex-sm-row.card-header-tabs li.nav-item'));
         Assert::true($dom->has('div.container.event div.row div.col div.card.sh-box.my-3#snippet--attendanceTabs div.card-body div.tab-content div.tab-pane.fade.player-list div.row.my-2'));
+
+        //admin sees also pencil button
+        $this->authorizeAdmin();
+        $dom = parent::getDomForAction($this->presenter, 'event', ["udalost" => $event["id"]]);
+
+        $pencilBtn = 'div.container.event div.row div.col div.card.sh-box.my-3 div.card-header div.row div.col.col-md-auto a.btn.btn-sm.btn-light.btn-light-bordered i.fa.fa-edit';
+        Assert::true($dom->has($pencilBtn));
+
+        $this->recordManager->deleteEvent($event["id"]);
     }
 
     protected function getPresenter(): string
