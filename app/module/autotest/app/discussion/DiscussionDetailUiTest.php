@@ -1,8 +1,11 @@
 <?php
 
+// phpcs:disable PSR1.Files.SideEffects
+
 namespace Tymy\Module\Autotest\Discussion;
 
 use Nette;
+use Nette\Application\Request;
 use Nette\Application\Responses\TextResponse;
 use Nette\Utils\Strings;
 use Tester\Assert;
@@ -17,34 +20,33 @@ $container = Bootstrap::boot();
 
 class DiscussionDetailUiTest extends UITest
 {
+    protected function getDomForAction(Nette\Application\UI\Presenter $presenter, string $action = "default", array $params = [])
+    {
+        $this->authorizeUser();
+        $request = new Request($presenter, 'GET', ['action' => $action] + $params);
+        $response = $presenter->run($request);
+
+        Assert::type(TextResponse::class, $response);
+        assert($response instanceof TextResponse);
+
+        //replace unescaped ampersands in html to prevent tests from failing
+        $html = preg_replace('/&(?!(?:apos|quot|[gl]t|amp);|#)/', "&amp;", (string) $response->getSource());
+
+        return DomQuery::fromHtml($html);
+    }
 
     public function testActionDiscussionReadableWritable()
     {
         $this->authorizeAdmin();
         $discussion = $this->recordManager->createDiscussion();
         $discussionWebName = Strings::webalize($discussion["id"] . "-" . $discussion["caption"]);
+        $dom = $this->getDomForAction($this->presenter, 'default', ['discussion' => $discussionWebName]);
 
-        $this->authorizeUser(); //this user can read & write into th
-        $request = new Nette\Application\Request($this->presenterName, 'GET', ['action' => 'default', 'discussion' => $discussionWebName]);
-        $response = $this->presenter->run($request);
-
-        assert($response instanceof TextResponse);
-        Assert::type(TextResponse::class, $response);
-
-        $re = '/&(?!(?:apos|quot|[gl]t|amp);|#)/';
-
-        $dom = NULL;
-        $html = (string) $response->getSource();
-        //replace unescaped ampersands in html to prevent tests from failing
-        $html = preg_replace($re, "&amp;", $html);
-        
-        $dom = DomQuery::fromHtml($html);
         //has navbar
-        parent::assertDomHas($dom,'div#snippet-navbar-nav');
-        
+        parent::assertDomHas($dom, 'div#snippet-navbar-nav');
+
         //has breadcrumbs
-        
-        parent::assertDomHas($dom,'div.container div.row div.col ol.breadcrumb');
+        parent::assertDomHas($dom, 'div.container div.row div.col ol.breadcrumb');
         Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 2);
         Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 3); //last item aint link
 
@@ -56,7 +58,7 @@ class DiscussionDetailUiTest extends UITest
 
         //user can write, assert there is addPost textarea wysiwyg shown
         parent::assertDomHas($wysiwygDom, 'div.col-md-10 textarea#addPost');
-        
+
         $searchFormDom = parent::assertDomHas($searchBarDom, 'div.col-md-10 div.addPost form.form-inline');
         parent::assertDomHas($searchFormDom, 'div.col-9 div.input-group input.form-control[name=search]');
         parent::assertDomHas($searchFormDom, 'div.col-9 div.input-group select.form-control.custom-select[name=suser]');
@@ -66,7 +68,7 @@ class DiscussionDetailUiTest extends UITest
 
         $discussionPostsDom = parent::assertDomHas($discussionDom, 'div.container-fluid.discussion#snippet--discussion');
         Assert::count(0, $discussionPostsDom->find('div.row'));
-        
+
         $this->recordManager->deleteDiscussion($discussion["id"]);
     }
 
@@ -77,25 +79,14 @@ class DiscussionDetailUiTest extends UITest
         $discussionWebName = Strings::webalize($discussion["id"] . "-" . $discussion["caption"]);
 
         $this->authorizeUser(); //this user can read only in this discussion
-        $request = new Nette\Application\Request($this->presenterName, 'GET', ['action' => 'default', 'discussion' => $discussionWebName]);
-        $response = $this->presenter->run($request);
+        $dom = $this->getDomForAction($this->presenter, 'default', ['discussion' => $discussionWebName]);
 
-        Assert::type('Nette\Application\Responses\TextResponse', $response);
-        
-        $re = '/&(?!(?:apos|quot|[gl]t|amp);|#)/';
-
-        $dom = NULL;
-        $html = (string)$response->getSource();
-        //replace unescaped ampersands in html to prevent tests from failing
-        $html = preg_replace($re, "&amp;", $html);
-        
-        $dom = DomQuery::fromHtml($html);
         //has navbar
-        parent::assertDomHas($dom,'div#snippet-navbar-nav');
-        
+        parent::assertDomHas($dom, 'div#snippet-navbar-nav');
+
         //has breadcrumbs
-        
-        parent::assertDomHas($dom,'div.container div.row div.col ol.breadcrumb');
+
+        parent::assertDomHas($dom, 'div.container div.row div.col ol.breadcrumb');
         Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item a[href]')), 2);
         Assert::equal(count($dom->find('ol.breadcrumb li.breadcrumb-item')), 3); //last item aint link
 

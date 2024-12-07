@@ -1,5 +1,7 @@
 <?php
 
+// phpcs:disable PSR1.Files.SideEffects
+
 namespace Tymy\Module\Autotest\Discussion;
 
 use Tester\Assert;
@@ -13,7 +15,6 @@ $container = Bootstrap::boot();
 
 class DiscussionsUiTest extends UITest
 {
-
     public function testActionDefault()
     {
         $dom = parent::getDomForAction($this->presenter);

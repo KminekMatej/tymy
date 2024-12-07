@@ -25,7 +25,7 @@ abstract class UITest extends RequestCase
 
         parent::setUp();
     }
-    
+
     /**
      * Load DOM response on presenter/action query
      *
