@@ -5,5 +5,4 @@
 
 services:  
   TestsManager: Tymy\Test\Manager\TestsManager
-  TestsRouter: Tymy\Test\Router\Router
   

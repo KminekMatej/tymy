@@ -15,8 +15,8 @@ use PDO;
 use PDOException;
 use Tymy\Bootstrap;
 use Tymy\Module\Admin\Manager\MigrationManager;
-use Tymy\Module\Autotest\Manager\MockMailer;
-use Tymy\Module\Autotest\MockRequestFactory;
+use Tymy\Test\Manager\MockMailer;
+use Tymy\Test\MockRequestFactory;
 
 use const ROOT_DIR;
 use const TEST_DIR;
@@ -47,7 +47,7 @@ class Tester
     {
         define("ROOT_DIR", FileSystem::normalizePath(Common::getCwdUnresolved() . "/.."));
         define("TEAM_DIR", ROOT_DIR);
-        define("TEST_DIR", ROOT_DIR . "/app/module/autotest");
+        define("TEST_DIR", ROOT_DIR . "/tests");
         putenv("team=autotest");
         $this->configFile = ROOT_DIR . "/local/config.neon";
         $this->autotestConfigFile = ROOT_DIR . "/local/config.autotest.neon";
@@ -353,7 +353,7 @@ class Tester
     private function symlinkTestDir()
     {
         $symlink = __DIR__ . "/tests";
-        $target = "../app/module/autotest/app";
+        $target = "../tests/app";
 
         $this->logg("Creating symlink $symlink to $target directory");
 
@@ -365,7 +365,7 @@ class Tester
     {
         $symlink = __DIR__ . "/tests";
         if (file_exists($symlink) && is_link($symlink)) {
-            $target = "../app/module/autotest/app";
+            $target = "../tests/app";
             $this->logg("Removing symlink $symlink to $target directory");
             unlink($symlink);
             $this->logg("Symlink succesfully removed");

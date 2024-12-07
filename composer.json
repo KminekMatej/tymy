@@ -55,7 +55,7 @@
         "classmap": ["app/"]
     },
     "autoload-dev": {
-        "classmap": ["app/"]
+        "classmap": ["app/", "tests/"]
     },
     "minimum-stability": "stable",
     "config": {

@@ -60,6 +60,9 @@ class Bootstrap
 
         $configurator->addConfig(TEAM_DIR . '/app/config/config.neon');
         $configurator->addConfig(TEAM_DIR . '/local/' . ($autotestMode ? 'config.autotest.neon' : 'config.neon'));
+        if ($autotestMode) {
+            $configurator->addConfig(TEAM_DIR . '/tests/config/config.neon');
+        }
 
         $configurator->addParameters(["team" => getenv("team") ?: substr($_SERVER["HTTP_HOST"], 0, strpos($_SERVER["HTTP_HOST"], "."))]);
 
