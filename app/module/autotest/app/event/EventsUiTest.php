@@ -12,7 +12,7 @@ use function count;
 require getenv("ROOT_DIR") . '/app/Bootstrap.php';
 $container = Bootstrap::boot();
 
-class EventPresenterTest extends UITest
+class EventsUiTest extends UITest
 {
 
     public function testActionDefault()
@@ -107,5 +107,5 @@ class EventPresenterTest extends UITest
     }
 }
 
-$test = new EventPresenterTest($container);
+$test = new EventsUiTest($container);
 $test->run();
