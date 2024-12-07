@@ -32,7 +32,7 @@ class DebtTest extends ApiTest
     public function testCRUDSingular(): void
     {
         $this->authorizeAdmin();
-        $recordId = $this->createRecord();
+        $recordId = $this->createRecord()["id"];
 
         $this->request($this->getBasePath() . "/" . $recordId)->expect(200, "array");
 
@@ -127,7 +127,7 @@ class DebtTest extends ApiTest
         $data["caption"] = "";
         $this->request($this->getBasePath(), "POST", $data)->expect(400);
 
-        $recordId = $this->createRecord();
+        $recordId = $this->createRecord()["id"];
         $this->request($this->getBasePath() . "/" . $recordId, "PUT", ["caption" => ""])->expect(400);
     }
 
@@ -146,7 +146,7 @@ class DebtTest extends ApiTest
         $data["amount"] = -13;
         $this->request($this->getBasePath(), "POST", $data)->expect(400);
 
-        $recordId = $this->createRecord();
+        $recordId = $this->createRecord()["id"];
         $this->request($this->getBasePath() . "/" . $recordId, "PUT", ["amount" => "-14"])->expect(400);
     }
 
@@ -173,7 +173,7 @@ class DebtTest extends ApiTest
     public function testCRUDPlural(): void
     {
         $this->authorizeAdmin();
-        $recordId = $this->createRecord();
+        $recordId = $this->createRecord()["id"];
 
         $this->request($this->getBasePath() . "s/" . $recordId)->expect(200, "array");
 

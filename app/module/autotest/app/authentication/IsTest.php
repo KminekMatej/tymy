@@ -35,7 +35,7 @@ class IsTest extends ApiTest
 
     public function createRecord(): array
     {
-        //not used in this test
+        throw new \Nette\NotImplementedException();
     }
 
     protected function getBasePath(): string

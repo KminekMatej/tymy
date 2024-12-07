@@ -2,13 +2,14 @@
 
 namespace Tymy\Module\Autotest;
 
+use Nette\Application\IPresenter;
+use Nette\Application\UI\Presenter;
 use Tester\DomQuery;
 use Tymy\Module\Autotest\Entity\Assert;
-use Tymy\Module\Core\Presenter\Front\BasePresenter;
 
 abstract class UITest extends RequestCase
 {
-    protected BasePresenter $presenter;
+    protected IPresenter $presenter;
     protected string $presenterName;
 
     protected abstract function getPresenter(): string;
@@ -17,6 +18,7 @@ abstract class UITest extends RequestCase
     {
         $this->presenterName = "{$this->getModule()}:{$this->getPresenter()}";
         $this->presenter = $this->presenterFactory->createPresenter($this->presenterName);
+        assert($this->presenter instanceof Presenter);
         $this->presenter->autoCanonicalize = false;
 
         parent::setUp();

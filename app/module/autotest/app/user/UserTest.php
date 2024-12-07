@@ -105,7 +105,7 @@ class UserTest extends ApiTest
 
     public function testCRUD(): void
     {
-        $recordId = $this->createRecord();
+        $recordId = $this->createRecord()["id"];
 
         $this->request($this->getBasePath() . "/" . $recordId)->expect(200, "array");
 
@@ -266,7 +266,7 @@ class UserTest extends ApiTest
         $adminData = $this->request($this->getBasePath() . "/1", "PUT", ["roles" => ["USR"]])->expect(200)->getData();
         Assert::contains("SUPER", $adminData["roles"]);
 
-        $userId = $this->createRecord();
+        $userId = $this->createRecord()["id"];
 
         $this->authorizeUser();
         $this->request($this->getBasePath() . "/$userId", "PUT", $this->mockChanges())->expect(403);
@@ -312,7 +312,7 @@ class UserTest extends ApiTest
         )->expect(400);
 
         $this->authorizeAdmin();
-        $userId = $this->createRecord();
+        $userId = $this->createRecord()["id"];
 
         $this->authorizeUser();
         $this->request(

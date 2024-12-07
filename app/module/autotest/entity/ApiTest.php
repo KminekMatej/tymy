@@ -24,6 +24,15 @@ abstract class ApiTest extends RequestCase
         $this->recordManager->deleteRecord($this->getBasePath(), $recordId);
     }
 
+    protected function change(int $recordId, ?array $changes = null)
+    {
+        $changes = $changes ?: $this->mockChanges();
+
+        $changedData = $this->request($this->getBasePath() . "/" . $recordId, "PUT", $changes)->expect(200, "array")->getData();
+
+        $this->assertObjectEquality($changes, $changedData);
+    }
+
     //*************** COMMON TESTS, SAME FOR ALL MODULES
 
     public function testUnauthorized()

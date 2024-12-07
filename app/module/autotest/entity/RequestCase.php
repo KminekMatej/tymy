@@ -137,15 +137,6 @@ abstract class RequestCase extends TestCase
         $this->logs = [];
     }
 
-    protected function change(int $recordId, ?array $changes = null)
-    {
-        $changes = $changes ?: $this->mockChanges();
-
-        $changedData = $this->request($this->getBasePath() . "/" . $recordId, "PUT", $changes)->expect(200, "array")->getData();
-
-        $this->assertObjectEquality($changes, $changedData);
-    }
-
     /** @return SimpleResponse */
     public function request($url, $method = "GET", $data = [], $responseClass = null)
     {

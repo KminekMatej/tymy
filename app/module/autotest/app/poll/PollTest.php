@@ -38,7 +38,7 @@ class PollTest extends ApiTest
     {
         $this->authorizeAdmin();
 
-        $recordId = $this->createRecord();
+        $recordId = $this->createRecord()["id"];
 
         $this->request($this->getBasePath() . "/" . $recordId)->expect(200, "array");
 
@@ -72,7 +72,7 @@ class PollTest extends ApiTest
     public function testCrudForbidden(): void
     {
         $this->authorizeAdmin();
-        $pollId = $this->createRecord();
+        $pollId = $this->createRecord()["id"];
         $this->createOptionsFor($pollId, 1);
         $optionsData = $this->request($this->getBasePath() . "/$pollId/options")->expect(200, "array")->getData();//poll doesnt exist
         $option = $optionsData[0];

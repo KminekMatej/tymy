@@ -178,7 +178,7 @@ class AttendanceStatusTest extends ApiTest
 
     public function createRecord(): array
     {
-        //use creator from recorManager - can create status or statusSet
+        throw new \Nette\NotImplementedException();
     }
 
     public function mockRecord(): void

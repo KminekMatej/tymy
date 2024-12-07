@@ -155,7 +155,7 @@ class AttendanceTest extends ApiTest
 
     public function createRecord(): array
     {
-        //attendance are never created solely, always just posted to some event
+        throw new \Nette\NotImplementedException();
     }
 
     public function mockRecord(): array

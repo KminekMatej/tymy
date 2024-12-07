@@ -39,7 +39,7 @@ class EventTest extends ApiTest
 
     public function testCRUDSingular(): void
     {
-        $recordId = $this->createRecord();
+        $recordId = $this->createRecord()["id"];
 
         $this->request($this->getBasePath() . "/" . $recordId)->expect(200, "array");
         $this->request($this->getBasePath() . "/" . $recordId . "/history")->expect(200, "array");
