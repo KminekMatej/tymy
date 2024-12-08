@@ -1,0 +1,3151 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Method Tymy\\\\Bootstrap\\:\\:addModuleConfig\\(\\) has parameter \\$modules with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/Bootstrap.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Admin\\\\Manager\\\\AdminManager\\:\\:__construct\\(\\) has parameter \\$ghosts with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/admin/manager/AdminManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Admin\\\\Manager\\\\MigrationManager\\:\\:executeCommands\\(\\) has parameter \\$sqlCommands with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/admin/manager/MigrationManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Admin\\\\Manager\\\\MigrationManager\\:\\:executeSqlContents\\(\\) has parameter \\$log with no type specified\\.$#"
+			count: 1
+			path: app/module/admin/manager/MigrationManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Admin\\\\Manager\\\\MigrationManager\\:\\:migrateBatch\\(\\) has parameter \\$migrations with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/admin/manager/MigrationManager.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function strlen expects string, bool given\\.$#"
+			count: 1
+			path: app/module/admin/manager/MigrationManager.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Admin\\\\Manager\\\\MigrationManager\\:\\:\\$log type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/admin/manager/MigrationManager.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Admin\\\\Manager\\\\MigrationManager\\:\\:\\$migrationsCache type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/admin/manager/MigrationManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Attendance\\\\Manager\\\\AttendanceManager\\:\\:allowAttend\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/attendance/manager/AttendanceManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Attendance\\\\Manager\\\\AttendanceManager\\:\\:allowCreate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/attendance/manager/AttendanceManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Attendance\\\\Manager\\\\AttendanceManager\\:\\:create\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/attendance/manager/AttendanceManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Attendance\\\\Manager\\\\AttendanceManager\\:\\:getByEvents\\(\\) has parameter \\$eventIds with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/attendance/manager/AttendanceManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Attendance\\\\Manager\\\\AttendanceManager\\:\\:update\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/attendance/manager/AttendanceManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Attendance\\\\Manager\\\\AttendanceManager\\:\\:updateRecord\\(\\) has parameter \\$updates with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/attendance/manager/AttendanceManager.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Attendance\\\\Manager\\\\AttendanceManager\\:\\:\\$myAttendances type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/attendance/manager/AttendanceManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Attendance\\\\Manager\\\\HistoryManager\\:\\:canEdit\\(\\) has parameter \\$entity with no type specified\\.$#"
+			count: 1
+			path: app/module/attendance/manager/HistoryManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Attendance\\\\Manager\\\\HistoryManager\\:\\:canEdit\\(\\) has parameter \\$userId with no type specified\\.$#"
+			count: 1
+			path: app/module/attendance/manager/HistoryManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Attendance\\\\Manager\\\\HistoryManager\\:\\:create\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/attendance/manager/HistoryManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Attendance\\\\Manager\\\\HistoryManager\\:\\:update\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/attendance/manager/HistoryManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Attendance\\\\Manager\\\\StatusManager\\:\\:allowCreate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/attendance/manager/StatusManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Attendance\\\\Manager\\\\StatusManager\\:\\:allowUpdate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/attendance/manager/StatusManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Attendance\\\\Manager\\\\StatusManager\\:\\:canEdit\\(\\) has parameter \\$entity with no type specified\\.$#"
+			count: 1
+			path: app/module/attendance/manager/StatusManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Attendance\\\\Manager\\\\StatusManager\\:\\:canEdit\\(\\) has parameter \\$userId with no type specified\\.$#"
+			count: 1
+			path: app/module/attendance/manager/StatusManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Attendance\\\\Manager\\\\StatusManager\\:\\:canRead\\(\\) has parameter \\$entity with no type specified\\.$#"
+			count: 1
+			path: app/module/attendance/manager/StatusManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Attendance\\\\Manager\\\\StatusManager\\:\\:canRead\\(\\) has parameter \\$userId with no type specified\\.$#"
+			count: 1
+			path: app/module/attendance/manager/StatusManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Attendance\\\\Manager\\\\StatusManager\\:\\:create\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/attendance/manager/StatusManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Attendance\\\\Manager\\\\StatusManager\\:\\:getByEventTypeId\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/attendance/manager/StatusManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Attendance\\\\Manager\\\\StatusManager\\:\\:getListUserAllowed\\(\\) has parameter \\$userId with no type specified\\.$#"
+			count: 1
+			path: app/module/attendance/manager/StatusManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Attendance\\\\Manager\\\\StatusManager\\:\\:update\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/attendance/manager/StatusManager.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Attendance\\\\Manager\\\\StatusManager\\:\\:\\$simpleCache type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/attendance/manager/StatusManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Attendance\\\\Manager\\\\StatusSetManager\\:\\:allowCreate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/attendance/manager/StatusSetManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Attendance\\\\Manager\\\\StatusSetManager\\:\\:allowUpdate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/attendance/manager/StatusSetManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Attendance\\\\Manager\\\\StatusSetManager\\:\\:canEdit\\(\\) has parameter \\$entity with no type specified\\.$#"
+			count: 1
+			path: app/module/attendance/manager/StatusSetManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Attendance\\\\Manager\\\\StatusSetManager\\:\\:canEdit\\(\\) has parameter \\$userId with no type specified\\.$#"
+			count: 1
+			path: app/module/attendance/manager/StatusSetManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Attendance\\\\Manager\\\\StatusSetManager\\:\\:canRead\\(\\) has parameter \\$entity with no type specified\\.$#"
+			count: 1
+			path: app/module/attendance/manager/StatusSetManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Attendance\\\\Manager\\\\StatusSetManager\\:\\:canRead\\(\\) has parameter \\$userId with no type specified\\.$#"
+			count: 1
+			path: app/module/attendance/manager/StatusSetManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Attendance\\\\Manager\\\\StatusSetManager\\:\\:create\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/attendance/manager/StatusSetManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Attendance\\\\Manager\\\\StatusSetManager\\:\\:map\\(\\) has parameter \\$force with no type specified\\.$#"
+			count: 1
+			path: app/module/attendance/manager/StatusSetManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Attendance\\\\Manager\\\\StatusSetManager\\:\\:update\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/attendance/manager/StatusSetManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Attendance\\\\Model\\\\Status\\:\\:setOrder\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/attendance/model/Status.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Attendance\\\\Model\\\\StatusSet\\:\\:setOrder\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/attendance/model/StatusSet.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Attendance\\\\Model\\\\StatusSet\\:\\:\\$statuses type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/attendance/model/StatusSet.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Attendance\\\\Presenter\\\\Api\\\\DefaultPresenter\\:\\:performPost\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/attendance/presenter/api/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Authentication\\\\Manager\\\\AuthenticationManager\\:\\:__construct\\(\\) has parameter \\$ghosts with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/authentication/manager/AuthenticationManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Authentication\\\\Manager\\\\AuthenticationManager\\:\\:authenticate\\(\\) has parameter \\$credentials with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/authentication/manager/AuthenticationManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Authentication\\\\Presenter\\\\Api\\\\DefaultPresenter\\:\\:actionIn\\(\\) has parameter \\$password with no type specified\\.$#"
+			count: 1
+			path: app/module/authentication/presenter/api/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Authentication\\\\Presenter\\\\Api\\\\DefaultPresenter\\:\\:actionIn\\(\\) has parameter \\$username with no type specified\\.$#"
+			count: 1
+			path: app/module/authentication/presenter/api/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Authorization\\\\Manager\\\\AuthorizationManager\\:\\:getUserStatus\\(\\) has parameter \\$userId with no type specified\\.$#"
+			count: 1
+			path: app/module/authorization/manager/AuthorizationManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Authorization\\\\Manager\\\\AuthorizationManager\\:\\:map\\(\\) has parameter \\$force with no type specified\\.$#"
+			count: 1
+			path: app/module/authorization/manager/AuthorizationManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Authorization\\\\Manager\\\\AuthorizationManager\\:\\:map\\(\\) has parameter \\$scheme with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/authorization/manager/AuthorizationManager.php
+
+		-
+			message: "#^Parameter \\#1 \\$id of method Tymy\\\\Module\\\\Authorization\\\\Manager\\\\AuthorizationManager\\:\\:isAllowedById\\(\\) expects int, string\\|null given\\.$#"
+			count: 1
+			path: app/module/authorization/manager/AuthorizationManager.php
+
+		-
+			message: "#^Parameter \\#2 \\$resource of method Tymy\\\\Module\\\\Authorization\\\\Manager\\\\AuthorizationManager\\:\\:isAllowed\\(\\) expects string\\|null, int given\\.$#"
+			count: 1
+			path: app/module/authorization/manager/AuthorizationManager.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Authorization\\\\Manager\\\\AuthorizationManager\\:\\:\\$permissionCache type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/authorization/manager/AuthorizationManager.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Authorization\\\\Manager\\\\AuthorizationManager\\:\\:\\$userCache type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/authorization/manager/AuthorizationManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Authorization\\\\Presenter\\\\Api\\\\DefaultPresenter\\:\\:actionDefault\\(\\) has parameter \\$resourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/authorization/presenter/api/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Component\\\\NavbarControl\\:\\:fileLoad\\(\\) has parameter \\$values with no type specified\\.$#"
+			count: 1
+			path: app/module/core/component/Navbar.php
+
+		-
+			message: "#^Parameter \\#1 \\$users of method Tymy\\\\Module\\\\User\\\\Manager\\\\UserManager\\:\\:getCounts\\(\\) expects array\\<Tymy\\\\Module\\\\User\\\\Model\\\\User\\>, array\\<Tymy\\\\Module\\\\Core\\\\Model\\\\BaseModel\\> given\\.$#"
+			count: 1
+			path: app/module/core/component/Navbar.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Component\\\\NewPostControl\\:\\:render\\(\\) has parameter \\$discussion with no type specified\\.$#"
+			count: 1
+			path: app/module/core/component/NewPost.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Component\\\\NewPostControl\\:\\:render\\(\\) has parameter \\$search with no type specified\\.$#"
+			count: 1
+			path: app/module/core/component/NewPost.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Component\\\\NewPostControl\\:\\:render\\(\\) has parameter \\$suser with no type specified\\.$#"
+			count: 1
+			path: app/module/core/component/NewPost.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Exception\\\\DBException\\:\\:from\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/core/exception/DBException.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Exception\\\\DBException\\:\\:from\\(\\) has parameter \\$type with no type specified\\.$#"
+			count: 1
+			path: app/module/core/exception/DBException.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Exception\\\\DeleteIntegrityException\\:\\:withIds\\(\\) has parameter \\$blockingIds with no type specified\\.$#"
+			count: 1
+			path: app/module/core/exception/DBException.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Exception\\\\IntegrityException\\:\\:__construct\\(\\) has parameter \\$failingField with no type specified\\.$#"
+			count: 1
+			path: app/module/core/exception/DBException.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Exception\\\\IntegrityException\\:\\:__construct\\(\\) has parameter \\$fkName with no type specified\\.$#"
+			count: 1
+			path: app/module/core/exception/DBException.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Exception\\\\IntegrityException\\:\\:__construct\\(\\) has parameter \\$fkTable with no type specified\\.$#"
+			count: 1
+			path: app/module/core/exception/DBException.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Exception\\\\IntegrityException\\:\\:__construct\\(\\) has parameter \\$relatedColumn with no type specified\\.$#"
+			count: 1
+			path: app/module/core/exception/DBException.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Exception\\\\IntegrityException\\:\\:__construct\\(\\) has parameter \\$relatedTable with no type specified\\.$#"
+			count: 1
+			path: app/module/core/exception/DBException.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Exception\\\\IntegrityException\\:\\:backslashtrim\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/core/exception/DBException.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Exception\\\\IntegrityException\\:\\:backslashtrim\\(\\) has parameter \\$str with no type specified\\.$#"
+			count: 1
+			path: app/module/core/exception/DBException.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Exception\\\\UpdateIntegrityException\\:\\:withIds\\(\\) has parameter \\$blockingIds with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/exception/DBException.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Exception\\\\UpdateIntegrityException\\:\\:withIds\\(\\) has parameter \\$failingField with no type specified\\.$#"
+			count: 1
+			path: app/module/core/exception/DBException.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Exception\\\\UpdateIntegrityException\\:\\:withIds\\(\\) has parameter \\$fkName with no type specified\\.$#"
+			count: 1
+			path: app/module/core/exception/DBException.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Exception\\\\UpdateIntegrityException\\:\\:withIds\\(\\) has parameter \\$fkTable with no type specified\\.$#"
+			count: 1
+			path: app/module/core/exception/DBException.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Exception\\\\UpdateIntegrityException\\:\\:withIds\\(\\) has parameter \\$relatedColumn with no type specified\\.$#"
+			count: 1
+			path: app/module/core/exception/DBException.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Exception\\\\UpdateIntegrityException\\:\\:withIds\\(\\) has parameter \\$relatedTable with no type specified\\.$#"
+			count: 1
+			path: app/module/core/exception/DBException.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Core\\\\Exception\\\\DeleteIntegrityException\\:\\:\\$blockingIds has no type specified\\.$#"
+			count: 1
+			path: app/module/core/exception/DBException.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Core\\\\Exception\\\\UpdateIntegrityException\\:\\:\\$blockingIds type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/exception/DBException.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Exception\\\\TymyResponse\\:\\:getPayload\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/core/exception/Exceptions.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Exception\\\\TymyResponse\\:\\:setPayload\\(\\) has parameter \\$payload with no type specified\\.$#"
+			count: 1
+			path: app/module/core/exception/Exceptions.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Factory\\\\FormFactory\\:\\:createEventLineForm\\(\\) has parameter \\$eventTypesList with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/factory/FormFactory.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Factory\\\\FormFactory\\:\\:getUserPermissions\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/factory/FormFactory.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Core\\\\Factory\\\\FormFactory\\:\\:\\$userPermissions type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/factory/FormFactory.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Helper\\\\ArrayHelper\\:\\:array_merge_unique\\(\\) has parameter \\$arrays with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/helper/ArrayHelper.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Helper\\\\ArrayHelper\\:\\:array_merge_unique\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/helper/ArrayHelper.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Helper\\\\ArrayHelper\\:\\:diffAbs\\(\\) has parameter \\$array1 with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/helper/ArrayHelper.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Helper\\\\ArrayHelper\\:\\:diffAbs\\(\\) has parameter \\$array2 with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/helper/ArrayHelper.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Helper\\\\ArrayHelper\\:\\:filter\\(\\) has parameter \\$inputArray with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/helper/ArrayHelper.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Helper\\\\ArrayHelper\\:\\:filter\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/helper/ArrayHelper.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Helper\\\\ArrayHelper\\:\\:idSort\\(\\) has parameter \\$entities with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/helper/ArrayHelper.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Helper\\\\ArrayHelper\\:\\:idSort\\(\\) has parameter \\$idArray with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/helper/ArrayHelper.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Helper\\\\ArrayHelper\\:\\:ints\\(\\) has parameter \\$array with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/helper/ArrayHelper.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Helper\\\\ArrayHelper\\:\\:isAssoc\\(\\) has parameter \\$array with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/helper/ArrayHelper.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Helper\\\\ArrayHelper\\:\\:pairs\\(\\) has parameter \\$inputArray with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/helper/ArrayHelper.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Helper\\\\ArrayHelper\\:\\:rowsToArrays\\(\\) has parameter \\$rows with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/helper/ArrayHelper.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Helper\\\\ArrayHelper\\:\\:subValue\\(\\) has parameter \\$inputArray with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/helper/ArrayHelper.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Helper\\\\ArrayHelper\\:\\:sum\\(\\) has parameter \\$inputArray with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/helper/ArrayHelper.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Helper\\\\ArrayHelper\\:\\:valuesEqual\\(\\) has parameter \\$array1 with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/helper/ArrayHelper.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Helper\\\\ArrayHelper\\:\\:valuesEqual\\(\\) has parameter \\$array2 with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/helper/ArrayHelper.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Helper\\\\DateHelper\\:\\:validateDate\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/core/helper/DateHelper.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Helper\\\\DateHelper\\:\\:validateDate\\(\\) has parameter \\$date with no type specified\\.$#"
+			count: 1
+			path: app/module/core/helper/DateHelper.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Helper\\\\Timer\\:\\:logPoints\\(\\) has parameter \\$timeWholeApp with no type specified\\.$#"
+			count: 1
+			path: app/module/core/helper/Timer.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Helper\\\\Timer\\:\\:logSumPoints\\(\\) has parameter \\$timeWholeApp with no type specified\\.$#"
+			count: 1
+			path: app/module/core/helper/Timer.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Helper\\\\Timer\\:\\:startNewPoint\\(\\) has parameter \\$name with no type specified\\.$#"
+			count: 1
+			path: app/module/core/helper/Timer.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Helper\\\\Timer\\:\\:startNewSumPoint\\(\\) has parameter \\$name with no type specified\\.$#"
+			count: 1
+			path: app/module/core/helper/Timer.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Helper\\\\Timer\\:\\:toMs\\(\\) has parameter \\$time with no type specified\\.$#"
+			count: 1
+			path: app/module/core/helper/Timer.php
+
+		-
+			message: "#^Parameter \\#1 \\$name of static method Tracy\\\\Debugger\\:\\:timer\\(\\) expects string\\|null, int given\\.$#"
+			count: 1
+			path: app/module/core/helper/Timer.php
+
+		-
+			message: "#^Parameter \\#1 \\$name of static method Tracy\\\\Debugger\\:\\:timer\\(\\) expects string\\|null, int\\|null given\\.$#"
+			count: 1
+			path: app/module/core/helper/Timer.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Core\\\\Helper\\\\Timer\\:\\:\\$dumps type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/helper/Timer.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Core\\\\Helper\\\\Timer\\:\\:\\$serverTimingHeader type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/helper/Timer.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Helper\\\\CURLHelper\\:\\:get\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/helper/cURLHelper.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager\\:\\:allowAdmin\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/BaseManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager\\:\\:allowCreate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/manager/BaseManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager\\:\\:allowUpdate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/manager/BaseManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager\\:\\:checkInputs\\(\\) has parameter \\$array with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/manager/BaseManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager\\:\\:composeInsertArray\\(\\) has parameter \\$array with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/manager/BaseManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager\\:\\:composeInsertArray\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/manager/BaseManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager\\:\\:composeUpdateArray\\(\\) has parameter \\$array with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/manager/BaseManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager\\:\\:composeUpdateArray\\(\\) has parameter \\$scheme with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/manager/BaseManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager\\:\\:composeUpdateArray\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/manager/BaseManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager\\:\\:create\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/manager/BaseManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager\\:\\:createByArray\\(\\) has parameter \\$array with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/manager/BaseManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager\\:\\:createRecord\\(\\) has parameter \\$inserts with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/manager/BaseManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager\\:\\:getIdList\\(\\) has parameter \\$idList with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/manager/BaseManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager\\:\\:getLastIdList\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/manager/BaseManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager\\:\\:getList\\(\\) has parameter \\$idList with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/manager/BaseManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager\\:\\:getListOrder\\(\\) has parameter \\$idList with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/manager/BaseManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager\\:\\:getListOrder\\(\\) has parameter \\$order with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/BaseManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager\\:\\:getListOrder\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/manager/BaseManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager\\:\\:loadRecord\\(\\) has parameter \\$manager with generic class Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager but does not specify its types\\: T$#"
+			count: 1
+			path: app/module/core/manager/BaseManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager\\:\\:mapAll\\(\\) has parameter \\$rows with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/manager/BaseManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager\\:\\:mapAllWithId\\(\\) has parameter \\$rows with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/manager/BaseManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager\\:\\:respondBadRequest\\(\\) has parameter \\$message with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/BaseManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager\\:\\:respondDeleted\\(\\) has parameter \\$id with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/BaseManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager\\:\\:respondOk\\(\\) has parameter \\$payload with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/BaseManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager\\:\\:respondOkCreated\\(\\) has parameter \\$payload with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/BaseManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager\\:\\:toBoolData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/manager/BaseManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager\\:\\:toBoolData\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/manager/BaseManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager\\:\\:update\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/manager/BaseManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager\\:\\:updateByArray\\(\\) has parameter \\$array with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/manager/BaseManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager\\:\\:updateRecord\\(\\) has parameter \\$updates with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/manager/BaseManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:A2001_LOGGED_IN\\(\\) has parameter \\$userData with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:A200_OK\\(\\) has parameter \\$payload with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:A201_CREATED\\(\\) has parameter \\$payload with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:A304_NOT_MODIFIED\\(\\) has parameter \\$payload with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:E4001_VIEW_NOT_PERMITTED\\(\\) has parameter \\$id with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:E4001_VIEW_NOT_PERMITTED\\(\\) has parameter \\$module with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:E4002_EDIT_NOT_PERMITTED\\(\\) has parameter \\$id with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:E4002_EDIT_NOT_PERMITTED\\(\\) has parameter \\$module with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:E4003_CREATE_NOT_PERMITTED\\(\\) has parameter \\$module with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:E4004_DELETE_NOT_PERMITTED\\(\\) has parameter \\$id with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:E4004_DELETE_NOT_PERMITTED\\(\\) has parameter \\$module with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:E4005_OBJECT_NOT_FOUND\\(\\) has parameter \\$id with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:E4005_OBJECT_NOT_FOUND\\(\\) has parameter \\$module with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:E4007_RELATION_PROHIBITS\\(\\) has parameter \\$field with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:E4008_CHILD_NOT_RELATED_TO_PARENT\\(\\) has parameter \\$childId with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:E4008_CHILD_NOT_RELATED_TO_PARENT\\(\\) has parameter \\$childModule with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:E4008_CHILD_NOT_RELATED_TO_PARENT\\(\\) has parameter \\$parentId with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:E4008_CHILD_NOT_RELATED_TO_PARENT\\(\\) has parameter \\$parentModule with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:E4009_CREATE_FAILED\\(\\) has parameter \\$module with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:E400_BAD_REQUEST\\(\\) has parameter \\$message with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:E4010_UPDATE_FAILED\\(\\) has parameter \\$id with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:E4010_UPDATE_FAILED\\(\\) has parameter \\$module with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:E4011_DELETE_FAILED\\(\\) has parameter \\$id with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:E4011_DELETE_FAILED\\(\\) has parameter \\$module with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:E4012_IMAGE_UPDATE_FAILED\\(\\) has parameter \\$id with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:E4012_IMAGE_UPDATE_FAILED\\(\\) has parameter \\$module with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:E4013_MISSING_INPUT\\(\\) has parameter \\$inputName with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:E4014_EMPTY_INPUT\\(\\) has parameter \\$inputName with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:E4015_MISSING_URL_INPUT\\(\\) has parameter \\$inputName with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:E4018_MIGRATION_FAILED\\(\\) has parameter \\$log with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:E401_UNAUTHORIZED\\(\\) has parameter \\$message with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:E403_FORBIDDEN\\(\\) has parameter \\$message with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:E404_NOT_FOUND\\(\\) has parameter \\$identifier with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\Responder\\:\\:E500_INTERNAL_SERVER_ERROR\\(\\) has parameter \\$throw with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/Responder.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\StringsManager\\:\\:translate\\(\\) has parameter \\$message with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/StringsManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Manager\\\\StringsManager\\:\\:translate\\(\\) has parameter \\$parameters with no type specified\\.$#"
+			count: 1
+			path: app/module/core/manager/StringsManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Model\\\\BaseModel\\:\\:arrayToJson\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/model/BaseModel.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Model\\\\BaseModel\\:\\:setHasMeta\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/core/model/BaseModel.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Model\\\\BaseModel\\:\\:setId\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/core/model/BaseModel.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Model\\\\Field\\:\\:getEnum\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/model/Field.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Model\\\\Field\\:\\:setEnum\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/core/model/Field.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Model\\\\Field\\:\\:setEnum\\(\\) has parameter \\$enum with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/model/Field.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Model\\\\Field\\:\\:setMaxLength\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/core/model/Field.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Core\\\\Model\\\\Field\\:\\:\\$enum type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/model/Field.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Model\\\\Filter\\:\\:__construct\\(\\) has parameter \\$value with no type specified\\.$#"
+			count: 1
+			path: app/module/core/model/Filter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Model\\\\Filter\\:\\:addFilter\\(\\) has parameter \\$filters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/model/Filter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Model\\\\Filter\\:\\:getValue\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/core/model/Filter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Model\\\\Order\\:\\:toString\\(\\) has parameter \\$orders with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/model/Order.php
+
+		-
+			message: "#^Class Tymy\\\\Module\\\\Core\\\\Model\\\\Row implements generic interface Iterator but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: app/module/core/model/Row.php
+
+		-
+			message: "#^Parameter \\#3 \\$isDST of function timezone_name_from_abbr expects int, false given\\.$#"
+			count: 1
+			path: app/module/core/presenter/RootPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Presenter\\\\Api\\\\BasePresenter\\:\\:loadResource\\(\\) has parameter \\$manager with generic class Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager but does not specify its types\\: T$#"
+			count: 1
+			path: app/module/core/presenter/api/BasePresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Presenter\\\\Api\\\\BasePresenter\\:\\:loadSubResource\\(\\) has parameter \\$manager with generic class Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager but does not specify its types\\: T$#"
+			count: 1
+			path: app/module/core/presenter/api/BasePresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Presenter\\\\Api\\\\BasePresenter\\:\\:respondBadRequest\\(\\) has parameter \\$message with no type specified\\.$#"
+			count: 1
+			path: app/module/core/presenter/api/BasePresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Presenter\\\\Api\\\\BasePresenter\\:\\:respondDeleted\\(\\) has parameter \\$id with no type specified\\.$#"
+			count: 1
+			path: app/module/core/presenter/api/BasePresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Presenter\\\\Api\\\\BasePresenter\\:\\:respondOk\\(\\) has parameter \\$payload with no type specified\\.$#"
+			count: 1
+			path: app/module/core/presenter/api/BasePresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Presenter\\\\Api\\\\BasePresenter\\:\\:respondOkCreated\\(\\) has parameter \\$payload with no type specified\\.$#"
+			count: 1
+			path: app/module/core/presenter/api/BasePresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Presenter\\\\Api\\\\BasePresenter\\:\\:setRequestData\\(\\) has parameter \\$requestData with no type specified\\.$#"
+			count: 1
+			path: app/module/core/presenter/api/BasePresenter.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Core\\\\Presenter\\\\Api\\\\BasePresenter\\:\\:\\$manager with generic class Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager does not specify its types\\: T$#"
+			count: 1
+			path: app/module/core/presenter/api/BasePresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Presenter\\\\Front\\\\BasePresenter\\:\\:respondByTymyResponse\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/core/presenter/front/BasePresenter.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Core\\\\Presenter\\\\Front\\\\BasePresenter\\:\\:\\$locale has no type specified\\.$#"
+			count: 1
+			path: app/module/core/presenter/front/BasePresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Presenter\\\\Front\\\\SecuredPresenter\\:\\:createComponentNavbar\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/core/presenter/front/SecuredPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Presenter\\\\Front\\\\SecuredPresenter\\:\\:getAccessibleSettings\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/core/presenter/front/SecuredPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Presenter\\\\Front\\\\SecuredPresenter\\:\\:getAllRoles\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/presenter/front/SecuredPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Presenter\\\\Front\\\\SecuredPresenter\\:\\:getLevelCaptions\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/core/presenter/front/SecuredPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Presenter\\\\Front\\\\SecuredPresenter\\:\\:pagination\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/presenter/front/SecuredPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Presenter\\\\Front\\\\SecuredPresenter\\:\\:setAccessibleSettings\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/core/presenter/front/SecuredPresenter.php
+
+		-
+			message: "#^Parameter \\#12 \\$httpRequest of class Tymy\\\\Module\\\\Core\\\\Component\\\\NavbarControl constructor expects Nette\\\\Http\\\\Request, Nette\\\\Http\\\\IRequest given\\.$#"
+			count: 1
+			path: app/module/core/presenter/front/SecuredPresenter.php
+
+		-
+			message: "#^Parameter \\#3 \\$length of function array_slice expects int\\|null, float given\\.$#"
+			count: 1
+			path: app/module/core/presenter/front/SecuredPresenter.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Core\\\\Presenter\\\\Front\\\\SecuredPresenter\\:\\:\\$accessibleSettings type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/presenter/front/SecuredPresenter.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Core\\\\Presenter\\\\Front\\\\SecuredPresenter\\:\\:\\$levelCaptions has no type specified\\.$#"
+			count: 1
+			path: app/module/core/presenter/front/SecuredPresenter.php
+
+		-
+			message: "#^Parameter \\#2 \\$value of method Nette\\\\Http\\\\IResponse\\:\\:setHeader\\(\\) expects string, int given\\.$#"
+			count: 1
+			path: app/module/core/response/FileContentResponse.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Core\\\\Router\\\\RouteList\\:\\:addApiRoute\\(\\) has parameter \\$metadata with no type specified\\.$#"
+			count: 1
+			path: app/module/core/router/RouteList.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Core\\\\Service\\\\BbService\\:\\:\\$find type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/service/BbService.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Core\\\\Service\\\\BbService\\:\\:\\$replace type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/core/service/BbService.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Debt\\\\Manager\\\\DebtManager\\:\\:allowCreate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/debt/manager/DebtManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Debt\\\\Manager\\\\DebtManager\\:\\:allowUpdate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/debt/manager/DebtManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Debt\\\\Manager\\\\DebtManager\\:\\:autosetType\\(\\) has parameter \\$debtData with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/debt/manager/DebtManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Debt\\\\Manager\\\\DebtManager\\:\\:create\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/debt/manager/DebtManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Debt\\\\Manager\\\\DebtManager\\:\\:getListUserAllowed\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/debt/manager/DebtManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Debt\\\\Manager\\\\DebtManager\\:\\:map\\(\\) has parameter \\$force with no type specified\\.$#"
+			count: 1
+			path: app/module/debt/manager/DebtManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Debt\\\\Manager\\\\DebtManager\\:\\:update\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/debt/manager/DebtManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Debt\\\\Presenter\\\\Api\\\\DefaultPresenter\\:\\:actionDefault\\(\\) has parameter \\$resourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/debt/presenter/api/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Debt\\\\Presenter\\\\Api\\\\DefaultPresenter\\:\\:actionDefault\\(\\) has parameter \\$subResourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/debt/presenter/api/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Debt\\\\Presenter\\\\Front\\\\DebtBasePresenter\\:\\:getCountryList\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/debt/presenter/front/DebtBasePresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Debt\\\\Presenter\\\\Front\\\\DefaultPresenter\\:\\:editDebt\\(\\) has parameter \\$bind with no type specified\\.$#"
+			count: 1
+			path: app/module/debt/presenter/front/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Debt\\\\Presenter\\\\Front\\\\DefaultPresenter\\:\\:generateQRCodeString\\(\\) has parameter \\$accountNumber with no type specified\\.$#"
+			count: 1
+			path: app/module/debt/presenter/front/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Debt\\\\Presenter\\\\Front\\\\DefaultPresenter\\:\\:generateQRCodeString\\(\\) has parameter \\$amount with no type specified\\.$#"
+			count: 1
+			path: app/module/debt/presenter/front/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Debt\\\\Presenter\\\\Front\\\\DefaultPresenter\\:\\:generateQRCodeString\\(\\) has parameter \\$countryISO with no type specified\\.$#"
+			count: 1
+			path: app/module/debt/presenter/front/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Debt\\\\Presenter\\\\Front\\\\DefaultPresenter\\:\\:generateQRCodeString\\(\\) has parameter \\$currencyISO with no type specified\\.$#"
+			count: 1
+			path: app/module/debt/presenter/front/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Debt\\\\Presenter\\\\Front\\\\DefaultPresenter\\:\\:generateQRCodeString\\(\\) has parameter \\$payeeEmail with no type specified\\.$#"
+			count: 1
+			path: app/module/debt/presenter/front/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Debt\\\\Presenter\\\\Front\\\\DefaultPresenter\\:\\:generateQRCodeString\\(\\) has parameter \\$varcode with no type specified\\.$#"
+			count: 1
+			path: app/module/debt/presenter/front/DefaultPresenter.php
+
+		-
+			message: "#^Parameter \\#1 \\$created of method Tymy\\\\Module\\\\Debt\\\\Model\\\\Debt\\:\\:setCreated\\(\\) expects Nette\\\\Utils\\\\DateTime, string given\\.$#"
+			count: 1
+			path: app/module/debt/presenter/front/DefaultPresenter.php
+
+		-
+			message: "#^Parameter \\#1 \\$debtDate of method Tymy\\\\Module\\\\Debt\\\\Model\\\\Debt\\:\\:setDebtDate\\(\\) expects Nette\\\\Utils\\\\DateTime\\|null, string given\\.$#"
+			count: 1
+			path: app/module/debt/presenter/front/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Discussion\\\\Manager\\\\DiscussionManager\\:\\:allowCreate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/discussion/manager/DiscussionManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Discussion\\\\Manager\\\\DiscussionManager\\:\\:allowUpdate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/discussion/manager/DiscussionManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Discussion\\\\Manager\\\\DiscussionManager\\:\\:create\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/discussion/manager/DiscussionManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Discussion\\\\Manager\\\\DiscussionManager\\:\\:getList\\(\\) has parameter \\$idList with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/discussion/manager/DiscussionManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Discussion\\\\Manager\\\\DiscussionManager\\:\\:update\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/discussion/manager/DiscussionManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Discussion\\\\Manager\\\\PostManager\\:\\:allowCreate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/discussion/manager/PostManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Discussion\\\\Manager\\\\PostManager\\:\\:allowDiscussion\\(\\) has parameter \\$discussionId with no type specified\\.$#"
+			count: 1
+			path: app/module/discussion/manager/PostManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Discussion\\\\Manager\\\\PostManager\\:\\:allowUpdate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/discussion/manager/PostManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Discussion\\\\Manager\\\\PostManager\\:\\:create\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/discussion/manager/PostManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Discussion\\\\Manager\\\\PostManager\\:\\:getReactions\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/discussion/manager/PostManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Discussion\\\\Manager\\\\PostManager\\:\\:update\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/discussion/manager/PostManager.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Discussion\\\\Manager\\\\PostManager\\:\\:\\$reactionsCache type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/discussion/manager/PostManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Discussion\\\\Model\\\\Discussion\\:\\:setEditablePosts\\(\\) has parameter \\$editablePosts with no type specified\\.$#"
+			count: 1
+			path: app/module/discussion/model/Discussion.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Discussion\\\\Model\\\\Discussion\\:\\:setPublicRead\\(\\) has parameter \\$publicRead with no type specified\\.$#"
+			count: 1
+			path: app/module/discussion/model/Discussion.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Discussion\\\\Model\\\\DiscussionPosts\\:\\:__construct\\(\\) has parameter \\$posts with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/discussion/model/DiscussionPosts.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Discussion\\\\Model\\\\Post\\:\\:\\$reactions type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/discussion/model/Post.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Discussion\\\\Presenter\\\\Api\\\\DefaultPresenter\\:\\:actionDefault\\(\\) has parameter \\$resourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/discussion/presenter/api/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Discussion\\\\Presenter\\\\Api\\\\DefaultPresenter\\:\\:actionDefault\\(\\) has parameter \\$subResourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/discussion/presenter/api/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Discussion\\\\Presenter\\\\Api\\\\NewOnlyPresenter\\:\\:requestGet\\(\\) has parameter \\$resourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/discussion/presenter/api/NewOnlyPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Discussion\\\\Presenter\\\\Api\\\\NewOnlyPresenter\\:\\:requestGet\\(\\) has parameter \\$subResourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/discussion/presenter/api/NewOnlyPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Discussion\\\\Presenter\\\\Api\\\\PostPresenter\\:\\:actionDefault\\(\\) has parameter \\$resourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/discussion/presenter/api/PostPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Discussion\\\\Presenter\\\\Api\\\\PostPresenter\\:\\:actionDefault\\(\\) has parameter \\$subResourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/discussion/presenter/api/PostPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Discussion\\\\Presenter\\\\Api\\\\PostPresenter\\:\\:actionMode\\(\\) has parameter \\$mode with no type specified\\.$#"
+			count: 1
+			path: app/module/discussion/presenter/api/PostPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Discussion\\\\Presenter\\\\Api\\\\PostPresenter\\:\\:actionMode\\(\\) has parameter \\$resourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/discussion/presenter/api/PostPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Discussion\\\\Presenter\\\\Api\\\\PostPresenter\\:\\:actionMode\\(\\) has parameter \\$subResourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/discussion/presenter/api/PostPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Discussion\\\\Presenter\\\\Api\\\\PostPresenter\\:\\:actionReact\\(\\) has parameter \\$resourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/discussion/presenter/api/PostPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Discussion\\\\Presenter\\\\Api\\\\PostPresenter\\:\\:actionReact\\(\\) has parameter \\$subResourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/discussion/presenter/api/PostPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Discussion\\\\Presenter\\\\Api\\\\PostPresenter\\:\\:requestGetList\\(\\) has parameter \\$page with no type specified\\.$#"
+			count: 1
+			path: app/module/discussion/presenter/api/PostPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Discussion\\\\Presenter\\\\Api\\\\PostPresenter\\:\\:requestGetList\\(\\) has parameter \\$resourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/discussion/presenter/api/PostPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Discussion\\\\Presenter\\\\Api\\\\PreviewPresenter\\:\\:actionDefault\\(\\) has parameter \\$resourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/discussion/presenter/api/PreviewPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Discussion\\\\Presenter\\\\Api\\\\PreviewPresenter\\:\\:requestPost\\(\\) has parameter \\$resourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/discussion/presenter/api/PreviewPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Discussion\\\\Presenter\\\\Front\\\\DiscussionPresenter\\:\\:actionStickPost\\(\\) has parameter \\$sticky with no type specified\\.$#"
+			count: 1
+			path: app/module/discussion/presenter/front/DiscussionPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Discussion\\\\Presenter\\\\Front\\\\DiscussionPresenter\\:\\:handleDeletePost\\(\\) has parameter \\$currentPage with no type specified\\.$#"
+			count: 1
+			path: app/module/discussion/presenter/front/DiscussionPresenter.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Discussion\\\\Presenter\\\\Front\\\\DiscussionPresenter\\:\\:\\$userList type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/discussion/presenter/front/DiscussionPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Manager\\\\EventManager\\:\\:addAttendances\\(\\) has parameter \\$events with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/event/manager/EventManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Manager\\\\EventManager\\:\\:addAttendancesToEvent\\(\\) has parameter \\$allSimpleUsers with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/event/manager/EventManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Manager\\\\EventManager\\:\\:addAttendancesToEvent\\(\\) has parameter \\$eventAttendances with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/event/manager/EventManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Manager\\\\EventManager\\:\\:allowCreate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/event/manager/EventManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Manager\\\\EventManager\\:\\:allowUpdate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/event/manager/EventManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Manager\\\\EventManager\\:\\:create\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/event/manager/EventManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Manager\\\\EventManager\\:\\:getAsMonthArray\\(\\) has parameter \\$events with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/event/manager/EventManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Manager\\\\EventManager\\:\\:getAsMonthArray\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/event/manager/EventManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Manager\\\\EventManager\\:\\:getEventsOfPrestatus\\(\\) has parameter \\$prestatusIds with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/event/manager/EventManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Manager\\\\EventManager\\:\\:getYearEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/event/manager/EventManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Manager\\\\EventManager\\:\\:update\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/event/manager/EventManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Manager\\\\EventTypeManager\\:\\:allowCreate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/event/manager/EventTypeManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Manager\\\\EventTypeManager\\:\\:canEdit\\(\\) has parameter \\$entity with no type specified\\.$#"
+			count: 1
+			path: app/module/event/manager/EventTypeManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Manager\\\\EventTypeManager\\:\\:canEdit\\(\\) has parameter \\$userId with no type specified\\.$#"
+			count: 1
+			path: app/module/event/manager/EventTypeManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Manager\\\\EventTypeManager\\:\\:canRead\\(\\) has parameter \\$entity with no type specified\\.$#"
+			count: 1
+			path: app/module/event/manager/EventTypeManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Manager\\\\EventTypeManager\\:\\:canRead\\(\\) has parameter \\$userId with no type specified\\.$#"
+			count: 1
+			path: app/module/event/manager/EventTypeManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Manager\\\\EventTypeManager\\:\\:create\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/event/manager/EventTypeManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Manager\\\\EventTypeManager\\:\\:getList\\(\\) has parameter \\$idList with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/event/manager/EventTypeManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Manager\\\\EventTypeManager\\:\\:getListUserAllowed\\(\\) has parameter \\$userId with no type specified\\.$#"
+			count: 1
+			path: app/module/event/manager/EventTypeManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Manager\\\\EventTypeManager\\:\\:update\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/event/manager/EventTypeManager.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Event\\\\Manager\\\\EventTypeManager\\:\\:\\$colorList type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/event/manager/EventTypeManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Model\\\\EventType\\:\\:setOrder\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/event/model/EventType.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Event\\\\Model\\\\EventType\\:\\:\\$postStatusSet type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/event/model/EventType.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Event\\\\Model\\\\EventType\\:\\:\\$preStatusSet type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/event/model/EventType.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Presenter\\\\Api\\\\DefaultPresenter\\:\\:actionDefault\\(\\) has parameter \\$resourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/event/presenter/api/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Presenter\\\\Api\\\\DefaultPresenter\\:\\:actionDefault\\(\\) has parameter \\$subResourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/event/presenter/api/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Presenter\\\\Api\\\\DefaultPresenter\\:\\:performPost\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/event/presenter/api/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Presenter\\\\Api\\\\DefaultPresenter\\:\\:requestPost\\(\\) has parameter \\$resourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/event/presenter/api/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Presenter\\\\Api\\\\ExportPresenter\\:\\:actionAttendance\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/event/presenter/api/ExportPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Presenter\\\\Api\\\\ExportPresenter\\:\\:actionReport\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/event/presenter/api/ExportPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Presenter\\\\Api\\\\ExportPresenter\\:\\:addAttendanceData\\(\\) has parameter \\$events with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/event/presenter/api/ExportPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Presenter\\\\Api\\\\ExportPresenter\\:\\:addReportData\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/event/presenter/api/ExportPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Presenter\\\\Api\\\\ExportPresenter\\:\\:addReportData\\(\\) has parameter \\$events with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/event/presenter/api/ExportPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Presenter\\\\Api\\\\ExportPresenter\\:\\:addReportData\\(\\) has parameter \\$users with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/event/presenter/api/ExportPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Presenter\\\\Api\\\\ExportPresenter\\:\\:addReportHeadings\\(\\) has parameter \\$events with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/event/presenter/api/ExportPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Presenter\\\\Api\\\\ExportPresenter\\:\\:output\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/event/presenter/api/ExportPresenter.php
+
+		-
+			message: "#^Parameter \\#2 \\$year of method Tymy\\\\Module\\\\Event\\\\Manager\\\\EventManager\\:\\:getYearEvents\\(\\) expects int, string given\\.$#"
+			count: 1
+			path: app/module/event/presenter/api/ExportPresenter.php
+
+		-
+			message: "#^Parameter \\#3 \\$page of method Tymy\\\\Module\\\\Event\\\\Manager\\\\EventManager\\:\\:getYearEvents\\(\\) expects int\\|null, string given\\.$#"
+			count: 1
+			path: app/module/event/presenter/api/ExportPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Presenter\\\\Api\\\\HistoryPresenter\\:\\:actionDefault\\(\\) has parameter \\$subResourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/event/presenter/api/HistoryPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Presenter\\\\Api\\\\HistoryPresenter\\:\\:requestGetList\\(\\) has parameter \\$eventId with no type specified\\.$#"
+			count: 1
+			path: app/module/event/presenter/api/HistoryPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Presenter\\\\Api\\\\TypesPresenter\\:\\:actionDefault\\(\\) has parameter \\$resourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/event/presenter/api/TypesPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Presenter\\\\Api\\\\TypesPresenter\\:\\:actionDefault\\(\\) has parameter \\$subResourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/event/presenter/api/TypesPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Presenter\\\\Front\\\\DefaultPresenter\\:\\:renderDefault\\(\\) has parameter \\$date with no type specified\\.$#"
+			count: 1
+			path: app/module/event/presenter/front/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Presenter\\\\Front\\\\DefaultPresenter\\:\\:renderDefault\\(\\) has parameter \\$direction with no type specified\\.$#"
+			count: 1
+			path: app/module/event/presenter/front/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Presenter\\\\Front\\\\DetailPresenter\\:\\:getEventCaptions\\(\\) has parameter \\$eventTypes with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/event/presenter/front/DetailPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Presenter\\\\Front\\\\DetailPresenter\\:\\:handleAttendanceResult\\(\\) has parameter \\$id with no type specified\\.$#"
+			count: 1
+			path: app/module/event/presenter/front/DetailPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Presenter\\\\Front\\\\DetailPresenter\\:\\:handleLoadHistory\\(\\) has parameter \\$udalost with no type specified\\.$#"
+			count: 1
+			path: app/module/event/presenter/front/DetailPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Presenter\\\\Front\\\\EventBasePresenter\\:\\:toFeed\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/event/presenter/front/EventBasePresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Event\\\\Presenter\\\\Front\\\\ExportPresenter\\:\\:createComponentExportAttendanceForm\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/event/presenter/front/ExportPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\File\\\\Handler\\\\FileManager\\:\\:getArchiveMimeTypes\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/file/manager/FileManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\File\\\\Handler\\\\FileManager\\:\\:getDocumentMimeTypes\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/file/manager/FileManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\File\\\\Handler\\\\FileManager\\:\\:getImageMimeTypes\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/file/manager/FileManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\File\\\\Presenter\\\\Front\\\\DefaultPresenter\\:\\:rrmdir\\(\\) has parameter \\$dir with no type specified\\.$#"
+			count: 1
+			path: app/module/file/presenter/front/DefaultPresenter.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\File\\\\Presenter\\\\Front\\\\DefaultPresenter\\:\\:\\$fileStats type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/file/presenter/front/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Multiaccount\\\\Manager\\\\MultiaccountManager\\:\\:canEdit\\(\\) has parameter \\$entity with no type specified\\.$#"
+			count: 1
+			path: app/module/multiaccount/manager/MultiaccountManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Multiaccount\\\\Manager\\\\MultiaccountManager\\:\\:canEdit\\(\\) has parameter \\$userId with no type specified\\.$#"
+			count: 1
+			path: app/module/multiaccount/manager/MultiaccountManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Multiaccount\\\\Manager\\\\MultiaccountManager\\:\\:canRead\\(\\) has parameter \\$entity with no type specified\\.$#"
+			count: 1
+			path: app/module/multiaccount/manager/MultiaccountManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Multiaccount\\\\Manager\\\\MultiaccountManager\\:\\:canRead\\(\\) has parameter \\$userId with no type specified\\.$#"
+			count: 1
+			path: app/module/multiaccount/manager/MultiaccountManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Multiaccount\\\\Manager\\\\MultiaccountManager\\:\\:create\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/multiaccount/manager/MultiaccountManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Multiaccount\\\\Manager\\\\MultiaccountManager\\:\\:create\\(\\) has parameter \\$resourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/multiaccount/manager/MultiaccountManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Multiaccount\\\\Manager\\\\MultiaccountManager\\:\\:delete\\(\\) has parameter \\$resourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/multiaccount/manager/MultiaccountManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Multiaccount\\\\Manager\\\\MultiaccountManager\\:\\:update\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/multiaccount/manager/MultiaccountManager.php
+
+		-
+			message: "#^Parameter \\#1 \\$targetTeamSysName of method Tymy\\\\Module\\\\Multiaccount\\\\Manager\\\\MultiaccountManager\\:\\:generateNewTk\\(\\) expects string, int given\\.$#"
+			count: 1
+			path: app/module/multiaccount/manager/MultiaccountManager.php
+
+		-
+			message: "#^Parameter \\#1 \\$entities of method Tymy\\\\Module\\\\Core\\\\Presenter\\\\Api\\\\BasePresenter\\:\\:arrayToJson\\(\\) expects array\\<Tymy\\\\Module\\\\Core\\\\Model\\\\BaseModel\\>, array\\<Tymy\\\\Module\\\\Team\\\\Model\\\\SimpleTeam\\> given\\.$#"
+			count: 1
+			path: app/module/multiaccount/presenter/api/DefaultPresenter.php
+
+		-
+			message: "#^Parameter \\#2 \\$resourceId of method Tymy\\\\Module\\\\Core\\\\Manager\\\\BaseManager\\<Tymy\\\\Module\\\\Core\\\\Model\\\\BaseModel\\>\\:\\:create\\(\\) expects int\\|null, string given\\.$#"
+			count: 1
+			path: app/module/multiaccount/presenter/api/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\News\\\\Manager\\\\NewsManager\\:\\:create\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/news/manager/NewsManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\News\\\\Manager\\\\NewsManager\\:\\:update\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/news/manager/NewsManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\News\\\\Presenter\\\\Api\\\\DefaultPresenter\\:\\:actionDefault\\(\\) has parameter \\$resourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/news/presenter/api/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\News\\\\Presenter\\\\Api\\\\DefaultPresenter\\:\\:actionDefault\\(\\) has parameter \\$subResourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/news/presenter/api/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Permission\\\\Manager\\\\PermissionManager\\:\\:allowCreate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/permission/manager/PermissionManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Permission\\\\Manager\\\\PermissionManager\\:\\:allowUpdate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/permission/manager/PermissionManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Permission\\\\Manager\\\\PermissionManager\\:\\:canEdit\\(\\) has parameter \\$entity with no type specified\\.$#"
+			count: 1
+			path: app/module/permission/manager/PermissionManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Permission\\\\Manager\\\\PermissionManager\\:\\:canEdit\\(\\) has parameter \\$userId with no type specified\\.$#"
+			count: 1
+			path: app/module/permission/manager/PermissionManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Permission\\\\Manager\\\\PermissionManager\\:\\:canRead\\(\\) has parameter \\$entity with no type specified\\.$#"
+			count: 1
+			path: app/module/permission/manager/PermissionManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Permission\\\\Manager\\\\PermissionManager\\:\\:canRead\\(\\) has parameter \\$userId with no type specified\\.$#"
+			count: 1
+			path: app/module/permission/manager/PermissionManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Permission\\\\Manager\\\\PermissionManager\\:\\:create\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/permission/manager/PermissionManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Permission\\\\Manager\\\\PermissionManager\\:\\:getUserAllowedPermissionNames\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/permission/manager/PermissionManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Permission\\\\Manager\\\\PermissionManager\\:\\:map\\(\\) has parameter \\$force with no type specified\\.$#"
+			count: 1
+			path: app/module/permission/manager/PermissionManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Permission\\\\Manager\\\\PermissionManager\\:\\:precedenceCheck\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/permission/manager/PermissionManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Permission\\\\Manager\\\\PermissionManager\\:\\:transformArrayToString\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/permission/manager/PermissionManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Permission\\\\Manager\\\\PermissionManager\\:\\:update\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/permission/manager/PermissionManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Permission\\\\Model\\\\Permission\\:\\:getAllowedRoles\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/permission/model/Permission.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Permission\\\\Model\\\\Permission\\:\\:getAllowedStatuses\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/permission/model/Permission.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Permission\\\\Model\\\\Permission\\:\\:getAllowedUsers\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/permission/model/Permission.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Permission\\\\Model\\\\Permission\\:\\:getRevokedRoles\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/permission/model/Permission.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Permission\\\\Model\\\\Permission\\:\\:getRevokedStatuses\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/permission/model/Permission.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Permission\\\\Model\\\\Permission\\:\\:getRevokedUsers\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/permission/model/Permission.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Permission\\\\Model\\\\Permission\\:\\:\\$allowedRoles type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/permission/model/Permission.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Permission\\\\Model\\\\Permission\\:\\:\\$allowedStatuses type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/permission/model/Permission.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Permission\\\\Model\\\\Permission\\:\\:\\$allowedUsers type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/permission/model/Permission.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Permission\\\\Model\\\\Permission\\:\\:\\$revokedRoles type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/permission/model/Permission.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Permission\\\\Model\\\\Permission\\:\\:\\$revokedStatuses type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/permission/model/Permission.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Permission\\\\Model\\\\Permission\\:\\:\\$revokedUsers type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/permission/model/Permission.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Permission\\\\Presenter\\\\Api\\\\DefaultPresenter\\:\\:actionDefault\\(\\) has parameter \\$resourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/permission/presenter/api/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Permission\\\\Presenter\\\\Api\\\\DefaultPresenter\\:\\:actionDefault\\(\\) has parameter \\$subResourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/permission/presenter/api/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Manager\\\\OptionManager\\:\\:allowCreate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/poll/manager/OptionManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Manager\\\\OptionManager\\:\\:allowUpdate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/poll/manager/OptionManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Manager\\\\OptionManager\\:\\:canEdit\\(\\) has parameter \\$entity with no type specified\\.$#"
+			count: 1
+			path: app/module/poll/manager/OptionManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Manager\\\\OptionManager\\:\\:canEdit\\(\\) has parameter \\$userId with no type specified\\.$#"
+			count: 1
+			path: app/module/poll/manager/OptionManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Manager\\\\OptionManager\\:\\:canRead\\(\\) has parameter \\$entity with no type specified\\.$#"
+			count: 1
+			path: app/module/poll/manager/OptionManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Manager\\\\OptionManager\\:\\:canRead\\(\\) has parameter \\$userId with no type specified\\.$#"
+			count: 1
+			path: app/module/poll/manager/OptionManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Manager\\\\OptionManager\\:\\:create\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/poll/manager/OptionManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Manager\\\\OptionManager\\:\\:createMultiple\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/poll/manager/OptionManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Manager\\\\OptionManager\\:\\:deleteOptions\\(\\) has parameter \\$ids with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/poll/manager/OptionManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Manager\\\\OptionManager\\:\\:update\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/poll/manager/OptionManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Manager\\\\PollManager\\:\\:allowCreate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/poll/manager/PollManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Manager\\\\PollManager\\:\\:allowUpdate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/poll/manager/PollManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Manager\\\\PollManager\\:\\:canEdit\\(\\) has parameter \\$entity with no type specified\\.$#"
+			count: 1
+			path: app/module/poll/manager/PollManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Manager\\\\PollManager\\:\\:canEdit\\(\\) has parameter \\$userId with no type specified\\.$#"
+			count: 1
+			path: app/module/poll/manager/PollManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Manager\\\\PollManager\\:\\:canRead\\(\\) has parameter \\$entity with no type specified\\.$#"
+			count: 1
+			path: app/module/poll/manager/PollManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Manager\\\\PollManager\\:\\:canRead\\(\\) has parameter \\$userId with no type specified\\.$#"
+			count: 1
+			path: app/module/poll/manager/PollManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Manager\\\\PollManager\\:\\:create\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/poll/manager/PollManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Manager\\\\PollManager\\:\\:map\\(\\) has parameter \\$force with no type specified\\.$#"
+			count: 1
+			path: app/module/poll/manager/PollManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Manager\\\\PollManager\\:\\:update\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/poll/manager/PollManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Manager\\\\VoteManager\\:\\:allowCreate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/poll/manager/VoteManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Manager\\\\VoteManager\\:\\:canEdit\\(\\) has parameter \\$entity with no type specified\\.$#"
+			count: 1
+			path: app/module/poll/manager/VoteManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Manager\\\\VoteManager\\:\\:canEdit\\(\\) has parameter \\$userId with no type specified\\.$#"
+			count: 1
+			path: app/module/poll/manager/VoteManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Manager\\\\VoteManager\\:\\:canRead\\(\\) has parameter \\$entity with no type specified\\.$#"
+			count: 1
+			path: app/module/poll/manager/VoteManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Manager\\\\VoteManager\\:\\:canRead\\(\\) has parameter \\$userId with no type specified\\.$#"
+			count: 1
+			path: app/module/poll/manager/VoteManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Manager\\\\VoteManager\\:\\:checkNumberOfAnswers\\(\\) has parameter \\$votes with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/poll/manager/VoteManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Manager\\\\VoteManager\\:\\:create\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/poll/manager/VoteManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Manager\\\\VoteManager\\:\\:update\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/poll/manager/VoteManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Model\\\\Poll\\:\\:setAnonymousResults\\(\\) has parameter \\$anonymousResults with no type specified\\.$#"
+			count: 1
+			path: app/module/poll/model/Poll.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Poll\\\\Model\\\\Poll\\:\\:\\$myVotes type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/poll/model/Poll.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Poll\\\\Model\\\\Poll\\:\\:\\$orderedVotes type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/poll/model/Poll.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Model\\\\Vote\\:\\:setBooleanValue\\(\\) has parameter \\$booleanValue with no type specified\\.$#"
+			count: 1
+			path: app/module/poll/model/Vote.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Presenter\\\\Api\\\\DefaultPresenter\\:\\:actionDefault\\(\\) has parameter \\$resourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/poll/presenter/api/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Presenter\\\\Api\\\\DefaultPresenter\\:\\:actionDefault\\(\\) has parameter \\$subResourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/poll/presenter/api/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Presenter\\\\Api\\\\OptionPresenter\\:\\:actionDefault\\(\\) has parameter \\$subResourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/poll/presenter/api/OptionPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Presenter\\\\Api\\\\OptionPresenter\\:\\:requestPost\\(\\) has parameter \\$resourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/poll/presenter/api/OptionPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Presenter\\\\Api\\\\VotePresenter\\:\\:actionDefault\\(\\) has parameter \\$resourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/poll/presenter/api/VotePresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Poll\\\\Presenter\\\\Api\\\\VotePresenter\\:\\:actionDefault\\(\\) has parameter \\$subResourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/poll/presenter/api/VotePresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\PushNotification\\\\Manager\\\\ApplePush\\:\\:__construct\\(\\) has parameter \\$apns with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/push-notification/manager/ApplePush.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\PushNotification\\\\Manager\\\\ApplePush\\:\\:sendBulkNotifications\\(\\) has parameter \\$subscribers with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/push-notification/manager/ApplePush.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\PushNotification\\\\Manager\\\\ApplePush\\:\\:\\$expiredSubscribers type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/push-notification/manager/ApplePush.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\PushNotification\\\\Manager\\\\FirebasePush\\:\\:__construct\\(\\) has parameter \\$fcm with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/push-notification/manager/FirebasePush.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\PushNotification\\\\Manager\\\\PushNotificationManager\\:\\:create\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/push-notification/manager/PushNotificationManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\PushNotification\\\\Manager\\\\PushNotificationManager\\:\\:update\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/push-notification/manager/PushNotificationManager.php
+
+		-
+			message: "#^Parameter \\#1 \\$deviceIds of method Tymy\\\\Module\\\\PushNotification\\\\Manager\\\\FirebasePush\\:\\:sendBulkNotifications\\(\\) expects array\\<string\\>, array\\<Tymy\\\\Module\\\\PushNotification\\\\Model\\\\Subscriber\\> given\\.$#"
+			count: 1
+			path: app/module/push-notification/manager/PushNotificationManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\PushNotification\\\\Model\\\\PushNotification\\:\\:addParam\\(\\) has parameter \\$value with no type specified\\.$#"
+			count: 1
+			path: app/module/push-notification/model/PushNotification.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\PushNotification\\\\Model\\\\PushNotification\\:\\:getParams\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/push-notification/model/PushNotification.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\PushNotification\\\\Model\\\\PushNotification\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/push-notification/model/PushNotification.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\PushNotification\\\\Model\\\\PushNotification\\:\\:setBadge\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/push-notification/model/PushNotification.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\PushNotification\\\\Model\\\\PushNotification\\:\\:setImageUrl\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/push-notification/model/PushNotification.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\PushNotification\\\\Model\\\\PushNotification\\:\\:setMessage\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/push-notification/model/PushNotification.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\PushNotification\\\\Model\\\\PushNotification\\:\\:setTeamId\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/push-notification/model/PushNotification.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\PushNotification\\\\Model\\\\PushNotification\\:\\:setTitle\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/push-notification/model/PushNotification.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\PushNotification\\\\Model\\\\PushNotification\\:\\:setType\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/push-notification/model/PushNotification.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\PushNotification\\\\Model\\\\PushNotification\\:\\:setUrl\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/push-notification/model/PushNotification.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\PushNotification\\\\Model\\\\PushNotification\\:\\:setUserId\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/push-notification/model/PushNotification.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\PushNotification\\\\Model\\\\PushNotification\\:\\:\\$params type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/push-notification/model/PushNotification.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\PushNotification\\\\Presenter\\\\Api\\\\ApplePresenter\\:\\:actionDefault\\(\\) has parameter \\$resourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/push-notification/presenter/api/ApplePresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\PushNotification\\\\Presenter\\\\Api\\\\ApplePresenter\\:\\:requestPost\\(\\) has parameter \\$resourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/push-notification/presenter/api/ApplePresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\PushNotification\\\\Presenter\\\\Api\\\\DefaultPresenter\\:\\:actionDefault\\(\\) has parameter \\$resourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/push-notification/presenter/api/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\PushNotification\\\\Presenter\\\\Api\\\\DefaultPresenter\\:\\:actionDefault\\(\\) has parameter \\$subResourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/push-notification/presenter/api/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\PushNotification\\\\Presenter\\\\Api\\\\DefaultPresenter\\:\\:requestPost\\(\\) has parameter \\$resourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/push-notification/presenter/api/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\PushNotification\\\\Presenter\\\\Api\\\\FcmPresenter\\:\\:actionDefault\\(\\) has parameter \\$resourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/push-notification/presenter/api/FcmPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\PushNotification\\\\Presenter\\\\Api\\\\FcmPresenter\\:\\:requestPost\\(\\) has parameter \\$resourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/push-notification/presenter/api/FcmPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Settings\\\\Manager\\\\ICalItemManager\\:\\:create\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/setting/manager/ICalItemManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Settings\\\\Manager\\\\ICalItemManager\\:\\:update\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/setting/manager/ICalItemManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Settings\\\\Manager\\\\ICalManager\\:\\:create\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/setting/manager/ICalManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Settings\\\\Manager\\\\ICalManager\\:\\:map\\(\\) has parameter \\$force with no type specified\\.$#"
+			count: 1
+			path: app/module/setting/manager/ICalManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Settings\\\\Manager\\\\ICalManager\\:\\:update\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/setting/manager/ICalManager.php
+
+		-
+			message: "#^Parameter \\#1 \\$entity of method Tymy\\\\Module\\\\Settings\\\\Manager\\\\ICalManager\\:\\:canEdit\\(\\) expects Tymy\\\\Module\\\\Settings\\\\Model\\\\ICal, Tymy\\\\Module\\\\Core\\\\Model\\\\BaseModel given\\.$#"
+			count: 1
+			path: app/module/setting/manager/ICalManager.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Settings\\\\Model\\\\ICal\\:\\:\\$statusIds type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/setting/model/ICal.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Setting\\\\Presenter\\\\Front\\\\MultiaccountPresenter\\:\\:handleMultiaccountRemove\\(\\) has parameter \\$team with no type specified\\.$#"
+			count: 1
+			path: app/module/setting/presenter/front/MultiaccountPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Setting\\\\Presenter\\\\Front\\\\PermissionPresenter\\:\\:composePermissionData\\(\\) has parameter \\$changes with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/setting/presenter/front/PermissionPresenter.php
+
+		-
+			message: "#^Parameter \\#3 \\$subResourceId of method Tymy\\\\Module\\\\Poll\\\\Manager\\\\OptionManager\\:\\:update\\(\\) expects int\\|null, string given\\.$#"
+			count: 1
+			path: app/module/setting/presenter/front/PollPresenter.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Setting\\\\Presenter\\\\Front\\\\SettingBasePresenter\\:\\:\\$eventTypes type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/setting/presenter/front/SettingBasePresenter.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Setting\\\\Presenter\\\\Front\\\\SettingBasePresenter\\:\\:\\$userPermissions type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/setting/presenter/front/SettingBasePresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Setting\\\\Presenter\\\\Front\\\\TeamPresenter\\:\\:actionDeleteStatus\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/setting/presenter/front/TeamPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Setting\\\\Presenter\\\\Front\\\\TeamPresenter\\:\\:actionDeleteStatusSet\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/setting/presenter/front/TeamPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Setting\\\\Presenter\\\\Front\\\\TeamPresenter\\:\\:actionDeleteType\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/setting/presenter/front/TeamPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Setting\\\\Presenter\\\\Front\\\\TeamPresenter\\:\\:actionNewStatus\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/setting/presenter/front/TeamPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Setting\\\\Presenter\\\\Front\\\\TeamPresenter\\:\\:actionNewStatusSet\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/setting/presenter/front/TeamPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Setting\\\\Presenter\\\\Front\\\\TeamPresenter\\:\\:actionNewType\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/setting/presenter/front/TeamPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Setting\\\\Presenter\\\\Front\\\\TeamPresenter\\:\\:eventTypeFormSuccess\\(\\) has parameter \\$values with no type specified\\.$#"
+			count: 1
+			path: app/module/setting/presenter/front/TeamPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Setting\\\\Presenter\\\\Front\\\\TeamPresenter\\:\\:statusFormSuccess\\(\\) has parameter \\$values with no type specified\\.$#"
+			count: 1
+			path: app/module/setting/presenter/front/TeamPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Setting\\\\Presenter\\\\Front\\\\TeamPresenter\\:\\:teamConfigFormSuccess\\(\\) has parameter \\$values with no type specified\\.$#"
+			count: 1
+			path: app/module/setting/presenter/front/TeamPresenter.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function md5 expects string, int\\<0, 1000\\> given\\.$#"
+			count: 1
+			path: app/module/setting/presenter/front/TeamPresenter.php
+
+		-
+			message: "#^Parameter \\#1 \\$control of method Nette\\\\Forms\\\\Controls\\\\BaseControl\\:\\:addConditionOn\\(\\) expects Nette\\\\Forms\\\\Control, Nette\\\\ComponentModel\\\\IComponent given\\.$#"
+			count: 1
+			path: app/module/sign/form/SignUpFormFactory.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Team\\\\Manager\\\\TeamManager\\:\\:__construct\\(\\) has parameter \\$allSkins with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/team/manager/TeamManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Team\\\\Manager\\\\TeamManager\\:\\:allowCreate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/team/manager/TeamManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Team\\\\Manager\\\\TeamManager\\:\\:allowUpdate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/team/manager/TeamManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Team\\\\Manager\\\\TeamManager\\:\\:canEdit\\(\\) has parameter \\$entity with no type specified\\.$#"
+			count: 1
+			path: app/module/team/manager/TeamManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Team\\\\Manager\\\\TeamManager\\:\\:canEdit\\(\\) has parameter \\$userId with no type specified\\.$#"
+			count: 1
+			path: app/module/team/manager/TeamManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Team\\\\Manager\\\\TeamManager\\:\\:canRead\\(\\) has parameter \\$entity with no type specified\\.$#"
+			count: 1
+			path: app/module/team/manager/TeamManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Team\\\\Manager\\\\TeamManager\\:\\:canRead\\(\\) has parameter \\$userId with no type specified\\.$#"
+			count: 1
+			path: app/module/team/manager/TeamManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Team\\\\Manager\\\\TeamManager\\:\\:create\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/team/manager/TeamManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Team\\\\Manager\\\\TeamManager\\:\\:map\\(\\) has parameter \\$force with no type specified\\.$#"
+			count: 1
+			path: app/module/team/manager/TeamManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Team\\\\Manager\\\\TeamManager\\:\\:mapSimple\\(\\) has parameter \\$row with no type specified\\.$#"
+			count: 1
+			path: app/module/team/manager/TeamManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Team\\\\Manager\\\\TeamManager\\:\\:update\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/team/manager/TeamManager.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Team\\\\Model\\\\SimpleTeam\\:\\:\\$languages type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/team/model/SimpleTeam.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Team\\\\Model\\\\Team\\:\\:setLanguages\\(\\) has parameter \\$languages with no type specified\\.$#"
+			count: 1
+			path: app/module/team/model/Team.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\Team\\\\Model\\\\Team\\:\\:\\$requiredFields type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/team/model/Team.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of function array_map expects \\(callable\\(Tymy\\\\Module\\\\Core\\\\Model\\\\BaseModel\\)\\: mixed\\)\\|null, Closure\\(Tymy\\\\Module\\\\User\\\\Model\\\\User\\)\\: array given\\.$#"
+			count: 1
+			path: app/module/team/presenter/api/ExportPresenter.php
+
+		-
+			message: "#^Parameter \\#1 \\$data of class Vojir\\\\Responses\\\\CsvResponse\\\\ComposedCsvResponse constructor expects iterable\\<array\\>&Traversable, array\\<array\\> given\\.$#"
+			count: 1
+			path: app/module/team/presenter/api/ExportPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Team\\\\Presenter\\\\Front\\\\PlayerPresenter\\:\\:handleDelete\\(\\) has parameter \\$player with no type specified\\.$#"
+			count: 1
+			path: app/module/team/presenter/front/PlayerPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Team\\\\Presenter\\\\Front\\\\PlayerPresenter\\:\\:renderDefault\\(\\) has parameter \\$player with no type specified\\.$#"
+			count: 1
+			path: app/module/team/presenter/front/PlayerPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Team\\\\Presenter\\\\Front\\\\PlayerPresenter\\:\\:renderNew\\(\\) has parameter \\$player with no type specified\\.$#"
+			count: 1
+			path: app/module/team/presenter/front/PlayerPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\Team\\\\Presenter\\\\Front\\\\PlayerPresenter\\:\\:userConfigFormSuccess\\(\\) has parameter \\$values with no type specified\\.$#"
+			count: 1
+			path: app/module/team/presenter/front/PlayerPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\User\\\\Manager\\\\InvitationManager\\:\\:allowCreate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/user/manager/InvitationManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\User\\\\Manager\\\\InvitationManager\\:\\:allowUpdate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/user/manager/InvitationManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\User\\\\Manager\\\\InvitationManager\\:\\:create\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/user/manager/InvitationManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\User\\\\Manager\\\\InvitationManager\\:\\:update\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/user/manager/InvitationManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\User\\\\Manager\\\\UserManager\\:\\:allowCreate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/user/manager/UserManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\User\\\\Manager\\\\UserManager\\:\\:allowRegister\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/user/manager/UserManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\User\\\\Manager\\\\UserManager\\:\\:allowUpdate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/user/manager/UserManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\User\\\\Manager\\\\UserManager\\:\\:canEdit\\(\\) has parameter \\$entity with no type specified\\.$#"
+			count: 1
+			path: app/module/user/manager/UserManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\User\\\\Manager\\\\UserManager\\:\\:canEdit\\(\\) has parameter \\$userId with no type specified\\.$#"
+			count: 1
+			path: app/module/user/manager/UserManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\User\\\\Manager\\\\UserManager\\:\\:canRead\\(\\) has parameter \\$entity with no type specified\\.$#"
+			count: 1
+			path: app/module/user/manager/UserManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\User\\\\Manager\\\\UserManager\\:\\:canRead\\(\\) has parameter \\$userId with no type specified\\.$#"
+			count: 1
+			path: app/module/user/manager/UserManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\User\\\\Manager\\\\UserManager\\:\\:create\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/user/manager/UserManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\User\\\\Manager\\\\UserManager\\:\\:createByArray\\(\\) has parameter \\$array with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/user/manager/UserManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\User\\\\Manager\\\\UserManager\\:\\:getByIdWithTeam\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/user/manager/UserManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\User\\\\Manager\\\\UserManager\\:\\:getByStatusAndId\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/user/manager/UserManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\User\\\\Manager\\\\UserManager\\:\\:getCounts\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/user/manager/UserManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\User\\\\Manager\\\\UserManager\\:\\:getSimpleUsers\\(\\) has parameter \\$userIds with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/user/manager/UserManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\User\\\\Manager\\\\UserManager\\:\\:mockTeamUser\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/user/manager/UserManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\User\\\\Manager\\\\UserManager\\:\\:register\\(\\) has parameter \\$array with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/user/manager/UserManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\User\\\\Manager\\\\UserManager\\:\\:update\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/user/manager/UserManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\User\\\\Manager\\\\UserManager\\:\\:updateByArray\\(\\) has parameter \\$array with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/user/manager/UserManager.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function md5 expects string, int\\<0, max\\> given\\.$#"
+			count: 1
+			path: app/module/user/manager/UserManager.php
+
+		-
+			message: "#^Parameter \\#1 \\$users of method Tymy\\\\Module\\\\User\\\\Manager\\\\UserManager\\:\\:getCounts\\(\\) expects array\\<Tymy\\\\Module\\\\User\\\\Model\\\\User\\>, array\\<Tymy\\\\Module\\\\Core\\\\Model\\\\BaseModel\\> given\\.$#"
+			count: 1
+			path: app/module/user/manager/UserManager.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\User\\\\Manager\\\\UserManager\\:\\:\\$userCounts type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/user/manager/UserManager.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\User\\\\Manager\\\\UserManager\\:\\:\\$userFields type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/user/manager/UserManager.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\User\\\\Model\\\\User\\:\\:csvSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/user/model/User.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\User\\\\Model\\\\User\\:\\:setCanEditCallName\\(\\) has parameter \\$canEditCallName with no type specified\\.$#"
+			count: 1
+			path: app/module/user/model/User.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\User\\\\Model\\\\User\\:\\:setCanLogin\\(\\) has parameter \\$canLogin with no type specified\\.$#"
+			count: 1
+			path: app/module/user/model/User.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\User\\\\Model\\\\User\\:\\:setHasNameday\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/module/user/model/User.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\User\\\\Model\\\\User\\:\\:\\$errFields type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/user/model/User.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\User\\\\Presenter\\\\Api\\\\DefaultPresenter\\:\\:actionDefault\\(\\) has parameter \\$resourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/user/presenter/api/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\User\\\\Presenter\\\\Api\\\\DefaultPresenter\\:\\:actionDefault\\(\\) has parameter \\$subResourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/user/presenter/api/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\User\\\\Presenter\\\\Api\\\\LivePresenter\\:\\:actionDefault\\(\\) has parameter \\$resourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/user/presenter/api/LivePresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\User\\\\Presenter\\\\Api\\\\LivePresenter\\:\\:actionDefault\\(\\) has parameter \\$subResourceId with no type specified\\.$#"
+			count: 1
+			path: app/module/user/presenter/api/LivePresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Module\\\\User\\\\Presenter\\\\Api\\\\StatusPresenter\\:\\:actionDefault\\(\\) has parameter \\$status with no type specified\\.$#"
+			count: 1
+			path: app/module/user/presenter/api/StatusPresenter.php
+
+		-
+			message: "#^Parameter \\#1 \\$template of method Tymy\\\\Module\\\\User\\\\Presenter\\\\Front\\\\DetailPresenter\\:\\:sendAsIcal\\(\\) expects Nette\\\\Bridges\\\\ApplicationLatte\\\\Template, Nette\\\\Application\\\\UI\\\\Template\\|stdClass given\\.$#"
+			count: 1
+			path: app/module/user/presenter/front/DetailPresenter.php
+
+		-
+			message: "#^Property Tymy\\\\Module\\\\User\\\\Presenter\\\\Front\\\\DetailPresenter\\:\\:\\$statusNameCache type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: app/module/user/presenter/front/DetailPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Event\\\\AttendanceStatusTest\\:\\:checkStatusOfStatusSet\\(\\) has parameter \\$mockedStatusData with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/app/attendance/AttendanceStatusTest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Event\\\\AttendanceStatusTest\\:\\:createRecord\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/app/attendance/AttendanceStatusTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function md5 expects string, int\\<0, 1000\\> given\\.$#"
+			count: 1
+			path: tests/app/attendance/AttendanceStatusTest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Event\\\\AttendanceTest\\:\\:createRecord\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/app/attendance/AttendanceTest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Event\\\\AttendanceTest\\:\\:mockRecord\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/app/attendance/AttendanceTest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Authentication\\\\IsTest\\:\\:createRecord\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/app/authentication/IsTest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Debt\\\\DebtTest\\:\\:createRecord\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/app/debt/DebtTest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Discussion\\\\DiscussionDetailUiTest\\:\\:getDomForAction\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/app/discussion/DiscussionDetailUiTest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Discussion\\\\DiscussionDetailUiTest\\:\\:testActionDiscussionReadableOnly\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/app/discussion/DiscussionDetailUiTest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Discussion\\\\DiscussionDetailUiTest\\:\\:testActionDiscussionReadableWritable\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/app/discussion/DiscussionDetailUiTest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Discussion\\\\DiscussionTest\\:\\:createRecord\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/app/discussion/DiscussionTest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Discussion\\\\DiscussionsUiTest\\:\\:testActionDefault\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/app/discussion/DiscussionsUiTest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Event\\\\EventDetailUiTest\\:\\:testEvent\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/app/event/EventDetailUiTest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Event\\\\EventTest\\:\\:createRecord\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/app/event/EventTest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Event\\\\EventsUiTest\\:\\:testActionDefault\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/app/event/EventsUiTest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Permission\\\\PermissionTest\\:\\:createRecord\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/app/permission/PermissionTest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Permission\\\\PermissionTest\\:\\:mockRecord\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/app/permission/PermissionTest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Event\\\\PollDetailUiTest\\:\\:testEvent\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/app/poll/PollDetailUiTest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Permission\\\\PollTest\\:\\:createRecord\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/app/poll/PollTest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Permission\\\\PollTest\\:\\:test\\(\\) has parameter \\$param with no type specified\\.$#"
+			count: 1
+			path: tests/app/poll/PollTest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Event\\\\PollsUiTest\\:\\:testActionDefault\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/app/poll/PollsUiTest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Team\\\\TeamUiTest\\:\\:getAllStatuses\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/app/user/TeamUiTest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Team\\\\TeamUiTest\\:\\:testAll\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/app/user/TeamUiTest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Team\\\\TeamUiTest\\:\\:testPlayers\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/app/user/TeamUiTest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\User\\\\UserTest\\:\\:createRecord\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/app/user/UserTest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\User\\\\UserTest\\:\\:textCsvExport\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/app/user/UserTest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\ApiTest\\:\\:change\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/entity/ApiTest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\ApiTest\\:\\:change\\(\\) has parameter \\$changes with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/entity/ApiTest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\ApiTest\\:\\:createRecord\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/entity/ApiTest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\ApiTest\\:\\:deleteRecord\\(\\) has parameter \\$recordId with no type specified\\.$#"
+			count: 1
+			path: tests/entity/ApiTest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\ApiTest\\:\\:mockRecord\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/entity/ApiTest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\ApiTest\\:\\:testMethodNotAllowed\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/entity/ApiTest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\ApiTest\\:\\:testUnauthorized\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/entity/ApiTest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Entity\\\\Assert\\:\\:errcode\\(\\) has parameter \\$expected with no type specified\\.$#"
+			count: 1
+			path: tests/entity/Assert.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RequestCase\\:\\:assertObjectEquality\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/entity/RequestCase.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RequestCase\\:\\:assertObjectEquality\\(\\) has parameter \\$new with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/entity/RequestCase.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RequestCase\\:\\:assertObjectEquality\\(\\) has parameter \\$original with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/entity/RequestCase.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RequestCase\\:\\:assertObjectEquality\\(\\) has parameter \\$skip with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/entity/RequestCase.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RequestCase\\:\\:authorizeAdmin\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/entity/RequestCase.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RequestCase\\:\\:authorizeAdmin\\(\\) has parameter \\$password with no type specified\\.$#"
+			count: 1
+			path: tests/entity/RequestCase.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RequestCase\\:\\:authorizeAdmin\\(\\) has parameter \\$userName with no type specified\\.$#"
+			count: 1
+			path: tests/entity/RequestCase.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RequestCase\\:\\:authorizeUser\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/entity/RequestCase.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RequestCase\\:\\:authorizeUser\\(\\) has parameter \\$password with no type specified\\.$#"
+			count: 1
+			path: tests/entity/RequestCase.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RequestCase\\:\\:authorizeUser\\(\\) has parameter \\$userName with no type specified\\.$#"
+			count: 1
+			path: tests/entity/RequestCase.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RequestCase\\:\\:request\\(\\) has parameter \\$data with no type specified\\.$#"
+			count: 1
+			path: tests/entity/RequestCase.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RequestCase\\:\\:request\\(\\) has parameter \\$method with no type specified\\.$#"
+			count: 1
+			path: tests/entity/RequestCase.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RequestCase\\:\\:request\\(\\) has parameter \\$responseClass with no type specified\\.$#"
+			count: 1
+			path: tests/entity/RequestCase.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RequestCase\\:\\:request\\(\\) has parameter \\$url with no type specified\\.$#"
+			count: 1
+			path: tests/entity/RequestCase.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RequestCase\\:\\:toJsonDate\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/entity/RequestCase.php
+
+		-
+			message: "#^Parameter \\#4 \\$httpResponse of class Tymy\\\\Test\\\\SimpleResponse constructor expects Nette\\\\Http\\\\Response, Nette\\\\Http\\\\IResponse given\\.$#"
+			count: 3
+			path: tests/entity/RequestCase.php
+
+		-
+			message: "#^Property Tymy\\\\Test\\\\RequestCase\\:\\:\\$config type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/entity/RequestCase.php
+
+		-
+			message: "#^Property Tymy\\\\Test\\\\RequestCase\\:\\:\\$moduleConfig type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/entity/RequestCase.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RequestLog\\:\\:__construct\\(\\) has parameter \\$postData with no type specified\\.$#"
+			count: 1
+			path: tests/entity/RequestLog.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RequestLog\\:\\:getPostData\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/entity/RequestLog.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RequestLog\\:\\:setPostData\\(\\) has parameter \\$postData with no type specified\\.$#"
+			count: 1
+			path: tests/entity/RequestLog.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\SimpleResponse\\:\\:__construct\\(\\) has parameter \\$code with no type specified\\.$#"
+			count: 1
+			path: tests/entity/SimpleResponse.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\SimpleResponse\\:\\:__construct\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/entity/SimpleResponse.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\SimpleResponse\\:\\:getData\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/entity/SimpleResponse.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\SimpleResponse\\:\\:setData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/entity/SimpleResponse.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\UITest\\:\\:assertNavbar\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/entity/UITest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\UITest\\:\\:getDomForAction\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/entity/UITest.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Manager\\\\MockMailer\\:\\:assertEmpty\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/manager/MockMailer.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Manager\\\\MockMailer\\:\\:assertSent\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/manager/MockMailer.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Manager\\\\MockMailer\\:\\:assertSent\\(\\) has parameter \\$body with no type specified\\.$#"
+			count: 1
+			path: tests/manager/MockMailer.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Manager\\\\MockMailer\\:\\:assertSent\\(\\) has parameter \\$from with no type specified\\.$#"
+			count: 1
+			path: tests/manager/MockMailer.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Manager\\\\MockMailer\\:\\:assertSent\\(\\) has parameter \\$subject with no type specified\\.$#"
+			count: 1
+			path: tests/manager/MockMailer.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Manager\\\\MockMailer\\:\\:assertSent\\(\\) has parameter \\$to with no type specified\\.$#"
+			count: 1
+			path: tests/manager/MockMailer.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Manager\\\\MockMailer\\:\\:checkLastMail\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/manager/MockMailer.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Manager\\\\MockMailer\\:\\:checkLastMail\\(\\) has parameter \\$body with no type specified\\.$#"
+			count: 1
+			path: tests/manager/MockMailer.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Manager\\\\MockMailer\\:\\:checkLastMail\\(\\) has parameter \\$from with no type specified\\.$#"
+			count: 1
+			path: tests/manager/MockMailer.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Manager\\\\MockMailer\\:\\:checkLastMail\\(\\) has parameter \\$lastMail with no type specified\\.$#"
+			count: 1
+			path: tests/manager/MockMailer.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Manager\\\\MockMailer\\:\\:checkLastMail\\(\\) has parameter \\$subject with no type specified\\.$#"
+			count: 1
+			path: tests/manager/MockMailer.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Manager\\\\MockMailer\\:\\:checkLastMail\\(\\) has parameter \\$to with no type specified\\.$#"
+			count: 1
+			path: tests/manager/MockMailer.php
+
+		-
+			message: "#^Property Tymy\\\\Test\\\\Manager\\\\MockMailer\\:\\:\\$lastMail type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/manager/MockMailer.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:__construct\\(\\) has parameter \\$config with no type specified\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:applyChanges\\(\\) has parameter \\$changes with no type specified\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:applyChanges\\(\\) has parameter \\$data with no type specified\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:createDebt\\(\\) has parameter \\$changes with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:createDebt\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:createDebt\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:createDiscussion\\(\\) has parameter \\$changes with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:createDiscussion\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:createDiscussion\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:createEvent\\(\\) has parameter \\$changes with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:createEvent\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:createEvent\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:createOptions\\(\\) has parameter \\$changes with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:createOptions\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:createPermission\\(\\) has parameter \\$changes with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:createPermission\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:createPermission\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:createPoll\\(\\) has parameter \\$changes with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:createPoll\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:createPoll\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:createRecord\\(\\) has parameter \\$changes with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:createRecord\\(\\) has parameter \\$checkSkips with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:createRecord\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:createRecord\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:createStatus\\(\\) has parameter \\$changes with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:createStatus\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:createStatus\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:createStatusSet\\(\\) has parameter \\$changes with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:createStatusSet\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:createStatusSet\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:createUser\\(\\) has parameter \\$changes with no type specified\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:createUser\\(\\) has parameter \\$data with no type specified\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:createUser\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:deleteDiscussion\\(\\) has parameter \\$id with no type specified\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:deleteEvent\\(\\) has parameter \\$id with no type specified\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:deletePoll\\(\\) has parameter \\$id with no type specified\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:deleteRecord\\(\\) has parameter \\$basePath with no type specified\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:deleteRecord\\(\\) has parameter \\$id with no type specified\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:deleteUser\\(\\) has parameter \\$id with no type specified\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:mockAttendance\\(\\) has parameter \\$post with no type specified\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:mockAttendance\\(\\) has parameter \\$pre with no type specified\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:mockAttendance\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:mockPermission\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\RecordManager\\:\\:toJsonDate\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function md5 expects string, int\\<0, 30000\\> given\\.$#"
+			count: 2
+			path: tests/manager/RecordManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Manager\\\\TestsManager\\:\\:runTests\\(\\) has parameter \\$folder with no type specified\\.$#"
+			count: 1
+			path: tests/manager/TestsManager.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Presenter\\\\Front\\\\DefaultPresenter\\:\\:processTestsOutput\\(\\) has parameter \\$output with no type specified\\.$#"
+			count: 1
+			path: tests/presenter/front/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Presenter\\\\Front\\\\DefaultPresenter\\:\\:renderDefault\\(\\) has parameter \\$resourceId with no type specified\\.$#"
+			count: 1
+			path: tests/presenter/front/DefaultPresenter.php
+
+		-
+			message: "#^Method Tymy\\\\Test\\\\Presenter\\\\Front\\\\DefaultPresenter\\:\\:runTests\\(\\) has parameter \\$folder with no type specified\\.$#"
+			count: 1
+			path: tests/presenter/front/DefaultPresenter.php
+
+		-
+			message: "#^Parameter \\#2 \\$value of method Tester\\\\Runner\\\\Runner\\:\\:setEnvironmentVariable\\(\\) expects string, true given\\.$#"
+			count: 1
+			path: tests/setup.php
