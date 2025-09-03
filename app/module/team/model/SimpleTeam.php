@@ -10,10 +10,10 @@ use JsonSerializable;
 class SimpleTeam implements JsonSerializable
 {
     public string $sysName;
-    public string $name;
-    public string $sport;
+    public ?string $name = null;
+    public ?string $sport = null;
     public array $languages;
-    public string $defaultLanguageCode;
+    public ?string $defaultLanguageCode = null;
 
     public function setSysName(string $sysName): static
     {
