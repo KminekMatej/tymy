@@ -60,7 +60,7 @@ class Timer
         $active = is_int(self::$number);
 
         if ($active) {
-            self::$points[self::$number]["time"] = Debugger::timer(self::$number);
+            self::$points[self::$number]["time"] = Debugger::timer((string)self::$number);
         }
     }
 
@@ -81,7 +81,7 @@ class Timer
             "name" => $name ?? "timer-" . self::$number,
             "time" => null
         ];
-        Debugger::timer(self::$number);
+        Debugger::timer((string)self::$number);
     }
 
     private static function startNewSumPoint($name): void

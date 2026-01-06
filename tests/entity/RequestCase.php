@@ -153,6 +153,7 @@ abstract class RequestCase extends TestCase
         $this->responder->presenterMock = $presenterMock;
         $response = $presenterMock->run($request);
         $httpResponse = $presenterMock->getHttpResponse();
+        assert($httpResponse instanceof \Nette\Http\Response);
         if (!$responseClass) {
             Assert::type(JsonResponse::class, $response);
             assert($response instanceof JsonResponse);

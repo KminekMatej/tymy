@@ -77,6 +77,7 @@ class DetailPresenter extends BasePresenter
         $this->template->now = (new DateTime())->setTimezone($this->template->dtz);
         $this->template->events = $this->eventManager->getEventsOfPrestatus($resource, $iCal->getStatusIds(), new DateTime("-90 days"));
 
+        assert($this->template instanceof Template);
         $this->sendAsIcal($this->template);
     }
 

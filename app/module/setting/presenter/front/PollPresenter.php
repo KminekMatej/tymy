@@ -143,7 +143,7 @@ class PollPresenter extends SettingBasePresenter
 
                 try {
                     in_array($id, $existingOptionIds) ?
-                            $this->optionManager->update($optionData, $poll->getId(), $id) :
+                            $this->optionManager->update($optionData, $poll->getId(), (int)$id) :
                             $this->optionManager->create($optionData, $poll->getId());
                 } catch (TymyResponse $tResp) {
                     $this->respondByTymyResponse($tResp);

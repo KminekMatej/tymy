@@ -243,7 +243,7 @@ class RecordManager
         $rand = random_int(0, 30000);
         return [
             "login" => "MAL_GANIS_" . $rand,
-            "password" => md5($rand),
+            "password" => md5((string)$rand),
             "email" => "mal-ganis-$rand@autotest.tymy.cz",
             "canLogin" => true,
             "canEditCallName" => true,
@@ -271,7 +271,7 @@ class RecordManager
     {
         $rand = random_int(0, 30000);
         return [
-            "code" => strtoupper(substr(md5($rand), 0, 3)),//random code
+            "code" => strtoupper(substr(md5((string)$rand), 0, 3)),//random code
             "caption" => "Why do this? ($rand)",
             "image" => $this->config["test_250_img"],
             "statusSetId" => $statusSetId,

@@ -55,6 +55,7 @@ class DefaultPresenter extends SecuredPresenter
     private function requestAddTeam(string $team): never
     {
         try {
+            /** @phpstan-ignore argument.type */
             $this->manager->create($this->requestData, $team);
         } catch (Exception $exc) {
             $this->respondByException($exc);
@@ -80,6 +81,7 @@ class DefaultPresenter extends SecuredPresenter
         assert($this->manager instanceof MultiaccountManager);
         $teams = $this->manager->getListUserAllowed();
 
+        /** @phpstan-ignore argument.type */
         $this->respondOk($this->arrayToJson($teams));
     }
 }

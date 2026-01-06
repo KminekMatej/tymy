@@ -87,7 +87,7 @@ class AuthorizationManager implements IAuthorizator
     public function isUserAllowed(User $user, ?string $privilege): bool
     {
         foreach ($user->getRoles() as $role) {
-            if ($this->isAllowed($role, $user->getId(), $privilege)) {
+            if ($this->isAllowed($role, (string)$user->getId(), $privilege)) {
                 return true;
             }
         }
@@ -136,7 +136,7 @@ class AuthorizationManager implements IAuthorizator
         //\Tracy\Debugger::log("Allowed by role: " . ($this->isAllowedByRole($role, $permission) ? "true" : "false"));
         //\Tracy\Debugger::log("Allowed by status: " . ($this->isAllowedByStatus($this->getUserStatus($resource), $permission) ? "true" : "false"));
         //\Tracy\Debugger::log("Allowed by id: " . ($this->isAllowedById($resource, $permission) ? "true" : "false"));
-        return $this->isAllowedByRole($role, $permission) || $this->isAllowedByStatus($this->getUserStatus($resource), $permission) || $this->isAllowedById($resource, $permission) ? self::Allow : self::Deny;
+        return $this->isAllowedByRole($role, $permission) || $this->isAllowedByStatus($this->getUserStatus($resource), $permission) || $this->isAllowedById((int)$resource, $permission) ? self::Allow : self::Deny;
     }
 
     private function isAdmin(string $role): bool

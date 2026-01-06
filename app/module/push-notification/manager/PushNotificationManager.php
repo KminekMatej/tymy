@@ -181,7 +181,8 @@ class PushNotificationManager extends BaseManager
     private function firebasePushBulk(PushNotification $notification, array $subscribers): void
     {
         try {
-            $this->firebasePush->sendBulkNotifications($subscribers, $notification);
+            $deviceIds = array_map(fn($subscriber) => $subscriber->getSubscription(), $subscribers);
+            $this->firebasePush->sendBulkNotifications($deviceIds, $notification);
             //TODO: handle detecting expired subsriptions here
         } catch (ErrorException $e) {
             Debugger::log('FCM Push ErrorException: ' . $e->getMessage(), ILogger::EXCEPTION);

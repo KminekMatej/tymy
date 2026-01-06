@@ -77,7 +77,7 @@ class AttendanceStatusTest extends ApiTest
 
         $rand = random_int(0, 1000);
         $changeMock = [
-            "code" => strtoupper(substr(md5($rand), 0, 3)),
+            "code" => strtoupper(substr(md5((string)$rand), 0, 3)),
             "caption" => "Changed name $rand",
         ];
         $this->request($this->getBasePath() . "/$statusId", "PUT", $changeMock)->expect(200, "array");

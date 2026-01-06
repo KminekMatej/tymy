@@ -310,7 +310,9 @@ class UserManager extends BaseManager
     public function limitUsersReached(): bool
     {
         $limit = $this->teamManager->getTeam()->getMaxUsers();
-        $currentCount = $this->getCounts($this->getList())["ACTIVE"];
+        /** @var User[] $users */
+        $users = $this->getList();
+        $currentCount = $this->getCounts($users)["ACTIVE"];
         return $currentCount >= $limit;
     }
 
@@ -732,7 +734,7 @@ class UserManager extends BaseManager
             $this->respondBadRequest($this->translator->translate("common.alerts.tooManyTries"));
         }
 
-        $resetCode = substr(md5(random_int(0, mt_getrandmax())), 0, 20);
+        $resetCode = substr(md5((string)random_int(0, mt_getrandmax())), 0, 20);
 
         $this->database->table(User::TABLE_PWD_RESET)->insert([
             "from_host" => $hostname,

@@ -100,7 +100,7 @@ class FileContentResponse implements Nette\Application\IResponse
             }
         }
 
-        $httpResponse->setHeader('Content-Length', $length);
+        $httpResponse->setHeader('Content-Length', (string)$length);
         echo $this->fileContent;
     }
 }

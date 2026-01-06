@@ -38,6 +38,9 @@ class ICalManager extends BaseManager
         return $entity->getUserId() === $userId;
     }
 
+    /**
+     * @param ICal $entity
+     */
     public function canRead(BaseModel $entity, int $userId): bool
     {
         return $this->canEdit($entity, $userId);

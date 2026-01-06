@@ -218,6 +218,6 @@ class TeamPresenter extends SettingBasePresenter
      */
     private function randomCode(): string
     {
-        return strtoupper(substr(md5(random_int(0, 1000)), 0, 3));
+        return strtoupper(substr(md5((string)random_int(0, 1000)), 0, 3));
     }
 }

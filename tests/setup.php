@@ -16,5 +16,5 @@ if (isset($runner) && $runner instanceof Runner) {
     putenv("TEAM_DIR=$rootDir");
     putenv("team=autotest");
 
-    $runner->setEnvironmentVariable("AUTOTEST", true);
+    $runner->setEnvironmentVariable("AUTOTEST", "true");
 }

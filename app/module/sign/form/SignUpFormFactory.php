@@ -40,10 +40,12 @@ class SignUpFormFactory
             ->setRequired('Heslo je povinné')
             ->addRule($form::PATTERN, "Heslo musí mít minimálně 3 znaky", self::PASSWORD_PATTERN);
 
+        $passwordControl = $form['password'];
+        assert($passwordControl instanceof \Nette\Forms\Control);
         $form->addPassword('password_check', 'Heslo znovu:')
             ->setRequired('Vyplňte heslo pro kontrolu znovu')
-            ->addConditionOn($form['password'], Form::VALID)
-            ->addRule($form::EQUAL, "Hesla se neshodují", $form['password']);
+            ->addConditionOn($passwordControl, Form::VALID)
+            ->addRule($form::EQUAL, "Hesla se neshodují", $passwordControl);
 
         $email = $form->addEmail('email', 'E-mail:')
             ->setRequired('E-mail je povinný')

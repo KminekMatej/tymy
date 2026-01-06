@@ -6,7 +6,7 @@ use Contributte\Translation\Translator;
 use Nette\Application\UI\Control;
 use Nette\Application\UI\Form;
 use Nette\Http\FileUpload;
-use Nette\Http\Request;
+use Nette\Http\IRequest;
 use Nette\Security\User;
 use Nette\Utils\DateTime;
 use Tymy\Module\Core\Helper\ArrayHelper;
@@ -30,7 +30,7 @@ class NavbarControl extends Control
 {
     private Translator $translator;
 
-    public function __construct(private SecuredPresenter $presenter, private PollManager $pollManager, private DiscussionManager $discussionManager, private EventManager $eventManager, private DebtManager $debtManager, private UserManager $userManager, private MultiaccountManager $multiaccountManager, private User $user, private TymyUser $tymyUser, private TeamManager $teamManager, private EventTypeManager $eventTypeManager, private Request $httpRequest)
+    public function __construct(private SecuredPresenter $presenter, private PollManager $pollManager, private DiscussionManager $discussionManager, private EventManager $eventManager, private DebtManager $debtManager, private UserManager $userManager, private MultiaccountManager $multiaccountManager, private User $user, private TymyUser $tymyUser, private TeamManager $teamManager, private EventTypeManager $eventTypeManager, private IRequest $httpRequest)
     {
         $this->translator = $this->presenter->translator;
     }
@@ -56,6 +56,7 @@ class NavbarControl extends Control
 
     private function initPlayers(): void
     {
+        /** @var \Tymy\Module\User\Model\User[] $users */
         $users = $this->userManager->getList();
         $this->template->birthdayToday = ArrayHelper::filter($users, "hasBirthdayToday", true);
         $this->template->birthdayTommorow = ArrayHelper::filter($users, "hasBirthdayTommorow", true);

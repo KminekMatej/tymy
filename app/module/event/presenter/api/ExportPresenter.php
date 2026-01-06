@@ -83,7 +83,7 @@ class ExportPresenter extends SecuredPresenter
             $this->respondNotAllowed();
         }
 
-        $events = $this->eventManager->getYearEvents($this->user->getId(), $year, $page)["events"];
+        $events = $this->eventManager->getYearEvents($this->user->getId(), (int)$year, (int)$page)["events"];
         $users = $this->userManager->getByStatus(User::STATUS_PLAYER);
 
         $filename = "report-event-$year-$page.xlsx";

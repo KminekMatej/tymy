@@ -66,7 +66,9 @@ class MultiaccountManager extends BaseManager
      */
     public function read(int $resourceId, ?int $subResourceId = null): BaseModel
     {
-        return $this->generateNewTk($resourceId);
+        $team = $this->teamManager->read($resourceId);
+        assert($team instanceof Team);
+        return $this->generateNewTk($team->getSysName());
     }
 
     public function create(array $data, $resourceId = null): BaseModel

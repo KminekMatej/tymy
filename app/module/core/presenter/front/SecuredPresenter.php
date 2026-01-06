@@ -131,8 +131,8 @@ class SecuredPresenter extends BasePresenter
 
         $result = range(1, ceil($totalCount / $perPage));
 
-        if (($shownCount = floor($shownCount / 2) * 2 + 1) >= 1) {
-            $result = array_slice($result, max(0, min(count($result) - $shownCount, $currentPage - ceil($shownCount / 2))), $shownCount);
+        if (($shownCount = (int)(floor($shownCount / 2) * 2 + 1)) >= 1) {
+            $result = array_slice($result, max(0, min(count($result) - $shownCount, $currentPage - (int)ceil($shownCount / 2))), $shownCount);
         }
 
         return $result;
